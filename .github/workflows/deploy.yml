@@ -6,27 +6,17 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - name: Deploy via SSH
-        env:
-          SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+      - name: Deploy
         run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh -i ~/.ssh/deploy_key \
-            -o StrictHostKeyChecking=no \
-            -o ConnectTimeout=15 \
-            dphoompat@192.168.1.203 '
-            set -e
-            cd /home/dphoompat/peyo-agent
-            git pull origin main
-            source venv/bin/activate
-            pip install -r requirements.txt -q
-            python manage.py migrate --noinput
-            python manage.py collectstatic --noinput -v 0
-            deactivate
-            sudo systemctl restart peyo-agent
-            echo "Deploy complete: $(date)"
-          '
+          set -e
+          cd /home/dphoompat/peyo-agent
+          git pull origin main
+          source venv/bin/activate
+          pip install -r requirements.txt -q
+          python manage.py migrate --noinput
+          python manage.py collectstatic --noinput -v 0
+          deactivate
+          sudo systemctl restart peyo-agent
+          echo "Deploy complete: $(date)"
