@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Plan — จากศูนย์ถึงเงินเข้ากระเป๋า</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark:   #090c14;
+      --card:   #0f1623;
+      --card2:  #131d2e;
+      --border: #1a2540;
+      --text:   #e2e8f0;
+      --muted:  #4b6080;
+      --blue:   #3b82f6;
+      --green:  #10b981;
+      --purple: #8b5cf6;
+      --orange: #f59e0b;
+      --red:    #ef4444;
+      --pink:   #ec4899;
+      --teal:   #14b8a6;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI','Sarabun',sans-serif; background: var(--dark); color: var(--text); line-height: 1.7; }
+
+    /* ── NAV ── */
+    nav { background: #07090f; border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; gap: 0; overflow-x: auto; position: sticky; top: 0; z-index: 99; }
+    nav a { color: #334155; text-decoration: none; padding: 13px 16px; font-size: 0.82rem; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    nav a:hover { color: #f9fafb; border-bottom-color: var(--blue); }
+
+    /* ── HERO ── */
+    .hero { background: linear-gradient(160deg,#060b18 0%,#0d1a2e 50%,#060e1a 100%); padding: 56px 24px 48px; text-align: center; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 60% 50% at 50% 0%, #1e40af12,transparent 70%); pointer-events:none; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; background:#1e3a5f30; border:1px solid #3b82f630; border-radius:20px; padding:5px 16px; font-size:0.78rem; color:#93c5fd; margin-bottom:18px; }
+    .hero h1 { font-size: clamp(2rem,5vw,3.4rem); font-weight:900; color:#f9fafb; line-height:1.15; margin-bottom:12px; }
+    .hero h1 .g { color:var(--green); } .hero h1 .b { color:var(--blue); }
+    .hero p { color:#4b6080; font-size:1rem; max-width:580px; margin:0 auto 28px; }
+    .hero-meta { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
+    .meta-pill { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:8px 18px; font-size:0.82rem; color:#64748b; }
+    .meta-pill strong { color:#94a3b8; }
+
+    /* ── LAYOUT ── */
+    .container { max-width:1100px; margin:0 auto; padding:56px 24px; }
+    .section-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+    .section-title { font-size:clamp(1.4rem,3vw,2.1rem); font-weight:800; color:#f9fafb; line-height:1.25; margin-bottom:8px; }
+    .section-sub { color:var(--muted); font-size:0.88rem; max-width:600px; margin-bottom:32px; }
+
+    /* ── TIMELINE OVERVIEW ── */
+    .timeline-bar { display:flex; gap:0; border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:24px; }
+    .tl-phase { flex:1; padding:16px 14px; border-right:1px solid var(--border); text-align:center; position:relative; cursor:default; transition:background 0.2s; }
+    .tl-phase:last-child { border:none; }
+    .tl-phase:hover { background:#0d1623; }
+    .tl-num { font-size:1.4rem; font-weight:900; line-height:1; margin-bottom:4px; }
+    .tl-name { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:2px; }
+    .tl-days { font-size:0.68rem; color:var(--muted); }
+    .tl-phase.p1 .tl-num { color:#60a5fa; }
+    .tl-phase.p2 .tl-num { color:#34d399; }
+    .tl-phase.p3 .tl-num { color:#a78bfa; }
+    .tl-phase.p4 .tl-num { color:#fbbf24; }
+    .tl-phase.p5 .tl-num { color:#f87171; }
+    .tl-phase.p6 .tl-num { color:#4ade80; }
+
+    /* ── PHASE CARDS ── */
+    .phase-block { margin-bottom:40px; }
+    .phase-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; padding:20px 24px; border-radius:14px; border:1px solid; }
+    .ph-icon { font-size:2rem; flex-shrink:0; }
+    .ph-phase { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:2px; }
+    .ph-title { font-size:1.1rem; font-weight:800; color:#f9fafb; margin-bottom:2px; }
+    .ph-range { font-size:0.78rem; color:var(--muted); }
+    .ph-outcome { margin-left:auto; text-align:right; flex-shrink:0; }
+    .ph-outcome .label { font-size:0.68rem; color:var(--muted); text-transform:uppercase; }
+    .ph-outcome .value { font-size:0.9rem; font-weight:700; }
+
+    .ph1 { background:#0d1a2e; border-color:#1e40af40; }
+    .ph1 .ph-phase { color:#60a5fa; }
+    .ph2 { background:#0a1f18; border-color:#16a34a40; }
+    .ph2 .ph-phase { color:#34d399; }
+    .ph3 { background:#130d2a; border-color:#7c3aed40; }
+    .ph3 .ph-phase { color:#a78bfa; }
+    .ph4 { background:#1a1200; border-color:#d9770640; }
+    .ph4 .ph-phase { color:#fbbf24; }
+    .ph5 { background:#1a0808; border-color:#dc262640; }
+    .ph5 .ph-phase { color:#f87171; }
+    .ph6 { background:#051a0e; border-color:#16a34a60; }
+    .ph6 .ph-phase { color:#4ade80; }
+
+    /* ── DAY GRID ── */
+    .day-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px; }
+    .day-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; transition:border-color 0.2s; }
+    .day-card:hover { border-color:#334155; }
+    .day-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:6px; }
+    .day-title { font-size:0.9rem; font-weight:700; color:#f1f5f9; margin-bottom:10px; }
+    .task-list { list-style:none; font-size:0.82rem; }
+    .task-list li { padding:4px 0; border-bottom:1px solid #0f1623; color:#94a3b8; display:flex; align-items:flex-start; gap:8px; }
+    .task-list li:last-child { border:none; }
+    .task-list .ck { flex-shrink:0; margin-top:2px; width:14px; height:14px; border:1px solid #1e3a5f; border-radius:3px; display:inline-block; }
+    .day-note { margin-top:10px; background:#0a1020; border-left:3px solid; border-radius:0 6px 6px 0; padding:8px 12px; font-size:0.78rem; color:#64748b; }
+
+    /* ── TOOL TABLE ── */
+    .tool-table { width:100%; border-collapse:collapse; }
+    .tool-table th { background:#0d1623; color:#334155; font-size:0.72rem; text-transform:uppercase; padding:12px 16px; text-align:left; border-bottom:2px solid var(--border); }
+    .tool-table td { padding:11px 16px; border-bottom:1px solid #0d1623; font-size:0.85rem; vertical-align:top; }
+    .tool-table tr:hover td { background:#0a1018; }
+    .tool-name { font-weight:600; color:#e2e8f0; }
+    .tool-use  { color:#64748b; font-size:0.78rem; }
+    .cost-free { color:#4ade80; font-size:0.82rem; font-weight:600; }
+    .cost-paid { color:#fbbf24; font-size:0.82rem; font-weight:600; }
+    .cost-once { color:#60a5fa; font-size:0.82rem; font-weight:600; }
+
+    /* ── BUDGET BOX ── */
+    .budget-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+    .budget-item { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; }
+    .budget-label { font-size:0.72rem; color:var(--muted); text-transform:uppercase; margin-bottom:4px; }
+    .budget-amount { font-size:1.2rem; font-weight:800; margin-bottom:4px; }
+    .budget-note { font-size:0.75rem; color:var(--muted); }
+
+    /* ── DECISION GATE ── */
+    .gate { background:linear-gradient(135deg,#130d1a,#0d1320); border:1px solid #7c3aed40; border-radius:14px; padding:24px; margin:20px 0; }
+    .gate-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .gate-icon { font-size:1.8rem; }
+    .gate-title { font-weight:700; color:#a78bfa; font-size:0.95rem; }
+    .gate-sub { font-size:0.78rem; color:var(--muted); }
+    .gate-checks { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .gate-check { background:#0f1020; border:1px solid #1a1a30; border-radius:8px; padding:8px 12px; font-size:0.82rem; color:#94a3b8; display:flex; align-items:center; gap:8px; }
+    .gate-check::before { content:'☐'; color:#334155; flex-shrink:0; }
+
+    /* ── SCRIPT BOX ── */
+    .script-box { background:#07090f; border:1px solid var(--border); border-radius:12px; padding:20px; margin-top:14px; }
+    .script-box .s-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:10px; }
+    .script-box .s-text { font-size:0.85rem; color:#94a3b8; line-height:1.8; border-left:3px solid #334155; padding-left:14px; font-style:italic; }
+    .script-box .s-text strong { color:#e2e8f0; font-style:normal; }
+
+    /* ── MONEY FLOW ── */
+    .money-flow { display:flex; align-items:center; gap:0; overflow-x:auto; }
+    .mf-step { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 18px; min-width:160px; text-align:center; flex-shrink:0; }
+    .mf-icon { font-size:1.6rem; margin-bottom:6px; }
+    .mf-title { font-size:0.78rem; font-weight:700; color:#f1f5f9; margin-bottom:2px; }
+    .mf-detail { font-size:0.7rem; color:var(--muted); }
+    .mf-arrow { color:#1e3a5f; font-size:1.4rem; padding:0 8px; flex-shrink:0; }
+
+    /* ── CALLOUT ── */
+    .callout { border-radius:10px; padding:14px 18px; margin:14px 0; font-size:0.86rem; display:flex; gap:12px; }
+    .callout-blue  { background:#1e3a5f18; border-left:4px solid var(--blue); }
+    .callout-green { background:#14532d18; border-left:4px solid var(--green); }
+    .callout-warn  { background:#3f2a0018; border-left:4px solid var(--orange); }
+    .callout-red   { background:#3f0e0e18; border-left:4px solid var(--red); }
+    .callout .icon { font-size:1.1rem; flex-shrink:0; }
+    .callout .text { color:#cbd5e1; line-height:1.65; }
+
+    /* ── CODE ── */
+    .code-block { background:#04060c; border:1px solid var(--border); border-radius:10px; padding:16px 20px; font-family:'Consolas','Courier New',monospace; font-size:0.83rem; color:#60a5fa; line-height:1.9; overflow-x:auto; margin:12px 0; }
+    .code-block .cm { color:#334155; }
+    .code-block .kw { color:#a78bfa; }
+    .code-block .st { color:#34d399; }
+
+    /* ── PROGRESS ── */
+    .progress-row { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:0.82rem; }
+    .progress-label { min-width:120px; color:#64748b; }
+    .progress-bar { flex:1; height:6px; background:#0d1623; border-radius:3px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:3px; }
+    .progress-pct { min-width:36px; text-align:right; color:#94a3b8; font-size:0.75rem; }
+
+    footer { background:#04060c; border-top:1px solid var(--border); text-align:center; padding:32px 24px; color:#1e3a5f; font-size:0.78rem; }
+
+    @media (max-width:640px) {
+      .timeline-bar { flex-direction:column; }
+      .tl-phase { border-right:none; border-bottom:1px solid var(--border); }
+      .phase-header { flex-wrap:wrap; }
+      .ph-outcome { margin-left:0; text-align:left; }
+      .gate-checks { grid-template-columns:1fr; }
+      .money-flow { flex-direction:column; }
+      .mf-arrow { transform:rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#overview">ภาพรวม</a>
+  <a href="#ph1">P1: เตรียม</a>
+  <a href="#ph2">P2: สร้าง Demo</a>
+  <a href="#ph3">P3: หาลูกค้า</a>
+  <a href="#ph4">P4: ปิดดีล</a>
+  <a href="#ph5">P5: Deliver</a>
+  <a href="#ph6">P6: รับเงิน</a>
+  <a href="#tools">Tools</a>
+  <a href="#budget">ต้นทุน</a>
+  <a href="#scripts">Scripts</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">🎯 Header Staff · Operation Plan · May 2026</div>
+  <h1>จาก <span class="b">ศูนย์</span><br>ถึง <span class="g">เงินเข้ากระเป๋า</span></h1>
+  <p>แผนปฏิบัติการทีละวัน ตั้งแต่ไม่มีอะไรเลย จนถึงวันที่ได้รับเงินจากลูกค้าจริง</p>
+  <div class="hero-meta">
+    <div class="meta-pill">⏱ <strong>ระยะเวลา:</strong> ~45-60 วัน</div>
+    <div class="meta-pill">💰 <strong>ต้นทุนเริ่มต้น:</strong> ~3,000-5,000 บาท</div>
+    <div class="meta-pill">🎯 <strong>เป้าหมาย:</strong> ปิดดีลแรก + รับเงิน</div>
+    <div class="meta-pill">📦 <strong>Product แรก:</strong> LINE AI Pro</div>
+  </div>
+</div>
+
+<!-- OVERVIEW TIMELINE -->
+<section id="overview" style="padding:48px 24px; background:#06080f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--blue);">ภาพรวม 6 Phases</div>
+    <h2 class="section-title">Road to First Baht</h2>
+
+    <div class="timeline-bar">
+      <div class="tl-phase p1"><div class="tl-num">1</div><div class="tl-name">Setup</div><div class="tl-days">Day 1-7</div></div>
+      <div class="tl-phase p2"><div class="tl-num">2</div><div class="tl-name">Demo</div><div class="tl-days">Day 8-14</div></div>
+      <div class="tl-phase p3"><div class="tl-num">3</div><div class="tl-name">Outreach</div><div class="tl-days">Day 15-28</div></div>
+      <div class="tl-phase p4"><div class="tl-num">4</div><div class="tl-name">Close</div><div class="tl-days">Day 29-38</div></div>
+      <div class="tl-phase p5"><div class="tl-num">5</div><div class="tl-name">Deliver</div><div class="tl-days">Day 39-52</div></div>
+      <div class="tl-phase p6"><div class="tl-num">6</div><div class="tl-name">💰 รับเงิน</div><div class="tl-days">Day 53-60</div></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px; margin-top:16px;">
+      <div style="background:var(--card); border:1px solid #1e40af30; border-radius:10px; padding:16px;">
+        <div style="color:#60a5fa; font-size:0.7rem; font-weight:700; text-transform:uppercase; margin-bottom:8px;">Phase 1-2 (สัปดาห์ 1-2)</div>
+        <p style="color:#64748b; font-size:0.82rem;">ติดตั้ง OpenClaw + LINE OA + สร้าง demo ที่ให้ลูกค้าทดลองได้จริง</p>
+      </div>
+      <div style="background:var(--card); border:1px solid #7c3aed30; border-radius:10px; padding:16px;">
+        <div style="color:#a78bfa; font-size:0.7rem; font-weight:700; text-transform:uppercase; margin-bottom:8px;">Phase 3 (สัปดาห์ 3-4)</div>
+        <p style="color:#64748b; font-size:0.82rem;">โพสต์ content + DM ลูกค้าเป้าหมาย + นัด discovery call 3+ ราย</p>
+      </div>
+      <div style="background:var(--card); border:1px solid #d9770630; border-radius:10px; padding:16px;">
+        <div style="color:#fbbf24; font-size:0.7rem; font-weight:700; text-transform:uppercase; margin-bottom:8px;">Phase 4 (สัปดาห์ 5-6)</div>
+        <p style="color:#64748b; font-size:0.82rem;">Discovery call → Demo → Proposal → Sign สัญญา → รับมัดจำ 50%</p>
+      </div>
+      <div style="background:var(--card); border:1px solid #dc262630; border-radius:10px; padding:16px;">
+        <div style="color:#f87171; font-size:0.7rem; font-weight:700; text-transform:uppercase; margin-bottom:8px;">Phase 5-6 (สัปดาห์ 7-9)</div>
+        <p style="color:#64748b; font-size:0.82rem;">Deploy บน VPS ลูกค้า → Training → Go live → เก็บเงินที่เหลือ 50%</p>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top:20px;">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>กลยุทธ์หลัก:</strong> เริ่มด้วย LINE AI Pro (#1) เท่านั้น อย่าพยายามสร้างทุก product พร้อมกัน
+        ทำ 1 product ให้ดี ปิดดีลแรกให้ได้ก่อน แล้วค่อย expand
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PHASE 1: SETUP ════════════ -->
+<section id="ph1" style="padding:48px 24px;">
+  <div class="container">
+
+    <div class="phase-block">
+      <div class="phase-header ph1">
+        <div class="ph-icon">⚙️</div>
+        <div>
+          <div class="ph-phase">Phase 1</div>
+          <div class="ph-title">Setup — ตั้งระบบทั้งหมด</div>
+          <div class="ph-range">Day 1–7 · สัปดาห์แรก</div>
+        </div>
+        <div class="ph-outcome">
+          <div class="label">Outcome</div>
+          <div class="value" style="color:#60a5fa;">ระบบพร้อมทดสอบ</div>
+        </div>
+      </div>
+
+      <div class="day-grid">
+
+        <div class="day-card">
+          <div class="day-label" style="color:#60a5fa;">Day 1</div>
+          <div class="day-title">📦 ติดตั้ง Infrastructure</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ติดตั้ง Node.js 24 บนเครื่องตัวเอง</li>
+            <li><span class="ck"></span>ติดตั้ง OpenClaw: <code style="color:#60a5fa; font-size:0.75rem;">npm install -g openclaw</code></li>
+            <li><span class="ck"></span>รัน <code style="color:#60a5fa; font-size:0.75rem;">openclaw onboard --install-daemon</code></li>
+            <li><span class="ck"></span>สมัคร Anthropic API key (claude.ai/api)</li>
+            <li><span class="ck"></span>ทดสอบ Control UI ที่ localhost:18789</li>
+          </ul>
+          <div class="day-note" style="border-color:#60a5fa;">ใช้เครื่องตัวเองก่อน ไม่ต้องซื้อ VPS ตอนนี้</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#60a5fa;">Day 2</div>
+          <div class="day-title">💚 สมัคร LINE Official Account</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>สมัคร LINE OA ที่ manager.line.biz (ฟรี)</li>
+            <li><span class="ck"></span>ตั้งชื่อ account ที่สื่อถึง demo เช่น "AI Demo Thai"</li>
+            <li><span class="ck"></span>เปิดใช้งาน Messaging API</li>
+            <li><span class="ck"></span>คัดลอก Channel Access Token + Secret</li>
+            <li><span class="ck"></span>Webhook URL: <code style="color:#34d399; font-size:0.75rem;">ใส่ ngrok URL ชั่วคราว</code></li>
+          </ul>
+          <div class="day-note" style="border-color:#34d399;">ใช้ ngrok สำหรับ local test ก่อน</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#60a5fa;">Day 3</div>
+          <div class="day-title">🔗 เชื่อมต่อ LINE กับ OpenClaw</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ติดตั้ง LINE channel ใน OpenClaw Control UI</li>
+            <li><span class="ck"></span>ใส่ Channel Access Token + Secret</li>
+            <li><span class="ck"></span>ทดสอบส่งข้อความจาก LINE → OpenClaw</li>
+            <li><span class="ck"></span>ทดสอบ AI ตอบกลับ</li>
+            <li><span class="ck"></span>แก้ bug ที่เจอ (ถ้ามี)</li>
+          </ul>
+          <div class="day-note" style="border-color:#60a5fa;">ถ้าติดตั้งไม่ได้ ดู docs.openclaw.ai/channels/line</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#60a5fa;">Day 4</div>
+          <div class="day-title">🤖 เขียน System Prompt ของ AI</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>สร้างไฟล์ AGENTS.md สำหรับ demo persona</li>
+            <li><span class="ck"></span>กำหนดบุคลิก AI: ชื่อ น้ำเสียง ความรู้</li>
+            <li><span class="ck"></span>ใส่ FAQ สำหรับธุรกิจตัวอย่าง (ร้านค้า)</li>
+            <li><span class="ck"></span>ตั้ง fallback message เมื่อ AI ไม่รู้</li>
+            <li><span class="ck"></span>ทดสอบถามหลาย scenario</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">ทำ demo เป็น "ร้านค้าออนไลน์" ก่อน ลูกค้าเข้าใจง่าย</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#60a5fa;">Day 5</div>
+          <div class="day-title">☁️ ซื้อ VPS + Deploy จริง</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>สมัคร DigitalOcean / Vultr (VPS $6/เดือน ~220 บาท)</li>
+            <li><span class="ck"></span>สร้าง Ubuntu 22.04 droplet</li>
+            <li><span class="ck"></span>ติดตั้ง Node.js 24 บน VPS</li>
+            <li><span class="ck"></span>ติดตั้ง OpenClaw + daemon บน VPS</li>
+            <li><span class="ck"></span>อัปเดต Webhook URL ใน LINE OA → IP จริง</li>
+          </ul>
+          <div class="day-note" style="border-color:#f59e0b;">VPS นี้เป็น demo server — ไม่ใช่ของลูกค้า</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#60a5fa;">Day 6-7</div>
+          <div class="day-title">🧪 ทดสอบ + Refine</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ทดสอบ end-to-end จาก LINE จริง</li>
+            <li><span class="ck"></span>ทดสอบกับ scenario 20+ แบบ</li>
+            <li><span class="ck"></span>ปรับ prompt ให้ตอบได้ดีขึ้น</li>
+            <li><span class="ck"></span>ทดสอบ handoff "ส่งต่อ staff"</li>
+            <li><span class="ck"></span>จด bug list + แก้ทั้งหมด</li>
+          </ul>
+          <div class="day-note" style="border-color:#34d399;">เมื่อจบ Phase 1: ทักไป LINE OA แล้วได้รับตอบ AI ทันที</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PHASE 2: DEMO ════════════ -->
+<section id="ph2" style="padding:48px 24px; background:#06080f;">
+  <div class="container">
+    <div class="phase-block">
+      <div class="phase-header ph2">
+        <div class="ph-icon">🎬</div>
+        <div>
+          <div class="ph-phase">Phase 2</div>
+          <div class="ph-title">สร้าง Demo — ของที่ขายได้จริง</div>
+          <div class="ph-range">Day 8–14 · สัปดาห์ 2</div>
+        </div>
+        <div class="ph-outcome">
+          <div class="label">Outcome</div>
+          <div class="value" style="color:#34d399;">Demo พร้อม + Salepage</div>
+        </div>
+      </div>
+
+      <div class="day-grid">
+
+        <div class="day-card">
+          <div class="day-label" style="color:#34d399;">Day 8-9</div>
+          <div class="day-title">🎭 สร้าง Demo Scenario 3 แบบ</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>Demo A: ร้านเสื้อผ้าออนไลน์ (ถามสต็อก/ราคา)</li>
+            <li><span class="ck"></span>Demo B: คลินิกความงาม (นัดหมาย/ถามบริการ)</li>
+            <li><span class="ck"></span>Demo C: โรงแรม (จองห้อง/ถามโปรโมชั่น)</li>
+            <li><span class="ck"></span>แต่ละ demo มี FAQ 20+ ข้อพร้อมใช้</li>
+            <li><span class="ck"></span>QR code สแกนแล้วทดลองได้เลย</li>
+          </ul>
+          <div class="day-note" style="border-color:#34d399;">ลูกค้าคลินิกทดลอง Demo B → เห็นแล้วอยากได้ทันที</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#34d399;">Day 10</div>
+          <div class="day-title">📱 ถ่ายวิดีโอ Demo 60 วินาที</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ถ่าย screen recording + เสียงพากย์ไทย</li>
+            <li><span class="ck"></span>แสดง: ลูกค้าถาม → AI ตอบใน 2 วินาที</li>
+            <li><span class="ck"></span>แสดง: ถามนอกสคริปต์ AI ยังตอบได้ (Gen AI)</li>
+            <li><span class="ck"></span>แสดง: ส่งต่อ staff เมื่อจำเป็น</li>
+            <li><span class="ck"></span>ตัดต่อด้วย CapCut (ฟรี)</li>
+          </ul>
+          <div class="day-note" style="border-color:#34d399;">วิดีโอ 60 วินาที = conversion tool ที่ดีที่สุด</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#34d399;">Day 11-12</div>
+          <div class="day-title">📄 สร้างเอกสารขาย</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>One-pager: ปัญหา → วิธีแก้ → ราคา → CTA</li>
+            <li><span class="ck"></span>Proposal template (Word/Canva)</li>
+            <li><span class="ck"></span>Invoice template</li>
+            <li><span class="ck"></span>Service agreement อย่างง่าย (1 หน้า)</li>
+            <li><span class="ck"></span>QR code สำหรับแต่ละ demo</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">ทำ one-pager เป็น PDF ส่ง WhatsApp/LINE ได้เลย</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#34d399;">Day 13-14</div>
+          <div class="day-title">🌐 Setup Online Presence</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>สร้าง LINE OA หลัก (เป็น demo + รับ lead)</li>
+            <li><span class="ck"></span>LinkedIn profile อัปเดต (ใส่ AI Specialist)</li>
+            <li><span class="ck"></span>Facebook Page ของธุรกิจ</li>
+            <li><span class="ck"></span>โพสต์ salepage.html บน hosting ฟรี (Netlify/GitHub Pages)</li>
+            <li><span class="ck"></span>ใส่ QR code ทดลอง demo ใน salepage</li>
+          </ul>
+          <div class="day-note" style="border-color:#34d399;">เมื่อจบ Phase 2: มี demo ที่ลูกค้าทดลองได้ + salepage พร้อม</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PHASE 3: OUTREACH ════════════ -->
+<section id="ph3" style="padding:48px 24px;">
+  <div class="container">
+    <div class="phase-block">
+      <div class="phase-header ph3">
+        <div class="ph-icon">📣</div>
+        <div>
+          <div class="ph-phase">Phase 3</div>
+          <div class="ph-title">Outreach — หาลูกค้าตัวแรก</div>
+          <div class="ph-range">Day 15–28 · สัปดาห์ 3-4</div>
+        </div>
+        <div class="ph-outcome">
+          <div class="label">Outcome</div>
+          <div class="value" style="color:#a78bfa;">นัด Discovery call 3+ ราย</div>
+        </div>
+      </div>
+
+      <div class="day-grid">
+
+        <div class="day-card">
+          <div class="day-label" style="color:#a78bfa;">Day 15-16</div>
+          <div class="day-title">📝 สร้าง Content ชุดแรก</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>LinkedIn post: "ผมทำ AI ตอบ LINE แทนพนักงานได้แล้ว" + วิดีโอ demo</li>
+            <li><span class="ck"></span>Facebook post: รูป before/after + ราคา</li>
+            <li><span class="ck"></span>TikTok: วิดีโอ demo 60 วินาที + caption ภาษาไทย</li>
+            <li><span class="ck"></span>ตั้ง auto-reply LINE OA ให้ส่ง demo link ทันที</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">อย่า polish มาก — post เลย ดีกว่ารอ perfect</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#a78bfa;">Day 17-18</div>
+          <div class="day-title">🎯 สร้าง Prospect List</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>Google "คลินิกความงาม กรุงเทพ" → เก็บ LINE/FB 50 ราย</li>
+            <li><span class="ck"></span>Facebook Group "ร้านค้าออนไลน์" → เก็บ contact 50 ราย</li>
+            <li><span class="ck"></span>LinkedIn search "เจ้าของร้าน / owner / clinic manager"</li>
+            <li><span class="ck"></span>บันทึกใน spreadsheet: ชื่อ, channel, pain point ที่เดา</li>
+            <li><span class="ck"></span>แบ่งกลุ่ม: คลินิก 30 / ร้านค้า 30 / อื่นๆ 20</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">100 contacts = 10-20 replies = 3-5 calls</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#a78bfa;">Day 19-21</div>
+          <div class="day-title">📨 ส่ง Cold Message ชุดแรก</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ส่ง 30 messages (Facebook Messenger / LINE)</li>
+            <li><span class="ck"></span>ใช้ template ที่ personalized ตาม industry</li>
+            <li><span class="ck"></span>อย่าขายตรง — ส่ง demo ให้ทดลองก่อน</li>
+            <li><span class="ck"></span>Follow-up คนที่เปิด message แล้วไม่ตอบ (Day 3)</li>
+            <li><span class="ck"></span>Track replies ใน spreadsheet</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">ดู script ด้านล่าง section "Scripts"</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#a78bfa;">Day 22-24</div>
+          <div class="day-title">💬 Join Facebook Groups</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>เข้าร่วม "เจ้าของธุรกิจ SME ไทย"</li>
+            <li><span class="ck"></span>เข้าร่วม "ร้านค้าออนไลน์ไทย"</li>
+            <li><span class="ck"></span>เข้าร่วม "คลินิก Beauty Thailand"</li>
+            <li><span class="ck"></span>ตอบคำถามใน group (ไม่ขายตรง) build trust ก่อน</li>
+            <li><span class="ck"></span>แชร์ insight เรื่อง AI ใน LINE OA</li>
+          </ul>
+          <div class="day-note" style="border-color:#ec4899;">ห้ามขายตรงใน group — โดนแบน! ให้ DM แทน</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#a78bfa;">Day 25-26</div>
+          <div class="day-title">📞 เริ่ม Discovery Calls</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>นัด call กับ prospect ที่สนใจ (30 นาที)</li>
+            <li><span class="ck"></span>เป้า: นัดให้ได้ 3+ ราย ใน Phase นี้</li>
+            <li><span class="ck"></span>ใช้ Discovery script (ดู section Scripts)</li>
+            <li><span class="ck"></span>ฟังมากกว่าพูด — เข้าใจ pain point ลูกค้า</li>
+            <li><span class="ck"></span>จบ call: "ขอส่ง proposal ให้ภายใน 48 ชั่วโมงได้ไหม"</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">Call ผ่าน Zoom / LINE Video / โทรศัพท์ก็ได้</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#a78bfa;">Day 27-28</div>
+          <div class="day-title">📊 ส่ง Proposal + ติดตาม</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ส่ง proposal PDF ที่ customize ตามลูกค้า</li>
+            <li><span class="ck"></span>ใส่ ROI estimate ที่ specific กับ business เขา</li>
+            <li><span class="ck"></span>ระบุ timeline ชัดเจน: เริ่ม X วันที่ Y เสร็จ</li>
+            <li><span class="ck"></span>Follow-up ถ้าไม่ตอบใน 48 ชั่วโมง</li>
+            <li><span class="ck"></span>เตรียมรับ objection (ดู section Objection)</li>
+          </ul>
+          <div class="day-note" style="border-color:#34d399;">เมื่อจบ Phase 3: มี proposal ส่งไปแล้ว 3+ ราย</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PHASE 4: CLOSE ════════════ -->
+<section id="ph4" style="padding:48px 24px; background:#06080f;">
+  <div class="container">
+    <div class="phase-block">
+      <div class="phase-header ph4">
+        <div class="ph-icon">🤝</div>
+        <div>
+          <div class="ph-phase">Phase 4</div>
+          <div class="ph-title">ปิดดีล — Sign + มัดจำ 50%</div>
+          <div class="ph-range">Day 29–38 · สัปดาห์ 5-6</div>
+        </div>
+        <div class="ph-outcome">
+          <div class="label">Outcome</div>
+          <div class="value" style="color:#fbbf24;">Sign สัญญา + รับ 10,000 บาท</div>
+        </div>
+      </div>
+
+      <div class="day-grid">
+
+        <div class="day-card">
+          <div class="day-label" style="color:#fbbf24;">Day 29-30</div>
+          <div class="day-title">🔄 Negotiation + Handle Objection</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>"แพงเกินไป" → แสดง ROI: ประหยัดค่าแรง CS เท่าไหร่/เดือน</li>
+            <li><span class="ck"></span>"กลัวข้อมูลรั่ว" → อธิบาย self-hosted = ข้อมูลอยู่กับเขา</li>
+            <li><span class="ck"></span>"ขอดูตัวอย่างก่อน" → ส่ง QR demo ทดลองได้เลยตอนนี้</li>
+            <li><span class="ck"></span>"ขอคิดก่อน" → "เข้าใจครับ ขอกำหนด deadline ไหม?"</li>
+            <li><span class="ck"></span>อย่า discount ง่าย — ให้ value เพิ่มแทน</li>
+          </ul>
+          <div class="day-note" style="border-color:#fbbf24;">ลูกค้าที่ "กลัวข้อมูลรั่ว" คือ lead ที่ดีที่สุดของเรา!</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#fbbf24;">Day 31-32</div>
+          <div class="day-title">📋 ส่งสัญญา + รอ Sign</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ส่ง Service Agreement 1 หน้า (อ่านง่าย)</li>
+            <li><span class="ck"></span>ระบุ: scope, timeline, payment terms, SLA</li>
+            <li><span class="ck"></span>Payment: 50% upfront, 50% เมื่อ go live</li>
+            <li><span class="ck"></span>ใช้ HelloSign/DocuSign (ฟรี tier) sign ออนไลน์ได้</li>
+            <li><span class="ck"></span>หรือพิมพ์ส่ง scan กลับก็ได้</li>
+          </ul>
+          <div class="day-note" style="border-color:#fbbf24;">สัญญา 1 หน้า ง่ายกว่า ลูกค้า SME sign เร็วกว่า</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#fbbf24;">Day 33</div>
+          <div class="day-title">💰 รับมัดจำ 50% — เงินเข้าแรก!</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ส่ง Invoice #001 พร้อม QR พร้อมเพย์</li>
+            <li><span class="ck"></span>รับโอนเงิน 10,000 บาท (จาก deal 20,000)</li>
+            <li><span class="ck"></span>ส่ง receipt ยืนยันรับเงินทันที</li>
+            <li><span class="ck"></span>ส่ง "ยินดีต้อนรับ" message + timeline เริ่มงาน</li>
+            <li><span class="ck"></span>📌 <strong style="color:#4ade80;">นี่คือเงินเข้ากระเป๋าครั้งแรก!</strong></li>
+          </ul>
+          <div class="day-note" style="border-color:#4ade80;">🎉 Milestone แรก: มัดจำ 10,000 บาท</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#fbbf24;">Day 34-38</div>
+          <div class="day-title">📅 Kick-off + วางแผน Delivery</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>Kick-off call 30 นาที กับลูกค้า</li>
+            <li><span class="ck"></span>เก็บข้อมูล: สินค้า, FAQ, ชื่อ brand, น้ำเสียง</li>
+            <li><span class="ck"></span>ส่ง "Client Onboarding Form" (Google Form)</li>
+            <li><span class="ck"></span>ตกลง timeline: เสร็จภายใน X วัน</li>
+            <li><span class="ck"></span>ระหว่างรอ: ไป outreach ลูกค้ารายต่อไป</li>
+          </ul>
+          <div class="day-note" style="border-color:#fbbf24;">อย่าหยุด outreach แม้จะได้ deal แรก — pipeline ต้องเดินต่อ</div>
+        </div>
+
+      </div>
+
+      <!-- GATE -->
+      <div class="gate" style="margin-top:20px;">
+        <div class="gate-header">
+          <span class="gate-icon">🚦</span>
+          <div>
+            <div class="gate-title">Decision Gate: ก่อนรับงาน ต้องเช็คนี้</div>
+            <div class="gate-sub">ถ้าไม่ครบทุกข้อ อย่าเพิ่งรับเงิน</div>
+          </div>
+        </div>
+        <div class="gate-checks">
+          <div class="gate-check">Scope ชัดเจน ไม่มีคำว่า "ฯลฯ"</div>
+          <div class="gate-check">Payment terms ระบุในสัญญา</div>
+          <div class="gate-check">Timeline realistic (ไม่ใช่ฝัน)</div>
+          <div class="gate-check">ลูกค้ามี VPS หรือพร้อมซื้อ</div>
+          <div class="gate-check">ลูกค้ามี LINE OA หรือพร้อมสมัคร</div>
+          <div class="gate-check">Acceptance criteria ชัดเจน</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PHASE 5: DELIVER ════════════ -->
+<section id="ph5" style="padding:48px 24px;">
+  <div class="container">
+    <div class="phase-block">
+      <div class="phase-header ph5">
+        <div class="ph-icon">🚀</div>
+        <div>
+          <div class="ph-phase">Phase 5</div>
+          <div class="ph-title">Deliver — ติดตั้งและ Go Live</div>
+          <div class="ph-range">Day 39–52 · สัปดาห์ 7-8</div>
+        </div>
+        <div class="ph-outcome">
+          <div class="label">Outcome</div>
+          <div class="value" style="color:#f87171;">ระบบ Live + ลูกค้าแฮปปี้</div>
+        </div>
+      </div>
+
+      <div class="day-grid">
+
+        <div class="day-card">
+          <div class="day-label" style="color:#f87171;">Day 39-40</div>
+          <div class="day-title">🖥️ Setup VPS ลูกค้า</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ซื้อ VPS ให้ลูกค้า (หรือแนะนำให้ซื้อ)</li>
+            <li><span class="ck"></span>DigitalOcean $6/เดือน = ~220 บาท</li>
+            <li><span class="ck"></span>ติดตั้ง Ubuntu 22.04 + Node.js 24</li>
+            <li><span class="ck"></span>ติดตั้ง OpenClaw + daemon</li>
+            <li><span class="ck"></span>Configure firewall + SSL (Let's Encrypt ฟรี)</li>
+          </ul>
+          <div class="day-note" style="border-color:#f87171;">VPS ของลูกค้า ไม่ใช่ของเรา — ข้อมูลอยู่กับเขา</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#f87171;">Day 41-42</div>
+          <div class="day-title">🔗 เชื่อมต่อ LINE OA ลูกค้า</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ขอ Channel Access Token + Secret จากลูกค้า</li>
+            <li><span class="ck"></span>Configure LINE channel ใน OpenClaw</li>
+            <li><span class="ck"></span>ตั้ง Webhook URL → domain จริงของลูกค้า</li>
+            <li><span class="ck"></span>ทดสอบ connection ว่า message ผ่านได้</li>
+            <li><span class="ck"></span>Setup auto-reply + greeting message</li>
+          </ul>
+          <div class="day-note" style="border-color:#f87171;">ถ้าลูกค้าไม่มี LINE OA ช่วย guide สมัครด้วย</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#f87171;">Day 43-45</div>
+          <div class="day-title">🤖 Build AI Knowledge Base</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>รวบรวม FAQ จาก Onboarding Form</li>
+            <li><span class="ck"></span>เขียน System Prompt ตาม brand ลูกค้า</li>
+            <li><span class="ck"></span>ใส่ข้อมูลสินค้า/บริการทั้งหมด</li>
+            <li><span class="ck"></span>ตั้ง escalation path: AI ไม่รู้ → "รอสักครู่นะคะ"</li>
+            <li><span class="ck"></span>ทดสอบกับ 30+ คำถามจริงที่ลูกค้าเคยได้รับ</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">ยิ่งข้อมูลเยอะ AI ยิ่งตอบได้ดี — ขอ FAQ เก่าจากลูกค้าด้วย</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#f87171;">Day 46-47</div>
+          <div class="day-title">🧪 UAT — ให้ลูกค้าทดสอบ</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ส่งลิงก์ทดสอบให้ลูกค้า 2-3 คนในทีม</li>
+            <li><span class="ck"></span>ให้ทดสอบ 3 วัน เก็บ feedback ทุกข้อ</li>
+            <li><span class="ck"></span>แก้ทุก issue ที่ลูกค้าแจ้ง</li>
+            <li><span class="ck"></span>ปรับ prompt ตาม feedback</li>
+            <li><span class="ck"></span>ทดสอบซ้ำจนลูกค้า sign off</li>
+          </ul>
+          <div class="day-note" style="border-color:#f87171;">UAT = หลักฐานว่าระบบทำงานได้ก่อนรับเงินที่เหลือ</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#f87171;">Day 48-49</div>
+          <div class="day-title">📚 Training ทีมลูกค้า</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>สอน: วิธีดู Control UI dashboard</li>
+            <li><span class="ck"></span>สอน: วิธีอัปเดต FAQ ใน AGENTS.md</li>
+            <li><span class="ck"></span>สอน: วิธี escalate ถ้า AI ตอบผิด</li>
+            <li><span class="ck"></span>สอน: วิธีดู conversation log</li>
+            <li><span class="ck"></span>ส่ง User Manual PDF 5-10 หน้า</li>
+          </ul>
+          <div class="day-note" style="border-color:#f87171;">ทีมลูกค้าต้องดูแลได้เอง = ลด support load ของเรา</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#f87171;">Day 50-52</div>
+          <div class="day-title">🟢 Go Live + Monitor</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>เปิดระบบให้ลูกค้าจริงเริ่มใช้งาน</li>
+            <li><span class="ck"></span>Monitor 48 ชั่วโมงแรกอย่างใกล้ชิด</li>
+            <li><span class="ck"></span>ตอบ support ทันทีถ้ามีปัญหา</li>
+            <li><span class="ck"></span>เก็บ metric: messages/วัน, % AI resolved</li>
+            <li><span class="ck"></span>ส่ง go-live summary ให้ลูกค้า</li>
+          </ul>
+          <div class="day-note" style="border-color:#34d399;">Go live แล้ว = พร้อมรับเงินที่เหลือ!</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PHASE 6: GET PAID ════════════ -->
+<section id="ph6" style="padding:48px 24px; background:#04080d;">
+  <div class="container">
+    <div class="phase-block">
+      <div class="phase-header ph6">
+        <div class="ph-icon">💰</div>
+        <div>
+          <div class="ph-phase">Phase 6</div>
+          <div class="ph-title">รับเงิน — เงินเข้ากระเป๋าครบ</div>
+          <div class="ph-range">Day 53–60 · สัปดาห์ 9</div>
+        </div>
+        <div class="ph-outcome">
+          <div class="label">Outcome</div>
+          <div class="value" style="color:#4ade80;">💵 20,000 บาท + MRR 3,000/เดือน</div>
+        </div>
+      </div>
+
+      <!-- MONEY FLOW -->
+      <div style="overflow-x:auto; margin-bottom:20px;">
+        <div class="money-flow">
+          <div class="mf-step">
+            <div class="mf-icon">📋</div>
+            <div class="mf-title">Sign สัญญา</div>
+            <div class="mf-detail">Day 32</div>
+          </div>
+          <div class="mf-arrow">→</div>
+          <div class="mf-step" style="border-color:#fbbf2440;">
+            <div class="mf-icon">💰</div>
+            <div class="mf-title">มัดจำ 50%</div>
+            <div class="mf-detail" style="color:#fbbf24;">฿10,000 — Day 33</div>
+          </div>
+          <div class="mf-arrow">→</div>
+          <div class="mf-step">
+            <div class="mf-icon">🚀</div>
+            <div class="mf-title">Go Live</div>
+            <div class="mf-detail">Day 50-52</div>
+          </div>
+          <div class="mf-arrow">→</div>
+          <div class="mf-step" style="border-color:#4ade8040;">
+            <div class="mf-icon">💵</div>
+            <div class="mf-title">เงินที่เหลือ 50%</div>
+            <div class="mf-detail" style="color:#4ade80;">฿10,000 — Day 53</div>
+          </div>
+          <div class="mf-arrow">→</div>
+          <div class="mf-step" style="border-color:#10b98140;">
+            <div class="mf-icon">🔄</div>
+            <div class="mf-title">MRR เริ่ม</div>
+            <div class="mf-detail" style="color:#34d399;">฿3,000/เดือน</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-grid">
+
+        <div class="day-card">
+          <div class="day-label" style="color:#4ade80;">Day 53</div>
+          <div class="day-title">📤 ส่ง Invoice งวดที่ 2</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ส่ง Invoice #001 งวด 2 ทันทีหลัง Go Live</li>
+            <li><span class="ck"></span>แนบ Go-Live Report ยืนยันงานเสร็จ</li>
+            <li><span class="ck"></span>ระบุ due date: 7 วัน</li>
+            <li><span class="ck"></span>ใส่ QR พร้อมเพย์ + เลขบัญชี</li>
+            <li><span class="ck"></span>Follow-up ถ้าไม่จ่ายใน 3 วัน</li>
+          </ul>
+          <div class="day-note" style="border-color:#4ade80;">อย่าลืมส่ง Invoice — เงินไม่โอนเองถ้าไม่ขอ</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#4ade80;">Day 55</div>
+          <div class="day-title">💵 รับเงินงวด 2 + Setup MRR</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ยืนยันรับเงิน 10,000 บาท</li>
+            <li><span class="ck"></span>ส่ง Receipt + ขอบคุณ</li>
+            <li><span class="ck"></span>ส่ง Invoice MRR แรก (3,000 บาท/เดือน)</li>
+            <li><span class="ck"></span>ตั้ง reminder: Invoice วันที่ 1 ของทุกเดือน</li>
+            <li><span class="ck"></span>🎉 รวมรับแล้ว: 20,000 บาท setup!</li>
+          </ul>
+          <div class="day-note" style="border-color:#4ade80;">🏆 เป้าหมาย Phase 6 สำเร็จ!</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#4ade80;">Day 56-57</div>
+          <div class="day-title">📸 สร้าง Case Study ทันที</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>ขอ permission ลูกค้าใช้เป็น case study</li>
+            <li><span class="ck"></span>เก็บ metric: messages/วัน, % resolved, ความพอใจ</li>
+            <li><span class="ck"></span>ถ่าย screenshot ระบบทำงานจริง</li>
+            <li><span class="ck"></span>ขอ testimonial สั้น 2-3 ประโยค</li>
+            <li><span class="ck"></span>โพสต์ LinkedIn + Facebook: "ปิดดีลแรก + ผลลัพธ์"</li>
+          </ul>
+          <div class="day-note" style="border-color:#a78bfa;">Case study 1 อัน = lead ใหม่ 5-10 ราย</div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-label" style="color:#4ade80;">Day 58-60</div>
+          <div class="day-title">🔁 เริ่ม Cycle ต่อไป</div>
+          <ul class="task-list">
+            <li><span class="ck"></span>Review: อะไรได้ผล อะไรไม่ได้ผล</li>
+            <li><span class="ck"></span>Outreach pipeline ที่ค้างอยู่ — follow-up ต่อ</li>
+            <li><span class="ck"></span>ถาม referral: "รู้จักธุรกิจไหนที่ต้องการแบบนี้บ้าง?"</li>
+            <li><span class="ck"></span>ปรับ proposal ตาม objection ที่เจอ</li>
+            <li><span class="ck"></span>ตั้งเป้า: ปิดดีลที่ 2 ใน 30 วัน</li>
+          </ul>
+          <div class="day-note" style="border-color:#4ade80;">ดีลแรก = ที่ยากที่สุด ดีลที่ 2 ง่ายกว่าเสมอ</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ TOOLS ════════════ -->
+<section id="tools" style="padding:48px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--teal);">Tools ที่ต้องใช้</div>
+    <h2 class="section-title">เครื่องมือทั้งหมดในการเริ่มต้น</h2>
+    <div style="overflow-x:auto;">
+      <table class="tool-table">
+        <thead>
+          <tr><th>Tool</th><th>ใช้ทำอะไร</th><th>ราคา</th><th>Phase ที่ใช้</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><div class="tool-name">OpenClaw</div><div class="tool-use">AI Gateway หลัก</div></td><td style="color:#94a3b8; font-size:0.85rem;">เชื่อม LINE กับ AI</td><td><span class="cost-free">ฟรี (MIT)</span></td><td style="color:#4b5563; font-size:0.82rem;">P1+</td></tr>
+          <tr><td><div class="tool-name">Anthropic API (Claude)</div><div class="tool-use">LLM สำหรับ AI ตอบ</div></td><td style="color:#94a3b8; font-size:0.85rem;">Brain ของ AI</td><td><span class="cost-paid">~500-1,500฿/เดือน</span></td><td style="color:#4b5563; font-size:0.82rem;">P1+</td></tr>
+          <tr><td><div class="tool-name">LINE Official Account</div><div class="tool-use">Channel ที่ลูกค้าคุย</div></td><td style="color:#94a3b8; font-size:0.85rem;">หน้าร้าน LINE</td><td><span class="cost-free">ฟรี (Free plan)</span></td><td style="color:#4b5563; font-size:0.82rem;">P1+</td></tr>
+          <tr><td><div class="tool-name">DigitalOcean VPS</div><div class="tool-use">Server รัน OpenClaw</div></td><td style="color:#94a3b8; font-size:0.85rem;">Infrastructure</td><td><span class="cost-paid">~220฿/เดือน ($6)</span></td><td style="color:#4b5563; font-size:0.82rem;">P1+</td></tr>
+          <tr><td><div class="tool-name">ngrok</div><div class="tool-use">Test webhook local</div></td><td style="color:#94a3b8; font-size:0.85rem;">Dev/Testing เท่านั้น</td><td><span class="cost-free">ฟรี (limited)</span></td><td style="color:#4b5563; font-size:0.82rem;">P1 เท่านั้น</td></tr>
+          <tr><td><div class="tool-name">Canva</div><div class="tool-use">สร้าง proposal, one-pager</div></td><td style="color:#94a3b8; font-size:0.85rem;">Design ทุกอย่าง</td><td><span class="cost-free">ฟรี (Free tier)</span></td><td style="color:#4b5563; font-size:0.82rem;">P2+</td></tr>
+          <tr><td><div class="tool-name">CapCut</div><div class="tool-use">ตัดต่อวิดีโอ demo</div></td><td style="color:#94a3b8; font-size:0.85rem;">Video content</td><td><span class="cost-free">ฟรี</span></td><td style="color:#4b5563; font-size:0.82rem;">P2</td></tr>
+          <tr><td><div class="tool-name">Google Sheets</div><div class="tool-use">Prospect list, tracking</div></td><td style="color:#94a3b8; font-size:0.85rem;">CRM อย่างง่าย</td><td><span class="cost-free">ฟรี</span></td><td style="color:#4b5563; font-size:0.82rem;">P3+</td></tr>
+          <tr><td><div class="tool-name">Netlify / GitHub Pages</div><div class="tool-use">Host salepage</div></td><td style="color:#94a3b8; font-size:0.85rem;">เว็บไซต์ฟรี</td><td><span class="cost-free">ฟรี</span></td><td style="color:#4b5563; font-size:0.82rem;">P2+</td></tr>
+          <tr><td><div class="tool-name">Google Forms</div><div class="tool-use">Onboarding form</div></td><td style="color:#94a3b8; font-size:0.85rem;">เก็บข้อมูลลูกค้า</td><td><span class="cost-free">ฟรี</span></td><td style="color:#4b5563; font-size:0.82rem;">P4+</td></tr>
+          <tr><td><div class="tool-name">HelloSign / DocuSign</div><div class="tool-use">Sign สัญญาออนไลน์</div></td><td style="color:#94a3b8; font-size:0.85rem;">ลายเซ็นดิจิทัล</td><td><span class="cost-free">ฟรี (3 docs/เดือน)</span></td><td style="color:#4b5563; font-size:0.82rem;">P4</td></tr>
+          <tr><td><div class="tool-name">Let's Encrypt</div><div class="tool-use">SSL certificate</div></td><td style="color:#94a3b8; font-size:0.85rem;">HTTPS สำหรับ webhook</td><td><span class="cost-free">ฟรี</span></td><td style="color:#4b5563; font-size:0.82rem;">P5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ BUDGET ════════════ -->
+<section id="budget" style="padding:48px 24px; background:#06080f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--orange);">ต้นทุนเริ่มต้น</div>
+    <h2 class="section-title">ต้องใช้เงินเท่าไหร่ในการเริ่ม</h2>
+
+    <div class="budget-grid">
+      <div class="budget-item" style="border-color:#3b82f640;">
+        <div class="budget-label">VPS Demo Server</div>
+        <div class="budget-amount" style="color:#60a5fa;">~220 บาท</div>
+        <div class="budget-note">DigitalOcean $6/เดือน</div>
+      </div>
+      <div class="budget-item" style="border-color:#8b5cf640;">
+        <div class="budget-label">Claude API (เดือนแรก)</div>
+        <div class="budget-amount" style="color:#a78bfa;">~500 บาท</div>
+        <div class="budget-note">ขึ้นอยู่กับ testing</div>
+      </div>
+      <div class="budget-item" style="border-color:#10b98140;">
+        <div class="budget-label">LINE OA</div>
+        <div class="budget-amount" style="color:#34d399;">ฟรี</div>
+        <div class="budget-note">Free plan 1,000 msg/เดือน</div>
+      </div>
+      <div class="budget-item" style="border-color:#f59e0b40;">
+        <div class="budget-label">Domain (optional)</div>
+        <div class="budget-amount" style="color:#fbbf24;">~350 บาท/ปี</div>
+        <div class="budget-note">ใช้ IP ตรงก็ได้ก่อน</div>
+      </div>
+      <div class="budget-item" style="border-color:#ec489940;">
+        <div class="budget-label">Tools ทั้งหมด</div>
+        <div class="budget-amount" style="color:#f472b6;">ฟรีเกือบทั้งหมด</div>
+        <div class="budget-note">Canva, Google, GitHub</div>
+      </div>
+      <div class="budget-item" style="border-color:#4ade8060; background:#051a0e;">
+        <div class="budget-label">รวมต้นทุนเดือนแรก</div>
+        <div class="budget-amount" style="color:#4ade80; font-size:1.6rem;">~1,070 บาท</div>
+        <div class="budget-note">ถ้าปิดดีล 20K = ROI 1,770%</div>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top:20px;">
+      <span class="icon">🎯</span>
+      <div class="text">
+        <strong>ลงทุน ~1,000 บาท → รายได้ 20,000 บาท</strong> จากดีลแรก
+        + MRR 3,000 บาท/เดือน recurring revenue เริ่มต้นตั้งแต่เดือนที่ 2 เป็นต้นไป
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ SCRIPTS ════════════ -->
+<section id="scripts" style="padding:48px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--pink);">Scripts สำคัญ</div>
+    <h2 class="section-title">ข้อความและสคริปต์พร้อมใช้</h2>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(460px,1fr)); gap:20px;">
+
+      <div>
+        <h3 style="color:#94a3b8; font-size:0.88rem; margin-bottom:12px;">📨 Cold Message — คลินิก</h3>
+        <div class="script-box">
+          <div class="s-label">ส่งผ่าน Facebook Messenger / LINE</div>
+          <div class="s-text">
+            สวัสดีครับ คุณ[ชื่อ] 👋<br><br>
+            ผมเห็นคลินิก[ชื่อ]มีลูกค้า inbox เยอะมากเลย<br>
+            ตอนนี้มีทีมคอยตอบ LINE ตลอดไหมครับ?<br><br>
+            ผมทำระบบ <strong>AI ตอบ LINE แทนพนักงาน</strong> ให้คลินิกหลายแห่งในกรุงเทพครับ<br>
+            AI ตอบได้ทันที 24/7 ข้อมูลอยู่บน server คลินิกเองครับ<br><br>
+            ขอส่งลิงก์ทดลองใช้ฟรีก่อนได้ไหมครับ? 🙏
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:#94a3b8; font-size:0.88rem; margin-bottom:12px;">📨 Cold Message — ร้านค้าออนไลน์</h3>
+        <div class="script-box">
+          <div class="s-label">ส่งผ่าน Facebook Messenger</div>
+          <div class="s-text">
+            สวัสดีครับ 👋<br><br>
+            เห็นร้าน[ชื่อ]มีลูกค้าถาม inbox เยอะมากเลยนะครับ<br>
+            ทีมงานตอบทันไหมครับ โดยเฉพาะนอกเวลาทำงาน?<br><br>
+            ผมทำ <strong>AI ตอบ LINE/Facebook แทนพนักงาน</strong><br>
+            ตอบเร็ว ตอบได้ตลอด 24 ชั่วโมง ข้อมูลไม่รั่วครับ<br><br>
+            มีลูกค้าที่ใช้แล้วลด CS workload ได้ 70% ครับ<br>
+            ขอส่งตัวอย่างให้ดูได้ไหมครับ?
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:#94a3b8; font-size:0.88rem; margin-bottom:12px;">📞 Discovery Call Script</h3>
+        <div class="script-box">
+          <div class="s-label">เปิด call (30 นาที)</div>
+          <div class="s-text">
+            "ขอบคุณที่สละเวลานะครับ วันนี้อยากเข้าใจปัญหาของคุณก่อน<br>
+            ตอนนี้ใช้วิธีไหนตอบ LINE อยู่ครับ? มีทีมกี่คน?"<br><br>
+            [ฟัง] → "คำถามที่ได้บ่อยที่สุดคืออะไรครับ?"<br><br>
+            [ฟัง] → "ถ้า AI ตอบคำถามพวกนี้ได้ 70% คุณต้องการอะไรเพิ่มไหมครับ?"<br><br>
+            [ฟัง] → <strong>"ขอ demo 5 นาทีผ่าน screen share ได้เลยไหมครับ?"</strong><br><br>
+            [หลัง demo] → "เห็น potential ไหมครับ? ถ้าสนใจขอส่ง proposal ภายใน 48 ชั่วโมงได้ไหมครับ?"
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:#94a3b8; font-size:0.88rem; margin-bottom:12px;">🚫 Handle Objection: "แพงเกิน"</h3>
+        <div class="script-box">
+          <div class="s-label">เมื่อลูกค้าบอกราคาแพง</div>
+          <div class="s-text">
+            "เข้าใจครับ ขอถามนิดนึงนะครับ ตอนนี้ทีม CS กี่คน?<br>
+            เงินเดือนรวมประมาณเท่าไหร่ต่อเดือนครับ?"<br><br>
+            [ถ้าตอบ 15,000-20,000] →<br>
+            <strong>"งั้น AI ช่วยงานได้ 70% = ประหยัด 10,000-14,000 บาท/เดือน<br>
+            Setup 20,000 บาท = คืนทุนใน 2 เดือนครับ"</strong><br><br>
+            "แต่ข้อดีกว่าคือ: ลูกค้าได้ตอบตลอด 24 ชั่วโมง<br>
+            ทีมของคุณไปทำงานที่ซับซ้อนกว่าได้ครับ"
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:#94a3b8; font-size:0.88rem; margin-bottom:12px;">✉️ Follow-up หลังส่ง Proposal (Day 3)</h3>
+        <div class="script-box">
+          <div class="s-label">ส่งถ้าไม่ตอบใน 3 วัน</div>
+          <div class="s-text">
+            "สวัสดีครับ คุณ[ชื่อ]<br><br>
+            ส่ง proposal ไปเมื่อ 3 วันที่แล้วครับ ได้ดูแล้วยังไงบ้างครับ?<br><br>
+            ถ้ามีคำถามหรืออยากปรับรายละเอียดอะไร ยินดีครับ 🙏<br><br>
+            <strong>ถ้าสะดวก call 15 นาที วันพฤหัสหรือศุกร์นี้ได้ไหมครับ?</strong>"
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:#94a3b8; font-size:0.88rem; margin-bottom:12px;">⭐ ขอ Testimonial หลัง Go Live</h3>
+        <div class="script-box">
+          <div class="s-label">ส่งหลังระบบทำงานสักสัปดาห์</div>
+          <div class="s-text">
+            "สวัสดีครับ คุณ[ชื่อ] ระบบทำงานเป็นยังไงบ้างครับ?<br><br>
+            ถ้าพอใจ ขอ favor นิดนึงนะครับ —<br>
+            ช่วยเขียน 2-3 ประโยคสั้นๆ ว่า AI ช่วยอะไรได้บ้าง<br>
+            จะนำไปใช้เป็น case study ในเว็บครับ ไม่ระบุชื่อก็ได้ถ้าไม่สะดวก<br><br>
+            <strong>และถ้ารู้จักธุรกิจไหนที่น่าจะต้องการแบบนี้บ้าง แนะนำให้ผมได้เลยนะครับ 🙏</strong>"
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FINAL CHECKLIST ════════════ -->
+<section style="padding:48px 24px; background:#04080d;">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label" style="color:var(--green); text-align:center;">Checklist สรุป</div>
+      <h2 class="section-title" style="text-align:center;">ก่อนออกหาลูกค้า ต้องมีครบนี้</h2>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin-top:32px;">
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="color:#60a5fa; font-weight:700; font-size:0.85rem; margin-bottom:12px;">⚙️ Technical Ready</div>
+        <ul style="list-style:none; font-size:0.82rem; color:#64748b;">
+          <li style="padding:4px 0;">☐ OpenClaw รันบน VPS ได้</li>
+          <li style="padding:4px 0;">☐ LINE OA เชื่อมต่อแล้ว</li>
+          <li style="padding:4px 0;">☐ AI ตอบได้ 20+ คำถาม</li>
+          <li style="padding:4px 0;">☐ Demo scenario 3 แบบพร้อม</li>
+          <li style="padding:4px 0;">☐ ทดสอบผ่านแล้ว end-to-end</li>
+        </ul>
+      </div>
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="color:#34d399; font-weight:700; font-size:0.85rem; margin-bottom:12px;">📄 เอกสารพร้อม</div>
+        <ul style="list-style:none; font-size:0.82rem; color:#64748b;">
+          <li style="padding:4px 0;">☐ Salepage พร้อม + online</li>
+          <li style="padding:4px 0;">☐ One-pager PDF</li>
+          <li style="padding:4px 0;">☐ Proposal template</li>
+          <li style="padding:4px 0;">☐ Service Agreement 1 หน้า</li>
+          <li style="padding:4px 0;">☐ Invoice template + QR</li>
+        </ul>
+      </div>
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="color:#a78bfa; font-weight:700; font-size:0.85rem; margin-bottom:12px;">📣 Marketing พร้อม</div>
+        <ul style="list-style:none; font-size:0.82rem; color:#64748b;">
+          <li style="padding:4px 0;">☐ Demo video 60 วินาที</li>
+          <li style="padding:4px 0;">☐ LinkedIn post แรก</li>
+          <li style="padding:4px 0;">☐ Prospect list 100 ราย</li>
+          <li style="padding:4px 0;">☐ Cold message template</li>
+          <li style="padding:4px 0;">☐ Google Sheet tracking</li>
+        </ul>
+      </div>
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;">
+        <div style="color:#4ade80; font-weight:700; font-size:0.85rem; margin-bottom:12px;">🧠 Mindset พร้อม</div>
+        <ul style="list-style:none; font-size:0.82rem; color:#64748b;">
+          <li style="padding:4px 0;">☐ รู้ ICP ชัดเจน (คลินิก/ร้านค้า)</li>
+          <li style="padding:4px 0;">☐ จำ pitch 30 วินาทีได้</li>
+          <li style="padding:4px 0;">☐ รู้ handle objection 3 แบบ</li>
+          <li style="padding:4px 0;">☐ ตั้ง daily target: DM 10 ราย/วัน</li>
+          <li style="padding:4px 0;">☐ พร้อม follow-up ไม่ยอมแพ้</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top:24px; max-width:700px; margin-left:auto; margin-right:auto;">
+      <span class="icon">🏁</span>
+      <div class="text">
+        <strong>กฎข้อเดียว:</strong> ดีลแรกคือที่ยากที่สุด แต่ทุกอย่างเริ่มจากการ "ส่ง message ไปหาลูกค้า 1 ราย"
+        ถ้าวันนี้ไม่ส่งแม้แต่ 1 message ก็ไม่มีวันได้ดีลแรก — <strong>เริ่มเลยวันนี้</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="font-size:0.88rem; color:#1e3a5f; margin-bottom:8px;">
+    Header Staff Action Plan — AI Automation Business · May 2026
+  </div>
+  <div>Powered by OpenClaw · MIT License · docs.openclaw.ai</div>
+</footer>
+
+</body>
+</html>

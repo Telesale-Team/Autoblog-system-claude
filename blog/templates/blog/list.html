@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}บทความ{% if active_category %} — {{ active_category.name }}{% endif %}{% if active_tag %} — #{{ active_tag.name }}{% endif %}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .brand-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: .75rem;
+    transition: transform .15s, box-shadow .15s;
+    color: inherit;
+  }
+  .brand-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  }
+  .thumb {
+    height: 180px;
+    background-color: var(--bs-secondary-bg);
+    background-size: cover;
+    background-position: center;
+    border-radius: .75rem .75rem 0 0;
+  }
+  .thumb-fallback {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    opacity: .4;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h1 class="fw-bold text-body">
+        {% if active_category %}{{ active_category.name }}
+        {% elif active_tag %}#{{ active_tag.name }}
+        {% else %}บทความล่าสุด{% endif %}
+      </h1>
+      <p class="text-secondary">
+        {% if active_category %}{{ active_category.description|default:"" }}
+        {% elif active_tag %}บทความที่แท็ก {{ active_tag.name }}
+        {% else %}Insight, How-to, และ Case Study เกี่ยวกับ AI สำหรับธุรกิจไทย{% endif %}
+      </p>
+    </div>
+
+    <form method="get" class="mx-auto mb-4" style="max-width:480px;">
+      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="ค้นหาบทความ...">
+    </form>
+
+    <div class="d-flex gap-2 justify-content-center flex-wrap mb-4">
+      <a href="{% url 'blog:list' %}" class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline-secondary{% endif %}">ทั้งหมด</a>
+      {% for c in categories %}
+        <a href="{% url 'blog:category' c.slug %}" class="btn btn-sm {% if active_category.slug == c.slug %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ c.name }}</a>
+      {% endfor %}
+    </div>
+
+    {% if articles %}
+    <div class="row g-4">
+      {% for a in articles %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ a.get_absolute_url }}" class="brand-card text-decoration-none d-block h-100 overflow-hidden">
+          <div class="thumb" {% if a.display_cover %}style="background-image:url('{{ a.display_cover }}');"{% endif %}>
+            {% if not a.display_cover %}<div class="thumb-fallback">📝</div>{% endif %}
+          </div>
+          <div class="p-3">
+            <small class="text-primary text-uppercase fw-semibold">{{ a.category.name }}</small>
+            <h3 class="fs-6 fw-bold text-body mt-1 mb-2">{{ a.title }}</h3>
+            <p class="text-secondary small">{{ a.excerpt|default:""|truncatechars:120 }}</p>
+            <small class="text-secondary">{{ a.published_at|date:"d M Y" }} · {{ a.reading_time }} นาที</small>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav class="d-flex justify-content-center mt-5">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">←</a></li>{% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}">→</a></li>{% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="text-center text-secondary py-5">
+      {% if q %}ไม่พบบทความที่ตรงกับ "{{ q }}"{% else %}ยังไม่มีบทความ{% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

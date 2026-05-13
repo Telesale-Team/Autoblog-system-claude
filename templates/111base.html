@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AIBiz Thailand — AI Assistant สำหรับธุรกิจไทย{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}AI Assistant สำหรับธุรกิจไทย ตอบลูกค้า 24/7 ทุกช่องทาง ข้อมูลอยู่กับคุณ 100%{% endblock %}">
+  {% block og %}
+  <meta property="og:title" content="{% block og_title %}{{ block.super }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ block.super }}{% endblock %}">
+  <meta property="og:type" content="website">
+  {% block og_image %}{% endblock %}
+  {% endblock %}
+
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/sarabun/sarabun.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/append.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top border-bottom bg-dark" style="background:#0d1117;">
+  <div class="container px-4">
+    <a class="navbar-brand fw-bold" href="{% url 'pages:home' %}">AI<span class="text-primary">Biz</span> Thailand</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto gap-lg-3">
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'pages:home' %}">หน้าแรก</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'blog:list' %}">บทความ</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'portfolio:list' %}">ผลงาน</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'pages:contact' %}">ติดต่อ</a></li>
+      </ul>
+      <a href="{% url 'pages:contact' %}" class="btn btn-primary btn-sm px-3">ปรึกษาฟรี →</a>
+    </div>
+  </div>
+</nav>
+
+  <main>{% block content %}{% endblock %}</main>
+
+<footer class="border-top py-4 text-center" style="background:#060911;">
+  <div class="container">
+    <div class="d-flex justify-content-center gap-3 mb-2 flex-wrap">
+      <a href="{% url 'pages:home' %}" class="text-secondary text-decoration-none">หน้าแรก</a>
+      <a href="{% url 'blog:list' %}" class="text-secondary text-decoration-none">บทความ</a>
+      <a href="{% url 'portfolio:list' %}" class="text-secondary text-decoration-none">ผลงาน</a>
+      <a href="{% url 'pages:contact' %}" class="text-secondary text-decoration-none">ติดต่อ</a>
+    </div>
+    <small class="text-secondary">© {% now "Y" %} AIBiz Thailand · Powered by OpenClaw · Self-Hosted AI Gateway</small>
+  </div>
+</footer>
+
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

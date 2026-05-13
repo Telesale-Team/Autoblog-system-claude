@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}AIBiz Thailand — พนักงาน AI ที่ไม่หลับ ไม่ลา ไม่หยุด{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+  <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 mb-3">
+    🦀 Powered by OpenClaw · Self-Hosted · MIT License
+  </span>
+  <h1 class="mb-3">
+    พนักงาน AI ที่<span class="accent">ไม่หลับ ไม่ลา ไม่หยุด</span><br>
+    <span class="accent2">ไม่ต้องจ่ายเงินเดือนเพิ่ม</span>
+  </h1>
+  <p class="text-secondary mb-4" style="max-width:600px; font-size:clamp(1rem,2vw,1.2rem);">
+    ตอบลูกค้าอย่างเป็นธรรมชาติ ทุกช่องทาง 24/7 — โดยที่ข้อมูลเป็นของคุณ 100%
+  </p>
+  <div class="d-flex gap-2 flex-wrap justify-content-center mb-5">
+    <a href="#packages" class="btn btn-primary btn-lg px-4">ดูแพ็กเกจและราคา</a>
+    <a href="#usecases" class="btn btn-outline-secondary btn-lg px-4">ดูตัวอย่างการใช้งาน</a>
+  </div>
+  <div class="row g-0 brand-card overflow-hidden" style="max-width:900px;">
+    <div class="col-6 col-md-3 text-center py-3 px-3 border-end">
+      <div class="fs-3 fw-bold text-light">70%</div>
+      <small class="text-secondary">queries ตอบอัตโนมัติ</small>
+    </div>
+    <div class="col-6 col-md-3 text-center py-3 px-3 border-end">
+      <div class="fs-3 fw-bold text-light">28+</div>
+      <small class="text-secondary">channels รองรับ</small>
+    </div>
+    <div class="col-6 col-md-3 text-center py-3 px-3 border-end">
+      <div class="fs-3 fw-bold text-light">5 นาที</div>
+      <small class="text-secondary">setup เริ่มต้น</small>
+    </div>
+    <div class="col-6 col-md-3 text-center py-3 px-3">
+      <div class="fs-3 fw-bold text-light">MIT</div>
+      <small class="text-secondary">ใช้เชิงพาณิชย์ได้</small>
+    </div>
+  </div>
+</section>
+
+<section class="py-5" style="background:#08030d;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mb-2">ปัญหาที่ธุรกิจไทยเจออยู่</div>
+      <h2 class="fw-bold text-light">คุณกำลังเสียเงินและเวลาโดยไม่รู้ตัว</h2>
+    </div>
+    <div class="row g-3">
+      {% for pain in "1234567"|make_list %}{% endfor %}
+      <div class="col-md-6 col-lg-4"><div class="pain-card p-3 h-100"><div class="pain-icon">😓</div><h3>ตอบ LINE ไม่ทัน</h3><p class="mb-0">ลูกค้าถามแล้วรอนาน → เปลี่ยนใจไปซื้อคู่แข่ง ทีม CS ทำงานล่วงเวลาทุกวัน</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="pain-card p-3 h-100"><div class="pain-icon">💸</div><h3>ค่า SaaS แพงขึ้นเรื่อยๆ</h3><p class="mb-0">จ่าย per-message หรือ per-user ยิ่งธุรกิจโต ยิ่งจ่ายแพง</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="pain-card p-3 h-100"><div class="pain-icon">🔓</div><h3>กลัวข้อมูลรั่ว</h3><p class="mb-0">ข้อมูลลูกค้าอยู่บน cloud vendor เสี่ยง PDPA โดนปรับสูงสุด 5 ล้านบาท</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="pain-card p-3 h-100"><div class="pain-icon">🧩</div><h3>ระบบกระจัดกระจาย</h3><p class="mb-0">LINE bot ระบบหนึ่ง Telegram อีกระบบ Facebook อีกระบบ ดูแลยาก</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="pain-card p-3 h-100"><div class="pain-icon">🕐</div><h3>ทำ manual tasks ซ้ำซ้อน</h3><p class="mb-0">สรุป email, นัดประชุม, ตอบคำถามซ้ำ กินเวลาทีม 3-4 ชม./วัน</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="pain-card p-3 h-100"><div class="pain-icon">📊</div><h3>ตัดสินใจช้าเพราะไม่มีข้อมูล</h3><p class="mb-0">ไม่รู้ว่าลูกค้าถามอะไรบ้าง ไม่มี report รายวัน</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5" style="background:#080d1a;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mb-2">วิธีแก้ปัญหา</div>
+      <h2 class="fw-bold text-light mb-2">AI Gateway ที่รันบน server ของคุณเอง</h2>
+      <p class="text-secondary">เชื่อมทุก channel เข้ากับ AI ที่ทรงพลัง ใน infrastructure ที่คุณควบคุม 100%</p>
+    </div>
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6">
+        <div class="brand-card p-4">
+          <small class="text-secondary mb-3 d-block">Data Flow — ข้อมูลทั้งหมดอยู่บน server ของคุณ</small>
+          <div class="d-flex flex-wrap gap-2 mb-2"><span class="fnode ch">💬 LINE</span><span class="fnode ch">📱 Telegram</span><span class="fnode ch">🔵 WhatsApp</span></div>
+          <div class="text-secondary small ps-3">↓ ส่งข้อความเข้ามา</div>
+          <div class="my-2"><span class="fnode gw">🦀 AI Gateway (บน server คุณ)</span></div>
+          <div class="text-secondary small ps-3">↓ route + process</div>
+          <div class="my-2"><span class="fnode ai">🤖 AI Agent (Claude/GPT/Gemini)</span></div>
+          <div class="text-secondary small ps-3">↓ ตอบกลับ</div>
+          <div class="mt-2"><span class="fnode ch">👤 ลูกค้าได้รับคำตอบทันที</span></div>
+          <div class="alert alert-success mt-3 mb-0 small">🔒 ข้อมูลทั้งหมดไม่ออกนอก server ของคุณ</div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <ul class="list-unstyled m-0">
+          {% for item in '0123456'|make_list %}{% endfor %}
+          <li class="d-flex gap-3 py-2 border-bottom border-secondary border-opacity-25"><span class="text-success fs-5">✓</span><div><strong class="text-light">ตอบลูกค้าอัตโนมัติ 24/7</strong><br><small class="text-secondary">ไม่มีวันหยุด ไม่ลา ไม่ป่วย ตอบได้ทันทีทุกช่องทาง</small></div></li>
+          <li class="d-flex gap-3 py-2 border-bottom border-secondary border-opacity-25"><span class="text-success fs-5">✓</span><div><strong class="text-light">ข้อมูล PDPA-Safe 100%</strong><br><small class="text-secondary">ทุกอย่างอยู่บน server ของคุณ ไม่ผ่าน cloud ของใคร</small></div></li>
+          <li class="d-flex gap-3 py-2 border-bottom border-secondary border-opacity-25"><span class="text-success fs-5">✓</span><div><strong class="text-light">รองรับ LINE + Telegram + WhatsApp พร้อมกัน</strong><br><small class="text-secondary">Gateway เดียวจัดการทุก channel ไม่ต้องแยกระบบ</small></div></li>
+          <li class="d-flex gap-3 py-2 border-bottom border-secondary border-opacity-25"><span class="text-success fs-5">✓</span><div><strong class="text-light">จ่ายครั้งเดียว ไม่มีค่า per-message</strong><br><small class="text-secondary">ประหยัดกว่า SaaS 60-80% ในระยะยาว</small></div></li>
+          <li class="d-flex gap-3 py-2"><span class="text-success fs-5">✓</span><div><strong class="text-light">AI จำ context ลูกค้าแต่ละราย</strong><br><small class="text-secondary">มี memory ติดตาม session ประวัติการสนทนาไม่หาย</small></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if featured_cases %}
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mb-2">ผลงานล่าสุด</div>
+      <h2 class="fw-bold text-light">Case Studies จากลูกค้าจริง</h2>
+    </div>
+    <div class="row g-4">
+      {% for cs in featured_cases %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ cs.get_absolute_url }}" class="brand-card text-decoration-none d-block h-100 overflow-hidden">
+          <div class="thumb" {% if cs.cover_image %}style="background-image:url('{{ cs.cover_image.url }}');"{% endif %}>
+            {% if not cs.cover_image %}<div class="thumb-fallback">📂</div>{% endif %}
+          </div>
+          <div class="p-3">
+            <small class="text-primary text-uppercase fw-semibold">{{ cs.get_industry_display }}</small>
+            <h3 class="fs-6 fw-bold text-light mt-1 mb-2">{{ cs.project_title }}</h3>
+            <p class="text-secondary small mb-2">{{ cs.problem|truncatechars:120 }}</p>
+            {% if cs.roi_metric %}<small class="text-secondary">⭐ {{ cs.roi_metric }}</small>{% endif %}
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4"><a href="{% url 'portfolio:list' %}" class="btn btn-outline-secondary">ดูผลงานทั้งหมด →</a></div>
+  </div>
+</section>
+{% endif %}
+
+<section id="usecases" class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mb-2">ตัวอย่างการใช้งาน</div>
+      <h2 class="fw-bold text-light mb-2">ธุรกิจแบบไหน ใช้ทำอะไรได้บ้าง</h2>
+      <p class="text-secondary">Use cases จริงที่ได้รับการพิสูจน์แล้วทั้งในไทยและต่างประเทศ</p>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4"><div class="brand-card p-3 h-100"><div class="d-flex gap-3 mb-2"><span style="font-size:2rem;">🛍️</span><div><div class="fw-bold text-light">ร้านค้า / E-Commerce</div><small class="text-secondary">LINE · WhatsApp · 24/7 Support</small></div></div><p class="text-secondary small">AI ตอบคำถามสินค้า สถานะออเดอร์ นโยบายคืนสินค้า ผ่าน LINE อัตโนมัติ</p><div class="roi-box"><strong>ตอบ 70% อัตโนมัติ</strong>ประหยัดค่าแรง CS 30-40 ชม./สัปดาห์</div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="brand-card p-3 h-100"><div class="d-flex gap-3 mb-2"><span style="font-size:2rem;">🏥</span><div><div class="fw-bold text-light">คลินิก / โรงพยาบาล</div><small class="text-secondary">Private AI · PDPA-Safe</small></div></div><p class="text-secondary small">AI ตอบนัดหมาย อาการเบื้องต้น บน server คลินิกเอง ปลอดภัย PDPA 100%</p><div class="roi-box"><strong>Zero data leakage</strong>ข้อมูลผู้ป่วยอยู่บน server คลินิกเท่านั้น</div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="brand-card p-3 h-100"><div class="d-flex gap-3 mb-2"><span style="font-size:2rem;">🏨</span><div><div class="fw-bold text-light">โรงแรม / รีสอร์ท</div><small class="text-secondary">LINE · WhatsApp · WebChat</small></div></div><p class="text-secondary small">แขกถามโปรโมชั่น จองห้อง สั่ง room service ผ่าน LINE AI ตอบไทย-อังกฤษ</p><div class="roi-box"><strong>รองรับลูกค้าต่างชาติ</strong>ตอบหลายภาษา ไม่ต้องจ้าง concierge</div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="brand-card p-3 h-100"><div class="d-flex gap-3 mb-2"><span style="font-size:2rem;">💼</span><div><div class="fw-bold text-light">B2B Sales / Lead Gen</div><small class="text-secondary">Telegram · CRM Integration</small></div></div><p class="text-secondary small">AI qualify lead ผ่าน Telegram BANT scoring ส่งต่อ sales อัตโนมัติ</p><div class="roi-box"><strong>Qualify ภายใน 1 ชม.</strong>แทน SDR ค่าจ้าง 25,000+/เดือน</div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="brand-card p-3 h-100"><div class="d-flex gap-3 mb-2"><span style="font-size:2rem;">🏭</span><div><div class="fw-bold text-light">โรงงาน / โลจิสติกส์</div><small class="text-secondary">LINE · Telegram · Slack</small></div></div><p class="text-secondary small">order ผ่าน LINE AI เช็คสต็อก แจ้งเตือน Telegram ทีมคุย Slack</p><div class="roi-box"><strong>Real-time tracking</strong>ลด error การสื่อสาร order 80%</div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="brand-card p-3 h-100"><div class="d-flex gap-3 mb-2"><span style="font-size:2rem;">⚖️</span><div><div class="fw-bold text-light">สำนักงานกฎหมาย / การเงิน</div><small class="text-secondary">Private LLM · On-Premise</small></div></div><p class="text-secondary small">ใช้ Ollama รันบน server เอง ไม่มีข้อมูลออกอินเตอร์เน็ตเลย</p><div class="roi-box"><strong>Air-gapped AI</strong>ข้อมูลลับไม่รั่ว — เหมาะ regulated industry</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="packages" class="py-5" style="background:#06090f;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mb-2">แพ็กเกจและราคา</div>
+      <h2 class="fw-bold text-light mb-2">เลือกแพ็กเกจที่เหมาะกับธุรกิจคุณ</h2>
+      <p class="text-secondary">จ่ายครั้งเดียว ไม่มีค่า per-message ไม่มีสัญญาผูกมัด</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3"><div class="brand-card p-4 h-100 d-flex flex-column"><div style="font-size:2rem;">🌱</div><div class="fw-bold text-light">Starter</div><small class="text-secondary mb-3">SME เริ่มต้น · 1 ช่องทาง</small><div class="fs-3 fw-bold text-light">15,000 <small class="text-secondary fw-normal fs-6">บาท</small></div><small class="text-success mb-3">+ 2,000 บาท/เดือน maintenance</small><ul class="list-unstyled small text-secondary flex-grow-1"><li class="py-1">✓ LINE หรือ Telegram (เลือก 1)</li><li class="py-1">✓ 1 AI Agent + custom persona</li><li class="py-1">✓ ติดตั้งบน VPS ลูกค้า</li><li class="py-1">✓ 30-day onboarding support</li></ul><a href="{% url 'pages:contact' %}" class="btn btn-outline-primary mt-3">เริ่มต้นที่นี่</a></div></div>
+      <div class="col-md-6 col-lg-3"><div class="brand-card pkg-card featured p-4 h-100 d-flex flex-column position-relative"><span class="featured-badge">⭐ ยอดนิยม</span><div style="font-size:2rem;">🚀</div><div class="fw-bold text-light">Business</div><small class="text-secondary mb-3">SME ที่กำลังโต · Multi-channel</small><div class="fs-3 fw-bold text-light">40,000 <small class="text-secondary fw-normal fs-6">บาท</small></div><small class="text-success mb-3">+ 5,000 บาท/เดือน maintenance</small><ul class="list-unstyled small text-secondary flex-grow-1"><li class="py-1">✓ LINE + Telegram + WebChat</li><li class="py-1">✓ 3 AI Agents</li><li class="py-1">✓ Multi-agent routing</li><li class="py-1">✓ Memory + session per customer</li><li class="py-1">✓ 90-day priority support</li></ul><a href="{% url 'pages:contact' %}" class="btn btn-primary mt-3">เลือกแพ็กเกจนี้</a></div></div>
+      <div class="col-md-6 col-lg-3"><div class="brand-card p-4 h-100 d-flex flex-column"><div style="font-size:2rem;">🔒</div><div class="fw-bold text-light">Private AI</div><small class="text-secondary mb-3">คลินิก / กฎหมาย / การเงิน</small><div class="fs-3 fw-bold text-light">80,000 <small class="text-secondary fw-normal fs-6">บาท</small></div><small class="text-success mb-3">+ 8,000 บาท/เดือน maintenance</small><ul class="list-unstyled small text-secondary flex-grow-1"><li class="py-1">✓ Ollama on-premise LLM</li><li class="py-1">✓ ข้อมูลไม่ออกอินเตอร์เน็ต 100%</li><li class="py-1">✓ PDPA compliance setup</li><li class="py-1">✓ 1-year SLA support</li></ul><a href="{% url 'pages:contact' %}" class="btn btn-outline-primary mt-3">ปรึกษาก่อน</a></div></div>
+      <div class="col-md-6 col-lg-3"><div class="brand-card p-4 h-100 d-flex flex-column"><div style="font-size:2rem;">🏭</div><div class="fw-bold text-light">Enterprise</div><small class="text-secondary mb-3">องค์กรขนาดใหญ่ · Custom</small><div class="fs-3 fw-bold text-light">150,000+ <small class="text-secondary fw-normal fs-6">บาท</small></div><small class="text-success mb-3">Custom maintenance SLA</small><ul class="list-unstyled small text-secondary flex-grow-1"><li class="py-1">✓ Unlimited agents + channels</li><li class="py-1">✓ API + CRM + ERP integration</li><li class="py-1">✓ 99% uptime SLA</li><li class="py-1">✓ White-label option</li></ul><a href="{% url 'pages:contact' %}" class="btn btn-outline-primary mt-3">ติดต่อทีมงาน</a></div></div>
+    </div>
+  </div>
+</section>
+
+{% if featured_articles %}
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mb-2">บทความล่าสุด</div>
+      <h2 class="fw-bold text-light">Insight ใหม่ ๆ จากทีมงาน</h2>
+    </div>
+    <div class="row g-4">
+      {% for a in featured_articles %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ a.get_absolute_url }}" class="brand-card text-decoration-none d-block h-100 overflow-hidden">
+          <div class="thumb" {% if a.cover_image %}style="background-image:url('{{ a.cover_image.url }}');"{% endif %}>
+            {% if not a.cover_image %}<div class="thumb-fallback">📝</div>{% endif %}
+          </div>
+          <div class="p-3">
+            <small class="text-primary text-uppercase fw-semibold">{{ a.category.name }}</small>
+            <h3 class="fs-6 fw-bold text-light mt-1 mb-2">{{ a.title }}</h3>
+            <p class="text-secondary small">{{ a.excerpt|default:""|truncatechars:120 }}</p>
+            <small class="text-secondary">{{ a.published_at|date:"d M Y" }} · {{ a.reading_time }} นาที</small>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4"><a href="{% url 'blog:list' %}" class="btn btn-outline-secondary">อ่านบทความทั้งหมด →</a></div>
+  </div>
+</section>
+{% endif %}
+
+<section class="cta-section text-center" id="contact">
+  <div class="container">
+    <div class="section-label mb-2">พร้อมเริ่มต้นแล้ว?</div>
+    <h2 class="fw-bold text-light mb-3">ให้ AI ทำงานแทนคุณ<br>ข้อมูลอยู่กับคุณ 100%</h2>
+    <p class="text-secondary mb-4">ปรึกษาฟรี ไม่มีค่าใช้จ่าย · ประเมินความต้องการและแนะนำ solution ที่เหมาะสม</p>
+    <div class="d-flex gap-2 justify-content-center flex-wrap">
+      <a href="{% url 'pages:contact' %}" class="btn btn-primary btn-lg px-4">💬 ปรึกษาฟรี</a>
+      <a href="#packages" class="btn btn-outline-secondary btn-lg px-4">ดูแพ็กเกจอีกครั้ง</a>
+    </div>
+    <small class="text-secondary d-block mt-3">🔒 ปรึกษาฟรี · ไม่มี commitment · ตอบภายใน 24 ชั่วโมง</small>
+  </div>
+</section>
+{% endblock %}

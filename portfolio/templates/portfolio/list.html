@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}ผลงาน — Case Studies{% endblock %}
+
+{% block extra_css %}
+<style>
+  .brand-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: .75rem;
+    transition: transform .15s, box-shadow .15s;
+    color: inherit;
+  }
+  .brand-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+  .thumb {
+    height: 180px;
+    background-color: var(--bs-secondary-bg);
+    background-size: cover;
+    background-position: center;
+    border-radius: .75rem .75rem 0 0;
+  }
+  .thumb-fallback {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    opacity: .4;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h1 class="fw-bold text-body">ผลงานของเรา</h1>
+      <p class="text-secondary">Case studies จริงจากลูกค้าที่ใช้ AI ในธุรกิจ — ทุกโปรเจกต์มีตัวเลขผลลัพธ์ที่วัดได้</p>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-center flex-wrap mb-4">
+      <a href="{% url 'portfolio:list' %}" class="btn btn-sm {% if not active_industry %}btn-primary{% else %}btn-outline-secondary{% endif %}">ทั้งหมด</a>
+      {% for value, label in industries %}
+        <a href="?industry={{ value }}" class="btn btn-sm {% if active_industry == value %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    {% if case_studies %}
+    <div class="row g-4">
+      {% for cs in case_studies %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ cs.get_absolute_url }}" class="brand-card text-decoration-none d-block h-100 overflow-hidden">
+          <div class="thumb" {% if cs.cover_image %}style="background-image:url('{{ cs.cover_image.url }}');"{% endif %}>
+            {% if not cs.cover_image %}<div class="thumb-fallback">📂</div>{% endif %}
+          </div>
+          <div class="p-3">
+            <small class="text-primary text-uppercase fw-semibold">{{ cs.get_industry_display }}</small>
+            <h3 class="fs-6 fw-bold text-body mt-1 mb-2">{{ cs.project_title }}</h3>
+            <p class="text-secondary small">{{ cs.problem|truncatechars:120 }}</p>
+            {% if cs.roi_metric %}<small class="text-secondary">⭐ {{ cs.roi_metric }}</small>{% endif %}
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav class="d-flex justify-content-center mt-5">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}">←</a></li>{% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}">→</a></li>{% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="text-center text-secondary py-5">ยังไม่มีผลงานในหมวดนี้</div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}{{ case.meta_title|default:case.project_title }}{% endblock %}
+{% block meta_description %}{{ case.meta_description|default:case.problem|truncatechars:160 }}{% endblock %}
+{% block og_image %}{% if case.cover_image %}<meta property="og:image" content="{{ case.cover_image.url }}">{% endif %}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .brand-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: .75rem;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .brand-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+  .thumb {
+    height: 180px;
+    background-color: #1c2128;
+    background-size: cover;
+    background-position: center;
+    border-radius: .75rem .75rem 0 0;
+  }
+  .thumb-fallback {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    opacity: .4;
+  }
+  .section-label {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--app-primary);
+  }
+  .cta-section {
+    padding: 4rem 1rem;
+    background: linear-gradient(135deg, #0d1117, #161b22);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<article class="container py-5" style="max-width:760px;">
+  <nav class="mb-3 small text-secondary">
+    <a href="{% url 'portfolio:list' %}" class="text-primary text-decoration-none">ผลงาน</a> › {{ case.get_industry_display }}
+  </nav>
+  <h1 class="fw-bold text-body mb-3">{{ case.project_title }}</h1>
+  <div class="text-secondary small mb-3">
+    {% if case.client_name %}ลูกค้า: {{ case.client_name }} · {% endif %}
+    {{ case.get_industry_display }}
+    {% if case.duration %} · ระยะเวลา: {{ case.duration }}{% endif %}
+  </div>
+
+  {% if case.roi_metric %}<div class="roi-tag mb-3">⭐ {{ case.roi_metric }}</div>{% endif %}
+
+  {% if case.cover_image %}
+    <img src="{{ case.cover_image.url }}" alt="{{ case.project_title }}" class="img-fluid rounded mb-4" style="aspect-ratio:16/9; object-fit:cover; width:100%;">
+  {% endif %}
+
+  <h2 class="fs-5 fw-bold mt-4 mb-2" style="color:#f87171;">📍 ปัญหาเดิม</h2>
+  <div class="article-body mb-4"><p>{{ case.problem|linebreaksbr }}</p></div>
+
+  <h2 class="fs-5 fw-bold mt-4 mb-2 text-primary">💡 วิธีแก้</h2>
+  <div class="article-body mb-4">{{ case.solution|safe }}</div>
+
+  <h2 class="fs-5 fw-bold mt-4 mb-2 text-success">🎯 ผลลัพธ์</h2>
+  <div class="article-body mb-4"><p>{{ case.result|linebreaksbr }}</p></div>
+
+  {% if case.tech_stack %}
+  <div class="alert alert-primary"><strong>⚙️ Tech Stack:</strong> {{ case.tech_stack }}</div>
+  {% endif %}
+
+  {% if case.testimonial %}
+  <blockquote class="border-start border-success border-4 ps-3 py-3 my-4" style="background:rgba(20,83,45,.15); border-radius:6px;">
+    <p class="fst-italic mb-2 text-body">"{{ case.testimonial }}"</p>
+    {% if case.testimonial_by %}<small class="text-secondary">— {{ case.testimonial_by }}</small>{% endif %}
+  </blockquote>
+  {% endif %}
+
+  {% if case.images.all %}
+  <h2 class="fs-5 fw-bold mt-4 mb-3 text-body">📸 Gallery</h2>
+  <div class="row g-3">
+    {% for img in case.images.all %}
+    <div class="col-md-6">
+      <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="img-fluid rounded">
+      {% if img.caption %}<small class="text-secondary d-block mt-1">{{ img.caption }}</small>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</article>
+
+{% if related %}
+<section class="py-5" style="background:#06090f;">
+  <div class="container">
+    <div class="text-center mb-4">
+      <div class="section-label mb-2">ผลงานที่คล้ายกัน</div>
+      <h2 class="fw-bold text-light fs-4">ดูเพิ่มเติม</h2>
+    </div>
+    <div class="row g-4">
+      {% for cs in related %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ cs.get_absolute_url }}" class="brand-card text-decoration-none d-block h-100 overflow-hidden">
+          <div class="thumb" {% if cs.cover_image %}style="background-image:url('{{ cs.cover_image.url }}');"{% endif %}>
+            {% if not cs.cover_image %}<div class="thumb-fallback">📂</div>{% endif %}
+          </div>
+          <div class="p-3">
+            <small class="text-primary text-uppercase fw-semibold">{{ cs.get_industry_display }}</small>
+            <h3 class="fs-6 fw-bold text-light mt-1 mb-0">{{ cs.project_title }}</h3>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="cta-section text-center">
+  <div class="container">
+    <h2 class="fw-bold text-light mb-3">อยากได้ผลแบบนี้ในธุรกิจคุณบ้าง?</h2>
+    <p class="text-secondary mb-4">ปรึกษาฟรี ตอบกลับภายใน 24 ชั่วโมง</p>
+    <a href="{% url 'pages:contact' %}?source=portfolio" class="btn btn-primary btn-lg px-4">💬 ปรึกษาฟรี</a>
+  </div>
+</section>
+{% endblock %}

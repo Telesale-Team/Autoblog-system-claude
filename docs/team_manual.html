@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คู่มือระบบ AI Agent Team — 10 Agents</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Sarabun', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      line-height: 1.7;
+    }
+
+    /* HEADER */
+    .hero {
+      background: linear-gradient(135deg, #1a1f2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 60px 40px;
+      text-align: center;
+      border-bottom: 2px solid #334155;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      color: #94a3b8;
+      font-size: 1.05rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #3b82f6;
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-top: 14px;
+    }
+
+    /* NAV */
+    nav {
+      background: #1e293b;
+      padding: 0 40px;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+    nav a {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 16px 20px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    nav a:hover {
+      color: #f1f5f9;
+      border-bottom-color: #3b82f6;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* SECTIONS */
+    section { margin-bottom: 64px; }
+    section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    section h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin: 24px 0 12px;
+    }
+
+    /* AGENT GRID */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .agent-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .agent-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+    }
+    .agent-card .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .agent-icon {
+      font-size: 1.8rem;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .agent-name {
+      font-weight: 700;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+    }
+    .agent-tag {
+      font-size: 0.72rem;
+      color: #64748b;
+      background: #0f172a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-top: 3px;
+      display: inline-block;
+    }
+    .agent-card p {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+    .agent-duties {
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+    .agent-duties li {
+      list-style: none;
+      padding: 2px 0;
+    }
+    .agent-duties li::before {
+      content: "→ ";
+      color: #3b82f6;
+    }
+
+    /* LAYER BADGE */
+    .layer-strategic { border-left: 3px solid #8b5cf6; }
+    .layer-revenue   { border-left: 3px solid #10b981; }
+    .layer-operations{ border-left: 3px solid #f59e0b; }
+    .layer-specialist{ border-left: 3px solid #ef4444; }
+
+    /* WHEN TO USE TABLE */
+    .use-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .use-table th {
+      background: #1e293b;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 2px solid #334155;
+    }
+    .use-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #1e293b;
+      font-size: 0.9rem;
+      vertical-align: top;
+    }
+    .use-table tr:hover td { background: #1e293b40; }
+    .use-table .topic { color: #e2e8f0; font-weight: 500; }
+    .use-table .primary { color: #3b82f6; font-weight: 600; }
+    .use-table .support { color: #64748b; font-size: 0.82rem; }
+
+    /* WORKFLOW */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 20px;
+    }
+    .workflow-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .workflow-card h3 {
+      color: #f1f5f9;
+      margin: 0 0 16px 0;
+      font-size: 1rem;
+    }
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+    .flow-step .step-agent {
+      background: #0f172a;
+      color: #60a5fa;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      white-space: nowrap;
+      min-width: 160px;
+    }
+    .flow-step .step-desc {
+      color: #64748b;
+      font-size: 0.8rem;
+    }
+    .flow-arrow {
+      color: #334155;
+      font-size: 1.2rem;
+      text-align: center;
+      padding-left: 20px;
+    }
+
+    /* APPROVAL TABLE */
+    .approval-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .approval-table th {
+      background: #1e293b;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 2px solid #334155;
+    }
+    .approval-table td {
+      padding: 11px 16px;
+      border-bottom: 1px solid #1e293b;
+      font-size: 0.88rem;
+    }
+    .approval-table tr:hover td { background: #1e293b40; }
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill-self    { background: #14532d; color: #4ade80; }
+    .pill-cos     { background: #1e3a5f; color: #60a5fa; }
+    .pill-money   { background: #3b1f00; color: #fb923c; }
+    .pill-legal   { background: #2d1b69; color: #a78bfa; }
+    .pill-ceo     { background: #3f0e0e; color: #f87171; }
+    .pill-both    { background: #1c2340; color: #818cf8; }
+
+    /* CADENCE */
+    .cadence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .cadence-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .cadence-card .freq {
+      font-size: 0.75rem;
+      color: #3b82f6;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .cadence-card h3 {
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      margin: 0 0 12px 0;
+    }
+    .cadence-card ul {
+      list-style: none;
+      font-size: 0.82rem;
+      color: #94a3b8;
+    }
+    .cadence-card ul li { padding: 3px 0; }
+    .cadence-card ul li::before { content: "• "; color: #475569; }
+
+    /* ACTIVATE BOX */
+    .activate-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .activate-box h3 {
+      color: #f1f5f9;
+      margin: 0 0 16px 0;
+    }
+    .code-block {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.88rem;
+      color: #60a5fa;
+      margin-bottom: 12px;
+      line-height: 1.9;
+    }
+    .code-block .comment { color: #475569; }
+    .code-block .keyword { color: #a78bfa; }
+    .code-block .value   { color: #34d399; }
+
+    /* TIMELINE */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: #334155;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 2px solid #1e293b;
+    }
+    .timeline-item .tl-label {
+      font-size: 0.75rem;
+      color: #3b82f6;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .timeline-item .tl-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+    }
+    .timeline-item .tl-desc {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 0.88rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout-info  { background: #1e3a5f40; border-left: 4px solid #3b82f6; }
+    .callout-warn  { background: #3f2a0040; border-left: 4px solid #f59e0b; }
+    .callout-tip   { background: #14532d40; border-left: 4px solid #10b981; }
+    .callout .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .callout .text { color: #cbd5e1; line-height: 1.6; }
+
+    /* FOOTER */
+    footer {
+      background: #1e293b;
+      border-top: 1px solid #334155;
+      text-align: center;
+      padding: 32px;
+      color: #475569;
+      font-size: 0.85rem;
+    }
+    footer strong { color: #64748b; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.6rem; }
+      nav a { padding: 12px 12px; font-size: 0.82rem; }
+      .workflow-grid { grid-template-columns: 1fr; }
+      .agent-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>🤖 ระบบ AI Agent Team</h1>
+  <p>คู่มือทีมงานสำหรับ AI Automation Specialist — SME ไทย</p>
+  <div class="badge">Version 2.0 · 10 Agents · Updated 2026-05-07</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#overview">ภาพรวม</a>
+  <a href="#agents">10 Agents</a>
+  <a href="#routing">การ Route</a>
+  <a href="#workflows">Workflows</a>
+  <a href="#approval">Approval Matrix</a>
+  <a href="#cadence">ตารางงาน</a>
+  <a href="#howto">วิธีใช้</a>
+  <a href="#roadmap">Roadmap</a>
+</nav>
+
+<div class="container">
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <h2>📌 ภาพรวมระบบ</h2>
+    <p style="color:#94a3b8; margin-bottom:24px;">
+      ระบบ AI Agent สำหรับบริหารธุรกิจ AI Automation ครบวงจร ประกอบด้วย <strong style="color:#f1f5f9;">10 agents</strong>
+      แต่ละตัวมีหน้าที่ชัดเจน ทำงานร่วมกันผ่าน Chief of Staff (Header Staff)
+    </p>
+
+    <div class="callout callout-tip">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>สินค้าและบริการ:</strong> AI Chatbot · AI Lead Generation · AI Workflow Automation · Custom AI Agent · AI + Hardware Integration<br>
+        <strong>ตลาดเป้าหมาย:</strong> SME ไทย 5–50 พนักงาน
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:12px; margin-top:24px;">
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:6px;">10</div>
+        <div style="color:#64748b; font-size:0.85rem;">Agents ทั้งหมด</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:6px;">4</div>
+        <div style="color:#64748b; font-size:0.85rem;">Workflow หลัก</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:6px;">1</div>
+        <div style="color:#64748b; font-size:0.85rem;">Orchestrator (CoS)</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:6px;">4</div>
+        <div style="color:#64748b; font-size:0.85rem;">Layers</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px;">โครงสร้าง 4 Layers</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:12px;">
+      <div style="background:#1e293b; border-left:4px solid #8b5cf6; border-radius:8px; padding:16px;">
+        <div style="color:#a78bfa; font-weight:700; font-size:0.85rem; margin-bottom:6px;">⭐ STRATEGIC</div>
+        <div style="color:#e2e8f0; font-size:0.9rem;">Chief of Staff</div>
+      </div>
+      <div style="background:#1e293b; border-left:4px solid #10b981; border-radius:8px; padding:16px;">
+        <div style="color:#4ade80; font-weight:700; font-size:0.85rem; margin-bottom:6px;">💰 REVENUE</div>
+        <div style="color:#e2e8f0; font-size:0.9rem;">Marketing · Sales · Customer Success</div>
+      </div>
+      <div style="background:#1e293b; border-left:4px solid #f59e0b; border-radius:8px; padding:16px;">
+        <div style="color:#fbbf24; font-weight:700; font-size:0.85rem; margin-bottom:6px;">⚙️ OPERATIONS</div>
+        <div style="color:#e2e8f0; font-size:0.9rem;">AI Orchestrator · Toolsmith · QA · Money</div>
+      </div>
+      <div style="background:#1e293b; border-left:4px solid #ef4444; border-radius:8px; padding:16px;">
+        <div style="color:#f87171; font-weight:700; font-size:0.85rem; margin-bottom:6px;">🔬 SPECIALIST</div>
+        <div style="color:#e2e8f0; font-size:0.9rem;">Data Analyst · Legal Advisor</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 AGENTS -->
+  <section id="agents">
+    <h2>👥 10 Agents</h2>
+
+    <div class="agent-grid">
+
+      <div class="agent-card layer-strategic">
+        <div class="agent-header">
+          <div class="agent-icon">🎯</div>
+          <div>
+            <div class="agent-name">Chief of Staff</div>
+            <span class="agent-tag">Strategic · Orchestrator</span>
+          </div>
+        </div>
+        <p>ประสานงานทั้งระบบ รับคำถามจาก CEO และ route ไปยัง agent ที่เหมาะสม</p>
+        <ul class="agent-duties">
+          <li>Routing ทุก request อัตโนมัติ</li>
+          <li>Daily Executive Summary 9:30 AM</li>
+          <li>Weekly + Monthly review</li>
+          <li>Escalation management</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-revenue">
+        <div class="agent-header">
+          <div class="agent-icon">💼</div>
+          <div>
+            <div class="agent-name">Hustler (Sales)</div>
+            <span class="agent-tag">Revenue · B2B Sales</span>
+          </div>
+        </div>
+        <p>ปิดดีล B2B ตั้งแต่ qualify lead จนถึง handoff ให้ Customer Success</p>
+        <ul class="agent-duties">
+          <li>Qualify MQL → SQL (BANT)</li>
+          <li>Discovery call + Demo</li>
+          <li>Proposal + Negotiation</li>
+          <li>Closing + CS Handoff</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-operations">
+        <div class="agent-header">
+          <div class="agent-icon">🤖</div>
+          <div>
+            <div class="agent-name">AI Orchestrator</div>
+            <span class="agent-tag">Operations · Technical Lead</span>
+          </div>
+        </div>
+        <p>หัวหน้าฝ่าย Technical ออกแบบและสร้างระบบ AI ทั้งหมด</p>
+        <ul class="agent-duties">
+          <li>AI system architecture</li>
+          <li>Build + integrate solutions</li>
+          <li>Bug fix + performance</li>
+          <li>Technical documentation</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-operations">
+        <div class="agent-header">
+          <div class="agent-icon">💰</div>
+          <div>
+            <div class="agent-name">Money Manager</div>
+            <span class="agent-tag">Operations · Finance</span>
+          </div>
+        </div>
+        <p>ดูแลการเงินทั้งหมด บัญชี ภาษี cash flow และ budgeting</p>
+        <ul class="agent-duties">
+          <li>P&L รายเดือน</li>
+          <li>Cash flow + forecasting</li>
+          <li>Budget approval</li>
+          <li>Tax planning</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-operations">
+        <div class="agent-header">
+          <div class="agent-icon">🛠️</div>
+          <div>
+            <div class="agent-name">AI Toolsmith</div>
+            <span class="agent-tag">Operations · Tools</span>
+          </div>
+        </div>
+        <p>ดูแล prompt library, templates, และ tool stack ทั้งระบบ</p>
+        <ul class="agent-duties">
+          <li>Prompt engineering</li>
+          <li>Template library</li>
+          <li>Tool evaluation</li>
+          <li>Automation design</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-operations">
+        <div class="agent-header">
+          <div class="agent-icon">✅</div>
+          <div>
+            <div class="agent-name">QA Agent</div>
+            <span class="agent-tag">Operations · Quality</span>
+          </div>
+        </div>
+        <p>ตรวจสอบคุณภาพ output ทุกชิ้นก่อน deliver หรือ publish</p>
+        <ul class="agent-duties">
+          <li>Code + system testing</li>
+          <li>Content compliance</li>
+          <li>Data accuracy</li>
+          <li>Legal doc pre-check</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-revenue">
+        <div class="agent-header">
+          <div class="agent-icon">🎨</div>
+          <div>
+            <div class="agent-name">Marketing Specialist</div>
+            <span class="agent-tag">Revenue · Marketing · ใหม่</span>
+          </div>
+        </div>
+        <p>วางกลยุทธ์การตลาด สร้าง content และ generate qualified lead</p>
+        <ul class="agent-duties">
+          <li>Content-Led Growth</li>
+          <li>LinkedIn + SEO + Blog</li>
+          <li>Lead magnet + newsletter</li>
+          <li>Campaign management</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-revenue">
+        <div class="agent-header">
+          <div class="agent-icon">💝</div>
+          <div>
+            <div class="agent-name">Customer Success</div>
+            <span class="agent-tag">Revenue · Post-Sales · ใหม่</span>
+          </div>
+        </div>
+        <p>ดูแลลูกค้าหลังการขาย เพิ่ม retention และลด churn</p>
+        <ul class="agent-duties">
+          <li>Onboarding 30 วันแรก</li>
+          <li>Health score monitoring</li>
+          <li>QBR + renewal</li>
+          <li>Upsell / Cross-sell</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-specialist">
+        <div class="agent-header">
+          <div class="agent-icon">📊</div>
+          <div>
+            <div class="agent-name">Data Analyst</div>
+            <span class="agent-tag">Specialist · Analytics · ใหม่</span>
+          </div>
+        </div>
+        <p>วิเคราะห์ข้อมูลธุรกิจทั้งหมด สร้าง dashboard และ insight</p>
+        <ul class="agent-duties">
+          <li>Revenue + product dashboards</li>
+          <li>Cohort + funnel analysis</li>
+          <li>A/B testing</li>
+          <li>Forecasting</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-specialist">
+        <div class="agent-header">
+          <div class="agent-icon">⚖️</div>
+          <div>
+            <div class="agent-name">Legal Advisor</div>
+            <span class="agent-tag">Specialist · Legal · ใหม่</span>
+          </div>
+        </div>
+        <p>ที่ปรึกษากฎหมายเบื้องต้น สัญญา PDPA และ risk management</p>
+        <ul class="agent-duties">
+          <li>Contract review (MSA/SOW/NDA)</li>
+          <li>PDPA compliance</li>
+          <li>IP protection</li>
+          <li>Risk assessment</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="callout callout-warn" style="margin-top:24px;">
+      <span class="icon">⚠️</span>
+      <div class="text">
+        <strong>หมายเหตุ:</strong> Legal Advisor เป็นผู้ช่วยเบื้องต้นเท่านั้น ไม่ใช่ทนายความที่มีใบอนุญาต
+        สำหรับสัญญามูลค่า &gt;100,000 บาท หรือคดีความ ต้องปรึกษาทนายจริงเสมอ
+      </div>
+    </div>
+  </section>
+
+  <!-- ROUTING -->
+  <section id="routing">
+    <h2>🗺️ การ Route คำถาม</h2>
+    <p style="color:#94a3b8; margin-bottom:24px;">
+      Chief of Staff (Header Staff) จะเลือก agent ที่เหมาะสมให้อัตโนมัติ ตามตารางนี้
+    </p>
+
+    <table class="use-table">
+      <thead>
+        <tr>
+          <th>หัวข้อที่ถาม</th>
+          <th>Primary Agent</th>
+          <th>Supporting Agents</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="topic">ภาพรวมธุรกิจ / Executive summary</td>
+          <td class="primary">Chief of Staff</td>
+          <td class="support">—</td>
+        </tr>
+        <tr>
+          <td class="topic">เปิด campaign ใหม่</td>
+          <td class="primary">Marketing Specialist</td>
+          <td class="support">Money Manager · Data Analyst · Hustler</td>
+        </tr>
+        <tr>
+          <td class="topic">หาลูกค้าใหม่ / ปิดดีล</td>
+          <td class="primary">Hustler (Sales)</td>
+          <td class="support">Marketing · Legal · Money</td>
+        </tr>
+        <tr>
+          <td class="topic">ลูกค้าจะต่อสัญญาไหม</td>
+          <td class="primary">Customer Success</td>
+          <td class="support">Data Analyst · Hustler</td>
+        </tr>
+        <tr>
+          <td class="topic">ลูกค้า complain / ปัญหาระบบ</td>
+          <td class="primary">Customer Success</td>
+          <td class="support">AI Orchestrator · QA</td>
+        </tr>
+        <tr>
+          <td class="topic">สร้าง / แก้ไขระบบ AI</td>
+          <td class="primary">AI Orchestrator</td>
+          <td class="support">AI Toolsmith · QA</td>
+        </tr>
+        <tr>
+          <td class="topic">ตรวจสอบสัญญา</td>
+          <td class="primary">Legal Advisor</td>
+          <td class="support">Money Manager · Hustler</td>
+        </tr>
+        <tr>
+          <td class="topic">ทำไมรายได้ลด / วิเคราะห์ตัวเลข</td>
+          <td class="primary">Data Analyst</td>
+          <td class="support">Customer Success · Hustler</td>
+        </tr>
+        <tr>
+          <td class="topic">เรื่องการเงิน / ภาษี / budget</td>
+          <td class="primary">Money Manager</td>
+          <td class="support">Data Analyst · Legal</td>
+        </tr>
+        <tr>
+          <td class="topic">Prompt / Template / Tool</td>
+          <td class="primary">AI Toolsmith</td>
+          <td class="support">QA</td>
+        </tr>
+        <tr>
+          <td class="topic">ตรวจคุณภาพ content / code</td>
+          <td class="primary">QA Agent</td>
+          <td class="support">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- WORKFLOWS -->
+  <section id="workflows">
+    <h2>🔄 4 Workflows หลัก</h2>
+
+    <div class="workflow-grid">
+
+      <div class="workflow-card">
+        <h3>🅐 Marketing → Sales → Customer Success</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <span class="step-agent">🎨 Marketing</span>
+            <span class="step-desc">สร้าง MQL พร้อม lead score</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💼 Hustler (Sales)</span>
+            <span class="step-desc">Qualify BANT ภายใน 2 ชม.</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💼 Sales (ต่อ)</span>
+            <span class="step-desc">Discovery → Demo → Proposal → Close</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💝 Customer Success</span>
+            <span class="step-desc">Onboarding ภายใน 48 ชม. หลัง close</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">🎨 Marketing (ต่อ)</span>
+            <span class="step-desc">รับ case study + testimonial กลับไป</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="workflow-card">
+        <h3>🅑 Customer Issue Resolution</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <span class="step-agent">👤 ลูกค้า</span>
+            <span class="step-desc">แจ้งปัญหา</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💝 Customer Success</span>
+            <span class="step-desc">Triage → กำหนด P1/P2/P3/P4</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">🤖 AI Orchestrator</span>
+            <span class="step-desc">Engineering fix</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">✅ QA Agent</span>
+            <span class="step-desc">Verify fix บน staging</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💝 CS (ต่อ)</span>
+            <span class="step-desc">แจ้งลูกค้าและปิด ticket</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="workflow-card">
+        <h3>🅒 Contract Negotiation</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <span class="step-agent">💼 Hustler (Sales)</span>
+            <span class="step-desc">Draft contract</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💰 Money Manager</span>
+            <span class="step-desc">Review financial terms (24 ชม.)</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">⚖️ Legal Advisor</span>
+            <span class="step-desc">Review legal terms + risk rating</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💼 Hustler (ต่อ)</span>
+            <span class="step-desc">Negotiate กับลูกค้า</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">💝 Customer Success</span>
+            <span class="step-desc">รับ handoff เริ่ม onboarding</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="workflow-card">
+        <h3>🅓 Data-Driven Decision Loop</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <span class="step-agent">📊 Data Analyst</span>
+            <span class="step-desc">Collect + analyze + generate insight</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">🎯 Chief of Staff</span>
+            <span class="step-desc">Validate + กำหนด action + assign agent</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">🔧 Relevant Agents</span>
+            <span class="step-desc">Implement action</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">📊 Data Analyst (ต่อ)</span>
+            <span class="step-desc">Measure results → Iterate</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 style="margin-top:32px;">SLA ของ Critical Handoffs</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap:12px;">
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.78rem; margin-bottom:4px;">Marketing → Sales</div>
+        <div style="color:#f1f5f9; font-weight:700;">ภายใน 2 ชั่วโมง</div>
+        <div style="color:#64748b; font-size:0.78rem;">หลัง MQL qualify</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.78rem; margin-bottom:4px;">Sales → Customer Success</div>
+        <div style="color:#f1f5f9; font-weight:700;">ภายใน 48 ชั่วโมง</div>
+        <div style="color:#64748b; font-size:0.78rem;">หลัง closed deal</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.78rem; margin-bottom:4px;">CS → Engineering (P1)</div>
+        <div style="color:#f87171; font-weight:700;">ภายใน 1 ชั่วโมง</div>
+        <div style="color:#64748b; font-size:0.78rem;">bug critical</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.78rem; margin-bottom:4px;">Sales → Legal Review</div>
+        <div style="color:#f1f5f9; font-weight:700;">ภายใน 24 ชั่วโมง</div>
+        <div style="color:#64748b; font-size:0.78rem;">contract review</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROVAL MATRIX -->
+  <section id="approval">
+    <h2>✅ Approval Matrix</h2>
+    <p style="color:#94a3b8; margin-bottom:24px;">ทุกการตัดสินใจต้องผ่านผู้มีสิทธิ์อนุมัติตามระดับมูลค่า</p>
+
+    <table class="approval-table">
+      <thead>
+        <tr>
+          <th>ประเภท</th>
+          <th>เงื่อนไข</th>
+          <th>เจ้าของ</th>
+          <th>ผู้อนุมัติ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:#94a3b8;">Marketing Campaign</td>
+          <td>< 5,000 บาท</td>
+          <td>Marketing</td>
+          <td><span class="pill pill-self">ตัวเอง</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Marketing Campaign</td>
+          <td>5K – 20K บาท</td>
+          <td>Marketing</td>
+          <td><span class="pill pill-money">Money Manager</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Marketing Campaign</td>
+          <td>> 20,000 บาท</td>
+          <td>Marketing</td>
+          <td><span class="pill pill-ceo">CEO</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Sales Discount</td>
+          <td>< 10%</td>
+          <td>Sales</td>
+          <td><span class="pill pill-self">ตัวเอง</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Sales Discount</td>
+          <td>10% – 20%</td>
+          <td>Sales</td>
+          <td><span class="pill pill-cos">Chief of Staff</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Sales Discount</td>
+          <td>> 20%</td>
+          <td>Sales</td>
+          <td><span class="pill pill-ceo">CEO</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Refund</td>
+          <td>< 5,000 บาท</td>
+          <td>CS</td>
+          <td><span class="pill pill-self">ตัวเอง</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Refund</td>
+          <td>5K – 20K บาท</td>
+          <td>CS</td>
+          <td><span class="pill pill-money">Money Manager</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Refund</td>
+          <td>> 20,000 บาท</td>
+          <td>CS</td>
+          <td><span class="pill pill-ceo">CEO</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Contract</td>
+          <td>< 100,000 บาท</td>
+          <td>Sales</td>
+          <td><span class="pill pill-legal">Legal</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Contract</td>
+          <td>100K – 500K บาท</td>
+          <td>Sales</td>
+          <td><span class="pill pill-both">Legal + Money</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Contract</td>
+          <td>> 500,000 บาท</td>
+          <td>Sales</td>
+          <td><span class="pill pill-ceo">Legal + Money + CEO</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Tool Subscription</td>
+          <td>< 1,000 บาท/เดือน</td>
+          <td>Any Agent</td>
+          <td><span class="pill pill-self">ตัวเอง</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Tool Subscription</td>
+          <td>1K – 5K บาท/เดือน</td>
+          <td>Any Agent</td>
+          <td><span class="pill pill-money">Money Manager</span></td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;">Tool Subscription</td>
+          <td>> 5,000 บาท/เดือน</td>
+          <td>Any Agent</td>
+          <td><span class="pill pill-ceo">CEO</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CADENCE -->
+  <section id="cadence">
+    <h2>📅 ตารางการทำงาน</h2>
+
+    <div class="cadence-grid">
+      <div class="cadence-card">
+        <div class="freq">ทุกวัน · 9:00 AM</div>
+        <h3>Daily Stand-up</h3>
+        <ul>
+          <li>ทุก agent ส่ง update → CoS</li>
+          <li>เมื่อวาน / วันนี้ / Blocker</li>
+          <li>1 KPI per agent</li>
+        </ul>
+      </div>
+
+      <div class="cadence-card">
+        <div class="freq">ทุกวัน · 9:30 AM</div>
+        <h3>Executive Summary</h3>
+        <ul>
+          <li>CoS รวบรวมส่ง CEO</li>
+          <li>Revenue / Alerts / Wins</li>
+          <li>Top 3 priorities</li>
+        </ul>
+      </div>
+
+      <div class="cadence-card">
+        <div class="freq">ทุกศุกร์ · 17:00</div>
+        <h3>Weekly Strategic Review</h3>
+        <ul>
+          <li>CEO + CoS + 3 agents</li>
+          <li>Wins / Blockers</li>
+          <li>Next week priorities</li>
+        </ul>
+      </div>
+
+      <div class="cadence-card">
+        <div class="freq">วันที่ 1 ของเดือน</div>
+        <h3>Monthly Business Review</h3>
+        <ul>
+          <li>All agents เข้าร่วม</li>
+          <li>Finance + Sales + CS</li>
+          <li>Product + Risk + Strategy</li>
+        </ul>
+      </div>
+
+      <div class="cadence-card">
+        <div class="freq">ทุก 3 เดือน</div>
+        <h3>Quarterly Planning</h3>
+        <ul>
+          <li>Day 1: Review goals</li>
+          <li>Day 2: Plan OKRs</li>
+          <li>Resource allocation</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px;">KPI ที่ต้องดูตามความถี่</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:12px; margin-top:12px;">
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.75rem; text-transform:uppercase; margin-bottom:8px;">Daily</div>
+        <ul style="list-style:none; font-size:0.85rem; color:#94a3b8;">
+          <li>• Revenue today</li>
+          <li>• New leads</li>
+          <li>• Critical alerts</li>
+        </ul>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.75rem; text-transform:uppercase; margin-bottom:8px;">Weekly</div>
+        <ul style="list-style:none; font-size:0.85rem; color:#94a3b8;">
+          <li>• MRR change</li>
+          <li>• Pipeline value</li>
+          <li>• Customer health</li>
+        </ul>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.75rem; text-transform:uppercase; margin-bottom:8px;">Monthly</div>
+        <ul style="list-style:none; font-size:0.85rem; color:#94a3b8;">
+          <li>• Total revenue</li>
+          <li>• Churn rate</li>
+          <li>• Customer count</li>
+        </ul>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:16px;">
+        <div style="color:#64748b; font-size:0.75rem; text-transform:uppercase; margin-bottom:8px;">Quarterly</div>
+        <ul style="list-style:none; font-size:0.85rem; color:#94a3b8;">
+          <li>• ARR growth</li>
+          <li>• LTV/CAC ratio</li>
+          <li>• NPS + OKRs</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO USE -->
+  <section id="howto">
+    <h2>🚀 วิธีใช้งาน</h2>
+
+    <div class="activate-box">
+      <h3>วิธีที่ 1 — Auto-route ผ่าน Header Staff (แนะนำ)</h3>
+      <div class="code-block">
+        <span class="comment"># พิมพ์แค่นี้ Header Staff จะเลือก agent ให้เอง</span><br><br>
+        Header Staff <span class="value">อยากเปิด campaign LinkedIn ใหม่</span><br>
+        Header Staff <span class="value">ลูกค้า ABC จะต่อสัญญาหรือเปล่า</span><br>
+        Header Staff <span class="value">ทำไม MRR เดือนนี้ลด 15%</span>
+      </div>
+    </div>
+
+    <div class="activate-box">
+      <h3>วิธีที่ 2 — Activate Agent ตรง</h3>
+      <div class="code-block">
+        <span class="comment"># ระบุ agent โดยตรงเมื่อรู้แน่ว่าต้องการใคร</span><br><br>
+        <span class="keyword">Activate Marketing Specialist</span> - <span class="value">วางแผน content สัปดาห์นี้</span><br>
+        <span class="keyword">Activate Customer Success</span> - <span class="value">ทำ QBR ให้ลูกค้า XYZ</span><br>
+        <span class="keyword">Activate Data Analyst</span> - <span class="value">สร้าง weekly revenue report</span><br>
+        <span class="keyword">Activate Legal Advisor</span> - <span class="value">review สัญญาฉบับนี้</span><br>
+        <span class="keyword">Activate Money Manager</span> - <span class="value">เช็ค cash flow เดือนนี้</span>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:8px;">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>Tip ประหยัด Token:</strong> สำหรับงานทั่วไป คุยกับ Claude ตรงๆ โดยบอก context สั้นๆ
+        เช่น <em>"ผมเป็น AI Automation Specialist ขาย AI ให้ SME ไทย — [คำถาม]"</em>
+        ไม่จำเป็นต้อง Activate agent ทุกครั้ง
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <h2>🗓️ Implementation Roadmap</h2>
+    <p style="color:#94a3b8; margin-bottom:28px;">เพิ่ม agent ตาม MRR ที่เติบโต ไม่ต้อง implement ทุกตัวพร้อมกัน</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-label">ตอนนี้</div>
+        <div class="tl-title">6 Agents พื้นฐาน (1–6)</div>
+        <div class="tl-desc">Chief of Staff · Sales · AI Orchestrator · Money Manager · Toolsmith · QA</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-label">MRR 30,000+ บาท</div>
+        <div class="tl-title">เพิ่ม Marketing Specialist (7)</div>
+        <div class="tl-desc">เมื่อมีรายได้สม่ำเสมอ ต้องการ lead มากขึ้น</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-label">MRR 50,000+ บาท</div>
+        <div class="tl-title">เพิ่ม Customer Success (8)</div>
+        <div class="tl-desc">เมื่อมีลูกค้า MRR 3+ ราย ต้องดูแล retention</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-label">MRR 100,000+ บาท</div>
+        <div class="tl-title">เพิ่ม Data Analyst (9)</div>
+        <div class="tl-desc">เมื่อมี data เยอะ ต้องการ insight ตัดสินใจ</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-label">MRR 200,000+ บาท</div>
+        <div class="tl-title">เพิ่ม Legal Advisor (10)</div>
+        <div class="tl-desc">เมื่อเริ่มดีล &gt;100K บาท และต้องการ compliance</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:36px;">Success Criteria หลัง 8 สัปดาห์</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:12px; margin-top:12px;">
+      <div style="background:#14532d40; border:1px solid #166534; border-radius:8px; padding:14px; font-size:0.88rem; color:#4ade80;">
+        ✅ All 10 agents มี system prompt ใช้งานได้
+      </div>
+      <div style="background:#14532d40; border:1px solid #166534; border-radius:8px; padding:14px; font-size:0.88rem; color:#4ade80;">
+        ✅ All workflows มี SLA ชัดเจน
+      </div>
+      <div style="background:#14532d40; border:1px solid #166534; border-radius:8px; padding:14px; font-size:0.88rem; color:#4ade80;">
+        ✅ Daily/Weekly/Monthly cadence ทำงาน
+      </div>
+      <div style="background:#14532d40; border:1px solid #166534; border-radius:8px; padding:14px; font-size:0.88rem; color:#4ade80;">
+        ✅ Dashboard แสดง KPI realtime
+      </div>
+      <div style="background:#14532d40; border:1px solid #166534; border-radius:8px; padding:14px; font-size:0.88rem; color:#4ade80;">
+        ✅ Customer satisfaction &gt; 4/5
+      </div>
+      <div style="background:#14532d40; border:1px solid #166534; border-radius:8px; padding:14px; font-size:0.88rem; color:#4ade80;">
+        ✅ Net Revenue Retention &gt; 100%
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>AI Automation Business — Agent System v2.0</strong><br>
+  คู่มือสำหรับทีมงาน · อัปเดต 2026-05-07<br><br>
+  <span style="color:#334155;">สร้างจาก agent_expansion_v2.md · Single source of truth: ดูไฟล์ CLAUDE.md</span>
+</footer>
+
+</body>
+</html>

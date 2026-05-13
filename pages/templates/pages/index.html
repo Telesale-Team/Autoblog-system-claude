@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}แดชบอร์ด 2021 — {{ block.super }}{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active" aria-current="page">แดชบอร์ด</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* === KPI Stat Cards Row === */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1rem;
+  }
+
+  /* === Chart Card === */
+  .chart-card {
+    border: 1px solid var(--bs-border-color);
+    border-radius: .6rem;
+    padding: 1.2rem;
+    height: 100%;
+  }
+  .chart-card .chart-title {
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    opacity: .55;
+    margin-bottom: .6rem;
+  }
+
+  /* === Donut / Ring Gauge === */
+  .gauge-wrap {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    padding: .5rem 0;
+  }
+  .gauge-item { text-align: center; }
+  .gauge-item .gauge-label {
+    font-size: .75rem;
+    opacity: .6;
+    margin-top: .3rem;
+  }
+  .gauge-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--app-primary);
+  }
+
+  /* === GAP Card === */
+  .gap-negative { color: #dc3545; font-weight: 600; font-size: 1rem; }
+  .gap-ring { width: 56px; height: 56px; }
+
+  /* === Retail Sales === */
+  .retail-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--app-primary);
+    letter-spacing: -.02em;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ========================================================
+   PAGE HEADER
+   ======================================================== #}
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-0">ANALYTICS DASHBOARD</h1>
+    <h6 class="mb-0 mt-1">ปี 2021 — ภาพรวมผลการดำเนินงาน</h6>
+  </div>
+  <div class="d-flex gap-2 no-print">
+    <button class="btn btn-app btn-app-soft btn-sm" onclick="window.print()">
+      <i class="bi bi-printer me-1"></i> พิมพ์
+    </button>
+    <button class="btn btn-app btn-app-filled btn-sm">
+      <i class="bi bi-download me-1"></i> ส่งออก
+    </button>
+  </div>
+</div>
+
+{# ========================================================
+   ROW 1: KPI STAT CARDS
+   ======================================================== #}
+<div class="kpi-grid mb-4">
+
+  <div class="stat-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="stat-label">Total Projects</div>
+        <div class="stat-value">{{ kpi.total_projects|default:"26" }}</div>
+      </div>
+      <div class="stat-icon"><i class="bi bi-folder2-open"></i></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="stat-label">LOI Issued</div>
+        <div class="stat-value">{{ kpi.loi_issued|default:290549834|intcomma }}</div>
+      </div>
+      <div class="stat-icon"><i class="bi bi-file-earmark-check"></i></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="stat-label">Monthly</div>
+        <div class="stat-value">{{ kpi.monthly|default:157958693|intcomma }}</div>
+      </div>
+      <div class="stat-icon"><i class="bi bi-calendar-month"></i></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="stat-label">Savings</div>
+        <div class="stat-value">{{ kpi.savings|default:36842682|intcomma }}</div>
+      </div>
+      <div class="stat-icon"><i class="bi bi-piggy-bank"></i></div>
+    </div>
+  </div>
+
+</div>
+
+{# ========================================================
+   ROW 2: MAIN CHART + RIGHT WIDGETS
+   ======================================================== #}
+<div class="row g-3 mb-3">
+
+  {# --- Left: Area Chart + Bar Chart --- #}
+  <div class="col-12 col-lg-7">
+
+    {# Area Chart: Our Section (Jan–Jun) #}
+    <div class="chart-card mb-3">
+      <div class="chart-title">Our Section — ม.ค. ถึง มิ.ย.</div>
+      <canvas id="areaChart" height="130"></canvas>
+      <div class="d-flex gap-3 mt-2" style="font-size:.75rem">
+        <span><span class="badge me-1" style="background:var(--app-primary)">&nbsp;</span>LOI</span>
+        <span><span class="badge me-1 bg-secondary">&nbsp;</span>Transactions</span>
+        <span><span class="badge me-1 bg-warning">&nbsp;</span>Continuations</span>
+      </div>
+    </div>
+
+    {# Bar Chart: CMSS / CMI / NAP / PCC #}
+    <div class="chart-card">
+      <div class="chart-title">LOI by Department</div>
+      <canvas id="barChart" height="120"></canvas>
+    </div>
+
+  </div>
+
+  {# --- Right: P&L Gauges + GAP + Retail Sales --- #}
+  <div class="col-12 col-lg-5 d-flex flex-column gap-3">
+
+    {# P&L Donut Gauges #}
+    <div class="chart-card">
+      <div class="chart-title">P &amp; L</div>
+      <div class="gauge-wrap">
+        <div class="gauge-item">
+          <canvas id="donut1" width="90" height="90"></canvas>
+          <div class="gauge-label">P &amp; L</div>
+          <div class="gauge-value">{{ kpi.pl1|default:"1" }}%</div>
+        </div>
+        <div class="gauge-item">
+          <canvas id="donut2" width="90" height="90"></canvas>
+          <div class="gauge-label">P &amp; L</div>
+          <div class="gauge-value">{{ kpi.pl2|default:"62" }}%</div>
+        </div>
+      </div>
+    </div>
+
+    {# GAP 1 #}
+    <div class="chart-card">
+      <div class="chart-title">GAP 1</div>
+      <div class="d-flex align-items-center gap-3">
+        <canvas id="gapRing" class="gap-ring" width="56" height="56"></canvas>
+        <div>
+          <div class="gap-negative">{{ kpi.gap1|default:"-4,252,455" }}</div>
+          <div class="gap-negative">{{ kpi.gap2|default:"-3,354,174" }}</div>
+        </div>
+      </div>
+    </div>
+
+    {# Retail Sales #}
+    <div class="chart-card flex-fill">
+      <div class="chart-title">Retail Sales</div>
+      <div class="retail-amount mb-2">
+        ${{ kpi.retail_sales|default:24905000|intcomma }}
+      </div>
+      <canvas id="branchBar" height="90"></canvas>
+      <div class="d-flex justify-content-around mt-1" style="font-size:.7rem;opacity:.6">
+        <span>First Branch</span><span>Second Branch</span><span>Third Branch</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{# ========================================================
+   ROW 3: LOI BY DEPARTMENTS
+   ======================================================== #}
+<div class="row g-3">
+  <div class="col-12 col-md-5">
+    <div class="chart-card">
+      <div class="chart-title">LOI Issued by Departments</div>
+      <div class="d-flex gap-4 align-items-end mb-2">
+        <div class="text-center">
+          <div class="fw-bold" style="color:var(--app-primary);font-size:1.3rem">6M</div>
+          <div style="font-size:.7rem;opacity:.5">6M</div>
+        </div>
+        <div class="text-center">
+          <div class="fw-bold" style="color:var(--app-primary);font-size:1.3rem">31</div>
+          <div style="font-size:.7rem;opacity:.5">33M</div>
+        </div>
+        <div class="text-center" style="opacity:.4">
+          <div class="fw-bold" style="font-size:1.3rem">—</div>
+          <div style="font-size:.7rem">12M</div>
+        </div>
+      </div>
+      <canvas id="deptChart" height="70"></canvas>
+    </div>
+  </div>
+  <div class="col-12 col-md-7">
+    <div class="chart-card">
+      <div class="chart-title">Actual of April 2021</div>
+      <canvas id="actualChart" height="70"></canvas>
+      <div class="text-center mt-1 fw-bold" style="color:var(--app-primary)">1200</div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+// =====================================================
+// Agent-4: Chart Builder
+// =====================================================
+
+// Helper: get CSS variable value
+const cssVar = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const PRIMARY = cssVar('--app-primary') || '#B8860B';
+const SECONDARY = cssVar('--app-secondary') || '#DAA520';
+
+// ---- Area Chart ----
+new Chart(document.getElementById('areaChart'), {
+  type: 'line',
+  data: {
+    labels: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.'],
+    datasets: [
+      {
+        label: 'LOI',
+        data: {{ area_loi|default:"[40,55,48,70,65,90]" }},
+        borderColor: PRIMARY,
+        backgroundColor: PRIMARY + '33',
+        fill: true, tension: .45, pointRadius: 3
+      },
+      {
+        label: 'Transactions',
+        data: {{ area_tx|default:"[30,40,35,55,50,70]" }},
+        borderColor: '#6c757d',
+        backgroundColor: 'transparent',
+        fill: false, tension: .45, pointRadius: 3,
+        borderDash: [4,3]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(128,128,128,.1)' }, ticks: { maxTicksLimit: 5 } }
+    }
+  }
+});
+
+// ---- Department Bar Chart ----
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: ['CMSS','CMI','NAP','PCC'],
+    datasets: [
+      { label: 'LOI',      data: [30,60,45,70], backgroundColor: PRIMARY },
+      { label: 'Actual',   data: [20,45,35,55], backgroundColor: SECONDARY + '88' },
+      { label: 'Target',   data: [50,70,60,80], backgroundColor: '#6c757d33' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(128,128,128,.1)' }, ticks: { maxTicksLimit: 5 } }
+    }
+  }
+});
+
+// ---- P&L Donut 1 (1%) ----
+function makeDonut(id, val, color) {
+  new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [val, 100 - val],
+        backgroundColor: [color, color + '22'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      cutout: '72%',
+      responsive: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } }
+    }
+  });
+}
+makeDonut('donut1', {{ kpi.pl1|default:1 }}, PRIMARY);
+makeDonut('donut2', {{ kpi.pl2|default:62 }}, PRIMARY);
+
+// ---- GAP Ring ----
+new Chart(document.getElementById('gapRing'), {
+  type: 'doughnut',
+  data: {
+    datasets: [{ data: [40, 60], backgroundColor: ['#dc3545', '#dc354522'], borderWidth: 0 }]
+  },
+  options: { cutout: '70%', responsive: false, plugins: { legend: { display: false } } }
+});
+
+// ---- Branch Bar (Retail Sales) ----
+new Chart(document.getElementById('branchBar'), {
+  type: 'bar',
+  data: {
+    labels: ['First','Second','Third'],
+    datasets: [{
+      data: {{ branch_data|default:"[45,65,85]" }},
+      backgroundColor: [PRIMARY + 'aa', PRIMARY + 'cc', PRIMARY],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { display: false }
+    }
+  }
+});
+
+// ---- Dept Chart ----
+new Chart(document.getElementById('deptChart'), {
+  type: 'bar',
+  data: {
+    labels: ['6M','33M','12M'],
+    datasets: [{ data: [60,31,20], backgroundColor: PRIMARY, borderRadius: 3 }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { display: false }
+    }
+  }
+});
+
+// ---- Actual April ----
+new Chart(document.getElementById('actualChart'), {
+  type: 'line',
+  data: {
+    labels: ['','','','','','',''],
+    datasets: [{
+      data: {{ actual_april|default:"[800,950,1100,1000,1200,1100,1200]" }},
+      borderColor: PRIMARY,
+      backgroundColor: 'transparent',
+      fill: false, tension: .45, pointRadius: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { x: { display: false }, y: { display: false } }
+  }
+});
+</script>
+{% endblock %}

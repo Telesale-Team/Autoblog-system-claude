@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw — คู่มือภาษาไทย สำหรับทีมออกแบบผลิตภัณฑ์</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Sarabun', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      line-height: 1.75;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b2a3b 50%, #0f3460 100%);
+      padding: 64px 40px;
+      text-align: center;
+      border-bottom: 2px solid #1e3a5f;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, #3b82f620 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, #8b5cf620 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-logo {
+      font-size: 3.5rem;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 10px;
+    }
+    .hero h1 span { color: #60a5fa; }
+    .hero p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+    .hero-badges {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .badge-blue   { background: #1e3a5f; color: #60a5fa; border: 1px solid #2563eb40; }
+    .badge-green  { background: #14532d; color: #4ade80; border: 1px solid #16a34a40; }
+    .badge-purple { background: #2d1b69; color: #a78bfa; border: 1px solid #7c3aed40; }
+    .badge-orange { background: #431407; color: #fb923c; border: 1px solid #ea580c40; }
+
+    /* NAV */
+    nav {
+      background: #111827;
+      padding: 0 32px;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav a {
+      color: #6b7280;
+      text-decoration: none;
+      padding: 15px 18px;
+      font-size: 0.88rem;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    nav a:hover { color: #f9fafb; border-bottom-color: #3b82f6; }
+
+    /* LAYOUT */
+    .container { max-width: 1140px; margin: 0 auto; padding: 48px 24px; }
+    section { margin-bottom: 72px; }
+    section h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-sub {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    /* WHAT IS BOX */
+    .what-is {
+      background: linear-gradient(135deg, #1e293b, #1a2744);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .what-is h3 { color: #60a5fa; margin-bottom: 12px; font-size: 1.1rem; }
+    .what-is p { color: #cbd5e1; font-size: 0.95rem; }
+    .what-is .highlight {
+      background: #0f172a;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: #93c5fd;
+      font-style: italic;
+    }
+
+    /* FEATURE GRID */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .feature-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 22px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
+    .feature-icon { font-size: 2rem; margin-bottom: 10px; }
+    .feature-card h3 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 8px; }
+    .feature-card p { color: #64748b; font-size: 0.85rem; }
+    .feature-card ul {
+      list-style: none;
+      margin-top: 10px;
+      font-size: 0.83rem;
+      color: #94a3b8;
+    }
+    .feature-card ul li::before { content: "• "; color: #3b82f6; }
+    .feature-card ul li { padding: 2px 0; }
+
+    /* CHANNEL GRID */
+    .channel-section { margin-bottom: 28px; }
+    .channel-section h3 {
+      color: #94a3b8;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .channel-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .ch-pill {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.83rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ch-pill.highlight-th { border-color: #16a34a; color: #4ade80; background: #14532d20; }
+    .ch-pill.enterprise { border-color: #7c3aed50; color: #a78bfa; }
+
+    /* ARCH DIAGRAM */
+    .arch-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      font-family: 'Consolas', monospace;
+      font-size: 0.88rem;
+      color: #94a3b8;
+      overflow-x: auto;
+    }
+    .arch-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 8px 0;
+      flex-wrap: wrap;
+    }
+    .arch-node {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 8px 16px;
+      white-space: nowrap;
+      font-size: 0.85rem;
+    }
+    .arch-node.gateway  { border-color: #3b82f6; color: #60a5fa; }
+    .arch-node.channel  { border-color: #10b981; color: #34d399; }
+    .arch-node.llm      { border-color: #8b5cf6; color: #a78bfa; }
+    .arch-node.user     { border-color: #f59e0b; color: #fbbf24; }
+    .arch-arrow { color: #475569; font-size: 1.1rem; }
+
+    /* PRODUCT TABLE */
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .product-table th {
+      background: #1e293b;
+      color: #64748b;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 13px 16px;
+      text-align: left;
+      border-bottom: 2px solid #334155;
+    }
+    .product-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #1e293b;
+      vertical-align: top;
+      font-size: 0.88rem;
+    }
+    .product-table tr:hover td { background: #1e293b40; }
+    .product-name { color: #f1f5f9; font-weight: 600; }
+    .product-target { color: #64748b; font-size: 0.82rem; }
+    .product-value { color: #94a3b8; }
+    .difficulty {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .diff-easy   { background: #14532d; color: #4ade80; }
+    .diff-medium { background: #3f2a00; color: #fbbf24; }
+    .diff-hard   { background: #3f0e0e; color: #f87171; }
+
+    /* SETUP STEPS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .step-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+    }
+    .step-num {
+      position: absolute;
+      top: -12px;
+      left: 16px;
+      background: #3b82f6;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .step-card h3 { color: #f1f5f9; font-size: 0.9rem; margin: 8px 0 6px; }
+    .step-card p  { color: #64748b; font-size: 0.82rem; }
+    .code-inline {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: #60a5fa;
+    }
+
+    /* CALLOUT */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 0.88rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout-info  { background: #1e3a5f30; border-left: 4px solid #3b82f6; }
+    .callout-warn  { background: #3f2a0030; border-left: 4px solid #f59e0b; }
+    .callout-green { background: #14532d30; border-left: 4px solid #10b981; }
+    .callout-red   { background: #3f0e0e30; border-left: 4px solid #ef4444; }
+    .callout .icon { font-size: 1.2rem; flex-shrink: 0; }
+    .callout .text { color: #cbd5e1; line-height: 1.6; }
+
+    /* COMPARISON */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .compare-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 22px;
+    }
+    .compare-card h3 { margin-bottom: 14px; font-size: 0.95rem; }
+    .compare-card ul { list-style: none; font-size: 0.85rem; }
+    .compare-card ul li { padding: 5px 0; border-bottom: 1px solid #1e293b; color: #94a3b8; }
+    .compare-card ul li:last-child { border: none; }
+    .green-card { border-color: #16a34a50; }
+    .green-card h3 { color: #4ade80; }
+    .red-card   { border-color: #dc262650; }
+    .red-card   h3 { color: #f87171; }
+
+    /* USE CASE CARDS */
+    .usecase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .usecase-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .usecase-card:hover { border-color: #60a5fa; }
+    .uc-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .uc-icon { font-size: 2rem; flex-shrink: 0; }
+    .uc-title { color: #f1f5f9; font-weight: 700; font-size: 1rem; }
+    .uc-tag { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+    .uc-body { color: #94a3b8; font-size: 0.88rem; margin-bottom: 14px; }
+    .uc-tech { font-size: 0.8rem; color: #475569; }
+    .uc-tech span {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-right: 4px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+    .uc-revenue {
+      margin-top: 12px;
+      background: #14532d30;
+      border: 1px solid #16a34a40;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      color: #4ade80;
+    }
+
+    /* PRICING TIER */
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .tier-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 22px;
+    }
+    .tier-card .tier-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+    .tier-card .tier-price {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+    }
+    .tier-card .tier-price span { font-size: 0.85rem; font-weight: 400; color: #64748b; }
+    .tier-card .tier-desc { color: #64748b; font-size: 0.83rem; margin-bottom: 14px; }
+    .tier-card ul { list-style: none; font-size: 0.83rem; color: #94a3b8; }
+    .tier-card ul li { padding: 4px 0; }
+    .tier-card ul li::before { content: "✓ "; color: #10b981; }
+
+    /* FOOTER */
+    footer {
+      background: #111827;
+      border-top: 1px solid #1f2937;
+      text-align: center;
+      padding: 36px;
+      color: #374151;
+      font-size: 0.85rem;
+    }
+    footer a { color: #3b82f6; text-decoration: none; }
+    footer strong { color: #4b5563; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.8rem; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo">🦀</div>
+  <h1>Open<span>Claw</span></h1>
+  <p>คู่มือภาษาไทยสำหรับทีมออกแบบผลิตภัณฑ์ — เข้าใจ OpenClaw และนำไปสร้าง Product & Service</p>
+  <div class="hero-badges">
+    <span class="badge badge-blue">Self-Hosted Gateway</span>
+    <span class="badge badge-green">Open Source MIT</span>
+    <span class="badge badge-purple">28+ Channels</span>
+    <span class="badge badge-orange">35+ LLM Providers</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#what">OpenClaw คืออะไร</a>
+  <a href="#arch">สถาปัตยกรรม</a>
+  <a href="#features">ฟีเจอร์หลัก</a>
+  <a href="#channels">Channels</a>
+  <a href="#multiagent">Multi-Agent</a>
+  <a href="#setup">ติดตั้ง</a>
+  <a href="#products">ไอเดียผลิตภัณฑ์</a>
+  <a href="#pricing">Model การเงิน</a>
+  <a href="#compare">OpenClaw vs อื่น</a>
+</nav>
+
+<div class="container">
+
+  <!-- WHAT IS OPENCLAW -->
+  <section id="what">
+    <h2>🦀 OpenClaw คืออะไร</h2>
+    <p class="section-sub">ทำความเข้าใจแก่นแท้ของ OpenClaw ก่อนออกแบบผลิตภัณฑ์</p>
+
+    <div class="what-is">
+      <h3>คำนิยามอย่างง่าย</h3>
+      <p>
+        OpenClaw คือ <strong style="color:#f1f5f9;">Self-Hosted AI Gateway</strong> — ตัวกลางที่เชื่อมต่อแอปแชท (LINE, Telegram, WhatsApp, Discord ฯลฯ)
+        เข้ากับ AI Agent ที่คุณต้องการ โดยข้อมูลทั้งหมดอยู่บนเซิร์ฟเวอร์ของคุณ ไม่ผ่านบุคคลที่สาม
+      </p>
+      <div class="highlight">
+        "A self-hosted gateway that connects your favorite chat apps to AI coding agents —
+        keeping your data under your control."
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>ทำไมถึงสำคัญสำหรับเรา:</strong> ลูกค้า SME ไทยส่วนใหญ่ใช้ LINE, Telegram และ Facebook
+        OpenClaw ช่วยให้เราสร้าง AI Chatbot ที่รันบน server ของลูกค้าเองได้ทันที
+        ลูกค้าควบคุมข้อมูล 100% — จุดขายที่แข็งแกร่งมากในตลาด B2B
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap:12px; margin-top:24px;">
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:1.8rem; margin-bottom:6px;">🔒</div>
+        <div style="color:#f1f5f9; font-weight:600; font-size:0.9rem;">Self-Hosted</div>
+        <div style="color:#64748b; font-size:0.78rem; margin-top:4px;">ข้อมูลอยู่บน server ลูกค้า</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:1.8rem; margin-bottom:6px;">💬</div>
+        <div style="color:#f1f5f9; font-weight:600; font-size:0.9rem;">28+ Channels</div>
+        <div style="color:#64748b; font-size:0.78rem; margin-top:4px;">รองรับทุกแอปแชทหลัก</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:1.8rem; margin-bottom:6px;">🤖</div>
+        <div style="color:#f1f5f9; font-weight:600; font-size:0.9rem;">35+ LLM</div>
+        <div style="color:#64748b; font-size:0.78rem; margin-top:4px;">Claude, GPT, Gemini, Ollama</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:1.8rem; margin-bottom:6px;">⚡</div>
+        <div style="color:#f1f5f9; font-weight:600; font-size:0.9rem;">5 นาที setup</div>
+        <div style="color:#64748b; font-size:0.78rem; margin-top:4px;">ติดตั้งและใช้งานได้เร็ว</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:1.8rem; margin-bottom:6px;">🆓</div>
+        <div style="color:#f1f5f9; font-weight:600; font-size:0.9rem;">MIT License</div>
+        <div style="color:#64748b; font-size:0.78rem; margin-top:4px;">ใช้เชิงพาณิชย์ได้ฟรี</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:1.8rem; margin-bottom:6px;">🔀</div>
+        <div style="color:#f1f5f9; font-weight:600; font-size:0.9rem;">Multi-Agent</div>
+        <div style="color:#64748b; font-size:0.78rem; margin-top:4px;">หลาย AI ทำงานพร้อมกัน</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section id="arch">
+    <h2>🏗️ สถาปัตยกรรมระบบ</h2>
+    <p class="section-sub">เข้าใจว่า OpenClaw ทำงานยังไงก่อนออกแบบ Solution</p>
+
+    <div class="arch-box">
+      <div style="color:#64748b; font-size:0.8rem; margin-bottom:20px;">ภาพรวม Data Flow</div>
+
+      <div class="arch-row">
+        <div class="arch-node user">👤 User (LINE/WhatsApp/Telegram)</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node channel">💬 Channel Connector</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node gateway">🦀 OpenClaw Gateway</div>
+      </div>
+
+      <div style="color:#475569; padding: 8px 0 8px 120px; font-size:0.8rem;">↓ routing + session management</div>
+
+      <div class="arch-row">
+        <div class="arch-node gateway">🦀 Agent Router</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node llm">🤖 AI Agent (Claude/GPT/Gemini)</div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node">🛠️ Tools (search/browser/cron)</div>
+      </div>
+
+      <div style="color:#475569; padding: 8px 0 8px 120px; font-size:0.8rem;">↓ response</div>
+
+      <div class="arch-row">
+        <div class="arch-node user">👤 User รับ response กลับ</div>
+        <span style="color:#475569; font-size:0.8rem; margin-left:12px;">← ผ่านช่องทางเดิม</span>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:20px;">
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:20px;">
+        <h3 style="color:#60a5fa; margin-bottom:12px; font-size:0.95rem;">🔄 Single Process Architecture</h3>
+        <p style="color:#94a3b8; font-size:0.85rem;">
+          OpenClaw รันเป็น process เดียว (daemon) บน server ลูกค้า
+          จัดการทุก channel พร้อมกัน ไม่ต้องรันหลาย process
+        </p>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:20px;">
+        <h3 style="color:#a78bfa; margin-bottom:12px; font-size:0.95rem;">🗄️ Isolated Agent Storage</h3>
+        <p style="color:#94a3b8; font-size:0.85rem;">
+          แต่ละ Agent มี workspace แยกกัน
+          เก็บ session history, memory, และ config ที่ <code style="color:#60a5fa;">~/.openclaw/agents/&lt;agentId&gt;/</code>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <h2>⚡ ฟีเจอร์หลัก</h2>
+    <p class="section-sub">ทุกฟีเจอร์ที่ OpenClaw มี — เพื่อประเมินว่าใช้ทำอะไรได้บ้าง</p>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Multi-Channel Gateway</h3>
+        <p>เชื่อมต่อหลาย chat platform พร้อมกันใน gateway เดียว</p>
+        <ul>
+          <li>Telegram, WhatsApp, LINE</li>
+          <li>Discord, Slack, Teams</li>
+          <li>Signal, iMessage, Matrix</li>
+          <li>WebChat UI สำเร็จรูป</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>35+ LLM Providers</h3>
+        <p>รองรับทั้ง cloud AI และ self-hosted</p>
+        <ul>
+          <li>Anthropic (Claude)</li>
+          <li>OpenAI (GPT-4)</li>
+          <li>Google (Gemini)</li>
+          <li>Ollama / vLLM (on-premise)</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔀</div>
+        <h3>Multi-Agent Routing</h3>
+        <p>ส่งข้อความไปยัง AI Agent ที่เหมาะสมโดยอัตโนมัติ</p>
+        <ul>
+          <li>Isolated sessions per agent</li>
+          <li>Binding rules (channel/account)</li>
+          <li>Thread inheritance</li>
+          <li>Group chat + mention activation</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📁</div>
+        <h3>Media Support</h3>
+        <p>รองรับไฟล์และสื่อทุกประเภท</p>
+        <ul>
+          <li>รูปภาพ + Image generation</li>
+          <li>เสียง + Voice transcription</li>
+          <li>วิดีโอ + เอกสาร (PDF)</li>
+          <li>Text-to-Speech</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>Control UI Dashboard</h3>
+        <p>หน้าควบคุมผ่าน browser ไม่ต้องใช้ terminal</p>
+        <ul>
+          <li>Chat interface สำเร็จรูป</li>
+          <li>Configuration UI</li>
+          <li>Session management</li>
+          <li>Agent monitoring</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Mobile Nodes</h3>
+        <p>รองรับ iOS และ Android</p>
+        <ul>
+          <li>Mobile pairing</li>
+          <li>Voice chat</li>
+          <li>Canvas workflows</li>
+          <li>Device commands</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🛠️</div>
+        <h3>Built-in Tools</h3>
+        <p>เครื่องมือสำเร็จรูปสำหรับ AI Agent</p>
+        <ul>
+          <li>Web search (หลาย providers)</li>
+          <li>Browser automation</li>
+          <li>Cron jobs (scheduled tasks)</li>
+          <li>Workflow skills + plugins</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Security & Privacy</h3>
+        <p>ออกแบบมาเพื่อ privacy-first</p>
+        <ul>
+          <li>Self-hosted ทั้งหมด</li>
+          <li>ข้อมูลไม่ผ่าน third-party</li>
+          <li>Remote access control</li>
+          <li>MIT License (ใช้เชิงพาณิชย์ได้)</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Memory & Sessions</h3>
+        <p>AI จำบริบทและ session ได้</p>
+        <ul>
+          <li>Session history per user</li>
+          <li>AGENTS.md / SOUL.md persona</li>
+          <li>USER.md preferences</li>
+          <li>Local notes storage</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CHANNELS -->
+  <section id="channels">
+    <h2>📡 Channels ที่รองรับ</h2>
+    <p class="section-sub">28+ platform — เน้น highlight ที่เกี่ยวข้องกับตลาดไทยเป็นพิเศษ</p>
+
+    <div class="channel-section">
+      <h3>⭐ แนะนำสำหรับตลาดไทย</h3>
+      <div class="channel-pills">
+        <span class="ch-pill highlight-th">🟢 LINE</span>
+        <span class="ch-pill highlight-th">🟢 Telegram</span>
+        <span class="ch-pill highlight-th">🟢 WhatsApp</span>
+        <span class="ch-pill highlight-th">🟢 Facebook (ผ่าน plugin)</span>
+        <span class="ch-pill highlight-th">🟢 Zalo</span>
+      </div>
+    </div>
+
+    <div class="channel-section">
+      <h3>💼 Enterprise & Business</h3>
+      <div class="channel-pills">
+        <span class="ch-pill enterprise">Microsoft Teams</span>
+        <span class="ch-pill enterprise">Google Chat</span>
+        <span class="ch-pill enterprise">Slack</span>
+        <span class="ch-pill enterprise">Feishu/Lark</span>
+        <span class="ch-pill enterprise">Mattermost</span>
+        <span class="ch-pill enterprise">Nextcloud Talk</span>
+      </div>
+    </div>
+
+    <div class="channel-section">
+      <h3>🌐 Community & Social</h3>
+      <div class="channel-pills">
+        <span class="ch-pill">Discord</span>
+        <span class="ch-pill">Twitch</span>
+        <span class="ch-pill">IRC</span>
+        <span class="ch-pill">Matrix</span>
+        <span class="ch-pill">Nostr</span>
+        <span class="ch-pill">WeChat</span>
+        <span class="ch-pill">QQ Bot</span>
+      </div>
+    </div>
+
+    <div class="channel-section">
+      <h3>📞 Voice & Other</h3>
+      <div class="channel-pills">
+        <span class="ch-pill">Voice Call (Twilio/Plivo)</span>
+        <span class="ch-pill">iMessage (macOS)</span>
+        <span class="ch-pill">Signal</span>
+        <span class="ch-pill">WebChat (Built-in)</span>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top:16px;">
+      <span class="icon">🎯</span>
+      <div class="text">
+        <strong>สำคัญมาก:</strong> Channel ทั้งหมดรันพร้อมกันได้ใน gateway เดียว
+        ลูกค้า 1 ราย สามารถมี LINE bot + Telegram bot + WebChat ได้พร้อมกัน
+        โดยใช้ OpenClaw instance เดียว
+      </div>
+    </div>
+  </section>
+
+  <!-- MULTI-AGENT -->
+  <section id="multiagent">
+    <h2>🔀 Multi-Agent Routing</h2>
+    <p class="section-sub">ฟีเจอร์ที่ทรงพลังที่สุดของ OpenClaw — สำคัญมากสำหรับออกแบบ Product</p>
+
+    <div style="background:#1e293b; border:1px solid #334155; border-radius:14px; padding:28px; margin-bottom:20px;">
+      <h3 style="color:#a78bfa; margin-bottom:16px;">แนวคิดหลัก</h3>
+      <p style="color:#94a3b8; margin-bottom:20px; font-size:0.9rem;">
+        Gateway 1 ตัว สามารถมีหลาย Agent พร้อมกัน แต่ละ Agent มี persona, memory, และ config แยกกันสนิท
+        ระบบ routing จะส่งข้อความไปยัง Agent ที่ถูกต้องตาม rule ที่กำหนด
+      </p>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:12px;">
+        <div style="background:#0f172a; border:1px solid #7c3aed40; border-radius:10px; padding:14px; text-align:center;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">🤖</div>
+          <div style="color:#a78bfa; font-weight:600; font-size:0.85rem;">Agent A</div>
+          <div style="color:#64748b; font-size:0.75rem;">Sales Bot (LINE)</div>
+        </div>
+        <div style="background:#0f172a; border:1px solid #7c3aed40; border-radius:10px; padding:14px; text-align:center;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">🤖</div>
+          <div style="color:#a78bfa; font-weight:600; font-size:0.85rem;">Agent B</div>
+          <div style="color:#64748b; font-size:0.75rem;">Support Bot (Telegram)</div>
+        </div>
+        <div style="background:#0f172a; border:1px solid #7c3aed40; border-radius:10px; padding:14px; text-align:center;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">🤖</div>
+          <div style="color:#a78bfa; font-weight:600; font-size:0.85rem;">Agent C</div>
+          <div style="color:#64748b; font-size:0.75rem;">Internal Bot (Slack)</div>
+        </div>
+        <div style="background:#0f172a; border:1px solid #334155; border-radius:10px; padding:14px; text-align:center; border-style:dashed;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">➕</div>
+          <div style="color:#475569; font-size:0.85rem;">เพิ่ม Agent ได้ไม่จำกัด</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="color:#cbd5e1; margin-bottom:12px;">Routing Rules ทำงานยังไง</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:14px;">
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px;">
+        <div style="color:#60a5fa; font-size:0.8rem; font-weight:600; margin-bottom:6px;">BY CHANNEL</div>
+        <div style="color:#e2e8f0; font-size:0.88rem;">ข้อความจาก WhatsApp เลขนี้ → Agent A</div>
+        <div style="color:#475569; font-size:0.78rem; margin-top:4px;">เช่น เบอร์ธุรกิจ vs เบอร์ส่วนตัว</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px;">
+        <div style="color:#60a5fa; font-size:0.8rem; font-weight:600; margin-bottom:6px;">BY GROUP</div>
+        <div style="color:#e2e8f0; font-size:0.88rem;">กลุ่ม Discord server นี้ → Agent B</div>
+        <div style="color:#475569; font-size:0.78rem; margin-top:4px;">แยก workspace ตาม team</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px;">
+        <div style="color:#60a5fa; font-size:0.8rem; font-weight:600; margin-bottom:6px;">BY SENDER</div>
+        <div style="color:#e2e8f0; font-size:0.88rem;">User ID นี้ → Agent C เสมอ</div>
+        <div style="color:#475569; font-size:0.78rem; margin-top:4px;">VIP customer ได้ agent พิเศษ</div>
+      </div>
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px;">
+        <div style="color:#60a5fa; font-size:0.8rem; font-weight:600; margin-bottom:6px;">BY THREAD</div>
+        <div style="color:#e2e8f0; font-size:0.88rem;">Thread ที่เริ่มกับ Agent ไหน → ไปต่อกับ Agent นั้น</div>
+        <div style="color:#475569; font-size:0.78rem; margin-top:4px;">Context ต่อเนื่องไม่หลุด</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section id="setup">
+    <h2>⚙️ การติดตั้ง (5 นาที)</h2>
+    <p class="section-sub">Requirements และขั้นตอนติดตั้ง OpenClaw</p>
+
+    <div class="callout callout-warn">
+      <span class="icon">⚠️</span>
+      <div class="text">
+        <strong>System Requirements:</strong>
+        Node.js 24 (แนะนำ) หรือ Node 22.14+ · API Key จาก LLM Provider (Anthropic / OpenAI / Google) ·
+        Windows ผู้ใช้ WSL2 เพื่อ stability สูงสุด
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:24px;">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Install</h3>
+        <p>รัน installer สำหรับ OS ของคุณ</p>
+        <div style="margin-top:8px; font-size:0.78rem; color:#475569;">macOS/Linux: curl · Windows: PowerShell</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Onboard</h3>
+        <p>รัน <span class="code-inline">openclaw onboard --install-daemon</span></p>
+        <div style="margin-top:8px; font-size:0.78rem; color:#475569;">ตั้งค่า LLM provider + API key</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Verify</h3>
+        <p>ตรวจสอบ Gateway รันที่ port <span class="code-inline">18789</span></p>
+        <div style="margin-top:8px; font-size:0.78rem; color:#475569;">daemon ทำงาน background</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Control UI</h3>
+        <p>เปิด browser ไปที่ Control UI dashboard</p>
+        <div style="margin-top:8px; font-size:0.78rem; color:#475569;">ไม่ต้องใช้ terminal แล้ว</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">5</div>
+        <h3>Connect</h3>
+        <p>เชื่อมต่อ channels ที่ต้องการ</p>
+        <div style="margin-top:8px; font-size:0.78rem; color:#475569;">LINE, Telegram, WhatsApp ฯลฯ</div>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:20px;">
+      <span class="icon">📦</span>
+      <div class="text">
+        <strong>Infrastructure ที่ลูกค้าต้องมี:</strong> VPS หรือ server ที่ run ตลอด 24/7
+        แนะนำ Linux VPS ราคา ~300-500 บาท/เดือน (DigitalOcean, AWS Lightsail, หรือ server ในบริษัทลูกค้าเอง)
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT IDEAS -->
+  <section id="products">
+    <h2>💡 ไอเดียผลิตภัณฑ์สำหรับ SME ไทย</h2>
+    <p class="section-sub">ผลิตภัณฑ์ที่สร้างได้บน OpenClaw — เรียงตามความยากง่ายในการ implement</p>
+
+    <div class="usecase-grid">
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">💬</span>
+          <div>
+            <div class="uc-title">LINE AI Chatbot สำหรับร้านค้า</div>
+            <div class="uc-tag">🟢 เริ่มต้นง่าย · SME ทั่วไป</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          ติดตั้ง OpenClaw บน VPS เชื่อมต่อ LINE Official Account
+          ลูกค้าถามสินค้า สั่งของ เช็คสต็อก ผ่าน LINE ได้เลย
+          ข้อมูลทั้งหมดอยู่บน server ร้านค้า
+        </p>
+        <div class="uc-tech">
+          <span>LINE Channel</span><span>Claude/GPT</span><span>Self-hosted</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 15,000–25,000 บาท + 2,000 บาท/เดือน maintenance</div>
+      </div>
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">🏢</span>
+          <div>
+            <div class="uc-title">Internal AI Assistant สำหรับทีมงาน</div>
+            <div class="uc-tag">🟡 กลาง · SME มีทีม IT</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          OpenClaw + Slack/Teams → AI ช่วยทีมงาน ตอบคำถาม HR ค้นหาเอกสาร
+          สรุปรายงาน และทำ workflow automation ผ่านแชทที่ใช้งานอยู่แล้ว
+        </p>
+        <div class="uc-tech">
+          <span>Slack/Teams Channel</span><span>Multi-Agent</span><span>Document search</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 30,000–60,000 บาท + 5,000 บาท/เดือน</div>
+      </div>
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">📞</span>
+          <div>
+            <div class="uc-title">Multi-Channel Customer Service</div>
+            <div class="uc-tag">🟡 กลาง · ธุรกิจมี Support Team</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          รับ message จาก LINE + Facebook + Telegram + เว็บไซต์ พร้อมกัน
+          ใน gateway เดียว AI ตอบอัตโนมัติ หรือ route ไปยัง support staff
+        </p>
+        <div class="uc-tech">
+          <span>LINE</span><span>Telegram</span><span>WebChat</span><span>Multi-Agent Routing</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 40,000–80,000 บาท + 8,000 บาท/เดือน</div>
+      </div>
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">🔒</span>
+          <div>
+            <div class="uc-title">Private AI สำหรับ Data-Sensitive Business</div>
+            <div class="uc-tag">🟡 กลาง · โรงพยาบาล / กฎหมาย / การเงิน</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          ธุรกิจที่ข้อมูลต้องอยู่ภายใน (PDPA-sensitive) เช่น คลินิก
+          ทนายความ บริษัทการเงิน ใช้ Ollama (self-hosted LLM) ใน OpenClaw
+          ข้อมูลไม่ออกนอกองค์กรเลย 100%
+        </p>
+        <div class="uc-tech">
+          <span>Ollama (on-premise)</span><span>LINE/Teams</span><span>Zero data egress</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 80,000–150,000 บาท (premium PDPA compliance)</div>
+      </div>
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">🛒</span>
+          <div>
+            <div class="uc-title">AI Sales Agent + Lead Qualification</div>
+            <div class="uc-tag">🟡 กลาง · ธุรกิจ B2C / B2B</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          AI ถาม qualify lead ผ่าน LINE/Telegram ก่อนส่งต่อ sales
+          บันทึก session history ของลูกค้าแต่ละราย ส่ง follow-up อัตโนมัติ
+          integrate กับ CRM
+        </p>
+        <div class="uc-tech">
+          <span>LINE/Telegram</span><span>Memory session</span><span>CRM webhook</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 35,000–70,000 บาท + revenue share model</div>
+      </div>
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">🏨</span>
+          <div>
+            <div class="uc-title">Hospitality AI (โรงแรม / รีสอร์ท)</div>
+            <div class="uc-tag">🟡 กลาง · Tourism & Hospitality</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          AI ตอบ LINE/WhatsApp ของแขก จองห้อง สอบถามโปรโมชั่น
+          บริการ in-room service ผ่าน QR code ส่งต่อสตาฟฟ์ผ่าน Slack/Teams
+        </p>
+        <div class="uc-tech">
+          <span>LINE</span><span>WhatsApp</span><span>WebChat</span><span>Multi-Agent</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 50,000–100,000 บาท + 6,000 บาท/เดือน</div>
+      </div>
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">🏭</span>
+          <div>
+            <div class="uc-title">Manufacturing / Logistics Bot</div>
+            <div class="uc-tag">🔴 ซับซ้อน · โรงงาน / โลจิสติกส์</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          AI รับ order ผ่าน LINE เช็คสต็อก production status
+          แจ้งเตือนผ่าน Telegram เมื่อ shipment อัปเดต
+          ทีมงานคุยกัน + AI ผ่าน Slack internal
+        </p>
+        <div class="uc-tech">
+          <span>LINE</span><span>Telegram alerts</span><span>Slack internal</span><span>API integration</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 100,000–200,000 บาท + custom maintenance</div>
+      </div>
+
+      <div class="usecase-card">
+        <div class="uc-header">
+          <span class="uc-icon">🎓</span>
+          <div>
+            <div class="uc-title">EdTech AI Tutor</div>
+            <div class="uc-tag">🟡 กลาง · โรงเรียน / สถาบัน</div>
+          </div>
+        </div>
+        <p class="uc-body">
+          นักเรียนถาม AI tutor ผ่าน LINE หรือ Discord
+          AI มี memory จำพัฒนาการของนักเรียนแต่ละคน
+          ครูดูสรุปผ่าน WebChat dashboard
+        </p>
+        <div class="uc-tech">
+          <span>LINE/Discord</span><span>Per-user memory</span><span>WebChat dashboard</span>
+        </div>
+        <div class="uc-revenue">💰 Package: 30,000–60,000 บาท + 3,000 บาท/เดือน/100 users</div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-green" style="margin-top:24px;">
+      <span class="icon">🚀</span>
+      <div class="text">
+        <strong>จุดขายหลักที่ต้องพูดกับลูกค้า:</strong>
+        (1) <strong>ข้อมูลอยู่กับลูกค้า 100%</strong> — ไม่ผ่าน cloud บุคคลที่สาม (PDPA-friendly) ·
+        (2) <strong>รองรับทุก channel</strong> — ไม่ต้องสร้างระบบแยกสำหรับแต่ละแอป ·
+        (3) <strong>ราคาถูกกว่า SaaS</strong> — จ่ายครั้งเดียว ไม่มีค่า per-message
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING MODEL -->
+  <section id="pricing">
+    <h2>💰 Model การเงินสำหรับ OpenClaw Products</h2>
+    <p class="section-sub">แนวทางตั้งราคาและ package สำหรับขายลูกค้า</p>
+
+    <div class="tier-grid">
+
+      <div class="tier-card">
+        <div class="tier-label">Starter Package</div>
+        <div class="tier-price">15,000 <span>บาท</span></div>
+        <div class="tier-desc">สำหรับ SME เริ่มต้น — 1 channel, 1 agent</div>
+        <ul>
+          <li>LINE หรือ Telegram</li>
+          <li>1 AI Agent</li>
+          <li>Setup + training</li>
+          <li>30-day support</li>
+          <li>บน VPS ลูกค้า</li>
+        </ul>
+      </div>
+
+      <div class="tier-card" style="border-color:#3b82f650;">
+        <div class="tier-label">Business Package</div>
+        <div class="tier-price">40,000 <span>บาท</span></div>
+        <div class="tier-desc">Multi-channel + Multi-agent setup</div>
+        <ul>
+          <li>LINE + Telegram + WebChat</li>
+          <li>3 AI Agents</li>
+          <li>Custom persona + memory</li>
+          <li>90-day support</li>
+          <li>Media support (รูป/เสียง)</li>
+        </ul>
+      </div>
+
+      <div class="tier-card" style="border-color:#8b5cf650;">
+        <div class="tier-label">Enterprise Package</div>
+        <div class="tier-price">100,000+ <span>บาท</span></div>
+        <div class="tier-desc">Full stack + Private LLM option</div>
+        <ul>
+          <li>ทุก channel ที่ต้องการ</li>
+          <li>Unlimited agents</li>
+          <li>Ollama (on-premise LLM)</li>
+          <li>API + CRM integration</li>
+          <li>1-year SLA support</li>
+        </ul>
+      </div>
+
+      <div class="tier-card" style="border-color:#10b98150;">
+        <div class="tier-label">MRR Maintenance</div>
+        <div class="tier-price">2,000–8,000 <span>บาท/เดือน</span></div>
+        <div class="tier-desc">ค่าดูแลรายเดือน (Recurring Revenue)</div>
+        <ul>
+          <li>Monitoring + uptime</li>
+          <li>Update + patch</li>
+          <li>LLM API cost pass-through</li>
+          <li>Monthly performance report</li>
+          <li>Priority support</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="callout callout-info" style="margin-top:24px;">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>โครงสร้างค่าใช้จ่ายลูกค้า (ต้องแจ้ง):</strong>
+        ค่า setup (one-time) + ค่า VPS ลูกค้า (~300-500 บาท/เดือน) + ค่า LLM API (ตามการใช้งาน) + ค่า maintenance ของเรา
+        LLM API cost โดยเฉลี่ย Claude Haiku ~500-2,000 บาท/เดือน ขึ้นอยู่กับปริมาณ message
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON -->
+  <section id="compare">
+    <h2>⚖️ OpenClaw vs ทางเลือกอื่น</h2>
+    <p class="section-sub">เพื่อช่วยตอบคำถามลูกค้าและ position product ได้ถูกต้อง</p>
+
+    <div class="compare-grid">
+      <div class="compare-card green-card">
+        <h3>✅ OpenClaw เหมาะเมื่อ...</h3>
+        <ul>
+          <li>ลูกค้าต้องการ data sovereignty (ข้อมูลอยู่กับตัวเอง)</li>
+          <li>ต้องการหลาย channel พร้อมกัน</li>
+          <li>ธุรกิจที่มี PDPA-sensitive data</li>
+          <li>ต้องการ custom AI persona ลึก</li>
+          <li>งบ long-term ถูกกว่า SaaS</li>
+          <li>ต้องการ self-hosted LLM (Ollama)</li>
+          <li>Developer / power user ที่ต้องการ control</li>
+        </ul>
+      </div>
+      <div class="compare-card red-card">
+        <h3>❌ OpenClaw ไม่เหมาะเมื่อ...</h3>
+        <ul>
+          <li>ลูกค้าไม่มี IT / ไม่มี server</li>
+          <li>ต้องการ no-code setup 100%</li>
+          <li>งบน้อย ไม่อยากลงทุน upfront</li>
+          <li>ต้องการ SLA 99.9% โดยไม่ดูแล</li>
+          <li>ต้องการ dashboard analytics สำเร็จรูป</li>
+          <li>Scale ใหญ่มาก (ล้าน message/วัน)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto; margin-top:20px;">
+      <table style="width:100%; border-collapse:collapse; min-width:500px;">
+        <thead>
+          <tr>
+            <th style="background:#1e293b; color:#64748b; font-size:0.78rem; text-transform:uppercase; padding:12px 16px; text-align:left; border-bottom:2px solid #334155;">ด้าน</th>
+            <th style="background:#1e293b; color:#60a5fa; font-size:0.78rem; text-transform:uppercase; padding:12px 16px; text-align:center; border-bottom:2px solid #334155;">OpenClaw</th>
+            <th style="background:#1e293b; color:#64748b; font-size:0.78rem; text-transform:uppercase; padding:12px 16px; text-align:center; border-bottom:2px solid #334155;">SaaS Chatbot (Chatfuel/ManyChat)</th>
+            <th style="background:#1e293b; color:#64748b; font-size:0.78rem; text-transform:uppercase; padding:12px 16px; text-align:center; border-bottom:2px solid #334155;">สร้างเอง (Custom)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; color:#94a3b8; font-size:0.88rem;">Data Privacy</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 100% Self-hosted</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#f87171; font-size:0.88rem;">🔴 บน cloud vendor</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 ขึ้นอยู่กับ dev</td>
+          </tr>
+          <tr>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; color:#94a3b8; font-size:0.88rem;">Multi-Channel</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 28+ channels</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-size:0.88rem;">🟡 จำกัดตาม plan</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-size:0.88rem;">🟡 dev เอง ใช้เวลา</td>
+          </tr>
+          <tr>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; color:#94a3b8; font-size:0.88rem;">ราคา Long-term</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 ถูกกว่ามาก</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#f87171; font-size:0.88rem;">🔴 ค่ารายเดือนสูง</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-size:0.88rem;">🟡 dev cost สูง</td>
+          </tr>
+          <tr>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; color:#94a3b8; font-size:0.88rem;">Setup ง่าย</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-size:0.88rem;">🟡 ต้องมี technical</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 No-code</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#f87171; font-size:0.88rem;">🔴 ต้อง dev เต็มตัว</td>
+          </tr>
+          <tr>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; color:#94a3b8; font-size:0.88rem;">LLM Flexibility</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 35+ providers</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-size:0.88rem;">🟡 จำกัด</td>
+            <td style="padding:11px 16px; border-bottom:1px solid #1e293b; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 เลือกเองได้</td>
+          </tr>
+          <tr>
+            <td style="padding:11px 16px; color:#94a3b8; font-size:0.88rem;">License</td>
+            <td style="padding:11px 16px; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 MIT (ฟรี+พาณิชย์)</td>
+            <td style="padding:11px 16px; text-align:center; color:#f87171; font-size:0.88rem;">🔴 Proprietary</td>
+            <td style="padding:11px 16px; text-align:center; color:#4ade80; font-size:0.88rem;">🟢 เป็นของคุณ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-size:1.5rem; margin-bottom:10px;">🦀</div>
+  <strong>OpenClaw — คู่มือภาษาไทย สำหรับทีมออกแบบผลิตภัณฑ์</strong><br>
+  จัดทำโดย Header Staff (Chief of Staff Agent) · อัปเดต 2026-05-07<br><br>
+  <a href="https://docs.openclaw.ai/" target="_blank">docs.openclaw.ai</a> ·
+  <span style="color:#374151;">MIT License · Self-Hosted · Open Source</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Strategy — ช่องว่างตลาดไทย AI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark:   #090d18;
+      --card:   #111827;
+      --border: #1f2937;
+      --text:   #e2e8f0;
+      --muted:  #6b7280;
+      --blue:   #3b82f6;
+      --green:  #10b981;
+      --purple: #8b5cf6;
+      --orange: #f59e0b;
+      --red:    #ef4444;
+      --pink:   #ec4899;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI','Sarabun',sans-serif; background: var(--dark); color: var(--text); line-height: 1.75; }
+
+    /* NAV */
+    nav {
+      background: #0d1117;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+    }
+    nav a { color: #4b5563; text-decoration: none; padding: 14px 18px; font-size: 0.85rem; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    nav a:hover { color: #f9fafb; border-bottom-color: var(--blue); }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg,#0d1b2a,#1a1f3a,#0f2d1a); padding: 60px 24px; text-align: center; border-bottom: 1px solid var(--border); }
+    .hero .eyebrow { display: inline-block; background: #1e3a5f40; border: 1px solid #3b82f640; border-radius: 20px; padding: 5px 16px; font-size: 0.78rem; color: #93c5fd; margin-bottom: 18px; }
+    .hero h1 { font-size: clamp(1.8rem,4vw,3rem); font-weight: 900; color: #f9fafb; line-height: 1.2; margin-bottom: 12px; }
+    .hero h1 span { color: var(--green); }
+    .hero p { color: #6b7280; font-size: 0.95rem; max-width: 640px; margin: 0 auto; }
+
+    /* LAYOUT */
+    .container { max-width: 1140px; margin: 0 auto; padding: 60px 24px; }
+    section { padding: 64px 24px; }
+    .section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+    .section-title { font-size: clamp(1.4rem,3vw,2.2rem); font-weight: 800; color: #f9fafb; line-height: 1.25; margin-bottom: 10px; }
+    .section-sub { color: var(--muted); font-size: 0.9rem; max-width: 640px; margin-bottom: 36px; }
+    .text-center { text-align: center; }
+    .text-center .section-sub { margin-left: auto; margin-right: auto; }
+
+    /* ── COMPETITOR ANALYSIS ── */
+    .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 16px; margin-bottom: 24px; }
+    .comp-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+    .comp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .comp-logo { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+    .comp-name { font-weight: 700; color: #f1f5f9; font-size: 0.95rem; }
+    .comp-tagline { font-size: 0.75rem; color: var(--muted); }
+    .comp-stat { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .stat-pill { background: #0f172a; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 0.75rem; color: #94a3b8; }
+    .strong-list, .weak-list { list-style: none; font-size: 0.83rem; margin-bottom: 10px; }
+    .strong-list li::before { content: "✓ "; color: var(--green); }
+    .strong-list li { padding: 2px 0; color: #94a3b8; }
+    .weak-list li::before { content: "✗ "; color: var(--red); }
+    .weak-list li { padding: 2px 0; color: #6b7280; }
+    .list-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #4b5563; letter-spacing: 0.08em; margin-bottom: 6px; }
+
+    /* GAP HIGHLIGHT */
+    .gap-box { background: linear-gradient(135deg,#14532d20,#052e16); border: 1px solid #16a34a40; border-radius: 14px; padding: 28px; margin-bottom: 16px; }
+    .gap-box h3 { color: #4ade80; font-size: 1rem; margin-bottom: 8px; }
+    .gap-box p { color: #94a3b8; font-size: 0.88rem; }
+
+    /* MARKET DATA */
+    .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; }
+    .mstat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .mstat .num { font-size: 1.8rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .mstat .label { color: var(--muted); font-size: 0.78rem; }
+    .mstat .src { color: #374151; font-size: 0.68rem; margin-top: 4px; }
+
+    /* ── 5 PRODUCTS ── */
+    .product-section { background: #06090f; }
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 28px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .product-card:hover { border-color: var(--blue); }
+    .product-num {
+      position: absolute;
+      top: -14px;
+      left: 28px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .pn-1 { background: var(--blue); }
+    .pn-2 { background: var(--green); }
+    .pn-3 { background: var(--purple); }
+    .pn-4 { background: var(--orange); }
+    .pn-5 { background: var(--pink); }
+
+    .product-head { display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 16px; margin-bottom: 20px; }
+    .product-icon { font-size: 2.4rem; }
+    .product-name { font-size: 1.2rem; font-weight: 800; color: #f9fafb; }
+    .product-subtitle { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+    .product-badge { background: #1e3a5f; border: 1px solid #2563eb40; border-radius: 8px; padding: 6px 14px; font-size: 0.8rem; color: #60a5fa; white-space: nowrap; }
+
+    .product-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .pb-col h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #4b5563; margin-bottom: 10px; }
+    .pb-col ul { list-style: none; font-size: 0.85rem; color: #94a3b8; }
+    .pb-col ul li { padding: 4px 0; border-bottom: 1px solid #111827; }
+    .pb-col ul li:last-child { border: none; }
+    .pb-col ul li::before { content: "→ "; color: var(--blue); }
+
+    .product-vs { background: #0f172a; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-top: 16px; font-size: 0.83rem; }
+    .product-vs .vs-label { color: #4b5563; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px; }
+    .product-vs table { width: 100%; border-collapse: collapse; }
+    .product-vs td { padding: 4px 8px; color: #6b7280; }
+    .product-vs td:first-child { color: #4b5563; }
+    .product-vs td.win { color: #4ade80; }
+    .product-vs td.lose { color: #f87171; }
+
+    .product-price-box { background: linear-gradient(135deg,#1e293b,#1a2744); border: 1px solid #3b82f640; border-radius: 10px; padding: 16px 20px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; }
+    .price-main { font-size: 1.5rem; font-weight: 800; color: #f9fafb; }
+    .price-main span { font-size: 0.82rem; font-weight: 400; color: var(--muted); }
+    .price-mrr { font-size: 0.85rem; color: var(--green); }
+
+    /* ── CUSTOMER SEGMENTS ── */
+    .segment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 16px; }
+    .seg-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .seg-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .seg-title { font-weight: 700; color: #f1f5f9; font-size: 0.92rem; margin-bottom: 4px; }
+    .seg-size { font-size: 0.75rem; color: var(--blue); margin-bottom: 8px; }
+    .seg-pain { font-size: 0.82rem; color: #6b7280; margin-bottom: 10px; }
+    .seg-product { font-size: 0.78rem; background: #0f172a; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; color: #94a3b8; }
+
+    /* ── CHANNELS ── */
+    .channel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
+    .ch-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    .ch-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .ch-icon { font-size: 1.6rem; }
+    .ch-name { font-weight: 700; color: #f1f5f9; font-size: 0.9rem; }
+    .ch-type { font-size: 0.72rem; color: var(--muted); }
+    .ch-action { font-size: 0.83rem; color: #94a3b8; margin-bottom: 10px; }
+    .ch-kpi { background: #0f172a; border-radius: 6px; padding: 8px 12px; font-size: 0.78rem; color: #60a5fa; }
+
+    /* ── PRICING TABLE ── */
+    .pricing-table { width: 100%; border-collapse: collapse; }
+    .pricing-table th { background: #1e293b; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; padding: 14px 16px; text-align: left; border-bottom: 2px solid var(--border); }
+    .pricing-table th.highlight { color: var(--blue); background: #1e3a5f30; }
+    .pricing-table td { padding: 13px 16px; border-bottom: 1px solid #111827; vertical-align: top; font-size: 0.87rem; }
+    .pricing-table tr:hover td { background: #0d1117; }
+    .pricing-table .product-col { font-weight: 600; color: #f1f5f9; }
+    .pricing-table .sub-col { color: var(--muted); font-size: 0.78rem; }
+    .price-setup { font-size: 1rem; font-weight: 700; color: #f9fafb; }
+    .price-retainer { font-size: 0.82rem; color: var(--green); }
+    .tag { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+    .tag-easy   { background: #14532d; color: #4ade80; }
+    .tag-medium { background: #3f2a00; color: #fbbf24; }
+    .tag-hard   { background: #3f0e0e; color: #f87171; }
+    .tag-premium{ background: #2d1b69; color: #a78bfa; }
+
+    /* ── DECISION FACTORS ── */
+    .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .dec-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    .dec-card h3 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .dec-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #111827; font-size: 0.85rem; }
+    .dec-item:last-child { border: none; }
+    .dec-label { color: var(--muted); min-width: 110px; flex-shrink: 0; font-size: 0.8rem; }
+    .dec-value { color: #cbd5e1; }
+
+    /* CALLOUT */
+    .callout { border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 0.87rem; display: flex; gap: 12px; align-items: flex-start; }
+    .callout-blue  { background: #1e3a5f20; border-left: 4px solid var(--blue); }
+    .callout-green { background: #14532d20; border-left: 4px solid var(--green); }
+    .callout-warn  { background: #3f2a0020; border-left: 4px solid var(--orange); }
+    .callout .icon { flex-shrink: 0; font-size: 1.1rem; }
+    .callout .text { color: #cbd5e1; line-height: 1.6; }
+
+    /* ROADMAP */
+    .roadmap-row { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+    .roadmap-phase { flex: 1; padding: 20px; border-right: 1px solid var(--border); }
+    .roadmap-phase:last-child { border: none; }
+    .rp-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+    .rp-title { font-weight: 700; color: #f1f5f9; font-size: 0.9rem; margin-bottom: 8px; }
+    .rp-items { font-size: 0.8rem; color: #6b7280; list-style: none; }
+    .rp-items li { padding: 2px 0; }
+    .rp-items li::before { content: "• "; }
+
+    footer { background: #060911; border-top: 1px solid var(--border); text-align: center; padding: 32px; color: #374151; font-size: 0.8rem; }
+    footer a { color: #4b5563; text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .product-body { grid-template-columns: 1fr; }
+      .decision-grid { grid-template-columns: 1fr; }
+      .roadmap-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#market">ตลาดไทย</a>
+  <a href="#competitor">คู่แข่ง</a>
+  <a href="#gap">ช่องว่าง</a>
+  <a href="#products">5 Products</a>
+  <a href="#customers">กลุ่มลูกค้า</a>
+  <a href="#channels">ช่องทางเข้าถึง</a>
+  <a href="#pricing">ราคา</a>
+  <a href="#decisions">ปัจจัยตัดสินใจ</a>
+  <a href="#roadmap">Roadmap</a>
+</nav>
+
+<div class="hero">
+  <div class="eyebrow">🇹🇭 Header Staff Analysis · May 2026</div>
+  <h1>ช่องว่างตลาด AI ไทย<br><span>5 Products ที่ควรทำตอนนี้</span></h1>
+  <p>วิเคราะห์จาก Broadpang · Oho.chat · OpenClaw Data · Thailand Market Research 2026</p>
+</div>
+
+<!-- ═══════════════ MARKET SIZE ═══════════════ -->
+<section id="market" style="padding:60px 24px; background:#06090f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--blue);">ขนาดตลาด</div>
+    <h2 class="section-title">ตลาด AI ไทยใหญ่และโตเร็วมาก</h2>
+    <p class="section-sub">แต่ adoption จริงยังต่ำมาก — นี่คือ window of opportunity</p>
+
+    <div class="market-grid">
+      <div class="mstat">
+        <div class="num" style="color:var(--blue);">$4.8B</div>
+        <div class="label">AI Customer Service ไทย ปี 2025</div>
+        <div class="src">Chiang Rai Times / Market Research</div>
+      </div>
+      <div class="mstat">
+        <div class="num" style="color:var(--green);">26.5%</div>
+        <div class="label">CAGR ปี 2025-2031</div>
+        <div class="src">Industry Forecast</div>
+      </div>
+      <div class="mstat">
+        <div class="num" style="color:var(--orange);">73%</div>
+        <div class="label">องค์กรไทยพร้อม digital transform</div>
+        <div class="src">PwC Thailand Survey 2025</div>
+      </div>
+      <div class="mstat">
+        <div class="num" style="color:var(--red);">18-24%</div>
+        <div class="label">Adoption จริงของ deep AI</div>
+        <div class="src">PwC Thailand — ช่องว่างใหญ่มาก!</div>
+      </div>
+      <div class="mstat">
+        <div class="num" style="color:var(--purple);">35%</div>
+        <div class="label">ลูกค้าไทยใช้ LINE OA chatbot แล้ว</div>
+        <div class="src">Thailand Banking Sector</div>
+      </div>
+      <div class="mstat">
+        <div class="num" style="color:var(--pink);">21.5M฿</div>
+        <div class="label">ค่าปรับ PDPA สะสม ปี 2025</div>
+        <div class="src">PDPC Enforcement</div>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top:24px;">
+      <span class="icon">🎯</span>
+      <div class="text">
+        <strong>Key Insight:</strong> 73% ต้องการ แต่มีแค่ 18-24% ที่ทำจริง = มีลูกค้า 50%+ ที่พร้อมซื้อแต่ยังหา solution ที่ใช่ไม่เจอ
+        บวกกับ PDPA enforcement จริงแล้ว = ความต้องการ self-hosted AI พุ่งสูงในปี 2026
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ COMPETITOR ═══════════════ -->
+<section id="competitor" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--orange);">วิเคราะห์คู่แข่ง</div>
+    <h2 class="section-title">Broadpang vs Oho.chat — เขาทำอะไรได้และทำไม่ได้</h2>
+
+    <div class="comp-grid">
+
+      <div class="comp-card">
+        <div class="comp-header">
+          <div class="comp-logo" style="background:#1a1a2e;">📢</div>
+          <div>
+            <div class="comp-name">Broadpang</div>
+            <div class="comp-tagline">ระบบ Broadcast #1 ของไทย</div>
+          </div>
+        </div>
+        <div class="comp-stat">
+          <span class="stat-pill">40,000+ users</span>
+          <span class="stat-pill">750 บาท/เดือน</span>
+          <span class="stat-pill">LINE + Facebook</span>
+        </div>
+        <div class="list-label">จุดแข็ง</div>
+        <ul class="strong-list">
+          <li>ราคาถูกมาก เริ่มต้น 750 บาท/เดือน</li>
+          <li>ฐานลูกค้าใหญ่ 40,000+ ราย</li>
+          <li>ง่ายมาก ไม่ต้องมีความรู้ IT</li>
+          <li>ตลาดร้านค้าออนไลน์ครอง</li>
+        </ul>
+        <div class="list-label" style="margin-top:10px;">จุดอ่อน (โอกาสของเรา)</div>
+        <ul class="weak-list">
+          <li>แค่ Broadcast — ไม่มี AI ตอบโต้</li>
+          <li>ไม่มี real-time AI response</li>
+          <li>ข้อมูลลูกค้าอยู่บน cloud Broadpang</li>
+          <li>ไม่มี multi-agent routing</li>
+          <li>ไม่มี memory/context ลูกค้าแต่ละราย</li>
+        </ul>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-header">
+          <div class="comp-logo" style="background:#1a2a1a;">💬</div>
+          <div>
+            <div class="comp-name">Oho.chat</div>
+            <div class="comp-tagline">Omnichannel Chat #1 ของไทย</div>
+          </div>
+        </div>
+        <div class="comp-stat">
+          <span class="stat-pill">4,255+ businesses</span>
+          <span class="stat-pill">193M messages</span>
+          <span class="stat-pill">Free trial</span>
+        </div>
+        <div class="list-label">จุดแข็ง</div>
+        <ul class="strong-list">
+          <li>Omnichannel จริง (LINE+FB+IG+TikTok)</li>
+          <li>UI สวย ใช้งานง่าย no-code</li>
+          <li>CRM + Analytics built-in</li>
+          <li>มีลูกค้าใหญ่ (Phyathai, Thai PBS)</li>
+          <li>PDPA compliance ประกาศชัด</li>
+        </ul>
+        <div class="list-label" style="margin-top:10px;">จุดอ่อน (โอกาสของเรา)</div>
+        <ul class="weak-list">
+          <li>Chatbot เป็น rule-based ไม่ใช่ Gen AI</li>
+          <li>ข้อมูลอยู่บน Oho.chat cloud</li>
+          <li>ราคา enterprise ไม่โปร่งใส</li>
+          <li>ไม่มี Private/On-premise option</li>
+          <li>ไม่รองรับ internal team (Slack/Teams)</li>
+          <li>ไม่มี AI workflow automation จริง</li>
+        </ul>
+      </div>
+
+      <div class="comp-card" style="border-color:#374151; background:#0a0f1e;">
+        <div class="comp-header">
+          <div class="comp-logo" style="background:#1e3a5f;">🦀</div>
+          <div>
+            <div class="comp-name">เรา (OpenClaw-based)</div>
+            <div class="comp-tagline">Self-hosted Gen AI Gateway</div>
+          </div>
+        </div>
+        <div class="comp-stat">
+          <span class="stat-pill" style="border-color:#3b82f6; color:#60a5fa;">Self-hosted</span>
+          <span class="stat-pill" style="border-color:#10b981; color:#34d399;">Gen AI จริง</span>
+          <span class="stat-pill" style="border-color:#8b5cf6; color:#a78bfa;">28+ channels</span>
+        </div>
+        <div class="list-label">สิ่งที่เราทำได้ที่คู่แข่งทำไม่ได้</div>
+        <ul class="strong-list">
+          <li>ข้อมูลอยู่บน server ลูกค้า 100%</li>
+          <li>Gen AI จริง ไม่ใช่ rule-based</li>
+          <li>Private LLM (Ollama) on-premise</li>
+          <li>AI workflow automation (cron/search)</li>
+          <li>Internal team AI (Slack/Teams)</li>
+          <li>Multi-agent routing ซับซ้อนได้</li>
+        </ul>
+        <div class="list-label" style="margin-top:10px;">ข้อจำกัดที่ต้องรู้</div>
+        <ul class="weak-list">
+          <li>ต้องมี VPS / server</li>
+          <li>setup ยากกว่า no-code tools</li>
+          <li>ราคา setup สูงกว่า SaaS เริ่มต้น</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ GAP ANALYSIS ═══════════════ -->
+<section id="gap" style="padding:60px 24px; background:#06090f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--green);">ช่องว่างตลาด</div>
+    <h2 class="section-title">สิ่งที่ยังไม่มีใครทำในไทย</h2>
+
+    <div class="gap-box">
+      <h3>🔒 1. Self-hosted AI สำหรับ PDPA-sensitive industry</h3>
+      <p>คลินิก โรงพยาบาล สำนักกฎหมาย บริษัทการเงิน — ทั้งหมดนี้ไม่สามารถใช้ Oho.chat หรือ Broadpang ได้อย่างปลอดภัย
+      เพราะข้อมูลผู้ป่วย/ลูกความอยู่บน cloud ของ vendor ซึ่งเสี่ยง PDPA โดยตรง ยังไม่มีใครในไทยทำ solution นี้ชัดเจน</p>
+    </div>
+
+    <div class="gap-box">
+      <h3>🤖 2. Generative AI จริงในแชท (ไม่ใช่ rule-based)</h3>
+      <p>Oho.chat chatbot ยังเป็นแบบ if-then rule ไม่สามารถตอบคำถามนอกสคริปต์ได้
+      ลูกค้าไทยเริ่มคาดหวัง AI ที่ "คุยได้จริง" เหมือน ChatGPT แต่อยู่ใน LINE ของธุรกิจ ยังไม่มี solution ราคา SME</p>
+    </div>
+
+    <div class="gap-box">
+      <h3>⚙️ 3. AI Workflow Automation ที่ทำงานได้จริง</h3>
+      <p>ทั้ง Broadpang และ Oho.chat ทำได้แค่ "ตอบข้อความ" แต่ไม่สามารถ "ทำงานต่อ" เช่น
+      อัปเดต CRM อัตโนมัติ ส่ง report ทุกเช้า เช็คสต็อกแล้วแจ้งเตือน ตลาดนี้ว่างอยู่ทั้งหมด</p>
+    </div>
+
+    <div class="gap-box">
+      <h3>👥 4. Internal AI สำหรับทีมงานองค์กรไทย</h3>
+      <p>Slack/Teams AI assistant สำหรับทีม SME ไทย ไม่มีใครทำเป็น packaged solution
+      บริษัทที่มีพนักงาน 10-50 คนยังใช้ทีมงาน manual ทำงานซ้ำซ้อน ทั้งที่สามารถ automate ได้ง่ายมาก</p>
+    </div>
+
+    <div class="gap-box">
+      <h3>🏭 5. AI สำหรับโรงงาน/โลจิสติกส์ราคา SME</h3>
+      <p>Enterprise solution มีแต่ราคาแพงมาก (หลักล้าน) โรงงานขนาดกลาง 50-200 คน
+      ยังไม่มี AI solution ที่ราคา 50,000-100,000 บาท ใช้งานได้จริง ตลาดนี้ใหญ่มากและยังว่างอยู่</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 5 PRODUCTS ═══════════════ -->
+<section id="products" class="product-section" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--blue);">5 Products ที่แนะนำ</div>
+    <h2 class="section-title">สินค้าและบริการสำหรับตลาดไทย</h2>
+    <p class="section-sub">เรียงตาม opportunity size และ ease of implementation</p>
+
+    <!-- PRODUCT 1 -->
+    <div class="product-card">
+      <div class="product-num pn-1">1</div>
+      <div class="product-head">
+        <div class="product-icon">🤖</div>
+        <div>
+          <div class="product-name">LINE AI Pro — ตัวแทน AI ใน LINE ที่คุยได้จริง</div>
+          <div class="product-subtitle">Gen AI chatbot บน LINE OA · ตอบได้ทุกคำถาม ไม่ติดสคริปต์</div>
+        </div>
+        <div class="product-badge">🔥 Quick Win</div>
+      </div>
+
+      <div class="product-body">
+        <div class="pb-col">
+          <h4>สิ่งที่ได้รับ</h4>
+          <ul>
+            <li>AI ตอบ LINE OA อัตโนมัติ 24/7</li>
+            <li>Gen AI จริง (Claude/GPT) ไม่ใช่ rule-based</li>
+            <li>จำ context ลูกค้าแต่ละราย</li>
+            <li>ส่งต่อ staff เมื่อ AI ไม่แน่ใจ</li>
+            <li>ติดตั้งบน VPS ลูกค้า</li>
+            <li>Control UI ดู chat ทั้งหมด</li>
+          </ul>
+        </div>
+        <div class="pb-col">
+          <h4>ทำไมดีกว่า Oho.chat / Broadpang</h4>
+          <ul>
+            <li>ตอบคำถามนอกสคริปต์ได้ (Gen AI)</li>
+            <li>ข้อมูลไม่อยู่บน cloud vendor</li>
+            <li>จ่ายครั้งเดียว ไม่มี per-message</li>
+            <li>ปรับแต่ง persona ได้ลึกกว่า</li>
+            <li>เพิ่ม channel อื่นได้ในอนาคต</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="product-vs">
+        <div class="vs-label">เปรียบเทียบโดยตรง</div>
+        <table>
+          <tr><td>vs Broadpang</td><td class="win">✓ AI ตอบได้จริง vs แค่ broadcast</td></tr>
+          <tr><td>vs Oho.chat</td><td class="win">✓ Gen AI vs rule-based + self-hosted</td></tr>
+        </table>
+      </div>
+
+      <div class="product-price-box">
+        <div>
+          <div class="price-main">20,000 <span>บาท (setup)</span></div>
+          <div class="price-mrr">+ 3,000 บาท/เดือน maintenance</div>
+        </div>
+        <div style="font-size:0.82rem; color:#4b5563; text-align:right;">Deliver: 1-2 สัปดาห์<br>Margin: ~70%</div>
+      </div>
+    </div>
+
+    <!-- PRODUCT 2 -->
+    <div class="product-card">
+      <div class="product-num pn-2">2</div>
+      <div class="product-head">
+        <div class="product-icon">🔒</div>
+        <div>
+          <div class="product-name">Private AI Clinic — AI สำหรับคลินิกและสถานพยาบาล</div>
+          <div class="product-subtitle">Ollama on-premise · ข้อมูลผู้ป่วยไม่ออกนอก server · PDPA-proof</div>
+        </div>
+        <div class="product-badge" style="background:#14532d; border-color:#16a34a40; color:#4ade80;">💰 High Value</div>
+      </div>
+
+      <div class="product-body">
+        <div class="pb-col">
+          <h4>สิ่งที่ได้รับ</h4>
+          <ul>
+            <li>AI รันบน server คลินิก 100%</li>
+            <li>ข้อมูลผู้ป่วยไม่ออกอินเตอร์เน็ตเลย</li>
+            <li>LINE bot สำหรับนัดหมาย/ถามอาการ</li>
+            <li>PDPA compliance documentation</li>
+            <li>Staff internal chat ผ่าน LINE/Telegram</li>
+            <li>Backup + security setup</li>
+          </ul>
+        </div>
+        <div class="pb-col">
+          <h4>ทำไมตลาดนี้ใหญ่</h4>
+          <ul>
+            <li>คลินิกในไทยมี 30,000+ แห่ง</li>
+            <li>PDPA ปรับสูงสุด 5 ล้านบาท</li>
+            <li>ไม่มีคู่แข่งทำ self-hosted สำหรับคลินิก</li>
+            <li>คลินิกยอมจ่ายแพงเพื่อ compliance</li>
+            <li>Word-of-mouth ในวงการแพทย์แรงมาก</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="product-vs">
+        <div class="vs-label">ทำไมไม่มีคู่แข่ง</div>
+        <table>
+          <tr><td>Oho.chat</td><td class="lose">✗ ข้อมูลอยู่บน cloud Oho — PDPA risk</td></tr>
+          <tr><td>Broadpang</td><td class="lose">✗ ไม่มีฟีเจอร์สำหรับ healthcare</td></tr>
+          <tr><td>เรา</td><td class="win">✓ Ollama on-premise = zero data egress</td></tr>
+        </table>
+      </div>
+
+      <div class="product-price-box">
+        <div>
+          <div class="price-main">80,000 <span>บาท (setup)</span></div>
+          <div class="price-mrr">+ 8,000 บาท/เดือน + PDPA consulting add-on</div>
+        </div>
+        <div style="font-size:0.82rem; color:#4b5563; text-align:right;">Deliver: 3-4 สัปดาห์<br>Margin: ~65%</div>
+      </div>
+    </div>
+
+    <!-- PRODUCT 3 -->
+    <div class="product-card">
+      <div class="product-num pn-3">3</div>
+      <div class="product-head">
+        <div class="product-icon">🔀</div>
+        <div>
+          <div class="product-name">Omni AI Agent — รวมทุก channel ใน AI เดียว</div>
+          <div class="product-subtitle">LINE + Facebook + Instagram + TikTok + WebChat · Gen AI · Self-hosted</div>
+        </div>
+        <div class="product-badge" style="background:#2d1b69; border-color:#7c3aed40; color:#a78bfa;">⭐ Premium</div>
+      </div>
+
+      <div class="product-body">
+        <div class="pb-col">
+          <h4>สิ่งที่ได้รับ</h4>
+          <ul>
+            <li>รวม 4+ channels ใน gateway เดียว</li>
+            <li>AI ตอบ consistent ทุกช่องทาง</li>
+            <li>Auto-route ตาม channel/ลูกค้า</li>
+            <li>Dashboard รวม inbox เดียว</li>
+            <li>CRM webhook integration</li>
+            <li>Monthly analytics report</li>
+          </ul>
+        </div>
+        <div class="pb-col">
+          <h4>vs Oho.chat (คู่แข่งตรง)</h4>
+          <ul>
+            <li>Gen AI vs rule-based chatbot</li>
+            <li>Self-hosted vs SaaS cloud</li>
+            <li>จ่ายครั้งเดียว vs subscription</li>
+            <li>ไม่มี per-message cost</li>
+            <li>เพิ่ม Telegram/WhatsApp ได้</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="product-vs">
+        <div class="vs-label">จุดต่างจาก Oho.chat</div>
+        <table>
+          <tr><td>AI Type</td><td class="win">✓ Gen AI (Claude) vs rule-based</td></tr>
+          <tr><td>Data</td><td class="win">✓ Server ลูกค้า vs Oho cloud</td></tr>
+          <tr><td>ราคา 3 ปี</td><td class="win">✓ ถูกกว่า 60% (ไม่มี subscription)</td></tr>
+        </table>
+      </div>
+
+      <div class="product-price-box">
+        <div>
+          <div class="price-main">50,000 <span>บาท (setup)</span></div>
+          <div class="price-mrr">+ 6,000 บาท/เดือน maintenance</div>
+        </div>
+        <div style="font-size:0.82rem; color:#4b5563; text-align:right;">Deliver: 2-3 สัปดาห์<br>Margin: ~65%</div>
+      </div>
+    </div>
+
+    <!-- PRODUCT 4 -->
+    <div class="product-card">
+      <div class="product-num pn-4">4</div>
+      <div class="product-head">
+        <div class="product-icon">⚙️</div>
+        <div>
+          <div class="product-name">AI Workflow Bot — AI ที่ทำงานอัตโนมัติได้จริง</div>
+          <div class="product-subtitle">Cron jobs · Web search · CRM update · Report generation · ไม่ใช่แค่ chatbot</div>
+        </div>
+        <div class="product-badge" style="background:#3f2a00; border-color:#d9770640; color:#fbbf24;">🆕 Unique</div>
+      </div>
+
+      <div class="product-body">
+        <div class="pb-col">
+          <h4>สิ่งที่ AI ทำได้อัตโนมัติ</h4>
+          <ul>
+            <li>ส่ง daily report ทุกเช้า 8:00</li>
+            <li>เช็คสต็อกแล้วแจ้งเตือนเมื่อต่ำ</li>
+            <li>อัปเดต CRM หลัง conversation</li>
+            <li>สรุป email inbox รายวัน</li>
+            <li>ติดตาม lead และ follow-up อัตโนมัติ</li>
+            <li>รวบรวม mention social media</li>
+          </ul>
+        </div>
+        <div class="pb-col">
+          <h4>ใครต้องการ</h4>
+          <ul>
+            <li>ร้านค้าออนไลน์ที่มี order เยอะ</li>
+            <li>ธุรกิจที่ทำ report manual ทุกวัน</li>
+            <li>Sales team ที่ต้องการ follow-up</li>
+            <li>โรงงานที่ต้องการ alert อัตโนมัติ</li>
+            <li>Marketing team ที่ track competitor</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="product-vs">
+        <div class="vs-label">ไม่มีคู่แข่งทำในไทย</div>
+        <table>
+          <tr><td>Broadpang</td><td class="lose">✗ แค่ broadcast ไม่มี automation</td></tr>
+          <tr><td>Oho.chat</td><td class="lose">✗ แค่ chat ไม่มี workflow</td></tr>
+          <tr><td>เรา</td><td class="win">✓ AI agent ทำงานได้จริงแบบ autonomous</td></tr>
+        </table>
+      </div>
+
+      <div class="product-price-box">
+        <div>
+          <div class="price-main">35,000 <span>บาท (setup)</span></div>
+          <div class="price-mrr">+ 4,500 บาท/เดือน + add-on ต่อ workflow</div>
+        </div>
+        <div style="font-size:0.82rem; color:#4b5563; text-align:right;">Deliver: 2-3 สัปดาห์<br>Margin: ~70%</div>
+      </div>
+    </div>
+
+    <!-- PRODUCT 5 -->
+    <div class="product-card">
+      <div class="product-num pn-5">5</div>
+      <div class="product-head">
+        <div class="product-icon">👥</div>
+        <div>
+          <div class="product-name">Team AI Assistant — AI ผู้ช่วยทีมงานภายในองค์กร</div>
+          <div class="product-subtitle">Slack · LINE · Teams · ช่วยทีมค้นหาเอกสาร สรุปประชุม ตอบ FAQ</div>
+        </div>
+        <div class="product-badge" style="background:#1e3a5f; border-color:#3b82f640; color:#60a5fa;">📈 Growing</div>
+      </div>
+
+      <div class="product-body">
+        <div class="pb-col">
+          <h4>สิ่งที่ได้รับ</h4>
+          <ul>
+            <li>AI ช่วยทีมใน Slack/LINE/Teams</li>
+            <li>ค้นหาเอกสารบริษัทด้วยภาษาธรรมชาติ</li>
+            <li>สรุปการประชุมอัตโนมัติ</li>
+            <li>ตอบ FAQ HR, Policy, Process</li>
+            <li>Onboarding พนักงานใหม่อัตโนมัติ</li>
+            <li>Knowledge base ของบริษัท</li>
+          </ul>
+        </div>
+        <div class="pb-col">
+          <h4>ROI ที่ลูกค้าได้</h4>
+          <ul>
+            <li>ประหยัด 20-30 นาที/คน/วัน</li>
+            <li>ทีม 20 คน = 400+ ชม./เดือน</li>
+            <li>ลด onboarding time 50%</li>
+            <li>HR ตอบคำถามซ้ำน้อยลง 70%</li>
+            <li>ไม่ต้องจ้าง admin เพิ่ม</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="product-vs">
+        <div class="vs-label">ไม่มีใครทำสำหรับ SME ไทยในราคานี้</div>
+        <table>
+          <tr><td>Microsoft Copilot</td><td class="lose">✗ แพงมาก ~$30/user/เดือน + data ออก cloud</td></tr>
+          <tr><td>เรา</td><td class="win">✓ Setup once, ข้อมูลอยู่ในบริษัท, ราคา SME</td></tr>
+        </table>
+      </div>
+
+      <div class="product-price-box">
+        <div>
+          <div class="price-main">40,000 <span>บาท (setup)</span></div>
+          <div class="price-mrr">+ 5,000 บาท/เดือน (ไม่จำกัด users)</div>
+        </div>
+        <div style="font-size:0.82rem; color:#4b5563; text-align:right;">Deliver: 2-3 สัปดาห์<br>Margin: ~65%</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ CUSTOMER SEGMENTS ═══════════════ -->
+<section id="customers" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--purple);">กลุ่มลูกค้า</div>
+    <h2 class="section-title">ลูกค้ากลุ่มไหนบ้าง ใครควรขายก่อน</h2>
+    <p class="section-sub">เรียงตาม willingness to pay และ ease of close</p>
+
+    <div class="segment-grid">
+      <div class="seg-card" style="border-color:#16a34a40;">
+        <div class="seg-icon">🏥</div>
+        <div class="seg-title">คลินิก / โรงพยาบาลเอกชน</div>
+        <div class="seg-size" style="color:var(--green);">⭐⭐⭐⭐⭐ ยอมจ่ายสูงสุด</div>
+        <p class="seg-pain">Pain: PDPA + ตอบ LINE ไม่ทัน + นัดหมายยุ่งยาก<br>Budget: 80K-150K บาท</p>
+        <div class="seg-product">สินค้า: Private AI Clinic (#2)</div>
+      </div>
+
+      <div class="seg-card" style="border-color:#7c3aed40;">
+        <div class="seg-icon">🛍️</div>
+        <div class="seg-title">ร้านค้าออนไลน์ขนาดกลาง</div>
+        <div class="seg-size" style="color:var(--purple);">⭐⭐⭐⭐ volume ใหญ่</div>
+        <p class="seg-pain">Pain: ตอบ LINE ไม่ทัน order หาย มีทีม CS 2-5 คน<br>Budget: 20K-40K บาท</p>
+        <div class="seg-product">สินค้า: LINE AI Pro (#1) + Workflow Bot (#4)</div>
+      </div>
+
+      <div class="seg-card" style="border-color:#d9770640;">
+        <div class="seg-icon">🏨</div>
+        <div class="seg-title">โรงแรม / รีสอร์ท</div>
+        <div class="seg-size" style="color:var(--orange);">⭐⭐⭐⭐ multi-channel need</div>
+        <p class="seg-pain">Pain: ลูกค้าถามหลาย channel ภาษาหลาย staff น้อย<br>Budget: 50K-100K บาท</p>
+        <div class="seg-product">สินค้า: Omni AI Agent (#3)</div>
+      </div>
+
+      <div class="seg-card" style="border-color:#3b82f640;">
+        <div class="seg-icon">⚖️</div>
+        <div class="seg-title">สำนักงานกฎหมาย / บัญชี</div>
+        <div class="seg-size" style="color:var(--blue);">⭐⭐⭐⭐ premium segment</div>
+        <p class="seg-pain">Pain: data ต้องลับมาก PDPA strict ทีมงานเยอะ<br>Budget: 80K-120K บาท</p>
+        <div class="seg-product">สินค้า: Private AI (#2) + Team AI (#5)</div>
+      </div>
+
+      <div class="seg-card" style="border-color:#ec489940;">
+        <div class="seg-icon">🏭</div>
+        <div class="seg-title">โรงงาน / โลจิสติกส์ขนาดกลาง</div>
+        <div class="seg-size" style="color:var(--pink);">⭐⭐⭐ ตลาดว่าง</div>
+        <p class="seg-pain">Pain: order ซับซ้อน alert ล่าช้า report manual ทุกวัน<br>Budget: 60K-150K บาท</p>
+        <div class="seg-product">สินค้า: AI Workflow Bot (#4) + Omni AI (#3)</div>
+      </div>
+
+      <div class="seg-card" style="border-color:#374151;">
+        <div class="seg-icon">🏢</div>
+        <div class="seg-title">SME ทั่วไป 10-50 พนักงาน</div>
+        <div class="seg-size" style="color:var(--muted);">⭐⭐⭐ volume ที่ใหญ่ที่สุด</div>
+        <p class="seg-pain">Pain: ทีมงาน manual เยอะ ไม่มีเวลา ต้องการ AI แต่ไม่รู้จะเริ่มยังไง<br>Budget: 20K-50K บาท</p>
+        <div class="seg-product">สินค้า: LINE AI Pro (#1) + Team AI (#5)</div>
+      </div>
+    </div>
+
+    <div class="callout callout-blue" style="margin-top:24px;">
+      <span class="icon">🎯</span>
+      <div class="text">
+        <strong>แนะนำให้เริ่มที่:</strong> คลินิก + ร้านค้าออนไลน์ขนาดกลาง เป็น primary target ก่อนครับ
+        คลินิก = deal ใหญ่ referral แรง, ร้านค้าออนไลน์ = volume สูง case study ง่าย
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CHANNELS ═══════════════ -->
+<section id="channels" style="padding:60px 24px; background:#06090f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--green);">ช่องทางเข้าถึงลูกค้า</div>
+    <h2 class="section-title">เข้าถึงลูกค้าได้อย่างไร (เน้น Online)</h2>
+    <p class="section-sub">เรียงตาม ROI และ speed to first lead</p>
+
+    <div class="channel-grid">
+
+      <div class="ch-card" style="border-color:#0066b240;">
+        <div class="ch-header">
+          <span class="ch-icon">💼</span>
+          <div>
+            <div class="ch-name">LinkedIn</div>
+            <div class="ch-type">B2B · Organic · ดีที่สุดสำหรับเรา</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          โพสต์ case study, before/after, ROI จริง เน้น pain point ที่ธุรกิจเจอ
+          ไม่ขายตรง แต่ build authority ว่าเราเข้าใจปัญหา B2B ไทยจริงๆ
+        </p>
+        <div class="ch-kpi">🎯 Content: 3x/สัปดาห์ · DM outreach: 30-50 ราย/สัปดาห์</div>
+      </div>
+
+      <div class="ch-card" style="border-color:#00b90040;">
+        <div class="ch-header">
+          <span class="ch-icon">💚</span>
+          <div>
+            <div class="ch-name">LINE Official Account</div>
+            <div class="ch-type">Lead Capture · Thai-specific</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          ใช้ LINE OA ของเราเองเป็น demo ที่มีชีวิต ลูกค้าทักมา ก็จะได้เห็น AI
+          ตอบเป็นตัวอย่างทันที Lead magnet: "ทดลอง AI ตอบ LINE ฟรี 7 วัน"
+        </p>
+        <div class="ch-kpi">🎯 LINE OA เป็น demo + lead capture ในตัวเดียว</div>
+      </div>
+
+      <div class="ch-card" style="border-color:#1877f240;">
+        <div class="ch-header">
+          <span class="ch-icon">📘</span>
+          <div>
+            <div class="ch-name">Facebook Group</div>
+            <div class="ch-type">Community · Organic Reach</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          กลุ่ม "เจ้าของธุรกิจไทย", "ร้านค้าออนไลน์", "คลินิกไทย", "SME ไทย"
+          Share insight ไม่ขายตรง ตอบคำถาม build authority ใน niche
+        </p>
+        <div class="ch-kpi">🎯 เน้นกลุ่มที่ตรง niche: คลินิก, ร้านค้า, โรงแรม</div>
+      </div>
+
+      <div class="ch-card" style="border-color:#ff000040;">
+        <div class="ch-header">
+          <span class="ch-icon">▶️</span>
+          <div>
+            <div class="ch-name">YouTube / TikTok</div>
+            <div class="ch-type">Demo Video · Social Proof</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          วิดีโอสั้น "Demo AI ตอบ LINE แทนพนักงาน" ให้เห็นของจริงทำงาน
+          ยิ่งเห็น AI ตอบได้จริง ความต้องการยิ่งสูง ไม่ต้องอธิบายเยอะ
+        </p>
+        <div class="ch-kpi">🎯 Demo video 60-90 วินาที = conversion สูงสุด</div>
+      </div>
+
+      <div class="ch-card" style="border-color:#ea580c40;">
+        <div class="ch-header">
+          <span class="ch-icon">🔍</span>
+          <div>
+            <div class="ch-name">Google Ads (Search)</div>
+            <div class="ch-type">Paid · High Intent</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          Keywords: "AI chatbot LINE", "ระบบตอบ LINE อัตโนมัติ", "AI สำหรับคลินิก"
+          ลูกค้าที่ search เหล่านี้พร้อมซื้อแล้ว conversion rate สูงที่สุด
+        </p>
+        <div class="ch-kpi">🎯 Budget: 5,000-15,000 บาท/เดือน · เริ่มเมื่อมี case study</div>
+      </div>
+
+      <div class="ch-card" style="border-color:#8b5cf640;">
+        <div class="ch-header">
+          <span class="ch-icon">✉️</span>
+          <div>
+            <div class="ch-name">Cold Email + LinkedIn DM</div>
+            <div class="ch-type">Outbound · Targeted</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          สร้าง prospect list ตาม industry (คลินิก, โรงแรม, ร้านค้า)
+          ส่ง personalized message โชว์ pain + proof + offer ชัดเจน
+        </p>
+        <div class="ch-kpi">🎯 Target 50 prospects/สัปดาห์ · conversion ~5-10%</div>
+      </div>
+
+      <div class="ch-card" style="border-color:#06b6d440;">
+        <div class="ch-header">
+          <span class="ch-icon">📝</span>
+          <div>
+            <div class="ch-name">Blog / SEO Content</div>
+            <div class="ch-type">Long-term · Organic</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          บทความ "AI chatbot LINE ราคาเท่าไหร่", "วิธีทำ AI ตอบ LINE อัตโนมัติ"
+          "PDPA กับ AI chatbot ต้องระวังอะไรบ้าง" — SEO ติดแน่แล้วได้ lead ฟรีตลอด
+        </p>
+        <div class="ch-kpi">🎯 10 บทความ/เดือน · ผลใน 3-6 เดือน</div>
+      </div>
+
+      <div class="ch-card" style="border-color:#374151;">
+        <div class="ch-header">
+          <span class="ch-icon">🤝</span>
+          <div>
+            <div class="ch-name">Partner / Referral</div>
+            <div class="ch-type">Leverage · ไม่ต้องหาเอง</div>
+          </div>
+        </div>
+        <p class="ch-action">
+          Partner กับ LINE Official Account Agency, Web Agency, IT company ที่มีฐานลูกค้า SME อยู่แล้ว
+          ให้ commission 10-15% ต่อ referral ที่ปิดได้
+        </p>
+        <div class="ch-kpi">🎯 หา Partner 5-10 ราย · ต่อราย = pipeline ใหม่ทันที</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<section id="pricing" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--orange);">ราคาและบริการ</div>
+    <h2 class="section-title">สรุปราคาทั้ง 5 Products</h2>
+
+    <div style="overflow-x:auto;">
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th class="highlight">Setup (one-time)</th>
+            <th class="highlight">Retainer/เดือน</th>
+            <th>Deliver Time</th>
+            <th>ความยาก</th>
+            <th>LTV ลูกค้า 2 ปี</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="product-col">🤖 LINE AI Pro</div>
+              <div class="sub-col">LINE OA · Gen AI</div>
+            </td>
+            <td><div class="price-setup">฿20,000</div></td>
+            <td><div class="price-retainer">฿3,000/เดือน</div></td>
+            <td>1-2 สัปดาห์</td>
+            <td><span class="tag tag-easy">ง่าย</span></td>
+            <td style="color:#4ade80; font-weight:700;">฿92,000</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="product-col">🔒 Private AI Clinic</div>
+              <div class="sub-col">On-premise · PDPA</div>
+            </td>
+            <td><div class="price-setup">฿80,000</div></td>
+            <td><div class="price-retainer">฿8,000/เดือน</div></td>
+            <td>3-4 สัปดาห์</td>
+            <td><span class="tag tag-medium">กลาง</span></td>
+            <td style="color:#4ade80; font-weight:700;">฿272,000</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="product-col">🔀 Omni AI Agent</div>
+              <div class="sub-col">Multi-channel · CRM</div>
+            </td>
+            <td><div class="price-setup">฿50,000</div></td>
+            <td><div class="price-retainer">฿6,000/เดือน</div></td>
+            <td>2-3 สัปดาห์</td>
+            <td><span class="tag tag-medium">กลาง</span></td>
+            <td style="color:#4ade80; font-weight:700;">฿194,000</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="product-col">⚙️ AI Workflow Bot</div>
+              <div class="sub-col">Automation · Cron</div>
+            </td>
+            <td><div class="price-setup">฿35,000</div></td>
+            <td><div class="price-retainer">฿4,500/เดือน</div></td>
+            <td>2-3 สัปดาห์</td>
+            <td><span class="tag tag-medium">กลาง</span></td>
+            <td style="color:#4ade80; font-weight:700;">฿143,000</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="product-col">👥 Team AI Assistant</div>
+              <div class="sub-col">Internal · Slack/Teams</div>
+            </td>
+            <td><div class="price-setup">฿40,000</div></td>
+            <td><div class="price-retainer">฿5,000/เดือน</div></td>
+            <td>2-3 สัปดาห์</td>
+            <td><span class="tag tag-medium">กลาง</span></td>
+            <td style="color:#4ade80; font-weight:700;">฿160,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warn" style="margin-top:20px;">
+      <span class="icon">⚠️</span>
+      <div class="text">
+        <strong>ค่าใช้จ่ายที่ลูกค้าจ่ายเพิ่มเติมเอง (ไม่ผ่านเรา):</strong>
+        VPS server ฿300-800/เดือน + LLM API (Claude Haiku ฿500-2,000/เดือน) + LINE API plan (฿0-1,500/เดือน)
+        — ต้องแจ้งลูกค้าชัดเจนตั้งแต่ต้นเพื่อไม่ให้ surprise
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ DECISION FACTORS ═══════════════ -->
+<section id="decisions" style="padding:60px 24px; background:#06090f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--pink);">ปัจจัยสำคัญอื่นๆ</div>
+    <h2 class="section-title">สิ่งที่ต้องพิจารณาก่อนตัดสินใจ</h2>
+
+    <div class="decision-grid">
+
+      <div class="dec-card">
+        <h3>⚠️ ความเสี่ยงที่ต้องจัดการ</h3>
+        <div class="dec-item"><span class="dec-label">LLM API cost</span><span class="dec-value">ถ้า volume สูงมาก ค่า Claude อาจสูง แนะนำ cap + alert ให้ลูกค้า</span></div>
+        <div class="dec-item"><span class="dec-label">LINE API change</span><span class="dec-value">LINE เปลี่ยน policy ได้ ต้องมี fallback channel (Telegram/WebChat)</span></div>
+        <div class="dec-item"><span class="dec-label">VPS ล่ม</span><span class="dec-value">ต้องมี monitoring + auto-restart + SLA ชัดเจนในสัญญา</span></div>
+        <div class="dec-item"><span class="dec-label">AI ตอบผิด</span><span class="dec-value">ต้องมี human escalation + guardrail + disclaimer ในทุก deployment</span></div>
+        <div class="dec-item"><span class="dec-label">คู่แข่ง copy</span><span class="dec-value">Oho.chat อาจเพิ่ม Gen AI ได้ — ต้องสร้าง switching cost (integration ลึก)</span></div>
+      </div>
+
+      <div class="dec-card">
+        <h3>💡 ปัจจัยที่ทำให้ชนะ</h3>
+        <div class="dec-item"><span class="dec-label">Speed to value</span><span class="dec-value">Deliver ใน 2 สัปดาห์ ลูกค้าเห็นผลเร็ว = referral ง่าย</span></div>
+        <div class="dec-item"><span class="dec-label">PDPA fear</span><span class="dec-value">กฎหมายบังคับใช้จริงแล้ว ลูกค้า healthcare/legal พร้อมจ่ายมาก</span></div>
+        <div class="dec-item"><span class="dec-label">Case study</span><span class="dec-value">1 case study ดี ๆ = lead ใหม่ 5-10 ราย ต้องทำให้ได้เร็ว</span></div>
+        <div class="dec-item"><span class="dec-label">Demo ง่าย</span><span class="dec-value">ให้ลูกค้าทดลองคุยกับ AI สาธิตตั้งแต่ครั้งแรกที่คุย</span></div>
+        <div class="dec-item"><span class="dec-label">Niche deep</span><span class="dec-value">เลือก 2 niche (คลินิก + ร้านค้า) ทำให้เชี่ยวชาญจริง ดีกว่ากว้างเกินไป</span></div>
+      </div>
+
+      <div class="dec-card">
+        <h3>📊 KPI ที่ต้องติดตาม</h3>
+        <div class="dec-item"><span class="dec-label">MRR</span><span class="dec-value">เป้า 30K บาท/เดือน ภายใน 6 เดือน (10 ลูกค้า × 3K avg)</span></div>
+        <div class="dec-item"><span class="dec-label">CAC</span><span class="dec-value">ต้องต่ำกว่า 1 retainer/เดือน = LTV/CAC &gt; 24x</span></div>
+        <div class="dec-item"><span class="dec-label">Churn rate</span><span class="dec-value">เป้า &lt;5%/ปี — ต้องมี QBR ทุก 3 เดือน</span></div>
+        <div class="dec-item"><span class="dec-label">Referral rate</span><span class="dec-value">เป้า 30% ของลูกค้าใหม่มาจาก referral ใน 6 เดือน</span></div>
+        <div class="dec-item"><span class="dec-label">Avg deal size</span><span class="dec-value">เป้า 40,000+ บาท setup ภายใน Q3 (upsell + bundle)</span></div>
+      </div>
+
+      <div class="dec-card">
+        <h3>🚀 Quick Wins ที่ทำได้เลยตอนนี้</h3>
+        <div class="dec-item"><span class="dec-label">สัปดาห์ 1</span><span class="dec-value">สร้าง LINE OA ของเราเองให้ AI ตอบเป็น demo live</span></div>
+        <div class="dec-item"><span class="dec-label">สัปดาห์ 2</span><span class="dec-value">โพสต์ LinkedIn "AI ตอบ LINE แทนพนักงาน" + demo video 60 วินาที</span></div>
+        <div class="dec-item"><span class="dec-label">สัปดาห์ 3</span><span class="dec-value">DM 50 คลินิก + 50 ร้านค้าออนไลน์ใน Facebook/LINE</span></div>
+        <div class="dec-item"><span class="dec-label">เดือน 1</span><span class="dec-value">ปิดดีลแรก → ทำ case study ทันที → ใช้ pitch ดีลต่อไป</span></div>
+        <div class="dec-item"><span class="dec-label">เดือน 2-3</span><span class="dec-value">หา Partner 3-5 รายที่มีฐาน SME อยู่แล้ว</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ROADMAP ═══════════════ -->
+<section id="roadmap" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--blue);">Roadmap</div>
+    <h2 class="section-title">เส้นทาง 6 เดือนแรก</h2>
+
+    <div class="roadmap-row">
+      <div class="roadmap-phase">
+        <div class="rp-label" style="color:var(--blue);">เดือน 1-2</div>
+        <div class="rp-title">Foundation</div>
+        <ul class="rp-items">
+          <li>Launch LINE AI Pro (#1)</li>
+          <li>สร้าง demo live บน LINE OA</li>
+          <li>LinkedIn + TikTok content</li>
+          <li>ปิด 2-3 ดีลแรก</li>
+          <li>ทำ case study แรก</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase">
+        <div class="rp-label" style="color:var(--green);">เดือน 3-4</div>
+        <div class="rp-title">Expand</div>
+        <ul class="rp-items">
+          <li>Launch Private AI Clinic (#2)</li>
+          <li>เข้า niche คลินิก</li>
+          <li>Launch Omni AI (#3)</li>
+          <li>หา Partner 3 ราย</li>
+          <li>MRR เป้า 20K บาท</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase">
+        <div class="rp-label" style="color:var(--purple);">เดือน 5-6</div>
+        <div class="rp-title">Scale</div>
+        <ul class="rp-items">
+          <li>Launch Workflow Bot (#4)</li>
+          <li>Launch Team AI (#5)</li>
+          <li>Google Ads เริ่มเล็กน้อย</li>
+          <li>SEO content 20+ บทความ</li>
+          <li>MRR เป้า 50K บาท</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top:20px;">
+      <span class="icon">🏆</span>
+      <div class="text">
+        <strong>เป้าหมาย 6 เดือน:</strong>
+        MRR 50,000+ บาท · ลูกค้า 15+ ราย · Case studies 5 อุตสาหกรรม · Partner network 5 ราย ·
+        ถ้าทำได้ตามนี้ = พร้อม activate Data Analyst + Customer Success agent ในระบบ
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="font-size:0.9rem; color:#4b5563; margin-bottom:8px;">
+    Header Staff Analysis — AI Automation Business · May 2026
+  </div>
+  Sources:
+  <a href="https://broadpang.com" target="_blank">Broadpang.com</a> ·
+  <a href="https://www.oho.chat" target="_blank">Oho.chat</a> ·
+  <a href="https://contabo.com/blog/openclaw-use-cases-for-business-in-2026/" target="_blank">Contabo OpenClaw</a> ·
+  <a href="https://www.pwc.com/th/en/press-room/press-release/2025/press-release-31-01-25-en.html" target="_blank">PwC Thailand 2025</a> ·
+  <a href="https://www.grandviewresearch.com/industry-analysis/thailand-bot-market-report" target="_blank">Thailand Bot Market</a>
+</footer>
+
+</body>
+</html>

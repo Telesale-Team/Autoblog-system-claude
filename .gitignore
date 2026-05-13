@@ -1,0 +1,38 @@
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+db.sqlite3
+db.sqlite3-journal
+*.log
+
+# Environment
+.env
+.env.*
+!scripts/.env.server.template
+
+# Django generated
+media/
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code runtime (keep agents/skills, skip session data)
+.claude/sessions/
+.claude/history.jsonl
+.claude/cache/
+.claude/shell-snapshots/
+.claude/telemetry/
+.claude/file-history/
+.claude/paste-cache/
+.claude/downloads/
+.claude/backups/
+.claude/.credentials.json
+.claude/mcp-needs-auth-cache.json
+
