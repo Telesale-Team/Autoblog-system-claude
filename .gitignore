@@ -28,6 +28,7 @@ Thumbs.db
 content_backlog/
 content_briefs/
 workflows/
+!.github/
 agent_expansion_v2.md
 
 # Claude Code runtime (keep agents/skills, skip session data)
