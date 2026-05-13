@@ -23,6 +23,13 @@ staticfiles/
 .DS_Store
 Thumbs.db
 
+# Excluded folders/files
+.claude/
+content_backlog/
+content_briefs/
+workflows/
+agent_expansion_v2.md
+
 # Claude Code runtime (keep agents/skills, skip session data)
 .claude/sessions/
 .claude/history.jsonl
