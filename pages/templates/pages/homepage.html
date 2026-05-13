@@ -1,169 +1,180 @@
-{% extends "pages/base.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
+    <meta name="generator" content="Astro v5.13.2" />
+    <title>Blog Template · Bootstrap v5.3</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/" />
 
-{% block title %}AIBoot Thailand — Blog{% endblock %}
+    <!-- Bootstrap core JS with Popper -->
+    <script src="{% static 'vendor/bootstrap/js/color-modes.js' %}"></script>
 
-{% block extra_css %}
-<style>
-	.bd-placeholder-img {
-		font-size: 1.125rem;
-		text-anchor: middle;
-		-webkit-user-select: none;
-		user-select: none;
-	}
-	@media (min-width: 768px) {
-		.bd-placeholder-img-lg { font-size: 3.5rem; }
-	}
-	/* Bootstrap icons SVG fill fix */
-	.bi { vertical-align: -0.125em; fill: currentColor; }
-	/* chevron-right symbol */
-	.btn-bd-primary {
-		--bd-violet-bg: #712cf9;
-		--bs-btn-font-weight: 600;
-		--bs-btn-color: var(--bs-white);
-		--bs-btn-bg: var(--bd-violet-bg);
-		--bs-btn-border-color: var(--bd-violet-bg);
-		--bs-btn-hover-bg: #6528e0;
-		--bs-btn-hover-border-color: #6528e0;
-		--bs-btn-active-bg: #5a23c8;
-	}
-</style>
-{% endblock %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
 
-{% block content %}
+    <meta name="theme-color" content="#712cf9" />
 
-<!-- SVG symbols used in content -->
-<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-	<symbol id="chevron-right" viewBox="0 0 16 16">
-		<path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-	</symbol>
-</svg>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900&display=swap" rel="stylesheet" />
 
-<div class="container">
-	<header class="border-bottom lh-1 py-3">
-		<div class="row flex-nowrap justify-content-between align-items-center">
-			<div class="col-4 pt-1">
-				<a class="link-secondary" href="#">Subscribe</a>
-			</div>
-			<div class="col-4 text-center">
-				<a class="blog-header-logo text-body-emphasis text-decoration-none" href="{% url 'pages:home' %}">AIBoot Thailand</a>
-			</div>
-			<div class="col-4 d-flex justify-content-end align-items-center">
-				<a class="link-secondary" href="#" aria-label="Search">
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24">
-						<title>Search</title>
-						<circle cx="10.5" cy="10.5" r="7.5"></circle>
-						<path d="M21 21l-5.2-5.2"></path>
-					</svg>
-				</a>
-				<a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
-			</div>
-		</div>
-	</header>
-	<div class="nav-scroller py-1 mb-3 border-bottom">
-		<nav class="nav nav-underline justify-content-between">
-			<a class="nav-item nav-link link-body-emphasis active" href="#">World</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">U.S.</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Technology</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Design</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Culture</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Business</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Politics</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Opinion</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Science</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Health</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Style</a>
-			<a class="nav-item nav-link link-body-emphasis" href="#">Travel</a>
-		</nav>
-	</div>
-</div>
+    <link href="{% static 'vendor/bootstrap/css/blog.css' %}" rel="stylesheet" />
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.min.css' %}" rel="stylesheet" />
+  </head>
+  <body>
 
-<main class="container">
-	<div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-		<div class="col-lg-6 px-0">
-			<h1 class="display-4 fst-italic">Title of a longer featured blog post</h1>
-			<p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.</p>
-			<p class="lead mb-0">
-				<a href="#" class="text-body-emphasis fw-bold">Continue reading...</a>
-			</p>
-		</div>
-	</div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+      </symbol>
+      <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+      </symbol>
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+      </symbol>
+    </svg>
 
-	<div class="row mb-2">
-		<div class="col-md-6">
-			<div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-				<div class="col p-4 d-flex flex-column position-static">
-					<strong class="d-inline-block mb-2 text-primary-emphasis">World</strong>
-					<h3 class="mb-0">Featured post</h3>
-					<div class="mb-1 text-body-secondary">Nov 12</div>
-					<p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-					<a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
-						Continue reading<svg class="bi" aria-hidden="true"><use xlink:href="#chevron-right"></use></svg>
-					</a>
-				</div>
-				<div class="col-auto d-none d-lg-block">
-					<svg aria-label="Placeholder: Thumbnail" class="bd-placeholder-img" height="250" preserveAspectRatio="xMidYMid slice" role="img" width="200" xmlns="http://www.w3.org/2000/svg">
-						<title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-					</svg>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-				<div class="col p-4 d-flex flex-column position-static">
-					<strong class="d-inline-block mb-2 text-success-emphasis">Design</strong>
-					<h3 class="mb-0">Post title</h3>
-					<div class="mb-1 text-body-secondary">Nov 11</div>
-					<p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-					<a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
-						Continue reading<svg class="bi" aria-hidden="true"><use xlink:href="#chevron-right"></use></svg>
-					</a>
-				</div>
-				<div class="col-auto d-none d-lg-block">
-					<svg aria-label="Placeholder: Thumbnail" class="bd-placeholder-img" height="250" preserveAspectRatio="xMidYMid slice" role="img" width="200" xmlns="http://www.w3.org/2000/svg">
-						<title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-					</svg>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3">
+      <button class="btn btn-sm btn-secondary dropdown-toggle d-flex align-items-center gap-1" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+        <svg class="theme-icon-active" width="16" height="16" aria-hidden="true"><use href="#circle-half"></use></svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-bs-theme-value="light" aria-pressed="false">
+            <svg width="16" height="16" aria-hidden="true"><use href="#sun-fill"></use></svg>
+            Light
+            <svg class="ms-auto d-none" width="16" height="16" aria-hidden="true"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center gap-2" data-bs-theme-value="dark" aria-pressed="false">
+            <svg width="16" height="16" aria-hidden="true"><use href="#moon-stars-fill"></use></svg>
+            Dark
+            <svg class="ms-auto d-none" width="16" height="16" aria-hidden="true"><use href="#check2"></use></svg>
+          </button>
+        </li>
 
-	<div class="row g-5">
-		<div class="col-md-8">
-			<h3 class="pb-4 mb-4 fst-italic border-bottom">From the Firehose</h3>
-			<article class="blog-post">
-				<h2 class="display-5 link-body-emphasis mb-1">Sample blog post</h2>
-				<p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
-				<p>This blog post shows a few different types of content that's supported and styled with Bootstrap.</p>
-				<hr />
-				<p>This is some additional paragraph placeholder content.</p>
-			</article>
-			<article class="blog-post">
-				<h2 class="display-5 link-body-emphasis mb-1">Another blog post</h2>
-				<p class="blog-post-meta">December 23, 2020 by <a href="#">Jacob</a></p>
-				<p>This is some additional paragraph placeholder content.</p>
-			</article>
-			<nav class="blog-pagination" aria-label="Pagination">
-				<a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-				<a class="btn btn-outline-secondary rounded-pill disabled" aria-disabled="true">Newer</a>
-			</nav>
-		</div>
-		<div class="col-md-4">
-			<div class="position-sticky" style="top: 2rem">
-				<div class="p-4 mb-3 bg-body-tertiary rounded">
-					<h4 class="fst-italic">About</h4>
-					<p class="mb-0">Customize this section to tell your visitors a little bit about your publication.</p>
-				</div>
-				<div class="p-4">
-					<h4 class="fst-italic">Elsewhere</h4>
-					<ol class="list-unstyled">
-						<li><a href="#">GitHub</a></li>
-						<li><a href="#">Facebook</a></li>
-					</ol>
-				</div>
-			</div>
-		</div>
-	</div>
-</main>
+      </ul>
+    </div>
 
-{% endblock %}
+    {% include "pages/navbar.html" %}
+
+    <main class="container">
+
+      {% if featured_articles %}
+      {% with featured_articles.0 as hero %}
+      <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+        <div class="col-lg-6 px-0">
+          <strong class="d-inline-block mb-2 text-primary-emphasis">{{ hero.category.name }}</strong>
+          <h1 class="display-4 fst-italic">{{ hero.title }}</h1>
+          <p class="lead my-3">{{ hero.excerpt }}</p>
+          <p class="lead mb-0">
+            <a href="{{ hero.get_absolute_url }}" class="text-body-emphasis fw-bold">อ่านต่อ...</a>
+          </p>
+        </div>
+      </div>
+      {% endwith %}
+      {% endif %}
+
+      {% if featured_articles|length > 1 %}
+      <div class="row mb-2">
+        {% for article in featured_articles|slice:"1:3" %}
+        <div class="col-md-6">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-3 d-flex flex-column position-static overflow-hidden">
+              <strong class="d-inline-block mb-1 text-primary-emphasis small">{{ article.category.name }}</strong>
+              <h5 class="mb-1 lh-sm">{{ article.title }}</h5>
+              <div class="mb-1 text-body-secondary small">{{ article.published_at|date:"d M Y" }}</div>
+              <p class="card-text mb-auto small text-truncate-3">{{ article.excerpt }}</p>
+              <a href="{{ article.get_absolute_url }}" class="icon-link gap-1 icon-link-hover stretched-link mt-2 small">
+                อ่านต่อ <i class="bi bi-chevron-right"></i>
+              </a>
+            </div>
+            {% if article.display_cover %}
+            <div class="col-3 d-none d-lg-block p-0">
+              <img src="{{ article.display_cover }}" class="w-100 h-100 object-fit-cover" alt="{{ article.title }}">
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="row g-5">
+        <div class="col-md-8">
+          <h2 class="pb-4 mb-4 fst-italic border-bottom">บทความล่าสุด</h2>
+          {% for article in recent_articles %}
+          <article class="blog-post-card p-4 mb-3 rounded-3 border bg-body-tertiary">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <a href="{{ article.category.get_absolute_url }}" class="badge text-bg-secondary fw-normal text-decoration-none">{{ article.category.name }}</a>
+              <small class="text-body-secondary">{{ article.published_at|date:"d M Y" }} · {{ article.reading_time }} นาที</small>
+            </div>
+            <h3 class="fs-4 link-body-emphasis mb-1">
+              <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-body-emphasis">{{ article.title }}</a>
+            </h3>
+            <p class="text-body-secondary small mb-2">โดย {{ article.author.get_full_name|default:article.author.username }}</p>
+            <p class="mb-3">{{ article.excerpt }}</p>
+            <a href="{{ article.get_absolute_url }}" class="icon-link gap-1 icon-link-hover small">
+              อ่านต่อ <i class="bi bi-chevron-right"></i>
+            </a>
+          </article>
+          {% empty %}
+          <p class="text-body-secondary">ยังไม่มีบทความ</p>
+          {% endfor %}
+          <div class="d-flex align-items-center gap-3 mt-5 pt-4 border-top">
+            <div class="flex-grow-1 border-top"></div>
+            <a href="{% url 'blog:list' %}" class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill border text-body-secondary text-decoration-none small fw-semibold">
+              บทความทั้งหมด <i class="bi bi-arrow-right"></i>
+            </a>
+            <div class="flex-grow-1 border-top"></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="sticky-top pt-3">
+            <div class="p-4 mb-3 bg-body-tertiary rounded">
+              <h4 class="fst-italic">เกี่ยวกับเรา</h4>
+              <p class="mb-0">AIBoot Thailand — ผู้เชี่ยวชาญด้าน AI Automation สำหรับธุรกิจ SME ไทย</p>
+            </div>
+            <div>
+              <h4 class="fst-italic">บทความล่าสุด</h4>
+              <ul class="list-unstyled">
+                {% for article in recent_articles|slice:":3" %}
+                <li>
+                  <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="{{ article.get_absolute_url }}">
+                    {% if article.display_cover %}
+                    <img src="{{ article.display_cover }}" width="100" height="96" class="object-fit-cover flex-shrink-0 rounded" alt="{{ article.title }}">
+                    {% else %}
+                    <svg aria-hidden="true" width="100" height="96" preserveAspectRatio="xMidYMid slice" class="flex-shrink-0 rounded bg-secondary-subtle" xmlns="http://www.w3.org/2000/svg">
+                    </svg>
+                    {% endif %}
+                    <div class="col-lg-8">
+                      <h6 class="mb-0">{{ article.title }}</h6>
+                      <small class="text-body-secondary">{{ article.published_at|date:"d M Y" }}</small>
+                    </div>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
+      <p class="mb-0">
+        <a href="#">Back to top</a>
+      </p>
+    </footer>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}" class="astro-vvvwv3sm"></script>
+  </body>
+</html>

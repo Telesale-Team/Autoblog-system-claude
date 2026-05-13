@@ -1,86 +1,38 @@
 {% load static %}
-<style>
-	.site-navbar {
-		border-bottom: 1px solid #e5e5e5;
-		padding: .6rem 0;
-	}
-	.site-navbar .social-icons a {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		border: 1px solid #e5e5e5;
-		color: var(--bs-secondary-color);
-		font-size: .9rem;
-		text-decoration: none;
-		transition: border-color .15s, color .15s, background .15s;
-	}
-	.site-navbar .social-icons a:hover {
-		border-color: var(--bs-emphasis-color);
-		color: var(--bs-emphasis-color);
-		background: var(--bs-secondary-bg);
-	}
-	.site-navbar .social-line {
-		font-size: .65rem;
-		font-weight: 700;
-		letter-spacing: .03em;
-	}
-	.site-navbar .nav-link {
-		font-size: .875rem;
-		font-weight: 400;
-		color: var(--bs-secondary-color);
-		padding: .25rem .7rem;
-		letter-spacing: .01em;
-		transition: color .15s;
-	}
-	.site-navbar .nav-link:hover,
-	.site-navbar .nav-link.active {
-		color: var(--bs-emphasis-color);
-	}
-	.site-navbar .navbar-toggler {
-		border-color: #e5e5e5;
-		padding: .25rem .5rem;
-		font-size: .875rem;
-	}
-	.site-navbar .navbar-toggler:focus { box-shadow: none; }
-</style>
-
-<nav class="site-navbar navbar navbar-expand-lg">
-	<div class="container">
-		<div class="social-icons d-flex align-items-center gap-1">
-			<a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-			<a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-			<a href="#" aria-label="LINE" class="social-line">LINE</a>
-		</div>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-expanded="false">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="siteNav">
-			<ul class="navbar-nav ms-auto gap-1 mb-2 mb-lg-0">
-				<li class="nav-item">
-					<a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'pages:home' %}">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if request.resolver_match.app_name == 'blog' %}active{% endif %}" href="{% url 'blog:list' %}">Blog</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if request.resolver_match.app_name == 'portfolio' %}active{% endif %}" href="{% url 'portfolio:list' %}">Portfolio</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'pages:services' %}">Services</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'pages:about' %}">About</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'pages:contact' %}">Contact</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'dashboard:docs_view' 'team-manual' %}">Team Manual</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+<nav class="navbar navbar-expand-lg border-bottom">
+  <div class="container">
+    <div class="d-flex align-items-center gap-2 me-3">
+      <a href="#" class="text-body-secondary" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+      <a href="#" class="text-body-secondary" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+      <a href="#" class="text-body-secondary small fw-bold" aria-label="LINE">LINE</a>
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="siteNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'pages:home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.app_name == 'blog' %}active{% endif %}" href="{% url 'blog:list' %}">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.app_name == 'portfolio' %}active{% endif %}" href="{% url 'portfolio:list' %}">Portfolio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'pages:services' %}">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'pages:about' %}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'pages:contact' %}">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard:docs_view' 'team-manual' %}">Team Manual</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

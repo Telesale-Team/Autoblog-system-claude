@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from blog.models import Article
-from portfolio.models import CaseStudy
 from .forms import ContactForm
 
 
@@ -23,12 +22,15 @@ def get_utm(request):
 
 
 def home(request):
-    featured_articles = Article.objects.filter(status="published", is_featured=True)[:3]
-    featured_cases = CaseStudy.objects.filter(status="published", is_featured=True)[:3]
-
+    featured_articles = Article.objects.filter(
+        status="published", is_featured=True
+    ).select_related("author", "category")[:3]
+    recent_articles = Article.objects.filter(
+        status="published"
+    ).select_related("author", "category")[:6]
     return render(request, "pages/homepage.html", {
         "featured_articles": featured_articles,
-        "featured_cases": featured_cases,
+        "recent_articles": recent_articles,
     })
 
 
