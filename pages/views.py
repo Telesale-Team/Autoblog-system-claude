@@ -26,10 +26,18 @@ def home(request):
     featured_articles = Article.objects.filter(status="published", is_featured=True)[:3]
     featured_cases = CaseStudy.objects.filter(status="published", is_featured=True)[:3]
 
-    return render(request, "pages/home.html", {
+    return render(request, "pages/homepage.html", {
         "featured_articles": featured_articles,
         "featured_cases": featured_cases,
     })
+
+
+def about(request):
+    return render(request, "pages/about.html")
+
+
+def services(request):
+    return render(request, "pages/services.html")
 
 
 def contact(request):
