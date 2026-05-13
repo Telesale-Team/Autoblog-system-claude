@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "pages/base.html" %}
 {% load static %}
 
 {% block title %}{{ article.meta_title|default:article.title }}{% endblock %}
@@ -233,6 +233,9 @@
   </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
 <script src="{% static 'js/blog-toc.js' %}" defer></script>
 <script src="{% static 'js/blog-code-copy.js' %}" defer></script>
 {% endblock %}

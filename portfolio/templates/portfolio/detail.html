@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "pages/base.html" %}
 
 {% block title %}{{ case.meta_title|default:case.project_title }}{% endblock %}
 {% block meta_description %}{{ case.meta_description|default:case.problem|truncatechars:160 }}{% endblock %}
