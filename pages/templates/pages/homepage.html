@@ -72,7 +72,7 @@
           </div>
           <h5 class="fw-bold lh-sm mb-2">{{ article.title }}</h5>
           <p class="small text-body-secondary mb-3 flex-grow-1">{{ article.excerpt }}</p>
-          <a href="{{ article.get_absolute_url }}" class="btn btn-outline-secondary btn-sm">
+          <a href="{{ article.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
             อ่านต่อ <i class="bi bi-chevron-right"></i>
           </a>
         </div>
@@ -112,7 +112,7 @@
           </h3>
           <p class="text-body-secondary small mb-2">โดย {{ article.author.get_full_name|default:article.author.username }}</p>
           <p class="mb-3">{{ article.excerpt }}</p>
-          <a href="{{ article.get_absolute_url }}" class="btn btn-outline-secondary btn-sm">
+          <a href="{{ article.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
             อ่านต่อ <i class="bi bi-chevron-right"></i>
           </a>
         </div>
@@ -121,7 +121,7 @@
       <p class="text-body-secondary">ยังไม่มีบทความ</p>
       {% endfor %}
       <div class="text-center mt-4">
-        <a href="{% url 'blog:list' %}" class="btn btn-outline-secondary">
+        <a href="{% url 'blog:list' %}" class="btn btn-outline-primary">
           บทความทั้งหมด <i class="bi bi-arrow-right ms-1"></i>
         </a>
       </div>

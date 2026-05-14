@@ -39,9 +39,9 @@
     </div>
 
     <div class="d-flex gap-2 justify-content-center flex-wrap mb-4">
-      <a href="{% url 'portfolio:list' %}" class="btn btn-sm {% if not active_industry %}btn-primary{% else %}btn-outline-secondary{% endif %}">ทั้งหมด</a>
+      <a href="{% url 'portfolio:list' %}" class="btn btn-sm {% if not active_industry %}btn-primary{% else %}btn-outline-primary{% endif %}">ทั้งหมด</a>
       {% for value, label in industries %}
-        <a href="?industry={{ value }}" class="btn btn-sm {% if active_industry == value %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ label }}</a>
+        <a href="?industry={{ value }}" class="btn btn-sm {% if active_industry == value %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ label }}</a>
       {% endfor %}
     </div>
 
