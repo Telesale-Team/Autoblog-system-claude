@@ -154,6 +154,21 @@ body {
 .navbar .nav-link:hover, .navbar .nav-link.active { color: var(--brand-gold) !important; }
 .navbar-brand span { color: var(--brand-gold); }
 
+/* Search box — gold border ทั้งกล่อง */
+.navbar .input-group,
+.navbar .input-group .form-control,
+.navbar .input-group .btn {
+  border-color: var(--brand-gold) !important;
+}
+.navbar .form-control {
+  background: transparent;
+  box-shadow: none !important;
+}
+.navbar .form-control:focus {
+  background: transparent;
+  box-shadow: none !important;
+}
+
 /* Hero gradient background */
 .hero-section {
   position: relative;
