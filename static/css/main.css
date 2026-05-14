@@ -83,6 +83,13 @@
 .text-navy   { color: var(--brand-navy) !important; }
 .bg-navy     { background-color: var(--brand-navy) !important; }
 
+/* ── Outline badge ── */
+.badge-outline {
+  background: transparent !important;
+  border: 1px solid currentColor;
+  color: var(--bs-secondary-color) !important;
+}
+
 /* ── Custom button: Gold (ใช้สำหรับ premium CTA เท่านั้น) ── */
 .btn-gold {
   background: var(--brand-gold);

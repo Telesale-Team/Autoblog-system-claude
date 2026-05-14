@@ -211,7 +211,7 @@
             {% if not a.display_cover %}<div class="thumb-fallback">📝</div>{% endif %}
           </div>
           <div class="p-3">
-            <span class="badge text-bg-{{ a.category.color }} fw-normal mb-1">{{ a.category.name }}</span>
+            <span class="badge badge-outline fw-normal mb-1">{{ a.category.name }}</span>
             <h3 class="fs-6 fw-bold mt-1">{{ a.title }}</h3>
             <p class="text-secondary small mb-0">{{ a.excerpt|default:""|truncatechars:120 }}</p>
           </div>

@@ -28,7 +28,7 @@
     <!-- Text bottom -->
     <div class="p-4 p-md-5 bg-body-secondary">
       <a href="{{ hero.category.get_absolute_url }}"
-         class="badge text-bg-{{ hero.category.color }} text-decoration-none fw-normal">
+         class="badge badge-outline text-decoration-none fw-normal">
         {{ hero.category.name }}
       </a>
       <h1 class="display-6 fst-italic fw-bold lh-sm mb-3">{{ hero.title }}</h1>
@@ -67,7 +67,7 @@
         {% endif %}
         <div class="p-4 d-flex flex-column flex-grow-1">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <a href="{{ article.category.get_absolute_url }}" class="badge text-bg-{{ article.category.color }} text-decoration-none fw-normal">{{ article.category.name }}</a>
+            <a href="{{ article.category.get_absolute_url }}" class="badge badge-outline text-decoration-none fw-normal">{{ article.category.name }}</a>
             <small class="text-body-secondary">{{ article.published_at|date:"d M Y" }}</small>
           </div>
           <h5 class="fw-bold lh-sm mb-2">{{ article.title }}</h5>
@@ -104,7 +104,7 @@
         {% endif %}
         <div class="p-4">
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <a href="{{ article.category.get_absolute_url }}" class="badge text-bg-{{ article.category.color }} fw-normal text-decoration-none">{{ article.category.name }}</a>
+            <a href="{{ article.category.get_absolute_url }}" class="badge badge-outline fw-normal text-decoration-none">{{ article.category.name }}</a>
             <small class="text-body-secondary">{{ article.published_at|date:"d M Y" }} · {{ article.reading_time }} นาที</small>
           </div>
           <h3 class="fs-4 link-body-emphasis mb-1">
@@ -166,7 +166,7 @@
             {% for cat in categories %}
             <li class="d-flex justify-content-between align-items-center py-1 {% if not forloop.first %}border-top{% endif %}">
               <a href="{{ cat.get_absolute_url }}" class="text-body-emphasis text-decoration-none small">{{ cat.name }}</a>
-              <span class="badge text-bg-{{ cat.color }} rounded-pill">{{ cat.article_count }}</span>
+              <span class="badge badge-outline rounded-pill">{{ cat.article_count }}</span>
             </li>
             {% endfor %}
           </ul>
@@ -179,7 +179,7 @@
           <h5 class="fst-italic border-bottom pb-2 mb-3">แท็กยอดนิยม</h5>
           <div class="d-flex flex-wrap gap-2">
             {% for tag in tags %}
-            <a href="{{ tag.get_absolute_url }}" class="badge text-bg-secondary text-decoration-none fw-normal py-1 px-2">{{ tag.name }}</a>
+            <a href="{{ tag.get_absolute_url }}" class="badge badge-outline text-decoration-none fw-normal py-1 px-2">{{ tag.name }}</a>
             {% endfor %}
           </div>
         </div>

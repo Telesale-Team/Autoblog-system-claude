@@ -111,7 +111,7 @@
           <h6 class="text-white fw-semibold mb-3 pb-2 border-bottom border-secondary">แท็ก</h6>
           <div class="d-flex flex-wrap gap-2">
             {% for tag in tags %}
-            <a href="{{ tag.get_absolute_url }}" class="badge text-bg-secondary text-decoration-none fw-normal py-1 px-2">{{ tag.name }}</a>
+            <a href="{{ tag.get_absolute_url }}" class="badge badge-outline text-decoration-none fw-normal py-1 px-2">{{ tag.name }}</a>
             {% empty %}
             <span class="text-secondary">ยังไม่มีแท็ก</span>
             {% endfor %}
