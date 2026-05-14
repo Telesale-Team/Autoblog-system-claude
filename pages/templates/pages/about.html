@@ -1,85 +1,670 @@
 {% extends "base_public.html" %}
-{% load static %}
 
 {% block title %}เกี่ยวกับเรา — AIBiz Thailand{% endblock %}
+{% block meta_description %}AIBiz Thailand ผู้เชี่ยวชาญด้าน AI Automation สำหรับธุรกิจ SME ไทย ช่วยลดต้นทุนและเพิ่มประสิทธิภาพด้วย AI ที่ใช้งานได้จริง{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ── CSS Variables ─────────────────────────── */
+  :root {
+    --brand-gold: #c9a96e;
+    --brand-gold-light: #dfc090;
+    --brand-gold-dim: rgba(201,169,110,.15);
+    --brand-dark: #0f172a;
+    --brand-navy: #1a2744;
+    --brand-navy-2: #1e2f52;
+  }
+
+  /* ── Global Typography ─────────────────────── */
+  body { font-family: 'Sarabun', sans-serif; }
+  h1, h2, h3, h4, h5, h6 {
+    font-style: normal !important;
+    font-family: 'Sarabun', sans-serif;
+  }
+  .text-gold { color: var(--brand-gold) !important; }
+
+  /* ── HERO ──────────────────────────────────── */
+  .about-hero {
+    position: relative;
+    min-height: 540px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--brand-dark);
+  }
+  .about-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(.45) saturate(.8);
+    transition: transform 8s ease;
+  }
+  .about-hero:hover .about-hero__bg { transform: scale(1.04); }
+  .about-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      rgba(15,23,42,.85) 0%,
+      rgba(26,39,68,.6)  60%,
+      rgba(201,169,110,.08) 100%);
+  }
+  .about-hero__content {
+    position: relative;
+    z-index: 2;
+  }
+  .about-hero__eyebrow {
+    display: inline-block;
+    font-size: .78rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--brand-gold);
+    border: 1px solid rgba(201,169,110,.4);
+    padding: .3rem .9rem;
+    border-radius: 2rem;
+    margin-bottom: 1.25rem;
+  }
+  .about-hero__title {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+  .about-hero__title span { color: var(--brand-gold); }
+  .about-hero__lead {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,.8);
+    max-width: 560px;
+    line-height: 1.8;
+  }
+  .about-hero__stat {
+    text-align: center;
+    padding: 1.2rem 1.5rem;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(201,169,110,.2);
+    border-radius: .75rem;
+    backdrop-filter: blur(6px);
+  }
+  .about-hero__stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--brand-gold);
+    line-height: 1;
+    margin-bottom: .25rem;
+  }
+  .about-hero__stat-label {
+    font-size: .8rem;
+    color: rgba(255,255,255,.65);
+  }
+
+  /* ── SECTION DIVIDER ───────────────────────── */
+  .section-eyebrow {
+    display: inline-block;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--brand-gold);
+    font-weight: 600;
+    margin-bottom: .5rem;
+  }
+  .section-line {
+    display: inline-block;
+    width: 48px;
+    height: 2px;
+    background: var(--brand-gold);
+    vertical-align: middle;
+    margin-right: .6rem;
+  }
+
+  /* ── MISSION SECTION ───────────────────────── */
+  .mission-section { background: var(--brand-dark); padding: 96px 0; }
+  .mission-img-wrap {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,.5);
+  }
+  .mission-img-wrap img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s ease;
+  }
+  .mission-img-wrap:hover img { transform: scale(1.04); }
+  .mission-img-badge {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    background: var(--brand-gold);
+    color: var(--brand-dark);
+    font-weight: 700;
+    font-size: .85rem;
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+  }
+  .checkpoint-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+    padding: .9rem 1.1rem;
+    border-radius: .6rem;
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+    transition: border-color .25s, background .25s;
+  }
+  .checkpoint-item:hover {
+    border-color: rgba(201,169,110,.3);
+    background: var(--brand-gold-dim);
+  }
+  .checkpoint-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--brand-gold-dim);
+    border: 1px solid rgba(201,169,110,.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-gold);
+    font-size: 1rem;
+    margin-top: .1rem;
+  }
+  .checkpoint-text strong { color: #fff; display: block; margin-bottom: .15rem; }
+  .checkpoint-text small { color: rgba(255,255,255,.55); font-size: .82rem; }
+
+  /* ── EXPERTISE SECTION ─────────────────────── */
+  .expertise-section { background: var(--brand-navy); padding: 96px 0; }
+  .expertise-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 1rem;
+    padding: 2rem 1.75rem;
+    height: 100%;
+    transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .expertise-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-gold), transparent);
+    opacity: 0;
+    transition: opacity .28s;
+  }
+  .expertise-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(201,169,110,.35);
+    box-shadow: 0 16px 48px rgba(0,0,0,.3);
+  }
+  .expertise-card:hover::before { opacity: 1; }
+  .expertise-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: .75rem;
+    background: var(--brand-gold-dim);
+    border: 1px solid rgba(201,169,110,.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--brand-gold);
+    margin-bottom: 1.25rem;
+  }
+  .expertise-card h5 { color: #fff; font-weight: 700; margin-bottom: .6rem; }
+  .expertise-card p { color: rgba(255,255,255,.55); font-size: .88rem; line-height: 1.7; margin-bottom: 1rem; }
+  .expertise-tag {
+    display: inline-block;
+    font-size: .72rem;
+    color: var(--brand-gold);
+    border: 1px solid rgba(201,169,110,.3);
+    border-radius: 2rem;
+    padding: .2rem .65rem;
+    margin: .15rem .1rem 0 0;
+  }
+
+  /* ── VALUES SECTION ────────────────────────── */
+  .values-section { background: var(--brand-dark); padding: 96px 0; }
+  .value-card {
+    background: linear-gradient(145deg, rgba(255,255,255,.05) 0%, rgba(201,169,110,.04) 100%);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 1rem;
+    padding: 2.25rem 1.75rem;
+    text-align: center;
+    height: 100%;
+    transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;
+  }
+  .value-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(201,169,110,.4);
+    box-shadow: 0 20px 60px rgba(201,169,110,.1);
+  }
+  .value-icon-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--brand-gold-dim);
+    border: 2px solid rgba(201,169,110,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--brand-gold);
+    margin: 0 auto 1.5rem;
+    transition: background .28s, border-color .28s;
+  }
+  .value-card:hover .value-icon-circle {
+    background: rgba(201,169,110,.25);
+    border-color: var(--brand-gold);
+  }
+  .value-card h5 { color: #fff; font-weight: 700; margin-bottom: .75rem; }
+  .value-card p { color: rgba(255,255,255,.6); font-size: .9rem; line-height: 1.75; margin: 0; }
+
+  /* ── CTA SECTION ───────────────────────────── */
+  .cta-section {
+    position: relative;
+    padding: 100px 0;
+    overflow: hidden;
+    background: var(--brand-navy-2);
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%,
+      rgba(201,169,110,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section__content { position: relative; z-index: 1; }
+  .cta-section h2 { color: #fff; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; }
+  .cta-section p { color: rgba(255,255,255,.65); font-size: 1.05rem; }
+  .btn-gold {
+    background: var(--brand-gold);
+    color: var(--brand-dark);
+    font-weight: 700;
+    border: none;
+    padding: .85rem 2.2rem;
+    border-radius: .5rem;
+    font-size: 1rem;
+    transition: background .22s, transform .22s, box-shadow .22s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .btn-gold:hover {
+    background: var(--brand-gold-light);
+    color: var(--brand-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(201,169,110,.35);
+  }
+  .btn-outline-gold {
+    background: transparent;
+    color: var(--brand-gold);
+    border: 1.5px solid rgba(201,169,110,.5);
+    font-weight: 600;
+    padding: .85rem 2rem;
+    border-radius: .5rem;
+    font-size: 1rem;
+    transition: background .22s, border-color .22s, transform .22s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .btn-outline-gold:hover {
+    background: var(--brand-gold-dim);
+    border-color: var(--brand-gold);
+    color: var(--brand-gold);
+    transform: translateY(-2px);
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<main class="container mt-5 mb-5">
+<main>
 
-  <!-- Page header -->
-  <div class="pb-4 mb-5 border-bottom">
-    <h1 class="fw-bold">เกี่ยวกับ AIBiz Thailand</h1>
-    <p class="lead text-body-secondary">ผู้เชี่ยวชาญด้าน AI Automation สำหรับธุรกิจ SME ไทย ช่วยลดต้นทุนและเพิ่มประสิทธิภาพด้วยเทคโนโลยี AI ที่ใช้งานได้จริง</p>
+  <!-- ══════════════════════════════════════════
+       HERO SECTION
+  ══════════════════════════════════════════ -->
+  <section class="about-hero">
+    <div class="about-hero__bg"></div>
+    <div class="about-hero__overlay"></div>
+
+    <div class="container about-hero__content py-5">
+      <div class="row align-items-center g-5">
+
+        <div class="col-lg-7">
+          <span class="about-hero__eyebrow">เกี่ยวกับ AIBiz Thailand</span>
+          <h1 class="about-hero__title">
+            เราเปลี่ยนธุรกิจ SME ไทย<br>
+            ด้วย <span>AI ที่ใช้งานได้จริง</span>
+          </h1>
+          <p class="about-hero__lead mb-0">
+            ไม่ใช่แค่เครื่องมือ — แต่คือพาร์ทเนอร์ที่เข้าใจธุรกิจของคุณ
+            ออกแบบระบบ AI ที่วัดผลได้ ลดต้นทุนได้จริง เริ่มได้เร็ว
+          </p>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="about-hero__stat">
+                <span class="about-hero__stat-number">20+</span>
+                <span class="about-hero__stat-label">ลูกค้า SME ที่ใช้จริง</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="about-hero__stat">
+                <span class="about-hero__stat-number">3 ปี+</span>
+                <span class="about-hero__stat-label">ประสบการณ์ด้าน AI</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="about-hero__stat">
+                <span class="about-hero__stat-number">60-80%</span>
+                <span class="about-hero__stat-label">ลด Manual Operation</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="about-hero__stat">
+                <span class="about-hero__stat-number">24 ชม.</span>
+                <span class="about-hero__stat-label">ตอบกลับภายใน</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       MISSION SECTION — split layout
+  ══════════════════════════════════════════ -->
+  <section class="mission-section">
+    <div class="container">
+      <div class="row align-items-center g-5">
+
+        <!-- Image Left -->
+        <div class="col-lg-5">
+          <div class="mission-img-wrap">
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80"
+                 alt="ทีมงาน AIBiz Thailand">
+            <span class="mission-img-badge">
+              <i class="bi bi-patch-check-fill me-1"></i> Trusted Partner
+            </span>
+          </div>
+        </div>
+
+        <!-- Text Right -->
+        <div class="col-lg-7">
+          <span class="section-eyebrow">
+            <span class="section-line"></span>Mission ของเรา
+          </span>
+          <h2 class="fw-bold text-white mb-3" style="font-size:clamp(1.6rem,3.5vw,2.4rem)">
+            ทำไมต้อง <span class="text-gold">AIBiz Thailand?</span>
+          </h2>
+          <p style="color:rgba(255,255,255,.65); line-height:1.8;" class="mb-4">
+            SME ไทยส่วนใหญ่ยังขาดความรู้และทรัพยากรในการนำ AI มาใช้งานจริง
+            เราจึงเป็นสะพานเชื่อมระหว่างเทคโนโลยี AI และธุรกิจของคุณ
+            โดยเราไม่ได้แค่ขายโซลูชัน แต่ทำความเข้าใจ Process จริงของธุรกิจคุณก่อน
+            แล้วออกแบบ AI ที่ตอบโจทย์จริงๆ วัดผลได้จริงๆ
+          </p>
+
+          <div class="d-flex flex-column gap-3">
+            <div class="checkpoint-item">
+              <div class="checkpoint-icon"><i class="bi bi-graph-up-arrow"></i></div>
+              <div class="checkpoint-text">
+                <strong>ประสบการณ์จริงมากกว่า 3 ปี</strong>
+                <small>ผ่านงาน AI Automation หลากหลายอุตสาหกรรมในไทย</small>
+              </div>
+            </div>
+            <div class="checkpoint-item">
+              <div class="checkpoint-icon"><i class="bi bi-people-fill"></i></div>
+              <div class="checkpoint-text">
+                <strong>ลูกค้า SME ที่ใช้ระบบจริงมากกว่า 20 ราย</strong>
+                <small>ตั้งแต่ร้านอาหาร ไปจนถึงบริษัทผลิตชิ้นส่วนอุตสาหกรรม</small>
+              </div>
+            </div>
+            <div class="checkpoint-item">
+              <div class="checkpoint-icon"><i class="bi bi-currency-dollar"></i></div>
+              <div class="checkpoint-text">
+                <strong>ลดต้นทุน Manual Operation เฉลี่ย 60-80%</strong>
+                <small>วัดเป็นตัวเลขได้จริง ไม่ใช่แค่ประมาณการ</small>
+              </div>
+            </div>
+            <div class="checkpoint-item">
+              <div class="checkpoint-icon"><i class="bi bi-headset"></i></div>
+              <div class="checkpoint-text">
+                <strong>Support ภาษาไทย ตอบกลับภายใน 24 ชั่วโมง</strong>
+                <small>ทีม Support พร้อมดูแลหลัง Go-Live ทุกโปรเจกต์</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       EXPERTISE SECTION — 4 cards
+  ══════════════════════════════════════════ -->
+  <section class="expertise-section">
+    <div class="container">
+
+      <div class="text-center mb-5">
+        <span class="section-eyebrow">
+          <span class="section-line"></span>ความเชี่ยวชาญ
+        </span>
+        <h2 class="fw-bold text-white mb-3" style="font-size:clamp(1.6rem,3.5vw,2.4rem)">
+          4 ด้านที่เรา<span class="text-gold">เชี่ยวชาญ</span>
+        </h2>
+        <p style="color:rgba(255,255,255,.55); max-width:520px; margin:0 auto; font-size:.95rem; line-height:1.8;">
+          เราไม่ได้ทำทุกอย่าง — แต่สิ่งที่เราทำ เราทำให้ดีที่สุด
+        </p>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- Card 1 -->
+        <div class="col-sm-6 col-xl-3">
+          <div class="expertise-card">
+            <div class="expertise-icon-wrap">
+              <i class="bi bi-chat-dots-fill"></i>
+            </div>
+            <h5>AI Chatbot</h5>
+            <p>ระบบ Chatbot อัจฉริยะสำหรับ Line, Facebook, Website และ Internal Tools ที่เข้าใจภาษาไทยและตอบได้เป็นธรรมชาติ</p>
+            <div>
+              <span class="expertise-tag">Line OA</span>
+              <span class="expertise-tag">Facebook</span>
+              <span class="expertise-tag">WhatsApp</span>
+              <span class="expertise-tag">Web Widget</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-sm-6 col-xl-3">
+          <div class="expertise-card">
+            <div class="expertise-icon-wrap">
+              <i class="bi bi-cpu-fill"></i>
+            </div>
+            <h5>Custom AI Agent</h5>
+            <p>สร้าง AI Agent เฉพาะทางด้วย RAG, Fine-tuning และ Multi-agent Systems ที่เรียนรู้จาก Knowledge Base ของธุรกิจคุณ</p>
+            <div>
+              <span class="expertise-tag">RAG</span>
+              <span class="expertise-tag">Fine-tuning</span>
+              <span class="expertise-tag">Multi-agent</span>
+              <span class="expertise-tag">Knowledge Base</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-sm-6 col-xl-3">
+          <div class="expertise-card">
+            <div class="expertise-icon-wrap">
+              <i class="bi bi-gear-wide-connected"></i>
+            </div>
+            <h5>Workflow Automation</h5>
+            <p>เชื่อมต่อระบบต่างๆ ด้วย n8n, Zapier และ API Integration รวมถึงเชื่อมกับ ERP/CRM ที่ใช้งานอยู่แล้ว</p>
+            <div>
+              <span class="expertise-tag">n8n</span>
+              <span class="expertise-tag">Zapier</span>
+              <span class="expertise-tag">API</span>
+              <span class="expertise-tag">ERP/CRM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="col-sm-6 col-xl-3">
+          <div class="expertise-card">
+            <div class="expertise-icon-wrap">
+              <i class="bi bi-hdd-network-fill"></i>
+            </div>
+            <h5>AI + Hardware</h5>
+            <p>ผสานซอฟต์แวร์ AI เข้ากับฮาร์ดแวร์จริง ด้วย Computer Vision, IoT Sensors และ Edge AI สำหรับโรงงานและคลังสินค้า</p>
+            <div>
+              <span class="expertise-tag">Computer Vision</span>
+              <span class="expertise-tag">IoT</span>
+              <span class="expertise-tag">Edge AI</span>
+              <span class="expertise-tag">Raspberry Pi</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       VALUES SECTION — 3 cards
+  ══════════════════════════════════════════ -->
+  <section class="values-section">
+    <div class="container">
+
+      <div class="text-center mb-5">
+        <span class="section-eyebrow">
+          <span class="section-line"></span>หลักการทำงาน
+        </span>
+        <h2 class="fw-bold text-white mb-3" style="font-size:clamp(1.6rem,3.5vw,2.4rem)">
+          3 หลักการที่เรายึดมั่น<span class="text-gold">เสมอ</span>
+        </h2>
+        <p style="color:rgba(255,255,255,.55); max-width:480px; margin:0 auto; font-size:.95rem; line-height:1.8;">
+          ทุก engagement เริ่มจากการเข้าใจธุรกิจ ไม่ใช่การขายเทคโนโลยี
+        </p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+
+        <div class="col-md-6 col-lg-4">
+          <div class="value-card">
+            <div class="value-icon-circle">
+              <i class="bi bi-bar-chart-line-fill"></i>
+            </div>
+            <h5>วัดผลได้จริง</h5>
+            <p>
+              ทุกโปรเจกต์มี KPI ชัดเจนตั้งแต่วันแรก
+              และเรารายงานผลลัพธ์เป็นตัวเลขที่จับต้องได้
+              ไม่ใช่แค่ความพึงพอใจส่วนตัว
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="value-card">
+            <div class="value-icon-circle">
+              <i class="bi bi-building-check"></i>
+            </div>
+            <h5>เข้าใจธุรกิจก่อน</h5>
+            <p>
+              ไม่ขาย Solution สำเร็จรูป แต่ใช้เวลา Discovery
+              ทำความเข้าใจ Process จริงของคุณก่อน
+              แล้วค่อยออกแบบระบบที่ตอบโจทย์จริงๆ
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="value-card">
+            <div class="value-icon-circle">
+              <i class="bi bi-rocket-takeoff-fill"></i>
+            </div>
+            <h5>เริ่มได้เร็ว</h5>
+            <p>
+              ส่ง MVP ใน 2-4 สัปดาห์ ให้คุณทดลองใช้งานจริงก่อน
+              แล้วค่อยปรับและ Scale ใหญ่ตามผลลัพธ์ที่วัดได้
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       TEAM / CULTURE IMAGE BAND
+  ══════════════════════════════════════════ -->
+  <div style="height:320px; overflow:hidden; position:relative;">
+    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1600&q=80"
+         alt="ทีม AIBiz Thailand"
+         style="width:100%; height:100%; object-fit:cover; object-position:center 40%;
+                filter:brightness(.5) saturate(.75);">
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,
+      rgba(15,23,42,.7) 0%, rgba(26,39,68,.2) 50%, rgba(15,23,42,.7) 100%);
+      display:flex; align-items:center; justify-content:center;">
+      <blockquote class="text-center mb-0 px-3">
+        <p class="fs-4 fw-bold text-white mb-2" style="font-style:normal;">
+          "เราไม่ได้ขาย AI — เราช่วยให้ธุรกิจคุณ<span class="text-gold"> ทำงานฉลาดขึ้น</span>"
+        </p>
+        <footer class="text-white-50 small">— ทีม AIBiz Thailand</footer>
+      </blockquote>
+    </div>
   </div>
 
-  <!-- Mission -->
-  <div class="row g-5 mb-5 align-items-center">
-    <div class="col-md-6">
-      <h2 class="fw-bold mb-3">ทำไมต้อง AIBiz?</h2>
-      <p class="text-body-secondary">SME ไทยส่วนใหญ่ยังขาดความรู้และทรัพยากรในการนำ AI มาใช้งานจริง เราจึงเป็นสะพานเชื่อมระหว่างเทคโนโลยี AI และธุรกิจของคุณ</p>
-      <p class="text-body-secondary">เราไม่ได้แค่ขายโซลูชัน แต่เราทำความเข้าใจ Process ของธุรกิจคุณก่อน แล้วออกแบบ AI ที่ตอบโจทย์จริงๆ วัดผลได้จริงๆ</p>
-      <ul class="list-unstyled mt-4">
-        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>ประสบการณ์ด้าน AI Automation มากกว่า 3 ปี</li>
-        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>ลูกค้า SME ไทยที่ใช้ระบบจริงมากกว่า 20 ราย</li>
-        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>ลดต้นทุน Manual Operation เฉลี่ย 60-80%</li>
-        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Support ภาษาไทย ตอบกลับภายใน 24 ชั่วโมง</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <div class="p-4 rounded bg-body-secondary border h-100">
-        <h5 class="fw-bold mb-3">สิ่งที่เราเชี่ยวชาญ</h5>
-        <div class="d-flex flex-column gap-3">
-          <div class="d-flex gap-3 align-items-start">
-            <i class="bi bi-chat-dots-fill fs-4 text-primary flex-shrink-0 mt-1"></i>
-            <div><strong>AI Chatbot & Automation</strong><br><small class="text-body-secondary">Line, Facebook, Website, Internal Tools</small></div>
-          </div>
-          <div class="d-flex gap-3 align-items-start">
-            <i class="bi bi-cpu-fill fs-4 text-primary flex-shrink-0 mt-1"></i>
-            <div><strong>Custom AI Agent</strong><br><small class="text-body-secondary">RAG, Fine-tuning, Multi-agent Systems</small></div>
-          </div>
-          <div class="d-flex gap-3 align-items-start">
-            <i class="bi bi-gear-wide-connected fs-4 text-primary flex-shrink-0 mt-1"></i>
-            <div><strong>Workflow Integration</strong><br><small class="text-body-secondary">n8n, Zapier, API Integration, ERP</small></div>
-          </div>
-          <div class="d-flex gap-3 align-items-start">
-            <i class="bi bi-hdd-network-fill fs-4 text-primary flex-shrink-0 mt-1"></i>
-            <div><strong>AI + Hardware</strong><br><small class="text-body-secondary">Computer Vision, IoT, Edge AI</small></div>
+
+  <!-- ══════════════════════════════════════════
+       CTA SECTION
+  ══════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="container cta-section__content">
+      <div class="row justify-content-center text-center">
+        <div class="col-lg-7">
+          <span class="section-eyebrow mb-3 d-block">
+            <span class="section-line"></span>เริ่มต้นวันนี้
+          </span>
+          <h2 class="mb-3">พร้อมเปลี่ยนธุรกิจของคุณ<br>ด้วย AI หรือยัง?</h2>
+          <p class="mb-5">
+            ปรึกษาฟรี ไม่มีข้อผูกมัด เราจะช่วยวิเคราะห์ว่า AI
+            จะช่วยธุรกิจของคุณได้อย่างไร และควรเริ่มจากตรงไหนก่อน
+          </p>
+          <div class="d-flex flex-wrap gap-3 justify-content-center">
+            <a href="{% url 'pages:contact' %}" class="btn-gold">
+              <i class="bi bi-chat-text-fill"></i>
+              ปรึกษาฟรีเลย
+            </a>
+            <a href="{% url 'pages:services' %}" class="btn-outline-gold">
+              <i class="bi bi-grid-3x3-gap-fill"></i>
+              ดูบริการทั้งหมด
+            </a>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Values -->
-  <div class="p-5 rounded bg-body-secondary border mb-5">
-    <h2 class="fw-bold text-center mb-4">หลักการทำงานของเรา</h2>
-    <div class="row g-4 text-center">
-      <div class="col-md-4">
-        <div class="fs-1 mb-2">🎯</div>
-        <h5 class="fw-bold">วัดผลได้จริง</h5>
-        <p class="text-body-secondary small mb-0">ทุกโปรเจกต์มี KPI ชัดเจน และรายงานผลลัพธ์เป็นตัวเลขที่จับต้องได้</p>
-      </div>
-      <div class="col-md-4">
-        <div class="fs-1 mb-2">🤝</div>
-        <h5 class="fw-bold">เข้าใจธุรกิจก่อน</h5>
-        <p class="text-body-secondary small mb-0">ไม่ขาย Solution สำเร็จรูป แต่ออกแบบให้ตรงกับ Process จริงของคุณ</p>
-      </div>
-      <div class="col-md-4">
-        <div class="fs-1 mb-2">🚀</div>
-        <h5 class="fw-bold">เริ่มได้เร็ว</h5>
-        <p class="text-body-secondary small mb-0">MVP ใน 2-4 สัปดาห์ ทดลองใช้จริงก่อน scale ใหญ่</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- CTA -->
-  <div class="text-center">
-    <h3 class="fw-bold mb-3">พร้อมเริ่มต้นหรือยัง?</h3>
-    <p class="text-body-secondary mb-4">ปรึกษาฟรี ไม่มีข้อผูกมัด เราจะช่วยวิเคราะห์ว่า AI จะช่วยธุรกิจคุณได้อย่างไร</p>
-    <a href="{% url 'pages:contact' %}" class="btn btn-primary btn-lg px-4">
-      💬 ปรึกษาฟรี <i class="bi bi-arrow-right ms-1"></i>
-    </a>
-  </div>
+  </section>
 
 </main>
 {% endblock %}

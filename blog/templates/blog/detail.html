@@ -22,108 +22,24 @@
 
   /* ── TOC Sidebar ── */
   .sidebar-sticky { position: sticky; top: 80px; }
-  .toc-card {
-    border: 1px solid var(--bs-border-color);
-    border-radius: .6rem;
-    overflow: hidden;
-    font-size: .875rem;
-  }
-  .toc-header {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    padding: .6rem 1rem;
-    background: var(--bs-secondary-bg);
-    font-weight: 600;
-    border-bottom: 1px solid var(--bs-border-color);
-  }
-  .toc-icon { font-size: 1rem; }
-  .toc-toggle { margin-left: auto; background: none; border: none; cursor: pointer; font-size: .8rem; }
-  .toc-nav a {
-    display: block;
-    padding: .3rem 1rem;
-    color: var(--bs-body-color);
-    text-decoration: none;
-    border-left: 3px solid transparent;
-  }
   .toc-nav a:hover, .toc-nav a.active {
-    border-left-color: var(--brand-blue);
-    color: var(--brand-blue);
-    background: rgba(184,134,11,.07);
+    border-left-color: var(--brand-gold);
+    color: var(--brand-gold) !important;
+    background: rgba(201,169,110,.07);
   }
 
-  /* ── Article Body ── */
-  .article-body { line-height: 1.9; font-size: 1rem; }
-  .article-body h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2rem; }
-  .article-body h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; }
-  .article-body p { margin-bottom: 1.1rem; }
-  .article-body pre {
-    background: var(--bs-secondary-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: .5rem;
-    padding: 1rem;
-    overflow-x: auto;
-  }
+  /* ── Article blockquote ── */
   .article-body blockquote {
-    border-left: 4px solid var(--brand-blue);
+    border-left: 4px solid var(--brand-gold);
     padding-left: 1rem;
     color: var(--bs-secondary-color);
     font-style: italic;
   }
 
-  /* ── Tags, Ads, CTA ── */
-  .tag-pill {
-    display: inline-block;
-    padding: .25rem .7rem;
-    border: 1px solid var(--bs-border-color);
-    border-radius: 2rem;
-    font-size: .8rem;
-    color: var(--bs-body-color);
-    text-decoration: none;
-  }
-  .tag-pill:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
-  .ad-placeholder {
-    border: 1px dashed var(--bs-border-color);
-    border-radius: .5rem;
-    padding: 1rem;
-    text-align: center;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* ── Related Articles & CTA ── */
-  .brand-card {
-    background: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: .75rem;
-    transition: transform .15s, box-shadow .15s;
-  }
-  .brand-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
-  .thumb {
-    height: 180px;
-    background-color: var(--bs-secondary-bg);
-    background-size: cover;
-    background-position: center;
-    border-radius: .75rem .75rem 0 0;
-  }
-  .thumb-fallback {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    opacity: .4;
-  }
-  .section-label {
-    font-size: .75rem;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-  }
-  .cta-section {
-    padding: 4rem 1rem;
+  /* ── Tag pills ── */
+  .tag-pill:hover {
+    border-color: var(--brand-gold);
+    color: var(--brand-gold) !important;
   }
 </style>
 {% endblock %}
@@ -131,8 +47,8 @@
 {% block content %}
 <div class="container py-5 blog-detail-wrapper">
   <nav class="mb-3 small text-secondary">
-    <a href="{% url 'blog:list' %}" class="text-primary text-decoration-none">บทความ</a>
-    › <a href="{% url 'blog:category' article.category.slug %}" class="text-primary text-decoration-none">{{ article.category.name }}</a>
+    <a href="{% url 'blog:list' %}" class="text-decoration-none">บทความ</a>
+    › <a href="{% url 'blog:category' article.category.slug %}" class="text-decoration-none">{{ article.category.name }}</a>
   </nav>
 
   <div class="blog-grid">
@@ -206,16 +122,18 @@
     <div class="row g-4">
       {% for a in related %}
       <div class="col-md-6 col-lg-4">
-        <a href="{{ a.get_absolute_url }}" class="brand-card text-decoration-none d-block h-100 overflow-hidden">
+        <div class="brand-card d-block h-100 overflow-hidden position-relative">
           <div class="thumb" {% if a.display_cover %}style="background-image:url('{{ a.display_cover }}');"{% endif %}>
             {% if not a.display_cover %}<div class="thumb-fallback">📝</div>{% endif %}
           </div>
           <div class="p-3">
             <span class="badge badge-outline fw-normal mb-1">{{ a.category.name }}</span>
-            <h3 class="fs-6 fw-bold mt-1">{{ a.title }}</h3>
+            <h3 class="fs-6 fw-bold mt-1">
+              <a href="{{ a.get_absolute_url }}" class="text-body-emphasis text-decoration-none stretched-link">{{ a.title }}</a>
+            </h3>
             <p class="text-secondary small mb-0">{{ a.excerpt|default:""|truncatechars:120 }}</p>
           </div>
-        </a>
+        </div>
       </div>
       {% endfor %}
     </div>

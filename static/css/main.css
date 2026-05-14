@@ -33,8 +33,40 @@
 
 /* ── Global link color — gold ── */
 :root {
-  --bs-link-color:       var(--brand-gold);
-  --bs-link-hover-color: var(--brand-gold-d);
+  --bs-link-color:           var(--brand-gold);
+  --bs-link-hover-color:     var(--brand-gold-d);
+  --bs-link-color-rgb:       201, 169, 110;
+  --bs-link-hover-color-rgb: 184, 146, 79;
+}
+a {
+  color: var(--brand-gold);
+}
+a:hover {
+  color: var(--brand-gold-d);
+}
+
+/* ── Gold on hover — ทุก element ที่กดได้ (ยกเว้น btn) ── */
+a:not(.btn):hover,
+.nav-link:hover,
+.dropdown-item:hover,
+.page-link:hover,
+.badge:not(.btn):hover,
+.list-group-item:hover { color: var(--brand-gold) !important; }
+
+/* btn-outline-primary hover/active — text ต้องเป็นสีเข้ม */
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-primary:focus {
+  background-color: var(--brand-gold);
+  border-color: var(--brand-gold);
+  color: #fff !important;
+}
+
+/* pagination active */
+.page-item.active .page-link {
+  background-color: var(--brand-gold);
+  border-color: var(--brand-gold);
+  color: var(--brand-dark);
 }
 
 /* ── Dark mode overrides ── */
@@ -74,6 +106,13 @@
   background-color: var(--brand-gold);
   border-color: var(--brand-gold);
   color: var(--brand-dark);
+}
+
+/* ── Heading font — override blog.css Playfair Display ── */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-th);
+  font-style: normal;
 }
 
 /* ── Heading colors (theme-aware) ── */
@@ -148,12 +187,23 @@ body {
 
 /* Brand cards */
 .brand-card {
-  background: var(--brand-card);
-  border: 1px solid var(--brand-border);
-  border-radius: 14px;
-  transition: transform .2s, border-color .2s;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: .75rem;
+  transition: transform .15s, box-shadow .15s;
+  color: var(--bs-body-color);
 }
-.brand-card:hover { border-color: var(--brand-blue); transform: translateY(-3px); }
+.brand-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  border-color: var(--brand-gold);
+}
+.brand-card:hover .stretched-link {
+  color: var(--brand-gold) !important;
+}
+.brand-card .stretched-link:focus {
+  outline: none;
+}
 
 .pain-card { background: #120a0a; border: 1px solid #2d1515; border-radius: 12px; }
 .pain-card .pain-icon { font-size: 1.8rem; }
