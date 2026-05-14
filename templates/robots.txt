@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /ckeditor5/
+
+Sitemap: https://blog.kooky-shop.com/sitemap.xml

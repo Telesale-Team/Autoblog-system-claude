@@ -6,6 +6,15 @@ from django.conf.urls.static import static
 from django.views.static import serve
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
+from django.contrib.sitemaps.views import sitemap
+from django.views.generic import TemplateView
+from pages.sitemaps import StaticSitemap, ArticleSitemap, CategorySitemap
+
+sitemaps = {
+    "static": StaticSitemap,
+    "articles": ArticleSitemap,
+    "categories": CategorySitemap,
+}
 
 _coming_soon = staff_member_required(
     lambda request, **kw: render(request, "dashboard/coming_soon.html", {})
@@ -39,4 +48,6 @@ urlpatterns = [
 
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
+    path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
