@@ -1,115 +1,604 @@
 {% extends "base_public.html" %}
 
-{% block title %}{{ case.meta_title|default:case.project_title }}{% endblock %}
+{% block title %}{{ case.meta_title|default:case.project_title }} — AIBiz Thailand{% endblock %}
 {% block meta_description %}{{ case.meta_description|default:case.problem|truncatechars:160 }}{% endblock %}
 {% block og_image %}{% if case.cover_image %}<meta property="og:image" content="{{ case.cover_image.url }}">{% endif %}{% endblock %}
 
 {% block extra_css %}
 <style>
-  .brand-card {
+  /* ── Design Tokens ── */
+  :root {
+    --brand-gold: #c9a96e;
+    --brand-dark: #0f172a;
+    --brand-navy: #1a2744;
+    --gold-tint: rgba(201, 169, 110, 0.08);
+    --gold-tint-border: rgba(201, 169, 110, 0.25);
+  }
+
+  /* ── Utilities ── */
+  .text-gold { color: var(--brand-gold) !important; }
+  .bg-brand-dark { background-color: var(--brand-dark) !important; }
+  .bg-brand-navy { background-color: var(--brand-navy) !important; }
+  .border-gold { border-color: var(--brand-gold) !important; }
+
+  /* ── Typography — Sarabun, no italic ── */
+  body, h1, h2, h3, h4, h5, h6, p, span, a, li, blockquote {
+    font-family: 'Sarabun', sans-serif;
+    font-style: normal !important;
+  }
+
+  /* ── Breadcrumb ── */
+  .detail-breadcrumb a {
+    color: rgba(255,255,255,.65);
+    text-decoration: none;
+    font-size: .875rem;
+  }
+  .detail-breadcrumb a:hover { color: var(--brand-gold); }
+  .detail-breadcrumb .sep { color: rgba(255,255,255,.35); margin: 0 .4rem; }
+  .detail-breadcrumb .current { color: rgba(255,255,255,.85); font-size: .875rem; }
+
+  /* ── Hero ── */
+  .case-hero {
+    position: relative;
+    min-height: 360px;
+    max-height: 480px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    background-color: var(--brand-dark);
+  }
+  .case-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: .55;
+  }
+  .case-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15,23,42,.92) 0%, rgba(15,23,42,.45) 55%, rgba(15,23,42,.2) 100%);
+  }
+  .case-hero__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 2rem 0 2.5rem;
+  }
+  .roi-display {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: var(--brand-gold);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+  }
+  .roi-label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+    margin-bottom: .35rem;
+  }
+
+  /* ── Stat Block ── */
+  .stat-block {
+    border-left: 3px solid var(--brand-gold);
+    padding: .75rem 1rem .75rem 1.25rem;
+  }
+  .stat-block .stat-value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--brand-gold);
+    line-height: 1.2;
+  }
+  .stat-block .stat-label {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color);
+    margin-top: .15rem;
+  }
+
+  /* ── Section headings ── */
+  .section-icon {
+    font-size: 1.1rem;
+    margin-right: .4rem;
+  }
+  .section-heading {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Result tint box ── */
+  .result-box {
+    background: var(--gold-tint);
+    border: 1px solid var(--gold-tint-border);
+    border-radius: .75rem;
+    padding: 1.5rem 1.75rem;
+  }
+
+  /* ── Tech Stack badges ── */
+  .tech-badge {
+    display: inline-block;
+    background-color: var(--brand-navy);
+    color: #e2e8f0;
+    font-size: .78rem;
+    font-weight: 600;
+    padding: .3rem .75rem;
+    border-radius: 2rem;
+    margin: .2rem;
+    letter-spacing: .03em;
+  }
+
+  /* ── Gallery ── */
+  .gallery-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: .6rem;
+    cursor: zoom-in;
+    transition: opacity .15s;
+  }
+  .gallery-img:hover { opacity: .88; }
+
+  /* ── Testimonial ── */
+  .testimonial-card {
+    background: var(--bs-body-secondary, #f8f9fa);
+    border-left: 4px solid var(--brand-gold);
+    border-radius: 0 .75rem .75rem 0;
+    padding: 1.75rem 2rem 1.5rem;
+    position: relative;
+  }
+  .testimonial-quote {
+    font-size: 4.5rem;
+    line-height: .85;
+    color: var(--brand-gold);
+    font-weight: 900;
+    user-select: none;
+    margin-bottom: .5rem;
+    display: block;
+  }
+  .testimonial-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--bs-body-color);
+    margin-bottom: .75rem;
+  }
+  .testimonial-by {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+  }
+
+  /* ── Sticky sidebar ── */
+  .detail-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+  .sidebar-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: .85rem;
+    overflow: hidden;
+  }
+  .sidebar-roi {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-navy) 100%);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .sidebar-roi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--brand-gold);
+    line-height: 1.15;
+  }
+  .sidebar-roi-label {
+    font-size: .72rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+    margin-top: .2rem;
+  }
+  .sidebar-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: .6rem 0;
+    border-bottom: 1px solid var(--bs-border-color);
+    font-size: .875rem;
+    gap: .75rem;
+  }
+  .sidebar-info-row:last-child { border-bottom: none; }
+  .sidebar-info-label {
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+    white-space: nowrap;
+  }
+  .sidebar-info-value {
+    text-align: right;
+    color: var(--bs-body-color);
+    word-break: break-word;
+  }
+
+  /* ── Related cards ── */
+  .related-card {
     background: var(--bs-body-bg);
     border: 1px solid var(--bs-border-color);
     border-radius: .75rem;
-    transition: transform .15s, box-shadow .15s;
+    overflow: hidden;
+    transition: border-color .18s, transform .18s, box-shadow .18s;
+    position: relative;
   }
-  .brand-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
-  .thumb {
-    height: 180px;
+  .related-card:hover {
+    border-color: var(--brand-gold);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(201,169,110,.15);
+  }
+  .related-thumb {
+    height: 160px;
     background-color: var(--bs-secondary-bg);
     background-size: cover;
     background-position: center;
-    border-radius: .75rem .75rem 0 0;
   }
-  .thumb-fallback {
+  .related-thumb-fallback {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    opacity: .4;
+    font-size: 2rem;
+    opacity: .35;
   }
-  .section-label {
-    font-size: .75rem;
+
+  /* ── Badge outline ── */
+  .badge-outline {
+    background: transparent;
+    border: 1px solid var(--brand-gold);
+    color: var(--brand-gold);
     font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
+    font-size: .72rem;
+    letter-spacing: .05em;
+    padding: .3em .7em;
+    border-radius: 2rem;
   }
-  .cta-section {
-    padding: 4rem 1rem;
+
+  /* ── CTA Final ── */
+  .cta-final {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-navy) 100%);
+    padding: 4.5rem 1rem;
+    text-align: center;
+  }
+  .cta-final h2 { color: #fff; }
+  .cta-final p { color: rgba(255,255,255,.6); }
+
+  /* ── btn-primary → gold filled ── */
+  .btn-primary {
+    background-color: var(--brand-gold) !important;
+    border-color: var(--brand-gold) !important;
+    color: var(--brand-dark) !important;
+    font-weight: 700;
+  }
+  .btn-primary:hover, .btn-primary:focus {
+    background-color: #b8924f !important;
+    border-color: #b8924f !important;
+    color: var(--brand-dark) !important;
+  }
+
+  /* ── Divider ── */
+  .gold-divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, var(--brand-gold), transparent);
+    margin: 2rem 0;
+    opacity: .5;
+  }
+
+  /* ── Lightbox overlay ── */
+  #lightbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.88);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+  #lightbox-overlay.active { display: flex; }
+  #lightbox-overlay img {
+    max-width: 92vw;
+    max-height: 88vh;
+    border-radius: .5rem;
+    object-fit: contain;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  }
+  #lightbox-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 0;
   }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<article class="container py-5" style="max-width:760px;">
-  <nav class="mb-3 small text-secondary">
-    <a href="{% url 'portfolio:list' %}" class="text-primary text-decoration-none">ผลงาน</a> › {{ case.get_industry_display }}
-  </nav>
-  <h1 class="fw-bold text-body mb-3">{{ case.project_title }}</h1>
-  <div class="text-secondary small mb-3">
-    {% if case.client_name %}ลูกค้า: {{ case.client_name }} · {% endif %}
-    {{ case.get_industry_display }}
-    {% if case.duration %} · ระยะเวลา: {{ case.duration }}{% endif %}
-  </div>
 
-  {% if case.roi_metric %}<div class="roi-tag mb-3">⭐ {{ case.roi_metric }}</div>{% endif %}
-
+<!-- ══════════════════════════════════════
+     1. HERO — ROI + Title + Breadcrumb
+════════════════════════════════════════ -->
+<section class="case-hero">
   {% if case.cover_image %}
-    <img src="{{ case.cover_image.url }}" alt="{{ case.project_title }}" class="img-fluid rounded mb-4" style="aspect-ratio:16/9; object-fit:cover; width:100%;">
+  <img class="case-hero__img" src="{{ case.cover_image.url }}" alt="{{ case.project_title }}">
   {% endif %}
+  <div class="case-hero__overlay"></div>
 
-  <h2 class="fs-5 fw-bold mt-4 mb-2" style="color:#f87171;">📍 ปัญหาเดิม</h2>
-  <div class="article-body mb-4"><p>{{ case.problem|linebreaksbr }}</p></div>
+  <div class="case-hero__content">
+    <div class="container">
 
-  <h2 class="fs-5 fw-bold mt-4 mb-2 text-primary">💡 วิธีแก้</h2>
-  <div class="article-body mb-4">{{ case.solution|safe }}</div>
+      <!-- Breadcrumb -->
+      <nav class="detail-breadcrumb mb-3">
+        <a href="{% url 'portfolio:list' %}">ผลงาน</a>
+        <span class="sep">/</span>
+        <a href="{% url 'portfolio:list' %}?industry={{ case.get_industry_display }}">{{ case.get_industry_display }}</a>
+        <span class="sep">/</span>
+        <span class="current">{{ case.project_title|truncatechars:40 }}</span>
+      </nav>
 
-  <h2 class="fs-5 fw-bold mt-4 mb-2 text-success">🎯 ผลลัพธ์</h2>
-  <div class="article-body mb-4"><p>{{ case.result|linebreaksbr }}</p></div>
+      <!-- ROI Metric -->
+      {% if case.roi_metric %}
+      <div class="roi-label">ผลลัพธ์ที่ได้รับ</div>
+      <div class="roi-display mb-2">{{ case.roi_metric }}</div>
+      {% endif %}
 
-  {% if case.tech_stack %}
-  <div class="alert alert-primary"><strong>⚙️ Tech Stack:</strong> {{ case.tech_stack }}</div>
-  {% endif %}
-
-  {% if case.testimonial %}
-  <blockquote class="border-start border-success border-4 ps-3 py-3 my-4" style="background:rgba(20,83,45,.15); border-radius:6px;">
-    <p class="fst-italic mb-2 text-body">"{{ case.testimonial }}"</p>
-    {% if case.testimonial_by %}<small class="text-secondary">— {{ case.testimonial_by }}</small>{% endif %}
-  </blockquote>
-  {% endif %}
-
-  {% if case.images.all %}
-  <h2 class="fs-5 fw-bold mt-4 mb-3 text-body">📸 Gallery</h2>
-  <div class="row g-3">
-    {% for img in case.images.all %}
-    <div class="col-md-6">
-      <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="img-fluid rounded">
-      {% if img.caption %}<small class="text-secondary d-block mt-1">{{ img.caption }}</small>{% endif %}
+      <!-- Title -->
+      <h1 class="fw-bold text-white mb-0" style="font-size:clamp(1.35rem,3vw,2rem); max-width:680px;">{{ case.project_title }}</h1>
     </div>
-    {% endfor %}
   </div>
-  {% endif %}
-</article>
+</section>
 
+<!-- ══════════════════════════════════════
+     MAIN CONTENT AREA
+════════════════════════════════════════ -->
+<div class="container py-5">
+  <div class="row g-5">
+
+    <!-- ─── LEFT: Main Content col-lg-8 ─── -->
+    <div class="col-lg-8">
+
+      <!-- ── 2. Stat Block ── -->
+      <div class="row g-3 mb-4">
+        {% if case.roi_metric %}
+        <div class="col-sm-4">
+          <div class="stat-block">
+            <div class="stat-value">{{ case.roi_metric }}</div>
+            <div class="stat-label">ROI / ผลลัพธ์หลัก</div>
+          </div>
+        </div>
+        {% endif %}
+        {% if case.duration %}
+        <div class="col-sm-4">
+          <div class="stat-block">
+            <div class="stat-value">{{ case.duration }}</div>
+            <div class="stat-label">ระยะเวลาโครงการ</div>
+          </div>
+        </div>
+        {% endif %}
+        <div class="col-sm-4">
+          <div class="stat-block">
+            <div class="stat-value">{{ case.get_industry_display }}</div>
+            <div class="stat-label">อุตสาหกรรม</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="gold-divider">
+
+      <!-- ── 3. ปัญหาเดิม ── -->
+      <div class="mb-4">
+        <h2 class="section-heading">
+          <span class="section-icon">📍</span>
+          <span>ปัญหาเดิมที่ลูกค้าเผชิญ</span>
+        </h2>
+        <div class="ps-4 text-body" style="line-height:1.85;">
+          {{ case.problem|linebreaksbr }}
+        </div>
+      </div>
+
+      <hr class="gold-divider">
+
+      <!-- ── 4. วิธีแก้ ── -->
+      <div class="mb-4">
+        <h2 class="section-heading">
+          <span class="section-icon">💡</span>
+          <span>วิธีที่เราแก้ปัญหา</span>
+        </h2>
+        <div class="ps-4 text-body article-body" style="line-height:1.85;">
+          {{ case.solution|safe }}
+        </div>
+      </div>
+
+      <hr class="gold-divider">
+
+      <!-- ── 5. ผลลัพธ์ ── -->
+      <div class="mb-4">
+        <h2 class="section-heading">
+          <span class="section-icon">🎯</span>
+          <span>ผลลัพธ์ที่ได้รับ</span>
+        </h2>
+        <div class="result-box">
+          <div class="text-body" style="line-height:1.85;">
+            {{ case.result|linebreaksbr }}
+          </div>
+        </div>
+      </div>
+
+      <hr class="gold-divider">
+
+      <!-- ── 6. Tech Stack ── -->
+      {% if case.tech_stack %}
+      <div class="mb-4">
+        <h2 class="section-heading">
+          <span class="section-icon">⚙️</span>
+          <span>Tech Stack ที่ใช้</span>
+        </h2>
+        <div class="ps-1">
+          {% for tech in case.tech_stack.split %}
+          <span class="tech-badge">{{ tech }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      <hr class="gold-divider">
+      {% endif %}
+
+      <!-- ── 7. Gallery ── -->
+      {% if case.images.all %}
+      <div class="mb-4">
+        <h2 class="section-heading">
+          <span class="section-icon">📸</span>
+          <span>Gallery</span>
+        </h2>
+        <div class="row g-3">
+          {% for img in case.images.all %}
+          <div class="col-sm-6">
+            <img
+              src="{{ img.image.url }}"
+              alt="{{ img.caption|default:case.project_title }}"
+              class="gallery-img"
+              data-lightbox="{{ img.image.url }}"
+            >
+            {% if img.caption %}
+            <small class="text-secondary d-block mt-1 ps-1">{{ img.caption }}</small>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <hr class="gold-divider">
+      {% endif %}
+
+      <!-- ── 8. Testimonial ── -->
+      {% if case.testimonial %}
+      <div class="mb-4">
+        <div class="testimonial-card">
+          <span class="testimonial-quote">"</span>
+          <p class="testimonial-text">{{ case.testimonial }}</p>
+          {% if case.testimonial_by %}
+          <div class="testimonial-by">— {{ case.testimonial_by }}</div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+    <!-- /col-lg-8 -->
+
+    <!-- ─── RIGHT: Sticky Sidebar col-lg-4 ─── -->
+    <div class="col-lg-4">
+      <div class="detail-sidebar">
+        <div class="sidebar-card">
+
+          <!-- ROI Hero in sidebar -->
+          <div class="sidebar-roi">
+            {% if case.roi_metric %}
+            <div class="sidebar-roi-label">ผลลัพธ์สำคัญ</div>
+            <div class="sidebar-roi-value">{{ case.roi_metric }}</div>
+            {% else %}
+            <div class="sidebar-roi-value text-white" style="font-size:1.25rem;">{{ case.project_title }}</div>
+            {% endif %}
+          </div>
+
+          <!-- CTA Button -->
+          <div class="p-4 pb-3">
+            <a href="{% url 'pages:contact' %}?source=portfolio&case={{ case.pk }}" class="btn btn-primary w-100 py-2">
+              ปรึกษาฟรี — อยากได้ผลแบบนี้
+            </a>
+          </div>
+
+          <!-- Project Info -->
+          <div class="px-4 pb-4">
+            {% if case.client_name %}
+            <div class="sidebar-info-row">
+              <span class="sidebar-info-label">ลูกค้า</span>
+              <span class="sidebar-info-value">{{ case.client_name }}</span>
+            </div>
+            {% endif %}
+            <div class="sidebar-info-row">
+              <span class="sidebar-info-label">อุตสาหกรรม</span>
+              <span class="sidebar-info-value">{{ case.get_industry_display }}</span>
+            </div>
+            {% if case.duration %}
+            <div class="sidebar-info-row">
+              <span class="sidebar-info-label">ระยะเวลา</span>
+              <span class="sidebar-info-value">{{ case.duration }}</span>
+            </div>
+            {% endif %}
+            {% if case.tech_stack %}
+            <div class="sidebar-info-row">
+              <span class="sidebar-info-label">เทคโนโลยี</span>
+              <span class="sidebar-info-value" style="font-size:.8rem;">{{ case.tech_stack }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+        </div>
+
+        <!-- Secondary CTA below card -->
+        <div class="text-center mt-3">
+          <a href="{% url 'portfolio:list' %}" class="text-secondary small text-decoration-none">
+            ← ดูผลงานทั้งหมด
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- /col-lg-4 -->
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     9. Related Case Studies
+════════════════════════════════════════ -->
 {% if related %}
 <section class="py-5 bg-body-secondary">
   <div class="container">
     <div class="text-center mb-4">
-      <div class="section-label mb-2 text-body-secondary">ผลงานที่คล้ายกัน</div>
-      <h2 class="fw-bold fs-4">ดูเพิ่มเติม</h2>
+      <span class="badge-outline mb-2 d-inline-block">ผลงานที่เกี่ยวข้อง</span>
+      <h2 class="fw-bold mt-2" style="font-size:1.4rem;">ดูเคสอื่นที่น่าสนใจ</h2>
     </div>
     <div class="row g-4">
       {% for cs in related %}
       <div class="col-md-6 col-lg-4">
-        <a href="{{ cs.get_absolute_url }}" class="brand-card text-decoration-none d-block h-100 overflow-hidden">
-          <div class="thumb" {% if cs.cover_image %}style="background-image:url('{{ cs.cover_image.url }}');"{% endif %}>
-            {% if not cs.cover_image %}<div class="thumb-fallback">📂</div>{% endif %}
+        <div class="related-card h-100">
+          <a href="{{ cs.get_absolute_url }}" class="stretched-link text-decoration-none"></a>
+          <div
+            class="related-thumb"
+            {% if cs.cover_image %}style="background-image:url('{{ cs.cover_image.url }}');"{% endif %}
+          >
+            {% if not cs.cover_image %}
+            <div class="related-thumb-fallback">📂</div>
+            {% endif %}
           </div>
           <div class="p-3">
-            <span class="badge badge-outline fw-normal mb-1">{{ cs.get_industry_display }}</span>
-            <h3 class="fs-6 fw-bold mt-1 mb-0">{{ cs.project_title }}</h3>
+            <span class="badge-outline">{{ cs.get_industry_display }}</span>
+            <h3 class="fs-6 fw-bold text-body mt-2 mb-1">{{ cs.project_title }}</h3>
+            {% if cs.roi_metric %}
+            <small class="text-gold fw-semibold">{{ cs.roi_metric }}</small>
+            {% endif %}
           </div>
-        </a>
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -117,11 +606,63 @@
 </section>
 {% endif %}
 
-<section class="cta-section bg-dark text-center">
-  <div class="container">
-    <h2 class="fw-bold text-white mb-3">อยากได้ผลแบบนี้ในธุรกิจคุณบ้าง?</h2>
-    <p class="text-secondary mb-4">ปรึกษาฟรี ตอบกลับภายใน 24 ชั่วโมง</p>
-    <a href="{% url 'pages:contact' %}?source=portfolio" class="btn btn-primary btn-lg px-4">💬 ปรึกษาฟรี</a>
+<!-- ══════════════════════════════════════
+     10. CTA Final
+════════════════════════════════════════ -->
+<section class="cta-final">
+  <div class="container" style="max-width:640px;">
+    <div class="badge-outline mb-3 d-inline-block">ปรึกษาฟรี ไม่มีข้อผูกมัด</div>
+    <h2 class="fw-bold mb-3">อยากได้ผลแบบนี้?<br>ปรึกษาเราได้เลย</h2>
+    <p class="mb-4">ทีม AI Automation Specialist พร้อมวิเคราะห์ปัญหาและออกแบบระบบ AI ที่เหมาะกับธุรกิจคุณโดยเฉพาะ — ตอบกลับภายใน 24 ชั่วโมง</p>
+    <a href="{% url 'pages:contact' %}?source=portfolio_cta{% if case.pk %}&case={{ case.pk }}{% endif %}" class="btn btn-primary btn-lg px-5 py-2">
+      ปรึกษาฟรีตอนนี้เลย
+    </a>
   </div>
 </section>
+
+<!-- ══════════════════════════════════════
+     Lightbox Overlay
+════════════════════════════════════════ -->
+{% if case.images.all %}
+<div id="lightbox-overlay" role="dialog" aria-modal="true">
+  <button id="lightbox-close" aria-label="ปิด">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+{% if case.images.all %}
+<script>
+(function () {
+  var overlay = document.getElementById('lightbox-overlay');
+  var lbImg   = document.getElementById('lightbox-img');
+  var closeBtn = document.getElementById('lightbox-close');
+
+  document.querySelectorAll('[data-lightbox]').forEach(function (img) {
+    img.addEventListener('click', function () {
+      lbImg.src = this.getAttribute('data-lightbox');
+      lbImg.alt = this.alt;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeLightbox() {
+    overlay.classList.remove('active');
+    lbImg.src = '';
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeLightbox);
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeLightbox();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+})();
+</script>
+{% endif %}
 {% endblock %}
