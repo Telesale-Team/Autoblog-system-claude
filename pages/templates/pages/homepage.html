@@ -97,6 +97,10 @@
           <img src="{{ article.display_cover }}" alt="{{ article.title }}"
                class="w-100 object-fit-cover" style="height: 220px;">
         </a>
+        {% else %}
+        <a href="{{ article.get_absolute_url }}" class="d-flex align-items-center justify-content-center bg-body-secondary text-body-secondary text-decoration-none" style="height: 220px;">
+          <i class="bi bi-newspaper" style="font-size: 3rem; opacity: .3;"></i>
+        </a>
         {% endif %}
         <div class="p-4">
           <div class="d-flex justify-content-between align-items-start mb-2">
