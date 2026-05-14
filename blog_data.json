@@ -1,0 +1,263 @@
+[
+{
+  "model": "blog.category",
+  "pk": 1,
+  "fields": {
+    "name": "Educational",
+    "slug": "educational",
+    "description": "บทความ how-to, tutorial, framework สำหรับให้ความรู้",
+    "display_order": 1
+  }
+},
+{
+  "model": "blog.category",
+  "pk": 2,
+  "fields": {
+    "name": "Industry Insight",
+    "slug": "insights",
+    "description": "Trend, news, prediction ในวงการ AI",
+    "display_order": 2
+  }
+},
+{
+  "model": "blog.category",
+  "pk": 3,
+  "fields": {
+    "name": "Case Study",
+    "slug": "case-studies",
+    "description": "เรื่องราวลูกค้าและ ROI ที่ได้จริง",
+    "display_order": 3
+  }
+},
+{
+  "model": "blog.category",
+  "pk": 4,
+  "fields": {
+    "name": "Behind the Scenes",
+    "slug": "behind-the-scenes",
+    "description": "เบื้องหลังการทำงาน, brand, personality",
+    "display_order": 4
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 1,
+  "fields": {
+    "name": "OpenClaw",
+    "slug": "openclaw"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 2,
+  "fields": {
+    "name": "AI Gateway",
+    "slug": "ai-gateway"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 3,
+  "fields": {
+    "name": "Self-Hosted",
+    "slug": "self-hosted"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 4,
+  "fields": {
+    "name": "SME",
+    "slug": "sme"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 5,
+  "fields": {
+    "name": "PDPA",
+    "slug": "pdpa"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 6,
+  "fields": {
+    "name": "AI Chatbot",
+    "slug": "ai-chatbot"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 7,
+  "fields": {
+    "name": "LINE",
+    "slug": "line"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 8,
+  "fields": {
+    "name": "Tutorial",
+    "slug": "tutorial"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 9,
+  "fields": {
+    "name": "How-to",
+    "slug": "how-to"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 10,
+  "fields": {
+    "name": "Claude Code",
+    "slug": "claude-code"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 11,
+  "fields": {
+    "name": "AI Coding",
+    "slug": "ai-coding"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 12,
+  "fields": {
+    "name": "มือใหม่",
+    "slug": "muue-aihm"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 13,
+  "fields": {
+    "name": "Anthropic",
+    "slug": "anthropic"
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 4,
+  "fields": {
+    "title": "OpenClaw คืออะไร? ทำไม SME ไทยควรรู้จัก AI Gateway แบบ Self-Hosted",
+    "slug": "openclaw-introduction-for-thai-sme",
+    "author": 1,
+    "category": 1,
+    "excerpt": "ทำความรู้จัก OpenClaw — AI Gateway แบบ open-source ที่ติดตั้งบน server ของคุณเอง เชื่อม LINE, Telegram, WhatsApp กับ Claude/GPT/Gemini พร้อมเหตุผลว่าทำไมมันเหมาะกับ SME ไทยมากกว่า SaaS Chatbot ทั่วไป",
+    "content": "<p>ในยุคที่ทุกธุรกิจพูดถึง AI กัน เจ้าของกิจการ SME หลายคนคงเริ่มมองหาวิธีนำ AI Chatbot มาใช้ตอบลูกค้า แต่พอลองหาข้อมูล กลับเจอตัวเลือกที่แพงกว่าที่คิด หรือไม่ก็ต้องส่งข้อมูลลูกค้าออกไปบน cloud ของบริษัทต่างประเทศ</p>\n\n<p><strong>OpenClaw</strong> คือคำตอบสำหรับโจทย์นี้ — โปรเจกต์ open-source ที่กำลังมาแรงในวงการ AI Automation ที่ออกแบบมาให้ติดตั้งบน server ของคุณเองได้ และเชื่อมต่อกับ AI ได้ทุกค่ายในตลาด</p>\n\n<h2>OpenClaw ทำงานอย่างไร</h2>\n<p>OpenClaw ทำหน้าที่เป็น \"Gateway\" หรือสะพานเชื่อมระหว่าง 3 ส่วนหลัก:</p>\n<ol>\n  <li><strong>ช่องทางสื่อสาร (Channels)</strong> — LINE, Telegram, WhatsApp, Facebook Messenger, WebChat, Slack, Discord และอื่น ๆ รวม 28+ ช่องทาง</li>\n  <li><strong>AI Models</strong> — Claude, GPT-4, Gemini, Llama, Mistral, Ollama (LLM ที่รัน local) รวม 35+ providers</li>\n  <li><strong>ระบบฝั่งคุณ</strong> — ฐานข้อมูลลูกค้า, CRM, ERP, ระบบสต็อก ฯลฯ</li>\n</ol>\n\n<p>เมื่อมีข้อความเข้ามาจากช่องทางใดก็ตาม OpenClaw จะรับ ส่งให้ AI ประมวลผล แล้วตอบกลับลูกค้าโดยอัตโนมัติ ทั้งหมดเกิดขึ้นบน server ของคุณเอง</p>\n\n<h2>ความต่างจาก Chatbot ทั่วไปในตลาด</h2>\n<p>Chatbot SaaS อย่าง Chatfuel, ManyChat หรือ Dialogflow มีข้อดีคือใช้งานง่าย แต่มีข้อจำกัดสำคัญ:</p>\n<ul>\n  <li>ข้อมูลลูกค้าทั้งหมดวิ่งผ่าน server ของผู้ให้บริการ — เป็นความเสี่ยงด้าน <strong>PDPA</strong></li>\n  <li>คิดเงินแบบ per-message หรือ per-user — ยิ่งใช้เยอะ ยิ่งจ่ายแพง</li>\n  <li>ผูกกับ AI provider เดียว ย้ายไม่ได้</li>\n  <li>ปรับแต่งได้จำกัด ทำ workflow ซับซ้อนยาก</li>\n</ul>\n\n<p>OpenClaw แก้ปัญหาเหล่านี้ทั้งหมด เพราะเป็น <strong>self-hosted</strong> และ <strong>MIT License</strong> — แปลว่าโค้ดทั้งหมดเป็นของคุณ ใช้เชิงพาณิชย์ได้ ไม่มีค่ารายเดือนผูกมัด</p>\n\n<h2>ทำไม SME ไทยถึงเหมาะ</h2>\n<p>SME ไทยส่วนใหญ่มีลูกค้าหลักอยู่บน LINE และต้องคำนึงถึง พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) ที่บังคับใช้แล้วตั้งแต่ปี 2565 OpenClaw ตอบโจทย์ทั้งสองข้อนี้พอดี:</p>\n\n<blockquote>\n\"ข้อมูลลูกค้าไม่ออกนอกบริษัท\" คือคำที่ลูกค้าทุกรายของเราพอใจมากที่สุด หลังเปลี่ยนจาก SaaS chatbot เดิม\n</blockquote>\n\n<p>นอกจากนี้ การจ่ายแบบครั้งเดียว + ค่า maintenance รายเดือน ทำให้ <strong>ประหยัดกว่า SaaS 60-80%</strong> เมื่อคำนวณค่าใช้จ่ายระยะยาว 3 ปี โดยเฉพาะธุรกิจที่มี volume ข้อความเยอะ</p>\n\n<h2>ใครเหมาะ ใครยังไม่เหมาะ</h2>\n<p><strong>เหมาะกับคุณถ้า:</strong></p>\n<ul>\n  <li>มีลูกค้าทักผ่าน LINE/Telegram มากกว่า 100 คน/วัน</li>\n  <li>ทีม CS ทำไม่ทัน หรืออยากตอบ 24/7</li>\n  <li>กังวลเรื่องข้อมูลลูกค้ารั่วหรือ PDPA</li>\n  <li>อยากควบคุมระบบเองทั้งหมด ไม่ผูกขาดกับ vendor</li>\n</ul>\n\n<p><strong>ยังไม่เหมาะถ้า:</strong></p>\n<ul>\n  <li>มีลูกค้าทักน้อยมาก (&lt; 20 คน/วัน) — SaaS plan ฟรี/ถูกอาจคุ้มกว่า</li>\n  <li>ไม่มีทีม IT เลย และไม่ต้องการจ้างคนดูแลระบบ</li>\n</ul>\n\n<h2>สรุป</h2>\n<p>OpenClaw คือทางเลือกที่ลงตัวระหว่าง <em>\"ใช้งานง่ายแบบ SaaS\"</em> กับ <em>\"ควบคุมข้อมูลเองแบบ on-premise\"</em> สำหรับ SME ไทยที่กำลังมองหาระบบ AI Chatbot ที่จริงจัง ไม่ใช่ของเล่น และไม่ต้องการเสี่ยงเรื่อง PDPA หรือค่าใช้จ่ายที่บานปลาย</p>\n\n<p>ในบทความถัดไป เราจะลงลึกเรื่อง <strong>\"5 เหตุผลที่ AI Gateway ดีกว่า SaaS Chatbot\"</strong> และ <strong>\"วิธีตั้งค่า OpenClaw เชื่อม LINE ใน 5 นาที\"</strong> ติดตามได้เลยครับ</p>\n",
+    "cover_image": "blog/covers/2026/05/openclaw-introduction-for-thai-sme_CS22OKV.jpg",
+    "cover_image_url": "",
+    "meta_title": "",
+    "meta_description": "",
+    "og_image": "",
+    "status": "published",
+    "is_featured": true,
+    "views_count": 6,
+    "published_at": "2026-05-06T12:01:00.188Z",
+    "created_at": "2026-05-08T12:01:00.189Z",
+    "updated_at": "2026-05-08T12:05:27.160Z",
+    "tags": [
+      2,
+      1,
+      4,
+      3
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 5,
+  "fields": {
+    "title": "5 เหตุผลที่ AI Gateway บน Server ตัวเอง ดีกว่า SaaS Chatbot สำหรับธุรกิจไทย",
+    "slug": "5-reasons-ai-gateway-better-than-saas",
+    "author": 1,
+    "category": 2,
+    "excerpt": "เทียบให้เห็นชัด ๆ ว่าทำไม AI Gateway แบบ self-hosted ถึงเหมาะกับ SME ไทยมากกว่า SaaS chatbot ทั่วไป — ทั้งเรื่องราคา, PDPA, การควบคุม, scaling และความยืดหยุ่นในระยะยาว",
+    "content": "<p>ทุกครั้งที่เราพูดคุยกับเจ้าของ SME ไทยเรื่อง AI Chatbot คำถามแรกที่เจอเสมอคือ \"แล้วต่างจาก ManyChat หรือ Chatfuel ยังไง?\" บทความนี้จะตอบให้เห็นภาพชัดที่สุด ผ่าน 5 เหตุผลที่ทำให้ AI Gateway แบบ self-hosted (เช่น OpenClaw) เหนือกว่าในระยะยาว</p>\n\n<h2>1. ค่าใช้จ่ายระยะยาวต่างกันเป็นเท่าตัว</h2>\n<p>SaaS Chatbot คิดเงินแบบ subscription รายเดือน + บางเจ้าคิด per-message อีก ตัวอย่างชัดเจน:</p>\n<ul>\n  <li>ManyChat Pro: $15-30/เดือน + ขึ้นตาม subscriber → ปีละ 6,000-15,000 บาท</li>\n  <li>Chatfuel Premium: $14.99-79.99/เดือน → ปีละ 6,000-32,000 บาท</li>\n  <li>Botpress, Tidio, Intercom: $39-200/เดือน → ปีละ 15,000-80,000+ บาท</li>\n</ul>\n<p>เทียบกับ self-hosted: <strong>จ่ายค่า setup ครั้งเดียว 15,000-80,000 + maintenance 2,000-8,000/เดือน</strong> ที่ไม่ขึ้นตาม volume ข้อความ คำนวณ 3 ปี ประหยัดกว่า 50-70% โดยเฉพาะถ้ามีลูกค้าเยอะ</p>\n\n<h2>2. ข้อมูลลูกค้าไม่ออกนอกบริษัท = PDPA-Safe จริง</h2>\n<p>นี่คือเหตุผลที่ <strong>คลินิก, สำนักงานกฎหมาย, สถาบันการเงิน</strong> ในไทยเลือก self-hosted กันเกือบทั้งหมด เพราะ:</p>\n\n<blockquote>\nพ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) กำหนดโทษปรับสูงสุด <strong>5 ล้านบาท</strong> สำหรับการประมวลผลข้อมูลส่วนบุคคลโดยไม่ได้รับความยินยอม หรือไม่มีมาตรการรักษาความปลอดภัยที่เหมาะสม\n</blockquote>\n\n<p>เมื่อข้อมูลลูกค้าวิ่งผ่าน server ของผู้ให้บริการ SaaS ที่ไหนก็ไม่รู้ในต่างประเทศ คุณต้อง:</p>\n<ul>\n  <li>มี Data Processing Agreement (DPA) ที่ชัดเจน</li>\n  <li>ตรวจสอบว่า vendor มี certification (เช่น ISO 27001, SOC 2)</li>\n  <li>แจ้งลูกค้าว่าข้อมูลถูกประมวลผลที่ไหน</li>\n</ul>\n<p>ในขณะที่ self-hosted = ข้อมูลทุกอย่างอยู่บน server ของคุณ ไม่ต้องเซ็น DPA ใด ๆ ความเสี่ยงเหลือศูนย์</p>\n\n<h2>3. AI Multi-Provider — ไม่ผูกขาดกับใคร</h2>\n<p>นี่คือข้อได้เปรียบที่หลายคนมองข้าม SaaS Chatbot ส่วนใหญ่ผูกกับ AI provider เดียว (มัก OpenAI) ถ้าวันนึง:</p>\n<ul>\n  <li>OpenAI ขึ้นราคา → คุณไม่มีทางเลือก</li>\n  <li>OpenAI ล่ม → bot คุณก็ล่ม</li>\n  <li>มี AI ใหม่ที่เก่งกว่า/ถูกกว่า → ย้ายไม่ได้</li>\n</ul>\n<p>OpenClaw และ AI Gateway แนวเดียวกันรองรับ <strong>35+ LLM providers</strong> สลับได้ในไม่กี่นาทีแค่เปลี่ยน config ไม่ต้องเขียนโค้ดใหม่</p>\n\n<h2>4. Customization ที่ทำได้จริง ไม่ใช่แค่หน้าตา</h2>\n<p>SaaS chatbot ส่วนใหญ่ให้ customize ได้แค่ flow และข้อความ แต่พอจะทำอะไรซับซ้อน เช่น:</p>\n<ul>\n  <li>เชื่อม CRM/ERP ของบริษัทเอง</li>\n  <li>ดึงข้อมูลจากฐานข้อมูล real-time</li>\n  <li>Multi-agent — แบ่ง AI หลายตัวทำหน้าที่ต่างกัน (sales/support/internal)</li>\n  <li>Custom workflow ที่ต้องเรียก API หลายเส้น</li>\n</ul>\n<p>ก็จะเจอข้อจำกัด หรือต้องจ่าย Enterprise plan แพงมาก ในขณะที่ self-hosted = เขียน code เองได้ทั้งหมด ไม่มีลิมิต</p>\n\n<h2>5. Scale ไม่กลัว — เพราะค่าใช้จ่ายไม่พุ่ง</h2>\n<p>ปัญหาที่เจอบ่อยมากในธุรกิจที่โต: SaaS plan เริ่มจาก 1,000 subscribers ฟรี แต่พอ 10,000 → 50,000 → 100,000 ราคากระโดด exponential</p>\n<p>self-hosted บน VPS เริ่มต้น 300-500 บาท/เดือน รองรับได้ <strong>หลักหมื่นถึงแสน users</strong> ก่อนต้อง upgrade server ค่าใช้จ่ายเพิ่มแบบ linear ไม่ใช่ exponential</p>\n\n<h2>แล้วเมื่อไหร่ SaaS เหมาะกว่า?</h2>\n<p>SaaS chatbot ก็มีจุดเด่น โดยเฉพาะถ้า:</p>\n<ul>\n  <li>คุณต้องการ launch ภายใน 1-2 วัน ไม่มีทีม IT</li>\n  <li>Volume ข้อความน้อยมาก (&lt; 1,000 messages/เดือน)</li>\n  <li>ไม่มี sensitive data ที่กังวล PDPA</li>\n  <li>ต้องการ no-code visual flow builder</li>\n</ul>\n\n<h2>สรุป</h2>\n<p>ถ้าธุรกิจคุณเริ่มจริงจัง — มีลูกค้าทักเข้ามาทุกวัน, มีข้อมูลที่อ่อนไหว, อยากควบคุมระยะยาว — <strong>AI Gateway แบบ self-hosted คือคำตอบที่ลงทุนคุ้มกว่ามาก</strong> โดยเฉพาะเมื่อมองในแง่ ROI 3 ปี</p>\n\n<p>บทความถัดไปเราจะแสดงวิธีตั้งค่า OpenClaw เชื่อม LINE จริง ๆ ใน 5 นาที</p>\n",
+    "cover_image": "blog/covers/2026/05/5-reasons-ai-gateway-better-than-saas_bqZPusz.jpg",
+    "cover_image_url": "",
+    "meta_title": "",
+    "meta_description": "",
+    "og_image": "",
+    "status": "published",
+    "is_featured": true,
+    "views_count": 6,
+    "published_at": "2026-05-07T12:01:00.201Z",
+    "created_at": "2026-05-08T12:01:00.213Z",
+    "updated_at": "2026-05-08T12:05:27.303Z",
+    "tags": [
+      6,
+      2,
+      5,
+      4
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 6,
+  "fields": {
+    "title": "คู่มือเริ่มต้น: ตั้งค่า OpenClaw เชื่อม LINE ใน 5 นาที (ฉบับ SME)",
+    "slug": "openclaw-line-setup-in-5-minutes",
+    "author": 1,
+    "category": 1,
+    "excerpt": "Step-by-step สำหรับเจ้าของ SME ที่อยากลอง deploy OpenClaw เชื่อม LINE Official Account เข้ากับ AI ตั้งแต่ขั้นเตรียม VPS, ตั้ง webhook, config AI provider จนถึงการทดสอบครั้งแรก",
+    "content": "<p>หลังจากบทความแนะนำ OpenClaw และเหตุผลที่ควรเลือก self-hosted ครั้งนี้เรามาลงมือจริง — คู่มือทีละขั้นตอนสำหรับการตั้งค่า OpenClaw เชื่อม LINE Official Account ให้ AI ตอบลูกค้าอัตโนมัติ</p>\n\n<blockquote>\nหมายเหตุ: บทความนี้เน้นภาพรวมและแนวคิด ไม่ใช่ technical doc ของ OpenClaw — สำหรับขั้นตอนละเอียดยิบ ดูที่ docs.openclaw.ai\n</blockquote>\n\n<h2>สิ่งที่ต้องเตรียม</h2>\n<ul>\n  <li><strong>VPS</strong> Linux (Ubuntu 22.04+) อย่างน้อย 2 GB RAM, 20 GB SSD — แนะนำ Hostinger, DigitalOcean, Cloudways (ราคาเริ่มต้น 200-500 บาท/เดือน)</li>\n  <li><strong>LINE Official Account</strong> + LINE Developers account (ฟรี ที่ <code>developers.line.biz</code>)</li>\n  <li><strong>API Key</strong> ของ LLM ที่จะใช้ (Claude/OpenAI/Gemini) — ราคาเริ่มต้นประมาณ $5</li>\n  <li><strong>Domain name</strong> 1 ตัว สำหรับ webhook (เช่น <code>bot.yourcompany.co.th</code>)</li>\n</ul>\n\n<h2>ขั้นที่ 1: ติดตั้ง OpenClaw บน VPS</h2>\n<p>หลัง SSH เข้า VPS แล้ว วิธีที่ง่ายที่สุดคือใช้ Docker:</p>\n<pre><code>curl -fsSL https://get.openclaw.ai/install.sh | bash</code></pre>\n<p>script จะติดตั้ง Docker, Docker Compose, และ pull image OpenClaw มาให้พร้อมใช้ ใช้เวลาประมาณ 2-3 นาที</p>\n\n<h3>ตั้งค่า config เริ่มต้น</h3>\n<p>OpenClaw จะถาม:</p>\n<ul>\n  <li>ชื่อโปรเจกต์</li>\n  <li>Admin email + password</li>\n  <li>Port ที่จะรัน (default 8080)</li>\n</ul>\n<p>เสร็จแล้วเข้า dashboard ผ่านเบราว์เซอร์: <code>http://your-server-ip:8080</code></p>\n\n<h2>ขั้นที่ 2: ตั้งค่า LINE Channel</h2>\n<p>ที่ LINE Developers Console:</p>\n<ol>\n  <li>สร้าง <strong>Provider</strong> และ <strong>Messaging API channel</strong></li>\n  <li>คัดลอก <code>Channel Secret</code> และ <code>Channel Access Token</code></li>\n  <li>ปิด \"Auto-reply messages\" และ \"Greeting messages\" (ป้องกัน LINE ตอบทับ AI)</li>\n</ol>\n\n<h3>เพิ่ม channel ใน OpenClaw</h3>\n<p>ที่ dashboard กด <em>Channels → Add new → LINE</em> วาง 2 ค่าที่คัดลอกมา OpenClaw จะคืนค่า <strong>Webhook URL</strong> ให้</p>\n\n<h3>ตั้ง webhook ที่ LINE</h3>\n<p>กลับไปที่ LINE Developers Console → Messaging API → Webhook URL → วาง URL ที่ได้ → กด <em>Verify</em></p>\n\n<p>ถ้าขึ้น <strong>Success</strong> แปลว่าเชื่อมต่อสำเร็จแล้ว!</p>\n\n<h2>ขั้นที่ 3: ตั้งค่า AI Agent</h2>\n<p>ที่ <em>Agents → Create new</em>:</p>\n<ul>\n  <li><strong>Provider</strong>: เลือก Claude, OpenAI, หรือ Gemini</li>\n  <li><strong>API Key</strong>: ใส่ API key ที่ได้</li>\n  <li><strong>Model</strong>: แนะนำ <code>claude-haiku</code> หรือ <code>gpt-4o-mini</code> (ถูก + เร็ว) สำหรับ SME ทั่วไป</li>\n  <li><strong>System Prompt</strong>: เขียนบทบาท เช่น \"คุณคือพนักงาน CS ของร้าน X ตอบคำถามลูกค้าเรื่องสินค้า ราคา และการจัดส่ง อย่างเป็นมิตร ใช้ภาษาไทย\"</li>\n</ul>\n\n<h2>ขั้นที่ 4: เชื่อม Agent กับ Channel</h2>\n<p>ที่ <em>Routing → New rule</em>:</p>\n<ul>\n  <li>Channel: เลือก LINE channel ที่สร้างไว้</li>\n  <li>Agent: เลือก agent ที่สร้างไว้</li>\n  <li>Memory: เปิด <strong>Per-user session</strong> เพื่อให้ AI จำบทสนทนาของลูกค้าแต่ละคนได้</li>\n</ul>\n\n<h2>ขั้นที่ 5: ทดสอบ</h2>\n<p>เพิ่ม LINE OA เป็นเพื่อน → ส่งข้อความทักทาย → AI ควรตอบกลับภายใน 2-3 วินาที</p>\n\n<p>ถ้า AI ไม่ตอบ ลอง check:</p>\n<ul>\n  <li>Webhook URL valid และ HTTPS (LINE บังคับ)</li>\n  <li>API key ของ AI ถูกต้องและมี credit เหลือ</li>\n  <li>Log ใน OpenClaw dashboard (มีบอกชัดเจนว่าผิดที่ขั้นไหน)</li>\n</ul>\n\n<h2>Tips สำหรับ SME</h2>\n<ol>\n  <li><strong>เริ่มที่ Claude Haiku หรือ GPT-4o-mini</strong> — ค่าใช้จ่ายประมาณ 500-2,000 บาท/เดือน สำหรับ traffic SME ทั่วไป</li>\n  <li><strong>System prompt ดี = บอทดี</strong> ใช้เวลาเขียน prompt ให้ละเอียด ระบุรายการสินค้า/ราคา/นโยบายไว้เลย</li>\n  <li><strong>ตั้ง confidence threshold + human handoff</strong> — เมื่อ AI ไม่แน่ใจ ส่งต่อให้ทีมงานทันที (สำคัญมากในธุรกิจที่ผิดไม่ได้)</li>\n  <li><strong>ดู log ทุกวัน 1-2 สัปดาห์แรก</strong> — จะเห็น pattern ว่าลูกค้าถามอะไร แล้วปรับ prompt ให้ดีขึ้นเรื่อย ๆ</li>\n</ol>\n\n<h2>สรุป</h2>\n<p>การ deploy OpenClaw ครั้งแรกใช้เวลาจริง ๆ ประมาณ 30-60 นาที ถ้ามีพื้นฐาน Linux เบื้องต้น สำหรับ SME ที่ไม่มีทีม IT แนะนำให้ใช้บริการติดตั้งกับ vendor (เริ่ม 15,000 บาท) จะคุ้มกว่ามากเพราะได้ทั้ง training + maintenance plan</p>\n\n<p>หลัง deploy แล้ว สิ่งที่จะได้ทันที: <strong>ลูกค้าได้คำตอบ 24/7</strong>, <strong>ทีม CS เหลือเวลาทำงานสำคัญ</strong>, และ <strong>ข้อมูลทุกอย่างอยู่บน server คุณเอง</strong></p>\n",
+    "cover_image": "blog/covers/2026/05/openclaw-line-setup-in-5-minutes_iW2Z95j.jpg",
+    "cover_image_url": "",
+    "meta_title": "",
+    "meta_description": "",
+    "og_image": "",
+    "status": "published",
+    "is_featured": true,
+    "views_count": 10,
+    "published_at": "2026-05-08T12:01:00.298Z",
+    "created_at": "2026-05-08T12:01:00.299Z",
+    "updated_at": "2026-05-08T12:05:27.455Z",
+    "tags": [
+      9,
+      7,
+      1,
+      8
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 7,
+  "fields": {
+    "title": "วิธีใช้ Claude Code สำหรับมือใหม่: เริ่มต้นใน 10 นาที",
+    "slug": "how-to-use-claude-code-beginner",
+    "author": 1,
+    "category": 1,
+    "excerpt": "สอนใช้ Claude Code AI coding assistant ตั้งแต่ติดตั้งจนใช้งานได้จริง พร้อมตัวอย่างเขียนโค้ด แก้ bug และ automation สำหรับ dev ไทยมือใหม่ — เริ่มฟรี!",
+    "content": "<blockquote><p><strong>เคยเสียเวลาทั้งบ่ายแก้ bug ตัวเดียวไหม?</strong> 😩</p><p>เขียนโค้ดติดตรงไหนก็ค้นใน Stack Overflow ทีละหน้า อ่าน docs ภาษาอังกฤษไม่เข้าใจ ถามใน LINE กลุ่มก็เงียบ — ปัญหานี้นัก dev ไทยทุกคนน่าจะเจอ</p><p>ถ้าเราบอกคุณว่ามี<strong>เครื่องมือฟรีที่ช่วยให้คุณเขียนโค้ดเร็วขึ้นมาก</strong> เข้าใจ codebase ของคุณ และตอบเป็นภาษาไทยได้ — คุณจะเชื่อไหม?</p><p>เครื่องมือนั้นชื่อ <strong>Claude Code</strong> บทความนี้จะสอนคุณตั้งแต่ติดตั้งจนใช้งานได้จริงใน <strong>10 นาที</strong></p></blockquote><p>สรุป Claude Code ใน 1 ภาพ</p><p>10 นาที</p><p>เริ่มต้นใช้งาน</p><p>ฟรี</p><p>มี Free tier</p><p>CLI</p><p>ใช้ใน terminal</p><p>TH ✓</p><p>เข้าใจไทย</p><hr><h2>Claude Code คืออะไร?</h2><p><strong>Claude Code</strong> คือ AI coding assistant อย่างเป็นทางการจาก <a href=\"https://anthropic.com\">Anthropic</a> (บริษัทเดียวกับที่สร้าง Claude AI ที่หลายคนใช้ผ่านเว็บ)</p><p>แต่ Claude Code ไม่ใช่แค่ chatbot ตอบคำถาม — มันคือ <strong>CLI tool ที่รันใน terminal ของคุณ</strong> สามารถ:</p><ul><li data-list-item-id=\"e6d85741eda2b3aa9a599a4cf9b7f119d\"><strong>อ่าน codebase ทั้ง project</strong> ของคุณได้ ไม่ใช่แค่ snippet ที่ copy ไปวาง</li><li data-list-item-id=\"e98fd6a3686aac40a41d91ef6895f85d8\"><strong>แก้ไขไฟล์จริง</strong> บนเครื่องคุณ ไม่ใช่แค่บอกว่าควรเขียนยังไง</li><li data-list-item-id=\"e5718f1487fdb10349a2d0afd734a318a\"><strong>รันคำสั่ง shell</strong> ได้ (เช่น <code>npm install</code>, <code>git commit</code>)</li><li data-list-item-id=\"e0a474dbb45389d584b50786d26fc30cf\"><strong>เข้าใจภาษาไทย</strong> ทั้ง prompt และ comment</li></ul><p>ลองเปรียบเทียบให้เห็นภาพ:</p><figure class=\"table\"><table><thead><tr><th>&nbsp;</th><th>ChatGPT</th><th>Claude Code</th></tr></thead><tbody><tr><td>รูปแบบ</td><td>เว็บ chat</td><td>CLI ใน terminal</td></tr><tr><td>เห็นไฟล์คุณไหม</td><td>❌ ต้อง copy-paste</td><td>✅ อ่านได้ทั้ง project</td></tr><tr><td>แก้ไฟล์ให้ได้ไหม</td><td>❌ บอกว่าต้องแก้</td><td>✅ แก้ให้เลย</td></tr><tr><td>รันคำสั่งได้ไหม</td><td>❌</td><td>✅</td></tr><tr><td>ภาษาไทย</td><td>✅</td><td>✅</td></tr></tbody></table></figure><hr><h2>ทำไม Dev มือใหม่ควรใช้ Claude Code</h2><p>ถ้าคุณเพิ่งเริ่มเขียนโค้ด หรือเป็น dev มาไม่นาน Claude Code จะเปลี่ยนวิธีทำงานของคุณ 3 ด้านหลัก:</p><p><strong>1. ประหยัดเวลาค้นหาคำตอบ</strong> แทนที่จะค้น \"javascript array filter syntax\" แล้วเปิด 5 แท็บเปรียบเทียบ — แค่บอก Claude Code ว่า \"ช่วยเขียน function กรอง user ที่อายุเกิน 18\" แล้วได้โค้ดพร้อมใช้ในไม่กี่วินาที</p><p><strong>2. อธิบายโค้ดเป็นภาษาไทยได้</strong> เจอโค้ดเก่าที่อ่านไม่ออก? พิมพ์ \"อธิบายไฟล์นี้ให้ฟังเป็นภาษาไทย\" Claude Code จะวิเคราะห์ไฟล์ทั้งหมดแล้วเล่าให้ฟังเหมือนพี่ในออฟฟิศสอนน้องใหม่</p><p><strong>3. ฟรี tier ใช้ได้พอสมควร</strong> ไม่ต้องจ่ายเงินก่อน — ลองใช้ฟรีก่อนตัดสินใจอัพเกรด</p><hr><p>ติดตั้ง Claude Code ใน 5 ขั้นตอน</p><ol><li data-list-item-id=\"ec72ff682ef5110256e64f53adf1d7cae\"><strong>สมัคร Anthropic Account</strong> — ที่ console.anthropic.com (ฟรี)</li><li data-list-item-id=\"e7228d01a9504d6b2063f808f86921565\"><strong>Install ผ่าน npm</strong> — รัน <code>npm install -g @anthropic-ai/claude-code</code></li><li data-list-item-id=\"eeff9c5a5ce6c55643073ed11dc291ffa\"><strong>Authenticate</strong> — รัน <code>claude</code> แล้วทำตามขั้นตอน</li><li data-list-item-id=\"e57757c12b8801ec54494714eb92c1f62\"><strong>ทดสอบด้วย /help</strong> — ดูคำสั่งทั้งหมดที่ใช้ได้</li><li data-list-item-id=\"e5b127c916b3140dcd6333e9e85f60d34\"><strong>ลองใช้กับ project แรก</strong> — พิมพ์เป็นภาษาไทยได้เลย</li></ol><h2>ติดตั้ง Claude Code ใน 5 Step</h2><blockquote><p>⚠️ <strong>ก่อนเริ่ม:</strong> คุณต้องมี Node.js (เวอร์ชัน 18 ขึ้นไป) ติดตั้งบนเครื่อง — ถ้ายังไม่มี ดาวน์โหลดที่ <a href=\"https://nodejs.org\">nodejs.org</a></p></blockquote><h3>Step 1 — สมัคร Anthropic Account</h3><p>ไปที่ <a href=\"https://console.anthropic.com\">console.anthropic.com</a> แล้วสมัครด้วย email หรือ Google</p><blockquote><p>💡 <strong>ถ้าอยากใช้ฟรี:</strong> สมัคร Claude Free ที่ <a href=\"https://claude.ai\">claude.ai</a> แทน — Claude Code รองรับการ login ผ่าน Claude account ได้</p></blockquote><h3>Step 2 — ติดตั้งผ่าน npm</h3><p>เปิด terminal (ถ้า Windows ใช้ PowerShell หรือ Command Prompt) แล้วรันคำสั่ง:</p><pre><code class=\"language-plaintext\">npm install -g @anthropic-ai/claude-code\r\n</code></pre><p>รอจนเสร็จ (ประมาณ 30 วินาที — 2 นาที ขึ้นกับความเร็วเน็ต)</p><h3>Step 3 — Authenticate ครั้งแรก</h3><p><code>cd</code> เข้าไปใน folder project ของคุณ (หรือสร้าง folder ใหม่ก็ได้) แล้วรัน:</p><pre><code class=\"language-plaintext\">claude\r\n</code></pre><p>ครั้งแรกจะให้เลือกวิธี login:</p><ul><li data-list-item-id=\"e881177c0d2dbb3046013e8526ae5eed5\"><strong>Claude Pro/Max subscription</strong> — ใช้ subscription ที่มีอยู่แล้ว (แนะนำสำหรับมือใหม่)</li><li data-list-item-id=\"e40aab0ae0651489c16a1a1e6b1033323\"><strong>Anthropic API key</strong> — สำหรับคนที่ใช้ API อยู่แล้ว</li></ul><p>เลือกวิธีที่สะดวก แล้วทำตาม instruction ที่ขึ้นบนจอ</p><h3>Step 4 — ทดสอบด้วย /help</h3><p>หลัง login สำเร็จจะเห็น prompt <code>&gt;</code> รออยู่ ลองพิมพ์:</p><pre><code class=\"language-plaintext\">/help\r\n</code></pre><p>จะขึ้นรายการคำสั่งที่ใช้ได้ทั้งหมด ถ้าเห็นแล้วแปลว่า <strong>install สำเร็จ</strong> 🎉</p><h3>Step 5 — ลองใช้กับ project แรก</h3><p>ลองพิมพ์เป็นภาษาไทยเลย:</p><pre><code class=\"language-plaintext\">ช่วยอธิบายโครงสร้าง project นี้ให้ฟังหน่อย\r\n</code></pre><p>Claude Code จะอ่านไฟล์ทั้ง folder แล้วเล่าให้ฟังว่ามีอะไรบ้าง — <strong>ยินดีด้วย คุณใช้เป็นแล้ว!</strong></p><hr><h2>ตัวอย่างใช้งานจริง 3 แบบ (ที่นัก dev มือใหม่ใช้บ่อย)</h2><h3>ตัวอย่าง 1 — แก้ bug ที่ติดมา 2 ชม. ใน 30 วินาที</h3><p>สมมุติว่าคุณเขียนโค้ด JavaScript แล้วเจอ error:</p><pre><code class=\"language-plaintext\">TypeError: Cannot read properties of undefined (reading 'map')\r\n</code></pre><p>แทนที่จะ Google คุณแค่พิมพ์ใน Claude Code:</p><pre><code class=\"language-plaintext\">ใน file app.js เจอ error \"Cannot read properties of undefined\" ตอน render list ช่วยหาว่าทำไม + แก้ให้หน่อย\r\n</code></pre><p>Claude Code จะ: 1. เปิดไฟล์ <code>app.js</code> อ่านโค้ด 2. หา root cause (เช่น state ยังไม่มีค่าตอน render ครั้งแรก) 3. แก้ไฟล์ให้คุณเลย พร้อมอธิบายว่าแก้อะไร</p><h3>ตัวอย่าง 2 — เขียน function ใหม่จาก spec</h3><p>คุณอยากได้ function แต่ไม่อยากเขียนเอง:</p><pre><code class=\"language-plaintext\">ช่วยเขียน function ที่รับวันที่แบบ \"2026-05-09\" แล้วคืนค่าเป็นภาษาไทยแบบ \"9 พฤษภาคม 2569\"\r\n</code></pre><p>Claude Code จะเขียนโค้ด, สร้างไฟล์ใหม่ (ถ้าจำเป็น), และ <strong>เขียน test ให้ด้วย</strong> ถ้าคุณขอ</p><h3>ตัวอย่าง 3 — Refactor โค้ดเก่าให้สะอาด</h3><p>เจอไฟล์เก่ารกๆ ที่คนอื่นเขียนไว้?</p><pre><code class=\"language-plaintext\">ไฟล์ utils.js อ่านยากมาก ช่วย refactor ให้สะอาดขึ้น แต่ห้ามเปลี่ยน behavior นะ\r\n</code></pre><p>Claude Code จะ refactor + รัน test (ถ้ามี) เพื่อ verify ว่า behavior ไม่เปลี่ยน</p><hr><h2>5 คำสั่งพื้นฐานที่ต้องรู้</h2><p>ใน Claude Code มี <strong>slash commands</strong> ที่ขึ้นต้นด้วย <code>/</code> — นี่คือ 5 ตัวที่มือใหม่ใช้บ่อยที่สุด:</p><p><strong>1. </strong><code><strong>/help</strong></code> แสดงรายการคำสั่งทั้งหมด — เปิดดูได้ตลอด ไม่ต้องจำ</p><p><strong>2. </strong><code><strong>/clear</strong></code> ล้าง conversation ปัจจุบัน เริ่มใหม่ — ใช้เมื่อจะเปลี่ยน topic</p><p><strong>3. </strong><code><strong>/init</strong></code> ให้ Claude Code อ่าน project ทั้งหมดแล้วสร้าง <code>CLAUDE.md</code> (ไฟล์อธิบายโปรเจกต์) — <strong>รันครั้งเดียวตอน setup project ใหม่</strong></p><p><strong>4. </strong><code><strong>/agents</strong></code> ดูรายการ subagents ที่มี — agents คือ AI ผู้เชี่ยวชาญเฉพาะด้านที่คุณสร้างได้เอง (advanced)</p><p><strong>5. </strong><code><strong>/model</strong></code> เปลี่ยนรุ่น AI ที่ใช้ — เช่น เปลี่ยนเป็น Haiku (เร็ว ถูก) หรือ Opus (ฉลาดสุด ช้ากว่า)</p><blockquote><p>💡 <strong>Pro tip:</strong> พิมพ์ <code>/</code> แล้ว Claude Code จะแสดง autocomplete ของทุกคำสั่ง — ไม่ต้องจำ</p></blockquote><hr><h2>ข้อควรระวัง + คำถามที่พบบ่อย (FAQ)</h2><h3>Claude Code ใช้ฟรีไหม?</h3><p><strong>ใช่ — มี free tier</strong> ถ้าคุณมี Claude Free account สามารถใช้งานได้แต่มี usage limit ถ้าใช้เยอะขึ้นแนะนำ Claude Pro ($20/เดือน) จะใช้ได้สบายกว่า สำหรับ business ที่ใช้หนักให้ดู Claude Max หรือใช้ผ่าน Anthropic API</p><h3>Windows install ติดอะไรบ่อย?</h3><p>ปัญหาที่เจอบ่อยที่สุดคือ <strong>Node.js เก่า</strong> — ตรวจด้วย <code>node --version</code> ต้อง ≥ 18 ถ้าติด permission error ลองรัน PowerShell แบบ \"Run as Administrator\"</p><h3>Claude Code ต่างจาก Cursor/Copilot ยังไง?</h3><figure class=\"table\"><table><thead><tr><th>&nbsp;</th><th>Claude Code</th><th>Cursor</th><th>Copilot</th></tr></thead><tbody><tr><td>รูปแบบ</td><td>CLI</td><td>IDE (fork ของ VS Code)</td><td>VS Code extension</td></tr><tr><td>ฟรี</td><td>มี free tier</td><td>มี free tier limit</td><td>ไม่มี (จ่ายอย่างเดียว)</td></tr><tr><td>รันคำสั่งได้</td><td>✅</td><td>⚠️ จำกัด</td><td>❌</td></tr><tr><td>เหมาะกับ</td><td>งาน automation, deep work</td><td>UI-first dev</td><td>autocomplete</td></tr></tbody></table></figure><p>แต่ละตัวมีจุดเด่นต่างกัน — <strong>ใช้คู่กันได้</strong> หลายคนใช้ Cursor เป็น IDE + Claude Code สำหรับงาน automation</p><h3>Claude Code ใช้กับ VS Code ได้ไหม?</h3><p>ได้ มี <strong>VS Code extension</strong> อย่างเป็นทางการ (ค้นใน Marketplace ว่า \"Claude Code\") หลังติดตั้ง เปิด terminal ใน VS Code แล้ว <code>claude</code> เข้าได้เลย — extension จะ enhance UX เพิ่มเติม</p><h3>ภาษาไทย support ดีแค่ไหน?</h3><p><strong>ดีมาก</strong> — Claude เข้าใจไทยทั้ง prompt, comment, และ string ในโค้ด แต่แนะนำให้ใช้ <strong>prompt ภาษาอังกฤษสำหรับชื่อ function</strong> (เพราะ codebase ส่วนใหญ่เป็น English) แต่ explain/discuss เป็นไทยได้สบาย</p><hr><p>5 คำสั่งพื้นฐานที่ต้องรู้</p><p>/h</p><p><strong>/help</strong> — ดูคำสั่งทั้งหมด เปิดได้ตลอด ไม่ต้องจำ</p><p>/c</p><p><strong>/clear</strong> — ล้าง conversation เริ่มใหม่</p><p>/i</p><p><strong>/init</strong> — สร้าง CLAUDE.md ให้ Claude อ่าน project (รันครั้งเดียว)</p><p>/a</p><p><strong>/agents</strong> — ดู subagents ที่มี (advanced)</p><p>/m</p><p><strong>/model</strong> — เปลี่ยนรุ่น AI (Haiku เร็ว / Opus ฉลาด)</p><h2>ขั้นต่อไปสำหรับคนที่อยากใช้เก่งขึ้น</h2><p>ตอนนี้คุณติดตั้งและใช้งานพื้นฐานเป็นแล้ว ขั้นต่อไปแนะนำ:</p><p>📚 <strong>อ่านบทความถัดไป:</strong> - <i>[เร็ว ๆ นี้]</i> \"10 Slash Commands ที่ทำให้ Claude Code เร็วขึ้น 5 เท่า\" - <i>[เร็ว ๆ นี้]</i> \"สอนใช้ Hooks ใน Claude Code ทำ automation\"</p><p>🎯 <strong>ลองสร้าง custom subagent</strong> สำหรับงานเฉพาะของคุณ (เช่น \"agent ตรวจ security ของโค้ด PHP\")</p><p>🛠️ <strong>เชื่อมกับ MCP server</strong> เพื่อให้ Claude Code เข้าถึง Slack, Google Drive, database ได้</p><hr><h2>💡 อยากเอา AI มาใช้ในธุรกิจหรือทีม dev คุณ?</h2><p>Claude Code คือเครื่องมือที่ดีสำหรับ dev เดี่ยว — แต่ถ้าคุณมีทีม หรือมีธุรกิจที่อยากใช้ AI workflow แบบเต็มระบบ (chatbot, automation, lead generation) — เราช่วยได้</p><p>ทีมเราเชี่ยวชาญด้าน <strong>AI Automation สำหรับ SME ไทย</strong> ตั้งแต่ออกแบบระบบ chatbot, สร้าง custom AI agent, ไปจนถึงเชื่อม AI กับ workflow ภายในองค์กร</p><p>🎁 <strong>ขอ AI Audit ฟรี 30 นาที</strong> — ทีมเราจะวิเคราะห์ workflow ของคุณแล้วบอกว่าจุดไหน AI ช่วยได้คุ้มที่สุด ไม่มีค่าใช้จ่าย ไม่มีการขายตรง</p><p>👉 <a href=\"/contact/\"><strong>จองเวลา AI Audit ฟรี →</strong></a></p><hr><p><i>บทความนี้อ้างอิงจาก </i><a href=\"https://code.claude.com/docs/\"><i>Claude Code Documentation อย่างเป็นทางการ</i></a><i> อัพเดต ณ พฤษภาคม 2026 — ฟีเจอร์อาจมีการเปลี่ยนแปลง โปรดตรวจ docs ทางการก่อนใช้งานจริง</i></p>",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80",
+    "meta_title": "วิธีใช้ Claude Code สำหรับมือใหม่: เริ่มต้นใน 10 นาที",
+    "meta_description": "สอนใช้ Claude Code AI coding assistant ตั้งแต่ติดตั้งจนใช้งานได้จริง พร้อมตัวอย่างเขียนโค้ด แก้ bug และ automation สำหรับ dev ไทยมือใหม่ — เริ่มฟรี!",
+    "og_image": "",
+    "status": "published",
+    "is_featured": false,
+    "views_count": 41,
+    "published_at": "2026-05-09T05:05:27Z",
+    "created_at": "2026-05-09T04:57:39.793Z",
+    "updated_at": "2026-05-09T06:17:53.569Z",
+    "tags": [
+      11,
+      13,
+      10,
+      8,
+      12
+    ]
+  }
+}
+]
