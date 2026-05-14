@@ -1,11 +1,11 @@
-﻿{% extends "base_public.html" %}
+{% extends "base_public.html" %}
 
-{% block title %}à¸œà¸¥à¸‡à¸²à¸™à¸‚à¸­à¸‡à¹€à¸£à¸² â€” Case Studies | AIBiz Thailand{% endblock %}
-{% block meta_description %}à¸”à¸¹ Case Studies à¸ˆà¸£à¸´à¸‡à¸ˆà¸²à¸à¸¥à¸¹à¸à¸„à¹‰à¸²à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰ AI Automation à¸à¸±à¸š AIBiz Thailand â€” à¸—à¸¸à¸à¹‚à¸›à¸£à¹€à¸ˆà¸à¸•à¹Œà¸¡à¸µà¸•à¸±à¸§à¹€à¸¥à¸‚à¸œà¸¥à¸¥à¸±à¸žà¸˜à¹Œà¸—à¸µà¹ˆà¸§à¸±à¸”à¹„à¸”à¹‰{% endblock %}
+{% block title %}ผลงานของเรา — Case Studies | AIBiz Thailand{% endblock %}
+{% block meta_description %}ดู Case Studies จริงจากลูกค้าที่ใช้ AI Automation กับ AIBiz Thailand — ทุกโปรเจกต์มีตัวเลขผลลัพธ์ที่วัดได้{% endblock %}
 
 {% block extra_css %}
 <style>
-  /* â”€â”€ Design Tokens â”€â”€ */
+  /* ── Design Tokens ── */
   :root {
     --brand-gold:   #c9a96e;
     --brand-gold-d: #b8924f;
@@ -17,7 +17,7 @@
     --glass-border: rgba(201, 169, 110, 0.25);
   }
 
-  /* â”€â”€ HERO â”€â”€ */
+  /* ── HERO ── */
   .port-hero {
     position: relative;
     min-height: 52vh;
@@ -93,7 +93,7 @@
     margin-bottom: 0;
   }
 
-  /* â”€â”€ FILTER BAR â”€â”€ */
+  /* ── FILTER BAR ── */
   .filter-bar-wrap {
     background: var(--brand-dark);
     border-bottom: 1px solid rgba(201,169,110,0.12);
@@ -132,7 +132,7 @@
     font-weight: 700;
   }
 
-  /* â”€â”€ CARDS GRID â”€â”€ */
+  /* ── CARDS GRID ── */
   .port-grid-section {
     background: var(--brand-dark);
     padding: 4rem 0 5rem;
@@ -163,7 +163,7 @@
   }
   .port-card:hover::after { opacity: 1; }
 
-  /* Cover image â€” 16:9 */
+  /* Cover image — 16:9 */
   .port-card-cover {
     position: relative;
     width: 100%;
@@ -224,7 +224,7 @@
     flex-grow: 1;
   }
 
-  /* ROI metric â€” large gold */
+  /* ROI metric — large gold */
   .port-roi {
     font-size: 1.95rem;
     font-weight: 900;
@@ -249,7 +249,7 @@
     color: var(--brand-gold);
   }
 
-  /* Testimonial snippet â€” 2 lines */
+  /* Testimonial snippet — 2 lines */
   .port-testimonial-snippet {
     font-size: 0.86rem;
     color: #64748b;
@@ -309,7 +309,7 @@
     z-index: 2;
   }
 
-  /* â”€â”€ EMPTY STATE â”€â”€ */
+  /* ── EMPTY STATE ── */
   .port-empty {
     text-align: center;
     padding: 5rem 2rem;
@@ -342,7 +342,7 @@
     line-height: 1.75;
   }
 
-  /* â”€â”€ PAGINATION â”€â”€ */
+  /* ── PAGINATION ── */
   .port-pagination .page-link {
     background: transparent;
     border: 1px solid rgba(255,255,255,0.1);
@@ -375,7 +375,7 @@
     margin-left: 6px;
   }
 
-  /* â”€â”€ CTA SECTION â”€â”€ */
+  /* ── CTA SECTION ── */
   .port-cta-section {
     background: linear-gradient(135deg, #0d1735 0%, var(--brand-navy) 50%, #0f1f3d 100%);
     padding: 6rem 0;
@@ -482,7 +482,7 @@
   }
   .cta-trust-item i { color: var(--brand-gold); opacity: 0.7; }
 
-  /* â”€â”€ Responsive â”€â”€ */
+  /* ── Responsive ── */
   @media (max-width: 767.98px) {
     .port-hero-content { padding: 4.5rem 0 3.5rem; }
     .port-card-body { padding: 1.25rem 1.25rem 1rem; }
@@ -504,10 +504,10 @@
     <div class="row">
       <div class="col-lg-7">
         <div class="port-eyebrow">Case Studies &amp; Portfolio</div>
-        <h1>à¸œà¸¥à¸‡à¸²à¸™à¸‚à¸­à¸‡à¹€à¸£à¸²<br><span>AI à¸—à¸µà¹ˆà¸˜à¸¸à¸£à¸à¸´à¸ˆà¹„à¸—à¸¢à¹ƒà¸Šà¹‰à¹à¸¥à¹‰à¸§à¹„à¸”à¹‰à¸œà¸¥</span></h1>
+        <h1>ผลงานของเรา<br><span>AI ที่ธุรกิจไทยใช้แล้วได้ผล</span></h1>
         <p class="port-hero-lead">
-          à¸—à¸¸à¸à¹‚à¸›à¸£à¹€à¸ˆà¸à¸•à¹Œà¸„à¸·à¸­à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸ˆà¸£à¸´à¸‡ â€” à¸•à¸±à¸§à¹€à¸¥à¸‚ ROI à¸—à¸µà¹ˆà¸§à¸±à¸”à¹„à¸”à¹‰ à¹€à¸ªà¸µà¸¢à¸‡à¸ˆà¸²à¸à¸¥à¸¹à¸à¸„à¹‰à¸²
-          à¹à¸¥à¸°à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸—à¸µà¹ˆà¹€à¸à¸´à¸”à¸‚à¸¶à¹‰à¸™à¸ˆà¸£à¸´à¸‡à¹ƒà¸™à¸˜à¸¸à¸£à¸à¸´à¸ˆ SME à¹„à¸—à¸¢
+          ทุกโปรเจกต์คือหลักฐานจริง — ตัวเลข ROI ที่วัดได้ เสียงจากลูกค้า
+          และการเปลี่ยนแปลงที่เกิดขึ้นจริงในธุรกิจ SME ไทย
         </p>
       </div>
     </div>
@@ -520,10 +520,10 @@
 ========================================== -->
 <div class="filter-bar-wrap">
   <div class="container">
-    <nav class="filter-bar" aria-label="à¸à¸£à¸­à¸‡à¸•à¸²à¸¡à¸­à¸¸à¸•à¸ªà¸²à¸«à¸à¸£à¸£à¸¡">
+    <nav class="filter-bar" aria-label="กรองตามอุตสาหกรรม">
       <a href="{% url 'portfolio:list' %}"
          class="filter-link {% if not active_industry %}active{% endif %}">
-        à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
+        ทั้งหมด
       </a>
       {% for value, label in industries %}
       <a href="?industry={{ value }}"
@@ -550,7 +550,7 @@
 
         <div class="port-card d-flex flex-column position-relative">
 
-          <!-- Cover Image â€” 16:9 -->
+          <!-- Cover Image — 16:9 -->
           <div class="port-card-cover flex-shrink-0">
             {% if cs.display_cover %}
             <img src="{{ cs.display_cover }}" alt="{{ cs.project_title }}">
@@ -578,12 +578,12 @@
               </a>
             </h3>
 
-            <!-- Testimonial snippet â€” 2 lines -->
+            <!-- Testimonial snippet — 2 lines -->
             {% if cs.testimonial %}
             <p class="port-testimonial-snippet">
               "{{ cs.testimonial }}"
               {% if cs.testimonial_by %}
-              <span style="color:#475569; font-size:0.8rem; display:block; margin-top:3px;">â€” {{ cs.testimonial_by }}</span>
+              <span style="color:#475569; font-size:0.8rem; display:block; margin-top:3px;">— {{ cs.testimonial_by }}</span>
               {% endif %}
             </p>
             {% endif %}
@@ -600,10 +600,10 @@
 
           </div>
 
-          <!-- Card Footer â€” CTA -->
+          <!-- Card Footer — CTA -->
           <div class="port-card-footer">
             <a href="{{ cs.get_absolute_url }}" class="port-cta-link" tabindex="-1" aria-hidden="true">
-              à¸”à¸¹ Case Study <i class="bi bi-arrow-right"></i>
+              ดู Case Study <i class="bi bi-arrow-right"></i>
             </a>
           </div>
 
@@ -623,7 +623,7 @@
         <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
           <a class="page-link"
              href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}{% else %}#{% endif %}"
-             aria-label="à¸«à¸™à¹‰à¸²à¸à¹ˆà¸­à¸™à¸«à¸™à¹‰à¸²">
+             aria-label="หน้าก่อนหน้า">
             <i class="bi bi-chevron-left"></i>
           </a>
         </li>
@@ -639,7 +639,7 @@
             <a class="page-link" href="?page={{ num }}{% if active_industry %}&industry={{ active_industry }}{% endif %}">{{ num }}</a>
           </li>
           {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
-          <li class="page-item disabled"><span class="page-link">â€¦</span></li>
+          <li class="page-item disabled"><span class="page-link">…</span></li>
           {% endif %}
         {% endfor %}
 
@@ -647,7 +647,7 @@
         <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
           <a class="page-link"
              href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}{% else %}#{% endif %}"
-             aria-label="à¸«à¸™à¹‰à¸²à¸–à¸±à¸”à¹„à¸›">
+             aria-label="หน้าถัดไป">
             <i class="bi bi-chevron-right"></i>
           </a>
         </li>
@@ -666,13 +666,13 @@
       <div class="port-empty-icon">
         <i class="bi bi-folder2-open"></i>
       </div>
-      <h3>à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¸œà¸¥à¸‡à¸²à¸™à¹ƒà¸™à¸«à¸¡à¸§à¸”à¸™à¸µà¹‰</h3>
+      <h3>ยังไม่มีผลงานในหมวดนี้</h3>
       <p>
-        à¹€à¸£à¸²à¸à¸³à¸¥à¸±à¸‡à¹€à¸žà¸´à¹ˆà¸¡à¸œà¸¥à¸‡à¸²à¸™à¹ƒà¸«à¸¡à¹ˆà¸­à¸¢à¸¹à¹ˆ à¸¥à¸­à¸‡à¸”à¸¹à¸«à¸¡à¸§à¸”à¸«à¸¡à¸¹à¹ˆà¸­à¸·à¹ˆà¸™
-        à¸«à¸£à¸·à¸­à¸”à¸¹à¸œà¸¥à¸‡à¸²à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸‚à¸­à¸‡à¹€à¸£à¸²à¸à¹ˆà¸­à¸™à¸™à¸°à¸„à¸£à¸±à¸š
+        เรากำลังเพิ่มผลงานใหม่อยู่ ลองดูหมวดหมู่อื่น
+        หรือดูผลงานทั้งหมดของเราก่อนนะครับ
       </p>
       <a href="{% url 'portfolio:list' %}" class="btn-gold-filled">
-        à¸”à¸¹à¸œà¸¥à¸‡à¸²à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
+        ดูผลงานทั้งหมด
       </a>
     </div>
 
@@ -690,37 +690,37 @@
   <div class="container text-center position-relative" style="z-index:1;">
 
     <div class="port-eyebrow justify-content-center mb-4" style="display:inline-flex;">
-      à¸¡à¸µà¹‚à¸›à¸£à¹€à¸ˆà¸à¸•à¹Œà¹ƒà¸™à¹ƒà¸ˆà¹à¸¥à¹‰à¸§à¸«à¸£à¸·à¸­à¸¢à¸±à¸‡?
+      มีโปรเจกต์ในใจแล้วหรือยัง?
     </div>
 
     <h2>
-      à¸¡à¸µà¹‚à¸›à¸£à¹€à¸ˆà¸à¸•à¹Œà¹ƒà¸™à¹ƒà¸ˆ?<br>
-      <span>à¸›à¸£à¸¶à¸à¸©à¸²à¸Ÿà¸£à¸µ à¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸œà¸¹à¸à¸¡à¸±à¸”</span>
+      มีโปรเจกต์ในใจ?<br>
+      <span>ปรึกษาฟรี ไม่มีข้อผูกมัด</span>
     </h2>
 
     <p class="port-cta-lead mx-auto">
-      à¹€à¸¥à¹ˆà¸²à¹‚à¸ˆà¸—à¸¢à¹Œà¸˜à¸¸à¸£à¸à¸´à¸ˆà¹ƒà¸«à¹‰à¸Ÿà¸±à¸‡ à¸—à¸µà¸¡à¹€à¸£à¸²à¸ˆà¸°à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¸§à¹ˆà¸² AI à¸ˆà¸°à¸Šà¹ˆà¸§à¸¢à¹„à¸”à¹‰à¸­à¸¢à¹ˆà¸²à¸‡à¹„à¸£
-      à¹à¸¥à¸° ROI à¸—à¸µà¹ˆà¸„à¸²à¸”à¸«à¸§à¸±à¸‡à¹„à¸”à¹‰à¸ˆà¸£à¸´à¸‡à¹ƒà¸™ 45 à¸™à¸²à¸—à¸µ â€” à¸Ÿà¸£à¸µ à¹„à¸¡à¹ˆà¸¡à¸µà¸„à¹ˆà¸²à¹ƒà¸Šà¹‰à¸ˆà¹ˆà¸²à¸¢
+      เล่าโจทย์ธุรกิจให้ฟัง ทีมเราจะวิเคราะห์ว่า AI จะช่วยได้อย่างไร
+      และ ROI ที่คาดหวังได้จริงใน 45 นาที — ฟรี ไม่มีค่าใช้จ่าย
     </p>
 
     <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-4">
       <a href="{% url 'pages:contact' %}" class="btn-gold-filled">
-        <i class="bi bi-chat-dots me-2"></i>à¸›à¸£à¸¶à¸à¸©à¸²à¸Ÿà¸£à¸µà¹€à¸”à¸µà¹‹à¸¢à¸§à¸™à¸µà¹‰
+        <i class="bi bi-chat-dots me-2"></i>ปรึกษาฟรีเดี๋ยวนี้
       </a>
       <a href="{% url 'portfolio:list' %}" class="btn-outline-light-soft">
-        <i class="bi bi-grid me-2"></i>à¸”à¸¹à¸œà¸¥à¸‡à¸²à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
+        <i class="bi bi-grid me-2"></i>ดูผลงานทั้งหมด
       </a>
     </div>
 
     <div class="cta-trust-row">
       <div class="cta-trust-item">
-        <i class="bi bi-shield-check"></i> à¸Ÿà¸£à¸µ à¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸œà¸¹à¸à¸¡à¸±à¸”
+        <i class="bi bi-shield-check"></i> ฟรี ไม่มีข้อผูกมัด
       </div>
       <div class="cta-trust-item">
-        <i class="bi bi-clock"></i> Response à¸ à¸²à¸¢à¹ƒà¸™ 24 à¸Šà¸±à¹ˆà¸§à¹‚à¸¡à¸‡
+        <i class="bi bi-clock"></i> Response ภายใน 24 ชั่วโมง
       </div>
       <div class="cta-trust-item">
-        <i class="bi bi-award"></i> à¸£à¸±à¸šà¸›à¸£à¸°à¸à¸±à¸™à¸œà¸¥à¸¥à¸±à¸žà¸˜à¹Œ 30 à¸§à¸±à¸™
+        <i class="bi bi-award"></i> รับประกันผลลัพธ์ 30 วัน
       </div>
     </div>
 
@@ -728,4 +728,3 @@
 </section>
 
 {% endblock %}
-
