@@ -1,12 +1,12 @@
-{% extends "base_public.html" %}
+﻿{% extends "base_public.html" %}
 
-{% block title %}{{ case.meta_title|default:case.project_title }} — AIBiz Thailand{% endblock %}
+{% block title %}{{ case.meta_title|default:case.project_title }} â€” AIBiz Thailand{% endblock %}
 {% block meta_description %}{{ case.meta_description|default:case.problem|truncatechars:160 }}{% endblock %}
-{% block og_image %}{% if case.cover_image %}<meta property="og:image" content="{{ case.cover_image.url }}">{% endif %}{% endblock %}
+{% block og_image %}{% if case.display_cover %}<meta property="og:image" content="{{ case.display_cover }}">{% endif %}{% endblock %}
 
 {% block extra_css %}
 <style>
-  /* ── Design Tokens ── */
+  /* â”€â”€ Design Tokens â”€â”€ */
   :root {
     --brand-gold: #c9a96e;
     --brand-dark: #0f172a;
@@ -15,19 +15,19 @@
     --gold-tint-border: rgba(201, 169, 110, 0.25);
   }
 
-  /* ── Utilities ── */
+  /* â”€â”€ Utilities â”€â”€ */
   .text-gold { color: var(--brand-gold) !important; }
   .bg-brand-dark { background-color: var(--brand-dark) !important; }
   .bg-brand-navy { background-color: var(--brand-navy) !important; }
   .border-gold { border-color: var(--brand-gold) !important; }
 
-  /* ── Typography — Sarabun, no italic ── */
+  /* â”€â”€ Typography â€” Sarabun, no italic â”€â”€ */
   body, h1, h2, h3, h4, h5, h6, p, span, a, li, blockquote {
     font-family: 'Sarabun', sans-serif;
     font-style: normal !important;
   }
 
-  /* ── Breadcrumb ── */
+  /* â”€â”€ Breadcrumb â”€â”€ */
   .detail-breadcrumb a {
     color: rgba(255,255,255,.65);
     text-decoration: none;
@@ -37,7 +37,7 @@
   .detail-breadcrumb .sep { color: rgba(255,255,255,.35); margin: 0 .4rem; }
   .detail-breadcrumb .current { color: rgba(255,255,255,.85); font-size: .875rem; }
 
-  /* ── Hero ── */
+  /* â”€â”€ Hero â”€â”€ */
   .case-hero {
     position: relative;
     min-height: 360px;
@@ -83,7 +83,7 @@
     margin-bottom: .35rem;
   }
 
-  /* ── Stat Block ── */
+  /* â”€â”€ Stat Block â”€â”€ */
   .stat-block {
     border-left: 3px solid var(--brand-gold);
     padding: .75rem 1rem .75rem 1.25rem;
@@ -103,7 +103,7 @@
     margin-top: .15rem;
   }
 
-  /* ── Section headings ── */
+  /* â”€â”€ Section headings â”€â”€ */
   .section-icon {
     font-size: 1.1rem;
     margin-right: .4rem;
@@ -116,7 +116,7 @@
     align-items: center;
   }
 
-  /* ── Result tint box ── */
+  /* â”€â”€ Result tint box â”€â”€ */
   .result-box {
     background: var(--gold-tint);
     border: 1px solid var(--gold-tint-border);
@@ -124,7 +124,7 @@
     padding: 1.5rem 1.75rem;
   }
 
-  /* ── Tech Stack badges ── */
+  /* â”€â”€ Tech Stack badges â”€â”€ */
   .tech-badge {
     display: inline-block;
     background-color: var(--brand-navy);
@@ -137,7 +137,7 @@
     letter-spacing: .03em;
   }
 
-  /* ── Gallery ── */
+  /* â”€â”€ Gallery â”€â”€ */
   .gallery-img {
     width: 100%;
     aspect-ratio: 16/9;
@@ -148,7 +148,7 @@
   }
   .gallery-img:hover { opacity: .88; }
 
-  /* ── Testimonial ── */
+  /* â”€â”€ Testimonial â”€â”€ */
   .testimonial-card {
     background: var(--bs-body-secondary, #f8f9fa);
     border-left: 4px solid var(--brand-gold);
@@ -177,7 +177,7 @@
     color: var(--bs-secondary-color);
   }
 
-  /* ── Sticky sidebar ── */
+  /* â”€â”€ Sticky sidebar â”€â”€ */
   .detail-sidebar {
     position: sticky;
     top: 80px;
@@ -227,7 +227,7 @@
     word-break: break-word;
   }
 
-  /* ── Related cards ── */
+  /* â”€â”€ Related cards â”€â”€ */
   .related-card {
     background: var(--bs-body-bg);
     border: 1px solid var(--bs-border-color);
@@ -256,7 +256,7 @@
     opacity: .35;
   }
 
-  /* ── Badge outline ── */
+  /* â”€â”€ Badge outline â”€â”€ */
   .badge-outline {
     background: transparent;
     border: 1px solid var(--brand-gold);
@@ -268,7 +268,7 @@
     border-radius: 2rem;
   }
 
-  /* ── CTA Final ── */
+  /* â”€â”€ CTA Final â”€â”€ */
   .cta-final {
     background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-navy) 100%);
     padding: 4.5rem 1rem;
@@ -277,7 +277,7 @@
   .cta-final h2 { color: #fff; }
   .cta-final p { color: rgba(255,255,255,.6); }
 
-  /* ── btn-primary → gold filled ── */
+  /* â”€â”€ btn-primary â†’ gold filled â”€â”€ */
   .btn-primary {
     background-color: var(--brand-gold) !important;
     border-color: var(--brand-gold) !important;
@@ -290,7 +290,7 @@
     color: var(--brand-dark) !important;
   }
 
-  /* ── Divider ── */
+  /* â”€â”€ Divider â”€â”€ */
   .gold-divider {
     border: none;
     height: 2px;
@@ -299,7 +299,7 @@
     opacity: .5;
   }
 
-  /* ── Lightbox overlay ── */
+  /* â”€â”€ Lightbox overlay â”€â”€ */
   #lightbox-overlay {
     display: none;
     position: fixed;
@@ -336,12 +336,12 @@
 
 {% block content %}
 
-<!-- ══════════════════════════════════════
-     1. HERO — ROI + Title + Breadcrumb
-════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     1. HERO â€” ROI + Title + Breadcrumb
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <section class="case-hero">
-  {% if case.cover_image %}
-  <img class="case-hero__img" src="{{ case.cover_image.url }}" alt="{{ case.project_title }}">
+  {% if case.display_cover %}
+  <img class="case-hero__img" src="{{ case.display_cover }}" alt="{{ case.project_title }}">
   {% endif %}
   <div class="case-hero__overlay"></div>
 
@@ -350,7 +350,7 @@
 
       <!-- Breadcrumb -->
       <nav class="detail-breadcrumb mb-3">
-        <a href="{% url 'portfolio:list' %}">ผลงาน</a>
+        <a href="{% url 'portfolio:list' %}">à¸œà¸¥à¸‡à¸²à¸™</a>
         <span class="sep">/</span>
         <a href="{% url 'portfolio:list' %}?industry={{ case.get_industry_display }}">{{ case.get_industry_display }}</a>
         <span class="sep">/</span>
@@ -359,7 +359,7 @@
 
       <!-- ROI Metric -->
       {% if case.roi_metric %}
-      <div class="roi-label">ผลลัพธ์ที่ได้รับ</div>
+      <div class="roi-label">à¸œà¸¥à¸¥à¸±à¸žà¸˜à¹Œà¸—à¸µà¹ˆà¹„à¸”à¹‰à¸£à¸±à¸š</div>
       <div class="roi-display mb-2">{{ case.roi_metric }}</div>
       {% endif %}
 
@@ -369,22 +369,22 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      MAIN CONTENT AREA
-════════════════════════════════════════ -->
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="container py-5">
   <div class="row g-5">
 
-    <!-- ─── LEFT: Main Content col-lg-8 ─── -->
+    <!-- â”€â”€â”€ LEFT: Main Content col-lg-8 â”€â”€â”€ -->
     <div class="col-lg-8">
 
-      <!-- ── 2. Stat Block ── -->
+      <!-- â”€â”€ 2. Stat Block â”€â”€ -->
       <div class="row g-3 mb-4">
         {% if case.roi_metric %}
         <div class="col-sm-4">
           <div class="stat-block">
             <div class="stat-value">{{ case.roi_metric }}</div>
-            <div class="stat-label">ROI / ผลลัพธ์หลัก</div>
+            <div class="stat-label">ROI / à¸œà¸¥à¸¥à¸±à¸žà¸˜à¹Œà¸«à¸¥à¸±à¸</div>
           </div>
         </div>
         {% endif %}
@@ -392,25 +392,25 @@
         <div class="col-sm-4">
           <div class="stat-block">
             <div class="stat-value">{{ case.duration }}</div>
-            <div class="stat-label">ระยะเวลาโครงการ</div>
+            <div class="stat-label">à¸£à¸°à¸¢à¸°à¹€à¸§à¸¥à¸²à¹‚à¸„à¸£à¸‡à¸à¸²à¸£</div>
           </div>
         </div>
         {% endif %}
         <div class="col-sm-4">
           <div class="stat-block">
             <div class="stat-value">{{ case.get_industry_display }}</div>
-            <div class="stat-label">อุตสาหกรรม</div>
+            <div class="stat-label">à¸­à¸¸à¸•à¸ªà¸²à¸«à¸à¸£à¸£à¸¡</div>
           </div>
         </div>
       </div>
 
       <hr class="gold-divider">
 
-      <!-- ── 3. ปัญหาเดิม ── -->
+      <!-- â”€â”€ 3. à¸›à¸±à¸à¸«à¸²à¹€à¸”à¸´à¸¡ â”€â”€ -->
       <div class="mb-4">
         <h2 class="section-heading">
-          <span class="section-icon">📍</span>
-          <span>ปัญหาเดิมที่ลูกค้าเผชิญ</span>
+          <span class="section-icon">ðŸ“</span>
+          <span>à¸›à¸±à¸à¸«à¸²à¹€à¸”à¸´à¸¡à¸—à¸µà¹ˆà¸¥à¸¹à¸à¸„à¹‰à¸²à¹€à¸œà¸Šà¸´à¸</span>
         </h2>
         <div class="ps-4 text-body" style="line-height:1.85;">
           {{ case.problem|linebreaksbr }}
@@ -419,11 +419,11 @@
 
       <hr class="gold-divider">
 
-      <!-- ── 4. วิธีแก้ ── -->
+      <!-- â”€â”€ 4. à¸§à¸´à¸˜à¸µà¹à¸à¹‰ â”€â”€ -->
       <div class="mb-4">
         <h2 class="section-heading">
-          <span class="section-icon">💡</span>
-          <span>วิธีที่เราแก้ปัญหา</span>
+          <span class="section-icon">ðŸ’¡</span>
+          <span>à¸§à¸´à¸˜à¸µà¸—à¸µà¹ˆà¹€à¸£à¸²à¹à¸à¹‰à¸›à¸±à¸à¸«à¸²</span>
         </h2>
         <div class="ps-4 text-body article-body" style="line-height:1.85;">
           {{ case.solution|safe }}
@@ -432,11 +432,11 @@
 
       <hr class="gold-divider">
 
-      <!-- ── 5. ผลลัพธ์ ── -->
+      <!-- â”€â”€ 5. à¸œà¸¥à¸¥à¸±à¸žà¸˜à¹Œ â”€â”€ -->
       <div class="mb-4">
         <h2 class="section-heading">
-          <span class="section-icon">🎯</span>
-          <span>ผลลัพธ์ที่ได้รับ</span>
+          <span class="section-icon">ðŸŽ¯</span>
+          <span>à¸œà¸¥à¸¥à¸±à¸žà¸˜à¹Œà¸—à¸µà¹ˆà¹„à¸”à¹‰à¸£à¸±à¸š</span>
         </h2>
         <div class="result-box">
           <div class="text-body" style="line-height:1.85;">
@@ -447,12 +447,12 @@
 
       <hr class="gold-divider">
 
-      <!-- ── 6. Tech Stack ── -->
+      <!-- â”€â”€ 6. Tech Stack â”€â”€ -->
       {% if case.tech_stack %}
       <div class="mb-4">
         <h2 class="section-heading">
-          <span class="section-icon">⚙️</span>
-          <span>Tech Stack ที่ใช้</span>
+          <span class="section-icon">âš™ï¸</span>
+          <span>Tech Stack à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰</span>
         </h2>
         <div class="ps-1">
           {% for tech in case.tech_stack.split %}
@@ -463,11 +463,11 @@
       <hr class="gold-divider">
       {% endif %}
 
-      <!-- ── 7. Gallery ── -->
+      <!-- â”€â”€ 7. Gallery â”€â”€ -->
       {% if case.images.all %}
       <div class="mb-4">
         <h2 class="section-heading">
-          <span class="section-icon">📸</span>
+          <span class="section-icon">ðŸ“¸</span>
           <span>Gallery</span>
         </h2>
         <div class="row g-3">
@@ -489,14 +489,14 @@
       <hr class="gold-divider">
       {% endif %}
 
-      <!-- ── 8. Testimonial ── -->
+      <!-- â”€â”€ 8. Testimonial â”€â”€ -->
       {% if case.testimonial %}
       <div class="mb-4">
         <div class="testimonial-card">
           <span class="testimonial-quote">"</span>
           <p class="testimonial-text">{{ case.testimonial }}</p>
           {% if case.testimonial_by %}
-          <div class="testimonial-by">— {{ case.testimonial_by }}</div>
+          <div class="testimonial-by">â€” {{ case.testimonial_by }}</div>
           {% endif %}
         </div>
       </div>
@@ -505,7 +505,7 @@
     </div>
     <!-- /col-lg-8 -->
 
-    <!-- ─── RIGHT: Sticky Sidebar col-lg-4 ─── -->
+    <!-- â”€â”€â”€ RIGHT: Sticky Sidebar col-lg-4 â”€â”€â”€ -->
     <div class="col-lg-4">
       <div class="detail-sidebar">
         <div class="sidebar-card">
@@ -513,7 +513,7 @@
           <!-- ROI Hero in sidebar -->
           <div class="sidebar-roi">
             {% if case.roi_metric %}
-            <div class="sidebar-roi-label">ผลลัพธ์สำคัญ</div>
+            <div class="sidebar-roi-label">à¸œà¸¥à¸¥à¸±à¸žà¸˜à¹Œà¸ªà¸³à¸„à¸±à¸</div>
             <div class="sidebar-roi-value">{{ case.roi_metric }}</div>
             {% else %}
             <div class="sidebar-roi-value text-white" style="font-size:1.25rem;">{{ case.project_title }}</div>
@@ -523,7 +523,7 @@
           <!-- CTA Button -->
           <div class="p-4 pb-3">
             <a href="{% url 'pages:contact' %}?source=portfolio&case={{ case.pk }}" class="btn btn-primary w-100 py-2">
-              ปรึกษาฟรี — อยากได้ผลแบบนี้
+              à¸›à¸£à¸¶à¸à¸©à¸²à¸Ÿà¸£à¸µ â€” à¸­à¸¢à¸²à¸à¹„à¸”à¹‰à¸œà¸¥à¹à¸šà¸šà¸™à¸µà¹‰
             </a>
           </div>
 
@@ -531,23 +531,23 @@
           <div class="px-4 pb-4">
             {% if case.client_name %}
             <div class="sidebar-info-row">
-              <span class="sidebar-info-label">ลูกค้า</span>
+              <span class="sidebar-info-label">à¸¥à¸¹à¸à¸„à¹‰à¸²</span>
               <span class="sidebar-info-value">{{ case.client_name }}</span>
             </div>
             {% endif %}
             <div class="sidebar-info-row">
-              <span class="sidebar-info-label">อุตสาหกรรม</span>
+              <span class="sidebar-info-label">à¸­à¸¸à¸•à¸ªà¸²à¸«à¸à¸£à¸£à¸¡</span>
               <span class="sidebar-info-value">{{ case.get_industry_display }}</span>
             </div>
             {% if case.duration %}
             <div class="sidebar-info-row">
-              <span class="sidebar-info-label">ระยะเวลา</span>
+              <span class="sidebar-info-label">à¸£à¸°à¸¢à¸°à¹€à¸§à¸¥à¸²</span>
               <span class="sidebar-info-value">{{ case.duration }}</span>
             </div>
             {% endif %}
             {% if case.tech_stack %}
             <div class="sidebar-info-row">
-              <span class="sidebar-info-label">เทคโนโลยี</span>
+              <span class="sidebar-info-label">à¹€à¸—à¸„à¹‚à¸™à¹‚à¸¥à¸¢à¸µ</span>
               <span class="sidebar-info-value" style="font-size:.8rem;">{{ case.tech_stack }}</span>
             </div>
             {% endif %}
@@ -558,7 +558,7 @@
         <!-- Secondary CTA below card -->
         <div class="text-center mt-3">
           <a href="{% url 'portfolio:list' %}" class="text-secondary small text-decoration-none">
-            ← ดูผลงานทั้งหมด
+            â† à¸”à¸¹à¸œà¸¥à¸‡à¸²à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
           </a>
         </div>
       </div>
@@ -568,15 +568,15 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      9. Related Case Studies
-════════════════════════════════════════ -->
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 {% if related %}
 <section class="py-5 bg-body-secondary">
   <div class="container">
     <div class="text-center mb-4">
-      <span class="badge-outline mb-2 d-inline-block">ผลงานที่เกี่ยวข้อง</span>
-      <h2 class="fw-bold mt-2" style="font-size:1.4rem;">ดูเคสอื่นที่น่าสนใจ</h2>
+      <span class="badge-outline mb-2 d-inline-block">à¸œà¸¥à¸‡à¸²à¸™à¸—à¸µà¹ˆà¹€à¸à¸µà¹ˆà¸¢à¸§à¸‚à¹‰à¸­à¸‡</span>
+      <h2 class="fw-bold mt-2" style="font-size:1.4rem;">à¸”à¸¹à¹€à¸„à¸ªà¸­à¸·à¹ˆà¸™à¸—à¸µà¹ˆà¸™à¹ˆà¸²à¸ªà¸™à¹ƒà¸ˆ</h2>
     </div>
     <div class="row g-4">
       {% for cs in related %}
@@ -585,10 +585,10 @@
           <a href="{{ cs.get_absolute_url }}" class="stretched-link text-decoration-none"></a>
           <div
             class="related-thumb"
-            {% if cs.cover_image %}style="background-image:url('{{ cs.cover_image.url }}');"{% endif %}
+            {% if cs.display_cover %}style="background-image:url('{{ cs.display_cover }}');"{% endif %}
           >
-            {% if not cs.cover_image %}
-            <div class="related-thumb-fallback">📂</div>
+            {% if not cs.display_cover %}
+            <div class="related-thumb-fallback">ðŸ“‚</div>
             {% endif %}
           </div>
           <div class="p-3">
@@ -606,26 +606,26 @@
 </section>
 {% endif %}
 
-<!-- ══════════════════════════════════════
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      10. CTA Final
-════════════════════════════════════════ -->
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <section class="cta-final">
   <div class="container" style="max-width:640px;">
-    <div class="badge-outline mb-3 d-inline-block">ปรึกษาฟรี ไม่มีข้อผูกมัด</div>
-    <h2 class="fw-bold mb-3">อยากได้ผลแบบนี้?<br>ปรึกษาเราได้เลย</h2>
-    <p class="mb-4">ทีม AI Automation Specialist พร้อมวิเคราะห์ปัญหาและออกแบบระบบ AI ที่เหมาะกับธุรกิจคุณโดยเฉพาะ — ตอบกลับภายใน 24 ชั่วโมง</p>
+    <div class="badge-outline mb-3 d-inline-block">à¸›à¸£à¸¶à¸à¸©à¸²à¸Ÿà¸£à¸µ à¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸œà¸¹à¸à¸¡à¸±à¸”</div>
+    <h2 class="fw-bold mb-3">à¸­à¸¢à¸²à¸à¹„à¸”à¹‰à¸œà¸¥à¹à¸šà¸šà¸™à¸µà¹‰?<br>à¸›à¸£à¸¶à¸à¸©à¸²à¹€à¸£à¸²à¹„à¸”à¹‰à¹€à¸¥à¸¢</h2>
+    <p class="mb-4">à¸—à¸µà¸¡ AI Automation Specialist à¸žà¸£à¹‰à¸­à¸¡à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¸›à¸±à¸à¸«à¸²à¹à¸¥à¸°à¸­à¸­à¸à¹à¸šà¸šà¸£à¸°à¸šà¸š AI à¸—à¸µà¹ˆà¹€à¸«à¸¡à¸²à¸°à¸à¸±à¸šà¸˜à¸¸à¸£à¸à¸´à¸ˆà¸„à¸¸à¸“à¹‚à¸”à¸¢à¹€à¸‰à¸žà¸²à¸° â€” à¸•à¸­à¸šà¸à¸¥à¸±à¸šà¸ à¸²à¸¢à¹ƒà¸™ 24 à¸Šà¸±à¹ˆà¸§à¹‚à¸¡à¸‡</p>
     <a href="{% url 'pages:contact' %}?source=portfolio_cta{% if case.pk %}&case={{ case.pk }}{% endif %}" class="btn btn-primary btn-lg px-5 py-2">
-      ปรึกษาฟรีตอนนี้เลย
+      à¸›à¸£à¸¶à¸à¸©à¸²à¸Ÿà¸£à¸µà¸•à¸­à¸™à¸™à¸µà¹‰à¹€à¸¥à¸¢
     </a>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      Lightbox Overlay
-════════════════════════════════════════ -->
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 {% if case.images.all %}
 <div id="lightbox-overlay" role="dialog" aria-modal="true">
-  <button id="lightbox-close" aria-label="ปิด">&times;</button>
+  <button id="lightbox-close" aria-label="à¸›à¸´à¸”">&times;</button>
   <img id="lightbox-img" src="" alt="">
 </div>
 {% endif %}
@@ -666,3 +666,4 @@
 </script>
 {% endif %}
 {% endblock %}
+

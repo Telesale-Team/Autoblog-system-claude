@@ -30,7 +30,9 @@ class CaseStudy(models.Model):
                                    help_text="เว้นว่างได้ถ้าลูกค้าไม่ให้เปิดเผย")
     industry = models.CharField("อุตสาหกรรม", max_length=30, choices=INDUSTRY_CHOICES)
 
-    cover_image = models.ImageField("รูปปก", upload_to="portfolio/covers/%Y/%m/", blank=True, null=True)
+    cover_image = models.ImageField("รูปปก (อัพโหลด)", upload_to="portfolio/covers/%Y/%m/", blank=True, null=True)
+    cover_image_url = models.URLField("รูปปก (URL ภายนอก)", max_length=500, blank=True,
+        help_text="ใส่ URL จาก Unsplash หรือ CDN — ถ้ากรอกทั้งคู่จะใช้ URL นี้")
 
     problem = models.TextField("ปัญหาเดิม")
     solution = CKEditor5Field("วิธีแก้", config_name="extends")
@@ -78,6 +80,14 @@ class CaseStudy(models.Model):
 
     def get_absolute_url(self):
         return reverse("portfolio:detail", kwargs={"slug": self.slug})
+
+    @property
+    def display_cover(self):
+        if self.cover_image_url:
+            return self.cover_image_url
+        if self.cover_image:
+            return self.cover_image.url
+        return ""
 
 
 class CaseStudyImage(models.Model):
