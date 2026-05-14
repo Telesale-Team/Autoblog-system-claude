@@ -24,11 +24,17 @@
   --font-display:    'Playfair Display', Georgia, serif;
 
   /* Heading colors (theme-aware) */
-  --heading-dark-bg: #f1f5f9;   /* heading บน dark background */
-  --heading-light-bg: var(--brand-navy); /* heading บน light background */
+  --heading-dark-bg:  #faf6ee;   /* heading บน dark bg — warm ivory */
+  --heading-light-bg: #2c1a0e;   /* heading บน light bg — dark espresso */
 
   /* Spacing scale (ใช้ร่วมกับ Bootstrap) */
   --section-py:      4rem;
+}
+
+/* ── Global link color — gold ── */
+:root {
+  --bs-link-color:       var(--brand-gold);
+  --bs-link-hover-color: var(--brand-gold-d);
 }
 
 /* ── Dark mode overrides ── */
