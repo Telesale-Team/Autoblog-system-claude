@@ -16,9 +16,9 @@
 | Token | Value | ใช้กับ |
 |-------|-------|--------|
 | `--brand-navy` | `#1a2744` | Primary bg, Heading (light mode) |
-| `--brand-blue` | `#2563eb` | btn-primary, link, focus ring |
+| `--brand-blue` | `#2563eb` | Secondary blue (ใช้เป็น fallback) |
 | `--brand-blue-d` | `#1d4ed8` | Blue hover state |
-| `--brand-gold` | `#c9a96e` | Accent: logo, navbar hover, highlight |
+| `--brand-gold` | `#c9a96e` | **Primary** — btn-primary, links, interactive |
 | `--brand-gold-d` | `#b8924f` | Gold hover state |
 | `--brand-green` | `#10b981` | Success, positive metric |
 | `--brand-dark` | `#0f172a` | Dark mode body background |

@@ -7,9 +7,9 @@
 :root {
   /* Brand Palette */
   --brand-navy:      #1a2744;   /* Primary — bg, heading (light mode) */
-  --brand-blue:      #2563eb;   /* Interactive — btn-primary, link, focus */
+  --brand-blue:      #2563eb;   /* Secondary blue — ยังใช้งานได้ */
   --brand-blue-d:    #1d4ed8;   /* Blue hover */
-  --brand-gold:      #c9a96e;   /* Accent — logo, navbar hover, highlight เท่านั้น */
+  --brand-gold:      #c9a96e;   /* Primary — btn-primary, links, interactive */
   --brand-gold-d:    #b8924f;   /* Gold hover */
   --brand-green:     #10b981;   /* Success */
   --brand-dark:      #0f172a;   /* Dark background */
@@ -35,16 +35,39 @@
 [data-bs-theme="dark"] {
   --bs-body-bg:       var(--brand-dark);
   --bs-body-color:    #e2e8f0;
-  --bs-primary:       var(--brand-blue);
-  --bs-primary-rgb:   37, 99, 235;
+  --bs-primary:       var(--brand-gold);
+  --bs-primary-rgb:   201, 169, 110;
   --bs-success-rgb:   16, 185, 129;
   --bs-border-color:  var(--brand-border);
 }
 
 /* ── Light mode overrides ── */
 [data-bs-theme="light"] {
-  --bs-primary:       var(--brand-blue);
-  --bs-primary-rgb:   37, 99, 235;
+  --bs-primary:       var(--brand-gold);
+  --bs-primary-rgb:   201, 169, 110;
+}
+
+/* ── btn-primary override — gold bg ต้องใช้ text สีเข้ม ── */
+.btn-primary {
+  background-color: var(--brand-gold);
+  border-color: var(--brand-gold);
+  color: var(--brand-dark);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--brand-gold-d);
+  border-color: var(--brand-gold-d);
+  color: var(--brand-dark);
+}
+.btn-outline-primary {
+  color: var(--brand-gold);
+  border-color: var(--brand-gold);
+}
+.btn-outline-primary:hover {
+  background-color: var(--brand-gold);
+  border-color: var(--brand-gold);
+  color: var(--brand-dark);
 }
 
 /* ── Heading colors (theme-aware) ── */
@@ -139,7 +162,7 @@ body {
 .section-label {
   font-size: .78rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: .12em;
-  color: var(--brand-blue);
+  color: var(--brand-gold);
 }
 
 .roi-box {
