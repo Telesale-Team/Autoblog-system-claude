@@ -1,8 +1,8 @@
-# AI Automation Business — 12-Agent System
+# AI Automation Business — 13-Agent System
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.1 | **Updated:** 2026-05-09
+**Version:** 2.2 | **Updated:** 2026-05-14
 
 ---
 
@@ -21,7 +21,7 @@
 
 ---
 
-## 12 Agents
+## 13 Agents
 
 | # | Agent | ไฟล์ | บทบาทหลัก |
 |---|-------|------|-----------|
@@ -37,6 +37,7 @@
 | 10 | Legal Advisor | `.claude/agents/10_legal_advisor.md` | สัญญา, PDPA, compliance |
 | 11 | SEO Specialist | `.claude/agents/11_seo_specialist.md` | Keyword research, on-page SEO, ranking |
 | 12 | Content Writer (TH) | `.claude/agents/12_content_writer_th.md` | เขียนบทความไทยคุณภาพสูงสำหรับ SEO + lead |
+| 13 | Frontend Designer | `.claude/agents/13_frontend_designer.md` | Design System, UI/UX, Color Palette, Component Library |
 
 ## Skills (ใน `.claude/skills/`)
 
@@ -66,6 +67,7 @@ Activate AI Orchestrator - [คำถาม]
 Activate Money Manager - [คำถาม]
 Activate AI Toolsmith - [คำถาม]
 Activate QA Agent - [คำถาม]
+Activate Frontend Designer - [คำถาม]
 ```
 
 ### Alias สั้น:
@@ -93,6 +95,7 @@ Activate QA Agent - [คำถาม]
 | `legal-advisor` | Legal Advisor |
 | `seo-specialist` | SEO Specialist |
 | `content-writer-th` | Content Writer (TH) |
+| `frontend-designer` | Frontend Designer |
 
 ### Auto-routing ผ่าน Chief of Staff:
 ```
@@ -115,6 +118,7 @@ Chief of Staff จะเลือก agent ที่เหมาะสมให�
 | ปิดดีลลูกค้าใหม่ | Hustler | Legal, Money Manager |
 | ปัญหาการเงิน | Money Manager | Data Analyst, Legal |
 | ทำคอนเทนต์ SEO / blog | Marketing Specialist | SEO, Content Writer, AI Toolsmith, QA |
+| Design System / UI/UX | Frontend Designer | Marketing Specialist, AI Orchestrator, QA |
 | Keyword research / on-page SEO | SEO Specialist | Content Writer, Data Analyst |
 | เขียนบทความภาษาไทย | Content Writer (TH) | SEO, AI Toolsmith, QA |
 

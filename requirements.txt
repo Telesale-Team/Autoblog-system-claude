@@ -11,6 +11,7 @@ easy-thumbnails==2.10.1
 mysqlclient==2.2.8
 pillow==12.2.0
 python-slugify==8.0.4
+whitenoise==6.12.0
 sqlparse==0.5.5
 text-unidecode==1.3
 tzdata==2026.2

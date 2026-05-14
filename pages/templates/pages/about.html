@@ -1,20 +1,85 @@
-{% extends "pages/base.html" %}
+{% extends "base_public.html" %}
 {% load static %}
 
-{% block title %}About — AIBoot Thailand{% endblock %}
-
-{% block extra_css %}
-<link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
-<link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
-{% endblock %}
+{% block title %}เกี่ยวกับเรา — AIBiz Thailand{% endblock %}
 
 {% block content %}
+<main class="container mt-5 mb-5">
 
-{% endblock %}
+  <!-- Page header -->
+  <div class="pb-4 mb-5 border-bottom">
+    <h1 class="fw-bold">เกี่ยวกับ AIBiz Thailand</h1>
+    <p class="lead text-body-secondary">ผู้เชี่ยวชาญด้าน AI Automation สำหรับธุรกิจ SME ไทย ช่วยลดต้นทุนและเพิ่มประสิทธิภาพด้วยเทคโนโลยี AI ที่ใช้งานได้จริง</p>
+  </div>
 
-{% block extra_js %}
-<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
-<script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
-<script src="{% static 'assets/js/main.js' %}"></script>
+  <!-- Mission -->
+  <div class="row g-5 mb-5 align-items-center">
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-3">ทำไมต้อง AIBiz?</h2>
+      <p class="text-body-secondary">SME ไทยส่วนใหญ่ยังขาดความรู้และทรัพยากรในการนำ AI มาใช้งานจริง เราจึงเป็นสะพานเชื่อมระหว่างเทคโนโลยี AI และธุรกิจของคุณ</p>
+      <p class="text-body-secondary">เราไม่ได้แค่ขายโซลูชัน แต่เราทำความเข้าใจ Process ของธุรกิจคุณก่อน แล้วออกแบบ AI ที่ตอบโจทย์จริงๆ วัดผลได้จริงๆ</p>
+      <ul class="list-unstyled mt-4">
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>ประสบการณ์ด้าน AI Automation มากกว่า 3 ปี</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>ลูกค้า SME ไทยที่ใช้ระบบจริงมากกว่า 20 ราย</li>
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>ลดต้นทุน Manual Operation เฉลี่ย 60-80%</li>
+        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Support ภาษาไทย ตอบกลับภายใน 24 ชั่วโมง</li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <div class="p-4 rounded bg-body-secondary border h-100">
+        <h5 class="fw-bold mb-3">สิ่งที่เราเชี่ยวชาญ</h5>
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-chat-dots-fill fs-4 text-primary flex-shrink-0 mt-1"></i>
+            <div><strong>AI Chatbot & Automation</strong><br><small class="text-body-secondary">Line, Facebook, Website, Internal Tools</small></div>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-cpu-fill fs-4 text-primary flex-shrink-0 mt-1"></i>
+            <div><strong>Custom AI Agent</strong><br><small class="text-body-secondary">RAG, Fine-tuning, Multi-agent Systems</small></div>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-gear-wide-connected fs-4 text-primary flex-shrink-0 mt-1"></i>
+            <div><strong>Workflow Integration</strong><br><small class="text-body-secondary">n8n, Zapier, API Integration, ERP</small></div>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-hdd-network-fill fs-4 text-primary flex-shrink-0 mt-1"></i>
+            <div><strong>AI + Hardware</strong><br><small class="text-body-secondary">Computer Vision, IoT, Edge AI</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <div class="p-5 rounded bg-body-secondary border mb-5">
+    <h2 class="fw-bold text-center mb-4">หลักการทำงานของเรา</h2>
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="fs-1 mb-2">🎯</div>
+        <h5 class="fw-bold">วัดผลได้จริง</h5>
+        <p class="text-body-secondary small mb-0">ทุกโปรเจกต์มี KPI ชัดเจน และรายงานผลลัพธ์เป็นตัวเลขที่จับต้องได้</p>
+      </div>
+      <div class="col-md-4">
+        <div class="fs-1 mb-2">🤝</div>
+        <h5 class="fw-bold">เข้าใจธุรกิจก่อน</h5>
+        <p class="text-body-secondary small mb-0">ไม่ขาย Solution สำเร็จรูป แต่ออกแบบให้ตรงกับ Process จริงของคุณ</p>
+      </div>
+      <div class="col-md-4">
+        <div class="fs-1 mb-2">🚀</div>
+        <h5 class="fw-bold">เริ่มได้เร็ว</h5>
+        <p class="text-body-secondary small mb-0">MVP ใน 2-4 สัปดาห์ ทดลองใช้จริงก่อน scale ใหญ่</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="text-center">
+    <h3 class="fw-bold mb-3">พร้อมเริ่มต้นหรือยัง?</h3>
+    <p class="text-body-secondary mb-4">ปรึกษาฟรี ไม่มีข้อผูกมัด เราจะช่วยวิเคราะห์ว่า AI จะช่วยธุรกิจคุณได้อย่างไร</p>
+    <a href="{% url 'pages:contact' %}" class="btn btn-primary btn-lg px-4">
+      💬 ปรึกษาฟรี <i class="bi bi-arrow-right ms-1"></i>
+    </a>
+  </div>
+
+</main>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "pages/base.html" %}
+{% extends "base_public.html" %}
 
 {% block title %}ผลงาน — Case Studies{% endblock %}
 
@@ -54,7 +54,7 @@
             {% if not cs.cover_image %}<div class="thumb-fallback">📂</div>{% endif %}
           </div>
           <div class="p-3">
-            <small class="text-primary text-uppercase fw-semibold">{{ cs.get_industry_display }}</small>
+            <span class="badge text-bg-secondary fw-normal mb-1">{{ cs.get_industry_display }}</span>
             <h3 class="fs-6 fw-bold text-body mt-1 mb-2">{{ cs.project_title }}</h3>
             <p class="text-secondary small">{{ cs.problem|truncatechars:120 }}</p>
             {% if cs.roi_metric %}<small class="text-secondary">⭐ {{ cs.roi_metric }}</small>{% endif %}

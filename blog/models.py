@@ -13,10 +13,21 @@ def slugify_th(value):
 
 
 class Category(models.Model):
+    COLOR_CHOICES = [
+        ("primary", "Primary (น้ำเงิน)"),
+        ("secondary", "Secondary (เทา)"),
+        ("success", "Success (เขียว)"),
+        ("danger", "Danger (แดง)"),
+        ("warning", "Warning (เหลือง)"),
+        ("info", "Info (ฟ้า)"),
+        ("dark", "Dark (ดำ)"),
+    ]
+
     name = models.CharField("ชื่อหมวด", max_length=100, unique=True)
     slug = models.SlugField(max_length=120, unique=True, blank=True, allow_unicode=False)
     description = models.TextField("คำอธิบาย", blank=True)
     display_order = models.IntegerField(default=0)
+    color = models.CharField("สี Badge", max_length=20, choices=COLOR_CHOICES, default="secondary")
 
     class Meta:
         verbose_name_plural = "Categories"

@@ -1,91 +1,102 @@
-{% extends "pages/base.html" %}
+{% extends "base_public.html" %}
 {% load static %}
 
-{% block title %}Contact — AIBoot Thailand{% endblock %}
-
-{% block extra_css %}
-<link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
-<link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
-{% endblock %}
+{% block title %}ติดต่อเรา — AIBiz Thailand{% endblock %}
 
 {% block content %}
-<main class="main">
+<main class="container mt-5 mb-5">
 
-  <div class="page-title light-background">
-    <div class="container">
-      <h1>Contact</h1>
-      <nav class="breadcrumbs">
-        <ol>
-          <li><a href="{% url 'pages:home' %}">Home</a></li>
-          <li class="current">Contact</li>
-        </ol>
-      </nav>
-    </div>
+  <!-- Page header -->
+  <div class="pb-4 mb-5 border-bottom">
+    <h1 class="fw-bold">ติดต่อเรา</h1>
+    <p class="lead text-body-secondary">พร้อมให้คำปรึกษาเรื่อง AI สำหรับธุรกิจของคุณ ติดต่อเราได้เลย ตอบกลับภายใน 24 ชั่วโมง</p>
   </div>
 
-  <section id="contact" class="contact section">
-    <div class="container" data-aos="fade">
+  <div class="row g-5">
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-success mb-4">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
+    <!-- Contact info -->
+    <div class="col-md-4">
+      <div class="p-4 rounded bg-body-secondary border h-100">
+        <h5 class="fw-bold mb-4">ข้อมูลติดต่อ</h5>
 
-      <div class="row gy-5 gx-lg-5">
-
-        <div class="col-lg-4">
-          <div class="info">
-            <h3>Get in touch</h3>
-            <p>พร้อมให้คำปรึกษาเรื่อง AI สำหรับธุรกิจของคุณ ติดต่อเราได้เลย</p>
-            <div class="info-item d-flex">
-              <i class="bi bi-envelope flex-shrink-0"></i>
-              <div><h4>Email:</h4><p>dphoompat.pjs@gmail.com</p></div>
-            </div>
-            <div class="info-item d-flex">
-              <i class="bi bi-telephone flex-shrink-0"></i>
-              <div><h4>โทร:</h4><p>กรอกฟอร์มด้านขวา เราจะติดต่อกลับ</p></div>
-            </div>
+        <div class="d-flex gap-3 align-items-start mb-4">
+          <i class="bi bi-envelope-fill fs-5 text-primary flex-shrink-0 mt-1"></i>
+          <div>
+            <div class="fw-semibold small">Email</div>
+            <a href="mailto:dphoompat.pjs@gmail.com" class="text-body-secondary text-decoration-none small">dphoompat.pjs@gmail.com</a>
           </div>
         </div>
 
-        <div class="col-lg-8">
-          <form method="post" action="{% url 'pages:contact' %}">
-            {% csrf_token %}
-            <div class="row">
-              <div class="col-md-6 form-group">
-                {{ form.name }}
-              </div>
-              <div class="col-md-6 form-group mt-3 mt-md-0">
-                {{ form.email }}
-              </div>
-            </div>
-            <div class="form-group mt-3">
-              {{ form.phone }}
-            </div>
-            <div class="form-group mt-3">
-              {{ form.company }}
-            </div>
-            <div class="form-group mt-3">
-              {{ form.message }}
-            </div>
-            {% if form.errors %}
-              <div class="alert alert-danger mt-3">กรุณาตรวจสอบข้อมูลที่กรอก</div>
-            {% endif %}
-            <div class="text-center mt-3">
-              <button type="submit" class="btn btn-primary px-4">ส่งข้อความ</button>
-            </div>
-          </form>
+        <div class="d-flex gap-3 align-items-start mb-4">
+          <i class="bi bi-clock-fill fs-5 text-primary flex-shrink-0 mt-1"></i>
+          <div>
+            <div class="fw-semibold small">เวลาทำการ</div>
+            <div class="text-body-secondary small">จันทร์–ศุกร์ 09:00–18:00 น.</div>
+          </div>
         </div>
 
+        <div class="d-flex gap-3 align-items-start">
+          <i class="bi bi-chat-fill fs-5 text-primary flex-shrink-0 mt-1"></i>
+          <div>
+            <div class="fw-semibold small">Line / Facebook</div>
+            <div class="text-body-secondary small">กรอกฟอร์มด้านขวา เราจะติดต่อกลับ</div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+
+    <!-- Contact form -->
+    <div class="col-md-8">
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" action="{% url 'pages:contact' %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label small fw-semibold">ชื่อ-นามสกุล *</label>
+            {{ form.name }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-semibold">อีเมล *</label>
+            {{ form.email }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-semibold">เบอร์โทรศัพท์</label>
+            {{ form.phone }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small fw-semibold">บริษัท / ธุรกิจ</label>
+            {{ form.company }}
+          </div>
+          <div class="col-12">
+            <label class="form-label small fw-semibold">ข้อความ / ต้องการปรึกษาเรื่องอะไร *</label>
+            {{ form.message }}
+          </div>
+        </div>
+
+        {% if form.errors %}
+          <div class="alert alert-danger mt-3">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>กรุณาตรวจสอบข้อมูลที่กรอก
+          </div>
+        {% endif %}
+
+        <div class="mt-4">
+          <button type="submit" class="btn btn-primary px-4">
+            ส่งข้อความ <i class="bi bi-send ms-1"></i>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
 
 </main>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
-<script src="{% static 'assets/js/main.js' %}"></script>
 {% endblock %}

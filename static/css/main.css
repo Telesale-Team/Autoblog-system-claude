@@ -1,22 +1,73 @@
-/* Brand variables — extend Bootstrap 5 dark theme */
+/* ============================================================
+   DESIGN TOKENS — AIBiz Thailand
+   Option A: Tech Professional (Navy + Gold)
+   Single source of truth — อย่าแก้สีที่อื่น ให้แก้ที่นี่เท่านั้น
+   ============================================================ */
+
 :root {
-  --brand-blue:    #3b82f6;
-  --brand-blue-d:  #1d4ed8;
-  --brand-green:   #10b981;
-  --brand-purple:  #8b5cf6;
-  --brand-dark:    #0a0f1e;
-  --brand-card:    #111827;
-  --brand-border:  #1f2937;
+  /* Brand Palette */
+  --brand-navy:      #1a2744;   /* Primary — bg, heading (light mode) */
+  --brand-blue:      #2563eb;   /* Interactive — btn-primary, link, focus */
+  --brand-blue-d:    #1d4ed8;   /* Blue hover */
+  --brand-gold:      #c9a96e;   /* Accent — logo, navbar hover, highlight เท่านั้น */
+  --brand-gold-d:    #b8924f;   /* Gold hover */
+  --brand-green:     #10b981;   /* Success */
+  --brand-dark:      #0f172a;   /* Dark background */
+  --brand-card:      #111827;   /* Card bg (dark mode) */
+  --brand-border:    #1e2d4a;   /* Border (dark mode) */
+  --brand-muted:     #94a3b8;   /* Muted text, placeholder */
+  --brand-blue-light:#93c5fd;   /* Light blue: link hover, h4, highlight */
+  --brand-amber:     #fbbf24;   /* Amber: code highlight, blockquote accent */
+
+  /* Typography */
+  --font-th:         'Sarabun', 'Segoe UI', sans-serif;
+  --font-display:    'Playfair Display', Georgia, serif;
+
+  /* Heading colors (theme-aware) */
+  --heading-dark-bg: #f1f5f9;   /* heading บน dark background */
+  --heading-light-bg: var(--brand-navy); /* heading บน light background */
+
+  /* Spacing scale (ใช้ร่วมกับ Bootstrap) */
+  --section-py:      4rem;
 }
 
+/* ── Dark mode overrides ── */
 [data-bs-theme="dark"] {
-  --bs-body-bg: var(--brand-dark);
-  --bs-body-color: #e2e8f0;
-  --bs-primary: var(--brand-blue);
-  --bs-primary-rgb: 59, 130, 246;
-  --bs-success-rgb: 16, 185, 129;
-  --bs-border-color: var(--brand-border);
+  --bs-body-bg:       var(--brand-dark);
+  --bs-body-color:    #e2e8f0;
+  --bs-primary:       var(--brand-blue);
+  --bs-primary-rgb:   37, 99, 235;
+  --bs-success-rgb:   16, 185, 129;
+  --bs-border-color:  var(--brand-border);
 }
+
+/* ── Light mode overrides ── */
+[data-bs-theme="light"] {
+  --bs-primary:       var(--brand-blue);
+  --bs-primary-rgb:   37, 99, 235;
+}
+
+/* ── Heading colors (theme-aware) ── */
+[data-bs-theme="dark"]  h1, [data-bs-theme="dark"]  h2,
+[data-bs-theme="dark"]  h3, [data-bs-theme="dark"]  h4,
+[data-bs-theme="dark"]  h5, [data-bs-theme="dark"]  h6 { color: var(--heading-dark-bg); }
+[data-bs-theme="light"] h1, [data-bs-theme="light"] h2,
+[data-bs-theme="light"] h3, [data-bs-theme="light"] h4,
+[data-bs-theme="light"] h5, [data-bs-theme="light"] h6 { color: var(--heading-light-bg); }
+
+/* ── Utility classes ── */
+.text-gold   { color: var(--brand-gold) !important; }
+.text-navy   { color: var(--brand-navy) !important; }
+.bg-navy     { background-color: var(--brand-navy) !important; }
+
+/* ── Custom button: Gold (ใช้สำหรับ premium CTA เท่านั้น) ── */
+.btn-gold {
+  background: var(--brand-gold);
+  color: var(--brand-dark);
+  border: none;
+  font-weight: 600;
+}
+.btn-gold:hover { background: var(--brand-gold-d); color: var(--brand-dark); }
 
 body {
   font-family: 'Sarabun', 'Segoe UI', sans-serif;
@@ -24,8 +75,9 @@ body {
 }
 
 /* Navbar */
-.navbar .nav-link { color: #cbd5e1; font-size: .92rem; font-weight: 500; }
-.navbar .nav-link:hover, .navbar .nav-link.active { color: var(--brand-blue); }
+.navbar .nav-link { font-size: .92rem; font-weight: 500; }
+.navbar .nav-link:hover, .navbar .nav-link.active { color: var(--brand-gold) !important; }
+.navbar-brand span { color: var(--brand-gold); }
 
 /* Hero gradient background */
 .hero-section {
@@ -52,7 +104,7 @@ body {
   font-size: clamp(2rem, 5vw, 3.6rem);
   font-weight: 900;
   line-height: 1.15;
-  color: #f9fafb;
+  color: var(--heading-dark-bg);
   max-width: 820px;
 }
 .hero-section .accent { color: var(--brand-blue); }
@@ -122,28 +174,28 @@ body {
 .fnode.ai { border-color: rgba(139,92,246,.3); color: #a78bfa; }
 
 .cta-section {
-  background: linear-gradient(135deg, #1e3a5f 0%, #1a1f3a 50%, #1e293b 100%);
-  border-top: 1px solid #1e3a5f;
-  border-bottom: 1px solid #1e3a5f;
+  background: var(--brand-navy);
+  border-top: 1px solid var(--brand-border);
+  border-bottom: 1px solid var(--brand-border);
   padding: 80px 24px;
 }
 
 /* Post card thumb */
 .thumb {
   width: 100%; aspect-ratio: 16/9;
-  background: #0d1117;
+  background: var(--brand-dark);
   background-size: cover;
   background-position: center;
   border-radius: 14px 14px 0 0;
 }
 .thumb-fallback {
   display: flex; align-items: center; justify-content: center;
-  height: 100%; color: #374151; font-size: 2.4rem;
+  height: 100%; color: var(--brand-muted); font-size: 2.4rem;
 }
 
 /* ============ Article body — typography v2 ============ */
 .article-body {
-  color: #cbd5e1;
+  color: var(--bs-body-color);
   font-size: 1.0625rem;       /* 17px — better readability for Thai */
   line-height: 1.9;
   font-weight: 400;
@@ -153,7 +205,7 @@ body {
 .article-body h2,
 .article-body h3,
 .article-body h4 {
-  color: #f8fafc;
+  color: var(--heading-dark-bg);
   font-weight: 800;
   line-height: 1.25;
   letter-spacing: -.01em;
@@ -185,14 +237,14 @@ body {
 .article-body h4 {
   font-size: 1.1rem;
   margin: 1.5rem 0 .75rem;
-  color: #93c5fd;
+  color: var(--brand-blue-light);
 }
 
 /* Paragraphs */
 .article-body p {
   margin-bottom: 1.25rem;
 }
-.article-body p strong { color: #f1f5f9; font-weight: 700; }
+.article-body p strong { color: var(--heading-dark-bg); font-weight: 700; }
 
 /* Images */
 .article-body img {
@@ -215,14 +267,14 @@ body {
 
 /* Links */
 .article-body a {
-  color: #60a5fa;
+  color: var(--brand-blue);
   text-decoration: none;
-  border-bottom: 1px solid rgba(96,165,250,.4);
+  border-bottom: 1px solid rgba(37,99,235,.4);
   transition: all .15s;
 }
 .article-body a:hover {
-  color: #93c5fd;
-  border-bottom-color: #93c5fd;
+  color: var(--brand-blue-light);
+  border-bottom-color: var(--brand-blue-light);
 }
 
 /* Blockquote — premium callout */
@@ -235,23 +287,23 @@ body {
   position: relative;
 }
 .article-body blockquote p:last-child { margin-bottom: 0; }
-.article-body blockquote strong { color: #fbbf24; }
+.article-body blockquote strong { color: var(--brand-amber); }
 
 /* Inline code */
 .article-body code:not(pre code) {
-  background: #0d1117;
+  background: var(--brand-dark);
   border: 1px solid var(--brand-border);
   padding: 2px 8px;
   border-radius: 6px;
   font-size: .9em;
-  color: #fbbf24;
+  color: var(--brand-amber);
   font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
   font-weight: 500;
 }
 
 /* Code blocks (pre) — terminal-like with header */
 .article-body pre {
-  background: #0a0e14;
+  background: var(--brand-dark);
   border: 1px solid var(--brand-border);
   border-radius: 10px;
   padding: 0;
@@ -264,7 +316,7 @@ body {
   display: block;
   background: transparent;
   border: 0;
-  color: #e2e8f0;
+  color: var(--bs-body-color);
   font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
   font-size: .92rem;
   line-height: 1.7;
@@ -307,18 +359,18 @@ body {
   border-radius: 10px;
   overflow: hidden;
 }
-.article-body thead { background: #161b22; }
+.article-body thead { background: var(--brand-card); }
 .article-body th {
   padding: .85rem 1rem;
   text-align: left;
-  color: #f1f5f9;
+  color: var(--heading-dark-bg);
   font-weight: 700;
   border-bottom: 2px solid var(--brand-border);
 }
 .article-body td {
   padding: .75rem 1rem;
   border-bottom: 1px solid var(--brand-border);
-  color: #cbd5e1;
+  color: var(--bs-body-color);
 }
 .article-body tbody tr:hover { background: rgba(255,255,255,.02); }
 .article-body tr:last-child td { border-bottom: 0; }
@@ -333,7 +385,7 @@ body {
 
 /* Tag pills */
 .tag-pill {
-  background: var(--brand-border); color: #cbd5e1;
+  background: var(--brand-border); color: var(--bs-body-color);
   padding: 4px 12px; border-radius: 16px;
   font-size: .78rem; text-decoration: none;
   display: inline-block;
@@ -374,7 +426,7 @@ body {
 }
 
 .toc-card {
-  background: #0d1117;
+  background: var(--brand-dark);
   border: 1px solid var(--brand-border);
   border-radius: 12px;
   overflow: hidden;
@@ -382,15 +434,15 @@ body {
 .toc-header {
   display: flex; align-items: center; gap: 8px;
   padding: 12px 16px;
-  background: #161b22;
-  font-weight: 700; color: #e2e8f0;
+  background: var(--brand-card);
+  font-weight: 700; color: var(--bs-body-color);
   border-bottom: 1px solid var(--brand-border);
   font-size: .95rem;
 }
 .toc-icon { font-size: 1.1rem; }
 .toc-toggle {
   margin-left: auto; background: transparent; border: 0;
-  color: #94a3b8; cursor: pointer; font-size: .9rem;
+  color: var(--brand-muted); cursor: pointer; font-size: .9rem;
 }
 
 .toc-nav {
@@ -407,7 +459,7 @@ body {
 .toc-nav a {
   display: block;
   padding: 6px 16px;
-  color: #94a3b8;
+  color: var(--brand-muted);
   text-decoration: none;
   font-size: .88rem;
   border-left: 2px solid transparent;
@@ -415,13 +467,13 @@ body {
   line-height: 1.4;
 }
 .toc-nav a:hover {
-  color: #e2e8f0;
+  color: var(--bs-body-color);
   background: rgba(59,130,246,.05);
 }
 .toc-nav a.toc-h3 {
   padding-left: 32px;
   font-size: .82rem;
-  color: #64748b;
+  color: var(--bs-secondary-color);
 }
 .toc-nav a.active {
   color: var(--brand-blue);
@@ -437,7 +489,7 @@ body {
   border-radius: 12px;
   height: 250px;
   display: flex; align-items: center; justify-content: center;
-  background: #06090f;
+  background: var(--brand-dark);
 }
 
 /* Article body — wider now (no max-width 760px constraint) */

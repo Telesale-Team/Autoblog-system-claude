@@ -1,4 +1,4 @@
-{% extends "pages/base.html" %}
+{% extends "base_public.html" %}
 
 {% block title %}{{ case.meta_title|default:case.project_title }}{% endblock %}
 {% block meta_description %}{{ case.meta_description|default:case.problem|truncatechars:160 }}{% endblock %}
@@ -7,15 +7,15 @@
 {% block extra_css %}
 <style>
   .brand-card {
-    background: #161b22;
-    border: 1px solid #30363d;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
     border-radius: .75rem;
     transition: transform .15s, box-shadow .15s;
   }
-  .brand-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+  .brand-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
   .thumb {
     height: 180px;
-    background-color: #1c2128;
+    background-color: var(--bs-secondary-bg);
     background-size: cover;
     background-position: center;
     border-radius: .75rem .75rem 0 0;
@@ -33,11 +33,9 @@
     font-weight: 600;
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: var(--app-primary);
   }
   .cta-section {
     padding: 4rem 1rem;
-    background: linear-gradient(135deg, #0d1117, #161b22);
   }
 </style>
 {% endblock %}
@@ -94,11 +92,11 @@
 </article>
 
 {% if related %}
-<section class="py-5" style="background:#06090f;">
+<section class="py-5 bg-body-secondary">
   <div class="container">
     <div class="text-center mb-4">
-      <div class="section-label mb-2">ผลงานที่คล้ายกัน</div>
-      <h2 class="fw-bold text-light fs-4">ดูเพิ่มเติม</h2>
+      <div class="section-label mb-2 text-body-secondary">ผลงานที่คล้ายกัน</div>
+      <h2 class="fw-bold fs-4">ดูเพิ่มเติม</h2>
     </div>
     <div class="row g-4">
       {% for cs in related %}
@@ -108,8 +106,8 @@
             {% if not cs.cover_image %}<div class="thumb-fallback">📂</div>{% endif %}
           </div>
           <div class="p-3">
-            <small class="text-primary text-uppercase fw-semibold">{{ cs.get_industry_display }}</small>
-            <h3 class="fs-6 fw-bold text-light mt-1 mb-0">{{ cs.project_title }}</h3>
+            <span class="badge text-bg-secondary fw-normal mb-1">{{ cs.get_industry_display }}</span>
+            <h3 class="fs-6 fw-bold mt-1 mb-0">{{ cs.project_title }}</h3>
           </div>
         </a>
       </div>
@@ -119,9 +117,9 @@
 </section>
 {% endif %}
 
-<section class="cta-section text-center">
+<section class="cta-section bg-dark text-center">
   <div class="container">
-    <h2 class="fw-bold text-light mb-3">อยากได้ผลแบบนี้ในธุรกิจคุณบ้าง?</h2>
+    <h2 class="fw-bold text-white mb-3">อยากได้ผลแบบนี้ในธุรกิจคุณบ้าง?</h2>
     <p class="text-secondary mb-4">ปรึกษาฟรี ตอบกลับภายใน 24 ชั่วโมง</p>
     <a href="{% url 'pages:contact' %}?source=portfolio" class="btn btn-primary btn-lg px-4">💬 ปรึกษาฟรี</a>
   </div>

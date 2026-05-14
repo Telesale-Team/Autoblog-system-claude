@@ -1,74 +1,77 @@
-{% extends "pages/base.html" %}
+{% extends "base_public.html" %}
 {% load static %}
 
-{% block title %}Services — AIBoot Thailand{% endblock %}
-
-{% block extra_css %}
-<link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
-<link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
-{% endblock %}
+{% block title %}บริการ — AIBiz Thailand{% endblock %}
 
 {% block content %}
-<main class="main">
+<main class="container mt-5 mb-5">
 
-  <div class="page-title light-background">
-    <div class="container">
-      <h1>Services</h1>
-      <nav class="breadcrumbs">
-        <ol>
-          <li><a href="{% url 'pages:home' %}">Home</a></li>
-          <li class="current">Services</li>
-        </ol>
-      </nav>
-    </div>
+  <!-- Page header -->
+  <div class="pb-4 mb-5 border-bottom">
+    <h1 class="fw-bold">บริการของเรา</h1>
+    <p class="lead text-body-secondary">เราออกแบบและ implement ระบบ AI ที่ตอบโจทย์ธุรกิจของคุณโดยตรง ตั้งแต่ AI Chatbot ไปจนถึง Custom AI Agent และ Hardware Integration</p>
+    <a href="{% url 'pages:contact' %}" class="btn btn-primary">เริ่มต้นเลย <i class="bi bi-arrow-right ms-1"></i></a>
   </div>
 
-  <section id="services-2" class="services-2 section">
-    <div class="container">
-      <div class="row justify-content-center" data-aos="fade-up">
-        <div class="col-md-6 col-lg-4">
-          <span class="content-subtitle">Our Services</span>
-          <h2 class="content-title">AI Solutions สำหรับธุรกิจไทย</h2>
-          <p class="lead">เราออกแบบและ implement ระบบ AI ที่ตอบโจทย์ธุรกิจของคุณโดยตรง</p>
-          <p class="mb-5">ตั้งแต่ AI Chatbot ไปจนถึง Custom AI Agent และ Hardware Integration</p>
-          <p><a href="{% url 'pages:contact' %}" class="btn btn-get-started">เริ่มต้นเลย</a></p>
-        </div>
-        <div class="col-md-6 col-lg-6 ps-lg-5">
-          <div class="row">
-            <div class="col-6">
-              <div class="services-item" data-aos="fade-up">
-                <div class="services-icon"><i class="bi bi-chat-dots-fill"></i></div>
-                <div><h3>AI Chatbot</h3><p>ตอบลูกค้าอัตโนมัติทุกช่องทาง</p></div>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="services-item" data-aos="fade-up" data-aos-delay="100">
-                <div class="services-icon"><i class="bi bi-people-fill"></i></div>
-                <div><h3>Lead Generation</h3><p>สร้าง lead คุณภาพด้วย AI</p></div>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="services-item" data-aos="fade-up" data-aos-delay="200">
-                <div class="services-icon"><i class="bi bi-gear-wide-connected"></i></div>
-                <div><h3>Workflow Automation</h3><p>ระบบอัตโนมัติครบวงจร</p></div>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="services-item" data-aos="fade-up" data-aos-delay="300">
-                <div class="services-icon"><i class="bi bi-cpu-fill"></i></div>
-                <div><h3>Custom AI Agent</h3><p>AI ที่ออกแบบมาเพื่อคุณ</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Services grid -->
+  <div class="row g-4 mb-5">
+
+    <div class="col-md-6">
+      <div class="p-4 h-100 rounded border bg-body-secondary">
+        <div class="mb-3 fs-2 text-primary"><i class="bi bi-chat-dots-fill"></i></div>
+        <h3 class="fw-bold fs-5">AI Chatbot</h3>
+        <p class="text-body-secondary mb-0">ตอบลูกค้าอัตโนมัติทุกช่องทาง ทั้ง Line, Facebook, Website — ตลอด 24 ชั่วโมง ลดภาระทีม Support ได้ทันที</p>
       </div>
     </div>
-  </section>
+
+    <div class="col-md-6">
+      <div class="p-4 h-100 rounded border bg-body-secondary">
+        <div class="mb-3 fs-2 text-primary"><i class="bi bi-people-fill"></i></div>
+        <h3 class="fw-bold fs-5">AI Lead Generation</h3>
+        <p class="text-body-secondary mb-0">สร้าง lead คุณภาพด้วย AI คัดกรองและ qualify ลูกค้าเป้าหมายให้ทีม Sales โฟกัสได้ถูกคน</p>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="p-4 h-100 rounded border bg-body-secondary">
+        <div class="mb-3 fs-2 text-primary"><i class="bi bi-gear-wide-connected"></i></div>
+        <h3 class="fw-bold fs-5">Workflow Automation</h3>
+        <p class="text-body-secondary mb-0">เชื่อมต่อระบบงานต่างๆ ให้ทำงานอัตโนมัติ ลดขั้นตอน Manual ที่ซ้ำซาก ประหยัดเวลาได้มากกว่า 80%</p>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="p-4 h-100 rounded border bg-body-secondary">
+        <div class="mb-3 fs-2 text-primary"><i class="bi bi-cpu-fill"></i></div>
+        <h3 class="fw-bold fs-5">Custom AI Agent</h3>
+        <p class="text-body-secondary mb-0">AI ที่ออกแบบมาเพื่อธุรกิจของคุณโดยเฉพาะ เรียนรู้ข้อมูล Process และวิธีการทำงานของบริษัทคุณ</p>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="p-4 h-100 rounded border bg-body-secondary">
+        <div class="mb-3 fs-2 text-primary"><i class="bi bi-hdd-network-fill"></i></div>
+        <h3 class="fw-bold fs-5">AI + Hardware Integration</h3>
+        <p class="text-body-secondary mb-0">เชื่อมต่อ AI กับอุปกรณ์ฮาร์ดแวร์ เช่น กล้อง IoT เซนเซอร์ และระบบหน้าร้าน เพื่อ Automation ครบวงจร</p>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="p-4 h-100 rounded border bg-body-secondary">
+        <div class="mb-3 fs-2 text-primary"><i class="bi bi-graph-up-arrow"></i></div>
+        <h3 class="fw-bold fs-5">AI Consulting</h3>
+        <p class="text-body-secondary mb-0">วางแผนกลยุทธ์ AI สำหรับธุรกิจของคุณ ประเมิน Use Case และ ROI ก่อนลงทุนจริง</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="p-5 text-center rounded bg-dark">
+    <h2 class="fw-bold text-white mb-3">ไม่แน่ใจว่าบริการไหนเหมาะกับธุรกิจคุณ?</h2>
+    <p class="text-secondary mb-4">ปรึกษาเราฟรี เราจะช่วยวิเคราะห์และแนะนำแนวทางที่เหมาะสมที่สุด</p>
+    <a href="{% url 'pages:contact' %}" class="btn btn-primary btn-lg px-4">💬 ปรึกษาฟรีเลย</a>
+  </div>
 
 </main>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
-<script src="{% static 'assets/js/main.js' %}"></script>
 {% endblock %}

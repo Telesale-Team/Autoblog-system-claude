@@ -1,4 +1,4 @@
-{% extends "pages/base.html" %}
+{% extends "base_public.html" %}
 
 {% block title %}บทความ{% if active_category %} — {{ active_category.name }}{% endif %}{% if active_tag %} — #{{ active_tag.name }}{% endif %}{% endblock %}
 
@@ -69,7 +69,7 @@
             {% if not a.display_cover %}<div class="thumb-fallback">📝</div>{% endif %}
           </div>
           <div class="p-3">
-            <small class="text-primary text-uppercase fw-semibold">{{ a.category.name }}</small>
+            <span class="badge text-bg-{{ a.category.color }} fw-normal mb-1">{{ a.category.name }}</span>
             <h3 class="fs-6 fw-bold text-body mt-1 mb-2">{{ a.title }}</h3>
             <p class="text-secondary small">{{ a.excerpt|default:""|truncatechars:120 }}</p>
             <small class="text-secondary">{{ a.published_at|date:"d M Y" }} · {{ a.reading_time }} นาที</small>
