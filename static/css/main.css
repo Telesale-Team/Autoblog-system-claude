@@ -837,3 +837,108 @@ header.masthead .post-heading .meta a { color: #fff; }
   .post-preview > a > .post-title { font-size: 2rem; }
 }
 
+
+
+/* ============================================================
+   MOBILE RESPONSIVE FIXES
+   ============================================================ */
+
+/* ── Navbar: navbar height variable ── */
+:root { --navbar-h: 56px; }
+
+/* ── Navbar: search + social mobile layout ── */
+@media (max-width: 991.98px) {
+  .navbar .d-flex.align-items-center.gap-2.ms-3 {
+    justify-content: flex-start;
+    padding: 0.5rem 0;
+  }
+  .navbar form.d-flex {
+    margin: 0.5rem 0;
+  }
+  .navbar .input-group { max-width: 100%; }
+}
+
+/* ── Homepage: sidebar sticky top + hero image height ── */
+.sticky-top[style*="top: 1rem"] { top: calc(var(--navbar-h) + 1rem) !important; }
+
+@media (max-width: 767.98px) {
+  /* Hero image clamp height */
+  .blog-post-card img,
+  .brand-card img { height: clamp(180px, 40vw, 280px) !important; }
+}
+
+/* ── Blog detail: TOC mobile collapsible ── */
+@media (max-width: 767px) {
+  .blog-grid { grid-template-columns: 1fr !important; }
+  .blog-sidebar {
+    display: block !important;
+    order: -1;
+  }
+  .sidebar-sticky { position: static !important; }
+  .toc-nav {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .toc-nav.open { max-height: 600px; }
+}
+
+/* ── Portfolio detail: sidebar mobile ── */
+@media (max-width: 991.98px) {
+  .detail-sidebar { position: static !important; }
+}
+
+/* ── Portfolio list: filter bar sticky top ── */
+.filter-bar-wrap {
+  top: var(--navbar-h) !important;
+  z-index: 50 !important;
+}
+
+/* ── Services: Hero height mobile ── */
+@media (max-width: 767.98px) {
+  .services-hero { min-height: 65vh !important; }
+  .services-hero h1 { font-size: clamp(1.7rem, 6vw, 2.4rem) !important; }
+  .services-hero__content { padding: 3.5rem 0 3rem !important; }
+}
+
+/* ── About: Hero + Mission image mobile ── */
+@media (max-width: 991.98px) {
+  .about-hero { min-height: auto !important; }
+  .mission-img-wrap img { height: 280px !important; }
+}
+@media (max-width: 767.98px) {
+  .about-hero__stat-number { font-size: 1.5rem !important; }
+}
+
+/* ── Contact: submit row wrap ── */
+@media (max-width: 575.98px) {
+  .info-card { height: auto !important; }
+  .form-card .d-flex.align-items-center.gap-3 { flex-wrap: wrap; }
+}
+
+/* ── Blog list: filter horizontal scroll ── */
+.filter-pills-scroll {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.filter-pills-scroll::-webkit-scrollbar { display: none; }
+
+/* ── Services: Process steps mobile ── */
+@media (max-width: 575.98px) {
+  .process-step { padding: 0 0.5rem !important; }
+  .process-step h4 { font-size: 0.9rem !important; }
+  .process-step p { font-size: 0.8rem !important; }
+}
+
+/* ── Portfolio detail: stat block border mobile ── */
+@media (max-width: 575.98px) {
+  .stat-block {
+    border-left: none !important;
+    border-top: 3px solid var(--brand-gold);
+    padding: 0.75rem 0 !important;
+  }
+}

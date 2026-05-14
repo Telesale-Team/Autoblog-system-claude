@@ -23,7 +23,7 @@
       <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="ค้นหาบทความ...">
     </form>
 
-    <div class="d-flex gap-2 justify-content-center flex-wrap mb-4">
+    <div class="filter-pills-scroll gap-2 mb-4">
       <a href="{% url 'blog:list' %}" class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline-primary{% endif %}">ทั้งหมด</a>
       {% for c in categories %}
         <a href="{% url 'blog:category' c.slug %}" class="btn btn-sm {% if active_category.slug == c.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ c.name }}</a>

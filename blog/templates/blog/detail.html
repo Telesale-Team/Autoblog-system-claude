@@ -154,4 +154,10 @@
 {% block extra_js %}
 <script src="{% static 'js/blog-toc.js' %}" defer></script>
 <script src="{% static 'js/blog-code-copy.js' %}" defer></script>
+<script>
+  document.querySelector('.toc-toggle')?.addEventListener('click', function() {
+    document.querySelector('#article-toc').classList.toggle('open');
+    this.textContent = document.querySelector('#article-toc').classList.contains('open') ? '▲' : '▼';
+  });
+</script>
 {% endblock %}
