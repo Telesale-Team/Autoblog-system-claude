@@ -183,6 +183,54 @@
   .fc-cat-user-event {
     outline: 1.5px dashed rgba(255,255,255,.5) !important;
   }
+
+  /* ── Premium Modal Animations ───────────────────────────────────────── */
+  .modal.fade .modal-dialog {
+    transform: scale(.96) translateY(8px);
+    transition: transform .2s ease-out, opacity .2s ease-out;
+  }
+  .modal.show .modal-dialog {
+    transform: scale(1) translateY(0);
+  }
+  @media (max-width: 767px) {
+    #editEventModal .modal-dialog {
+      position: fixed; bottom: 0; left: 0; right: 0; margin: 0;
+      max-width: 100%;
+    }
+    #editEventModal .modal-content {
+      border-radius: 1rem 1rem 0 0;
+      border-bottom: none;
+    }
+    #editEventModal.fade .modal-dialog {
+      transform: translateY(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+    }
+    #editEventModal.show .modal-dialog {
+      transform: translateY(0);
+    }
+  }
+
+  /* ── Toast ──────────────────────────────────────────────────────────── */
+  .cal-toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    padding: .5rem 1.1rem; border-radius: .4rem;
+    font-size: .82rem; font-weight: 500; z-index: 9999;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    transform: translateY(6px);
+  }
+  .cal-toast.show {
+    opacity: 1; transform: translateY(0);
+  }
+  .cal-toast.ok  { background: var(--brand-navy,#1a2744); color: #fff; }
+  .cal-toast.err { background: #dc3545; color: #fff; }
+
+  /* ── Input focus ring (gold) ────────────────────────────────────────── */
+  #editEventModal .form-control:focus,
+  #editEventModal .form-select:focus {
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 3px rgba(201,169,110,.18);
+  }
 </style>
 {% endblock %}
 
@@ -299,17 +347,30 @@
         <button type="button" class="btn-close btn-sm align-self-start" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body pt-2">
-        <div style="font-size:.88rem" id="modalDesc" class="mb-3"></div>
-        <div id="modalReadonlyNotice" class="modal-readonly-notice d-none">
-          event นี้มาจากแผนงาน/ระบบ — ไม่สามารถแก้ไขหรือลบได้
+        <div id="modalBody">
+          <div style="font-size:.88rem" id="modalDesc" class="mb-3"></div>
+          <div id="modalReadonlyNotice" class="modal-readonly-notice d-none">
+            <i class="bi bi-lock-fill me-1"></i>event นี้มาจากแผนงาน/ระบบ — ดูได้อย่างเดียว
+          </div>
+          <div id="modalUserActions" class="d-none d-flex gap-2 mt-2">
+            <button class="btn btn-outline-primary btn-sm flex-grow-1" id="btnEditEvent">
+              <i class="bi bi-pencil me-1"></i>แก้ไข
+            </button>
+            <button class="btn btn-outline-danger btn-sm" id="btnDeleteEvent">
+              <i class="bi bi-trash me-1"></i>ลบ
+            </button>
+          </div>
         </div>
-        <div id="modalUserActions" class="d-none d-flex gap-2 mt-2">
-          <button class="btn btn-outline-primary btn-sm flex-grow-1" id="btnEditEvent">
-            <i class="bi bi-pencil me-1"></i>แก้ไข
-          </button>
-          <button class="btn btn-outline-danger btn-sm" id="btnDeleteEvent">
-            <i class="bi bi-trash me-1"></i>ลบ
-          </button>
+        {# Delete confirmation (inline replace) #}
+        <div id="deleteConfirm" class="d-none text-center py-2">
+          <i class="bi bi-exclamation-triangle-fill text-danger fs-3 d-block mb-2"></i>
+          <p class="mb-3 fw-semibold" style="font-size:.9rem">ลบงานนี้ใช่ไหม?</p>
+          <div class="d-flex gap-2 justify-content-center">
+            <button class="btn btn-danger btn-sm px-3" id="btnConfirmDelete">
+              <i class="bi bi-trash me-1"></i>ยืนยันลบ
+            </button>
+            <button class="btn btn-outline-secondary btn-sm px-3" id="btnCancelDelete">ไม่ลบ</button>
+          </div>
         </div>
       </div>
     </div>
@@ -337,11 +398,9 @@
         <div class="mb-3">
           <label class="form-label-sm">ประเภท</label>
           <select class="form-select form-select-sm" id="editCategory">
-            <option value="user-action">งานต้องทำ (Task)</option>
-            <option value="user-milestone">แผน / เป้าหมาย</option>
-            <option value="user-content">Content ที่ต้องเขียน</option>
-            <option value="user-recurring">Recurring / นัดประจำ</option>
-            <option value="user-event">อื่น ๆ</option>
+            {% for value, label in category_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
           </select>
         </div>
         <div class="mb-3">
@@ -360,239 +419,280 @@
   </div>
 </div>
 
+{# ── Toast ──────────────────────────────────────────────────────────────── #}
+<div id="calToast" class="cal-toast"></div>
+
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script>
 (function () {
+  const csrf   = '{{ csrf_token }}';
+  const API    = '{% url "dashboard:api_events" %}';
+
   /* ── Design System tokens ──────────────────────────────────────────── */
   const css      = getComputedStyle(document.documentElement);
-  const gold     = css.getPropertyValue('--app-primary').trim()       || '#c9a96e';
-  const goldDark = css.getPropertyValue('--app-secondary').trim()     || '#b8924f';
-  const navy     = css.getPropertyValue('--brand-navy').trim()        || '#1a2744';
-  const green    = css.getPropertyValue('--brand-green').trim()       || '#10b981';
-  const muted    = css.getPropertyValue('--bs-secondary-color').trim()|| '#6c757d';
-  const infoClr  = '#0891b2';   /* cyan-600 — user events */
+  const gold     = css.getPropertyValue('--app-primary').trim()        || '#c9a96e';
+  const goldDark = css.getPropertyValue('--app-secondary').trim()      || '#b8924f';
+  const navy     = css.getPropertyValue('--brand-navy').trim()         || '#1a2744';
+  const muted    = css.getPropertyValue('--bs-secondary-color').trim() || '#6c757d';
+  const userClr  = '#0891b2';
 
   /* ── Category config ───────────────────────────────────────────────── */
   const CAT_CFG = {
-    milestone:    { color: gold,          label: 'แผน (Roadmap)',     icon: '🎯', filterGroup: 'milestone' },
-    action:       { color: goldDark,      label: 'งานต้องทำ (Task)',  icon: '⚡', filterGroup: 'action'    },
-    article:      { color: green,         label: 'Actual',             icon: '📝', filterGroup: 'actual'    },
-    lead:         { color: green + 'cc',  label: 'Actual',             icon: '👤', filterGroup: 'actual'    },
-    recurring:    { color: muted,         label: 'Recurring',          icon: '🔄', filterGroup: 'recurring' },
-    content_plan: { color: navy + '99',   label: 'Content',            icon: '📄', filterGroup: 'content'   },
-    backlog:      { color: navy,          label: 'Content',            icon: '🗓️', filterGroup: 'content'   },
-    'user-action':     { color: infoClr,  label: 'งานของฉัน',         icon: '✏️', filterGroup: 'user-event', userOwned: true },
-    'user-milestone':  { color: infoClr,  label: 'งานของฉัน',         icon: '🏁', filterGroup: 'user-event', userOwned: true },
-    'user-content':    { color: infoClr,  label: 'งานของฉัน',         icon: '📋', filterGroup: 'user-event', userOwned: true },
-    'user-recurring':  { color: infoClr,  label: 'งานของฉัน',         icon: '🔁', filterGroup: 'user-event', userOwned: true },
-    'user-event':      { color: infoClr,  label: 'งานของฉัน',         icon: '📌', filterGroup: 'user-event', userOwned: true },
+    milestone:    { color: gold,     label: 'แผน (Roadmap)',    icon: '🎯', filterGroup: 'milestone' },
+    action:       { color: goldDark, label: 'งานต้องทำ',        icon: '⚡', filterGroup: 'action'    },
+    article:      { color: '#059669',label: 'Actual',            icon: '📝', filterGroup: 'actual'    },
+    lead:         { color: '#059669',label: 'Actual',            icon: '👤', filterGroup: 'actual'    },
+    recurring:    { color: muted,    label: 'Recurring',         icon: '🔄', filterGroup: 'recurring' },
+    content_plan: { color: navy,     label: 'Content',           icon: '📄', filterGroup: 'content'   },
+    backlog:      { color: navy,     label: 'Content',           icon: '🗓️', filterGroup: 'content'   },
+    general:      { color: userClr,  label: 'งานของฉัน',        icon: '📌', filterGroup: 'user-event', userOwned: true },
+    priority:     { color: gold,     label: 'งานสำคัญ',         icon: '🔥', filterGroup: 'user-event', userOwned: true },
+    meeting:      { color: '#7c3aed',label: 'ประชุม',            icon: '👥', filterGroup: 'user-event', userOwned: true },
+    delivery:     { color: '#059669',label: 'ส่งมอบงาน',        icon: '📦', filterGroup: 'user-event', userOwned: true },
+    personal:     { color: muted,    label: 'ส่วนตัว',          icon: '🙋', filterGroup: 'user-event', userOwned: true },
   };
   function getCfg(cat) { return CAT_CFG[cat] || { color: gold, label: cat, icon: '•', filterGroup: 'milestone' }; }
 
   /* ── Phase highlight ───────────────────────────────────────────────── */
   const today = new Date();
   document.querySelectorAll('#phaseBar .phase-item').forEach(el => {
-    const start = new Date(el.dataset.phaseStart);
-    const end   = new Date(el.dataset.phaseEnd);
-    if (today >= start && today <= end) {
-      el.classList.add('phase-active');
-    } else if (today > end) {
-      el.classList.add('phase-done');
-    }
+    const s = new Date(el.dataset.phaseStart), e = new Date(el.dataset.phaseEnd);
+    el.classList.add(today >= s && today <= e ? 'phase-active' : today > e ? 'phase-done' : '');
   });
 
-  /* ── localStorage helpers ──────────────────────────────────────────── */
-  const LS_KEY = 'cal_user_events_v1';
-  function loadUserEvents() {
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; }
-  }
-  function saveUserEvents(arr) {
-    localStorage.setItem(LS_KEY, JSON.stringify(arr));
-  }
-  function genId() { return 'ue_' + Date.now() + '_' + Math.random().toString(36).slice(2,7); }
-
-  /* ── Build event list ──────────────────────────────────────────────── */
+  /* ── System events (from Django) ───────────────────────────────────── */
   const rawEvents = {{ events_json|safe }};
   const sysEvents = rawEvents.map(e => ({
     ...e,
     color:       getCfg(e.category).color,
     borderColor: 'transparent',
-    extendedProps: {
-      description: e.description || '',
-      category:    e.category    || 'milestone',
-      userOwned:   false,
-    },
+    editable:    false,
+    extendedProps: { description: e.description || '', category: e.category || 'milestone', isSystem: true },
   }));
-
-  function userEventsToFC(arr) {
-    return arr.map(ue => ({
-      id:          ue.id,
-      title:       getCfg(ue.category).icon + ' ' + ue.title,
-      start:       ue.date,
-      color:       infoClr,
-      borderColor: 'transparent',
-      classNames:  ['fc-cat-user-event'],
-      extendedProps: {
-        description: ue.desc || '',
-        category:    ue.category,
-        userOwned:   true,
-        rawTitle:    ue.title,
-      },
-    }));
-  }
 
   /* ── FullCalendar init ─────────────────────────────────────────────── */
   let activeFilter = 'all';
 
   const cal = new FullCalendar.Calendar(document.getElementById('calendar'), {
-    initialView: 'dayGridMonth',
-    initialDate: '2026-05-15',
-    locale: 'th',
-    firstDay: 1,
-    height: 'auto',
-    headerToolbar: {
-      left:   'prev,next today',
-      center: 'title',
-      right:  'dayGridMonth,listMonth',
-    },
-    buttonText: {
-      today:     'วันนี้',
-      month:     'เดือน',
-      listMonth: 'รายการ',
-    },
-    events: function (fetchInfo, successCb) {
-      const allEvents = [
-        ...sysEvents,
-        ...userEventsToFC(loadUserEvents()),
-      ];
-      if (activeFilter === 'all') {
-        successCb(allEvents);
-      } else {
-        successCb(allEvents.filter(e => {
-          const cat = e.extendedProps ? e.extendedProps.category : (e.category || '');
-          return getCfg(cat).filterGroup === activeFilter;
-        }));
-      }
-    },
+    initialView:  'dayGridMonth',
+    initialDate:  '2026-05-15',
+    locale:       'th',
+    firstDay:     1,
+    height:       'auto',
+    headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listMonth' },
+    buttonText:   { today: 'วันนี้', month: 'เดือน', listMonth: 'รายการ' },
+
+    eventSources: [
+      // Source 1: System events (static from Django)
+      {
+        events: function (fetchInfo, success) {
+          const evts = activeFilter === 'all'
+            ? sysEvents
+            : sysEvents.filter(e => getCfg(e.category).filterGroup === activeFilter);
+          success(evts);
+        },
+        editable: false,
+      },
+      // Source 2: User events (from DB via API)
+      {
+        url:    API,
+        method: 'GET',
+        extraParams: function () { return { start: cal.view.activeStart.toISOString(), end: cal.view.activeEnd.toISOString() }; },
+        success: function (data) {
+          return data.map(e => ({
+            id:          'db_' + e.id,
+            dbId:        e.id,
+            title:       getCfg(e.extendedProps.category).icon + ' ' + e.title,
+            start:       e.start,
+            end:         e.end,
+            allDay:      e.allDay,
+            color:       e.color || getCfg(e.extendedProps.category).color,
+            borderColor: 'transparent',
+            classNames:  ['fc-cat-user-event'],
+            extendedProps: { ...e.extendedProps, isSystem: false },
+          }));
+        },
+        failure: function () { showToast('โหลด events ไม่สำเร็จ', true); },
+      },
+    ],
+
     eventDidMount: function (info) {
       const desc = info.event.extendedProps.description;
       if (desc) info.el.setAttribute('title', desc);
     },
+
+    // คลิกวันว่าง → เพิ่มงานใหม่
+    dateClick: function (info) {
+      openEditModal(null, info.dateStr);
+    },
+
+    // คลิก event
     eventClick: function (info) {
       openDetailModal(info.event);
+    },
+
+    // Drag & Drop → PATCH
+    eventDrop: function (info) {
+      const dbId = info.event.extendedProps.isSystem ? null : info.event.extendedProps.dbId || info.event.id.replace('db_','');
+      if (!dbId) { info.revert(); return; }
+      apiPatch(dbId, { start: info.event.startStr, allDay: info.event.allDay })
+        .catch(() => { info.revert(); showToast('บันทึกไม่สำเร็จ', true); });
     },
   });
 
   cal.render();
 
-  /* ── Category badge HTML ───────────────────────────────────────────── */
-  function catBadgeHTML(cat) {
-    const cfg = getCfg(cat);
-    return `<span class="event-cat-badge" style="color:${cfg.color};border-color:${cfg.color}40;background:${cfg.color}18">${cfg.icon} ${cfg.label}</span>`;
+  /* ── API helpers ───────────────────────────────────────────────────── */
+  function apiPost(data) {
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf }, body: JSON.stringify(data) }).then(r => r.json());
+  }
+  function apiPatch(id, data) {
+    return fetch(API + id + '/', { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf }, body: JSON.stringify(data) }).then(r => r.json());
+  }
+  function apiDelete(id) {
+    return fetch(API + id + '/', { method: 'DELETE', headers: { 'X-CSRFToken': csrf } }).then(r => r.json());
   }
 
-  /* ── Detail modal ──────────────────────────────────────────────────── */
-  let activeEventId = null;
+  /* ── Toast ─────────────────────────────────────────────────────────── */
+  function showToast(msg, isErr) {
+    const t = document.getElementById('calToast');
+    t.textContent = msg;
+    t.className = 'cal-toast show ' + (isErr ? 'err' : 'ok');
+    clearTimeout(t._tid);
+    t._tid = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  /* ── Category badge HTML ───────────────────────────────────────────── */
+  function catBadgeHTML(cat) {
+    const c = getCfg(cat);
+    return `<span class="event-cat-badge" style="color:${c.color};border-color:${c.color}40;background:${c.color}18">${c.icon} ${c.label}</span>`;
+  }
+
+  /* ── Detail modal (Modal B + C) ────────────────────────────────────── */
+  let activeDbId = null;
+  let detailModal = null;
 
   function openDetailModal(event) {
-    activeEventId = event.id || null;
-    const props     = event.extendedProps || {};
-    const isUser    = props.userOwned || false;
-    const cat       = props.category || 'milestone';
+    const props   = event.extendedProps || {};
+    const isSystem = props.isSystem !== false ? true : !props.dbId && !event.id.toString().startsWith('db_') ? true : false;
+    activeDbId = isSystem ? null : (props.dbId || event.id.replace('db_', ''));
 
-    document.getElementById('modalCatBadge').innerHTML = catBadgeHTML(cat);
+    document.getElementById('modalCatBadge').innerHTML = catBadgeHTML(props.category || 'milestone');
     document.getElementById('modalTitle').textContent  = event.title;
     document.getElementById('modalDate').textContent   = event.startStr || '';
     document.getElementById('modalDesc').textContent   = props.description || '';
 
     const notice  = document.getElementById('modalReadonlyNotice');
     const actions = document.getElementById('modalUserActions');
-    if (isUser) {
+    const delConf = document.getElementById('deleteConfirm');
+
+    // Reset delete confirm state
+    delConf.classList.add('d-none');
+    document.getElementById('modalBody').classList.remove('d-none');
+
+    if (!isSystem && activeDbId) {
       notice.classList.add('d-none');
       actions.classList.remove('d-none');
-      // store raw title for edit
-      actions.dataset.eid = event.id;
     } else {
       notice.classList.remove('d-none');
       actions.classList.add('d-none');
     }
 
-    new bootstrap.Modal(document.getElementById('eventModal')).show();
+    detailModal = new bootstrap.Modal(document.getElementById('eventModal'));
+    detailModal.show();
   }
 
-  /* Edit from detail modal */
+  // Edit button
   document.getElementById('btnEditEvent').addEventListener('click', function () {
-    const eid = document.getElementById('modalUserActions').dataset.eid;
-    const arr  = loadUserEvents();
-    const ue   = arr.find(x => x.id === eid);
-    if (!ue) return;
-    bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
-    openEditModal(ue);
+    if (!activeDbId) return;
+    detailModal && detailModal.hide();
+    // Fetch current data from API then open edit modal
+    fetch(API + '?start=2020-01-01&end=2030-01-01', { headers: { 'X-CSRFToken': csrf } })
+      .then(r => r.json())
+      .then(list => {
+        const evt = list.find(e => String(e.id) === String(activeDbId));
+        if (evt) openEditModal(evt, null);
+      });
   });
 
-  /* Delete from detail modal */
+  // Delete button → show confirm
   document.getElementById('btnDeleteEvent').addEventListener('click', function () {
-    const eid = document.getElementById('modalUserActions').dataset.eid;
-    const arr  = loadUserEvents().filter(x => x.id !== eid);
-    saveUserEvents(arr);
-    bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
-    cal.refetchEvents();
+    document.getElementById('modalBody').classList.add('d-none');
+    document.getElementById('modalUserActions').classList.add('d-none');
+    document.getElementById('deleteConfirm').classList.remove('d-none');
   });
 
-  /* ── Add/Edit modal ────────────────────────────────────────────────── */
-  function openEditModal(ue) {
-    document.getElementById('editModalHeading').textContent = ue ? 'แก้ไขงาน' : 'เพิ่มงาน';
-    document.getElementById('editEventId').value    = ue ? ue.id    : '';
-    document.getElementById('editTitle').value      = ue ? ue.title : '';
-    document.getElementById('editDate').value       = ue ? ue.date  : '';
-    document.getElementById('editCategory').value   = ue ? ue.category : 'user-action';
-    document.getElementById('editDesc').value       = ue ? (ue.desc || '') : '';
+  // Confirm delete
+  document.getElementById('btnConfirmDelete').addEventListener('click', function () {
+    if (!activeDbId) return;
+    apiDelete(activeDbId).then(() => {
+      detailModal && detailModal.hide();
+      cal.refetchEvents();
+      showToast('ลบงานแล้ว');
+    }).catch(() => showToast('ลบไม่สำเร็จ', true));
+  });
+
+  // Cancel delete
+  document.getElementById('btnCancelDelete').addEventListener('click', function () {
+    document.getElementById('deleteConfirm').classList.add('d-none');
+    document.getElementById('modalBody').classList.remove('d-none');
+    document.getElementById('modalUserActions').classList.remove('d-none');
+  });
+
+  /* ── Add / Edit modal (Modal A) ────────────────────────────────────── */
+  let editingDbId = null;
+
+  function openEditModal(evtData, prefillDate) {
+    editingDbId = evtData ? evtData.id : null;
+    document.getElementById('editModalHeading').textContent = evtData ? 'แก้ไขงาน' : 'เพิ่มงานใหม่';
+    document.getElementById('editTitle').value    = evtData ? evtData.title : '';
+    document.getElementById('editDate').value     = evtData ? evtData.start.slice(0,10) : (prefillDate || '');
+    document.getElementById('editCategory').value = evtData ? (evtData.extendedProps?.category || 'general') : 'general';
+    document.getElementById('editDesc').value     = evtData ? (evtData.extendedProps?.description || '') : '';
     document.getElementById('editError').classList.add('d-none');
     new bootstrap.Modal(document.getElementById('editEventModal')).show();
   }
 
-  document.getElementById('btnAddEvent').addEventListener('click', function () {
-    openEditModal(null);
-  });
+  document.getElementById('btnAddEvent').addEventListener('click', () => openEditModal(null, null));
 
   document.getElementById('btnSaveEvent').addEventListener('click', function () {
     const title = document.getElementById('editTitle').value.trim();
-    const date  = document.getElementById('editDate').value;
-    if (!title || !date) {
+    const dt    = document.getElementById('editDate').value;
+    if (!title || !dt) {
       document.getElementById('editError').classList.remove('d-none');
       return;
     }
     document.getElementById('editError').classList.add('d-none');
 
-    const eid  = document.getElementById('editEventId').value || null;
-    const arr  = loadUserEvents();
+    const payload = {
+      title,
+      start:       dt + 'T00:00:00',
+      allDay:      true,
+      category:    document.getElementById('editCategory').value,
+      description: document.getElementById('editDesc').value.trim(),
+    };
 
-    if (eid) {
-      const idx = arr.findIndex(x => x.id === eid);
-      if (idx !== -1) {
-        arr[idx] = { id: eid, title, date,
-          category: document.getElementById('editCategory').value,
-          desc: document.getElementById('editDesc').value.trim() };
-      }
-    } else {
-      arr.push({
-        id:       genId(),
-        title,
-        date,
-        category: document.getElementById('editCategory').value,
-        desc:     document.getElementById('editDesc').value.trim(),
+    const btn = document.getElementById('btnSaveEvent');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>กำลังบันทึก...';
+
+    const promise = editingDbId ? apiPatch(editingDbId, payload) : apiPost(payload);
+    promise.then(data => {
+      if (data.error) { showToast(data.error, true); return; }
+      bootstrap.Modal.getInstance(document.getElementById('editEventModal')).hide();
+      cal.refetchEvents();
+      showToast(editingDbId ? 'บันทึกการแก้ไขแล้ว' : 'เพิ่มงานแล้ว');
+    }).catch(() => showToast('บันทึกไม่สำเร็จ กรุณาลองใหม่', true))
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-check2 me-1"></i>บันทึก';
       });
-    }
-
-    saveUserEvents(arr);
-    bootstrap.Modal.getInstance(document.getElementById('editEventModal')).hide();
-    cal.refetchEvents();
   });
 
-  /* ── Filter / Legend tabs ──────────────────────────────────────────── */
+  /* ── Filter / Legend ───────────────────────────────────────────────── */
   document.getElementById('legendBar').addEventListener('click', function (e) {
     const item = e.target.closest('.legend-item');
     if (!item) return;

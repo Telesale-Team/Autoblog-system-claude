@@ -2,6 +2,7 @@ import json
 import re
 from datetime import date, timedelta
 from pathlib import Path
+from django.utils.dateparse import parse_datetime
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -969,4 +970,89 @@ def calendar_view(request):
 
     return render(request, "dashboard/calendar.html", {
         "events_json": json.dumps(events, ensure_ascii=False),
+        "category_choices": CalendarEvent.CATEGORY_CHOICES,
     })
+
+
+# ── Calendar API ─────────────────────────────────────────────────────────────
+
+from dashboard.models import CalendarEvent
+
+
+@staff_member_required
+def api_calendar_events(request):
+    if request.method == "GET":
+        start = request.GET.get("start")
+        end   = request.GET.get("end")
+        qs = CalendarEvent.objects.filter(created_by=request.user)
+        if start:
+            qs = qs.filter(start_datetime__gte=start)
+        if end:
+            qs = qs.filter(start_datetime__lte=end)
+        return JsonResponse([e.to_fc() for e in qs], safe=False)
+
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+        title = data.get("title", "").strip()
+        start = data.get("start")
+        if not title or not start:
+            return JsonResponse({"error": "title และ start จำเป็น"}, status=400)
+
+        evt = CalendarEvent.objects.create(
+            title       = title,
+            start_datetime = parse_datetime(start) or timezone.now(),
+            end_datetime   = parse_datetime(data["end"]) if data.get("end") else None,
+            all_day     = data.get("allDay", True),
+            category    = data.get("category", "general"),
+            description = data.get("description", ""),
+            color       = data.get("color", ""),
+            is_system   = False,
+            created_by  = request.user,
+        )
+        return JsonResponse(evt.to_fc(), status=201)
+
+    return JsonResponse({"error": "Method not allowed"}, status=405)
+
+
+@staff_member_required
+def api_calendar_event_detail(request, pk):
+    try:
+        evt = CalendarEvent.objects.get(pk=pk, created_by=request.user)
+    except CalendarEvent.DoesNotExist:
+        return JsonResponse({"error": "Not found"}, status=404)
+
+    if evt.is_system:
+        return JsonResponse({"error": "ไม่สามารถแก้ไข event ของระบบได้"}, status=403)
+
+    if request.method in ("PUT", "PATCH"):
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+        if "title" in data:
+            evt.title = data["title"].strip() or evt.title
+        if "start" in data and data["start"]:
+            evt.start_datetime = parse_datetime(data["start"]) or evt.start_datetime
+        if "end" in data:
+            evt.end_datetime = parse_datetime(data["end"]) if data["end"] else None
+        if "allDay" in data:
+            evt.all_day = data["allDay"]
+        if "category" in data:
+            evt.category = data["category"]
+        if "description" in data:
+            evt.description = data["description"]
+        if "color" in data:
+            evt.color = data["color"]
+        evt.save()
+        return JsonResponse(evt.to_fc())
+
+    if request.method == "DELETE":
+        evt.delete()
+        return JsonResponse({"ok": True})
+
+    return JsonResponse({"error": "Method not allowed"}, status=405)
