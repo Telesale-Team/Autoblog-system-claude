@@ -17,7 +17,18 @@
   }
 
   /* ── FullCalendar overrides (Design System) ─────────────────────────── */
-  .fc .fc-toolbar-title { font-size: 1.05rem; font-weight: 700; color: var(--app-primary); }
+
+  /* Toolbar title — month/year label */
+  .fc .fc-toolbar-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--brand-navy);
+  }
+  [data-bs-theme="dark"] .fc .fc-toolbar-title {
+    color: var(--heading-dark-bg);
+  }
+
+  /* Navigation + view buttons */
   .fc .fc-button-primary {
     background: var(--app-primary) !important;
     border-color: var(--app-primary) !important;
@@ -32,8 +43,53 @@
     border-color: var(--app-primary) !important;
     color: var(--app-primary) !important;
   }
-  .fc .fc-col-header-cell-cushion { font-size: .8rem; font-weight: 600; color: var(--bs-secondary-color); }
-  .fc .fc-daygrid-day-number { font-size: .8rem; color: var(--bs-body-color); }
+
+  /* Column header row background */
+  .fc-col-header {
+    background: var(--brand-navy);
+  }
+  [data-bs-theme="dark"] .fc-col-header {
+    background: rgba(26, 39, 68, .85);
+  }
+
+  /* Column header cushion — วัน/day abbreviations */
+  .fc .fc-col-header-cell-cushion {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: .45rem .5rem;
+    color: var(--heading-dark-bg);
+  }
+  [data-bs-theme="dark"] .fc .fc-col-header-cell-cushion {
+    color: var(--heading-dark-bg);
+  }
+
+  /* Day number — default */
+  .fc .fc-daygrid-day-number {
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--bs-body-color);
+  }
+
+  /* Weekend day numbers — muted */
+  .fc .fc-day-sat .fc-daygrid-day-number,
+  .fc .fc-day-sun .fc-daygrid-day-number {
+    color: var(--bs-secondary-color);
+  }
+
+  /* Today highlight — gold tint instead of Bootstrap default blue */
+  .fc .fc-day-today {
+    background: rgba(201, 169, 110, .12) !important;
+    border-top: 2px solid var(--app-primary) !important;
+  }
+
+  /* Today day number — bolder */
+  .fc .fc-day-today .fc-daygrid-day-number {
+    font-weight: 600;
+    color: var(--app-primary);
+  }
+
   .fc .fc-event { font-size: .72rem; border-radius: 3px; border: none !important; padding: 1px 4px; cursor: pointer; }
   .fc .fc-event-title { font-weight: 500; }
   .fc-theme-standard td, .fc-theme-standard th { border-color: var(--bs-border-color) !important; }
