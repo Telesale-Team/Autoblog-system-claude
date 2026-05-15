@@ -96,64 +96,50 @@
   </div>
 </div>
 
-{# ── Active Agents ────────────────────────────────────────────────────────── #}
+{# ── Agent Stages ─────────────────────────────────────────────────────────── #}
+{% for stage in stages %}
+
+{% if stage.is_active %}
 <div class="stage-header active-stage">
-  <i class="bi bi-lightning-charge-fill me-1 text-gold"></i>ใช้งานได้เลยตอนนี้
+  <i class="bi bi-lightning-charge-fill me-1 text-gold"></i>{{ stage.label }}
 </div>
+{% else %}
+<div class="stage-header">
+  <i class="bi bi-lock-fill me-1"></i>{{ stage.label }}
+</div>
+{% endif %}
+
 <div class="row g-3 mb-4">
-  {% for agent in agents %}{% if agent.stage == "now" %}
+  {% for agent in stage.agents %}
   <div class="col-sm-6 col-xl-4">
-    <div class="agent-card">
+    <div class="agent-card{% if not stage.is_active %} locked{% endif %} h-100">
       <div class="d-flex align-items-center gap-2 mb-2">
         <div class="agent-icon {{ agent.color }}">
           <i class="bi {{ agent.icon }}"></i>
         </div>
         <div>
           <div class="agent-num">#{{ agent.number }}</div>
-          <div class="agent-name">{{ agent.name }}</div>
+          <div class="agent-name">
+            {{ agent.name }}
+            {% if not stage.is_active %}<span class="lock-badge ms-1"><i class="bi bi-lock-fill"></i> {{ stage.label }}</span>{% endif %}
+          </div>
         </div>
       </div>
+      {% if stage.is_active %}
       <div class="mb-2">
         <span class="agent-alias copy-alias" data-text="{{ agent.alias_example }}" title="คลิกเพื่อ copy">
           {{ agent.alias }} -
         </span>
       </div>
+      {% endif %}
       <div class="agent-role"><i class="bi bi-dot"></i>{{ agent.role }}</div>
       <div class="agent-use text-muted"><i class="bi bi-arrow-right-short"></i>{{ agent.use_when }}</div>
     </div>
   </div>
-  {% endif %}{% endfor %}
+  {% endfor %}
 </div>
 
-{# ── Locked Agents ────────────────────────────────────────────────────────── #}
-{% for stage_key, stage_label in stage_labels.items %}{% if stage_key != "now" %}
-{% with agents_in_stage=agents|dictsort:"stage" %}
-{% for agent in agents %}{% if agent.stage == stage_key %}
-{% if forloop.first %}
-<div class="stage-header">
-  <i class="bi bi-lock-fill me-1"></i>{{ stage_label }}
-</div>
-<div class="row g-3 mb-4">
-{% endif %}
-  <div class="col-sm-6 col-xl-4">
-    <div class="agent-card locked">
-      <div class="d-flex align-items-center gap-2 mb-2">
-        <div class="agent-icon {{ agent.color }}">
-          <i class="bi {{ agent.icon }}"></i>
-        </div>
-        <div>
-          <div class="agent-num">#{{ agent.number }}</div>
-          <div class="agent-name">{{ agent.name }} <span class="lock-badge ms-1"><i class="bi bi-lock-fill"></i> {{ stage_label }}</span></div>
-        </div>
-      </div>
-      <div class="agent-role"><i class="bi bi-dot"></i>{{ agent.role }}</div>
-      <div class="agent-use text-muted"><i class="bi bi-arrow-right-short"></i>{{ agent.use_when }}</div>
-    </div>
-  </div>
-{% if forloop.last %}</div>{% endif %}
-{% endif %}{% endfor %}
-{% endwith %}
-{% endif %}{% endfor %}
+{% endfor %}
 
 {# ── Copy Toast ───────────────────────────────────────────────────────────── #}
 <div class="copy-toast" id="copyToast">คัดลอกแล้ว ✓</div>

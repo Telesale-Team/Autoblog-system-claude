@@ -725,9 +725,22 @@ def team_view(request):
         "mrr200k": "Unlock ที่ MRR ฿200K",
     }
 
+    # Group agents by stage, preserving stage_labels order
+    stages = []
+    for stage_key, stage_label in stage_labels.items():
+        members = [a for a in agents if a["stage"] == stage_key]
+        if members:
+            stages.append({
+                "key": stage_key,
+                "label": stage_label,
+                "is_active": stage_key == "now",
+                "agents": members,
+            })
+
     return render(request, "dashboard/team.html", {
         "agents": agents,
         "stage_labels": stage_labels,
+        "stages": stages,
     })
 
 
