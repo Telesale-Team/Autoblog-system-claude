@@ -876,12 +876,14 @@ def api_calendar_events(request):
 @staff_member_required
 def api_calendar_event_detail(request, pk):
     try:
-        evt = CalendarEvent.objects.get(pk=pk, created_by=request.user)
+        evt = CalendarEvent.objects.get(pk=pk)
     except CalendarEvent.DoesNotExist:
         return JsonResponse({"error": "Not found"}, status=404)
 
-    if evt.is_system:
-        return JsonResponse({"error": "ไม่สามารถแก้ไข event ของระบบได้"}, status=403)
+    # is_system events: staff ทุกคน edit ได้
+    # user events: เฉพาะ created_by == request.user
+    if not evt.is_system and evt.created_by != request.user:
+        return JsonResponse({"error": "Not found"}, status=404)
 
     if request.method in ("PUT", "PATCH"):
         try:
