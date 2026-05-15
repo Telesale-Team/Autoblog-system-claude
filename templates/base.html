@@ -186,6 +186,12 @@
           <i class="bi bi-grid-1x2-fill"></i> Dashboard
         </a>
       </li>
+      <li class="nav-item">
+        <a href="{% url 'dashboard:calendar' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">
+          <i class="bi bi-calendar3"></i> Work Calendar
+        </a>
+      </li>
 
       <li class="nav-section-label">Content</li>
 

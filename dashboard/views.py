@@ -1,6 +1,6 @@
 import json
 import re
-from datetime import timedelta
+from datetime import date, timedelta
 from pathlib import Path
 
 from django.conf import settings
@@ -572,4 +572,145 @@ def backlog_view(request):
         "status_filter": status_filter,
         "counts": counts,
         "total": sum(counts.values()),
+    })
+
+
+# ── Calendar ─────────────────────────────────────────────────────────────────
+
+@staff_member_required
+def calendar_view(request):
+    now = timezone.now()
+    events = []
+
+    # ── 1. Published Articles (from DB) ──────────────────────────────────────
+    published = Article.objects.filter(
+        status="published", published_at__isnull=False
+    ).values("title", "published_at")
+    for art in published:
+        events.append({
+            "title": f"📝 {art['title'][:40]}",
+            "start": art["published_at"].date().isoformat(),
+            "color": "#198754",
+            "category": "article",
+            "description": "บทความ published",
+        })
+
+    # ── 2. Lead activities (created_at) ──────────────────────────────────────
+    leads_qs = ContactLead.objects.values("name", "company", "status", "created_at")
+    for lead in leads_qs:
+        company = lead["company"] or lead["name"]
+        events.append({
+            "title": f"👤 {company[:30]}",
+            "start": lead["created_at"].date().isoformat(),
+            "color": "#0d6efd",
+            "category": "lead",
+            "description": f"Lead เข้า — {lead['status']}",
+        })
+
+    # ── 3. Recurring schedule (Communication Cadence) ────────────────────────
+    # Generate for current month + next 3 months
+    for week_offset in range(14):
+        monday = (now + timedelta(weeks=week_offset)).date()
+        monday -= timedelta(days=monday.weekday())
+        friday = monday + timedelta(days=4)
+        first_of_month = monday.replace(day=1)
+
+        # Daily stand-up Mon–Fri (show only Mon as weekly marker)
+        events.append({
+            "title": "☀️ Daily Stand-up",
+            "start": monday.isoformat(),
+            "color": "#6c757d",
+            "category": "recurring",
+            "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+        })
+        # Weekly review every Friday
+        events.append({
+            "title": "📊 Weekly Review",
+            "start": friday.isoformat(),
+            "color": "#6f42c1",
+            "category": "recurring",
+            "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+        })
+
+    # Monthly review on 1st of each month (next 4 months)
+    for m_offset in range(4):
+        target = (now + timedelta(days=30 * m_offset)).date().replace(day=1)
+        events.append({
+            "title": "📅 Monthly Review",
+            "start": target.isoformat(),
+            "color": "#fd7e14",
+            "category": "recurring",
+            "description": "Monthly Business Review — all agents",
+        })
+
+    # ── 4. Road-to-Revenue Milestones ─────────────────────────────────────────
+    milestones = [
+        # Phase 1 — Foundation (done)
+        ("2026-05-15", "🏁 Sprint 1-3 Dashboard Complete", "#B8860B", "milestone",
+         "Dashboard, Pipeline, Revenue, Analytics, Backlog ครบ"),
+
+        # Phase 2 — Content Push (June)
+        ("2026-06-01", "🚀 Phase 2: Content Push เริ่ม", "#17a2b8", "milestone",
+         "เป้า: publish 8 บทความ + cold outreach 10 ราย/สัปดาห์"),
+        ("2026-06-07", "✍️ Content: บทความชุด Fear #4-5", "#198754", "content_plan",
+         "ทุกวันที่ไม่มี AI / ลูกค้าตัดสินใจ 5 นาที"),
+        ("2026-06-14", "✍️ Content: บทความชุด Fear #6-7", "#198754", "content_plan",
+         "พนักงานลาออก / ร้านตอบช้า"),
+        ("2026-06-21", "✍️ Content: บทความชุด Fear #8 + ใหม่", "#198754", "content_plan",
+         "ต้นทุนแรงงาน + บทความ How-to"),
+        ("2026-06-30", "🎯 เป้า: 5+ Leads จาก Content", "#dc3545", "milestone",
+         "วัดจาก contact form submissions"),
+
+        # Phase 3 — Pipeline (July)
+        ("2026-07-01", "🚀 Phase 3: Pipeline Build เริ่ม", "#17a2b8", "milestone",
+         "เป้า: 20+ leads, 5+ qualified, 2+ proposals"),
+        ("2026-07-07", "📞 Cold Outreach Batch #1 (30 ราย)", "#fd7e14", "action",
+         "LinkedIn + Line OA + โทรตรง"),
+        ("2026-07-14", "📞 Cold Outreach Batch #2 (30 ราย)", "#fd7e14", "action",
+         "Follow-up batch #1 + ส่ง batch ใหม่"),
+        ("2026-07-21", "💼 เป้า: 2 Proposal ส่งแล้ว", "#dc3545", "milestone",
+         "Proposal deck + ราคา + ขอบเขตงาน"),
+        ("2026-07-31", "🎯 เป้า: 1 Qualified → Proposal Stage", "#dc3545", "milestone",
+         "Lead ต้องอยู่ใน Pipeline stage: Proposal"),
+
+        # Phase 4 — First Close (August)
+        ("2026-08-01", "🚀 Phase 4: Close & Revenue", "#17a2b8", "milestone",
+         "เป้า: ปิดดีลแรก มีรายได้จริง"),
+        ("2026-08-15", "💰 เป้า: First Close — Deal #1", "#DAA520", "milestone",
+         "ดีลแรก — AI Chatbot หรือ Workflow Automation"),
+        ("2026-08-31", "🏆 เป้า: MRR บาทแรก", "#DAA520", "milestone",
+         "Recurring revenue เริ่มนับ"),
+
+        # Quarterly review
+        ("2026-09-01", "🔄 Quarterly Planning (Q3)", "#6f42c1", "recurring",
+         "Quarterly Planning 2 วัน — ทบทวนกลยุทธ์"),
+    ]
+
+    for start, title, color, category, desc in milestones:
+        events.append({
+            "title": title,
+            "start": start,
+            "color": color,
+            "category": category,
+            "description": desc,
+        })
+
+    # ── 5. Content Backlog scheduled items ───────────────────────────────────
+    backlog_items = _parse_backlog()
+    pending_items = [i for i in backlog_items if i["status"] in ("pending", "review")]
+    # Schedule pending items 1 per week starting next Monday
+    next_monday = now.date() + timedelta(days=(7 - now.weekday()) % 7 or 7)
+    for idx, item in enumerate(pending_items):
+        sched_date = next_monday + timedelta(weeks=idx)
+        status_icon = "👁️" if item["status"] == "review" else "🗓️"
+        events.append({
+            "title": f"{status_icon} {item['topic'][:38]}",
+            "start": sched_date.isoformat(),
+            "color": "#856404" if item["status"] == "review" else "#495057",
+            "category": "backlog",
+            "description": f"[{item['status']}] {item['keyword']}",
+        })
+
+    return render(request, "dashboard/calendar.html", {
+        "events_json": json.dumps(events, ensure_ascii=False),
     })

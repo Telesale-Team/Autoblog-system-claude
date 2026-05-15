@@ -12,6 +12,7 @@ urlpatterns = [
     path("revenue/", views.revenue_view, name="revenue"),
     path("analytics/", views.analytics_view, name="analytics"),
     path("backlog/", views.backlog_view, name="backlog"),
+    path("calendar/", views.calendar_view, name="calendar"),
     path("blog/", views.blog_list, name="blog"),
     path("blog/<int:pk>/toggle/", views.article_toggle_status, name="article_toggle"),
     path("docs/", views.docs_index, name="docs_index"),

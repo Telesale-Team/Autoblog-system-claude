@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Work Calendar — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Work Calendar</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  #calendar-wrap {
+    border: 1px solid var(--bs-border-color);
+    border-radius: .6rem;
+    background: var(--bs-body-bg);
+    padding: 1rem 1.25rem;
+  }
+
+  /* FullCalendar overrides to match Design System */
+  .fc .fc-toolbar-title { font-size: 1.05rem; font-weight: 700; color: var(--app-primary); }
+  .fc .fc-button-primary {
+    background: var(--app-primary) !important;
+    border-color: var(--app-primary) !important;
+    font-size: .8rem !important;
+  }
+  .fc .fc-button-primary:not(.fc-button-active):hover {
+    background: var(--app-secondary) !important;
+    border-color: var(--app-secondary) !important;
+  }
+  .fc .fc-button-primary.fc-button-active {
+    background: var(--bs-secondary-bg) !important;
+    border-color: var(--app-primary) !important;
+    color: var(--app-primary) !important;
+  }
+  .fc .fc-col-header-cell-cushion { font-size: .8rem; font-weight: 600; color: var(--bs-secondary-color); }
+  .fc .fc-daygrid-day-number { font-size: .8rem; color: var(--bs-body-color); }
+  .fc .fc-event { font-size: .72rem; border-radius: 3px; border: none !important; padding: 1px 4px; cursor: pointer; }
+  .fc .fc-event-title { font-weight: 500; }
+  .fc-theme-standard td, .fc-theme-standard th { border-color: var(--bs-border-color) !important; }
+  .fc-theme-standard .fc-scrollgrid { border-color: var(--bs-border-color) !important; }
+  .fc .fc-today-button { text-transform: capitalize; }
+
+  /* Legend */
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* Event detail modal */
+  .event-detail-title { font-weight: 700; font-size: 1rem; color: var(--app-primary); }
+
+  /* Phase timeline */
+  .phase-bar {
+    display: flex;
+    gap: 0;
+    border-radius: .5rem;
+    overflow: hidden;
+    border: 1px solid var(--bs-border-color);
+    margin-bottom: 1.25rem;
+  }
+  .phase-item {
+    flex: 1;
+    padding: .6rem .5rem;
+    text-align: center;
+    font-size: .75rem;
+    font-weight: 600;
+    color: #fff;
+    position: relative;
+  }
+  .phase-item .phase-dates { font-size: .65rem; font-weight: 400; opacity: .85; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Header ───────────────────────────────────────────────────────────────── #}
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 fw-bold" style="color:var(--app-primary)">Work Calendar</h4>
+    <p class="mb-0 text-muted small">แผนการทำงาน — Road to First Revenue</p>
+  </div>
+</div>
+
+{# ── Phase Timeline ───────────────────────────────────────────────────────── #}
+<div class="phase-bar">
+  <div class="phase-item" style="background:#6c757d">
+    <div>✅ Foundation</div>
+    <div class="phase-dates">พ.ค. 2026</div>
+  </div>
+  <div class="phase-item" style="background:#0d6efd">
+    <div>🚀 Content Push</div>
+    <div class="phase-dates">มิ.ย. 2026</div>
+  </div>
+  <div class="phase-item" style="background:#fd7e14">
+    <div>📞 Pipeline Build</div>
+    <div class="phase-dates">ก.ค. 2026</div>
+  </div>
+  <div class="phase-item" style="background:#B8860B">
+    <div>💰 First Revenue</div>
+    <div class="phase-dates">ส.ค. 2026</div>
+  </div>
+</div>
+
+{# ── Legend ───────────────────────────────────────────────────────────────── #}
+<div class="d-flex flex-wrap gap-3 mb-3" style="font-size:.78rem">
+  <span><span class="legend-dot me-1" style="background:#B8860B"></span>Milestone</span>
+  <span><span class="legend-dot me-1" style="background:#198754"></span>Article Published</span>
+  <span><span class="legend-dot me-1" style="background:#0d6efd"></span>Lead</span>
+  <span><span class="legend-dot me-1" style="background:#fd7e14"></span>Action / Outreach</span>
+  <span><span class="legend-dot me-1" style="background:#495057"></span>Content Plan</span>
+  <span><span class="legend-dot me-1" style="background:#6c757d"></span>Recurring</span>
+  <span><span class="legend-dot me-1" style="background:#6f42c1"></span>Review</span>
+</div>
+
+{# ── Calendar ─────────────────────────────────────────────────────────────── #}
+<div id="calendar-wrap">
+  <div id="calendar"></div>
+</div>
+
+{# ── Event Detail Modal ───────────────────────────────────────────────────── #}
+<div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <div class="event-detail-title" id="modalTitle">—</div>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body pt-1">
+        <div class="text-muted small mb-1" id="modalDate"></div>
+        <div style="font-size:.88rem" id="modalDesc"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<script>
+(function () {
+  const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+  const events = {{ events_json|safe }};
+
+  const cal = new FullCalendar.Calendar(document.getElementById('calendar'), {
+    initialView: 'dayGridMonth',
+    initialDate: '2026-05-15',
+    locale: 'th',
+    firstDay: 1,
+    height: 'auto',
+    headerToolbar: {
+      left:   'prev,next today',
+      center: 'title',
+      right:  'dayGridMonth,listMonth',
+    },
+    buttonText: {
+      today:     'วันนี้',
+      month:     'เดือน',
+      listMonth: 'รายการ',
+    },
+    events: events,
+    eventDidMount: function (info) {
+      // Tooltip via Bootstrap
+      if (info.event.extendedProps.description) {
+        info.el.setAttribute('title', info.event.extendedProps.description);
+      }
+    },
+    eventClick: function (info) {
+      document.getElementById('modalTitle').textContent = info.event.title;
+      document.getElementById('modalDate').textContent  = info.event.startStr;
+      document.getElementById('modalDesc').textContent  = info.event.extendedProps.description || '';
+      new bootstrap.Modal(document.getElementById('eventModal')).show();
+    },
+    // Hide recurring stand-ups by default to reduce noise — show only milestones + actions
+    eventClassNames: function (arg) {
+      return ['fc-cat-' + (arg.event.extendedProps.category || 'other')];
+    },
+  });
+
+  cal.render();
+
+  // ── Category filter buttons ────────────────────────────────────────────────
+  document.querySelectorAll('[data-cat-filter]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const cat = this.dataset.catFilter;
+      document.querySelectorAll('[data-cat-filter]').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      const filtered = cat === 'all'
+        ? events
+        : events.filter(e => e.category === cat);
+      cal.removeAllEvents();
+      cal.addEventSource(filtered);
+    });
+  });
+})();
+</script>
+{% endblock %}
