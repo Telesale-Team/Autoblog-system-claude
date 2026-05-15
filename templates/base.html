@@ -14,12 +14,12 @@
   {# === Dynamic CSS Variables from Settings === #}
   <style>
     :root {
-      --app-primary:       {{ user_settings.primary_color|default:"#B8860B" }};
-      --app-secondary:     {{ user_settings.secondary_color|default:"#DAA520" }};
+      --app-primary:       {{ user_settings.primary_color|default:"#c9a96e" }};
+      --app-secondary:     {{ user_settings.secondary_color|default:"#b8924f" }};
       --app-font-family:   {{ user_settings.font_family|default:"'Sarabun', sans-serif" }};
       --app-font-size:     {{ user_settings.font_size|default:"16" }}px;
       --app-h1-size:       {{ user_settings.h1_size|default:"2" }}rem;
-      --app-h1-color:      {{ user_settings.h1_color|default:"#B8860B" }};
+      --app-h1-color:      {{ user_settings.h1_color|default:"#c9a96e" }};
       --app-h6-size:       {{ user_settings.h6_size|default:"0.875" }}rem;
       --app-h6-color:      {{ user_settings.h6_color|default:"#6c757d" }};
       --app-btn-radius:    {{ user_settings.btn_radius|default:"0.375" }}rem;
@@ -108,7 +108,7 @@
     .stat-card .stat-value { font-size: 1.65rem; font-weight: 700; color: var(--app-primary); }
     .stat-card .stat-icon {
       width: 44px; height: 44px; border-radius: 50%;
-      background: rgba(184,134,11,.12);
+      background: rgba(201,169,110,.12);
       display: flex; align-items: center; justify-content: center;
       font-size: 1.3rem; color: var(--app-primary);
     }
@@ -131,7 +131,7 @@
     }
     /* Style 3: soft/ghost */
     .btn-app-soft {
-      background: rgba(184,134,11,.12) !important;
+      background: rgba(201,169,110,.12) !important;
       border: none !important;
       color: var(--app-primary) !important;
     }

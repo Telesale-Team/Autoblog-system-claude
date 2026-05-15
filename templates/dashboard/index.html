@@ -65,7 +65,7 @@
   }
   .quick-action-btn i { font-size: 1.4rem; color: var(--app-primary); }
   .quick-action-btn:hover {
-    background: rgba(184,134,11,.08);
+    background: rgba(201,169,110,.08);
     border-color: var(--app-primary);
     box-shadow: 0 3px 12px rgba(0,0,0,.07);
     color: var(--app-primary);
@@ -393,8 +393,8 @@
   const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
   const gridColor = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
   const textColor = isDark ? '#adb5bd' : '#6c757d';
-  const primary   = getComputedStyle(document.documentElement).getPropertyValue('--app-primary').trim() || '#B8860B';
-  const secondary = getComputedStyle(document.documentElement).getPropertyValue('--app-secondary').trim() || '#DAA520';
+  const primary   = getComputedStyle(document.documentElement).getPropertyValue('--app-primary').trim() || '#c9a96e';
+  const secondary = getComputedStyle(document.documentElement).getPropertyValue('--app-secondary').trim() || '#b8924f';
 
   const ctx = document.getElementById('leadsChart');
   if (!ctx) return;
@@ -409,7 +409,7 @@
         fill: true,
         tension: 0.4,
         borderColor: primary,
-        backgroundColor: 'rgba(184,134,11,.10)',
+        backgroundColor: 'rgba(201,169,110,.10)',
         pointRadius: 3,
         pointHoverRadius: 5,
         pointBackgroundColor: primary,

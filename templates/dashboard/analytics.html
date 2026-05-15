@@ -144,10 +144,10 @@
   const isDark   = document.documentElement.getAttribute('data-bs-theme') === 'dark';
   const grid     = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
   const textClr  = isDark ? '#adb5bd' : '#6c757d';
-  const primary  = getComputedStyle(document.documentElement).getPropertyValue('--app-primary').trim()  || '#B8860B';
-  const secondary= getComputedStyle(document.documentElement).getPropertyValue('--app-secondary').trim()|| '#DAA520';
+  const primary  = getComputedStyle(document.documentElement).getPropertyValue('--app-primary').trim()  || '#c9a96e';
+  const secondary= getComputedStyle(document.documentElement).getPropertyValue('--app-secondary').trim()|| '#b8924f';
 
-  const PALETTE = ['#B8860B','#DAA520','#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948'];
+  const PALETTE = ['#c9a96e','#b8924f','#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948'];
 
   // ── Weekly Trend ──────────────────────────────────────────────────────────
   new Chart(document.getElementById('weeklyChart'), {
@@ -158,7 +158,7 @@
         {
           label: 'Leads',
           data: {{ week_leads_data|safe }},
-          backgroundColor: 'rgba(184,134,11,.75)',
+          backgroundColor: 'rgba(201,169,110,.75)',
           borderRadius: 4,
           order: 1,
         },
