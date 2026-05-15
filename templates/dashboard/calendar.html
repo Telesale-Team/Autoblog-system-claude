@@ -79,19 +79,19 @@
 
 {# ── Phase Timeline ───────────────────────────────────────────────────────── #}
 <div class="phase-bar">
-  <div class="phase-item" style="background:#6c757d">
+  <div class="phase-item" style="background:var(--bs-secondary-color)">
     <div>✅ Foundation</div>
     <div class="phase-dates">พ.ค. 2026</div>
   </div>
-  <div class="phase-item" style="background:#0d6efd">
+  <div class="phase-item" style="background:var(--brand-navy,#1a2744)">
     <div>🚀 Content Push</div>
     <div class="phase-dates">มิ.ย. 2026</div>
   </div>
-  <div class="phase-item" style="background:#fd7e14">
+  <div class="phase-item" style="background:var(--brand-gold-d,#b8924f)">
     <div>📞 Pipeline Build</div>
     <div class="phase-dates">ก.ค. 2026</div>
   </div>
-  <div class="phase-item" style="background:#B8860B">
+  <div class="phase-item" style="background:var(--app-primary,#c9a96e);color:#1a2744">
     <div>💰 First Revenue</div>
     <div class="phase-dates">ส.ค. 2026</div>
   </div>
@@ -99,13 +99,10 @@
 
 {# ── Legend ───────────────────────────────────────────────────────────────── #}
 <div class="d-flex flex-wrap gap-3 mb-3" style="font-size:.78rem">
-  <span><span class="legend-dot me-1" style="background:#B8860B"></span>Milestone</span>
-  <span><span class="legend-dot me-1" style="background:#198754"></span>Article Published</span>
-  <span><span class="legend-dot me-1" style="background:#0d6efd"></span>Lead</span>
-  <span><span class="legend-dot me-1" style="background:#fd7e14"></span>Action / Outreach</span>
-  <span><span class="legend-dot me-1" style="background:#495057"></span>Content Plan</span>
-  <span><span class="legend-dot me-1" style="background:#6c757d"></span>Recurring</span>
-  <span><span class="legend-dot me-1" style="background:#6f42c1"></span>Review</span>
+  <span><span class="legend-dot me-1" style="background:var(--app-primary)"></span>Milestone / Revenue</span>
+  <span><span class="legend-dot me-1" style="background:var(--brand-navy,#1a2744)"></span>Article / Lead</span>
+  <span><span class="legend-dot me-1" style="background:var(--brand-gold-d,#b8924f)"></span>Action / Outreach</span>
+  <span><span class="legend-dot me-1" style="background:var(--bs-secondary-color)"></span>Recurring</span>
 </div>
 
 {# ── Calendar ─────────────────────────────────────────────────────────────── #}
@@ -135,8 +132,32 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script>
 (function () {
-  const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-  const events = {{ events_json|safe }};
+  // ── Read Design System tokens ────────────────────────────────────────────
+  const css      = getComputedStyle(document.documentElement);
+  const gold     = css.getPropertyValue('--app-primary').trim()   || '#c9a96e';
+  const goldDark = css.getPropertyValue('--brand-gold-d').trim()  || '#b8924f';
+  const navy     = css.getPropertyValue('--brand-navy').trim()    || '#1a2744';
+  const navyMid  = navy;  // use navy directly; opacity handled via hex alpha below
+  const muted    = css.getPropertyValue('--bs-secondary-color').trim() || '#6c757d';
+
+  // ── Category → Theme color map ──────────────────────────────────────────
+  const CAT_COLOR = {
+    milestone:    gold,
+    article:      navy,
+    lead:         navy + 'cc',   // navy 80% opacity
+    action:       goldDark,
+    content_plan: navy + '99',   // navy 60%
+    backlog:      goldDark + 'aa',
+    recurring:    muted,
+  };
+
+  // ── Remap event colors from category ────────────────────────────────────
+  const rawEvents = {{ events_json|safe }};
+  const events = rawEvents.map(e => ({
+    ...e,
+    color: CAT_COLOR[e.category] || gold,
+    borderColor: 'transparent',
+  }));
 
   const cal = new FullCalendar.Calendar(document.getElementById('calendar'), {
     initialView: 'dayGridMonth',
@@ -156,7 +177,6 @@
     },
     events: events,
     eventDidMount: function (info) {
-      // Tooltip via Bootstrap
       if (info.event.extendedProps.description) {
         info.el.setAttribute('title', info.event.extendedProps.description);
       }
@@ -167,28 +187,12 @@
       document.getElementById('modalDesc').textContent  = info.event.extendedProps.description || '';
       new bootstrap.Modal(document.getElementById('eventModal')).show();
     },
-    // Hide recurring stand-ups by default to reduce noise — show only milestones + actions
     eventClassNames: function (arg) {
       return ['fc-cat-' + (arg.event.extendedProps.category || 'other')];
     },
   });
 
   cal.render();
-
-  // ── Category filter buttons ────────────────────────────────────────────────
-  document.querySelectorAll('[data-cat-filter]').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const cat = this.dataset.catFilter;
-      document.querySelectorAll('[data-cat-filter]').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-
-      const filtered = cat === 'all'
-        ? events
-        : events.filter(e => e.category === cat);
-      cal.removeAllEvents();
-      cal.addEventSource(filtered);
-    });
-  });
 })();
 </script>
 {% endblock %}
