@@ -460,7 +460,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const today = new Date();
   document.querySelectorAll('#phaseBar .phase-item').forEach(el => {
     const s = new Date(el.dataset.phaseStart), e = new Date(el.dataset.phaseEnd);
-    el.classList.add(today >= s && today <= e ? 'phase-active' : today > e ? 'phase-done' : '');
+    if (today >= s && today <= e) el.classList.add('phase-active');
+    else if (today > e) el.classList.add('phase-done');
   });
 
   /* ── System events (from Django) ───────────────────────────────────── */
