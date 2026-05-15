@@ -797,160 +797,16 @@ def calendar_view(request):
             "description": f"Lead เข้า — {lead['status']}",
         })
 
-    # ── 3. Recurring schedule (Communication Cadence) ────────────────────────
-    # Generate for current month + next 3 months
-    for week_offset in range(14):
-        monday = (now + timedelta(weeks=week_offset)).date()
-        monday -= timedelta(days=monday.weekday())
-        friday = monday + timedelta(days=4)
-        first_of_month = monday.replace(day=1)
-
-        # Daily stand-up Mon–Fri (show only Mon as weekly marker)
+    # ── 3+4. System events จาก DB (milestones + recurring) ──────────────────
+    system_qs = CalendarEvent.objects.filter(is_system=True).values(
+        "title", "start_datetime", "category", "description", "color"
+    )
+    for evt in system_qs:
         events.append({
-            "title": "☀️ Daily Stand-up",
-            "start": monday.isoformat(),
-            "color": "#6c757d",
-            "category": "recurring",
-            "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
-        })
-        # Weekly review every Friday
-        events.append({
-            "title": "📊 Weekly Review",
-            "start": friday.isoformat(),
-            "color": "#6f42c1",
-            "category": "recurring",
-            "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
-        })
-
-    # Monthly review on 1st of each month (next 4 months)
-    for m_offset in range(4):
-        target = (now + timedelta(days=30 * m_offset)).date().replace(day=1)
-        events.append({
-            "title": "📅 Monthly Review",
-            "start": target.isoformat(),
-            "color": "#fd7e14",
-            "category": "recurring",
-            "description": "Monthly Business Review — all agents",
-        })
-
-    # ── 4. Milestones จาก docs/action_plan.html + docs/product_strategy.html ──
-    # Day 1 = 2026-05-15 (วันเริ่ม)
-    milestones = [
-        # ═══ 60-DAY ACTION PLAN ═══════════════════════════════════════════════
-
-        # Phase 1: Setup (Day 1-7) → May 15-21
-        ("2026-05-15", "⚙️ [Day 1] ติดตั้ง Infrastructure", "milestone",
-         "Install Node.js 24, OpenClaw, test localhost:18789"),
-        ("2026-05-16", "📱 [Day 2] สร้าง LINE Official Account", "action",
-         "Enable Messaging API + credentials"),
-        ("2026-05-17", "🔗 [Day 3] เชื่อม LINE → OpenClaw", "action",
-         "Channel Access Token + webhook"),
-        ("2026-05-18", "🤖 [Day 4] เขียน System Prompt + 20+ FAQ", "action",
-         "AI persona + knowledge base พร้อม"),
-        ("2026-05-19", "🖥️ [Day 5] Deploy บน VPS ($6/เดือน)", "action",
-         "DigitalOcean VPS + live demo server running"),
-        ("2026-05-21", "✅ [Day 7] Demo Production-Ready", "milestone",
-         "ทดสอบ 20+ scenarios ครบ — Gate 1 ผ่าน"),
-
-        # Phase 2: Demo Creation (Day 8-14) → May 22-28
-        ("2026-05-22", "🎬 [Day 8] สร้าง Demo 3 แบบ", "action",
-         "E-commerce / Clinic / Hotel — 20+ FAQ each"),
-        ("2026-05-24", "📹 [Day 10] ถ่าย Video Demo 60 วินาที", "action",
-         "Thai voiceover + CapCut — highest conversion format"),
-        ("2026-05-25", "📄 [Day 11] สร้าง Sales Materials", "action",
-         "One-pager + Proposal template + Invoice + Service agreement"),
-        ("2026-05-27", "🌐 [Day 13] ตั้ง LinkedIn + Facebook Page + Salepage", "action",
-         "Online presence พร้อม — Netlify / GitHub Pages"),
-        ("2026-05-28", "✅ [Day 14] Sales Materials ครบ", "milestone",
-         "Demo + Content + Sales Kit — Gate 2 ผ่าน"),
-
-        # Phase 3: Outreach (Day 15-28) → May 29 - Jun 11
-        ("2026-05-29", "📢 [Day 15] Publish Content ชุดแรก", "action",
-         "LinkedIn post + video, FB post, TikTok — 3 platforms"),
-        ("2026-05-31", "📋 [Day 17] สร้าง Prospect List 100 ราย", "action",
-         "50 คลินิก + 50 e-commerce shops → Google Sheets CRM"),
-        ("2026-06-02", "💬 [Day 19] ส่ง Cold Message 30 ราย", "action",
-         "Personalized DM Facebook/LINE — expect 10-20 replies"),
-        ("2026-06-04", "👥 [Day 22] Join 3 Facebook Groups", "action",
-         "SME / e-commerce / clinics — answer questions, build authority"),
-        ("2026-06-08", "📞 [Day 25] Discovery Calls 3+ ราย", "milestone",
-         "คุยกับ prospect ที่สนใจ — Gate 3 target"),
-        ("2026-06-11", "✅ [Day 28] 3+ Discovery Calls Done", "milestone",
-         "Pipeline มี qualified leads — เริ่ม Phase 4"),
-
-        # Phase 4: Close (Day 29-38) → Jun 12-21
-        ("2026-06-12", "🎯 [Day 29] Demo Calls + ส่ง Proposal", "action",
-         "ส่ง proposal ให้ 1-2 hot leads"),
-        ("2026-06-16", "🤝 [Day 33] รับ Deposit ฿10,000!", "milestone",
-         "50% setup fee — Project greenlit, onboarding เริ่ม"),
-        ("2026-06-21", "✍️ [Day 38] Contract Signed", "milestone",
-         "HelloSign + ฿10K received — Gate 4 ผ่าน"),
-
-        # Phase 5: Delivery (Day 39-52) → Jun 22 - Jul 5
-        ("2026-06-22", "🔧 [Day 39] เริ่ม Customize ระบบ", "action",
-         "Gather requirements + migrate FAQ + customize for customer"),
-        ("2026-06-26", "🚀 [Day 44] Deploy บน Customer VPS", "action",
-         "Configure OA + test all integrations"),
-        ("2026-07-01", "🧪 [Day 47] User Acceptance Testing", "action",
-         "Customer tests 3 วัน + feedback → fix issues"),
-        ("2026-07-03", "📚 [Day 48] Training ทีมลูกค้า", "action",
-         "Dashboard + FAQ updates + escalation process"),
-        ("2026-07-05", "🟢 [Day 52] GO LIVE!", "milestone",
-         "ระบบ production + 48h close monitoring — Gate 5 ผ่าน"),
-
-        # Phase 6: Get Paid (Day 53-60) → Jul 6-13
-        ("2026-07-06", "🧾 [Day 53] ส่ง Invoice #2 ฿10,000", "action",
-         "Final payment immediately after go-live"),
-        ("2026-07-08", "💰 [Day 55] รับเงินครบ + MRR เริ่ม!", "milestone",
-         "Setup รวม ฿20,000 + MRR ฿3,000/เดือน เริ่มนับ"),
-        ("2026-07-09", "📊 [Day 56] สร้าง Case Study", "action",
-         "Metrics + screenshots + testimonial → LinkedIn"),
-        ("2026-07-13", "🔄 [Day 60] เริ่ม Cycle 2", "milestone",
-         "Follow-up pipeline + ขอ referral + target deal #2 by Day 90"),
-
-        # ═══ PRODUCT ROADMAP 6 เดือน ════════════════════════════════════════
-
-        # Month 1-2 (May-Jun): LINE AI Pro
-        ("2026-05-29", "🚀 LINE AI Pro — Launch!", "milestone",
-         "Product #1: Setup ฿20K | MRR ฿3K/เดือน | Delivery 1-2 สัปดาห์"),
-        ("2026-06-30", "🎯 เป้าปิด 2-3 ดีลแรก", "milestone",
-         "Month 2 target — MRR เริ่มนับ + สร้าง 1 Case Study"),
-
-        # Month 3-4 (Jul-Aug): Clinic + Omni AI
-        ("2026-07-15", "🏥 Private AI Clinic — Launch!", "milestone",
-         "Product #2: Setup ฿80K | MRR ฿8K | ตลาด 30,000+ คลินิก | PDPA-safe"),
-        ("2026-07-15", "📡 Omni AI Agent — Launch!", "milestone",
-         "Product #3: Setup ฿50K | MRR ฿6K | LINE+FB+IG+TikTok"),
-        ("2026-08-15", "🎯 เป้า MRR ฿20,000/เดือน", "milestone",
-         "Month 4 revenue target — 3 partners acquired"),
-
-        # Month 5-6 (Sep-Oct): Workflow + Team AI + Scale
-        ("2026-09-15", "⚙️ AI Workflow Bot — Launch!", "milestone",
-         "Product #4: Setup ฿35K | MRR ฿4.5K | Daily reports + CRM + alerts"),
-        ("2026-09-15", "👥 Team AI Assistant — Launch!", "milestone",
-         "Product #5: Setup ฿40K | MRR ฿5K | Slack/Teams/LINE | saves 30min/person/day"),
-        ("2026-10-01", "📈 Google Ads เริ่ม (฿5K-15K/เดือน)", "action",
-         "High-intent keywords — start after case study ready"),
-        ("2026-10-15", "🎯 เป้า MRR ฿50,000/เดือน", "milestone",
-         "Month 6 target: 15+ customers | 5 case studies | 5 partners"),
-        ("2026-10-15", "🏆 Activate Data Analyst + Customer Success", "milestone",
-         "MRR ฿50K+ → เพิ่ม agents ตาม revenue milestone"),
-
-        # Quarterly
-        ("2026-09-01", "🔄 Quarterly Planning Q3", "recurring",
-         "2-day strategy session — ทบทวน MRR + product mix + channels"),
-
-        # ═══ FEATURE BACKLOG ═════════════════════════════════════════════════
-        ("2026-10-01", "💬 [Feature] Chat กับ Agent จาก Dashboard", "action",
-         "Integrate Anthropic API → กดที่ agent card แล้วส่งคำสั่งได้เลยจากหน้าเว็บ | Option A: modal chat | Option B: full chat history | ต้องการ ANTHROPIC_API_KEY"),
-    ]
-
-    for start, title, category, desc in milestones:
-        events.append({
-            "title": title,
-            "start": start,
-            "category": category,
-            "description": desc,
+            "title":       evt["title"],
+            "start":       evt["start_datetime"].date().isoformat(),
+            "category":    evt["category"],
+            "description": evt["description"],
         })
 
     # ── 5. Content Backlog scheduled items ───────────────────────────────────

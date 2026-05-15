@@ -6,11 +6,18 @@ User = get_user_model()
 
 class CalendarEvent(models.Model):
     CATEGORY_CHOICES = [
-        ("general",  "ทั่วไป"),
-        ("priority", "งานสำคัญ"),
-        ("meeting",  "ประชุม"),
-        ("delivery", "ส่งมอบงาน"),
-        ("personal", "ส่วนตัว"),
+        # User-created events
+        ("general",      "ทั่วไป"),
+        ("priority",     "งานสำคัญ"),
+        ("meeting",      "ประชุม"),
+        ("delivery",     "ส่งมอบงาน"),
+        ("personal",     "ส่วนตัว"),
+        # System events (is_system=True)
+        ("milestone",    "Milestone / แผน"),
+        ("action",       "งานต้องทำ (Task)"),
+        ("recurring",    "Recurring / นัดประจำ"),
+        ("content_plan", "Content Plan"),
+        ("backlog",      "Content Backlog"),
     ]
 
     title          = models.CharField("หัวข้อ", max_length=200)
