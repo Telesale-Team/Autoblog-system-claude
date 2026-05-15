@@ -937,6 +937,10 @@ def calendar_view(request):
         # Quarterly
         ("2026-09-01", "🔄 Quarterly Planning Q3", "recurring",
          "2-day strategy session — ทบทวน MRR + product mix + channels"),
+
+        # ═══ FEATURE BACKLOG ═════════════════════════════════════════════════
+        ("2026-10-01", "💬 [Feature] Chat กับ Agent จาก Dashboard", "action",
+         "Integrate Anthropic API → กดที่ agent card แล้วส่งคำสั่งได้เลยจากหน้าเว็บ | Option A: modal chat | Option B: full chat history | ต้องการ ANTHROPIC_API_KEY"),
     ]
 
     for start, title, category, desc in milestones:
