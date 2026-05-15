@@ -287,6 +287,103 @@
     border-color: var(--app-primary);
     box-shadow: 0 0 0 3px rgba(201,169,110,.18);
   }
+
+  /* ── Feature 1: Glowing Hot Events ─────────────────────────────────── */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 6px 1px rgba(201,169,110,.5); }
+    50%       { box-shadow: 0 0 12px 3px rgba(201,169,110,.9); }
+  }
+  .fc-event-hot {
+    animation: pulse-glow 1.8s ease-in-out infinite !important;
+    border-left: 3px solid var(--app-primary) !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fc-event-hot { animation: none !important; }
+  }
+
+  /* ── Feature 2: Progress Bar ────────────────────────────────────────── */
+  .revenue-progress-wrap {
+    background: linear-gradient(135deg, var(--brand-navy), rgba(26,39,68,.85));
+    border-radius: .6rem;
+    padding: .85rem 1.1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(201,169,110,.25);
+  }
+  .revenue-progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: .5rem;
+  }
+  .rp-label { font-size: .78rem; font-weight: 700; color: rgba(201,169,110,.9); letter-spacing: .06em; }
+  .rp-pct   { font-size: 1.1rem; font-weight: 800; color: var(--app-primary); }
+  .revenue-progress-bar {
+    height: 8px; background: rgba(255,255,255,.1); border-radius: 999px; overflow: hidden; margin-bottom: .4rem;
+  }
+  .revenue-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--app-primary), var(--app-secondary));
+    border-radius: 999px;
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .revenue-progress-fill { transition: none; }
+  }
+  .rp-status { font-size: .72rem; color: rgba(255,255,255,.5); }
+
+  /* ── Feature 3: Phase RPG Badges ───────────────────────────────────── */
+  @keyframes badge-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .6; }
+  }
+  .phase-active-badge {
+    display: block; font-size: .58rem; font-weight: 800;
+    color: var(--app-primary); letter-spacing: .08em;
+    margin-top: 3px; animation: badge-pulse 2s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .phase-active-badge { animation: none; }
+  }
+  .phase-lock-badge { display: block; font-size: .75rem; margin-top: 2px; opacity: .5; }
+  .phase-done-badge { display: block; font-size: .6rem; color: #6ee7b7; margin-top: 2px; font-weight: 700; }
+
+  /* ── Feature 4: Countdown Badge ────────────────────────────────────── */
+  .evt-countdown {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: .62rem;
+    font-weight: 700;
+    padding: 0 4px;
+    border-radius: 3px;
+    background: rgba(255,255,255,.25);
+    color: #fff;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  .fc-event-hot .evt-countdown {
+    background: var(--app-primary);
+    color: var(--brand-navy);
+  }
+
+  /* ── Feature 5: XP Pop Animation ───────────────────────────────────── */
+  @keyframes xp-float {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+  }
+  .xp-pop {
+    position: fixed;
+    right: 2rem;
+    bottom: 4.5rem;
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--app-primary);
+    pointer-events: none;
+    z-index: 10000;
+    animation: xp-float 1.2s ease-out forwards;
+    text-shadow: 0 1px 8px rgba(201,169,110,.6);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .xp-pop { animation: none; opacity: 0; }
+  }
 </style>
 {% endblock %}
 
@@ -305,6 +402,18 @@
   <button class="btn btn-outline-primary btn-add-event flex-shrink-0" id="btnAddEvent">
     <i class="bi bi-plus-lg me-1"></i>เพิ่มงาน
   </button>
+</div>
+
+{# ── Feature 2: Road to First Revenue Progress Bar ───────────────────────── #}
+<div class="revenue-progress-wrap">
+  <div class="revenue-progress-header">
+    <span class="rp-label">🏆 Road to First Revenue</span>
+    <span class="rp-pct" id="rpPct">0%</span>
+  </div>
+  <div class="revenue-progress-bar">
+    <div class="revenue-progress-fill" id="rpFill"></div>
+  </div>
+  <div class="rp-status" id="rpStatus"></div>
 </div>
 
 {# ── Phase Timeline ─────────────────────────────────────────────────────── #}
@@ -520,6 +629,17 @@ document.addEventListener('DOMContentLoaded', function () {
     else if (today > e) el.classList.add('phase-done');
   });
 
+  // Feature 3: RPG Phase badges — LEVEL UP style
+  document.querySelectorAll('#phaseBar .phase-item').forEach(function (el, idx) {
+    if (el.classList.contains('phase-active')) {
+      el.insertAdjacentHTML('beforeend', '<span class="phase-active-badge">&#9654; LEVEL ' + (idx + 1) + ' IN PROGRESS</span>');
+    } else if (!el.classList.contains('phase-done')) {
+      el.insertAdjacentHTML('beforeend', '<span class="phase-lock-badge">&#128274;</span>');
+    } else {
+      el.insertAdjacentHTML('beforeend', '<span class="phase-done-badge">&#10003; DONE</span>');
+    }
+  });
+
   /* ── System events (from Django) ───────────────────────────────────── */
   const rawEvents = {{ events_json|safe }};
   const sysEvents = rawEvents.map(e => ({
@@ -594,8 +714,25 @@ document.addEventListener('DOMContentLoaded', function () {
     ],
 
     eventDidMount: function (info) {
+      // tooltip
       const desc = info.event.extendedProps.description;
       if (desc) info.el.setAttribute('title', desc);
+
+      // Feature 1: Glowing hot events — within 3 days ahead
+      const daysUntilHot = Math.ceil((info.event.start - new Date()) / 86400000);
+      if (daysUntilHot >= 0 && daysUntilHot <= 3) {
+        info.el.classList.add('fc-event-hot');
+      }
+
+      // Feature 4: Countdown badge — within 7 days ahead
+      const daysUntilCd = Math.ceil((info.event.start - new Date()) / 86400000);
+      if (daysUntilCd >= 0 && daysUntilCd <= 7) {
+        const badge = document.createElement('span');
+        badge.className = 'evt-countdown';
+        badge.textContent = daysUntilCd === 0 ? 'วันนี้!' : daysUntilCd + 'd';
+        const titleEl = info.el.querySelector('.fc-event-title');
+        if (titleEl) titleEl.appendChild(badge);
+      }
     },
 
     // คลิกวันว่าง → เพิ่มงานใหม่
@@ -621,6 +758,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   cal.render();
 
+  // Feature 2: Road to First Revenue — milestone progress
+  (function () {
+    const milestoneEvents = sysEvents.filter(function (e) {
+      return e.extendedProps && e.extendedProps.category === 'milestone';
+    });
+    const total = milestoneEvents.length;
+    const done  = milestoneEvents.filter(function (e) { return new Date(e.start) <= new Date(); }).length;
+    const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    setTimeout(function () {
+      const fill     = document.getElementById('rpFill');
+      const pctEl    = document.getElementById('rpPct');
+      const statusEl = document.getElementById('rpStatus');
+      if (fill)     fill.style.width = pct + '%';
+      if (pctEl)    pctEl.textContent = pct + '%';
+      if (statusEl) statusEl.textContent = done + ' จาก ' + total + ' milestones ผ่านแล้ว — ' + (100 - pct) + '% เหลือถึง Revenue';
+    }, 300);
+  }());
+
   /* ── API helpers ───────────────────────────────────────────────────── */
   function apiPost(data) {
     return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf }, body: JSON.stringify(data) }).then(r => r.json());
@@ -639,6 +795,15 @@ document.addEventListener('DOMContentLoaded', function () {
     t.className = 'cal-toast show ' + (isErr ? 'err' : 'ok');
     clearTimeout(t._tid);
     t._tid = setTimeout(() => t.classList.remove('show'), 2500);
+
+    // Feature 5: +XP pop on success
+    if (!isErr) {
+      const xp = document.createElement('span');
+      xp.className = 'xp-pop';
+      xp.textContent = '+50 XP ⚡';
+      document.body.appendChild(xp);
+      setTimeout(function () { xp.remove(); }, 1300);
+    }
   }
 
   /* ── Category badge HTML ───────────────────────────────────────────── */
