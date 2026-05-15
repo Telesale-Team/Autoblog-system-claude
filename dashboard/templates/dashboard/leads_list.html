@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Leads ทั้งหมด — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Leads ทั้งหมด</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .status-badge {
+    font-size: .7rem;
+    padding: .25em .65em;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: .03em;
+    display: inline-block;
+  }
+  .status-new        { background: #fff3cd; color: #856404; }
+  .status-contacted  { background: #cff4fc; color: #055160; }
+  .status-qualified  { background: #cfe2ff; color: #084298; }
+  .status-closed_won { background: #d1e7dd; color: #0a3622; }
+  .status-closed_lost{ background: #e2e3e5; color: #41464b; }
+
+  .table-leads th {
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--bs-secondary-color);
+    font-weight: 600;
+    border-bottom-width: 1px;
+    white-space: nowrap;
+  }
+  .table-leads td { vertical-align: middle; font-size: .88rem; }
+
+  .filter-btn {
+    font-size: .8rem;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+  }
+  .filter-btn.active {
+    background: var(--app-primary) !important;
+    border-color: var(--app-primary) !important;
+    color: #fff !important;
+  }
+
+  .status-select {
+    font-size: .8rem;
+    padding: .2rem .5rem;
+    border-radius: .35rem;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .status-select:focus { outline: none; border-color: var(--app-primary); }
+  .status-select.saving { opacity: .5; pointer-events: none; }
+
+  .toast-feedback {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    min-width: 220px;
+    font-size: .88rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Page Header ─────────────────────────────────────────────────────────── #}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">Leads ทั้งหมด</h4>
+    <p class="mb-0 text-muted small">จัดการและ update สถานะ lead ได้ทันที</p>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    {% if new_count > 0 %}
+      <span class="badge bg-danger rounded-pill">{{ new_count }} ใหม่รอ follow-up</span>
+    {% endif %}
+    <a href="/admin/pages/contactlead/add/" target="_blank" rel="noopener"
+       class="btn btn-sm btn-app-filled btn-app">
+      <i class="bi bi-plus-lg me-1"></i>เพิ่ม Lead
+    </a>
+  </div>
+</div>
+
+{# ── Filter Tabs ──────────────────────────────────────────────────────────── #}
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <a href="{% url 'dashboard:leads' %}"
+     class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter %}active{% endif %}">
+    ทั้งหมด
+  </a>
+  {% for value, label in status_choices %}
+  <a href="{% url 'dashboard:leads' %}?status={{ value }}"
+     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == value %}active{% endif %}">
+    {{ label }}
+  </a>
+  {% endfor %}
+</div>
+
+{# ── Leads Table ──────────────────────────────────────────────────────────── #}
+<div class="card border" style="border-radius:.6rem">
+  <div class="card-body p-0">
+    {% if leads %}
+    <div class="table-responsive">
+      <table class="table table-leads table-hover mb-0">
+        <thead>
+          <tr>
+            <th class="ps-3">ชื่อ / อีเมล</th>
+            <th>บริษัท</th>
+            <th>เบอร์โทร</th>
+            <th>ที่มา</th>
+            <th>สถานะ</th>
+            <th class="pe-3">วันที่</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lead in leads %}
+          <tr id="lead-row-{{ lead.pk }}">
+            <td class="ps-3">
+              <div class="fw-semibold">{{ lead.name }}</div>
+              <div class="text-muted" style="font-size:.76rem">{{ lead.email }}</div>
+            </td>
+            <td>{{ lead.company|default:"—" }}</td>
+            <td>
+              {% if lead.phone %}
+                <a href="tel:{{ lead.phone }}" class="text-decoration-none text-body">{{ lead.phone }}</a>
+              {% else %}—{% endif %}
+            </td>
+            <td>
+              <span class="text-muted" style="font-size:.82rem">{{ lead.get_source_display }}</span>
+            </td>
+            <td>
+              <select class="status-select"
+                      data-lead-pk="{{ lead.pk }}"
+                      data-url="{% url 'dashboard:lead_status' lead.pk %}"
+                      aria-label="สถานะ lead {{ lead.name }}">
+                {% for value, label in status_choices %}
+                  <option value="{{ value }}" {% if lead.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td class="pe-3 text-muted" style="font-size:.8rem;white-space:nowrap">
+              {{ lead.created_at|date:"d M Y" }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center text-muted py-5">
+      <i class="bi bi-inbox fs-1"></i>
+      <p class="mt-3 mb-0">
+        {% if status_filter %}
+          ไม่มี lead ที่มีสถานะ "{{ status_filter }}"
+        {% else %}
+          ยังไม่มี lead ในระบบ
+        {% endif %}
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{# ── Toast Feedback ───────────────────────────────────────────────────────── #}
+<div id="statusToast" class="toast toast-feedback align-items-center border-0" role="alert"
+     aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body" id="toastMessage">อัปเดตสถานะแล้ว</div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const csrfToken = '{{ csrf_token }}';
+  const toast     = new bootstrap.Toast(document.getElementById('statusToast'), { delay: 2500 });
+  const toastMsg  = document.getElementById('toastMessage');
+  const toastEl   = document.getElementById('statusToast');
+
+  function showToast(msg, isError) {
+    toastMsg.textContent = msg;
+    toastEl.classList.remove('bg-success', 'bg-danger', 'text-white');
+    toastEl.classList.add(isError ? 'bg-danger' : 'bg-success', 'text-white');
+    toast.show();
+  }
+
+  document.querySelectorAll('.status-select').forEach(function (sel) {
+    sel.addEventListener('change', function () {
+      const pk  = sel.dataset.leadPk;
+      const url = sel.dataset.url;
+      const newStatus = sel.value;
+
+      sel.classList.add('saving');
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({ status: newStatus })
+      })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        sel.classList.remove('saving');
+        if (data.ok) {
+          showToast('อัปเดตสถานะเป็น "' + data.status_display + '" แล้ว', false);
+        } else {
+          showToast('เกิดข้อผิดพลาด: ' + (data.error || 'unknown'), true);
+          // revert
+          sel.value = sel.querySelector('option[selected]')?.value || '';
+        }
+      })
+      .catch(function () {
+        sel.classList.remove('saving');
+        showToast('ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่', true);
+      });
+    });
+  });
+})();
+</script>
+{% endblock %}

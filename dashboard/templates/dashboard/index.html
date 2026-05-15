@@ -1,0 +1,452 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Dashboard — Owner Overview{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Dashboard</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .kpi-delta-up   { color: #198754; font-size: .8rem; }
+  .kpi-delta-down { color: #dc3545; font-size: .8rem; }
+  .kpi-delta-flat { color: #6c757d; font-size: .8rem; }
+
+  .alert-smart {
+    border-left: 4px solid;
+    border-radius: .4rem;
+    padding: .7rem 1rem;
+    margin-bottom: .6rem;
+    font-size: .93rem;
+  }
+  .alert-smart.danger  { border-color: #dc3545; background: rgba(220,53,69,.07); }
+  .alert-smart.warning { border-color: #ffc107; background: rgba(255,193,7,.07); }
+  .alert-smart.success { border-color: #198754; background: rgba(25,135,84,.07); }
+  .alert-smart.primary { border-color: var(--app-primary); background: rgba(201,169,110,.07); }
+  .alert-smart.orange  { border-color: #fd7e14; background: rgba(253,126,20,.07); }
+
+  .alert-smart .alert-link-danger  { color: #dc3545; font-weight: 600; }
+  .alert-smart .alert-link-warning { color: #856404; font-weight: 600; }
+  .alert-smart .alert-link-primary { color: var(--app-primary); font-weight: 600; }
+  .alert-smart .alert-link-orange  { color: #fd7e14; font-weight: 600; }
+
+  .table-dashboard th {
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--bs-secondary-color);
+    font-weight: 600;
+    border-bottom-width: 1px;
+  }
+  .table-dashboard td { vertical-align: middle; font-size: .9rem; }
+
+  .status-badge {
+    font-size: .7rem;
+    padding: .25em .65em;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: .03em;
+  }
+  .status-new        { background: #fff3cd; color: #856404; }
+  .status-contacted  { background: #cff4fc; color: #055160; }
+  .status-qualified  { background: #cfe2ff; color: #084298; }
+  .status-closed_won { background: #d1e7dd; color: #0a3622; }
+  .status-closed_lost{ background: #e2e3e5; color: #41464b; }
+
+  .quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: 1rem .75rem;
+    border-radius: .6rem;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    text-decoration: none;
+    transition: background .2s, border-color .2s, box-shadow .2s;
+    font-size: .85rem;
+    font-weight: 500;
+  }
+  .quick-action-btn i { font-size: 1.4rem; color: var(--app-primary); }
+  .quick-action-btn:hover {
+    background: rgba(201,169,110,.08);
+    border-color: var(--app-primary);
+    box-shadow: 0 3px 12px rgba(0,0,0,.07);
+    color: var(--app-primary);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Page Header ─────────────────────────────────────────────────────────── #}
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h4 class="mb-0 page-title">Owner Dashboard</h4>
+    <p class="mb-0 text-muted small">ภาพรวมธุรกิจ — อัปเดตแบบ real-time</p>
+  </div>
+  <span class="text-muted small"><i class="bi bi-clock me-1"></i>{% now "j M Y, H:i" %}</span>
+</div>
+
+{# ── Smart Alerts ─────────────────────────────────────────────────────────── #}
+{% if today_actions %}
+<div class="mb-4">
+  <p class="fw-semibold mb-2 small text-uppercase text-secondary" style="letter-spacing:.07em">
+    <i class="bi bi-lightning-charge-fill me-1 text-gold"></i>วันนี้ต้องทำ
+  </p>
+  {% for action in today_actions %}
+  <div class="alert-smart {{ action.type }} d-flex align-items-center gap-2">
+    <i class="bi {{ action.icon }}
+      {% if action.type == 'danger' %}text-danger{% elif action.type == 'warning' %}text-warning{% elif action.type == 'orange' %}text-warning{% else %}text-primary{% endif %}"></i>
+    <span>
+      {{ action.text }} —
+      <a href="{% url 'dashboard:index' %}{{ action.url }}"
+         class="alert-link-{{ action.type }}">ไปจัดการ</a>
+    </span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{# ── 6 KPI Cards ──────────────────────────────────────────────────────────── #}
+<div class="row g-3 mb-4">
+
+  {# KPI 1 — Lead ใหม่วันนี้ + source #}
+  <div class="col-6 col-xl-4">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-start justify-content-between">
+        <div>
+          <div class="stat-label">Lead ใหม่วันนี้</div>
+          <div class="stat-value">{{ leads_today|intcomma }}</div>
+          <div class="mt-1">
+            {% if leads_today_sources %}
+              {% for s in leads_today_sources %}
+                <span class="kpi-delta-flat" style="font-size:.75rem"><i class="bi bi-dot"></i>{{ s.source }}: {{ s.count }}</span>
+              {% endfor %}
+            {% else %}
+              <span class="kpi-delta-flat"><i class="bi bi-dash"></i> ยังไม่มีวันนี้</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-person-plus-fill"></i></div>
+      </div>
+    </div>
+  </div>
+
+  {# KPI 2 — Active Pipeline #}
+  <div class="col-6 col-xl-4">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-start justify-content-between">
+        <div>
+          <div class="stat-label">Active Pipeline</div>
+          <div class="stat-value">{{ active_pipeline|intcomma }}</div>
+          <div class="mt-1">
+            {% for p in pipeline_by_status %}
+              <span class="kpi-delta-flat" style="font-size:.75rem"><i class="bi bi-dot"></i>{{ p.status }}: {{ p.count }}</span>
+            {% empty %}
+              <span class="kpi-delta-flat"><i class="bi bi-check-circle me-1"></i>ไม่มีดีลค้าง</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-funnel-fill"></i></div>
+      </div>
+    </div>
+  </div>
+
+  {# KPI 3 — Blog views สะสม #}
+  <div class="col-6 col-xl-4">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-start justify-content-between">
+        <div>
+          <div class="stat-label">Blog Views สะสม</div>
+          <div class="stat-value">{{ total_views|intcomma }}</div>
+          <div class="mt-1 kpi-delta-flat" style="font-size:.75rem"><i class="bi bi-eye me-1"></i>ทุกบทความ — ยังไม่มี GA</div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-eye-fill"></i></div>
+      </div>
+    </div>
+  </div>
+
+  {# KPI 4 — บทความสัปดาห์นี้ #}
+  <div class="col-6 col-xl-4">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-start justify-content-between">
+        <div>
+          <div class="stat-label">บทความสัปดาห์นี้</div>
+          <div class="stat-value">{{ articles_this_week }}<span class="stat-label">/{{ article_weekly_goal }}</span></div>
+          <div class="mt-1">
+            {% if articles_this_week >= article_weekly_goal %}
+              <span class="kpi-delta-up"><i class="bi bi-check-circle me-1"></i>ครบเป้าแล้ว</span>
+            {% else %}
+              <span class="kpi-delta-down"><i class="bi bi-exclamation-circle me-1"></i>ขาดอีก {{ article_weekly_goal|add:"-"|add:articles_this_week }} ชิ้น</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-pencil-square"></i></div>
+      </div>
+    </div>
+  </div>
+
+  {# KPI 5 — MQL สะสม #}
+  <div class="col-6 col-xl-4">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-start justify-content-between">
+        <div>
+          <div class="stat-label">MQL สะสม</div>
+          <div class="stat-value">{{ mql_total|intcomma }}</div>
+          <div class="mt-1">
+            {% if leads_delta_pct > 0 %}
+              <span class="kpi-delta-up"><i class="bi bi-arrow-up-short"></i>{{ leads_delta_pct }}% เดือนนี้</span>
+            {% elif leads_delta_pct < 0 %}
+              <span class="kpi-delta-down"><i class="bi bi-arrow-down-short"></i>{{ leads_delta_pct|cut:"-" }}% เดือนนี้</span>
+            {% else %}
+              <span class="kpi-delta-flat"><i class="bi bi-dash"></i> เท่าเดือนที่แล้ว</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+      </div>
+    </div>
+  </div>
+
+  {# KPI 6 — วันนี้ต้องทำ #}
+  <div class="col-6 col-xl-4">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-start justify-content-between">
+        <div>
+          <div class="stat-label">วันนี้ต้องทำ</div>
+          <div class="stat-value">{{ today_actions|length }}</div>
+          <div class="mt-1">
+            {% if today_actions %}
+              <span class="kpi-delta-down"><i class="bi bi-arrow-down me-1"></i>ดู Smart Alerts ด้านล่าง</span>
+            {% else %}
+              <span class="kpi-delta-up"><i class="bi bi-check-circle me-1"></i>ไม่มี action ค้าง</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-check2-circle"></i></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{# ── Leads Chart + Quick Actions ──────────────────────────────────────────── #}
+<div class="row g-3 mb-4">
+
+  {# Chart — Leads 30 วัน #}
+  <div class="col-lg-8">
+    <div class="card border h-100" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-2">
+        <span class="fw-semibold small">Leads 30 วันที่ผ่านมา</span>
+        <a href="{% url 'dashboard:leads' %}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem">ดูทั้งหมด</a>
+      </div>
+      <div class="card-body" style="min-height:220px">
+        <canvas id="leadsChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  {# Quick Actions #}
+  <div class="col-lg-4">
+    <div class="card border h-100" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom py-2">
+        <span class="fw-semibold small">Quick Actions</span>
+      </div>
+      <div class="card-body d-flex flex-column gap-2 justify-content-center">
+        <div class="row g-2">
+          <div class="col-6">
+            <a href="/admin/pages/contactlead/add/" target="_blank" rel="noopener" class="quick-action-btn w-100">
+              <i class="bi bi-person-plus-fill"></i>
+              <span>เพิ่ม Lead</span>
+            </a>
+          </div>
+          <div class="col-6">
+            <a href="{% url 'dashboard:blog' %}" class="quick-action-btn w-100">
+              <i class="bi bi-pencil-square"></i>
+              <span>จัดการ Blog</span>
+            </a>
+          </div>
+          <div class="col-6">
+            <a href="{% url 'dashboard:leads' %}" class="quick-action-btn w-100">
+              <i class="bi bi-people-fill"></i>
+              <span>ดู Leads</span>
+            </a>
+          </div>
+          <div class="col-6">
+            <a href="/admin/" target="_blank" rel="noopener" class="quick-action-btn w-100">
+              <i class="bi bi-shield-lock-fill"></i>
+              <span>Django Admin</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{# ── Recent Leads + Top Articles ──────────────────────────────────────────── #}
+<div class="row g-3">
+
+  {# Recent Leads table #}
+  <div class="col-lg-7">
+    <div class="card border" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-2">
+        <span class="fw-semibold small">Leads ล่าสุด</span>
+        <a href="{% url 'dashboard:leads' %}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem">ดูทั้งหมด</a>
+      </div>
+      <div class="card-body p-0">
+        {% if recent_leads %}
+        <div class="table-responsive">
+          <table class="table table-dashboard table-hover mb-0">
+            <thead>
+              <tr>
+                <th class="ps-3">ชื่อ</th>
+                <th>บริษัท</th>
+                <th>สถานะ</th>
+                <th class="pe-3">วันที่</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for lead in recent_leads %}
+              <tr>
+                <td class="ps-3">
+                  <div class="fw-semibold" style="font-size:.88rem">{{ lead.name }}</div>
+                  <div class="text-muted" style="font-size:.75rem">{{ lead.email }}</div>
+                </td>
+                <td>
+                  <span class="text-muted" style="font-size:.85rem">{{ lead.company|default:"—" }}</span>
+                </td>
+                <td>
+                  <span class="status-badge status-{{ lead.status }}">{{ lead.get_status_display }}</span>
+                </td>
+                <td class="pe-3 text-muted" style="font-size:.8rem">{{ lead.created_at|date:"d M" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-5">
+          <i class="bi bi-inbox fs-2"></i>
+          <p class="mt-2 mb-0 small">ยังไม่มี leads</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {# Top Articles table #}
+  <div class="col-lg-5">
+    <div class="card border" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-2">
+        <span class="fw-semibold small">บทความ Top Views</span>
+        <a href="{% url 'dashboard:blog' %}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem">ดูทั้งหมด</a>
+      </div>
+      <div class="card-body p-0">
+        {% if top_articles %}
+        <div class="table-responsive">
+          <table class="table table-dashboard table-hover mb-0">
+            <thead>
+              <tr>
+                <th class="ps-3">บทความ</th>
+                <th class="pe-3 text-end">Views</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for article in top_articles %}
+              <tr>
+                <td class="ps-3">
+                  <a href="{{ article.get_absolute_url }}" target="_blank" rel="noopener"
+                     class="text-decoration-none fw-semibold text-body" style="font-size:.87rem">
+                    {{ article.title|truncatechars:45 }}
+                  </a>
+                  <div class="text-muted" style="font-size:.73rem">{{ article.category.name }}</div>
+                </td>
+                <td class="pe-3 text-end">
+                  <span class="fw-bold text-gold" style="font-size:.9rem">{{ article.views_count|intcomma }}</span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-5">
+          <i class="bi bi-file-earmark fs-2"></i>
+          <p class="mt-2 mb-0 small">ยังไม่มีบทความ published</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  const labels = {{ chart_labels|safe }};
+  const data   = {{ chart_data|safe }};
+  const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+  const gridColor = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
+  const textColor = isDark ? '#adb5bd' : '#6c757d';
+  const primary   = getComputedStyle(document.documentElement).getPropertyValue('--app-primary').trim() || '#c9a96e';
+  const secondary = getComputedStyle(document.documentElement).getPropertyValue('--app-secondary').trim() || '#b8924f';
+
+  const ctx = document.getElementById('leadsChart');
+  if (!ctx) return;
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Leads',
+        data,
+        fill: true,
+        tension: 0.4,
+        borderColor: primary,
+        backgroundColor: 'rgba(201,169,110,.10)',
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        pointBackgroundColor: primary,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y} leads`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: textColor, font: { size: 11 }, maxTicksLimit: 8 },
+          grid: { color: gridColor }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { color: textColor, font: { size: 11 }, precision: 0 },
+          grid: { color: gridColor }
+        }
+      }
+    }
+  });
+})();
+</script>
+{% endblock %}

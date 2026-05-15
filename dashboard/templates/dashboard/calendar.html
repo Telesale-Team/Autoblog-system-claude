@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Work Calendar — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Work Calendar</li>
+{% endblock %}
+
+<!-- === CSS === -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- === Header: ชื่อหน้า + ปุ่มเพิ่มงาน === -->
+<div class="d-flex align-items-start justify-content-between mb-3 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">Work Calendar</h4>
+    <p class="mb-0 text-muted small mt-1">
+      ปฏิทินนี้รวมแผนธุรกิจ 6 เดือน + งานประจำวัน —
+      คลิก event เพื่อดูรายละเอียด กดปุ่ม
+      <span class="text-gold fw-semibold">+ เพิ่มงาน</span> เพื่อเพิ่มงานของคุณเองได้
+    </p>
+  </div>
+  <button class="btn btn-outline-primary btn-add-event flex-shrink-0" id="btnAddEvent">
+    <i class="bi bi-plus-lg me-1"></i>เพิ่มงาน
+  </button>
+</div>
+
+<!-- === Progress Bar: Road to First Revenue (JS คำนวณ % จาก is_completed) === -->
+<div class="revenue-progress-wrap">
+  <div class="revenue-progress-header">
+    <span class="rp-label">🏆 Road to First Revenue</span>
+    <span class="rp-pct" id="rpPct">0%</span>
+  </div>
+  <div class="revenue-progress-bar">
+    <div class="revenue-progress-fill" id="rpFill"></div>
+  </div>
+  <div class="rp-status" id="rpStatus"></div>
+</div>
+
+<!-- === Phase Bar: Journey timeline 4 phases พ.ค.–ต.ค. 2026 (JS เพิ่ม phase-active / phase-done) === -->
+<div class="phase-journey" id="phaseBar">
+
+  <!-- phase 1 -->
+  <div class="phase-step" data-phase-start="2026-05-01" data-phase-end="2026-05-31">
+    <div class="phase-connector phase-connector--left"></div>
+    <div class="phase-node-wrap">
+      <div class="phase-node">
+        <i class="bi bi-gear-fill phase-node-icon"></i>
+      </div>
+      <div class="phase-badge-slot"></div>
+    </div>
+    <div class="phase-connector phase-connector--right"></div>
+    <div class="phase-label">
+      <div class="phase-name">Foundation</div>
+      <div class="phase-dates">พ.ค. 2026</div>
+    </div>
+  </div>
+
+  <!-- phase 2 -->
+  <div class="phase-step" data-phase-start="2026-06-01" data-phase-end="2026-06-30">
+    <div class="phase-connector phase-connector--left"></div>
+    <div class="phase-node-wrap">
+      <div class="phase-node">
+        <i class="bi bi-rocket-takeoff-fill phase-node-icon"></i>
+      </div>
+      <div class="phase-badge-slot"></div>
+    </div>
+    <div class="phase-connector phase-connector--right"></div>
+    <div class="phase-label">
+      <div class="phase-name">Content Push</div>
+      <div class="phase-dates">มิ.ย. 2026</div>
+    </div>
+  </div>
+
+  <!-- phase 3 -->
+  <div class="phase-step" data-phase-start="2026-07-01" data-phase-end="2026-07-31">
+    <div class="phase-connector phase-connector--left"></div>
+    <div class="phase-node-wrap">
+      <div class="phase-node">
+        <i class="bi bi-telephone-fill phase-node-icon"></i>
+      </div>
+      <div class="phase-badge-slot"></div>
+    </div>
+    <div class="phase-connector phase-connector--right"></div>
+    <div class="phase-label">
+      <div class="phase-name">Pipeline Build</div>
+      <div class="phase-dates">ก.ค. 2026</div>
+    </div>
+  </div>
+
+  <!-- phase 4 -->
+  <div class="phase-step" data-phase-start="2026-08-01" data-phase-end="2026-10-31">
+    <div class="phase-connector phase-connector--left"></div>
+    <div class="phase-node-wrap">
+      <div class="phase-node">
+        <i class="bi bi-currency-dollar phase-node-icon"></i>
+      </div>
+      <div class="phase-badge-slot"></div>
+    </div>
+    <div class="phase-connector phase-connector--right"></div>
+    <div class="phase-label">
+      <div class="phase-name">First Revenue</div>
+      <div class="phase-dates">ส.ค.–ต.ค. 2026</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- === Stat Cards: ตัวเลขสรุปจาก Calendar DB === -->
+<div class="cal-stat-row">
+
+  <!-- Total -->
+  <div class="cal-stat-card cal-stat-card--total">
+    <div class="cal-stat-icon"><i class="bi bi-calendar3"></i></div>
+    <div class="cal-stat-body">
+      <div class="cal-stat-value">{{ cal_stats.total }}</div>
+      <div class="cal-stat-label">Total Events</div>
+    </div>
+  </div>
+
+  <!-- Done -->
+  <div class="cal-stat-card cal-stat-card--done">
+    <div class="cal-stat-icon"><i class="bi bi-check2-all"></i></div>
+    <div class="cal-stat-body">
+      <div class="cal-stat-value">{{ cal_stats.done }}</div>
+      <div class="cal-stat-label">Done</div>
+    </div>
+  </div>
+
+  <!-- Pending -->
+  <div class="cal-stat-card cal-stat-card--pending">
+    <div class="cal-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+    <div class="cal-stat-body">
+      <div class="cal-stat-value">{{ cal_stats.pending }}</div>
+      <div class="cal-stat-label">Pending</div>
+    </div>
+  </div>
+
+  <!-- Category breakdown -->
+  <div class="cal-stat-breakdown">
+    <div class="cal-stat-cat">
+      <i class="bi bi-arrow-repeat" style="color:#8fa8b8"></i>
+      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.recurring }}</span>
+      <span class="cal-stat-cat-name">Recurring</span>
+    </div>
+    <div class="cal-stat-cat">
+      <i class="bi bi-lightning-charge-fill" style="color:#3b5998"></i>
+      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.action }}</span>
+      <span class="cal-stat-cat-name">Action</span>
+    </div>
+    <div class="cal-stat-cat">
+      <i class="bi bi-flag-fill" style="color:#c9a96e"></i>
+      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.milestone }}</span>
+      <span class="cal-stat-cat-name">Milestone</span>
+    </div>
+    <div class="cal-stat-cat">
+      <i class="bi bi-file-text-fill" style="color:#5b7fa6"></i>
+      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.content_plan }}</span>
+      <span class="cal-stat-cat-name">Content</span>
+    </div>
+    <div class="cal-stat-cat">
+      <i class="bi bi-box-seam" style="color:#6b8cba"></i>
+      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.delivery }}</span>
+      <span class="cal-stat-cat-name">Delivery</span>
+    </div>
+    <div class="cal-stat-cat">
+      <i class="bi bi-people-fill" style="color:#4e6680"></i>
+      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.meeting }}</span>
+      <span class="cal-stat-cat-name">Meeting</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- === Filter Tabs + Recurring Toggle === -->
+<!-- toggle-recurring ซ่อน/แสดง recurring events ใน month view (JS อ่าน showRecurring) -->
+<div class="cal-toolbar-row">
+  <div class="cal-filter-tabs" id="legendBar" style="flex:1">
+  <button class="cal-filter-tab active" data-filter="all">
+    <i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด
+  </button>
+  <button class="cal-filter-tab" data-filter="milestone">
+    <i class="bi bi-flag-fill tab-icon" style="color:#c9a96e"></i>แผน (Roadmap)
+  </button>
+  <button class="cal-filter-tab" data-filter="action">
+    <i class="bi bi-lightning-charge-fill tab-icon" style="color:#3b5998"></i>งานต้องทำ
+  </button>
+  <button class="cal-filter-tab" data-filter="content">
+    <i class="bi bi-file-text-fill tab-icon" style="color:#5b7fa6"></i>Content
+  </button>
+  <button class="cal-filter-tab" data-filter="recurring">
+    <i class="bi bi-arrow-repeat tab-icon" style="color:#8fa8b8"></i>Recurring
+  </button>
+  <button class="cal-filter-tab" data-filter="actual">
+    <i class="bi bi-check-circle-fill tab-icon" style="color:#6b8cba"></i>Actual
+  </button>
+  <button class="cal-filter-tab" data-filter="user-event">
+    <i class="bi bi-person-fill tab-icon" style="color:#4e6680"></i>งานของฉัน
+  </button>
+  <button class="cal-filter-tab tab-done" data-filter="done">
+    <i class="bi bi-check2-all tab-icon" style="color:#8fa8b8"></i>เสร็จแล้ว
+  </button>
+</div>
+<!-- ปุ่ม toggle recurring: off by default เพื่อลด density ใน month view -->
+<button class="cal-recurring-toggle" id="btnToggleRecurring" title="แสดง/ซ่อน Recurring events">
+  <i class="bi bi-arrow-repeat me-1"></i>
+  <span id="toggleRecurringLabel">Recurring ซ่อนอยู่</span>
+</button>
+</div>
+</div>
+
+<!-- === Calendar: FullCalendar render ลงใน #calendar โดย calendar.js === -->
+<div id="calendar-wrap">
+  <div id="calendar"></div>
+</div>
+
+<!-- === Modal Detail: Todo-style popup เมื่อคลิก event ===
+     มี 2 state: #modalBody (แสดงรายละเอียด) และ #deleteConfirm (ยืนยันลบ) -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered todo-modal-dialog">
+    <div class="modal-content todo-modal-content">
+      <button type="button" class="todo-modal-close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-body p-0">
+
+        <!-- === State A: แสดงรายละเอียดงาน === -->
+        <div id="modalBody">
+          <div class="todo-task-row">
+            <button class="todo-checkbox" id="btnMarkDone" type="button" aria-label="Mark as done">
+              <i class="bi bi-check todo-check-icon"></i>
+            </button>
+            <div class="todo-task-main">
+              <div class="todo-task-title" id="modalTitle">—</div>
+              <div id="modalCatBadge" class="mt-1"></div>
+            </div>
+          </div>
+          <div class="todo-meta-row">
+            <span class="todo-date-chip"><i class="bi bi-calendar3"></i><span id="modalDate"></span></span>
+            <!-- ผู้ทำงาน — ซ่อนถ้าไม่มีข้อมูล -->
+            <span class="todo-assigned-chip d-none" id="modalAssigned">
+              <i class="bi bi-person-fill"></i><span id="modalAssignedName"></span>
+            </span>
+            <span class="todo-overdue-badge d-none" id="modalOverdue">
+              <i class="bi bi-exclamation-circle-fill"></i> เลยกำหนด
+            </span>
+          </div>
+          <div class="todo-desc-area" id="modalDesc"></div>
+          <div id="modalReadonlyNotice" class="todo-readonly-notice d-none">
+            <i class="bi bi-lock-fill me-1"></i>event นี้มาจากแผนงาน/ระบบ — ดูได้อย่างเดียว
+          </div>
+          <div id="modalUserActions" class="d-none todo-action-row">
+            <div class="todo-action-left">
+              <button class="todo-icon-btn" id="btnEditEvent" type="button" title="แก้ไข"><i class="bi bi-pencil"></i></button>
+              <button class="todo-icon-btn todo-icon-btn--danger" id="btnDeleteEvent" type="button" title="ลบ"><i class="bi bi-trash"></i></button>
+            </div>
+            <span class="todo-action-hint">แตะ <i class="bi bi-check-circle"></i> เพื่อทำเครื่องหมายเสร็จ</span>
+          </div>
+        </div>
+
+        <!-- === State B: ยืนยันลบ === -->
+        <div id="deleteConfirm" class="d-none todo-delete-confirm">
+          <div class="todo-delete-icon"><i class="bi bi-trash3-fill"></i></div>
+          <p class="todo-delete-label">ลบงานนี้ใช่ไหม?</p>
+          <div class="d-flex gap-2 justify-content-center">
+            <button class="btn btn-danger btn-sm px-4" id="btnConfirmDelete"><i class="bi bi-trash me-1"></i>ยืนยันลบ</button>
+            <button class="btn btn-outline-secondary btn-sm px-3" id="btnCancelDelete">ไม่ลบ</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === Modal Edit: Form เพิ่ม/แก้ไขงาน (ใช้ทั้ง Add และ Edit) === -->
+<div class="modal fade" id="editEventModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <h6 class="modal-title page-title mb-0" id="editModalHeading">เพิ่มงาน</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editEventId">
+        <div class="mb-3">
+          <label class="form-label-sm">ชื่องาน <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-sm" id="editTitle" placeholder="เช่น ส่ง Cold DM 10 ราย">
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">วันที่ <span class="text-danger">*</span></label>
+          <input type="date" class="form-control form-control-sm" id="editDate">
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">ประเภท</label>
+          <!-- === category_choices มาจาก CalendarEvent.CATEGORY_CHOICES ใน views.py === -->
+          <select class="form-select form-select-sm" id="editCategory">
+            {% for value, label in category_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">รายละเอียด (ไม่บังคับ)</label>
+          <textarea class="form-control form-control-sm" id="editDesc" rows="2" placeholder="รายละเอียดเพิ่มเติม..."></textarea>
+        </div>
+        <div id="editError" class="text-danger small d-none">กรุณากรอกชื่องานและวันที่</div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btnSaveEvent">
+          <i class="bi bi-check2 me-1"></i>บันทึก
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === Toast: Notification popup (.ok = navy, .err = red) === -->
+<div id="calToast" class="cal-toast"></div>
+
+{% endblock %}
+
+<!-- === JS: inject Django data เป็น window globals → calendar.js === -->
+{% block extra_js %}
+<script>
+  window.CALENDAR_CSRF    = '{{ csrf_token }}';
+  window.CALENDAR_API_URL = '{% url "dashboard:api_events" %}';
+  window.CALENDAR_EVENTS  = {{ events_json|safe }};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<script src="{% static 'js/calendar.js' %}"></script>
+{% endblock %}

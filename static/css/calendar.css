@@ -1,0 +1,562 @@
+/* =============================================================
+   calendar.css — Work Calendar styles
+   =============================================================
+   หัวข้อหลัก (Ctrl+F หาคำเหล่านี้):
+     [calendar-wrap]   — กรอบหน้าปฏิทิน
+     [fullcalendar]    — override styles ของ FullCalendar
+     [phase-bar]       — แถบ phase timeline (Foundation / Content Push / etc.)
+     [info-panel]      — กล่องอธิบาย category
+     [filter-tabs]     — แถบ tab กรอง category
+     [event-status]    — สี pending (เขียว) / completed (เทา)
+     [hot-events]      — glowing animation งานใกล้ครบกำหนด
+     [progress-bar]    — Road to First Revenue progress
+     [phase-badges]    — LEVEL UP / DONE / 🔒 badges
+     [countdown]       — badge "วันนี้!" / "3d"
+     [xp-pop]          — animation +50 XP เมื่อ mark done
+     [todo-modal]      — Todo-style event detail modal
+     [edit-modal]      — Add / Edit form modal
+     [toast]           — notification popup
+     [mobile]          — responsive overrides
+   ============================================================= */
+
+/* ── [calendar-wrap] ────────────────────────────────────────────────── */
+#calendar-wrap {
+  border: 1px solid var(--bs-border-color);
+  border-radius: .6rem;
+  background: var(--bs-body-bg);
+  padding: 1rem 1.25rem;
+}
+
+/* ── [fullcalendar] ─────────────────────────────────────────────────── */
+.fc .fc-toolbar-title { font-size: 1.1rem; font-weight: 800; color: var(--brand-navy); }
+[data-bs-theme="dark"] .fc .fc-toolbar-title { color: var(--heading-dark-bg); }
+
+.fc .fc-button-primary { background: var(--app-primary) !important; border-color: var(--app-primary) !important; font-size: .8rem !important; }
+.fc .fc-button-primary:not(.fc-button-active):hover { background: var(--app-secondary) !important; border-color: var(--app-secondary) !important; }
+.fc .fc-button-primary.fc-button-active { background: var(--bs-secondary-bg) !important; border-color: var(--app-primary) !important; color: var(--app-primary) !important; }
+
+.fc-col-header { background: var(--brand-navy); }
+[data-bs-theme="dark"] .fc-col-header { background: rgba(26,39,68,.85); }
+
+.fc .fc-col-header-cell-cushion { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: .45rem .5rem; color: var(--heading-dark-bg); }
+[data-bs-theme="dark"] .fc .fc-col-header-cell-cushion { color: var(--heading-dark-bg); }
+
+.fc .fc-daygrid-day-number { font-size: .82rem; font-weight: 500; color: var(--bs-body-color); }
+.fc .fc-day-sat .fc-daygrid-day-number,
+.fc .fc-day-sun .fc-daygrid-day-number { color: var(--bs-secondary-color); }
+
+.fc .fc-day-today { background: rgba(201,169,110,.12) !important; border-top: 2px solid var(--app-primary) !important; }
+.fc .fc-day-today .fc-daygrid-day-number { font-weight: 600; color: var(--app-primary); }
+
+.fc .fc-event { font-size: .72rem; border-radius: 3px; border: none !important; padding: 1px 4px; cursor: pointer; }
+.fc .fc-event-title { font-weight: 500; }
+
+/* === Event icon — Bootstrap Icons ตรงกับ Stat Cards === */
+.fc-event-inner { display: flex; align-items: center; gap: 3px; overflow: hidden; white-space: nowrap; }
+.cal-ev-icon { font-size: .68rem; flex-shrink: 0; opacity: .9; line-height: 1; }
+.fc-event-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.fc-theme-standard td, .fc-theme-standard th { border-color: var(--bs-border-color) !important; }
+.fc-theme-standard .fc-scrollgrid { border-color: var(--bs-border-color) !important; }
+.fc .fc-today-button { text-transform: capitalize; }
+
+/* ── [phase-bar] Phase Journey Timeline ─────────────────────────────── */
+
+/* wrapper */
+.phase-journey {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  padding: .85rem .5rem .6rem;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: .65rem;
+  position: relative;
+}
+
+/* each step: node + connectors + label */
+.phase-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  opacity: .45;
+  transition: opacity .25s;
+}
+
+/* horizontal connector lines (left/right halves) */
+.phase-connector {
+  position: absolute;
+  top: 20px; /* center of node */
+  height: 2px;
+  width: 50%;
+  background: var(--bs-border-color);
+  transition: background .25s;
+  z-index: 0;
+}
+.phase-connector--left  { left: 0; }
+.phase-connector--right { right: 0; }
+
+/* hide outer edges of first/last step */
+.phase-step:first-child .phase-connector--left,
+.phase-step:last-child  .phase-connector--right { display: none; }
+
+/* node circle */
+.phase-node-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.phase-node {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .25s, background .25s, box-shadow .25s, transform .25s;
+}
+.phase-node-icon {
+  font-size: .9rem;
+  color: var(--bs-secondary-color);
+  transition: color .25s;
+  line-height: 1;
+}
+.phase-badge-slot {
+  min-height: 18px;
+  margin-top: 3px;
+  text-align: center;
+}
+
+/* label below node */
+.phase-label {
+  margin-top: .45rem;
+  text-align: center;
+  line-height: 1.3;
+}
+.phase-name {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--bs-secondary-color);
+  letter-spacing: .01em;
+  transition: color .25s;
+}
+.phase-dates {
+  font-size: .62rem;
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+  opacity: .7;
+  margin-top: 1px;
+}
+
+/* ── STATE: done ────────────────────────────────────────────────────── */
+.phase-step.phase-done {
+  opacity: .55;
+}
+.phase-step.phase-done .phase-node {
+  border-color: #6ee7b7;
+  background: rgba(110,231,183,.1);
+}
+.phase-step.phase-done .phase-node-icon {
+  color: #6ee7b7;
+}
+/* fill connector to the right when done */
+.phase-step.phase-done .phase-connector--right,
+.phase-step.phase-done + .phase-step .phase-connector--left {
+  background: rgba(110,231,183,.45);
+}
+
+/* ── STATE: active ──────────────────────────────────────────────────── */
+.phase-step.phase-active {
+  opacity: 1;
+}
+.phase-step.phase-active .phase-node {
+  border-color: var(--app-primary, #c9a96e);
+  background: var(--brand-navy, #1a2744);
+  box-shadow: 0 0 0 4px rgba(201,169,110,.22), 0 0 14px rgba(201,169,110,.3);
+  transform: scale(1.12);
+}
+.phase-step.phase-active .phase-node-icon {
+  color: var(--app-primary, #c9a96e);
+}
+.phase-step.phase-active .phase-connector--left {
+  background: rgba(201,169,110,.5);
+}
+.phase-step.phase-active .phase-name {
+  color: var(--app-primary, #c9a96e);
+  font-weight: 800;
+}
+.phase-step.phase-active .phase-dates {
+  color: rgba(201,169,110,.8);
+  opacity: 1;
+}
+
+/* dark mode tweaks */
+[data-bs-theme="dark"] .phase-journey { background: rgba(26,39,68,.25); }
+[data-bs-theme="dark"] .phase-step.phase-active .phase-node { background: rgba(26,39,68,.9); }
+
+/* ── [cal-stat-cards] Dashboard stats — แทนที่ info panel ──────────── */
+.cal-stat-row {
+  display: flex;
+  align-items: stretch;
+  gap: .6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+/* === Summary cards: Total / Done / Pending === */
+.cal-stat-card {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .6rem .9rem;
+  border-radius: .55rem;
+  border: 1px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
+  min-width: 110px;
+  flex-shrink: 0;
+}
+.cal-stat-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cal-stat-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--bs-body-color);
+}
+.cal-stat-label {
+  font-size: .68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--bs-secondary-color);
+  margin-top: 1px;
+}
+
+/* card accent variants */
+.cal-stat-card--total .cal-stat-icon { color: var(--brand-gold, #c9a96e); }
+.cal-stat-card--total { border-left: 3px solid var(--brand-gold, #c9a96e); }
+
+.cal-stat-card--done .cal-stat-icon { color: #6ee7b7; }
+.cal-stat-card--done { border-left: 3px solid #6ee7b7; }
+.cal-stat-card--done .cal-stat-value { color: #6ee7b7; }
+
+.cal-stat-card--pending .cal-stat-icon { color: #f59e0b; }
+.cal-stat-card--pending { border-left: 3px solid #f59e0b; }
+
+/* === Category breakdown strip === */
+.cal-stat-breakdown {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .3rem .8rem;
+  padding: .55rem .9rem;
+  border-radius: .55rem;
+  border: 1px solid var(--bs-border-color);
+  background: var(--bs-tertiary-bg, rgba(0,0,0,.03));
+  flex: 1;
+  min-width: 200px;
+}
+.cal-stat-cat {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .78rem;
+  white-space: nowrap;
+}
+.cal-stat-cat-val {
+  font-weight: 800;
+  color: var(--bs-body-color);
+  min-width: 1.4ch;
+  text-align: right;
+}
+.cal-stat-cat-name {
+  color: var(--bs-secondary-color);
+  font-size: .72rem;
+}
+
+/* dark mode */
+[data-bs-theme="dark"] .cal-stat-card { background: rgba(26,39,68,.25); }
+[data-bs-theme="dark"] .cal-stat-breakdown { background: rgba(26,39,68,.2); }
+
+/* ── Add Event button ───────────────────────────────────────────────── */
+.btn-add-event { font-size: .8rem; padding: .3rem .75rem; }
+
+/* ── Event category badge (modal) ──────────────────────────────────── */
+.event-cat-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .7rem; font-weight: 600; padding: .2rem .55rem; border-radius: 20px; border: 1px solid; white-space: nowrap; }
+
+/* ── Todo-style Event Detail Modal ─────────────────────────────────── */
+.todo-modal-dialog { max-width: 420px; }
+.todo-modal-content { border-radius: 1rem; border: 1px solid var(--bs-border-color); box-shadow: 0 8px 32px rgba(0,0,0,.18); overflow: hidden; position: relative; }
+.todo-modal-close { position: absolute; top: .85rem; right: .85rem; z-index: 10; opacity: .45; transition: opacity .15s; }
+.todo-modal-close:hover { opacity: .85; }
+
+.todo-task-row { display: flex; align-items: flex-start; gap: .85rem; padding: 1.25rem 1.25rem .6rem; padding-right: 2.5rem; }
+.todo-checkbox { flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%; border: 2px solid var(--bs-border-color); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color .18s, background .18s, transform .15s; padding: 0; margin-top: .1rem; }
+.todo-checkbox:hover { border-color: var(--app-primary,#c9a96e); background: rgba(201,169,110,.1); transform: scale(1.08); }
+.todo-checkbox.is-done { border-color: var(--app-primary,#c9a96e); background: var(--app-primary,#c9a96e); }
+.todo-check-icon { font-size: .95rem; color: var(--bs-border-color); transition: color .18s; line-height: 1; }
+.todo-checkbox:hover .todo-check-icon { color: var(--app-primary,#c9a96e); }
+.todo-checkbox.is-done .todo-check-icon { color: var(--brand-navy,#1a2744); font-weight: 800; }
+
+.todo-task-main { flex: 1; min-width: 0; }
+.todo-task-title { font-size: 1.05rem; font-weight: 700; line-height: 1.35; color: var(--bs-body-color); word-break: break-word; transition: color .2s, text-decoration .2s; }
+.todo-task-title.is-done { text-decoration: line-through; text-decoration-color: var(--bs-secondary-color); color: var(--bs-secondary-color); }
+
+.todo-meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; padding: 0 1.25rem .75rem; }
+.todo-date-chip { display: inline-flex; align-items: center; gap: .35rem; font-size: .78rem; color: var(--bs-secondary-color); font-weight: 500; }
+.todo-date-chip i { font-size: .8rem; }
+
+/* === assigned_to chip === */
+.todo-assigned-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--app-primary, #c9a96e);
+  background: rgba(201,169,110,.1);
+  border: 1px solid rgba(201,169,110,.3);
+  border-radius: 20px;
+  padding: .15rem .55rem;
+}
+.todo-assigned-chip i { font-size: .75rem; }
+.todo-overdue-badge { display: inline-flex; align-items: center; gap: .25rem; font-size: .72rem; font-weight: 700; color: #dc3545; background: rgba(220,53,69,.1); border-radius: 20px; padding: .15rem .55rem; }
+
+.todo-desc-area { padding: 0 1.25rem; font-size: .85rem; color: var(--bs-secondary-color); line-height: 1.6; min-height: 0; }
+.todo-desc-area:not(:empty) { padding-bottom: .5rem; }
+.todo-desc-area .modal-desc-item { font-size: .84rem; padding: .25rem 0; color: var(--bs-secondary-color); border-bottom: 1px solid var(--bs-border-color); display: flex; align-items: baseline; gap: .4rem; }
+.todo-desc-area .modal-desc-item::before { content: ''; flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: var(--app-primary,#c9a96e); margin-top: .35rem; }
+.todo-desc-area .modal-desc-item:last-child { border: none; }
+
+.todo-readonly-notice { margin: .5rem 1.25rem; font-size: .75rem; color: var(--bs-secondary-color); border-left: 3px solid var(--bs-border-color); padding-left: .6rem; }
+
+.todo-action-row { display: flex; align-items: center; justify-content: space-between; padding: .65rem 1.25rem .9rem; margin-top: .5rem; border-top: 1px solid var(--bs-border-color); gap: .5rem; }
+.todo-action-left { display: flex; gap: .4rem; align-items: center; }
+.todo-icon-btn { width: 2rem; height: 2rem; border-radius: .45rem; border: 1px solid var(--bs-border-color); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--bs-secondary-color); font-size: .85rem; transition: border-color .15s, color .15s, background .15s; padding: 0; }
+.todo-icon-btn:hover { border-color: var(--app-primary,#c9a96e); color: var(--app-primary,#c9a96e); background: rgba(201,169,110,.08); }
+.todo-icon-btn--danger:hover { border-color: #dc3545; color: #dc3545; background: rgba(220,53,69,.06); }
+.todo-action-hint { font-size: .72rem; color: var(--bs-secondary-color); opacity: .7; text-align: right; line-height: 1.3; }
+.todo-action-hint i { font-size: .78rem; }
+
+.todo-delete-confirm { text-align: center; padding: 1.5rem 1.25rem 1.25rem; }
+.todo-delete-icon { font-size: 1.75rem; color: #dc3545; margin-bottom: .75rem; }
+.todo-delete-label { font-size: .92rem; font-weight: 600; margin-bottom: 1rem; color: var(--bs-body-color); }
+
+[data-bs-theme="dark"] .todo-modal-content { box-shadow: 0 8px 40px rgba(0,0,0,.45); }
+[data-bs-theme="dark"] .todo-checkbox { border-color: rgba(255,255,255,.2); }
+[data-bs-theme="dark"] .todo-checkbox:hover { border-color: var(--app-primary,#c9a96e); }
+
+/* ── Add/Edit form modal ────────────────────────────────────────────── */
+.form-label-sm { font-size: .8rem; font-weight: 600; margin-bottom: .25rem; }
+.fc-cat-user-event { outline: 1.5px dashed rgba(255,255,255,.5) !important; }
+.modal-desc-item { font-size: .85rem; padding: .2rem 0; color: var(--bs-secondary-color); border-bottom: 1px solid var(--bs-border-color); }
+.modal-desc-item:last-child { border: none; }
+
+/* ── Premium Modal Animations ───────────────────────────────────────── */
+.modal.fade .modal-dialog { transform: scale(.96) translateY(8px); transition: transform .2s ease-out, opacity .2s ease-out; }
+.modal.show .modal-dialog { transform: scale(1) translateY(0); }
+
+/* ── Input focus ring (gold) ────────────────────────────────────────── */
+#editEventModal .form-control:focus,
+#editEventModal .form-select:focus { border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.18); }
+
+/* ── Toast ──────────────────────────────────────────────────────────── */
+.cal-toast { position: fixed; bottom: 1.5rem; right: 1.5rem; padding: .5rem 1.1rem; border-radius: .4rem; font-size: .82rem; font-weight: 500; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; transform: translateY(6px); }
+.cal-toast.show { opacity: 1; transform: translateY(0); }
+.cal-toast.ok  { background: var(--brand-navy,#1a2744); color: #fff; }
+.cal-toast.err { background: #dc3545; color: #fff; }
+
+/* ── [event-status] — pending = เส้นเขียวซ้าย, completed = เทาจาง ─── */
+.fc-event-completed { background: #475569 !important; border-color: transparent !important; opacity: .65; filter: saturate(.2); }
+.fc-event-completed .fc-event-title { text-decoration: line-through; text-decoration-color: rgba(255,255,255,.6); opacity: .85; }
+.fc-event-completed .evt-countdown { display: none; }
+.fc-event-pending { border-left: 3px solid #10b981 !important; }
+
+/* ── [filter-tabs] ──────────────────────────────────────────────────── */
+
+/* wrapper row: filter tabs (flex:1) + toggle recurring button (right) */
+.cal-toolbar-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  margin-bottom: .9rem;
+}
+
+/* Recurring toggle button — off state (สีเทา) */
+.cal-recurring-toggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .35rem .75rem;
+  border-radius: .45rem;
+  border: 1px dashed var(--bs-border-color);
+  background: transparent;
+  color: var(--bs-secondary-color);
+  font-size: .77rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .18s;
+  align-self: flex-start;
+  margin-top: .25rem;
+}
+.cal-recurring-toggle:hover {
+  border-color: #8fa8b8;
+  color: #8fa8b8;
+}
+/* on state — border solid + สีนำ้เงิน */
+.cal-recurring-toggle.is-on {
+  border-style: solid;
+  border-color: #8fa8b8;
+  background: rgba(143,168,184,.1);
+  color: #8fa8b8;
+}
+[data-bs-theme="dark"] .cal-recurring-toggle.is-on {
+  background: rgba(143,168,184,.15);
+}
+
+/* Dot indicator สำหรับ recurring event ที่ toggle เปิดอยู่ */
+.fc-event-recurring-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 1px 5px;
+}
+.fc-event-recurring-dot .rec-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: .75;
+}
+.fc-event-recurring-dot .rec-label {
+  font-size: .65rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: .85;
+}
+
+/* ทำให้ recurring dot event เล็กลง — ไม่รบกวน primary events */
+.fc-event.fc-event-recurring-mini {
+  min-height: 0 !important;
+  padding: 0 3px !important;
+  opacity: .7;
+}
+
+@media (max-width: 575px) {
+  .cal-toolbar-row { flex-wrap: wrap; }
+  .cal-recurring-toggle { font-size: .72rem; padding: .25rem .55rem; }
+}
+
+.cal-filter-tabs { display: flex; flex-wrap: wrap; gap: .3rem .4rem; margin-bottom: 0; padding: .6rem .75rem; background: var(--bs-tertiary-bg,rgba(0,0,0,.03)); border: 1px solid var(--bs-border-color); border-radius: .5rem; }
+.cal-filter-tab { display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .7rem; border-radius: 20px; border: 1px solid var(--bs-border-color); cursor: pointer; font-size: .77rem; font-weight: 500; white-space: nowrap; background: transparent; color: var(--bs-body-color); transition: all .15s; user-select: none; line-height: 1.4; }
+.cal-filter-tab:hover { border-color: var(--app-primary); color: var(--app-primary); }
+.cal-filter-tab.active { background: var(--brand-navy,#1a2744); border-color: var(--brand-navy,#1a2744); color: var(--app-primary,#c9a96e); font-weight: 600; }
+[data-bs-theme="dark"] .cal-filter-tab.active { background: rgba(26,39,68,.8); }
+.cal-filter-tab .tab-icon { font-size: .82rem; line-height: 1; }
+.cal-filter-tab.tab-done.active { background: #475569; border-color: #475569; color: #fff; }
+.cal-filter-tab.tab-done:not(.active):hover { border-color: #64748b; color: #64748b; }
+
+/* ── [hot-events] — pulse glow สำหรับงานที่จะมาใน 3 วัน ───────────── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(201,169,110,.5); }
+  50%       { box-shadow: 0 0 12px 3px rgba(201,169,110,.9); }
+}
+.fc-event-hot { animation: pulse-glow 1.8s ease-in-out infinite !important; border-left: 3px solid var(--app-primary) !important; }
+@media (prefers-reduced-motion: reduce) { .fc-event-hot { animation: none !important; } }
+
+/* ── Progress Bar ───────────────────────────────────────────────────── */
+.revenue-progress-wrap { background: linear-gradient(135deg,var(--brand-navy),rgba(26,39,68,.85)); border-radius: .6rem; padding: .85rem 1.1rem; margin-bottom: 1rem; border: 1px solid rgba(201,169,110,.25); }
+.revenue-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
+.rp-label { font-size: .78rem; font-weight: 700; color: rgba(201,169,110,.9); letter-spacing: .06em; }
+.rp-pct   { font-size: 1.1rem; font-weight: 800; color: var(--app-primary); }
+.revenue-progress-bar { height: 8px; background: rgba(255,255,255,.1); border-radius: 999px; overflow: hidden; margin-bottom: .4rem; }
+.revenue-progress-fill { height: 100%; background: linear-gradient(90deg,var(--app-primary),var(--app-secondary)); border-radius: 999px; transition: width 1s cubic-bezier(.4,0,.2,1); width: 0%; }
+@media (prefers-reduced-motion: reduce) { .revenue-progress-fill { transition: none; } }
+.rp-status { font-size: .72rem; color: rgba(255,255,255,.5); }
+
+/* ── [phase-badges] RPG Badges (rendered by JS into .phase-badge-slot) ── */
+@keyframes badge-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .6; } }
+
+.phase-active-badge {
+  display: inline-block;
+  font-size: .55rem;
+  font-weight: 800;
+  color: var(--app-primary, #c9a96e);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: rgba(201,169,110,.12);
+  border: 1px solid rgba(201,169,110,.35);
+  border-radius: 20px;
+  padding: 1px 6px;
+  animation: badge-pulse 2s ease-in-out infinite;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) { .phase-active-badge { animation: none; } }
+
+.phase-done-badge {
+  display: inline-block;
+  font-size: .55rem;
+  font-weight: 700;
+  color: #6ee7b7;
+  background: rgba(110,231,183,.1);
+  border-radius: 20px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+.phase-lock-badge {
+  display: inline-block;
+  font-size: .7rem;
+  opacity: .4;
+  line-height: 1;
+}
+
+/* ── Countdown Badge ────────────────────────────────────────────────── */
+.evt-countdown { display: inline-block; margin-left: 4px; font-size: .62rem; font-weight: 700; padding: 0 4px; border-radius: 3px; background: rgba(255,255,255,.25); color: #fff; vertical-align: middle; line-height: 1.4; }
+.fc-event-hot .evt-countdown { background: var(--app-primary); color: var(--brand-navy); }
+
+/* ── XP Pop Animation ───────────────────────────────────────────────── */
+@keyframes xp-float { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.2); } }
+.xp-pop { position: fixed; right: 2rem; bottom: 4.5rem; font-size: .9rem; font-weight: 800; color: var(--app-primary); pointer-events: none; z-index: 10000; animation: xp-float 1.2s ease-out forwards; text-shadow: 0 1px 8px rgba(201,169,110,.6); }
+@media (prefers-reduced-motion: reduce) { .xp-pop { animation: none; opacity: 0; } }
+
+/* ── Mobile ─────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  #editEventModal .modal-dialog { position: fixed; bottom: 0; left: 0; right: 0; margin: 0; max-width: 100%; }
+  #editEventModal .modal-content { border-radius: 1rem 1rem 0 0; border-bottom: none; }
+  #editEventModal.fade .modal-dialog { transform: translateY(100%); transition: transform .28s cubic-bezier(.32,.72,0,1); }
+  #editEventModal.show .modal-dialog { transform: translateY(0); }
+}
+@media (max-width: 575px) {
+  #eventModal .modal-dialog { position: fixed; bottom: 0; left: 0; right: 0; margin: 0; max-width: 100%; }
+  #eventModal .modal-content { border-radius: 1.25rem 1.25rem 0 0; border-bottom: none; }
+  /* phase journey: 2x2 grid on small screens */
+  .phase-journey { flex-wrap: wrap; padding: .75rem .25rem .5rem; gap: .25rem 0; }
+  .phase-step { flex: 0 0 50%; }
+  /* hide cross-row connectors at breakpoint */
+  .phase-step:nth-child(2) .phase-connector--right,
+  .phase-step:nth-child(3) .phase-connector--left { display: none; }
+  /* row 2: re-hide left connector of step 3 */
+  .phase-step:nth-child(3) .phase-connector--right { display: flex; }
+  .phase-node { width: 36px; height: 36px; }
+  .phase-node-icon { font-size: .82rem; }
+  .cal-filter-tabs { gap: .25rem; padding: .5rem; }
+  .cal-filter-tab { font-size: .72rem; padding: .25rem .55rem; }
+  .fc .fc-toolbar { flex-wrap: wrap; gap: .5rem; }
+  .fc .fc-toolbar-title { font-size: .9rem; }
+  .fc .fc-button { font-size: .72rem !important; padding: .25rem .5rem !important; }
+}

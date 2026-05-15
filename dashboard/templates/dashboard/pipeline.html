@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Pipeline — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Pipeline</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .pipeline-board {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1.5rem;
+    align-items: flex-start;
+  }
+  .pipeline-col {
+    flex: 0 0 210px;
+    background: var(--bs-tertiary-bg, #f8f9fa);
+    border-radius: .6rem;
+    border: 1px solid var(--bs-border-color);
+    min-height: 200px;
+  }
+  .pipeline-col-header {
+    padding: .6rem .9rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pipeline-col-header .stage-name {
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .pipeline-col-body { padding: .6rem; display: flex; flex-direction: column; gap: .5rem; }
+
+  .lead-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-left: 3px solid transparent;
+    border-radius: .4rem;
+    padding: .6rem .7rem;
+    font-size: .83rem;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .lead-card:hover      { box-shadow: 0 3px 10px rgba(0,0,0,.09); border-color: var(--app-primary); }
+  .lead-card.hot        { border-left-color: #fd7e14; }
+  .lead-card.stale      { border-left-color: #dc3545; }
+
+  .lead-name    { font-weight: 600; }
+  .lead-sub     { font-size: .74rem; color: var(--bs-secondary-color); }
+  .lead-value   { font-size: .78rem; font-weight: 600; color: var(--app-primary); margin-top: .3rem; }
+
+  .deal-value-input {
+    width: 100%; font-size: .76rem;
+    padding: .2rem .45rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: .3rem;
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    margin-top: .35rem;
+  }
+  .deal-value-input:focus { outline: none; border-color: var(--app-primary); }
+
+  .stage-select {
+    width: 100%; font-size: .74rem;
+    padding: .18rem .4rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: .3rem;
+    background: var(--bs-body-bg);
+    color: var(--bs-secondary-color);
+    cursor: pointer;
+    margin-top: .3rem;
+  }
+  .stage-select:focus { outline: none; border-color: var(--app-primary); }
+
+  .kpi-pill {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .5rem 1rem; border-radius: .5rem;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+  }
+  .kpi-pill .kp-label { font-size: .68rem; color: var(--bs-secondary-color); text-transform: uppercase; letter-spacing: .05em; }
+  .kpi-pill .kp-value { font-weight: 700; font-size: 1.05rem; color: var(--app-primary); }
+  .kpi-pill.kpi-won    { }
+  .kpi-pill.kpi-won    .kp-value { color: #198754; }
+  .kpi-pill.kpi-hot    { border-color: #fd7e14; }
+  .kpi-pill.kpi-hot    .kp-label,
+  .kpi-pill.kpi-hot    .kp-value { color: #fd7e14; }
+  .kpi-pill.kpi-stale  { border-color: #dc3545; }
+  .kpi-pill.kpi-stale  .kp-label,
+  .kpi-pill.kpi-stale  .kp-value { color: #dc3545; }
+
+  .badge-hot { background: #fd7e14; color: #fff; font-size: .63rem; }
+
+  .toast-feedback { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; min-width: 220px; font-size: .88rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Header ───────────────────────────────────────────────────────────────── #}
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">Pipeline</h4>
+    <p class="mb-0 text-muted small">ย้าย stage และระบุมูลค่าดีลได้ทันที</p>
+  </div>
+  <a href="/admin/pages/contactlead/add/" target="_blank" rel="noopener"
+     class="btn btn-sm btn-app-filled btn-app">
+    <i class="bi bi-plus-lg me-1"></i>เพิ่ม Lead
+  </a>
+</div>
+
+{# ── KPI Pills ────────────────────────────────────────────────────────────── #}
+<div class="d-flex flex-wrap gap-3 mb-4">
+  <div class="kpi-pill">
+    <div><div class="kp-label">Pipeline Value</div><div class="kp-value">฿{{ pipeline_value|intcomma }}</div></div>
+  </div>
+  <div class="kpi-pill kpi-won">
+    <div><div class="kp-label">Won Revenue</div><div class="kp-value">฿{{ won_value|intcomma }}</div></div>
+  </div>
+  {% if hot_leads_pks %}
+  <div class="kpi-pill kpi-hot">
+    <div><div class="kp-label">Hot Leads</div><div class="kp-value">{{ hot_leads_pks|length }} ราย</div></div>
+    <i class="bi bi-fire text-warning"></i>
+  </div>
+  {% endif %}
+  {% if stale_pks %}
+  <div class="kpi-pill kpi-stale">
+    <div><div class="kp-label">ค้าง > 3 วัน</div><div class="kp-value">{{ stale_pks|length }} ราย</div></div>
+    <i class="bi bi-exclamation-circle-fill text-danger"></i>
+  </div>
+  {% endif %}
+</div>
+
+{# ── Kanban Board ─────────────────────────────────────────────────────────── #}
+<div class="pipeline-board">
+  {% for col in stages_with_leads %}
+  <div class="pipeline-col">
+
+    <div class="pipeline-col-header">
+      <span class="stage-name">{{ col.label }}</span>
+      <span class="badge {{ col.badge_cls }}" style="font-size:.68rem">{{ col.leads|length }}</span>
+    </div>
+
+    <div class="pipeline-col-body" id="col-body-{{ col.status }}">
+      {% for lead in col.leads %}
+
+      {% with days_stale=lead.updated_at|timesince %}
+      <div class="lead-card {% if lead.pk in hot_leads_pks %}hot{% elif lead.pk in stale_pks %}stale{% endif %}"
+           id="lcard-{{ lead.pk }}">
+
+        {% if lead.pk in hot_leads_pks %}
+          <span class="badge badge-hot mb-1">
+            <i class="bi bi-fire me-1"></i>Hot — Proposal > 5 วัน
+          </span>
+        {% elif lead.pk in stale_pks %}
+          <span class="badge bg-danger mb-1" style="font-size:.63rem">
+            <i class="bi bi-clock me-1"></i>ค้างนาน — รีบติดต่อ
+          </span>
+        {% endif %}
+
+        <div class="lead-name">{{ lead.name }}</div>
+        <div class="lead-sub">{{ lead.company|default:lead.email }}</div>
+        <div class="lead-sub">{{ lead.updated_at|timesince }} ที่แล้ว</div>
+
+        <div class="lead-value">
+          {% if lead.deal_value %}
+            ฿{{ lead.deal_value|intcomma }}
+          {% else %}
+            <span class="text-muted" style="font-size:.74rem">ยังไม่ระบุมูลค่า</span>
+          {% endif %}
+        </div>
+
+        <input type="number" class="deal-value-input"
+               placeholder="มูลค่าดีล (฿)"
+               value="{{ lead.deal_value|default:'' }}"
+               data-pk="{{ lead.pk }}"
+               data-url="{% url 'dashboard:lead_deal_value' lead.pk %}"
+               min="0" step="1000">
+
+        <select class="stage-select"
+                data-pk="{{ lead.pk }}"
+                data-url="{% url 'dashboard:lead_status' lead.pk %}"
+                aria-label="ย้าย stage">
+          {% for value, label in status_choices %}
+            <option value="{{ value }}" {% if lead.status == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+
+      </div>
+      {% endwith %}
+
+      {% empty %}
+      <div class="text-center text-muted py-4" style="font-size:.8rem">
+        <i class="bi bi-inbox d-block mb-1 fs-4"></i>ว่างอยู่
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+{# Toast #}
+<div id="statusToast" class="toast toast-feedback align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body" id="toastMessage">อัปเดตแล้ว</div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const csrf   = '{{ csrf_token }}';
+  const toast  = new bootstrap.Toast(document.getElementById('statusToast'), { delay: 2500 });
+  const toastMsg = document.getElementById('toastMessage');
+  const toastEl  = document.getElementById('statusToast');
+
+  function showToast(msg, err) {
+    toastMsg.textContent = msg;
+    toastEl.classList.remove('bg-success', 'bg-danger', 'text-white');
+    toastEl.classList.add(err ? 'bg-danger' : 'bg-success', 'text-white');
+    toast.show();
+  }
+
+  // Move stage
+  document.querySelectorAll('.stage-select').forEach(sel => {
+    sel.addEventListener('change', function () {
+      const pk  = sel.dataset.pk;
+      const url = sel.dataset.url;
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+        body: JSON.stringify({ status: sel.value }),
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) {
+          const card   = document.getElementById('lcard-' + pk);
+          const newCol = document.getElementById('col-body-' + sel.value);
+          if (card && newCol) {
+            newCol.prepend(card);
+            updateColCounts();
+          }
+          showToast(`ย้ายไป "${data.status_display}" แล้ว`, false);
+        } else {
+          showToast('เกิดข้อผิดพลาด', true);
+        }
+      })
+      .catch(() => showToast('ไม่สามารถเชื่อมต่อได้', true));
+    });
+  });
+
+  // Update deal value
+  document.querySelectorAll('.deal-value-input').forEach(inp => {
+    inp.addEventListener('change', function () {
+      fetch(inp.dataset.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+        body: JSON.stringify({ deal_value: inp.value }),
+      })
+      .then(r => r.json())
+      .then(data => { showToast(data.ok ? 'บันทึกมูลค่าแล้ว' : 'บันทึกไม่สำเร็จ', !data.ok); })
+      .catch(() => showToast('ไม่สามารถเชื่อมต่อได้', true));
+    });
+  });
+
+  function updateColCounts() {
+    document.querySelectorAll('.pipeline-col').forEach(col => {
+      const badge = col.querySelector('.pipeline-col-header .badge');
+      const body  = col.querySelector('.pipeline-col-body');
+      if (badge && body) badge.textContent = body.querySelectorAll('.lead-card').length;
+    });
+  }
+})();
+</script>
+{% endblock %}

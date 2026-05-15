@@ -799,14 +799,16 @@ def calendar_view(request):
 
     # ── 3+4. System events จาก DB (milestones + recurring) ──────────────────
     system_qs = CalendarEvent.objects.filter(is_system=True).values(
-        "title", "start_datetime", "category", "description", "color"
+        "pk", "title", "start_datetime", "category", "description", "color", "is_completed"
     )
     for evt in system_qs:
         events.append({
+            "id":          evt["pk"],
             "title":       evt["title"],
             "start":       evt["start_datetime"].date().isoformat(),
             "category":    evt["category"],
             "description": evt["description"],
+            "is_completed": evt["is_completed"],
         })
 
     # ── 5. Content Backlog scheduled items ───────────────────────────────────
@@ -825,9 +827,22 @@ def calendar_view(request):
             "description": f"[{item['status']}] {item['keyword']}",
         })
 
+    # ── 6. Calendar stats สำหรับ Stat Cards ─────────────────────────────────
+    _sys = CalendarEvent.objects.filter(is_system=True)
+    cal_stats = {
+        "total":   _sys.count(),
+        "done":    _sys.filter(is_completed=True).count(),
+        "pending": _sys.filter(is_completed=False).count(),
+        "by_cat": {
+            c: _sys.filter(category=c).count()
+            for c in ["action", "milestone", "recurring", "content_plan", "delivery", "meeting"]
+        },
+    }
+
     return render(request, "dashboard/calendar.html", {
-        "events_json": json.dumps(events, ensure_ascii=False),
-        "category_choices": CalendarEvent.CATEGORY_CHOICES,
+        "events_json":       json.dumps(events, ensure_ascii=False),
+        "category_choices":  CalendarEvent.CATEGORY_CHOICES,
+        "cal_stats":         cal_stats,
     })
 
 
@@ -905,6 +920,10 @@ def api_calendar_event_detail(request, pk):
             evt.description = data["description"]
         if "color" in data:
             evt.color = data["color"]
+        if "is_completed" in data:
+            evt.is_completed = bool(data["is_completed"])
+        if "assigned_to" in data:
+            evt.assigned_to = data["assigned_to"]
         evt.save()
         return JsonResponse(evt.to_fc())
 
