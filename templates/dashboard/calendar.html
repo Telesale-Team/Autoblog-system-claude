@@ -497,25 +497,42 @@
         editable: false,
       },
       // Source 2: User events (from DB via API)
+      // Use events function instead of url: to avoid cal.view reference-before-assignment
       {
-        url:    API,
-        method: 'GET',
-        extraParams: function () { return { start: cal.view.activeStart.toISOString(), end: cal.view.activeEnd.toISOString() }; },
-        success: function (data) {
-          return data.map(e => ({
-            id:          'db_' + e.id,
-            dbId:        e.id,
-            title:       getCfg(e.extendedProps.category).icon + ' ' + e.title,
-            start:       e.start,
-            end:         e.end,
-            allDay:      e.allDay,
-            color:       e.color || getCfg(e.extendedProps.category).color,
-            borderColor: 'transparent',
-            classNames:  ['fc-cat-user-event'],
-            extendedProps: { ...e.extendedProps, isSystem: false },
-          }));
+        events: function (fetchInfo, successCb, failureCb) {
+          const params = new URLSearchParams({
+            start: fetchInfo.startStr,
+            end:   fetchInfo.endStr,
+          });
+          fetch(API + '?' + params.toString(), {
+            headers: { 'X-CSRFToken': csrf },
+          })
+            .then(function (r) {
+              if (!r.ok) throw new Error('HTTP ' + r.status);
+              return r.json();
+            })
+            .then(function (data) {
+              successCb(data.map(function (e) {
+                const cat = (e.extendedProps && e.extendedProps.category) || 'general';
+                return {
+                  id:          'db_' + e.id,
+                  title:       getCfg(cat).icon + ' ' + e.title,
+                  start:       e.start,
+                  end:         e.end,
+                  allDay:      e.allDay,
+                  color:       e.color || getCfg(cat).color,
+                  borderColor: 'transparent',
+                  classNames:  ['fc-cat-user-event'],
+                  extendedProps: Object.assign({}, e.extendedProps, { isSystem: false, dbId: e.id }),
+                };
+              }));
+            })
+            .catch(function () {
+              failureCb();
+              showToast('โหลด events ไม่สำเร็จ', true);
+            });
         },
-        failure: function () { showToast('โหลด events ไม่สำเร็จ', true); },
+        editable: true,
       },
     ],
 
@@ -536,10 +553,12 @@
 
     // Drag & Drop → PATCH
     eventDrop: function (info) {
-      const dbId = info.event.extendedProps.isSystem ? null : info.event.extendedProps.dbId || info.event.id.replace('db_','');
+      const props = info.event.extendedProps || {};
+      if (props.isSystem) { info.revert(); return; }
+      const dbId = props.dbId || (info.event.id.startsWith('db_') ? info.event.id.slice(3) : null);
       if (!dbId) { info.revert(); return; }
       apiPatch(dbId, { start: info.event.startStr, allDay: info.event.allDay })
-        .catch(() => { info.revert(); showToast('บันทึกไม่สำเร็จ', true); });
+        .catch(function () { info.revert(); showToast('บันทึกไม่สำเร็จ', true); });
     },
   });
 
@@ -577,8 +596,8 @@
 
   function openDetailModal(event) {
     const props   = event.extendedProps || {};
-    const isSystem = props.isSystem !== false ? true : !props.dbId && !event.id.toString().startsWith('db_') ? true : false;
-    activeDbId = isSystem ? null : (props.dbId || event.id.replace('db_', ''));
+    const isSystem = props.isSystem === true || !props.dbId;
+    activeDbId = isSystem ? null : String(props.dbId);
 
     document.getElementById('modalCatBadge').innerHTML = catBadgeHTML(props.category || 'milestone');
     document.getElementById('modalTitle').textContent  = event.title;

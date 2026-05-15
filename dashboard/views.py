@@ -16,6 +16,7 @@ from django.views.decorators.http import require_POST
 from pages.models import ContactLead
 from blog.models import Article
 from portfolio.models import CaseStudy
+from dashboard.models import CalendarEvent
 
 
 # ── Internal docs registry ──────────────────────────────────────────────
@@ -975,8 +976,6 @@ def calendar_view(request):
 
 
 # ── Calendar API ─────────────────────────────────────────────────────────────
-
-from dashboard.models import CalendarEvent
 
 
 @staff_member_required
