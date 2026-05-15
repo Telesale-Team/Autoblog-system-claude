@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>Cover: ธุรกิจที่ไม่ปรับตัวกับ AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: #0f172a;
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .cover {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f172a 0%, #1B2A4A 40%, #1e3a5f 100%);
+  }
+
+  /* ---------- Background layer: grid lines ---------- */
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* ---------- Radial glow (left = dark/left-behind, right = bright/AI) ---------- */
+  .glow-left {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(107,114,128,0.18) 0%, transparent 70%);
+  }
+
+  .glow-right {
+    position: absolute;
+    top: 50%;
+    right: -60px;
+    transform: translateY(-50%);
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.22) 0%, transparent 65%);
+  }
+
+  /* ---------- Track (horizontal rail) ---------- */
+  .track {
+    position: absolute;
+    bottom: 148px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(107,114,128,0.3) 0%, rgba(201,168,76,0.8) 55%, rgba(201,168,76,0.2) 100%);
+  }
+
+  .track-lower {
+    position: absolute;
+    bottom: 138px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(107,114,128,0.15) 0%, rgba(201,168,76,0.4) 55%, rgba(201,168,76,0.1) 100%);
+  }
+
+  /* Perspective vanishing lines */
+  .rail-left {
+    position: absolute;
+    bottom: 138px;
+    left: 380px;
+    width: 2px;
+    height: 180px;
+    background: linear-gradient(180deg, rgba(201,168,76,0.5) 0%, transparent 100%);
+    transform-origin: bottom center;
+    transform: rotate(-12deg);
+  }
+
+  .rail-right {
+    position: absolute;
+    bottom: 138px;
+    left: 400px;
+    width: 2px;
+    height: 180px;
+    background: linear-gradient(180deg, rgba(201,168,76,0.3) 0%, transparent 100%);
+    transform-origin: bottom center;
+    transform: rotate(12deg);
+  }
+
+  /* ---------- LEFT SIDE: Stagnant business figure ---------- */
+  .left-scene {
+    position: absolute;
+    left: 60px;
+    bottom: 148px;
+    width: 320px;
+  }
+
+  /* Dark, grey business figure (standing still) */
+  .figure-still {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+  }
+
+  .figure-head {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #4b5563;
+    margin-bottom: 4px;
+    position: relative;
+  }
+
+  .figure-head::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 8px;
+    background: #374151;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .figure-body {
+    width: 44px;
+    height: 52px;
+    background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+    border-radius: 6px 6px 0 0;
+    position: relative;
+  }
+
+  .figure-legs {
+    width: 44px;
+    height: 32px;
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .figure-leg {
+    width: 16px;
+    height: 32px;
+    background: #1f2937;
+    border-radius: 0 0 3px 3px;
+  }
+
+  /* question mark above figure */
+  .figure-question {
+    position: absolute;
+    top: -52px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    color: #6b7280;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  /* shadow under still figure */
+  .figure-shadow {
+    width: 60px;
+    height: 8px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    margin-top: 2px;
+    filter: blur(3px);
+  }
+
+  /* Platform beneath left figure */
+  .platform-left {
+    position: absolute;
+    bottom: 138px;
+    left: 40px;
+    width: 200px;
+    height: 14px;
+    background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+    border-radius: 2px 2px 0 0;
+  }
+
+  /* ---- left label ---- */
+  .label-left {
+    position: absolute;
+    bottom: 94px;
+    left: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- DIVIDER: vertical line + X ---------- */
+  .divider {
+    position: absolute;
+    left: 370px;
+    top: 80px;
+    bottom: 80px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent 0%, rgba(201,168,76,0.5) 30%, rgba(201,168,76,0.5) 70%, transparent 100%);
+  }
+
+  /* ---------- RIGHT SIDE: AI-powered business train ---------- */
+  .right-scene {
+    position: absolute;
+    right: 0;
+    bottom: 148px;
+    left: 390px;
+  }
+
+  /* Train body */
+  .train {
+    position: absolute;
+    bottom: 0;
+    right: 60px;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  /* Speed lines trailing left from train */
+  .speed-lines {
+    position: absolute;
+    bottom: 30px;
+    right: 460px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .speed-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.6) 100%);
+    border-radius: 2px;
+  }
+
+  .speed-line:nth-child(1) { width: 120px; }
+  .speed-line:nth-child(2) { width: 80px; margin-left: 24px; }
+  .speed-line:nth-child(3) { width: 100px; margin-left: 8px; }
+  .speed-line:nth-child(4) { width: 60px; margin-left: 32px; }
+  .speed-line:nth-child(5) { width: 90px; margin-left: 12px; }
+
+  /* Train locomotive */
+  .train-loco {
+    width: 180px;
+    height: 80px;
+    background: linear-gradient(135deg, #C9A84C 0%, #d4b566 40%, #b8943f 100%);
+    border-radius: 12px 40px 4px 4px;
+    position: relative;
+    box-shadow: 0 0 40px rgba(201,168,76,0.5), 0 0 80px rgba(201,168,76,0.2);
+  }
+
+  .train-loco::before {
+    content: 'AI';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 26px;
+    font-weight: 800;
+    color: #1B2A4A;
+    letter-spacing: 0.05em;
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  /* Train window row */
+  .train-windows {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    right: 40px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .train-window {
+    width: 22px;
+    height: 18px;
+    background: rgba(27,42,74,0.7);
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  /* Train wheel */
+  .train-wheel {
+    position: absolute;
+    bottom: -12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #1B2A4A;
+    border: 3px solid #C9A84C;
+  }
+
+  .train-wheel-1 { left: 20px; }
+  .train-wheel-2 { left: 70px; }
+  .train-wheel-3 { left: 120px; }
+
+  /* Train cars behind loco */
+  .train-car {
+    width: 130px;
+    height: 64px;
+    background: linear-gradient(135deg, #1e3a5f 0%, #1B2A4A 100%);
+    border-radius: 6px;
+    border: 2px solid rgba(201,168,76,0.4);
+    position: relative;
+  }
+
+  .train-car-windows {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .train-car-window {
+    width: 18px;
+    height: 16px;
+    background: rgba(201,168,76,0.25);
+    border-radius: 2px;
+  }
+
+  /* Train car wheel */
+  .train-car-wheel {
+    position: absolute;
+    bottom: -11px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #1B2A4A;
+    border: 2px solid rgba(201,168,76,0.6);
+  }
+
+  .train-car-wheel-1 { left: 16px; }
+  .train-car-wheel-2 { left: 76px; }
+
+  /* Exhaust / rocket burst from front of train */
+  .train-burst {
+    position: absolute;
+    bottom: 20px;
+    right: 54px;
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+  }
+
+  .burst-dot {
+    border-radius: 50%;
+    background: rgba(201,168,76,0.7);
+    animation: none;
+  }
+
+  .burst-dot:nth-child(1) { width: 8px; height: 8px; }
+  .burst-dot:nth-child(2) { width: 5px; height: 5px; margin-bottom: 4px; }
+  .burst-dot:nth-child(3) { width: 10px; height: 10px; }
+  .burst-dot:nth-child(4) { width: 4px; height: 4px; margin-bottom: 6px; }
+
+  /* circuit / data nodes on right side */
+  .data-node {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.6);
+    box-shadow: 0 0 8px rgba(201,168,76,0.8);
+  }
+
+  .data-line {
+    position: absolute;
+    height: 1px;
+    background: rgba(201,168,76,0.25);
+  }
+
+  /* ---------- MAIN HEADLINE ---------- */
+  .headline-block {
+    position: absolute;
+    top: 52px;
+    left: 60px;
+    right: 60px;
+    text-align: center;
+  }
+
+  .headline-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.5);
+    color: #C9A84C;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .headline-main {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #f1f5f9;
+    letter-spacing: -0.01em;
+    margin-bottom: 0;
+  }
+
+  .headline-main .highlight {
+    color: #C9A84C;
+  }
+
+  /* ---------- BOTTOM BAR ---------- */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(15,23,42,0.85);
+    border-top: 1px solid rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    padding: 0 44px;
+    justify-content: space-between;
+  }
+
+  .brand-name {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 0.04em;
+  }
+
+  .brand-tagline {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(241,245,249,0.55);
+    letter-spacing: 0.06em;
+  }
+
+  .category-pill {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(201,168,76,0.9);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid rgba(201,168,76,0.35);
+    padding: 4px 14px;
+    border-radius: 14px;
+  }
+
+  /* ---------- Left warning label ---------- */
+  .warning-block {
+    position: absolute;
+    left: 60px;
+    bottom: 200px;
+    width: 280px;
+  }
+
+  .warning-icon {
+    font-size: 32px;
+    line-height: 1;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .warning-text {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #6b7280;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+
+  .warning-text .red {
+    color: #ef4444;
+  }
+
+  /* ---------- Right AI label ---------- */
+  .ai-block {
+    position: absolute;
+    right: 60px;
+    bottom: 200px;
+    width: 280px;
+    text-align: right;
+  }
+
+  .ai-icon {
+    font-size: 32px;
+    line-height: 1;
+    margin-bottom: 6px;
+    display: block;
+    text-align: right;
+  }
+
+  .ai-text {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: rgba(201,168,76,0.9);
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+
+  /* decorative corner accents */
+  .corner-tl {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 28px;
+    height: 28px;
+    border-top: 2px solid rgba(201,168,76,0.5);
+    border-left: 2px solid rgba(201,168,76,0.5);
+  }
+
+  .corner-tr {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 28px;
+    height: 28px;
+    border-top: 2px solid rgba(201,168,76,0.5);
+    border-right: 2px solid rgba(201,168,76,0.5);
+  }
+
+  .corner-bl {
+    position: absolute;
+    bottom: 72px;
+    left: 16px;
+    width: 28px;
+    height: 28px;
+    border-bottom: 2px solid rgba(201,168,76,0.5);
+    border-left: 2px solid rgba(201,168,76,0.5);
+  }
+
+  .corner-br {
+    position: absolute;
+    bottom: 72px;
+    right: 16px;
+    width: 28px;
+    height: 28px;
+    border-bottom: 2px solid rgba(201,168,76,0.5);
+    border-right: 2px solid rgba(201,168,76,0.5);
+  }
+
+</style>
+</head>
+<body>
+<div class="cover">
+
+  <!-- Background grid -->
+  <div class="bg-grid"></div>
+
+  <!-- Glow effects -->
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+
+  <!-- Corner accents -->
+  <div class="corner-tl"></div>
+  <div class="corner-tr"></div>
+  <div class="corner-bl"></div>
+  <div class="corner-br"></div>
+
+  <!-- Decorative data nodes (right side) -->
+  <div class="data-node" style="top:110px; right:200px;"></div>
+  <div class="data-node" style="top:90px; right:280px;"></div>
+  <div class="data-node" style="top:130px; right:350px;"></div>
+  <div class="data-line" style="top:113px; right:203px; width:80px;"></div>
+  <div class="data-line" style="top:93px; right:283px; width:70px; transform:rotate(20deg);"></div>
+  <div class="data-node" style="top:155px; right:180px;"></div>
+  <div class="data-line" style="top:113px; right:200px; width:44px; transform:rotate(80deg); transform-origin:top left;"></div>
+
+  <!-- ========== HEADLINE ========== -->
+  <div class="headline-block">
+    <div class="headline-tag">Industry Insight</div>
+    <div class="headline-main">
+      ธุรกิจที่ไม่ปรับตัวกับ <span class="highlight">AI</span><br>
+      กำลังเสี่ยง<span class="highlight">ตกขบวน</span>
+    </div>
+  </div>
+
+  <!-- ========== TRACK ========== -->
+  <div class="rail-left"></div>
+  <div class="rail-right"></div>
+  <div class="track"></div>
+  <div class="track-lower"></div>
+
+  <!-- ========== LEFT SCENE — Still / left-behind ========== -->
+  <div class="platform-left"></div>
+
+  <div style="position:absolute; bottom:162px; left:120px;">
+    <div class="figure-still">
+      <div class="figure-question">?</div>
+      <div class="figure-head"></div>
+      <div class="figure-body"></div>
+      <div class="figure-legs">
+        <div class="figure-leg"></div>
+        <div class="figure-leg"></div>
+      </div>
+    </div>
+    <div class="figure-shadow"></div>
+  </div>
+
+  <div class="warning-block">
+    <span class="warning-icon">&#9888;</span>
+    <div class="warning-text">
+      ยืนดู<span class="red">คู่แข่ง</span>วิ่งไปข้างหน้า<br>
+      ด้วยส่วนแบ่งตลาด<span class="red">ของคุณ</span>
+    </div>
+  </div>
+
+  <!-- VS divider -->
+  <div class="divider"></div>
+  <div style="position:absolute; left:355px; top:50%; transform:translateY(-50%); background:#1B2A4A; border:1px solid rgba(201,168,76,0.4); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-family:'Sarabun',sans-serif; font-size:11px; font-weight:700; color:rgba(201,168,76,0.8); letter-spacing:0.05em;">VS</div>
+
+  <!-- ========== RIGHT SCENE — AI-powered train ========== -->
+  <div class="right-scene">
+
+    <!-- Speed lines -->
+    <div class="speed-lines">
+      <div class="speed-line"></div>
+      <div class="speed-line"></div>
+      <div class="speed-line"></div>
+      <div class="speed-line"></div>
+      <div class="speed-line"></div>
+    </div>
+
+    <!-- Train -->
+    <div class="train">
+      <!-- Car 2 (rear) -->
+      <div class="train-car">
+        <div class="train-car-windows">
+          <div class="train-car-window"></div>
+          <div class="train-car-window"></div>
+          <div class="train-car-window"></div>
+        </div>
+        <div class="train-car-wheel train-car-wheel-1"></div>
+        <div class="train-car-wheel train-car-wheel-2"></div>
+      </div>
+
+      <!-- Car 1 (middle) -->
+      <div class="train-car">
+        <div class="train-car-windows">
+          <div class="train-car-window"></div>
+          <div class="train-car-window"></div>
+          <div class="train-car-window"></div>
+        </div>
+        <div class="train-car-wheel train-car-wheel-1"></div>
+        <div class="train-car-wheel train-car-wheel-2"></div>
+      </div>
+
+      <!-- Locomotive -->
+      <div class="train-loco">
+        <div class="train-windows">
+          <div class="train-window"></div>
+          <div class="train-window"></div>
+        </div>
+        <div class="train-wheel train-wheel-1"></div>
+        <div class="train-wheel train-wheel-2"></div>
+        <div class="train-wheel train-wheel-3"></div>
+      </div>
+    </div>
+
+    <!-- Burst from front -->
+    <div class="train-burst">
+      <div class="burst-dot"></div>
+      <div class="burst-dot"></div>
+      <div class="burst-dot"></div>
+      <div class="burst-dot"></div>
+    </div>
+
+  </div>
+
+  <!-- Right AI label -->
+  <div class="ai-block">
+    <span class="ai-icon">&#128640;</span>
+    <div class="ai-text">
+      ธุรกิจที่ใช้ AI วิ่งนำหน้า<br>
+      เร็วกว่า ถูกกว่า กำไรสูงกว่า
+    </div>
+  </div>
+
+  <!-- ========== BOTTOM BAR ========== -->
+  <div class="bottom-bar">
+    <div>
+      <div class="brand-name">AIBiz Thailand</div>
+      <div class="brand-tagline">AI Automation สำหรับ SME ไทย</div>
+    </div>
+    <div class="category-pill">Industry Insight</div>
+  </div>
+
+</div>
+</body>
+</html>

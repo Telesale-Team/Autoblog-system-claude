@@ -117,7 +117,7 @@ Chief of Staff จะเลือก agent ที่เหมาะสมให�
 | สร้างระบบ AI | AI Orchestrator | AI Toolsmith, QA |
 | ปิดดีลลูกค้าใหม่ | Hustler | Legal, Money Manager |
 | ปัญหาการเงิน | Money Manager | Data Analyst, Legal |
-| ทำคอนเทนต์ SEO / blog | Marketing Specialist | SEO, Content Writer, AI Toolsmith, QA |
+| ทำคอนเทนต์ SEO / blog | Marketing Specialist | SEO, Content Writer, Frontend Designer, AI Toolsmith, QA |
 | Design System / UI/UX | Frontend Designer | Marketing Specialist, AI Orchestrator, QA |
 | Keyword research / on-page SEO | SEO Specialist | Content Writer, Data Analyst |
 | เขียนบทความภาษาไทย | Content Writer (TH) | SEO, AI Toolsmith, QA |
