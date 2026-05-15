@@ -174,6 +174,8 @@
       </span>
     </div>
 
+    {# Pre-compute counts for badges — guard against missing context vars #}
+    {% with new_leads=sidebar_new_leads|default:0 draft_articles=sidebar_draft_articles|default:0 %}
     <ul class="nav flex-column mt-2 px-1">
 
       <li class="nav-section-label">หน้าหลัก</li>
@@ -181,54 +183,91 @@
       <li class="nav-item">
         <a href="{% url 'dashboard:index' %}"
            class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
-          <i class="bi bi-grid-1x2-fill"></i> แดชบอร์ด
+          <i class="bi bi-grid-1x2-fill"></i> Dashboard
         </a>
       </li>
 
-      <li class="nav-section-label">รายงาน</li>
+      <li class="nav-section-label">Content</li>
 
       <li class="nav-item">
-        <a href="{% url 'dashboard:projects' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}">
-          <i class="bi bi-folder2-open"></i> โครงการ
+        <a href="{% url 'dashboard:blog' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %} d-flex align-items-center justify-content-between">
+          <span><i class="bi bi-pencil-square"></i> บทความ</span>
+          {% if draft_articles > 0 %}
+            <span class="badge rounded-pill" style="background:var(--app-secondary);font-size:.65rem">{{ draft_articles }} draft</span>
+          {% endif %}
         </a>
       </li>
       <li class="nav-item">
-        <a href="{% url 'dashboard:loi' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'loi' %}active{% endif %}">
-          <i class="bi bi-file-earmark-text"></i> LOI Issued
+        <a href="{% url 'dashboard:backlog' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'backlog' %}active{% endif %}">
+          <i class="bi bi-list-task"></i> Content Backlog
         </a>
       </li>
       <li class="nav-item">
-        <a href="{% url 'dashboard:retail' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'retail' %}active{% endif %}">
-          <i class="bi bi-shop"></i> Retail Sales
+        <a href="{% url 'portfolio:list' %}"
+           class="nav-link">
+          <i class="bi bi-briefcase"></i> Portfolio
+        </a>
+      </li>
+
+      <li class="nav-section-label">Leads &amp; Sales</li>
+
+      <li class="nav-item">
+        <a href="{% url 'dashboard:leads' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %} d-flex align-items-center justify-content-between">
+          <span><i class="bi bi-people-fill"></i> Leads ทั้งหมด</span>
+          {% if new_leads > 0 %}
+            <span class="badge rounded-pill bg-danger" style="font-size:.65rem">{{ new_leads }} ใหม่</span>
+          {% endif %}
         </a>
       </li>
       <li class="nav-item">
-        <a href="{% url 'dashboard:gap' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'gap' %}active{% endif %}">
-          <i class="bi bi-graph-down-arrow"></i> GAP Analysis
+        <a href="{% url 'dashboard:pipeline' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'pipeline' %}active{% endif %}">
+          <i class="bi bi-kanban-fill"></i> Pipeline
         </a>
       </li>
 
       <li class="nav-section-label">การเงิน</li>
 
       <li class="nav-item">
-        <a href="{% url 'receipt:list' %}"
-           class="nav-link {% if 'receipt' in request.resolver_match.url_name %}active{% endif %}">
-          <i class="bi bi-receipt"></i> ใบเสร็จรับเงิน
+        <a href="{% url 'dashboard:revenue' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'revenue' %}active{% endif %}">
+          <i class="bi bi-currency-exchange"></i> Revenue
+        </a>
+      </li>
+
+      <li class="nav-section-label">Analytics</li>
+
+      <li class="nav-item">
+        <a href="{% url 'dashboard:analytics' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+          <i class="bi bi-bar-chart-fill"></i> Analytics
+        </a>
+      </li>
+
+      <li class="nav-section-label">เอกสาร</li>
+
+      <li class="nav-item">
+        <a href="{% url 'dashboard:docs_index' %}"
+           class="nav-link {% if 'docs' in request.resolver_match.url_name %}active{% endif %}">
+          <i class="bi bi-journal-bookmark-fill"></i> คู่มือทีม
         </a>
       </li>
       <li class="nav-item">
-        <a href="{% url 'dashboard:savings' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'savings' %}active{% endif %}">
-          <i class="bi bi-piggy-bank"></i> Savings
+        <a href="/" class="nav-link" target="_blank" rel="noopener">
+          <i class="bi bi-globe"></i> ดูเว็บไซต์
         </a>
       </li>
 
       <li class="nav-section-label">ระบบ</li>
 
+      <li class="nav-item">
+        <a href="/admin/" class="nav-link" target="_blank" rel="noopener">
+          <i class="bi bi-shield-lock-fill"></i> Django Admin
+        </a>
+      </li>
       <li class="nav-item">
         <a href="{% url 'settings:index' %}"
            class="nav-link {% if 'settings' in request.resolver_match.namespace %}active{% endif %}">
@@ -242,6 +281,7 @@
       </li>
 
     </ul>
+    {% endwith %}
   </nav>
   {# === END SIDEBAR === #}
 

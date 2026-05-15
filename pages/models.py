@@ -8,6 +8,7 @@ class ContactLead(models.Model):
         ("new", "New"),
         ("contacted", "Contacted"),
         ("qualified", "Qualified"),
+        ("proposal", "Proposal"),
         ("closed_won", "Closed - Won"),
         ("closed_lost", "Closed - Lost"),
     ]
@@ -31,6 +32,7 @@ class ContactLead(models.Model):
     utm_campaign = models.CharField(max_length=100, blank=True)
 
     status = models.CharField("สถานะ", max_length=20, choices=STATUS_CHOICES, default="new")
+    deal_value = models.DecimalField("มูลค่าดีล (บาท)", max_digits=12, decimal_places=2, null=True, blank=True)
     notes = models.TextField("บันทึกภายใน", blank=True)
 
     # PDPA

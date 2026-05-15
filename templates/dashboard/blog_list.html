@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}จัดการบทความ — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">บทความ</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .table-blog th {
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--bs-secondary-color);
+    font-weight: 600;
+    border-bottom-width: 1px;
+    white-space: nowrap;
+  }
+  .table-blog td { vertical-align: middle; font-size: .88rem; }
+
+  .filter-btn {
+    font-size: .8rem;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+  }
+  .filter-btn.active {
+    background: var(--app-primary) !important;
+    border-color: var(--app-primary) !important;
+    color: #fff !important;
+  }
+
+  .toggle-btn {
+    font-size: .75rem;
+    padding: .25rem .7rem;
+    border-radius: 999px;
+    border: 1px solid;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background .15s, color .15s, opacity .15s;
+  }
+  .toggle-btn.published {
+    border-color: #198754;
+    color: #198754;
+    background: rgba(25,135,84,.08);
+  }
+  .toggle-btn.published:hover {
+    background: rgba(25,135,84,.18);
+  }
+  .toggle-btn.draft {
+    border-color: #ffc107;
+    color: #856404;
+    background: rgba(255,193,7,.1);
+  }
+  .toggle-btn.draft:hover {
+    background: rgba(255,193,7,.22);
+  }
+  .toggle-btn.saving { opacity: .45; pointer-events: none; }
+
+  .article-cover {
+    width: 48px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: .3rem;
+    background: var(--bs-secondary-bg);
+  }
+  .article-cover-placeholder {
+    width: 48px;
+    height: 36px;
+    border-radius: .3rem;
+    background: var(--bs-secondary-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bs-secondary-color);
+    font-size: 1rem;
+  }
+
+  .toast-feedback {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    min-width: 220px;
+    font-size: .88rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Page Header ─────────────────────────────────────────────────────────── #}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 fw-bold" style="color:var(--app-primary)">จัดการบทความ</h4>
+    <p class="mb-0 text-muted small">toggle publish/draft ได้โดยตรงจากตารางนี้</p>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    {% if draft_count > 0 %}
+      <span class="badge rounded-pill" style="background:var(--app-secondary);color:#fff">{{ draft_count }} draft</span>
+    {% endif %}
+    <a href="/admin/blog/article/add/" target="_blank" rel="noopener"
+       class="btn btn-sm btn-app-filled btn-app">
+      <i class="bi bi-plus-lg me-1"></i>เขียนบทความใหม่
+    </a>
+  </div>
+</div>
+
+{# ── Filter Tabs ──────────────────────────────────────────────────────────── #}
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <a href="{% url 'dashboard:blog' %}"
+     class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter %}active{% endif %}">
+    ทั้งหมด
+  </a>
+  <a href="{% url 'dashboard:blog' %}?status=published"
+     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'published' %}active{% endif %}">
+    Published
+  </a>
+  <a href="{% url 'dashboard:blog' %}?status=draft"
+     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'draft' %}active{% endif %}">
+    Draft
+  </a>
+</div>
+
+{# ── Articles Table ───────────────────────────────────────────────────────── #}
+<div class="card border" style="border-radius:.6rem">
+  <div class="card-body p-0">
+    {% if articles %}
+    <div class="table-responsive">
+      <table class="table table-blog table-hover mb-0">
+        <thead>
+          <tr>
+            <th class="ps-3" style="width:52px"></th>
+            <th>หัวข้อ</th>
+            <th>หมวด</th>
+            <th>ผู้เขียน</th>
+            <th class="text-end">Views</th>
+            <th class="text-center">สถานะ</th>
+            <th class="pe-3 text-center">จัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for article in articles %}
+          <tr id="article-row-{{ article.pk }}">
+            {# Cover image #}
+            <td class="ps-3">
+              {% if article.display_cover %}
+                <img src="{{ article.display_cover }}" alt="" class="article-cover">
+              {% else %}
+                <div class="article-cover-placeholder"><i class="bi bi-image"></i></div>
+              {% endif %}
+            </td>
+
+            {# Title #}
+            <td>
+              <div class="fw-semibold" style="max-width:280px">
+                <a href="{{ article.get_absolute_url }}" target="_blank" rel="noopener"
+                   class="text-decoration-none" style="color:var(--bs-body-color)">
+                  {{ article.title|truncatechars:55 }}
+                </a>
+              </div>
+              <div class="text-muted" style="font-size:.75rem">
+                {{ article.created_at|date:"d M Y" }}
+                {% if article.published_at %} · published {{ article.published_at|date:"d M Y" }}{% endif %}
+              </div>
+            </td>
+
+            {# Category #}
+            <td>
+              <span class="badge bg-{{ article.category.color|default:'secondary' }}" style="font-size:.72rem">
+                {{ article.category.name }}
+              </span>
+            </td>
+
+            {# Author #}
+            <td>
+              <span class="text-muted" style="font-size:.83rem">
+                {{ article.author.get_full_name|default:article.author.username }}
+              </span>
+            </td>
+
+            {# Views #}
+            <td class="text-end fw-semibold" style="color:var(--app-primary)">
+              {{ article.views_count|intcomma }}
+            </td>
+
+            {# Status badge (updated via JS) #}
+            <td class="text-center" id="status-cell-{{ article.pk }}">
+              <span class="status-text-{{ article.pk }}">
+                {% if article.status == 'published' %}
+                  <span class="badge bg-success" style="font-size:.72rem">Published</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark" style="font-size:.72rem">Draft</span>
+                {% endif %}
+              </span>
+            </td>
+
+            {# Toggle button #}
+            <td class="pe-3 text-center">
+              <button class="toggle-btn {{ article.status }}"
+                      data-pk="{{ article.pk }}"
+                      data-url="{% url 'dashboard:article_toggle' article.pk %}"
+                      data-current="{{ article.status }}"
+                      aria-label="toggle publish สำหรับ {{ article.title }}">
+                {% if article.status == 'published' %}
+                  <i class="bi bi-arrow-down-circle me-1"></i>Draft
+                {% else %}
+                  <i class="bi bi-arrow-up-circle me-1"></i>Publish
+                {% endif %}
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center text-muted py-5">
+      <i class="bi bi-file-earmark-text fs-1"></i>
+      <p class="mt-3 mb-0">
+        {% if status_filter %}
+          ไม่มีบทความที่มีสถานะ "{{ status_filter }}"
+        {% else %}
+          ยังไม่มีบทความในระบบ
+        {% endif %}
+      </p>
+      <a href="/admin/blog/article/add/" target="_blank" rel="noopener"
+         class="btn btn-sm btn-app-filled btn-app mt-3">
+        <i class="bi bi-plus-lg me-1"></i>เขียนบทความแรก
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{# ── Toast Feedback ───────────────────────────────────────────────────────── #}
+<div id="statusToast" class="toast toast-feedback align-items-center border-0" role="alert"
+     aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body" id="toastMessage">อัปเดตสถานะแล้ว</div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const csrfToken = '{{ csrf_token }}';
+  const toast     = new bootstrap.Toast(document.getElementById('statusToast'), { delay: 2500 });
+  const toastMsg  = document.getElementById('toastMessage');
+  const toastEl   = document.getElementById('statusToast');
+
+  function showToast(msg, isError) {
+    toastMsg.textContent = msg;
+    toastEl.classList.remove('bg-success', 'bg-danger', 'text-white');
+    toastEl.classList.add(isError ? 'bg-danger' : 'bg-success', 'text-white');
+    toast.show();
+  }
+
+  document.querySelectorAll('.toggle-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const pk      = btn.dataset.pk;
+      const url     = btn.dataset.url;
+      const current = btn.dataset.current;
+
+      btn.classList.add('saving');
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({})
+      })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        btn.classList.remove('saving');
+        if (data.ok) {
+          const newStatus = data.status;
+          btn.dataset.current = newStatus;
+
+          // Update button appearance
+          btn.className = 'toggle-btn ' + newStatus;
+          if (newStatus === 'published') {
+            btn.innerHTML = '<i class="bi bi-arrow-down-circle me-1"></i>Draft';
+          } else {
+            btn.innerHTML = '<i class="bi bi-arrow-up-circle me-1"></i>Publish';
+          }
+
+          // Update status badge cell
+          const statusCell = document.querySelector('.status-text-' + pk);
+          if (statusCell) {
+            if (newStatus === 'published') {
+              statusCell.innerHTML = '<span class="badge bg-success" style="font-size:.72rem">Published</span>';
+            } else {
+              statusCell.innerHTML = '<span class="badge bg-warning text-dark" style="font-size:.72rem">Draft</span>';
+            }
+          }
+
+          showToast('"' + data.status_display + '" แล้ว', false);
+        } else {
+          showToast('เกิดข้อผิดพลาด: ' + (data.error || 'unknown'), true);
+        }
+      })
+      .catch(function () {
+        btn.classList.remove('saving');
+        showToast('ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่', true);
+      });
+    });
+  });
+})();
+</script>
+{% endblock %}

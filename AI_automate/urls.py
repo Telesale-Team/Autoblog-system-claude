@@ -37,7 +37,7 @@ _accounts_patterns = ([
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
-    path("dashboard/", include("dashboard.urls")),
+    path("owner/", include("dashboard.urls")),
     path("blog/", include("blog.urls")),
     path("portfolio/", include("portfolio.urls")),
     path("receipt/", include(_receipt_patterns)),
