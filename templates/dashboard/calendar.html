@@ -64,6 +64,7 @@
     position: relative;
   }
   .phase-item .phase-dates { font-size: .65rem; font-weight: 400; opacity: .85; }
+  .phase-item--gold { background: var(--app-primary, #c9a96e); color: var(--brand-navy, #1a2744); }
 </style>
 {% endblock %}
 
@@ -72,7 +73,7 @@
 {# ── Header ───────────────────────────────────────────────────────────────── #}
 <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
   <div>
-    <h4 class="mb-0 fw-bold" style="color:var(--app-primary)">Work Calendar</h4>
+    <h4 class="mb-0 page-title">Work Calendar</h4>
     <p class="mb-0 text-muted small">แผนการทำงาน — Road to First Revenue</p>
   </div>
 </div>
@@ -91,7 +92,7 @@
     <div>📞 Pipeline Build</div>
     <div class="phase-dates">ก.ค. 2026</div>
   </div>
-  <div class="phase-item" style="background:var(--app-primary,#c9a96e);color:#1a2744">
+  <div class="phase-item phase-item--gold">
     <div>💰 First Revenue</div>
     <div class="phase-dates">ส.ค. 2026</div>
   </div>

@@ -51,34 +51,54 @@
       position: fixed;
       top: 0; left: 0;
       z-index: 1040;
-      background: var(--app-primary);
+      background: var(--brand-navy, #1a2744);
       transition: transform 0.3s ease;
       overflow-y: auto;
     }
     #sidebar .sidebar-brand {
       padding: 1.2rem 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.15);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
     }
+    #sidebar .sidebar-brand .brand-accent { color: var(--app-primary, #c9a96e); }
     #sidebar .nav-link {
-      color: rgba(255,255,255,0.85);
+      color: rgba(255,255,255,0.75);
       padding: .55rem 1.2rem;
       border-radius: 0.4rem;
       margin: 2px 8px;
       font-size: .92rem;
       transition: background .2s, color .2s;
     }
-    #sidebar .nav-link:hover,
+    #sidebar .nav-link:hover {
+      background: rgba(201,169,110,.12);
+      color: var(--app-primary, #c9a96e);
+    }
     #sidebar .nav-link.active {
-      background: rgba(255,255,255,0.18);
-      color: #fff;
+      background: rgba(201,169,110,.18);
+      color: var(--app-primary, #c9a96e);
+      font-weight: 600;
     }
     #sidebar .nav-link i { width: 22px; font-size: 1.05rem; }
     #sidebar .nav-section-label {
       font-size: .7rem;
       text-transform: uppercase;
       letter-spacing: .08em;
-      color: rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.40);
       padding: .7rem 1.2rem .2rem;
+    }
+
+    /* === Page Title (ใช้แทน inline style="color:var(--app-primary)") === */
+    .page-title {
+      color: var(--bs-body-color);
+      font-weight: 700;
+    }
+    [data-bs-theme="dark"]  .page-title { color: var(--heading-dark-bg, #faf6ee); }
+    [data-bs-theme="light"] .page-title { color: var(--heading-light-bg, #2c1a0e); }
+
+    /* === Sidebar badge — draft count === */
+    .sidebar-badge-draft {
+      background: var(--app-secondary, #b8924f);
+      color: #fff;
+      font-size: .65rem;
     }
 
     /* === Main Content Area === */
@@ -168,7 +188,7 @@
   {# ===================== SIDEBAR ===================== #}
   <nav id="sidebar">
     <div class="sidebar-brand d-flex align-items-center gap-2">
-      <i class="bi bi-bar-chart-fill fs-4 text-white"></i>
+      <i class="bi bi-bar-chart-fill fs-4 brand-accent"></i>
       <span class="fw-bold text-white fs-6">
         {{ user_settings.company_name|default:"Analytics Co." }}
       </span>
@@ -200,7 +220,7 @@
            class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %} d-flex align-items-center justify-content-between">
           <span><i class="bi bi-pencil-square"></i> บทความ</span>
           {% if draft_articles > 0 %}
-            <span class="badge rounded-pill" style="background:var(--app-secondary);font-size:.65rem">{{ draft_articles }} draft</span>
+            <span class="badge rounded-pill sidebar-badge-draft">{{ draft_articles }} draft</span>
           {% endif %}
         </a>
       </li>

@@ -40,7 +40,7 @@
 {# ── Header ───────────────────────────────────────────────────────────────── #}
 <div class="d-flex align-items-center justify-content-between mb-4">
   <div>
-    <h4 class="mb-0 fw-bold" style="color:var(--app-primary)">Analytics</h4>
+    <h4 class="mb-0 page-title">Analytics</h4>
     <p class="mb-0 text-muted small">ข้อมูลจาก DB — ไม่รวม GA</p>
   </div>
   <span class="text-muted small"><i class="bi bi-clock me-1"></i>{% now "j M Y, H:i" %}</span>
@@ -49,7 +49,7 @@
 {# ── Row 1: Weekly Trends ─────────────────────────────────────────────────── #}
 <div class="chart-card mb-4">
   <div class="chart-header">
-    <i class="bi bi-graph-up me-2" style="color:var(--app-primary)"></i>Trend 12 สัปดาห์ — Leads &amp; Content
+    <i class="bi bi-graph-up me-2" class="text-gold"></i>Trend 12 สัปดาห์ — Leads &amp; Content
   </div>
   <div class="chart-body">
     <canvas id="weeklyChart" style="max-height:260px"></canvas>
@@ -61,7 +61,7 @@
 
   <div class="col-md-6">
     <div class="chart-card h-100">
-      <div class="chart-header"><i class="bi bi-pie-chart-fill me-2" style="color:var(--app-primary)"></i>Leads by Source</div>
+      <div class="chart-header"><i class="bi bi-pie-chart-fill me-2" class="text-gold"></i>Leads by Source</div>
       <div class="chart-body d-flex align-items-center justify-content-center">
         <canvas id="sourceChart" style="max-height:220px;max-width:220px"></canvas>
       </div>
@@ -70,7 +70,7 @@
 
   <div class="col-md-6">
     <div class="chart-card h-100">
-      <div class="chart-header"><i class="bi bi-bar-chart-steps me-2" style="color:var(--app-primary)"></i>Lead Funnel by Status</div>
+      <div class="chart-header"><i class="bi bi-bar-chart-steps me-2" class="text-gold"></i>Lead Funnel by Status</div>
       <div class="chart-body">
         <canvas id="funnelChart" style="max-height:220px"></canvas>
       </div>
@@ -85,7 +85,7 @@
   {# Top Articles table #}
   <div class="col-lg-7">
     <div class="chart-card h-100">
-      <div class="chart-header"><i class="bi bi-trophy-fill me-2" style="color:var(--app-secondary)"></i>Top 10 บทความ by Views</div>
+      <div class="chart-header"><i class="bi bi-trophy-fill me-2" class="text-gold"></i>Top 10 บทความ by Views</div>
       <div class="chart-body p-0">
         {% if top_articles %}
         <div class="table-responsive">
@@ -109,7 +109,7 @@
                        style="width:{% widthratio art.views_count max_views 100 %}%"></div>
                 </td>
                 <td><span class="badge bg-secondary" style="font-size:.68rem">{{ art.category__name|default:"—" }}</span></td>
-                <td class="pe-3 text-end fw-bold" style="color:var(--app-primary)">{{ art.views_count|intcomma }}</td>
+                <td class="pe-3 text-end fw-bold" class="text-gold">{{ art.views_count|intcomma }}</td>
               </tr>
               {% endwith %}
               {% endfor %}
@@ -126,7 +126,7 @@
   {# Articles by Category #}
   <div class="col-lg-5">
     <div class="chart-card h-100">
-      <div class="chart-header"><i class="bi bi-tags-fill me-2" style="color:var(--app-primary)"></i>บทความ by Category</div>
+      <div class="chart-header"><i class="bi bi-tags-fill me-2" class="text-gold"></i>บทความ by Category</div>
       <div class="chart-body d-flex align-items-center justify-content-center">
         <canvas id="catChart" style="max-height:260px"></canvas>
       </div>

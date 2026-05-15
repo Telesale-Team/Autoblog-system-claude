@@ -86,6 +86,16 @@
   }
   .kpi-pill .kp-label { font-size: .68rem; color: var(--bs-secondary-color); text-transform: uppercase; letter-spacing: .05em; }
   .kpi-pill .kp-value { font-weight: 700; font-size: 1.05rem; color: var(--app-primary); }
+  .kpi-pill.kpi-won    { }
+  .kpi-pill.kpi-won    .kp-value { color: #198754; }
+  .kpi-pill.kpi-hot    { border-color: #fd7e14; }
+  .kpi-pill.kpi-hot    .kp-label,
+  .kpi-pill.kpi-hot    .kp-value { color: #fd7e14; }
+  .kpi-pill.kpi-stale  { border-color: #dc3545; }
+  .kpi-pill.kpi-stale  .kp-label,
+  .kpi-pill.kpi-stale  .kp-value { color: #dc3545; }
+
+  .badge-hot { background: #fd7e14; color: #fff; font-size: .63rem; }
 
   .toast-feedback { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; min-width: 220px; font-size: .88rem; }
 </style>
@@ -96,7 +106,7 @@
 {# ── Header ───────────────────────────────────────────────────────────────── #}
 <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
   <div>
-    <h4 class="mb-0 fw-bold" style="color:var(--app-primary)">Pipeline</h4>
+    <h4 class="mb-0 page-title">Pipeline</h4>
     <p class="mb-0 text-muted small">ย้าย stage และระบุมูลค่าดีลได้ทันที</p>
   </div>
   <a href="/admin/pages/contactlead/add/" target="_blank" rel="noopener"
@@ -110,18 +120,18 @@
   <div class="kpi-pill">
     <div><div class="kp-label">Pipeline Value</div><div class="kp-value">฿{{ pipeline_value|intcomma }}</div></div>
   </div>
-  <div class="kpi-pill">
-    <div><div class="kp-label">Won Revenue</div><div class="kp-value" style="color:#198754">฿{{ won_value|intcomma }}</div></div>
+  <div class="kpi-pill kpi-won">
+    <div><div class="kp-label">Won Revenue</div><div class="kp-value">฿{{ won_value|intcomma }}</div></div>
   </div>
   {% if hot_leads_pks %}
-  <div class="kpi-pill" style="border-color:#fd7e14">
-    <div><div class="kp-label" style="color:#fd7e14">Hot Leads</div><div class="kp-value" style="color:#fd7e14">{{ hot_leads_pks|length }} ราย</div></div>
+  <div class="kpi-pill kpi-hot">
+    <div><div class="kp-label">Hot Leads</div><div class="kp-value">{{ hot_leads_pks|length }} ราย</div></div>
     <i class="bi bi-fire text-warning"></i>
   </div>
   {% endif %}
   {% if stale_pks %}
-  <div class="kpi-pill" style="border-color:#dc3545">
-    <div><div class="kp-label" style="color:#dc3545">ค้าง > 3 วัน</div><div class="kp-value" style="color:#dc3545">{{ stale_pks|length }} ราย</div></div>
+  <div class="kpi-pill kpi-stale">
+    <div><div class="kp-label">ค้าง > 3 วัน</div><div class="kp-value">{{ stale_pks|length }} ราย</div></div>
     <i class="bi bi-exclamation-circle-fill text-danger"></i>
   </div>
   {% endif %}
@@ -145,7 +155,7 @@
            id="lcard-{{ lead.pk }}">
 
         {% if lead.pk in hot_leads_pks %}
-          <span class="badge mb-1" style="background:#fd7e14;font-size:.63rem">
+          <span class="badge badge-hot mb-1">
             <i class="bi bi-fire me-1"></i>Hot — Proposal > 5 วัน
           </span>
         {% elif lead.pk in stale_pks %}

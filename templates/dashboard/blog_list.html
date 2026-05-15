@@ -85,6 +85,10 @@
     min-width: 220px;
     font-size: .88rem;
   }
+  .badge-draft-count {
+    background: var(--app-secondary);
+    color: #fff;
+  }
 </style>
 {% endblock %}
 
@@ -93,12 +97,12 @@
 {# ── Page Header ─────────────────────────────────────────────────────────── #}
 <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
   <div>
-    <h4 class="mb-0 fw-bold" style="color:var(--app-primary)">จัดการบทความ</h4>
+    <h4 class="mb-0 page-title">จัดการบทความ</h4>
     <p class="mb-0 text-muted small">toggle publish/draft ได้โดยตรงจากตารางนี้</p>
   </div>
   <div class="d-flex align-items-center gap-2">
     {% if draft_count > 0 %}
-      <span class="badge rounded-pill" style="background:var(--app-secondary);color:#fff">{{ draft_count }} draft</span>
+      <span class="badge rounded-pill badge-draft-count">{{ draft_count }} draft</span>
     {% endif %}
     <a href="/admin/blog/article/add/" target="_blank" rel="noopener"
        class="btn btn-sm btn-app-filled btn-app">
@@ -156,7 +160,7 @@
             <td>
               <div class="fw-semibold" style="max-width:280px">
                 <a href="{{ article.get_absolute_url }}" target="_blank" rel="noopener"
-                   class="text-decoration-none" style="color:var(--bs-body-color)">
+                   class="text-decoration-none text-body">
                   {{ article.title|truncatechars:55 }}
                 </a>
               </div>
@@ -181,7 +185,7 @@
             </td>
 
             {# Views #}
-            <td class="text-end fw-semibold" style="color:var(--app-primary)">
+            <td class="text-end fw-semibold text-gold">
               {{ article.views_count|intcomma }}
             </td>
 
