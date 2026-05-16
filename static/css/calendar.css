@@ -624,6 +624,72 @@
 .notes-empty-title { font-size: .82rem; font-weight: 600; color: rgba(148,163,184,.5); margin-bottom: .3rem; }
 .notes-empty-sub   { font-size: .72rem; color: rgba(148,163,184,.28); line-height: 1.5; }
 
+/* Note preview — 1 line truncated, click to expand */
+.note-preview {
+  font-size: .78rem;
+  color: rgba(148,163,184,.55);
+  line-height: 1.5;
+  margin-bottom: .4rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+}
+
+/* Card clickable cursor */
+.note-card { cursor: pointer; }
+.note-btn  { cursor: pointer; }
+
+/* === Note Detail Modal === */
+.note-detail-modal {
+  background: var(--dash-surface, #111827);
+  border: 1px solid var(--dash-border, rgba(201,169,110,.18));
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 4px 20px rgba(0,0,0,.4);
+}
+.note-detail-header {
+  padding: 1.1rem 1.25rem .85rem;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.note-detail-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.4;
+}
+.note-detail-pin {
+  color: var(--brand-gold, #c9a96e);
+  font-size: .85rem;
+}
+.note-detail-body {
+  font-size: .88rem;
+  color: #cbd5e1;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  padding: 1.1rem 1.25rem;
+  min-height: 80px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.note-detail-footer {
+  padding: .75rem 1.25rem !important;
+  background: rgba(255,255,255,.02);
+  border-top: 1px solid rgba(255,255,255,.05) !important;
+}
+.note-detail-date {
+  font-size: .68rem;
+  color: rgba(148,163,184,.4);
+}
+
+/* Color accent on detail header per color */
+.note-detail-gold   .note-detail-header { background: linear-gradient(135deg, rgba(201,169,110,.12), rgba(201,169,110,.04)); border-left: 3px solid rgba(201,169,110,.6); }
+.note-detail-blue   .note-detail-header { background: linear-gradient(135deg, rgba(59,130,246,.12), rgba(59,130,246,.04)); border-left: 3px solid rgba(59,130,246,.6); }
+.note-detail-green  .note-detail-header { background: linear-gradient(135deg, rgba(16,185,129,.12), rgba(16,185,129,.04)); border-left: 3px solid rgba(16,185,129,.6); }
+.note-detail-red    .note-detail-header { background: linear-gradient(135deg, rgba(239,68,68,.12), rgba(239,68,68,.04)); border-left: 3px solid rgba(239,68,68,.6); }
+.note-detail-purple .note-detail-header { background: linear-gradient(135deg, rgba(139,92,246,.12), rgba(139,92,246,.04)); border-left: 3px solid rgba(139,92,246,.6); }
+
 /* Color picker in modal */
 .note-color-picker { display: flex; gap: .5rem; }
 .note-color-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s, box-shadow .15s; }

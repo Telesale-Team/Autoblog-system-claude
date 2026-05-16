@@ -1,22 +1,32 @@
-/* === Notes Panel — CRUD JS === */
+/* === Notes Panel — CRUD + Detail View JS === */
 (function () {
   'use strict';
 
-  const API      = window.NOTES_API_URL;
-  const CSRF     = window.CALENDAR_CSRF;
-  const list     = document.getElementById('notesList');
-  const empty    = document.getElementById('notesEmpty');
+  const API        = window.NOTES_API_URL;
+  const CSRF       = window.CALENDAR_CSRF;
+  const list       = document.getElementById('notesList');
+  const empty      = document.getElementById('notesEmpty');
   const countBadge = document.getElementById('notesCount');
 
-  // Modal elements
-  const modal     = new bootstrap.Modal(document.getElementById('noteModal'));
-  const modalTitle = document.getElementById('noteModalTitle');
-  const noteId    = document.getElementById('noteId');
-  const noteTitle = document.getElementById('noteTitle');
+  // Edit/Add modal
+  const modal       = new bootstrap.Modal(document.getElementById('noteModal'));
+  const modalTitle  = document.getElementById('noteModalTitle');
+  const noteId      = document.getElementById('noteId');
+  const noteTitle   = document.getElementById('noteTitle');
   const noteContent = document.getElementById('noteContent');
-  const notePinned = document.getElementById('notePinned');
+  const notePinned  = document.getElementById('notePinned');
   const colorPicker = document.getElementById('noteColorPicker');
   let selectedColor = 'gold';
+
+  // Detail modal
+  const detailModal      = new bootstrap.Modal(document.getElementById('noteDetailModal'));
+  const detailContent    = document.getElementById('noteDetailContent');
+  const detailTitle      = document.getElementById('noteDetailTitle');
+  const detailBody       = document.getElementById('noteDetailBody');
+  const detailDate       = document.getElementById('noteDetailDate');
+  const detailPin        = document.getElementById('noteDetailPin');
+  const detailEditBtn    = document.getElementById('noteDetailEditBtn');
+  let   activeDetailCard = null;
 
   // === Color picker ===
   colorPicker.querySelectorAll('.note-color-btn').forEach(btn => {
@@ -29,9 +39,9 @@
 
   function setColor(color) {
     selectedColor = color;
-    colorPicker.querySelectorAll('.note-color-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.color === color);
-    });
+    colorPicker.querySelectorAll('.note-color-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.color === color)
+    );
   }
 
   // === Helpers ===
@@ -45,58 +55,106 @@
     if (empty) empty.style.display = n === 0 ? 'block' : 'none';
   }
 
+  function escape(str) {
+    return (str || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
   function createCardHTML(note) {
-    const pin = note.pinned
-      ? '<i class="bi bi-pin-angle-fill note-pin-icon"></i>' : '';
-    const content = note.content
-      ? `<div class="note-content">${note.content.replace(/</g,'&lt;')}</div>` : '';
+    const pin     = note.pinned ? '<i class="bi bi-pin-angle-fill note-pin-icon"></i>' : '';
+    const preview = note.content
+      ? `<div class="note-preview">${escape(note.content)}</div>` : '';
     return `
-      <div class="note-card note-color-${note.color}" data-id="${note.id}">
+      <div class="note-card note-color-${note.color}" data-id="${note.id}"
+           data-title="${escape(note.title)}"
+           data-content="${escape(note.content || '')}"
+           data-color="${note.color}"
+           data-pinned="${note.pinned ? 'true' : 'false'}"
+           data-date="${note.updated_at}">
         <div class="note-card-head">
-          <span class="note-title">${note.title.replace(/</g,'&lt;')}</span>
+          <span class="note-title">${escape(note.title)}</span>
           <div class="note-actions">
             ${pin}
             <button class="note-btn note-btn-edit" data-id="${note.id}" title="แก้ไข"><i class="bi bi-pencil"></i></button>
             <button class="note-btn note-btn-del"  data-id="${note.id}" title="ลบ"><i class="bi bi-trash"></i></button>
           </div>
         </div>
-        ${content}
+        ${preview}
         <div class="note-footer">${note.updated_at}</div>
       </div>`;
   }
 
+  // === Open Detail Modal (click card) ===
+  function openDetail(card) {
+    const color   = [...card.classList].find(c => c.startsWith('note-color-'))?.replace('note-color-', '') || 'gold';
+    const title   = card.dataset.title   || card.querySelector('.note-title')?.textContent || '';
+    const content = card.dataset.content || '';
+    const date    = card.dataset.date    || card.querySelector('.note-footer')?.textContent || '';
+    const pinned  = card.dataset.pinned === 'true';
+
+    // Set color class on modal
+    detailContent.className = detailContent.className
+      .replace(/note-detail-\w+/g, '')
+      .trim() + ` note-detail-${color}`;
+
+    detailTitle.textContent = title;
+    detailBody.textContent  = content || '(ไม่มีเนื้อหา)';
+    detailDate.textContent  = date;
+    detailPin.classList.toggle('d-none', !pinned);
+    activeDetailCard = card;
+
+    detailModal.show();
+  }
+
+  // Detail → Edit button
+  detailEditBtn.addEventListener('click', () => {
+    detailModal.hide();
+    setTimeout(() => openEdit(activeDetailCard), 300);
+  });
+
+  // === Bind card events ===
   function bindCardEvents(card) {
-    card.querySelector('.note-btn-edit').addEventListener('click', () => openEdit(card));
-    card.querySelector('.note-btn-del').addEventListener('click',  () => deleteNote(card));
+    // Click card body → detail (ยกเว้น action buttons)
+    card.addEventListener('click', e => {
+      if (e.target.closest('.note-btn')) return;
+      openDetail(card);
+    });
+    card.querySelector('.note-btn-edit').addEventListener('click', e => {
+      e.stopPropagation();
+      openEdit(card);
+    });
+    card.querySelector('.note-btn-del').addEventListener('click', e => {
+      e.stopPropagation();
+      deleteNote(card);
+    });
   }
 
   // Bind existing cards on page load
   list.querySelectorAll('.note-card').forEach(bindCardEvents);
   updateCount();
 
-  // === Open modal (Add) ===
+  // === Open Add Modal ===
   document.getElementById('btnAddNote').addEventListener('click', () => {
     modalTitle.textContent = 'เพิ่ม Note';
-    noteId.value    = '';
-    noteTitle.value = '';
+    noteId.value      = '';
+    noteTitle.value   = '';
     noteContent.value = '';
     notePinned.checked = false;
     setColor('gold');
     modal.show();
   });
 
-  // === Open modal (Edit) ===
+  // === Open Edit Modal ===
   function openEdit(card) {
     const id      = card.dataset.id;
-    const title   = card.querySelector('.note-title').textContent.trim();
-    const content = card.querySelector('.note-content')?.textContent.trim() || '';
-    const color   = [...card.classList].find(c => c.startsWith('note-color-'))?.replace('note-color-','') || 'gold';
-    const pinned  = card.querySelector('.note-pin-icon') !== null;
+    const title   = card.dataset.title   || card.querySelector('.note-title')?.textContent || '';
+    const content = card.dataset.content || '';
+    const color   = [...card.classList].find(c => c.startsWith('note-color-'))?.replace('note-color-', '') || 'gold';
+    const pinned  = card.dataset.pinned === 'true';
 
     modalTitle.textContent = 'แก้ไข Note';
-    noteId.value      = id;
-    noteTitle.value   = title;
-    noteContent.value = content;
+    noteId.value       = id;
+    noteTitle.value    = title;
+    noteContent.value  = content;
     notePinned.checked = pinned;
     setColor(color);
     modal.show();
@@ -114,7 +172,7 @@
       pinned:  notePinned.checked,
     };
 
-    const id = noteId.value;
+    const id     = noteId.value;
     const url    = id ? `${API}${id}/` : API;
     const method = id ? 'PATCH' : 'POST';
 
@@ -123,18 +181,19 @@
       const data = await res.json();
       if (!data.ok) return;
 
+      const now = new Date().toLocaleString('th-TH', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+
       if (id) {
-        // Update existing card
         const card = list.querySelector(`[data-id="${id}"]`);
-        const now  = new Date().toLocaleString('th-TH', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
         const tmp  = document.createElement('div');
         tmp.innerHTML = createCardHTML({ id, ...payload, updated_at: now });
         const newCard = tmp.firstElementChild;
         card.replaceWith(newCard);
         bindCardEvents(newCard);
       } else {
-        // Prepend new card
-        const now = new Date().toLocaleString('th-TH', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
         const tmp = document.createElement('div');
         tmp.innerHTML = createCardHTML({ id: data.id, ...payload, updated_at: now });
         const newCard = tmp.firstElementChild;

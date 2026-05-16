@@ -242,7 +242,12 @@
     <!-- Notes List -->
     <div class="notes-list" id="notesList">
       {% for note in notes %}
-      <div class="note-card note-color-{{ note.color }}" data-id="{{ note.pk }}">
+      <div class="note-card note-color-{{ note.color }}" data-id="{{ note.pk }}"
+           data-title="{{ note.title }}"
+           data-content="{{ note.content }}"
+           data-color="{{ note.color }}"
+           data-pinned="{{ note.pinned|yesno:'true,false' }}"
+           data-date="{{ note.updated_at|date:'d M Y H:i' }}">
         <div class="note-card-head">
           <span class="note-title">{{ note.title }}</span>
           <div class="note-actions">
@@ -252,7 +257,7 @@
           </div>
         </div>
         {% if note.content %}
-        <div class="note-content">{{ note.content }}</div>
+        <div class="note-preview">{{ note.content|truncatechars:60 }}</div>
         {% endif %}
         <div class="note-footer">{{ note.updated_at|date:"d M Y H:i" }}</div>
       </div>
@@ -269,6 +274,32 @@
 </div><!-- /col-lg-4 -->
 
 </div><!-- /row -->
+
+<!-- === Modal: Note Detail (คลิก card เพื่อดูรายละเอียด) === -->
+<div class="modal fade" id="noteDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content note-detail-modal" id="noteDetailContent">
+      <div class="note-detail-header" id="noteDetailHeader">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <span class="note-detail-pin d-none" id="noteDetailPin"><i class="bi bi-pin-angle-fill"></i></span>
+            <h6 class="note-detail-title mb-0" id="noteDetailTitle">—</h6>
+          </div>
+          <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
+        </div>
+      </div>
+      <div class="modal-body note-detail-body" id="noteDetailBody">—</div>
+      <div class="modal-footer note-detail-footer border-0 pt-0 d-flex justify-content-between">
+        <span class="note-detail-date" id="noteDetailDate"></span>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-secondary" id="noteDetailEditBtn">
+            <i class="bi bi-pencil me-1"></i>แก้ไข
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- === Modal: Add / Edit Note === -->
 <div class="modal fade" id="noteModal" tabindex="-1" aria-hidden="true">
