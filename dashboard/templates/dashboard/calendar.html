@@ -323,7 +323,13 @@
               <button class="todo-icon-btn" id="btnEditEvent" type="button" title="แก้ไข"><i class="bi bi-pencil"></i></button>
               <button class="todo-icon-btn todo-icon-btn--danger" id="btnDeleteEvent" type="button" title="ลบ"><i class="bi bi-trash"></i></button>
             </div>
-            <span class="todo-action-hint">แตะ <i class="bi bi-check-circle"></i> เพื่อทำเครื่องหมายเสร็จ</span>
+            <!-- === Toggle Done === -->
+            <div class="todo-toggle-wrap">
+              <span class="todo-toggle-label" id="toggleDoneLabel">ยังไม่เสร็จ</span>
+              <div class="form-check form-switch mb-0">
+                <input class="form-check-input todo-toggle-switch" type="checkbox" id="toggleDone" role="switch">
+              </div>
+            </div>
           </div>
         </div>
 

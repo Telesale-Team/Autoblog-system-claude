@@ -369,6 +369,31 @@
 [data-bs-theme="dark"] .todo-checkbox { border-color: rgba(255,255,255,.2); }
 [data-bs-theme="dark"] .todo-checkbox:hover { border-color: var(--app-primary,#c9a96e); }
 
+/* Toggle done ใน detail modal */
+.todo-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.todo-toggle-label {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--brand-muted, #94a3b8);
+  transition: color .2s;
+  white-space: nowrap;
+}
+.todo-toggle-switch {
+  width: 2.2rem !important;
+  height: 1.2rem !important;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.todo-toggle-switch:checked {
+  background-color: var(--brand-green, #10b981) !important;
+  border-color: var(--brand-green, #10b981) !important;
+}
+.todo-toggle-switch:focus { box-shadow: 0 0 0 2px rgba(16,185,129,.25) !important; }
+
 /* ── Add/Edit form modal ────────────────────────────────────────────── */
 #editEventModal .modal-content,
 #noteModal .modal-content {

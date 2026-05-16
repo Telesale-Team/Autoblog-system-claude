@@ -513,6 +513,15 @@ document.addEventListener('DOMContentLoaded', function () {
       markDoneBtn.classList.remove('is-done'); markDoneBtn.disabled = false; titleEl.classList.remove('is-done');
     }
 
+    /* toggle switch state */
+    const toggleSwitch = document.getElementById('toggleDone');
+    const toggleLabel  = document.getElementById('toggleDoneLabel');
+    if (toggleSwitch) {
+      toggleSwitch.checked = isCompleted;
+      toggleLabel.textContent = isCompleted ? 'เสร็จแล้ว ✓' : 'ยังไม่เสร็จ';
+      toggleLabel.style.color = isCompleted ? 'var(--brand-green,#10b981)' : 'var(--brand-muted,#94a3b8)';
+    }
+
     /* action row: แสดง/ซ่อน Edit + Delete */
     const notice  = document.getElementById('modalReadonlyNotice');
     const actions = document.getElementById('modalUserActions');
@@ -656,6 +665,30 @@ document.addEventListener('DOMContentLoaded', function () {
      User event  → PATCH ผ่าน apiPatch(activeDbId)
      System event → PATCH โดยตรงด้วย sysEvtId (DB pk ของ CalendarEvent)
      หลัง PATCH: อัพเดท sysEvents local copy → updateRevenueProgress()  */
+  /* Toggle switch — สลับ done/undone */
+  document.getElementById('toggleDone').addEventListener('change', function () {
+    if (!activeDbId && !activeEventProps) return;
+    const newDone = this.checked;
+    const label   = document.getElementById('toggleDoneLabel');
+    const titleEl = document.getElementById('modalTitle');
+    label.textContent = newDone ? 'เสร็จแล้ว ✓' : 'ยังไม่เสร็จ';
+    label.style.color = newDone ? 'var(--brand-green,#10b981)' : 'var(--brand-muted,#94a3b8)';
+    titleEl.classList.toggle('is-done', newDone);
+
+    const sysId = activeEventProps && activeEventProps.sysEvtId;
+    const patchId = activeDbId || sysId;
+    if (!patchId) return;
+    const patchUrl = activeDbId ? (API + activeDbId + '/') : ('/owner/api/events/' + sysId + '/');
+    fetch(patchUrl, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+      body:    JSON.stringify({ is_completed: newDone }),
+    }).then(function () {
+      showToast(newDone ? 'งานเสร็จแล้ว!' : 'ยกเลิกสถานะเสร็จแล้ว');
+      setTimeout(function () { detailModal && detailModal.hide(); cal.refetchEvents(); }, 400);
+    });
+  });
+
   document.getElementById('btnMarkDone').addEventListener('click', function () {
     if (!activeDbId && !activeEventProps) return;
 
