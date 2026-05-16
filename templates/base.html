@@ -364,48 +364,6 @@
           </a>
         </li>
 
-        {# ── Sales & CRM (Hustler + Customer Success) ── #}
-        <li class="nav-section-label" data-section>Sales &amp; CRM</li>
-
-        <li class="nav-item" data-label="leads ลูกค้า เป้าหมาย new">
-          <a href="{% url 'dashboard:leads' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %}">
-            <i class="bi bi-people-fill"></i>
-            <span class="nav-label">Leads ทั้งหมด</span>
-            {% if new_leads > 0 %}
-              <span class="badge rounded-pill bg-danger ms-auto" style="font-size:.6rem">{{ new_leads }}</span>
-            {% endif %}
-          </a>
-        </li>
-        <li class="nav-item" data-label="pipeline deal ดีล kanban">
-          <a href="{% url 'dashboard:pipeline' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'pipeline' %}active{% endif %}">
-            <i class="bi bi-kanban-fill"></i>
-            <span class="nav-label">Pipeline</span>
-          </a>
-        </li>
-        <li class="nav-item" data-label="customers ลูกค้า health retention">
-          <a href="{% url 'dashboard:customers' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'customers' %}active{% endif %}">
-            <i class="bi bi-people"></i>
-            <span class="nav-label">Customers</span>
-          </a>
-        </li>
-        <li class="nav-item" data-label="renewals ต่อสัญญา retention">
-          <a href="{% url 'dashboard:renewals' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'renewals' %}active{% endif %}">
-            <i class="bi bi-arrow-repeat"></i>
-            <span class="nav-label">Renewals</span>
-          </a>
-        </li>
-        <li class="nav-item" data-label="quotes ใบเสนอราคา proposal deal">
-          <a href="{% url 'dashboard:quotes' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'quotes' %}active{% endif %}">
-            <i class="bi bi-file-earmark-text"></i>
-            <span class="nav-label">Quote Builder</span>
-          </a>
-        </li>
-
         {# ── Marketing (Marketing Specialist + SEO + Content Writer) ── #}
         <li class="nav-section-label" data-section>Marketing</li>
 
@@ -445,6 +403,48 @@
              class="nav-link {% if request.resolver_match.url_name == 'keywords' %}active{% endif %}">
             <i class="bi bi-search"></i>
             <span class="nav-label">Keywords</span>
+          </a>
+        </li>
+
+        {# ── Sales & CRM (Hustler + Customer Success) ── #}
+        <li class="nav-section-label" data-section>Sales &amp; CRM</li>
+
+        <li class="nav-item" data-label="leads ลูกค้า เป้าหมาย new">
+          <a href="{% url 'dashboard:leads' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %}">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-label">Leads ทั้งหมด</span>
+            {% if new_leads > 0 %}
+              <span class="badge rounded-pill bg-danger ms-auto" style="font-size:.6rem">{{ new_leads }}</span>
+            {% endif %}
+          </a>
+        </li>
+        <li class="nav-item" data-label="pipeline deal ดีล kanban">
+          <a href="{% url 'dashboard:pipeline' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'pipeline' %}active{% endif %}">
+            <i class="bi bi-kanban-fill"></i>
+            <span class="nav-label">Pipeline</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="customers ลูกค้า health retention">
+          <a href="{% url 'dashboard:customers' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'customers' %}active{% endif %}">
+            <i class="bi bi-people"></i>
+            <span class="nav-label">Customers</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="renewals ต่อสัญญา retention">
+          <a href="{% url 'dashboard:renewals' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'renewals' %}active{% endif %}">
+            <i class="bi bi-arrow-repeat"></i>
+            <span class="nav-label">Renewals</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="quotes ใบเสนอราคา proposal deal">
+          <a href="{% url 'dashboard:quotes' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'quotes' %}active{% endif %}">
+            <i class="bi bi-file-earmark-text"></i>
+            <span class="nav-label">Quote Builder</span>
           </a>
         </li>
 
