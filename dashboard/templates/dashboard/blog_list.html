@@ -140,12 +140,12 @@
 {# ── Tabs: บทความ / Backlog ───────────────────────────────────────────────── #}
 <div class="ud-panel">
   <!-- === Premium Tab Bar === -->
-  <div class="prem-tabs">
-    <a class="prem-tab active" data-bs-toggle="tab" href="#tab-articles">
+  <div class="prem-tabs" role="tablist">
+    <a class="prem-tab active" data-bs-toggle="tab" href="#tab-articles" role="tab" aria-selected="true">
       <i class="bi bi-file-earmark-text"></i>บทความ
       {% if draft_count > 0 %}<span class="ds-badge ds-badge-warning">{{ draft_count }} draft</span>{% endif %}
     </a>
-    <a class="prem-tab" data-bs-toggle="tab" href="#tab-backlog">
+    <a class="prem-tab" data-bs-toggle="tab" href="#tab-backlog" role="tab" aria-selected="false">
       <i class="bi bi-list-task"></i>Backlog
       {% if backlog_pending %}<span class="ds-badge ds-badge-gold">{{ backlog_pending|length }}</span>{% endif %}
     </a>
@@ -353,6 +353,30 @@
 
 {% block extra_js %}
 <script>
+/* === Premium Tab switching === */
+(function () {
+  document.querySelectorAll('.prem-tab').forEach(function (tab) {
+    tab.addEventListener('click', function (e) {
+      e.preventDefault();
+      // Remove active from all tabs
+      document.querySelectorAll('.prem-tab').forEach(function (t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      // Activate clicked tab
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      // Show target pane
+      const target = document.querySelector(tab.getAttribute('href'));
+      document.querySelectorAll('.tab-pane').forEach(function (p) {
+        p.classList.remove('show', 'active');
+      });
+      if (target) { target.classList.add('show', 'active'); }
+    });
+  });
+})();
+
+/* === Toggle publish === */
 (function () {
   const csrfToken = '{{ csrf_token }}';
   const toast     = new bootstrap.Toast(document.getElementById('statusToast'), { delay: 2500 });
