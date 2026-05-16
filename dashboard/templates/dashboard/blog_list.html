@@ -121,6 +121,42 @@
     color: var(--brand-gold, #c9a96e) !important;
     background: rgba(201,169,110,.06);
   }
+
+  /* === Backlog Table === */
+  .bl-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .bl-table thead th {
+    font-size: .68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--brand-gold, #c9a96e);
+    background: rgba(201,169,110,.06);
+    padding: .7rem 1rem; border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    white-space: nowrap;
+  }
+  .bl-table tbody tr { border-bottom: 1px solid rgba(255,255,255,.04); transition: background .12s; }
+  .bl-table tbody tr:hover { background: rgba(201,169,110,.04); }
+  .bl-table tbody tr:last-child td { border-bottom: none; }
+  .bl-table tbody td { padding: .8rem 1rem; vertical-align: middle; }
+
+  .bl-num   { font-size: .7rem; color: var(--brand-muted, #94a3b8); font-weight: 600; min-width: 32px; }
+  .bl-topic { font-size: .88rem; font-weight: 600; color: #f1f5f9; line-height: 1.4; }
+  .bl-kw    { font-size: .78rem; color: var(--brand-muted, #94a3b8); margin-top: .15rem; }
+
+  /* Priority badges */
+  .bl-p1 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;
+    background:rgba(239,68,68,.15); color:#fca5a5; border:1px solid rgba(239,68,68,.3); }
+  .bl-p2 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;
+    background:rgba(245,158,11,.12); color:#fcd34d; border:1px solid rgba(245,158,11,.3); }
+  .bl-p3 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;
+    background:rgba(148,163,184,.08); color:var(--brand-muted,#94a3b8); border:1px solid rgba(148,163,184,.2); }
+
+  /* Status badges */
+  .s-pending  { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;
+    background:rgba(148,163,184,.1); color:var(--brand-muted,#94a3b8); border:1px solid rgba(148,163,184,.2); }
+  .s-review   { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;
+    background:rgba(201,169,110,.15); color:var(--brand-gold,#c9a96e); border:1px solid rgba(201,169,110,.3); }
+  .s-done     { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;
+    background:rgba(34,197,94,.12); color:#86efac; border:1px solid rgba(34,197,94,.25); }
+  .bl-done-row td { opacity: .5; }
+  .bl-done-row .bl-topic { text-decoration: line-through; }
 </style>
 {% endblock %}
 
@@ -275,60 +311,53 @@
     {# === TAB 2: Content Backlog === #}
     <div class="tab-pane fade" id="tab-backlog">
       <div class="p-3">
-        {% if backlog_pending %}
-        <div class="ds-section-label mb-3">รอดำเนินการ ({{ backlog_pending|length }})</div>
-        <div class="ds-table-wrap mb-4">
-          <div class="ds-table-scroll">
-            <table class="ds-table">
-              <thead>
-                <tr><th>#</th><th>หัวข้อ</th><th>Keyword</th><th>Priority</th><th>สถานะ</th></tr>
-              </thead>
-              <tbody>
-                {% for item in backlog_pending %}
-                <tr>
-                  <td class="td-muted">{{ item.num }}</td>
-                  <td class="td-primary">{{ item.topic }}</td>
-                  <td class="td-muted">{{ item.keyword|default:"—" }}</td>
-                  <td>
-                    <span class="ds-badge {% if item.priority == 'P1' %}ds-badge-danger{% elif item.priority == 'P2' %}ds-badge-warning{% else %}ds-badge-muted{% endif %}">
-                      {{ item.priority|default:"—" }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="ds-badge {% if item.status == 'review' %}ds-badge-gold{% else %}ds-badge-blue{% endif %}">
-                      {{ item.status }}
-                    </span>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        {% endif %}
-
-        {% if backlog_done %}
-        <div class="ds-section-label mb-3">เสร็จแล้ว ({{ backlog_done|length }})</div>
+        {% if backlog_pending or backlog_done %}
         <div class="ds-table-wrap">
-          <div class="ds-table-scroll">
-            <table class="ds-table">
-              <thead><tr><th>#</th><th>หัวข้อ</th><th>Keyword</th></tr></thead>
-              <tbody>
-                {% for item in backlog_done %}
-                <tr style="opacity:.55;">
-                  <td class="td-muted">{{ item.num }}</td>
-                  <td style="text-decoration:line-through;color:#94a3b8;">{{ item.topic }}</td>
-                  <td class="td-muted">{{ item.keyword|default:"—" }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+          <table class="bl-table">
+            <thead>
+              <tr>
+                <th style="width:42px;">#</th>
+                <th>หัวข้อ / Keyword</th>
+                <th style="width:80px;">Priority</th>
+                <th style="width:100px;">สถานะ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in backlog_pending %}
+              <tr>
+                <td class="bl-num">{{ item.num }}</td>
+                <td>
+                  <div class="bl-topic">{{ item.topic }}</div>
+                  {% if item.keyword %}<div class="bl-kw"><i class="bi bi-search" style="font-size:.65rem;margin-right:.25rem;"></i>{{ item.keyword }}</div>{% endif %}
+                </td>
+                <td>
+                  {% if item.priority == 'P1' %}<span class="bl-p1"><i class="bi bi-exclamation-circle-fill"></i>P1</span>
+                  {% elif item.priority == 'P2' %}<span class="bl-p2"><i class="bi bi-dash-circle-fill"></i>P2</span>
+                  {% elif item.priority == 'P3' %}<span class="bl-p3">P3</span>
+                  {% else %}<span class="bl-p3">—</span>{% endif %}
+                </td>
+                <td>
+                  {% if item.status == 'review' %}<span class="s-review"><i class="bi bi-eye-fill"></i>review</span>
+                  {% else %}<span class="s-pending"><i class="bi bi-clock"></i>pending</span>{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+              {% for item in backlog_done %}
+              <tr class="bl-done-row">
+                <td class="bl-num">{{ item.num }}</td>
+                <td>
+                  <div class="bl-topic">{{ item.topic }}</div>
+                  {% if item.keyword %}<div class="bl-kw">{{ item.keyword }}</div>{% endif %}
+                </td>
+                <td>—</td>
+                <td><span class="s-done"><i class="bi bi-check-circle-fill"></i>done</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-        {% endif %}
-
-        {% if not backlog_pending and not backlog_done %}
-        <div class="ds-empty-state">
+        {% else %}
+        <div class="ds-empty-state py-5">
           <i class="bi bi-list-task empty-icon"></i>
           <div class="empty-title">ยังไม่มี Backlog</div>
           <div class="empty-sub">เพิ่มหัวข้อใน content_backlog/BACKLOG.md</div>
