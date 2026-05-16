@@ -2,60 +2,78 @@
 {% load humanize %}
 {% block title %}Keywords — Marketing{% endblock %}
 {% block breadcrumb %}<li class="breadcrumb-item active">Keywords</li>{% endblock %}
+
 {% block extra_css %}
 <style>
-  .ds-table th { font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--bs-secondary-color); font-weight:600; }
-  .ds-table td { vertical-align:middle; font-size:.88rem; }
-  .ds-empty-state { padding:3rem 1rem; text-align:center; color:var(--bs-secondary-color); }
-  .ds-empty-state i { font-size:2.5rem; margin-bottom:1rem; display:block; }
-  .diff-bar { height:6px; border-radius:3px; background:#e9ecef; position:relative; width:80px; }
+  .diff-bar { height:5px; border-radius:3px; background:rgba(255,255,255,.08); width:70px; display:inline-block; vertical-align:middle; margin-right:.4rem; }
   .diff-fill { height:100%; border-radius:3px; }
 </style>
 {% endblock %}
+
 {% block content %}
-<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+<div class="ds-page-header d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
   <div>
-    <h4 class="mb-0 page-title">Keywords</h4>
-    <p class="mb-0 text-muted small">ติดตาม Keyword Ranking และวางแผน SEO</p>
+    <h4 class="page-title">Keywords</h4>
+    <div class="page-subtitle">ติดตาม Keyword Ranking และวางแผน SEO</div>
   </div>
-  <a href="{% url 'marketing:keyword_add' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>เพิ่ม Keyword</a>
+  <a href="{% url 'marketing:keyword_add' %}" class="btn btn-gold btn-sm px-3">
+    <i class="bi bi-plus-lg me-1"></i>เพิ่ม Keyword
+  </a>
 </div>
-<div class="card border-0 shadow-sm">
-  <div class="card-body p-0">
-    {% if keywords %}
-    <div class="table-responsive">
-      <table class="table ds-table table-hover mb-0">
-        <thead class="table-light">
-          <tr><th>Keyword</th><th>Intent</th><th>Volume</th><th>Difficulty</th><th>Rank</th><th>เป้า</th><th>บทความ</th><th class="text-end">Action</th></tr>
-        </thead>
-        <tbody>
-          {% for kw in keywords %}
-          <tr>
-            <td class="fw-semibold">{{ kw.keyword }}</td>
-            <td><span class="badge bg-light text-dark border" style="font-size:.65rem;">{{ kw.get_intent_display }}</span></td>
-            <td>{{ kw.search_volume|intcomma }}</td>
-            <td>
-              <div class="diff-bar"><div class="diff-fill" style="width:{{ kw.difficulty }}%;background:{% if kw.difficulty < 40 %}#198754{% elif kw.difficulty < 70 %}#ffc107{% else %}#dc3545{% endif %};"></div></div>
-              <small class="text-muted">{{ kw.difficulty }}</small>
-            </td>
-            <td class="fw-semibold">{% if kw.current_rank %}#{{ kw.current_rank }}{% else %}<span class="text-muted">—</span>{% endif %}</td>
-            <td class="text-muted small">{% if kw.target_position %}#{{ kw.target_position }}{% else %}—{% endif %}</td>
-            <td class="text-muted small">{{ kw.article.title|default:"—"|truncatechars:30 }}</td>
-            <td class="text-end">
-              <a href="{% url 'marketing:keyword_edit' kw.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2"><i class="bi bi-pencil"></i></a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    {% else %}
-    <div class="ds-empty-state">
-      <i class="bi bi-search"></i>
-      <div class="fw-semibold mb-1">ยังไม่มี Keyword</div>
-      <a href="{% url 'marketing:keyword_add' %}" class="btn btn-outline-primary btn-sm mt-2"><i class="bi bi-plus-lg me-1"></i>เพิ่ม Keyword แรก</a>
-    </div>
-    {% endif %}
+
+<div class="ds-table-wrap">
+  {% if keywords %}
+  <div class="ds-table-scroll">
+    <table class="ds-table">
+      <thead>
+        <tr>
+          <th>Keyword</th>
+          <th>Intent</th>
+          <th>Volume</th>
+          <th>Difficulty</th>
+          <th>Rank</th>
+          <th>เป้า</th>
+          <th>บทความ</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for kw in keywords %}
+        <tr>
+          <td class="td-primary">{{ kw.keyword }}</td>
+          <td>
+            <span class="ds-badge
+              {% if kw.intent == 'trans' %}ds-badge-success
+              {% elif kw.intent == 'commercial' %}ds-badge-warning
+              {% elif kw.intent == 'nav' %}ds-badge-blue
+              {% else %}ds-badge-muted{% endif %}">
+              {{ kw.get_intent_display|truncatechars:12 }}
+            </span>
+          </td>
+          <td class="td-muted">{{ kw.search_volume|intcomma }}</td>
+          <td>
+            <div class="diff-bar">
+              <div class="diff-fill" style="width:{{ kw.difficulty }}%;background:{% if kw.difficulty < 40 %}var(--brand-green){% elif kw.difficulty < 70 %}#fbbf24{% else %}#f87171{% endif %};"></div>
+            </div>
+            <span class="td-muted">{{ kw.difficulty }}</span>
+          </td>
+          <td class="fw-semibold" style="color:#f1f5f9;">{% if kw.current_rank %}#{{ kw.current_rank }}{% else %}<span class="td-muted">—</span>{% endif %}</td>
+          <td class="td-muted">{% if kw.target_position %}#{{ kw.target_position }}{% else %}—{% endif %}</td>
+          <td class="td-muted">{{ kw.article.title|default:"—"|truncatechars:28 }}</td>
+          <td class="text-end">
+            <a href="{% url 'marketing:keyword_edit' kw.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2"><i class="bi bi-pencil"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
+  {% else %}
+  <div class="ds-empty-state">
+    <i class="bi bi-search empty-icon"></i>
+    <div class="empty-title">ยังไม่มี Keyword</div>
+    <a href="{% url 'marketing:keyword_add' %}" class="btn btn-gold btn-sm px-4 mt-2"><i class="bi bi-plus-lg me-1"></i>เพิ่ม Keyword แรก</a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

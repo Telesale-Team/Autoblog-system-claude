@@ -942,3 +942,301 @@ header.masthead .post-heading .meta a { color: #fff; }
     padding: 0.75rem 0 !important;
   }
 }
+
+
+/* ============================================================
+   PREMIUM DASHBOARD DESIGN SYSTEM v2
+   Owner Dashboard — Dark + Gold tokens
+   ============================================================ */
+
+:root {
+  --dash-surface:       #111827;
+  --dash-surface-2:     #1a2235;
+  --dash-border:        rgba(201,169,110,.15);
+  --dash-glow-gold:     rgba(201,169,110,.25);
+  --dash-glow-green:    rgba(16,185,129,.18);
+  --dash-glow-red:      rgba(239,68,68,.18);
+  --dash-glow-blue:     rgba(59,130,246,.18);
+  --shadow-card:        0 4px 24px rgba(0,0,0,.45), 0 1px 4px rgba(0,0,0,.3);
+  --shadow-card-hover:  0 8px 40px rgba(0,0,0,.55), 0 2px 8px rgba(201,169,110,.12);
+  --radius-card:        12px;
+  --radius-badge:       6px;
+  --transition-ui:      0.18s cubic-bezier(.4,0,.2,1);
+}
+
+/* === ds-card-stat — KPI / Metric card === */
+.ds-card-stat {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--radius-card);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-ui), transform var(--transition-ui), border-color var(--transition-ui);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+.ds-card-stat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--brand-gold) 0%, transparent 100%);
+}
+.ds-card-stat:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+  border-color: rgba(201,169,110,.3);
+}
+.ds-card-stat .stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: rgba(201,169,110,.12);
+  border: 1px solid rgba(201,169,110,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  color: var(--brand-gold);
+  flex-shrink: 0;
+  margin-bottom: .9rem;
+}
+.ds-card-stat .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.1;
+  margin-bottom: .25rem;
+}
+.ds-card-stat .stat-label {
+  font-size: .75rem;
+  color: var(--brand-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 600;
+}
+.ds-card-stat .stat-delta {
+  display: inline-flex; align-items: center; gap: .2rem;
+  font-size: .78rem; font-weight: 600;
+  padding: .15rem .5rem;
+  border-radius: 20px;
+  margin-top: .4rem;
+}
+.ds-card-stat .stat-delta.up   { color: var(--brand-green); background: var(--dash-glow-green); }
+.ds-card-stat .stat-delta.down { color: #f87171; background: var(--dash-glow-red); }
+.ds-card-stat .stat-delta.flat { color: var(--brand-muted); background: rgba(148,163,184,.1); }
+
+/* === ds-page-header === */
+.ds-page-header {
+  padding: 0 0 1.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--dash-border);
+  position: relative;
+}
+.ds-page-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 48px; height: 2px;
+  background: var(--brand-gold);
+  border-radius: 1px;
+}
+.ds-page-header .page-title {
+  font-size: 1.35rem !important;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 !important;
+  line-height: 1.3;
+}
+.ds-page-header .page-subtitle {
+  font-size: .85rem;
+  color: var(--brand-muted);
+  margin-top: .2rem;
+}
+
+/* === ds-badge — Status badge with dot indicator === */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .2rem .6rem;
+  border-radius: var(--radius-badge);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.ds-badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: .8;
+}
+.ds-badge-success {
+  color: var(--brand-green);
+  background: var(--dash-glow-green);
+  border-color: rgba(16,185,129,.25);
+}
+.ds-badge-warning {
+  color: #fbbf24;
+  background: rgba(251,191,36,.12);
+  border-color: rgba(251,191,36,.25);
+}
+.ds-badge-danger {
+  color: #f87171;
+  background: var(--dash-glow-red);
+  border-color: rgba(239,68,68,.25);
+}
+.ds-badge-gold {
+  color: var(--brand-gold);
+  background: var(--dash-glow-gold);
+  border-color: rgba(201,169,110,.3);
+}
+.ds-badge-blue {
+  color: #60a5fa;
+  background: var(--dash-glow-blue);
+  border-color: rgba(59,130,246,.25);
+}
+.ds-badge-muted {
+  color: var(--brand-muted);
+  background: rgba(148,163,184,.08);
+  border-color: rgba(148,163,184,.2);
+}
+
+/* === ds-table — Premium data table === */
+.ds-table-wrap {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.ds-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  font-family: var(--font-th);
+}
+.ds-table thead th {
+  background: rgba(201,169,110,.06);
+  color: var(--brand-gold);
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: .85rem 1.1rem;
+  border-bottom: 1px solid var(--dash-border);
+  white-space: nowrap;
+}
+.ds-table tbody tr {
+  transition: background var(--transition-ui);
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.ds-table tbody tr:hover { background: rgba(201,169,110,.04); }
+.ds-table tbody tr:last-child td { border-bottom: none; }
+.ds-table tbody td {
+  padding: .85rem 1.1rem;
+  color: #cbd5e1;
+  font-size: .88rem;
+  vertical-align: middle;
+}
+.ds-table .td-primary {
+  color: #f1f5f9;
+  font-weight: 500;
+}
+.ds-table .td-muted { color: var(--brand-muted); font-size: .82rem; }
+.ds-table .td-amount {
+  font-weight: 700;
+  color: #f1f5f9;
+  font-variant-numeric: tabular-nums;
+}
+/* ── Responsive scroll wrapper ── */
+.ds-table-scroll { overflow-x: auto; }
+@media (max-width: 575px) {
+  .ds-table thead th,
+  .ds-table tbody td { padding: .65rem .75rem; font-size: .82rem; }
+}
+
+/* === ds-empty-state — Empty state placeholder === */
+.ds-empty-state {
+  padding: 3.5rem 1rem;
+  text-align: center;
+}
+.ds-empty-state .empty-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+  color: var(--brand-muted);
+  opacity: .5;
+}
+.ds-empty-state .empty-title {
+  font-size: .95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: .4rem;
+}
+.ds-empty-state .empty-sub {
+  font-size: .83rem;
+  color: var(--brand-muted);
+  margin-bottom: 1.25rem;
+}
+
+/* === ds-section-label — Sub-section divider === */
+.ds-section-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--brand-gold);
+  margin-bottom: 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--dash-border);
+  position: relative;
+}
+.ds-section-label::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 32px; height: 1px;
+  background: var(--brand-gold);
+}
+
+/* === Sidebar nav — upgrade layer (on top of existing base.html styles) === */
+#sidebar .nav-link.active {
+  background: linear-gradient(90deg,
+    rgba(201,169,110,.18) 0%,
+    rgba(201,169,110,.05) 100%) !important;
+  box-shadow: inset 0 0 12px rgba(201,169,110,.05);
+}
+#sidebar .nav-link.active i {
+  color: var(--brand-gold) !important;
+  filter: drop-shadow(0 0 4px rgba(201,169,110,.5));
+}
+#sidebar .nav-link:not(.active):hover i {
+  color: rgba(201,169,110,.7) !important;
+  transition: color var(--transition-ui);
+}
+
+/* === Card upgrade for non-stat cards === */
+.dash-card {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: box-shadow var(--transition-ui), border-color var(--transition-ui);
+}
+.dash-card:hover { border-color: rgba(201,169,110,.25); }
+.dash-card .dash-card-header {
+  background: rgba(201,169,110,.05);
+  border-bottom: 1px solid var(--dash-border);
+  padding: .75rem 1.25rem;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--brand-gold);
+}
+.dash-card .dash-card-body { padding: 1.25rem; }

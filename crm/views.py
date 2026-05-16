@@ -16,6 +16,8 @@ def customer_list(request):
     return render(request, "crm/customer_list.html", {
         "customers": customers,
         "total_value": total_value,
+        "healthy_count": customers.filter(health_score__gte=70).count(),
+        "tier_a_count": customers.filter(tier="A").count(),
         "today": timezone.now().date(),
     })
 
