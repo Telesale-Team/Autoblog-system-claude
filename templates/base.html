@@ -47,14 +47,26 @@
     /* === Sidebar === */
     #sidebar {
       width: var(--sidebar-width);
-      min-height: 100vh;
+      height: 100vh;
       position: fixed;
       top: 0; left: 0;
       z-index: 1040;
       background: var(--brand-navy, #1a2744);
       transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    #sidebar-nav-scroll {
+      flex: 1;
       overflow-y: auto;
-      padding-bottom: env(safe-area-inset-bottom, 1rem);
+      overflow-x: hidden;
+    }
+    #sidebar-bottom {
+      flex-shrink: 0;
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding: .4rem .5rem;
+      background: var(--brand-navy, #1a2744);
+      padding-bottom: env(safe-area-inset-bottom, .5rem);
     }
     #sidebar .sidebar-brand {
       padding: 1.2rem 1rem;
@@ -197,7 +209,10 @@
 
     {# Pre-compute counts for badges — guard against missing context vars #}
     {% with new_leads=sidebar_new_leads|default:0 draft_articles=sidebar_draft_articles|default:0 %}
-    <ul class="nav flex-column mt-2 px-1 pb-4">
+
+    {# === Scrollable nav area === #}
+    <div id="sidebar-nav-scroll">
+    <ul class="nav flex-column mt-2 px-1 pb-2">
 
       <li class="nav-section-label">หน้าหลัก</li>
 
@@ -294,26 +309,32 @@
         </a>
       </li>
 
-      <li class="nav-section-label">ระบบ</li>
-
-      <li class="nav-item">
-        <a href="/admin/" class="nav-link" target="_blank" rel="noopener">
-          <i class="bi bi-shield-lock-fill"></i> Django Admin
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'settings:index' %}"
-           class="nav-link {% if 'settings' in request.resolver_match.namespace %}active{% endif %}">
-          <i class="bi bi-gear-fill"></i> ตั้งค่า
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'accounts:logout' %}" class="nav-link">
-          <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
-        </a>
-      </li>
-
     </ul>
+    </div>
+
+    {# === Pinned bottom: ระบบ — เห็นเสมอไม่ต้อง scroll === #}
+    <div id="sidebar-bottom">
+      <ul class="nav flex-column px-1">
+        <li class="nav-section-label" style="padding-top:.5rem">ระบบ</li>
+        <li class="nav-item">
+          <a href="/admin/" class="nav-link" target="_blank" rel="noopener">
+            <i class="bi bi-shield-lock-fill"></i> Django Admin
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'settings:index' %}"
+             class="nav-link {% if 'settings' in request.resolver_match.namespace %}active{% endif %}">
+            <i class="bi bi-gear-fill"></i> ตั้งค่าระบบ
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'accounts:logout' %}" class="nav-link">
+            <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
+          </a>
+        </li>
+      </ul>
+    </div>
+
     {% endwith %}
   </nav>
   {# === END SIDEBAR === #}
