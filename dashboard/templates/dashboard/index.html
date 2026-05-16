@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load humanize %}
 
-{% block title %}Dashboard — Owner Overview{% endblock %}
+{% block title %}Dashboard — {{ user_settings.company_name|default:"AIBiz Thailand" }}{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item active">Dashboard</li>
@@ -9,383 +9,305 @@
 
 {% block extra_css %}
 <style>
-  .kpi-delta-up   { color: #198754; font-size: .8rem; }
-  .kpi-delta-down { color: #dc3545; font-size: .8rem; }
-  .kpi-delta-flat { color: #6c757d; font-size: .8rem; }
+  /* === Unified Dashboard === */
+  .ud-chart-card {
+    background: var(--dash-surface, #111827);
+    border: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    border-radius: 12px;
+    height: 100%;
+    overflow: hidden;
+    box-shadow: var(--shadow-card, 0 4px 24px rgba(0,0,0,.35));
+  }
+  .ud-chart-head {
+    padding: .65rem 1.1rem;
+    border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--brand-gold, #c9a96e);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    background: rgba(201,169,110,.05);
+  }
+  .ud-chart-card canvas { max-height: 220px; }
 
+  .ud-panel {
+    background: var(--dash-surface, #111827);
+    border: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    border-radius: 12px;
+    height: 100%;
+    overflow: hidden;
+    box-shadow: var(--shadow-card, 0 4px 24px rgba(0,0,0,.35));
+  }
+  .ud-panel-head {
+    padding: .65rem 1.1rem;
+    border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--brand-gold, #c9a96e);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    background: rgba(201,169,110,.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ud-panel-body { padding: .85rem 1.1rem; }
+
+  .table-compact th {
+    font-size: .68rem; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--brand-gold, #c9a96e); font-weight: 700; white-space: nowrap;
+    background: rgba(201,169,110,.05); border-bottom-width: 1px; padding: .55rem .85rem;
+  }
+  .table-compact td { font-size: .83rem; vertical-align: middle; padding: .6rem .85rem; }
+  .table-compact tr:hover td { background: rgba(201,169,110,.03); }
+
+  /* Alert smart */
   .alert-smart {
-    border-left: 4px solid;
-    border-radius: .4rem;
-    padding: .7rem 1rem;
-    margin-bottom: .6rem;
-    font-size: .93rem;
+    border-left: 3px solid; border-radius: .4rem;
+    padding: .55rem .9rem; margin-bottom: .45rem; font-size: .87rem;
+    display: flex; align-items: center; gap: .6rem;
   }
   .alert-smart.danger  { border-color: #dc3545; background: rgba(220,53,69,.07); }
   .alert-smart.warning { border-color: #ffc107; background: rgba(255,193,7,.07); }
-  .alert-smart.success { border-color: #198754; background: rgba(25,135,84,.07); }
-  .alert-smart.primary { border-color: var(--app-primary); background: rgba(201,169,110,.07); }
+  .alert-smart.primary { border-color: var(--brand-gold,#c9a96e); background: rgba(201,169,110,.07); }
   .alert-smart.orange  { border-color: #fd7e14; background: rgba(253,126,20,.07); }
 
-  .alert-smart .alert-link-danger  { color: #dc3545; font-weight: 600; }
-  .alert-smart .alert-link-warning { color: #856404; font-weight: 600; }
-  .alert-smart .alert-link-primary { color: var(--app-primary); font-weight: 600; }
-  .alert-smart .alert-link-orange  { color: #fd7e14; font-weight: 600; }
+  /* Pipeline bars */
+  .pipeline-bar-wrap { display: flex; align-items: center; gap: .6rem; margin-bottom: .4rem; }
+  .pipeline-bar-label { font-size: .75rem; color: var(--brand-muted,#94a3b8); min-width: 80px; }
+  .pipeline-bar-bg { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.07); }
+  .pipeline-bar-fill { height: 100%; border-radius: 3px; background: var(--brand-gold,#c9a96e); }
+  .pipeline-bar-count { font-size: .72rem; color: var(--brand-muted); min-width: 24px; text-align: right; }
 
-  .table-dashboard th {
-    font-size: .72rem;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--bs-secondary-color);
-    font-weight: 600;
-    border-bottom-width: 1px;
-  }
-  .table-dashboard td { vertical-align: middle; font-size: .9rem; }
+  .kpi-delta-up   { color: #10b981; font-size: .78rem; }
+  .kpi-delta-down { color: #f87171; font-size: .78rem; }
+  .kpi-delta-flat { color: var(--brand-muted,#94a3b8); font-size: .78rem; }
 
-  .status-badge {
-    font-size: .7rem;
-    padding: .25em .65em;
-    border-radius: 999px;
-    font-weight: 600;
-    letter-spacing: .03em;
-  }
-  .status-new        { background: #fff3cd; color: #856404; }
-  .status-contacted  { background: #cff4fc; color: #055160; }
-  .status-qualified  { background: #cfe2ff; color: #084298; }
-  .status-closed_won { background: #d1e7dd; color: #0a3622; }
-  .status-closed_lost{ background: #e2e3e5; color: #41464b; }
-
-  .quick-action-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: .4rem;
-    padding: 1rem .75rem;
-    border-radius: .6rem;
-    border: 1px solid var(--bs-border-color);
-    background: var(--bs-body-bg);
-    color: var(--bs-body-color);
-    text-decoration: none;
-    transition: background .2s, border-color .2s, box-shadow .2s;
-    font-size: .85rem;
-    font-weight: 500;
-  }
-  .quick-action-btn i { font-size: 1.4rem; color: var(--app-primary); }
-  .quick-action-btn:hover {
-    background: rgba(201,169,110,.08);
-    border-color: var(--app-primary);
-    box-shadow: 0 3px 12px rgba(0,0,0,.07);
-    color: var(--app-primary);
-  }
+  .views-bar { height: 5px; border-radius: 3px; background: linear-gradient(90deg, var(--brand-gold,#c9a96e), rgba(201,169,110,.3)); }
 </style>
 {% endblock %}
 
 {% block content %}
 
-{# ── Page Header ─────────────────────────────────────────────────────────── #}
-<div class="d-flex align-items-center justify-content-between mb-4">
+<!-- === Page Header + Clock === -->
+<div class="ds-page-header d-flex align-items-end justify-content-between flex-wrap gap-3 mb-3">
   <div>
-    <h4 class="mb-0 page-title">Owner Dashboard</h4>
-    <p class="mb-0 text-muted small">ภาพรวมธุรกิจ — อัปเดตแบบ real-time</p>
+    <h4 class="page-title">Dashboard</h4>
+    <div class="page-subtitle">ภาพรวมธุรกิจ — อัปเดตแบบ real-time</div>
   </div>
   <span class="text-muted small"><i class="bi bi-clock me-1"></i>{% now "j M Y, H:i" %}</span>
 </div>
 
-{# ── Smart Alerts ─────────────────────────────────────────────────────────── #}
+<!-- === Smart Alerts === -->
 {% if today_actions %}
-<div class="mb-4">
-  <p class="fw-semibold mb-2 small text-uppercase text-secondary" style="letter-spacing:.07em">
-    <i class="bi bi-lightning-charge-fill me-1 text-gold"></i>วันนี้ต้องทำ
-  </p>
+<div class="mb-3">
   {% for action in today_actions %}
-  <div class="alert-smart {{ action.type }} d-flex align-items-center gap-2">
+  <div class="alert-smart {{ action.type }}">
     <i class="bi {{ action.icon }}
-      {% if action.type == 'danger' %}text-danger{% elif action.type == 'warning' %}text-warning{% elif action.type == 'orange' %}text-warning{% else %}text-primary{% endif %}"></i>
-    <span>
-      {{ action.text }} —
-      <a href="{% url 'dashboard:index' %}{{ action.url }}"
-         class="alert-link-{{ action.type }}">ไปจัดการ</a>
-    </span>
+      {% if action.type == 'danger' %}text-danger
+      {% elif action.type == 'warning' %}text-warning
+      {% elif action.type == 'orange' %}text-warning
+      {% else %}text-gold{% endif %}"></i>
+    <span>{{ action.text }} — <a href="{% url 'dashboard:index' %}{{ action.url }}" class="fw-semibold" style="color:inherit">ไปจัดการ →</a></span>
   </div>
   {% endfor %}
 </div>
 {% endif %}
 
-{# ── 6 KPI Cards ──────────────────────────────────────────────────────────── #}
-<div class="row g-3 mb-4">
-
-  {# KPI 1 — Lead ใหม่วันนี้ + source #}
-  <div class="col-6 col-xl-4">
-    <div class="stat-card h-100">
-      <div class="d-flex align-items-start justify-content-between">
-        <div>
-          <div class="stat-label">Lead ใหม่วันนี้</div>
-          <div class="stat-value">{{ leads_today|intcomma }}</div>
-          <div class="mt-1">
-            {% if leads_today_sources %}
-              {% for s in leads_today_sources %}
-                <span class="kpi-delta-flat" style="font-size:.75rem"><i class="bi bi-dot"></i>{{ s.source }}: {{ s.count }}</span>
-              {% endfor %}
-            {% else %}
-              <span class="kpi-delta-flat"><i class="bi bi-dash"></i> ยังไม่มีวันนี้</span>
-            {% endif %}
-          </div>
-        </div>
-        <div class="stat-icon"><i class="bi bi-person-plus-fill"></i></div>
+<!-- === ROW 1: KPI Cards === -->
+<div class="row g-3 mb-3">
+  <div class="col-6 col-xl-3">
+    <div class="ds-card-stat">
+      <div class="stat-icon"><i class="bi bi-person-plus-fill"></i></div>
+      <div class="stat-value">{{ leads_today|intcomma }}</div>
+      <div class="stat-label">Lead ใหม่วันนี้</div>
+      <div class="stat-delta flat">MQL สะสม {{ mql_total|intcomma }}</div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="ds-card-stat">
+      <div class="stat-icon" style="background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.2);color:#60a5fa;">
+        <i class="bi bi-funnel-fill"></i>
+      </div>
+      <div class="stat-value" style="color:#60a5fa;">{{ active_pipeline|intcomma }}</div>
+      <div class="stat-label">Active Pipeline</div>
+      <div class="stat-delta {% if leads_delta_pct > 0 %}up{% elif leads_delta_pct < 0 %}down{% else %}flat{% endif %}">
+        {% if leads_delta_pct > 0 %}<i class="bi bi-arrow-up-short"></i>{{ leads_delta_pct }}% MoM
+        {% elif leads_delta_pct < 0 %}<i class="bi bi-arrow-down-short"></i>{{ leads_delta_pct|cut:"-" }}% MoM
+        {% else %}<i class="bi bi-dash"></i>เท่าเดือนที่แล้ว{% endif %}
       </div>
     </div>
   </div>
-
-  {# KPI 2 — Active Pipeline #}
-  <div class="col-6 col-xl-4">
-    <div class="stat-card h-100">
-      <div class="d-flex align-items-start justify-content-between">
-        <div>
-          <div class="stat-label">Active Pipeline</div>
-          <div class="stat-value">{{ active_pipeline|intcomma }}</div>
-          <div class="mt-1">
-            {% for p in pipeline_by_status %}
-              <span class="kpi-delta-flat" style="font-size:.75rem"><i class="bi bi-dot"></i>{{ p.status }}: {{ p.count }}</span>
-            {% empty %}
-              <span class="kpi-delta-flat"><i class="bi bi-check-circle me-1"></i>ไม่มีดีลค้าง</span>
-            {% endfor %}
-          </div>
-        </div>
-        <div class="stat-icon"><i class="bi bi-funnel-fill"></i></div>
+  <div class="col-6 col-xl-3">
+    <div class="ds-card-stat">
+      <div class="stat-icon" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.2);color:#34d399;">
+        <i class="bi bi-eye-fill"></i>
+      </div>
+      <div class="stat-value" style="color:#34d399;">{{ total_views|intcomma }}</div>
+      <div class="stat-label">Blog Views สะสม</div>
+      <div class="stat-delta flat">{{ published_articles }} บทความ published</div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="ds-card-stat">
+      <div class="stat-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2);color:#fbbf24;">
+        <i class="bi bi-pencil-square"></i>
+      </div>
+      <div class="stat-value" style="color:#fbbf24;">{{ articles_this_week }}<span style="font-size:.9rem;opacity:.6;">/{{ article_weekly_goal }}</span></div>
+      <div class="stat-label">บทความสัปดาห์นี้</div>
+      <div class="stat-delta {% if articles_this_week >= article_weekly_goal %}up{% else %}down{% endif %}">
+        {% if articles_this_week >= article_weekly_goal %}<i class="bi bi-check-circle me-1"></i>ครบเป้า
+        {% else %}<i class="bi bi-exclamation-circle me-1"></i>ขาดอีก {{ article_weekly_goal|add:"-"|add:articles_this_week }} ชิ้น{% endif %}
       </div>
     </div>
   </div>
-
-  {# KPI 3 — Blog views สะสม #}
-  <div class="col-6 col-xl-4">
-    <div class="stat-card h-100">
-      <div class="d-flex align-items-start justify-content-between">
-        <div>
-          <div class="stat-label">Blog Views สะสม</div>
-          <div class="stat-value">{{ total_views|intcomma }}</div>
-          <div class="mt-1 kpi-delta-flat" style="font-size:.75rem"><i class="bi bi-eye me-1"></i>ทุกบทความ — ยังไม่มี GA</div>
-        </div>
-        <div class="stat-icon"><i class="bi bi-eye-fill"></i></div>
-      </div>
-    </div>
-  </div>
-
-  {# KPI 4 — บทความสัปดาห์นี้ #}
-  <div class="col-6 col-xl-4">
-    <div class="stat-card h-100">
-      <div class="d-flex align-items-start justify-content-between">
-        <div>
-          <div class="stat-label">บทความสัปดาห์นี้</div>
-          <div class="stat-value">{{ articles_this_week }}<span class="stat-label">/{{ article_weekly_goal }}</span></div>
-          <div class="mt-1">
-            {% if articles_this_week >= article_weekly_goal %}
-              <span class="kpi-delta-up"><i class="bi bi-check-circle me-1"></i>ครบเป้าแล้ว</span>
-            {% else %}
-              <span class="kpi-delta-down"><i class="bi bi-exclamation-circle me-1"></i>ขาดอีก {{ article_weekly_goal|add:"-"|add:articles_this_week }} ชิ้น</span>
-            {% endif %}
-          </div>
-        </div>
-        <div class="stat-icon"><i class="bi bi-pencil-square"></i></div>
-      </div>
-    </div>
-  </div>
-
-  {# KPI 5 — MQL สะสม #}
-  <div class="col-6 col-xl-4">
-    <div class="stat-card h-100">
-      <div class="d-flex align-items-start justify-content-between">
-        <div>
-          <div class="stat-label">MQL สะสม</div>
-          <div class="stat-value">{{ mql_total|intcomma }}</div>
-          <div class="mt-1">
-            {% if leads_delta_pct > 0 %}
-              <span class="kpi-delta-up"><i class="bi bi-arrow-up-short"></i>{{ leads_delta_pct }}% เดือนนี้</span>
-            {% elif leads_delta_pct < 0 %}
-              <span class="kpi-delta-down"><i class="bi bi-arrow-down-short"></i>{{ leads_delta_pct|cut:"-" }}% เดือนนี้</span>
-            {% else %}
-              <span class="kpi-delta-flat"><i class="bi bi-dash"></i> เท่าเดือนที่แล้ว</span>
-            {% endif %}
-          </div>
-        </div>
-        <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
-      </div>
-    </div>
-  </div>
-
-  {# KPI 6 — วันนี้ต้องทำ #}
-  <div class="col-6 col-xl-4">
-    <div class="stat-card h-100">
-      <div class="d-flex align-items-start justify-content-between">
-        <div>
-          <div class="stat-label">วันนี้ต้องทำ</div>
-          <div class="stat-value">{{ today_actions|length }}</div>
-          <div class="mt-1">
-            {% if today_actions %}
-              <span class="kpi-delta-down"><i class="bi bi-arrow-down me-1"></i>ดู Smart Alerts ด้านล่าง</span>
-            {% else %}
-              <span class="kpi-delta-up"><i class="bi bi-check-circle me-1"></i>ไม่มี action ค้าง</span>
-            {% endif %}
-          </div>
-        </div>
-        <div class="stat-icon"><i class="bi bi-check2-circle"></i></div>
-      </div>
-    </div>
-  </div>
-
 </div>
 
-{# ── Leads Chart + Quick Actions ──────────────────────────────────────────── #}
-<div class="row g-3 mb-4">
+<!-- === ROW 2: Charts 7:5 === -->
+<div class="row g-3 mb-3">
 
-  {# Chart — Leads 30 วัน #}
-  <div class="col-lg-8">
-    <div class="card border h-100" style="border-radius:.6rem">
-      <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-2">
-        <span class="fw-semibold small">Leads 30 วันที่ผ่านมา</span>
-        <a href="{% url 'dashboard:leads' %}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem">ดูทั้งหมด</a>
-      </div>
-      <div class="card-body" style="min-height:220px">
-        <canvas id="leadsChart"></canvas>
-      </div>
+  <!-- Weekly Trend -->
+  <div class="col-md-7">
+    <div class="ud-chart-card">
+      <div class="ud-chart-head"><i class="bi bi-graph-up me-2"></i>Weekly Trend — Leads &amp; Content (12 สัปดาห์)</div>
+      <div class="p-3"><canvas id="weeklyChart"></canvas></div>
     </div>
   </div>
 
-  {# Quick Actions #}
-  <div class="col-lg-4">
-    <div class="card border h-100" style="border-radius:.6rem">
-      <div class="card-header bg-transparent border-bottom py-2">
-        <span class="fw-semibold small">Quick Actions</span>
-      </div>
-      <div class="card-body d-flex flex-column gap-2 justify-content-center">
-        <div class="row g-2">
-          <div class="col-6">
-            <a href="/admin/pages/contactlead/add/" target="_blank" rel="noopener" class="quick-action-btn w-100">
-              <i class="bi bi-person-plus-fill"></i>
-              <span>เพิ่ม Lead</span>
-            </a>
-          </div>
-          <div class="col-6">
-            <a href="{% url 'dashboard:blog' %}" class="quick-action-btn w-100">
-              <i class="bi bi-pencil-square"></i>
-              <span>จัดการ Blog</span>
-            </a>
-          </div>
-          <div class="col-6">
-            <a href="{% url 'dashboard:leads' %}" class="quick-action-btn w-100">
-              <i class="bi bi-people-fill"></i>
-              <span>ดู Leads</span>
-            </a>
-          </div>
-          <div class="col-6">
-            <a href="/admin/" target="_blank" rel="noopener" class="quick-action-btn w-100">
-              <i class="bi bi-shield-lock-fill"></i>
-              <span>Django Admin</span>
-            </a>
-          </div>
-          <div class="col-6">
-            <a href="{% url 'settings:index' %}" class="quick-action-btn w-100">
-              <i class="bi bi-gear-fill"></i>
-              <span>ตั้งค่าระบบ</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-{# ── Recent Leads + Top Articles ──────────────────────────────────────────── #}
-<div class="row g-3">
-
-  {# Recent Leads table #}
-  <div class="col-lg-7">
-    <div class="card border" style="border-radius:.6rem">
-      <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-2">
-        <span class="fw-semibold small">Leads ล่าสุด</span>
-        <a href="{% url 'dashboard:leads' %}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem">ดูทั้งหมด</a>
-      </div>
-      <div class="card-body p-0">
-        {% if recent_leads %}
-        <div class="table-responsive">
-          <table class="table table-dashboard table-hover mb-0">
-            <thead>
-              <tr>
-                <th class="ps-3">ชื่อ</th>
-                <th>บริษัท</th>
-                <th>สถานะ</th>
-                <th class="pe-3">วันที่</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for lead in recent_leads %}
-              <tr>
-                <td class="ps-3">
-                  <div class="fw-semibold" style="font-size:.88rem">{{ lead.name }}</div>
-                  <div class="text-muted" style="font-size:.75rem">{{ lead.email }}</div>
-                </td>
-                <td>
-                  <span class="text-muted" style="font-size:.85rem">{{ lead.company|default:"—" }}</span>
-                </td>
-                <td>
-                  <span class="status-badge status-{{ lead.status }}">{{ lead.get_status_display }}</span>
-                </td>
-                <td class="pe-3 text-muted" style="font-size:.8rem">{{ lead.created_at|date:"d M" }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+  <!-- Lead Source Pie -->
+  <div class="col-md-5">
+    <div class="ud-chart-card">
+      <div class="ud-chart-head"><i class="bi bi-pie-chart-fill me-2"></i>Lead Source</div>
+      <div class="p-3 d-flex justify-content-center align-items-center" style="min-height:200px;">
+        {% if leads_by_source %}
+        <canvas id="sourceChart" style="max-width:200px;max-height:200px;"></canvas>
         {% else %}
-        <div class="text-center text-muted py-5">
-          <i class="bi bi-inbox fs-2"></i>
-          <p class="mt-2 mb-0 small">ยังไม่มี leads</p>
-        </div>
+        <div class="text-center text-muted"><i class="bi bi-pie-chart" style="font-size:2rem;opacity:.3;display:block;margin-bottom:.5rem;"></i><small>ยังไม่มีข้อมูล</small></div>
         {% endif %}
       </div>
     </div>
   </div>
 
-  {# Top Articles table #}
-  <div class="col-lg-5">
-    <div class="card border" style="border-radius:.6rem">
-      <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-2">
-        <span class="fw-semibold small">บทความ Top Views</span>
-        <a href="{% url 'dashboard:blog' %}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem">ดูทั้งหมด</a>
+</div>
+
+<!-- === ROW 3: Pipeline + Recent Articles === -->
+<div class="row g-3 mb-3">
+
+  <!-- Pipeline Summary -->
+  <div class="col-md-5">
+    <div class="ud-panel">
+      <div class="ud-panel-head">
+        <span><i class="bi bi-funnel-fill me-2"></i>Pipeline</span>
+        <a href="{% url 'dashboard:pipeline' %}" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size:.7rem;">ดูทั้งหมด</a>
       </div>
-      <div class="card-body p-0">
-        {% if top_articles %}
-        <div class="table-responsive">
-          <table class="table table-dashboard table-hover mb-0">
-            <thead>
-              <tr>
-                <th class="ps-3">บทความ</th>
-                <th class="pe-3 text-end">Views</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for article in top_articles %}
-              <tr>
-                <td class="ps-3">
-                  <a href="{{ article.get_absolute_url }}" target="_blank" rel="noopener"
-                     class="text-decoration-none fw-semibold text-body" style="font-size:.87rem">
-                    {{ article.title|truncatechars:45 }}
-                  </a>
-                  <div class="text-muted" style="font-size:.73rem">{{ article.category.name }}</div>
-                </td>
-                <td class="pe-3 text-end">
-                  <span class="fw-bold text-gold" style="font-size:.9rem">{{ article.views_count|intcomma }}</span>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+      <div class="ud-panel-body">
+        {% with total_pipe=active_pipeline|default:1 %}
+        {% for p in pipeline_by_status %}
+        <div class="pipeline-bar-wrap">
+          <span class="pipeline-bar-label">{{ p.status|capfirst }}</span>
+          <div class="pipeline-bar-bg">
+            <div class="pipeline-bar-fill" style="width:{% widthratio p.count total_pipe 100 %}%"></div>
+          </div>
+          <span class="pipeline-bar-count">{{ p.count }}</span>
         </div>
+        {% empty %}
+        <div class="text-center text-muted py-3 small">ไม่มีดีลค้าง</div>
+        {% endfor %}
+        {% endwith %}
+        <div class="mt-2 pt-2" style="border-top:1px solid rgba(255,255,255,.06);">
+          <div class="d-flex justify-content-between" style="font-size:.8rem;">
+            <span class="text-muted">ทั้งหมด</span>
+            <span class="fw-bold" style="color:var(--brand-gold);">{{ active_pipeline }} deals</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Articles -->
+  <div class="col-md-7">
+    <div class="ud-panel">
+      <div class="ud-panel-head">
+        <span><i class="bi bi-file-earmark-text me-2"></i>บทความ Top Views</span>
+        <a href="{% url 'dashboard:blog' %}" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size:.7rem;">ดูทั้งหมด</a>
+      </div>
+      <div class="p-0">
+        {% if top_articles_views %}
+        <table class="table table-compact table-hover mb-0">
+          <thead><tr><th>บทความ</th><th class="text-end">Views</th><th class="text-end">Bar</th></tr></thead>
+          <tbody>
+            {% with max_views=top_articles_views.0.views_count|default:1 %}
+            {% for a in top_articles_views %}
+            <tr>
+              <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                {{ a.title|truncatechars:38 }}
+                <div style="font-size:.68rem;color:var(--brand-muted);">{{ a.category__name|default:"—" }}</div>
+              </td>
+              <td class="text-end fw-bold" style="color:var(--brand-gold);">{{ a.views_count|intcomma }}</td>
+              <td style="width:80px;">
+                <div class="views-bar" style="width:{% widthratio a.views_count max_views 100 %}%"></div>
+              </td>
+            </tr>
+            {% endfor %}
+            {% endwith %}
+          </tbody>
+        </table>
         {% else %}
-        <div class="text-center text-muted py-5">
-          <i class="bi bi-file-earmark fs-2"></i>
-          <p class="mt-2 mb-0 small">ยังไม่มีบทความ published</p>
-        </div>
+        <div class="text-center text-muted py-4"><i class="bi bi-file-earmark" style="font-size:1.5rem;opacity:.3;display:block;"></i><small>ยังไม่มีบทความ</small></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- === ROW 4: Conversion Funnel + Recent Leads === -->
+<div class="row g-3">
+
+  <!-- Conversion Funnel -->
+  <div class="col-md-4">
+    <div class="ud-chart-card">
+      <div class="ud-chart-head"><i class="bi bi-filter me-2"></i>Conversion Funnel</div>
+      <div class="p-3"><canvas id="funnelChart" style="max-height:200px;"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Recent Leads -->
+  <div class="col-md-8">
+    <div class="ud-panel">
+      <div class="ud-panel-head">
+        <span><i class="bi bi-people-fill me-2"></i>Leads ล่าสุด</span>
+        <a href="{% url 'dashboard:leads' %}" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size:.7rem;">ดูทั้งหมด</a>
+      </div>
+      <div class="p-0">
+        {% if recent_leads %}
+        <table class="table table-compact table-hover mb-0">
+          <thead><tr><th>ชื่อ</th><th>บริษัท</th><th>สถานะ</th><th>วันที่</th></tr></thead>
+          <tbody>
+            {% for lead in recent_leads %}
+            <tr>
+              <td>
+                <div class="fw-semibold">{{ lead.name }}</div>
+                <div style="font-size:.7rem;color:var(--brand-muted);">{{ lead.email }}</div>
+              </td>
+              <td style="color:var(--brand-muted);">{{ lead.company|default:"—" }}</td>
+              <td>
+                <span class="ds-badge
+                  {% if lead.status == 'closed_won' %}ds-badge-success
+                  {% elif lead.status == 'closed_lost' %}ds-badge-muted
+                  {% elif lead.status == 'proposal' %}ds-badge-gold
+                  {% elif lead.status == 'qualified' %}ds-badge-blue
+                  {% else %}ds-badge-warning{% endif %}" style="font-size:.65rem;">
+                  {{ lead.get_status_display }}
+                </span>
+              </td>
+              <td style="color:var(--brand-muted);font-size:.78rem;">{{ lead.created_at|date:"d M" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="text-center text-muted py-4"><i class="bi bi-inbox" style="font-size:1.5rem;opacity:.3;display:block;"></i><small>ยังไม่มี leads</small></div>
         {% endif %}
       </div>
     </div>
@@ -399,60 +321,72 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
 (function () {
-  const labels = {{ chart_labels|safe }};
-  const data   = {{ chart_data|safe }};
-  const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-  const gridColor = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
-  const textColor = isDark ? '#adb5bd' : '#6c757d';
-  const primary   = getComputedStyle(document.documentElement).getPropertyValue('--app-primary').trim() || '#c9a96e';
-  const secondary = getComputedStyle(document.documentElement).getPropertyValue('--app-secondary').trim() || '#b8924f';
+  const isDark   = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+  const gridCol  = isDark ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.06)';
+  const textCol  = isDark ? '#94a3b8' : '#6c757d';
+  const gold     = '#c9a96e';
+  const blue     = '#60a5fa';
 
-  const ctx = document.getElementById('leadsChart');
-  if (!ctx) return;
-
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Leads',
-        data,
-        fill: true,
-        tension: 0.4,
-        borderColor: primary,
-        backgroundColor: 'rgba(201,169,110,.10)',
-        pointRadius: 3,
-        pointHoverRadius: 5,
-        pointBackgroundColor: primary,
-        borderWidth: 2,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          mode: 'index',
-          intersect: false,
-          callbacks: {
-            label: ctx => ` ${ctx.parsed.y} leads`
-          }
-        }
+  // Weekly Trend chart
+  const wCtx = document.getElementById('weeklyChart');
+  if (wCtx) {
+    new Chart(wCtx, {
+      type: 'line',
+      data: {
+        labels: {{ week_labels|safe }},
+        datasets: [
+          { label: 'Leads', data: {{ week_leads_data|safe }}, borderColor: gold, backgroundColor: 'rgba(201,169,110,.1)', tension: 0.4, fill: true, borderWidth: 2, pointRadius: 2 },
+          { label: 'Content', data: {{ week_articles_data|safe }}, borderColor: blue, backgroundColor: 'rgba(96,165,250,.08)', tension: 0.4, fill: true, borderWidth: 2, pointRadius: 2 }
+        ]
       },
-      scales: {
-        x: {
-          ticks: { color: textColor, font: { size: 11 }, maxTicksLimit: 8 },
-          grid: { color: gridColor }
-        },
-        y: {
-          beginAtZero: true,
-          ticks: { color: textColor, font: { size: 11 }, precision: 0 },
-          grid: { color: gridColor }
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        plugins: { legend: { labels: { color: textCol, font: { size: 11 } } } },
+        scales: {
+          x: { ticks: { color: textCol, font: { size: 10 }, maxTicksLimit: 8 }, grid: { color: gridCol } },
+          y: { beginAtZero: true, ticks: { color: textCol, font: { size: 10 }, precision: 0 }, grid: { color: gridCol } }
         }
       }
+    });
+  }
+
+  // Lead Source pie
+  const sCtx = document.getElementById('sourceChart');
+  if (sCtx) {
+    const sourceLabels = {{ source_labels|safe }};
+    const sourceData   = {{ source_data|safe }};
+    if (sourceData.length) {
+      const palette = ['#c9a96e','#60a5fa','#34d399','#f87171','#a78bfa','#fbbf24','#2dd4bf','#94a3b8'];
+      new Chart(sCtx, {
+        type: 'doughnut',
+        data: { labels: sourceLabels, datasets: [{ data: sourceData, backgroundColor: palette, borderWidth: 0 }] },
+        options: {
+          responsive: true, cutout: '60%',
+          plugins: { legend: { position: 'right', labels: { color: textCol, font: { size: 11 }, boxWidth: 12 } } }
+        }
+      });
     }
-  });
+  }
+
+  // Funnel bar chart
+  const fCtx = document.getElementById('funnelChart');
+  if (fCtx) {
+    new Chart(fCtx, {
+      type: 'bar',
+      data: {
+        labels: {{ funnel_labels|safe }},
+        datasets: [{ data: {{ funnel_data|safe }}, backgroundColor: 'rgba(201,169,110,.7)', borderRadius: 4, borderSkipped: false }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: textCol, font: { size: 10 }, precision: 0 }, grid: { color: gridCol } },
+          y: { ticks: { color: textCol, font: { size: 10 } }, grid: { display: false } }
+        }
+      }
+    });
+  }
 })();
 </script>
 {% endblock %}

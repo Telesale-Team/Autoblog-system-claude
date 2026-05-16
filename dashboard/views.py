@@ -314,33 +314,67 @@ def index(request):
     recent_leads = ContactLead.objects.order_by("-created_at")[:10]
     top_articles = Article.objects.filter(status="published").order_by("-views_count")[:5]
 
+    # ── Analytics data (merged) ──────────────────────────────────────────────
+    from django.db.models.functions import TruncWeek
+    from blog.models import Category
+
+    leads_by_source = list(
+        ContactLead.objects.values("source")
+        .annotate(count=Count("id")).order_by("-count")
+    )
+    status_order = ["new", "contacted", "qualified", "proposal", "closed_won", "closed_lost"]
+    status_counts = {
+        row["status"]: row["count"]
+        for row in ContactLead.objects.values("status").annotate(count=Count("id"))
+    }
+    leads_funnel = [
+        {"status": s, "label": dict(ContactLead.STATUS_CHOICES).get(s, s), "count": status_counts.get(s, 0)}
+        for s in status_order
+    ]
+    top_articles_views = list(
+        Article.objects.filter(status="published").order_by("-views_count")
+        .values("title", "views_count", "category__name")[:8]
+    )
+    weeks_ago_12 = now - timedelta(weeks=12)
+    weekly_leads_map = {
+        row["week"].date().isoformat(): row["count"]
+        for row in ContactLead.objects.filter(created_at__gte=weeks_ago_12)
+        .annotate(week=TruncWeek("created_at")).values("week").annotate(count=Count("id"))
+    }
+    weekly_articles_map = {
+        row["week"].date().isoformat(): row["count"]
+        for row in Article.objects.filter(status="published", published_at__gte=weeks_ago_12)
+        .annotate(week=TruncWeek("published_at")).values("week").annotate(count=Count("id"))
+    }
+    week_labels, week_leads_data, week_articles_data = [], [], []
+    for i in range(11, -1, -1):
+        wm = (now - timedelta(weeks=i)).date()
+        wm = wm - timedelta(days=wm.weekday())
+        week_labels.append(wm.strftime("%d %b"))
+        week_leads_data.append(weekly_leads_map.get(wm.isoformat(), 0))
+        week_articles_data.append(weekly_articles_map.get(wm.isoformat(), 0))
+
     return render(request, "dashboard/index.html", {
-        # KPI 1
-        "leads_today": leads_today,
-        "leads_today_sources": leads_today_sources,
-        # KPI 2
-        "active_pipeline": active_pipeline,
-        "pipeline_by_status": pipeline_by_status,
-        # KPI 3
+        "leads_today": leads_today, "leads_today_sources": leads_today_sources,
+        "active_pipeline": active_pipeline, "pipeline_by_status": pipeline_by_status,
         "total_views": total_views,
-        # KPI 4
-        "articles_this_week": articles_this_week,
-        "article_weekly_goal": article_weekly_goal,
-        # KPI 5
-        "mql_total": mql_total,
-        # KPI 6
-        "today_actions": today_actions,
-        # chart
-        "chart_labels": chart_labels,
-        "chart_data": chart_data,
-        # supporting
-        "leads_this_month": leads_this_month,
-        "leads_delta_pct": leads_delta_pct,
-        "published_articles": published_articles,
-        "total_views": total_views,
-        "active_cases": active_cases,
-        "recent_leads": recent_leads,
-        "top_articles": top_articles,
+        "articles_this_week": articles_this_week, "article_weekly_goal": article_weekly_goal,
+        "mql_total": mql_total, "today_actions": today_actions,
+        "chart_labels": chart_labels, "chart_data": chart_data,
+        "leads_this_month": leads_this_month, "leads_delta_pct": leads_delta_pct,
+        "published_articles": published_articles, "active_cases": active_cases,
+        "recent_leads": recent_leads, "top_articles": top_articles,
+        # analytics merged
+        "leads_by_source": leads_by_source,
+        "source_labels":   json.dumps([r["source"] for r in leads_by_source]),
+        "source_data":     json.dumps([r["count"]  for r in leads_by_source]),
+        "leads_funnel":    leads_funnel,
+        "funnel_labels":   json.dumps([r["label"] for r in leads_funnel]),
+        "funnel_data":     json.dumps([r["count"] for r in leads_funnel]),
+        "top_articles_views": top_articles_views,
+        "week_labels":        json.dumps(week_labels),
+        "week_leads_data":    json.dumps(week_leads_data),
+        "week_articles_data": json.dumps(week_articles_data),
     })
 
 

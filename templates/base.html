@@ -473,23 +473,7 @@
           </a>
         </li>
 
-        {# ── Analytics & KPI (Data Analyst) ── #}
-        <li class="nav-section-label" data-section>Analytics</li>
-
-        <li class="nav-item" data-label="analytics วิเคราะห์ สถิติ chart">
-          <a href="{% url 'dashboard:analytics' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
-            <i class="bi bi-bar-chart-fill"></i>
-            <span class="nav-label">Analytics</span>
-          </a>
-        </li>
-        <li class="nav-item" data-label="kpi metric dashboard real-time mrr">
-          <a href="{% url 'dashboard:kpi' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'kpi' %}active{% endif %}">
-            <i class="bi bi-speedometer2"></i>
-            <span class="nav-label">KPI Dashboard</span>
-          </a>
-        </li>
+        {# ── Analytics & KPI ถูกรวมเข้า Dashboard แล้ว ── #}
 
         {# ── Legal (Legal Advisor) ── #}
         <li class="nav-section-label" data-section>Legal</li>
