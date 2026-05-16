@@ -19,28 +19,7 @@
 
   <div class="cal-header-title">
     <h4 class="mb-0 page-title">Work Calendar</h4>
-    <!-- Live clock + date -->
-    <div class="cal-live-clock mt-1">
-      <span class="cal-clock-date" id="calClockDate"></span>
-      <span class="cal-clock-sep">·</span>
-      <span class="cal-clock-time" id="calClockTime"></span>
-    </div>
-  </div>
-
-  <!-- Month/Year Jump Picker -->
-  <div class="cal-jump-picker">
-    <select id="calPickMonth" class="cal-pick-select" aria-label="เลือกเดือน">
-      <option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option>
-      <option value="2">มีนาคม</option><option value="3">เมษายน</option>
-      <option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option>
-      <option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option>
-      <option value="8">กันยายน</option><option value="9">ตุลาคม</option>
-      <option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
-    </select>
-    <select id="calPickYear" class="cal-pick-select" aria-label="เลือกปี"></select>
-    <button class="cal-pick-go" id="calPickGo" title="ไปยังเดือน/ปีที่เลือก">
-      <i class="bi bi-arrow-right-circle-fill"></i>
-    </button>
+    <p class="mb-0 cal-header-sub mt-1">ปฏิทินรวมแผนธุรกิจ 6 เดือน + งานประจำวัน</p>
   </div>
 
   <div class="cal-stat-row cal-stat-row--inline" id="cal-stat-row">
@@ -173,6 +152,31 @@
 <!-- === LEFT: Calendar === -->
 <div class="col-lg-10">
 <div id="calendar-wrap">
+
+  <!-- === Sub-header: Clock + Month/Year Picker (JS เลื่อนมาใต้ fc-header-toolbar) === -->
+  <div id="cal-subheader">
+    <div class="cal-sub-clock">
+      <i class="bi bi-clock-fill" style="color:var(--brand-gold);font-size:.8rem;"></i>
+      <span id="calClockDate"></span>
+      <span class="cal-sub-sep">·</span>
+      <span id="calClockTime"></span>
+    </div>
+    <div class="cal-sub-picker">
+      <select id="calPickMonth" aria-label="เลือกเดือน">
+        <option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option>
+        <option value="2">มีนาคม</option><option value="3">เมษายน</option>
+        <option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option>
+        <option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option>
+        <option value="8">กันยายน</option><option value="9">ตุลาคม</option>
+        <option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
+      </select>
+      <select id="calPickYear" aria-label="เลือกปี"></select>
+      <button id="calPickGo" title="ไปยังเดือน/ปีที่เลือก">
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </button>
+    </div>
+  </div>
+
   <div id="calendar"></div>
 </div>
 </div><!-- /col-lg-10 -->

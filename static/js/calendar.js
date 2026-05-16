@@ -22,6 +22,13 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  /* ── เลื่อน subheader ไปอยู่ใต้ fc-header-toolbar หลัง cal.render() ── */
+  function mountSubheader() {
+    const toolbar = document.querySelector('#calendar .fc-header-toolbar');
+    const sub     = document.getElementById('cal-subheader');
+    if (toolbar && sub) toolbar.insertAdjacentElement('afterend', sub);
+  }
+
   /* ── Live Clock ─────────────────────────────────────────────────── */
   function updateClock() {
     const now = new Date();
@@ -437,6 +444,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   cal.render();
+  mountSubheader(); /* เลื่อน clock+picker ใต้ toolbar */
 
   /* ── [5] Road to Revenue Progress Bar ────────────────────────────
      นับ sysEvents ที่ is_completed=true / total → แสดงเป็น %

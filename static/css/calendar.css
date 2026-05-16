@@ -909,64 +909,71 @@
    [cal-header-bar] — Premium Header Redesign v2
    ============================================================= */
 
-/* Live Clock */
-.cal-live-clock {
+/* ── Cal Sub-header (ใต้ toolbar, บน grid) ── */
+#cal-subheader {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  font-size: .82rem;
-  color: var(--brand-muted, #94a3b8);
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  background: var(--dash-surface, #0f1b35);
+  border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.2));
+  border-top: 1px solid var(--bs-border-color);
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-.cal-clock-date { font-weight: 500; color: #cbd5e1; }
-.cal-clock-sep  { color: var(--dash-border, rgba(201,169,110,.3)); }
-.cal-clock-time {
-  font-family: Consolas, monospace;
-  font-size: .8rem;
-  color: var(--brand-gold, #c9a96e);
-  font-weight: 600;
-  letter-spacing: .04em;
-}
+[data-bs-theme="light"] #cal-subheader { background: rgba(15,27,53,.05); }
 
-/* Month/Year Jump Picker */
-.cal-jump-picker {
+/* Clock */
+.cal-sub-clock {
   display: flex;
   align-items: center;
-  gap: .4rem;
-  flex-shrink: 0;
-}
-.cal-pick-select {
-  background: var(--dash-surface, #111827);
-  border: 1px solid var(--dash-border, rgba(201,169,110,.2));
-  border-radius: 8px;
-  color: #e2e8f0;
+  gap: .45rem;
   font-size: .82rem;
-  padding: .35rem .6rem;
-  cursor: pointer;
-  outline: none;
-  transition: border-color .15s;
   font-family: var(--font-th);
 }
-.cal-pick-select:focus,
-.cal-pick-select:hover { border-color: var(--brand-gold, #c9a96e); }
-.cal-pick-select option { background: #1a2235; }
+#calClockDate { color: #cbd5e1; font-weight: 500; }
+.cal-sub-sep  { color: rgba(201,169,110,.4); }
+#calClockTime {
+  font-family: Consolas, monospace;
+  color: var(--brand-gold, #c9a96e);
+  font-weight: 700;
+  font-size: .8rem;
+  letter-spacing: .05em;
+}
 
-.cal-pick-go {
+/* Picker */
+.cal-sub-picker {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+.cal-sub-picker select {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(201,169,110,.25);
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: .8rem;
+  padding: .25rem .5rem;
+  cursor: pointer;
+  outline: none;
+  font-family: var(--font-th);
+  transition: border-color .15s;
+}
+.cal-sub-picker select:hover,
+.cal-sub-picker select:focus { border-color: var(--brand-gold, #c9a96e); }
+.cal-sub-picker select option { background: #111827; }
+
+#calPickGo {
   background: transparent;
   border: none;
   color: var(--brand-gold, #c9a96e);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  padding: .2rem;
-  display: flex;
-  align-items: center;
+  padding: .1rem .2rem;
+  display: flex; align-items: center;
   transition: color .15s, transform .15s;
 }
-.cal-pick-go:hover { color: #f1c882; transform: scale(1.1); }
-
-@media (max-width: 767.98px) {
-  .cal-jump-picker { flex-wrap: wrap; }
-  .cal-live-clock  { font-size: .75rem; }
-}
+#calPickGo:hover { color: #f1c882; transform: scale(1.1); }
 
 /* ROW 1: Header Bar */
 .cal-header-bar {
