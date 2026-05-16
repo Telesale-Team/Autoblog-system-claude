@@ -14,203 +14,129 @@
 
 {% block content %}
 
-<!-- === Header: ชื่อหน้า + ปุ่มเพิ่มงาน === -->
-<div class="d-flex align-items-start justify-content-between mb-3 flex-wrap gap-2">
-  <div>
+<!-- === ROW 1: Header Bar — Title ซ้าย + Stats + Add button ขวา === -->
+<div class="cal-header-bar">
+
+  <div class="cal-header-title">
     <h4 class="mb-0 page-title">Work Calendar</h4>
-    <p class="mb-0 text-muted small mt-1">
-      ปฏิทินนี้รวมแผนธุรกิจ 6 เดือน + งานประจำวัน —
-      คลิก event เพื่อดูรายละเอียด กดปุ่ม
-      <span class="text-gold fw-semibold">+ เพิ่มงาน</span> เพื่อเพิ่มงานของคุณเองได้
+    <p class="mb-0 cal-header-sub mt-1">
+      ปฏิทินรวมแผนธุรกิจ 6 เดือน + งานประจำวัน —
+      คลิก event ดูรายละเอียด กดปุ่ม
+      <span class="text-gold fw-semibold">+ เพิ่มงาน</span> ได้เลย
     </p>
   </div>
-  <button class="btn btn-outline-primary btn-add-event flex-shrink-0" id="btnAddEvent">
-    <i class="bi bi-plus-lg me-1"></i>เพิ่มงาน
-  </button>
+
+  <div class="cal-stat-row cal-stat-row--inline" id="cal-stat-row">
+    <div class="cal-stat-card cal-stat-card--total">
+      <div class="cal-stat-icon"><i class="bi bi-calendar3"></i></div>
+      <div class="cal-stat-body">
+        <div class="cal-stat-value">{{ cal_stats.total }}</div>
+        <div class="cal-stat-label">Total</div>
+      </div>
+    </div>
+    <div class="cal-stat-card cal-stat-card--done">
+      <div class="cal-stat-icon"><i class="bi bi-check2-all"></i></div>
+      <div class="cal-stat-body">
+        <div class="cal-stat-value">{{ cal_stats.done }}</div>
+        <div class="cal-stat-label">Done</div>
+      </div>
+    </div>
+    <div class="cal-stat-card cal-stat-card--pending">
+      <div class="cal-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+      <div class="cal-stat-body">
+        <div class="cal-stat-value">{{ cal_stats.pending }}</div>
+        <div class="cal-stat-label">Pending</div>
+      </div>
+    </div>
+    <button class="btn btn-outline-primary btn-add-event flex-shrink-0 align-self-center ms-1" id="btnAddEvent">
+      <i class="bi bi-plus-lg me-1"></i>เพิ่มงาน
+    </button>
+  </div>
+
 </div>
 
-<!-- === Progress Bar: Road to First Revenue (JS คำนวณ % จาก is_completed) === -->
-<div class="revenue-progress-wrap">
-  <div class="revenue-progress-header">
-    <span class="rp-label">🏆 Road to First Revenue</span>
+<!-- === ROW 2: Progress Card — Road to Revenue + Phase Timeline รวม 1 card === -->
+<div class="cal-progress-card">
+  <div class="cal-progress-card-head">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-trophy-fill" style="color:var(--brand-gold)"></i>
+      <span class="rp-label">Road to First Revenue</span>
+    </div>
     <span class="rp-pct" id="rpPct">0%</span>
   </div>
-  <div class="revenue-progress-bar">
+  <div class="revenue-progress-bar mt-2 mb-1">
     <div class="revenue-progress-fill" id="rpFill"></div>
   </div>
   <div class="rp-status" id="rpStatus"></div>
+
+  <div class="phase-journey phase-journey--embedded" id="phaseBar">
+    <div class="phase-step" data-phase-start="2026-05-01" data-phase-end="2026-05-31">
+      <div class="phase-connector phase-connector--left"></div>
+      <div class="phase-node-wrap">
+        <div class="phase-node"><i class="bi bi-gear-fill phase-node-icon"></i></div>
+        <div class="phase-badge-slot"></div>
+      </div>
+      <div class="phase-connector phase-connector--right"></div>
+      <div class="phase-label">
+        <div class="phase-name">Foundation</div>
+        <div class="phase-dates">พ.ค. 2026</div>
+      </div>
+    </div>
+    <div class="phase-step" data-phase-start="2026-06-01" data-phase-end="2026-06-30">
+      <div class="phase-connector phase-connector--left"></div>
+      <div class="phase-node-wrap">
+        <div class="phase-node"><i class="bi bi-rocket-takeoff-fill phase-node-icon"></i></div>
+        <div class="phase-badge-slot"></div>
+      </div>
+      <div class="phase-connector phase-connector--right"></div>
+      <div class="phase-label">
+        <div class="phase-name">Content Push</div>
+        <div class="phase-dates">มิ.ย. 2026</div>
+      </div>
+    </div>
+    <div class="phase-step" data-phase-start="2026-07-01" data-phase-end="2026-07-31">
+      <div class="phase-connector phase-connector--left"></div>
+      <div class="phase-node-wrap">
+        <div class="phase-node"><i class="bi bi-telephone-fill phase-node-icon"></i></div>
+        <div class="phase-badge-slot"></div>
+      </div>
+      <div class="phase-connector phase-connector--right"></div>
+      <div class="phase-label">
+        <div class="phase-name">Pipeline Build</div>
+        <div class="phase-dates">ก.ค. 2026</div>
+      </div>
+    </div>
+    <div class="phase-step" data-phase-start="2026-08-01" data-phase-end="2026-10-31">
+      <div class="phase-connector phase-connector--left"></div>
+      <div class="phase-node-wrap">
+        <div class="phase-node"><i class="bi bi-currency-dollar phase-node-icon"></i></div>
+        <div class="phase-badge-slot"></div>
+      </div>
+      <div class="phase-connector phase-connector--right"></div>
+      <div class="phase-label">
+        <div class="phase-name">First Revenue</div>
+        <div class="phase-dates">ส.ค.–ต.ค. 2026</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- === Phase Bar: Journey timeline 4 phases พ.ค.–ต.ค. 2026 (JS เพิ่ม phase-active / phase-done) === -->
-<div class="phase-journey" id="phaseBar">
-
-  <!-- phase 1 -->
-  <div class="phase-step" data-phase-start="2026-05-01" data-phase-end="2026-05-31">
-    <div class="phase-connector phase-connector--left"></div>
-    <div class="phase-node-wrap">
-      <div class="phase-node">
-        <i class="bi bi-gear-fill phase-node-icon"></i>
-      </div>
-      <div class="phase-badge-slot"></div>
-    </div>
-    <div class="phase-connector phase-connector--right"></div>
-    <div class="phase-label">
-      <div class="phase-name">Foundation</div>
-      <div class="phase-dates">พ.ค. 2026</div>
-    </div>
-  </div>
-
-  <!-- phase 2 -->
-  <div class="phase-step" data-phase-start="2026-06-01" data-phase-end="2026-06-30">
-    <div class="phase-connector phase-connector--left"></div>
-    <div class="phase-node-wrap">
-      <div class="phase-node">
-        <i class="bi bi-rocket-takeoff-fill phase-node-icon"></i>
-      </div>
-      <div class="phase-badge-slot"></div>
-    </div>
-    <div class="phase-connector phase-connector--right"></div>
-    <div class="phase-label">
-      <div class="phase-name">Content Push</div>
-      <div class="phase-dates">มิ.ย. 2026</div>
-    </div>
-  </div>
-
-  <!-- phase 3 -->
-  <div class="phase-step" data-phase-start="2026-07-01" data-phase-end="2026-07-31">
-    <div class="phase-connector phase-connector--left"></div>
-    <div class="phase-node-wrap">
-      <div class="phase-node">
-        <i class="bi bi-telephone-fill phase-node-icon"></i>
-      </div>
-      <div class="phase-badge-slot"></div>
-    </div>
-    <div class="phase-connector phase-connector--right"></div>
-    <div class="phase-label">
-      <div class="phase-name">Pipeline Build</div>
-      <div class="phase-dates">ก.ค. 2026</div>
-    </div>
-  </div>
-
-  <!-- phase 4 -->
-  <div class="phase-step" data-phase-start="2026-08-01" data-phase-end="2026-10-31">
-    <div class="phase-connector phase-connector--left"></div>
-    <div class="phase-node-wrap">
-      <div class="phase-node">
-        <i class="bi bi-currency-dollar phase-node-icon"></i>
-      </div>
-      <div class="phase-badge-slot"></div>
-    </div>
-    <div class="phase-connector phase-connector--right"></div>
-    <div class="phase-label">
-      <div class="phase-name">First Revenue</div>
-      <div class="phase-dates">ส.ค.–ต.ค. 2026</div>
-    </div>
-  </div>
-
-</div>
-
-<!-- === Stat Cards: ตัวเลขสรุปจาก Calendar DB === -->
-<div class="cal-stat-row">
-
-  <!-- Total -->
-  <div class="cal-stat-card cal-stat-card--total">
-    <div class="cal-stat-icon"><i class="bi bi-calendar3"></i></div>
-    <div class="cal-stat-body">
-      <div class="cal-stat-value">{{ cal_stats.total }}</div>
-      <div class="cal-stat-label">Total Events</div>
-    </div>
-  </div>
-
-  <!-- Done -->
-  <div class="cal-stat-card cal-stat-card--done">
-    <div class="cal-stat-icon"><i class="bi bi-check2-all"></i></div>
-    <div class="cal-stat-body">
-      <div class="cal-stat-value">{{ cal_stats.done }}</div>
-      <div class="cal-stat-label">Done</div>
-    </div>
-  </div>
-
-  <!-- Pending -->
-  <div class="cal-stat-card cal-stat-card--pending">
-    <div class="cal-stat-icon"><i class="bi bi-hourglass-split"></i></div>
-    <div class="cal-stat-body">
-      <div class="cal-stat-value">{{ cal_stats.pending }}</div>
-      <div class="cal-stat-label">Pending</div>
-    </div>
-  </div>
-
-  <!-- Category breakdown -->
-  <div class="cal-stat-breakdown">
-    <div class="cal-stat-cat">
-      <i class="bi bi-arrow-repeat" style="color:#8fa8b8"></i>
-      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.recurring }}</span>
-      <span class="cal-stat-cat-name">Recurring</span>
-    </div>
-    <div class="cal-stat-cat">
-      <i class="bi bi-lightning-charge-fill" style="color:#3b5998"></i>
-      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.action }}</span>
-      <span class="cal-stat-cat-name">Action</span>
-    </div>
-    <div class="cal-stat-cat">
-      <i class="bi bi-flag-fill" style="color:#c9a96e"></i>
-      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.milestone }}</span>
-      <span class="cal-stat-cat-name">Milestone</span>
-    </div>
-    <div class="cal-stat-cat">
-      <i class="bi bi-file-text-fill" style="color:#5b7fa6"></i>
-      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.content_plan }}</span>
-      <span class="cal-stat-cat-name">Content</span>
-    </div>
-    <div class="cal-stat-cat">
-      <i class="bi bi-box-seam" style="color:#6b8cba"></i>
-      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.delivery }}</span>
-      <span class="cal-stat-cat-name">Delivery</span>
-    </div>
-    <div class="cal-stat-cat">
-      <i class="bi bi-people-fill" style="color:#4e6680"></i>
-      <span class="cal-stat-cat-val">{{ cal_stats.by_cat.meeting }}</span>
-      <span class="cal-stat-cat-name">Meeting</span>
-    </div>
-  </div>
-
-</div>
-
-<!-- === Filter Tabs + Recurring Toggle === -->
-<!-- toggle-recurring ซ่อน/แสดง recurring events ใน month view (JS อ่าน showRecurring) -->
-<div class="cal-toolbar-row">
+<!-- === ROW 3: Filter Toolbar === -->
+<div class="cal-toolbar-row cal-toolbar-row--compact mb-2">
   <div class="cal-filter-tabs" id="legendBar" style="flex:1">
-  <button class="cal-filter-tab active" data-filter="all">
-    <i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด
+    <button class="cal-filter-tab active" data-filter="all"><i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด</button>
+    <button class="cal-filter-tab" data-filter="milestone"><i class="bi bi-flag-fill tab-icon" style="color:#c9a96e"></i>แผน</button>
+    <button class="cal-filter-tab" data-filter="action"><i class="bi bi-lightning-charge-fill tab-icon" style="color:#3b5998"></i>งานต้องทำ</button>
+    <button class="cal-filter-tab" data-filter="content"><i class="bi bi-file-text-fill tab-icon" style="color:#5b7fa6"></i>Content</button>
+    <button class="cal-filter-tab" data-filter="recurring"><i class="bi bi-arrow-repeat tab-icon" style="color:#8fa8b8"></i>Recurring</button>
+    <button class="cal-filter-tab" data-filter="actual"><i class="bi bi-check-circle-fill tab-icon" style="color:#6b8cba"></i>Actual</button>
+    <button class="cal-filter-tab" data-filter="user-event"><i class="bi bi-person-fill tab-icon" style="color:#4e6680"></i>งานของฉัน</button>
+    <button class="cal-filter-tab tab-done" data-filter="done"><i class="bi bi-check2-all tab-icon" style="color:#8fa8b8"></i>เสร็จแล้ว</button>
+  </div>
+  <button class="cal-recurring-toggle" id="btnToggleRecurring" title="แสดง/ซ่อน Recurring events">
+    <i class="bi bi-arrow-repeat me-1"></i>
+    <span id="toggleRecurringLabel">Recurring ซ่อนอยู่</span>
   </button>
-  <button class="cal-filter-tab" data-filter="milestone">
-    <i class="bi bi-flag-fill tab-icon" style="color:#c9a96e"></i>แผน (Roadmap)
-  </button>
-  <button class="cal-filter-tab" data-filter="action">
-    <i class="bi bi-lightning-charge-fill tab-icon" style="color:#3b5998"></i>งานต้องทำ
-  </button>
-  <button class="cal-filter-tab" data-filter="content">
-    <i class="bi bi-file-text-fill tab-icon" style="color:#5b7fa6"></i>Content
-  </button>
-  <button class="cal-filter-tab" data-filter="recurring">
-    <i class="bi bi-arrow-repeat tab-icon" style="color:#8fa8b8"></i>Recurring
-  </button>
-  <button class="cal-filter-tab" data-filter="actual">
-    <i class="bi bi-check-circle-fill tab-icon" style="color:#6b8cba"></i>Actual
-  </button>
-  <button class="cal-filter-tab" data-filter="user-event">
-    <i class="bi bi-person-fill tab-icon" style="color:#4e6680"></i>งานของฉัน
-  </button>
-  <button class="cal-filter-tab tab-done" data-filter="done">
-    <i class="bi bi-check2-all tab-icon" style="color:#8fa8b8"></i>เสร็จแล้ว
-  </button>
-</div>
-<!-- ปุ่ม toggle recurring: off by default เพื่อลด density ใน month view -->
-<button class="cal-recurring-toggle" id="btnToggleRecurring" title="แสดง/ซ่อน Recurring events">
-  <i class="bi bi-arrow-repeat me-1"></i>
-  <span id="toggleRecurringLabel">Recurring ซ่อนอยู่</span>
-</button>
-</div>
 </div>
 
 <!-- === 2-Column Layout: Calendar (left) + Notes (right) === -->

@@ -695,3 +695,95 @@
 .note-color-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s, box-shadow .15s; }
 .note-color-btn:hover  { transform: scale(1.2); box-shadow: 0 0 8px rgba(255,255,255,.25); }
 .note-color-btn.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 10px rgba(255,255,255,.3); }
+
+
+/* =============================================================
+   [cal-header-bar] — Premium Header Redesign v2
+   ============================================================= */
+
+/* ROW 1: Header Bar */
+.cal-header-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .85rem;
+  flex-wrap: wrap;
+}
+.cal-header-title { flex: 1; min-width: 0; }
+.cal-header-sub { font-size: .82rem; color: var(--bs-secondary-color); line-height: 1.5; }
+
+/* Stat cards inline in header */
+.cal-stat-row--inline {
+  display: flex;
+  align-items: stretch;
+  gap: .5rem;
+  flex-wrap: nowrap;
+  margin-bottom: 0;
+}
+.cal-stat-row--inline .cal-stat-card {
+  min-width: 70px;
+  padding: .5rem .7rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: .15rem;
+  box-shadow: var(--shadow-card, 0 4px 24px rgba(0,0,0,.45));
+}
+.cal-stat-row--inline .cal-stat-icon { font-size: .9rem; margin-bottom: 0; }
+.cal-stat-row--inline .cal-stat-value { font-size: 1.15rem; }
+.cal-stat-row--inline .cal-stat-label { font-size: .6rem; letter-spacing: .06em; }
+
+/* ROW 2: Progress Card */
+.cal-progress-card {
+  background: var(--dash-surface, var(--bs-body-bg));
+  border: 1px solid var(--dash-border, var(--bs-border-color));
+  border-top: 2px solid var(--brand-gold, #c9a96e);
+  border-radius: 12px;
+  padding: .9rem 1.15rem .55rem;
+  margin-bottom: .85rem;
+  box-shadow: var(--shadow-card, 0 4px 24px rgba(0,0,0,.35));
+}
+[data-bs-theme="dark"] .cal-progress-card {
+  background: rgba(17,24,39,.85);
+  border-color: rgba(201,169,110,.2);
+  border-top-color: var(--brand-gold, #c9a96e);
+}
+.cal-progress-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .25rem;
+}
+.cal-progress-card-head .rp-label {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--bs-body-color);
+  letter-spacing: .01em;
+}
+.cal-progress-card-head .rp-pct {
+  font-size: .95rem;
+  font-weight: 800;
+  color: var(--brand-gold, #c9a96e);
+}
+
+/* Phase embedded inside progress card */
+.phase-journey--embedded {
+  margin-bottom: 0;
+  padding: .65rem .25rem .25rem;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--dash-border, var(--bs-border-color));
+  border-radius: 0;
+  margin-top: .5rem;
+}
+
+/* ROW 3: Filter toolbar compact */
+.cal-toolbar-row--compact { margin-bottom: .5rem; }
+
+/* Responsive */
+@media (max-width: 767.98px) {
+  .cal-header-bar { flex-direction: column; }
+  .cal-stat-row--inline { flex-wrap: wrap; }
+  .cal-stat-row--inline .cal-stat-card { min-width: 60px; }
+}
