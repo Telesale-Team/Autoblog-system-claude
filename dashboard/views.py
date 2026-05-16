@@ -979,7 +979,7 @@ def calendar_view(request):
     from dashboard.models import Note
     notes = Note.objects.all()
 
-    # Icon mapping for filter toolbar (ตรง bsIcon ใน CAT_CFG ของ calendar.js)
+    # Icon mapping for filter toolbar
     cat_icon_map = {
         "general":      "bi-pin-fill",
         "priority":     "bi-exclamation-circle-fill",
@@ -992,8 +992,28 @@ def calendar_view(request):
         "content_plan": "bi-file-text-fill",
         "backlog":      "bi-calendar2-week",
     }
+    # Count งานแต่ละ category จาก DB
+    from django.db.models import Count as DbCount
+    cat_counts = {
+        row["category"]: row["c"]
+        for row in CalendarEvent.objects.filter(is_system=True)
+                                        .values("category")
+                                        .annotate(c=DbCount("id"))
+    }
+    # รวม published articles และ leads ใน count ด้วย
+    cat_counts["article"] = Article.objects.filter(status="published").count()
+    cat_counts["lead"]    = ContactLead.objects.count()
+
+    # Total count สำหรับปุ่ม "ทั้งหมด"
+    total_count = CalendarEvent.objects.filter(is_system=True).count()
+
     category_filters = [
-        {"value": value, "label": label, "icon": cat_icon_map.get(value, "bi-circle")}
+        {
+            "value": value,
+            "label": label,
+            "icon":  cat_icon_map.get(value, "bi-circle"),
+            "count": cat_counts.get(value, 0),
+        }
         for value, label in CalendarEvent.CATEGORY_CHOICES
     ]
 
@@ -1001,6 +1021,7 @@ def calendar_view(request):
         "events_json":       json.dumps(events, ensure_ascii=False),
         "category_choices":  CalendarEvent.CATEGORY_CHOICES,
         "category_filters":  category_filters,
+        "total_count":       total_count,
         "cal_stats":         cal_stats,
         "notes":             notes,
         "note_colors":       Note.Color.choices,

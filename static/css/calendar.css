@@ -721,6 +721,35 @@
 
 
 /* =============================================================
+   [tab-count] — Category count badge บนปุ่ม filter
+   ============================================================= */
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 .35rem;
+  border-radius: 999px;
+  font-size: .6875rem;
+  font-weight: 700;
+  line-height: 1;
+  font-style: normal;
+  background: rgba(201,169,110,.15);
+  color: var(--brand-gold, #c9a96e);
+  border: 1px solid rgba(201,169,110,.25);
+  margin-left: .35rem;
+  transition: background .15s, color .15s;
+}
+.cal-filter-tab.active .tab-count {
+  background: rgba(15,27,53,.35);
+  color: #0f1b35;
+  border-color: transparent;
+}
+.tab-count[data-count="0"] { opacity: .35; }
+
+
+/* =============================================================
    [event-status-v2] — 2-color system: pending=blue, done=gray
    ============================================================= */
 :root {
