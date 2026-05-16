@@ -23,21 +23,27 @@
   </div>
 
   <div class="cal-stat-row cal-stat-row--inline" id="cal-stat-row">
-    <div class="cal-stat-card cal-stat-card--total">
+    <div class="cal-stat-card cal-stat-card--total"
+         data-bs-toggle="tooltip" data-bs-placement="bottom"
+         title="งานทั้งหมดใน Roadmap — ใช้เป็นตัวหาร % Road to Revenue">
       <div class="cal-stat-icon"><i class="bi bi-calendar3"></i></div>
       <div class="cal-stat-body">
         <div class="cal-stat-value">{{ cal_stats.total }}</div>
         <div class="cal-stat-label">Total</div>
       </div>
     </div>
-    <div class="cal-stat-card cal-stat-card--done">
+    <div class="cal-stat-card cal-stat-card--done"
+         data-bs-toggle="tooltip" data-bs-placement="bottom"
+         title="งานที่ mark เสร็จแล้ว — คำนวณเป็น % ใน Road to Revenue">
       <div class="cal-stat-icon"><i class="bi bi-check2-all"></i></div>
       <div class="cal-stat-body">
         <div class="cal-stat-value">{{ cal_stats.done }}</div>
         <div class="cal-stat-label">Done</div>
       </div>
     </div>
-    <div class="cal-stat-card cal-stat-card--pending">
+    <div class="cal-stat-card cal-stat-card--pending"
+         data-bs-toggle="tooltip" data-bs-placement="bottom"
+         title="งานที่ยังค้างอยู่ — ต้องทำให้เสร็จเพื่อถึง First Revenue">
       <div class="cal-stat-icon"><i class="bi bi-hourglass-split"></i></div>
       <div class="cal-stat-body">
         <div class="cal-stat-value">{{ cal_stats.pending }}</div>
@@ -430,6 +436,9 @@
   window.CALENDAR_API_URL = '{% url "dashboard:api_events" %}';
   window.CALENDAR_EVENTS  = {{ events_json|safe }};
   window.NOTES_API_URL    = '{% url "dashboard:api_notes" %}';
+  /* ตัวเลขจาก DB — ใช้ใน Road to Revenue แทน sysEvents.length */
+  window.CAL_TOTAL = {{ cal_stats.total }};
+  window.CAL_DONE  = {{ cal_stats.done }};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script src="{% static 'js/calendar.js' %}"></script>

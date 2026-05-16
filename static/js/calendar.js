@@ -82,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
   pickMonth.addEventListener('change', jumpToDate);
   pickYear.addEventListener('change', jumpToDate);
 
-  /* Init Bootstrap tooltips สำหรับ filter tabs */
-  document.querySelectorAll('#legendBar [data-bs-toggle="tooltip"]').forEach(function (el) {
+  /* Init Bootstrap tooltips — filter tabs + stat cards */
+  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
     new bootstrap.Tooltip(el, { trigger: 'hover', delay: { show: 400, hide: 100 } });
   });
 
@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 sysEvents[idx].color      = newDone ? DONE_COLOR : PENDING_COLOR;
                 sysEvents[idx].classNames = [newDone ? 'fc-event-completed' : 'fc-event-pending'];
               }
-              updateRevenueProgress();
+              updateRevenueProgress(newDone ? 1 : -1);
               cal.refetchEvents();
             });
         });
@@ -460,9 +460,11 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ── [5] Road to Revenue Progress Bar ────────────────────────────
      นับ sysEvents ที่ is_completed=true / total → แสดงเป็น %
      เรียก updateRevenueProgress() ทุกครั้งที่ mark done ด้วย          */
-  function updateRevenueProgress() {
-    const total = sysEvents.length;
-    const done  = sysEvents.filter(function (e) { return e.extendedProps && e.extendedProps.isCompleted; }).length;
+  function updateRevenueProgress(doneDelta) {
+    /* อัพเดต CAL_DONE เมื่อ toggle (doneDelta = +1 หรือ -1) */
+    if (doneDelta !== undefined) window.CAL_DONE = (window.CAL_DONE || 0) + doneDelta;
+    var total = window.CAL_TOTAL || sysEvents.length;
+    var done  = window.CAL_DONE  !== undefined ? window.CAL_DONE : sysEvents.filter(function (e) { return e.extendedProps && e.extendedProps.isCompleted; }).length;
     const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
     const fill     = document.getElementById('rpFill');
     const pctEl    = document.getElementById('rpPct');
@@ -738,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function () {
           sysEvents[idx].color      = newDone ? DONE_COLOR : PENDING_COLOR;
           sysEvents[idx].classNames = [newDone ? 'fc-event-completed' : 'fc-event-pending'];
         }
-        updateRevenueProgress();
+        updateRevenueProgress(newDone ? 1 : -1);
         showToast(newDone ? 'งานเสร็จแล้ว!' : 'ยกเลิกสถานะเสร็จแล้ว');
         setTimeout(function () { detailModal && detailModal.hide(); cal.refetchEvents(); }, 350);
       })
