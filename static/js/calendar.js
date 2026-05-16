@@ -336,9 +336,18 @@ document.addEventListener('DOMContentLoaded', function () {
             method:  'PATCH',
             headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
             body:    JSON.stringify({ is_completed: newDone }),
-          }).then(function () {
-            cal.refetchEvents();
-          });
+          }).then(function (r) { if (!r.ok) throw new Error(); })
+            .then(function () {
+              /* อัพเดท local sysEvents ทันที */
+              const idx = sysEvents.findIndex(function (e) { return String(e.id) === String(evId); });
+              if (idx !== -1) {
+                sysEvents[idx].extendedProps = Object.assign({}, sysEvents[idx].extendedProps, { isCompleted: newDone });
+                sysEvents[idx].color      = newDone ? DONE_COLOR : PENDING_COLOR;
+                sysEvents[idx].classNames = [newDone ? 'fc-event-completed' : 'fc-event-pending'];
+              }
+              updateRevenueProgress();
+              cal.refetchEvents();
+            });
         });
       }
 
@@ -675,18 +684,31 @@ document.addEventListener('DOMContentLoaded', function () {
     label.style.color = newDone ? 'var(--brand-green,#10b981)' : 'var(--brand-muted,#94a3b8)';
     titleEl.classList.toggle('is-done', newDone);
 
-    const sysId = activeEventProps && activeEventProps.sysEvtId;
+    const sysId   = activeEventProps && activeEventProps.sysEvtId;
     const patchId = activeDbId || sysId;
     if (!patchId) return;
-    const patchUrl = activeDbId ? (API + activeDbId + '/') : ('/owner/api/events/' + sysId + '/');
+    const patchUrl = API + patchId + '/';
+
     fetch(patchUrl, {
       method:  'PATCH',
       headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
       body:    JSON.stringify({ is_completed: newDone }),
-    }).then(function () {
-      showToast(newDone ? 'งานเสร็จแล้ว!' : 'ยกเลิกสถานะเสร็จแล้ว');
-      setTimeout(function () { detailModal && detailModal.hide(); cal.refetchEvents(); }, 400);
-    });
+    }).then(function (r) { if (!r.ok) throw new Error(); })
+      .then(function () {
+        /* อัพเดท local sysEvents ทันที — ไม่ต้อง full page reload */
+        const idx = sysEvents.findIndex(function (e) {
+          return String(e.id) === String(patchId);
+        });
+        if (idx !== -1) {
+          sysEvents[idx].extendedProps = Object.assign({}, sysEvents[idx].extendedProps, { isCompleted: newDone });
+          sysEvents[idx].color      = newDone ? DONE_COLOR : PENDING_COLOR;
+          sysEvents[idx].classNames = [newDone ? 'fc-event-completed' : 'fc-event-pending'];
+        }
+        updateRevenueProgress();
+        showToast(newDone ? 'งานเสร็จแล้ว!' : 'ยกเลิกสถานะเสร็จแล้ว');
+        setTimeout(function () { detailModal && detailModal.hide(); cal.refetchEvents(); }, 350);
+      })
+      .catch(function () { showToast('บันทึกไม่สำเร็จ', true); });
   });
 
   document.getElementById('btnMarkDone').addEventListener('click', function () {
