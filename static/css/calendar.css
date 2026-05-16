@@ -729,11 +729,20 @@
 }
 .fc-event.fc-event-pending { background-color: var(--cal-pending) !important; }
 .fc-event.fc-event-completed {
-  background-color: var(--cal-done) !important;
-  opacity: .65;
+  /* ใช้ rgba แทน opacity เพื่อไม่ให้ icon สีหม่น */
+  background-color: rgba(100, 116, 139, 0.6) !important;
 }
 .fc-event.fc-event-completed .fc-event-title,
-.fc-event.fc-event-completed .fc-event-title-text { text-decoration: line-through; }
+.fc-event.fc-event-completed .fc-event-title-text {
+  text-decoration: line-through;
+  opacity: .7;
+}
+
+/* Icon แสดงสีตาม category เต็ม — ทั้ง pending และ done */
+.fc-event .cal-ev-icon {
+  flex-shrink: 0;
+  line-height: 1;
+}
 
 
 /* =============================================================
