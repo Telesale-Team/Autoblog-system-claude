@@ -122,21 +122,8 @@
     background: rgba(201,169,110,.06);
   }
 
-  /* === Backlog Table === */
-  .bl-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-  .bl-table thead th {
-    font-size: .68rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .1em; color: var(--brand-gold, #c9a96e);
-    background: rgba(201,169,110,.06);
-    padding: .7rem 1rem; border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
-    white-space: nowrap;
-  }
-  .bl-table tbody tr { border-bottom: 1px solid rgba(255,255,255,.04); transition: background .12s; }
-  .bl-table tbody tr:hover { background: rgba(201,169,110,.04); }
-  .bl-table tbody tr:last-child td { border-bottom: none; }
-  .bl-table tbody td { padding: .8rem 1rem; vertical-align: middle; }
-
-  .bl-num   { font-size: .7rem; color: var(--brand-muted, #94a3b8); font-weight: 600; min-width: 32px; }
+  /* === Backlog Table extras === */
+  .bl-num   { font-size: .7rem; color: var(--brand-muted, #94a3b8); font-weight: 600; }
   .bl-topic { font-size: .88rem; font-weight: 600; color: #f1f5f9; line-height: 1.4; }
   .bl-kw    { font-size: .78rem; color: var(--brand-muted, #94a3b8); margin-top: .15rem; }
 
@@ -312,11 +299,11 @@
     <div class="tab-pane fade" id="tab-backlog">
       <div class="p-3">
         {% if backlog_pending or backlog_done %}
-        <div class="ds-table-wrap">
-          <table class="bl-table">
+        <div class="table-responsive">
+          <table class="table table-blog table-hover mb-0">
             <thead>
               <tr>
-                <th style="width:42px;">#</th>
+                <th class="ps-3" style="width:42px;">#</th>
                 <th>หัวข้อ / Keyword</th>
                 <th style="width:80px;">Priority</th>
                 <th style="width:100px;">สถานะ</th>
@@ -325,7 +312,7 @@
             <tbody>
               {% for item in backlog_pending %}
               <tr>
-                <td class="bl-num">{{ item.num }}</td>
+                <td class="ps-3 bl-num">{{ item.num }}</td>
                 <td>
                   <div class="bl-topic">{{ item.topic }}</div>
                   {% if item.keyword %}<div class="bl-kw"><i class="bi bi-search" style="font-size:.65rem;margin-right:.25rem;"></i>{{ item.keyword }}</div>{% endif %}
@@ -344,7 +331,7 @@
               {% endfor %}
               {% for item in backlog_done %}
               <tr class="bl-done-row">
-                <td class="bl-num">{{ item.num }}</td>
+                <td class="ps-3 bl-num">{{ item.num }}</td>
                 <td>
                   <div class="bl-topic">{{ item.topic }}</div>
                   {% if item.keyword %}<div class="bl-kw">{{ item.keyword }}</div>{% endif %}
