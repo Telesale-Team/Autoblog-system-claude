@@ -193,14 +193,18 @@ document.addEventListener('DOMContentLoaded', function () {
           });
         }
 
-        // Edit
+        // Edit button (user events)
         if (!isSystem && dbId) {
           item.querySelector('.day-ev-edit-btn').addEventListener('click', function (e) {
             e.stopPropagation();
-            dayModal.hide();
-            setTimeout(function () { openDetailModal(ev); }, 250);
           });
         }
+
+        // คลิก card → เปิด detail modal เหมือนคลิกบนปฏิทิน
+        item.addEventListener('click', function () {
+          dayModal.hide();
+          setTimeout(function () { openDetailModal(ev); }, 300);
+        });
 
         list.appendChild(item);
       });

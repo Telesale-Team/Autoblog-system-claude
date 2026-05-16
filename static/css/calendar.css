@@ -813,7 +813,9 @@
   transition: background .12s;
 }
 .day-ev-item:last-child { border-bottom: none; }
-.day-ev-item:hover { background: rgba(201,169,110,.04); }
+.day-ev-item { cursor: pointer; }
+.day-ev-item:hover { background: rgba(201,169,110,.06); }
+.day-ev-item:hover .day-ev-title { color: #f1f5f9; }
 .day-ev-item.day-ev-done { opacity: .6; }
 .day-ev-icon {
   font-size: 1rem;
@@ -864,8 +866,6 @@
 }
 .day-ev-item:hover .day-ev-edit-btn { opacity: 1; }
 .day-ev-edit-btn:hover { background: rgba(201,169,110,.12); color: var(--brand-gold, #c9a96e); }
-
-.day-ev-item:hover { background: rgba(201,169,110,.04); }
 
 
 /* =============================================================
