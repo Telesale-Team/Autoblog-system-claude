@@ -207,22 +207,23 @@
             </div>
           </div>
 
-          <!-- Restart Warning -->
-          <div class="restart-banner mt-3" id="restartBanner">
-            <i class="bi bi-arrow-clockwise me-2"></i>
-            <strong>บันทึกแล้ว!</strong> กรุณา restart dev server —
-            กด <code>Ctrl+C</code> แล้วรัน <code>python manage.py runserver</code> ใหม่
-          </div>
+          <!-- Restart Warning (เนื้อหาถูก inject โดย JS จาก server response) -->
+          <div class="restart-banner mt-3" id="restartBanner" style="display:none;"></div>
         </div>
 
         <!-- SQLite Save (เมื่อ revert กลับ SQLite) -->
         <div id="sqliteSaveWrap" class="{% if use_mysql %}d-none{% endif %}">
-          <hr style="border-color:var(--bs-border-color);margin:1.25rem 0">
-          <div class="d-flex align-items-center gap-2">
-            <button class="btn-save" id="btnSaveSqlite" type="button">
+          <div class="sqlite-action-card mt-4">
+            <div class="sqlite-action-info">
+              <i class="bi bi-floppy2-fill sqlite-action-icon"></i>
+              <div>
+                <div class="sqlite-action-title">บันทึกการตั้งค่า</div>
+                <div class="sqlite-action-desc">บันทึก <code>USE_MYSQL=False</code> ลง .env แล้ว restart server</div>
+              </div>
+            </div>
+            <button class="btn-apply-sqlite" id="btnSaveSqlite" type="button">
               <i class="bi bi-floppy-fill"></i> Apply SQLite
             </button>
-            <span class="text-secondary" style="font-size:.8rem">บันทึก USE_MYSQL=False ลง .env</span>
           </div>
           <div class="restart-banner mt-3" id="restartBannerSqlite"></div>
         </div>
@@ -280,7 +281,7 @@
           <li>กรอก credentials ของ server</li>
           <li>กด <strong>Test Connection</strong></li>
           <li>ถ้า success กด <strong>Save &amp; Apply</strong></li>
-          <li>Restart <code>runserver</code></li>
+          <li>Restart service อัตโนมัติ</li>
         </ol>
       </div>
     </div>

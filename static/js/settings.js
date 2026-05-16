@@ -147,6 +147,7 @@
       try {
         const result = await postJSON(window.SETTINGS_URLS.saveDb, { use_mysql: true, ...creds });
         if (result.ok) {
+          restartBanner.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i><strong>' + result.message + '</strong>';
           restartBanner.style.display = 'block';
           showPill(true, creds.host);
         } else {
@@ -169,9 +170,7 @@
       try {
         const result = await postJSON(window.SETTINGS_URLS.saveDb, { use_mysql: false });
         if (result.ok) {
-          restartBannerSql.innerHTML =
-            '<i class="bi bi-arrow-clockwise me-2"></i><strong>บันทึกแล้ว!</strong> ' +
-            'กรุณา restart <code>runserver</code> เพื่อให้ settings มีผล';
+          restartBannerSql.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i><strong>' + result.message + '</strong>';
           restartBannerSql.style.display = 'block';
           showPill(false, '');
         }
