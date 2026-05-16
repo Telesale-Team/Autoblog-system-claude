@@ -52,6 +52,41 @@ class Campaign(models.Model):
 
 
 
+# === CONTENT BACKLOG ===
+
+class ContentBacklog(models.Model):
+
+    class Priority(models.TextChoices):
+        HIGH   = "P1", "P1 — High"
+        MEDIUM = "P2", "P2 — Medium"
+        LOW    = "P3", "P3 — Low"
+
+    class Status(models.TextChoices):
+        PENDING     = "pending",     "Pending"
+        IN_PROGRESS = "in_progress", "In Progress"
+        REVIEW      = "review",      "Review"
+        DONE        = "done",        "Done"
+
+    num      = models.IntegerField("ลำดับ", default=0)
+    topic    = models.CharField("หัวข้อ", max_length=400)
+    keyword  = models.CharField("Target Keyword", max_length=300, blank=True)
+    priority = models.CharField("Priority", max_length=2, choices=Priority.choices, default=Priority.HIGH)
+    status   = models.CharField("Status", max_length=15, choices=Status.choices, default=Status.PENDING)
+    notes    = models.TextField("Notes", blank=True)
+    owner    = models.CharField("Owner", max_length=100, blank=True, default="All")
+    added_by = models.CharField("เพิ่มโดย", max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Content Backlog"
+        verbose_name_plural = "Content Backlog"
+        ordering = ["num"]
+
+    def __str__(self):
+        return f"#{self.num} {self.topic[:60]}"
+
+
 # === KEYWORD ===
 
 class Keyword(models.Model):

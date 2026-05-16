@@ -320,12 +320,12 @@
                 <td>
                   {% if item.priority == 'P1' %}<span class="bl-p1"><i class="bi bi-exclamation-circle-fill"></i>P1</span>
                   {% elif item.priority == 'P2' %}<span class="bl-p2"><i class="bi bi-dash-circle-fill"></i>P2</span>
-                  {% elif item.priority == 'P3' %}<span class="bl-p3">P3</span>
-                  {% else %}<span class="bl-p3">—</span>{% endif %}
+                  {% else %}<span class="bl-p3">P3</span>{% endif %}
                 </td>
                 <td>
-                  {% if item.status == 'review' %}<span class="s-review"><i class="bi bi-eye-fill"></i>review</span>
-                  {% else %}<span class="s-pending"><i class="bi bi-clock"></i>pending</span>{% endif %}
+                  {% if item.status == 'review' %}<span class="s-review"><i class="bi bi-eye-fill"></i>Review</span>
+                  {% elif item.status == 'in_progress' %}<span class="s-review" style="color:#60a5fa;background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.25);"><i class="bi bi-pencil-fill"></i>In Progress</span>
+                  {% else %}<span class="s-pending"><i class="bi bi-clock"></i>Pending</span>{% endif %}
                 </td>
               </tr>
               {% endfor %}
@@ -337,7 +337,7 @@
                   {% if item.keyword %}<div class="bl-kw">{{ item.keyword }}</div>{% endif %}
                 </td>
                 <td>—</td>
-                <td><span class="s-done"><i class="bi bi-check-circle-fill"></i>done</span></td>
+                <td><span class="s-done"><i class="bi bi-check-circle-fill"></i>Done</span></td>
               </tr>
               {% endfor %}
             </tbody>
