@@ -914,64 +914,91 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: .45rem 1rem;
-  background: rgba(201,169,110,.06);
-  border-top: 1px solid rgba(201,169,110,.2);
-  border-bottom: 1px solid rgba(201,169,110,.15);
+  padding: .5rem 1rem;
+  background: linear-gradient(90deg, rgba(201,169,110,.09) 0%, rgba(201,169,110,.03) 100%);
+  border-top: 1px solid rgba(201,169,110,.28);
+  border-bottom: 1px solid rgba(201,169,110,.14);
   gap: 1rem;
   flex-wrap: wrap;
+  backdrop-filter: blur(4px);
 }
-[data-bs-theme="light"] #cal-subheader { background: rgba(201,169,110,.04); }
+[data-bs-theme="light"] #cal-subheader {
+  background: linear-gradient(90deg, rgba(26,39,68,.05) 0%, rgba(201,169,110,.03) 100%);
+  border-top-color: rgba(26,39,68,.18);
+}
 
 /* Clock ใน fc-toolbar-title */
 .fc-clock-date {
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--heading-dark-bg, #faf6ee);
   font-family: var(--font-th);
+  letter-spacing: .01em;
 }
-.fc-clock-sep { color: rgba(201,169,110,.5); margin: 0 .35rem; }
+[data-bs-theme="light"] .fc-clock-date { color: var(--brand-navy, #1a2744); }
+
+.fc-clock-sep {
+  color: var(--brand-gold, #c9a96e);
+  margin: 0 .4rem;
+  opacity: .45;
+  font-weight: 300;
+}
+
+@keyframes clock-pulse { 0%,100% { text-shadow: 0 0 8px rgba(201,169,110,.55); } 50% { text-shadow: 0 0 18px rgba(201,169,110,.85), 0 0 4px rgba(201,169,110,.4); } }
 .fc-clock-time {
-  font-family: Consolas, monospace;
-  font-size: .95rem;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--brand-gold, #c9a96e);
-  letter-spacing: .06em;
+  letter-spacing: .1em;
+  animation: clock-pulse 2s ease-in-out infinite;
 }
+@media (prefers-reduced-motion: reduce) { .fc-clock-time { animation: none; } }
 
 /* Picker */
 .cal-sub-picker {
   display: flex;
   align-items: center;
-  gap: .35rem;
+  gap: .3rem;
 }
 .cal-sub-picker select {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(201,169,110,.25);
-  border-radius: 6px;
+  background: rgba(15,27,53,.55);
+  border: 1px solid rgba(201,169,110,.28);
+  border-radius: 8px;
   color: #e2e8f0;
   font-size: .8rem;
-  padding: .25rem .5rem;
+  font-weight: 600;
+  padding: .28rem .55rem;
   cursor: pointer;
   outline: none;
   font-family: var(--font-th);
-  transition: border-color .15s;
+  transition: border-color .2s, box-shadow .2s;
+  appearance: none;
+  min-width: 72px;
 }
+[data-bs-theme="light"] .cal-sub-picker select { background: rgba(255,255,255,.85); color: var(--brand-navy, #1a2744); }
 .cal-sub-picker select:hover,
-.cal-sub-picker select:focus { border-color: var(--brand-gold, #c9a96e); }
-.cal-sub-picker select option { background: #111827; }
+.cal-sub-picker select:focus { border-color: var(--brand-gold, #c9a96e); box-shadow: 0 0 0 2px rgba(201,169,110,.18); }
+.cal-sub-picker select option { background: #111827; color: #e2e8f0; }
 
 #calPickGo {
-  background: transparent;
-  border: none;
+  background: rgba(201,169,110,.12);
+  border: 1px solid rgba(201,169,110,.35);
+  border-radius: 8px;
   color: var(--brand-gold, #c9a96e);
-  font-size: 1.2rem;
+  font-size: .9rem;
   cursor: pointer;
-  padding: .1rem .2rem;
-  display: flex; align-items: center;
-  transition: color .15s, transform .15s;
+  padding: .28rem .55rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .18s, box-shadow .18s, transform .15s;
+  line-height: 1;
+  min-width: 32px;
 }
-#calPickGo:hover { color: #f1c882; transform: scale(1.1); }
+#calPickGo:hover {
+  background: rgba(201,169,110,.26);
+  box-shadow: 0 0 0 3px rgba(201,169,110,.18), 0 0 12px rgba(201,169,110,.22);
+  transform: scale(1.08);
+}
 
 /* ROW 1: Header Bar */
 .cal-header-bar {
