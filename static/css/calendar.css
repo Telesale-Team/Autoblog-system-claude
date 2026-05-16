@@ -910,14 +910,15 @@
   font-style: normal;
   background: rgba(201,169,110,.15);
   color: var(--brand-gold, #c9a96e);
-  border: 1px solid rgba(201,169,110,.25);
+  border: 1px solid rgba(201,169,110,.3);
   margin-left: .35rem;
+  flex-shrink: 0;
   transition: background .15s, color .15s;
 }
 .cal-filter-tab.active .tab-count {
-  background: rgba(15,27,53,.35);
-  color: #0f1b35;
-  border-color: transparent;
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  border-color: rgba(255,255,255,.25);
 }
 .tab-count[data-count="0"] { opacity: .35; }
 
