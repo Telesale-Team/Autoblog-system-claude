@@ -1,4 +1,5 @@
 import json
+import os
 import re
 from datetime import date, timedelta
 from pathlib import Path
@@ -845,6 +846,110 @@ def calendar_view(request):
         "category_choices":  CalendarEvent.CATEGORY_CHOICES,
         "cal_stats":         cal_stats,
     })
+
+
+# ── Settings ─────────────────────────────────────────────────────────────────
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_PATH = BASE_DIR / ".env"
+
+
+def _read_env():
+    """Read .env key-value pairs as dict."""
+    env = {}
+    if ENV_PATH.exists():
+        for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, _, v = line.partition("=")
+                env[k.strip()] = v.strip()
+    return env
+
+
+def _write_env_key(key, value):
+    """Update or append a single key in .env (preserves all other lines)."""
+    text = ENV_PATH.read_text(encoding="utf-8") if ENV_PATH.exists() else ""
+    lines = text.splitlines()
+    pattern = re.compile(rf"^{re.escape(key)}\s*=")
+    replaced = False
+    new_lines = []
+    for ln in lines:
+        if pattern.match(ln):
+            new_lines.append(f"{key}={value}")
+            replaced = True
+        else:
+            new_lines.append(ln)
+    if not replaced:
+        new_lines.append(f"{key}={value}")
+    ENV_PATH.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+
+
+@staff_member_required
+def settings_index(request):
+    env = _read_env()
+    use_mysql = env.get("USE_MYSQL", "False").lower() == "true"
+    return render(request, "dashboard/settings.html", {
+        "use_mysql":    use_mysql,
+        "db_host":      env.get("DB_HOST", ""),
+        "db_port":      env.get("DB_PORT", "3306"),
+        "db_name":      env.get("DB_NAME", ""),
+        "db_user":      env.get("DB_USER", ""),
+        "db_pass_set":  bool(env.get("DB_PASSWORD", "")),
+        "tab":          "database",
+    })
+
+
+@staff_member_required
+@require_POST
+def settings_test_db(request):
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"ok": False, "error": "Invalid JSON"}, status=400)
+
+    host     = data.get("host", "").strip()
+    port     = int(data.get("port") or 3306)
+    name     = data.get("name", "").strip()
+    user     = data.get("user", "").strip()
+    password = data.get("password", "")
+
+    if not all([host, name, user]):
+        return JsonResponse({"ok": False, "error": "Host, Database Name และ Username ต้องกรอกให้ครบ"})
+
+    try:
+        import pymysql
+        conn = pymysql.connect(
+            host=host, port=port, db=name,
+            user=user, password=password,
+            connect_timeout=5,
+        )
+        conn.close()
+        return JsonResponse({"ok": True, "message": f"Connected — MySQL at {host}:{port}/{name}"})
+    except Exception as e:
+        return JsonResponse({"ok": False, "error": str(e)})
+
+
+@staff_member_required
+@require_POST
+def settings_save_db(request):
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"ok": False, "error": "Invalid JSON"}, status=400)
+
+    use_mysql = data.get("use_mysql", False)
+    _write_env_key("USE_MYSQL", "True" if use_mysql else "False")
+
+    if use_mysql:
+        _write_env_key("DB_HOST",     data.get("host", "").strip())
+        _write_env_key("DB_PORT",     str(data.get("port") or 3306))
+        _write_env_key("DB_NAME",     data.get("name", "").strip())
+        _write_env_key("DB_USER",     data.get("user", "").strip())
+        password = data.get("password", "")
+        if password:
+            _write_env_key("DB_PASSWORD", password)
+
+    return JsonResponse({"ok": True, "message": "บันทึกลง .env แล้ว — กรุณา restart runserver"})
 
 
 # ── Calendar API ─────────────────────────────────────────────────────────────

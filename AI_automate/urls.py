@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
 from pages.sitemaps import StaticSitemap, ArticleSitemap, CategorySitemap
+from dashboard import views as dashboard_views
 
 sitemaps = {
     "static": StaticSitemap,
@@ -26,7 +27,9 @@ _receipt_patterns = ([
 ], "receipt")
 
 _settings_patterns = ([
-    path("", _coming_soon, name="index"),
+    path("", dashboard_views.settings_index, name="index"),
+    path("test-db/", dashboard_views.settings_test_db, name="test_db"),
+    path("save-db/", dashboard_views.settings_save_db, name="save_db"),
 ], "settings")
 
 _accounts_patterns = ([
