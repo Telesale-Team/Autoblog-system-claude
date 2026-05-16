@@ -441,74 +441,8 @@
   margin-bottom: .9rem;
 }
 
-/* Recurring toggle button — off state (สีเทา) */
-.cal-recurring-toggle {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: .3rem;
-  padding: .35rem .75rem;
-  border-radius: .45rem;
-  border: 1px dashed var(--bs-border-color);
-  background: transparent;
-  color: var(--bs-secondary-color);
-  font-size: .77rem;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all .18s;
-  align-self: flex-start;
-  margin-top: .25rem;
-}
-.cal-recurring-toggle:hover {
-  border-color: #8fa8b8;
-  color: #8fa8b8;
-}
-/* on state — border solid + สีนำ้เงิน */
-.cal-recurring-toggle.is-on {
-  border-style: solid;
-  border-color: #8fa8b8;
-  background: rgba(143,168,184,.1);
-  color: #8fa8b8;
-}
-[data-bs-theme="dark"] .cal-recurring-toggle.is-on {
-  background: rgba(143,168,184,.15);
-}
-
-/* Dot indicator สำหรับ recurring event ที่ toggle เปิดอยู่ */
-.fc-event-recurring-dot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 1px 5px;
-}
-.fc-event-recurring-dot .rec-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  flex-shrink: 0;
-  opacity: .75;
-}
-.fc-event-recurring-dot .rec-label {
-  font-size: .65rem;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: .85;
-}
-
-/* ทำให้ recurring dot event เล็กลง — ไม่รบกวน primary events */
-.fc-event.fc-event-recurring-mini {
-  min-height: 0 !important;
-  padding: 0 3px !important;
-  opacity: .7;
-}
-
 @media (max-width: 575px) {
   .cal-toolbar-row { flex-wrap: wrap; }
-  .cal-recurring-toggle { font-size: .72rem; padding: .25rem .55rem; }
 }
 
 .cal-filter-tabs { display: flex; flex-wrap: wrap; gap: .3rem .4rem; margin-bottom: 0; padding: .6rem .75rem; background: var(--bs-tertiary-bg,rgba(0,0,0,.03)); border: 1px solid var(--bs-border-color); border-radius: .5rem; }

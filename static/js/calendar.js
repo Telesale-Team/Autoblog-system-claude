@@ -113,10 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
        Source 1 (sysEvents) — static array จาก Django (milestone/action/etc.)
        Source 2 (API)       — user-created events จาก DB ผ่าน REST API
      activeFilter   — ค่าจาก filter tab ที่กดอยู่
-     showRecurring  — false by default (Smart Collapse) ซ่อน recurring ใน month view
-                      true เมื่อกด toggle → แสดงเป็น dot indicator                */
   let activeFilter    = 'all';
-  let showRecurring   = false;
   let currentViewType = 'dayGridMonth'; /* อัพเดทโดย datesSet callback */
 
   const cal = new FullCalendar.Calendar(document.getElementById('calendar'), {
@@ -233,13 +230,6 @@ document.addEventListener('DOMContentLoaded', function () {
         events: function (fetchInfo, success) {
           let evts = sysEvents;
 
-          /* Smart Collapse: ใน month view ซ่อน recurring เมื่อ showRecurring=false */
-          const isMonthView = currentViewType === 'dayGridMonth';
-          if (isMonthView && !showRecurring && activeFilter === 'all') {
-            evts = evts.filter(function (e) {
-              return getCfg(e.category).filterGroup !== 'recurring';
-            });
-          }
 
           if (activeFilter === 'done') {
             evts = evts.filter(function (e) { return e.extendedProps && e.extendedProps.isCompleted; });
@@ -304,15 +294,6 @@ document.addEventListener('DOMContentLoaded', function () {
       const cfg  = getCfg(cat);
       const isMonthView = arg.view ? arg.view.type === 'dayGridMonth' : currentViewType === 'dayGridMonth';
 
-      /* Dot indicator: recurring ใน month view เมื่อ showRecurring=true */
-      if (isMonthView && showRecurring && cfg.filterGroup === 'recurring') {
-        return {
-          html: '<div class="fc-event-recurring-dot">'
-              + '<span class="rec-dot"></span>'
-              + '<span class="rec-label">' + arg.event.title + '</span>'
-              + '</div>',
-        };
-      }
 
       const done   = !!(arg.event.extendedProps && arg.event.extendedProps.isCompleted);
       const evId   = arg.event.extendedProps && (arg.event.extendedProps.dbId || arg.event.id);
@@ -378,11 +359,6 @@ document.addEventListener('DOMContentLoaded', function () {
       /* งาน pending → เส้นเขียวซ้าย */
       info.el.classList.add('fc-event-pending');
 
-      /* recurring dot mode: เพิ่ม mini class เพื่อลด height */
-      const catChk = info.event.extendedProps && info.event.extendedProps.category;
-      if (showRecurring && currentViewType === 'dayGridMonth' && getCfg(catChk).filterGroup === 'recurring') {
-        info.el.classList.add('fc-event-recurring-mini');
-      }
 
       const days = Math.ceil((info.event.start - new Date()) / 86400000);
 
@@ -663,24 +639,6 @@ document.addEventListener('DOMContentLoaded', function () {
     cal.refetchEvents();
   });
 
-  /* ── [10b] Recurring Toggle — Smart Collapse ──────────────────────
-     กด btnToggleRecurring:
-       off → on: แสดง recurring เป็น dot indicator (showRecurring=true)
-       on  → off: ซ่อน recurring (showRecurring=false)
-     เปลี่ยน label + class ปุ่ม + refetch events                          */
-  document.getElementById('btnToggleRecurring').addEventListener('click', function () {
-    showRecurring = !showRecurring;
-    const btn   = document.getElementById('btnToggleRecurring');
-    const label = document.getElementById('toggleRecurringLabel');
-    if (showRecurring) {
-      btn.classList.add('is-on');
-      label.textContent = 'Recurring แสดงอยู่';
-    } else {
-      btn.classList.remove('is-on');
-      label.textContent = 'Recurring ซ่อนอยู่';
-    }
-    cal.refetchEvents();
-  });
 
   /* ── [11] Mark as Done ────────────────────────────────────────────
      กด checkbox circle (btnMarkDone) → PATCH is_completed=true
