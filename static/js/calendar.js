@@ -122,6 +122,14 @@ document.addEventListener('DOMContentLoaded', function () {
     height:        'auto',
     headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listMonth' },
     buttonText:    { today: 'วันนี้', month: 'เดือน', listMonth: 'รายการ' },
+    /* งานยังไม่เสร็จอยู่บนสุด เรียงตาม start time, งานเสร็จลงล่าง */
+    eventOrder: function (a, b) {
+      const aDone = !!(a.extendedProps && a.extendedProps.isCompleted);
+      const bDone = !!(b.extendedProps && b.extendedProps.isCompleted);
+      if (aDone !== bDone) return aDone ? 1 : -1;   /* pending ก่อน done */
+      return (a.start || 0) - (b.start || 0);        /* เรียงตามเวลา */
+    },
+
     dayMaxEvents:  5,
     moreLinkText:  function (n) { return '+ อีก ' + n + ' งาน'; },
     moreLinkClick: function (arg) {
