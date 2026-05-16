@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Design System — AIBiz Thailand{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Design System</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* === DS PAGE === */
+  .ds-section { margin-bottom: 3rem; }
+  .ds-section-title {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--brand-gold, #c9a96e);
+    margin-bottom: 1.25rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--brand-gold, #c9a96e);
+  }
+  /* === COLOR SWATCHES === */
+  .swatch { width: 80px; height: 80px; border-radius: 8px; margin-bottom: .5rem; border: 1px solid rgba(0,0,0,.1); }
+  .swatch-label { font-size: .72rem; text-align: center; color: var(--bs-secondary-color); }
+  /* === TOKEN TABLE === */
+  .token-table td, .token-table th { font-size: .83rem; }
+  .token-preview { display: inline-block; width: 18px; height: 18px; border-radius: 3px; vertical-align: middle; margin-right: .4rem; border: 1px solid rgba(0,0,0,.1); }
+  /* === FONT SCALE === */
+  .type-row { display: flex; align-items: baseline; gap: 1rem; margin-bottom: .75rem; border-bottom: 1px solid var(--bs-border-color); padding-bottom: .75rem; }
+  .type-label { font-size: .7rem; color: var(--bs-secondary-color); min-width: 80px; font-family: monospace; }
+  /* === BADGE SHOWCASE === */
+  .badge-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+  /* === SPACING === */
+  .spacing-box { background: rgba(201,169,110,.15); border: 1px dashed var(--brand-gold,#c9a96e); display: inline-flex; align-items: center; justify-content: center; font-size: .7rem; color: var(--brand-gold,#c9a96e); font-weight: 700; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === PAGE HEADER === -->
+<div class="mb-4">
+  <h4 class="mb-0 page-title">Design System</h4>
+  <p class="mb-0 text-muted small">Color Tokens, Typography, Components, Icons — AIBiz Thailand v1.0</p>
+</div>
+
+<!-- === SECTION 1: COLOR PALETTE === -->
+<div class="ds-section">
+  <div class="ds-section-title">Color Palette</div>
+  <div class="d-flex flex-wrap gap-3 mb-3">
+    <div class="text-center">
+      <div class="swatch" style="background:#0f1b35;"></div>
+      <div class="swatch-label">--brand-navy<br>#0f1b35</div>
+    </div>
+    <div class="text-center">
+      <div class="swatch" style="background:#1a2744;"></div>
+      <div class="swatch-label">--navy-2<br>#1a2744</div>
+    </div>
+    <div class="text-center">
+      <div class="swatch" style="background:#c9a96e;"></div>
+      <div class="swatch-label">--brand-gold<br>#c9a96e</div>
+    </div>
+    <div class="text-center">
+      <div class="swatch" style="background:#a07840;"></div>
+      <div class="swatch-label">--gold-dark<br>#a07840</div>
+    </div>
+    <div class="text-center">
+      <div class="swatch" style="background:#198754;"></div>
+      <div class="swatch-label">success<br>#198754</div>
+    </div>
+    <div class="text-center">
+      <div class="swatch" style="background:#dc3545;"></div>
+      <div class="swatch-label">danger<br>#dc3545</div>
+    </div>
+    <div class="text-center">
+      <div class="swatch" style="background:#ffc107;"></div>
+      <div class="swatch-label">warning<br>#ffc107</div>
+    </div>
+    <div class="text-center">
+      <div class="swatch" style="background:#0d6efd;"></div>
+      <div class="swatch-label">primary<br>#0d6efd</div>
+    </div>
+  </div>
+
+  <table class="table table-sm token-table">
+    <thead class="table-light"><tr><th>CSS Variable</th><th>Value</th><th>ใช้งาน</th></tr></thead>
+    <tbody>
+      <tr><td><code>--brand-navy</code></td><td><span class="token-preview" style="background:#0f1b35;"></span>#0f1b35</td><td>Sidebar, Dark backgrounds</td></tr>
+      <tr><td><code>--brand-gold</code></td><td><span class="token-preview" style="background:#c9a96e;"></span>#c9a96e</td><td>Primary accent, hover, gold UI</td></tr>
+      <tr><td><code>--app-primary</code></td><td>Dynamic</td><td>Theme Settings (ตั้งค่าได้)</td></tr>
+      <tr><td><code>--brand-muted</code></td><td>#94a3b8</td><td>Subtitle text, secondary info</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- === SECTION 2: TYPOGRAPHY === -->
+<div class="ds-section">
+  <div class="ds-section-title">Typography — Sarabun</div>
+  <div class="type-row"><span class="type-label">h1 / 2rem</span><span style="font-size:2rem;font-weight:800;">หัวข้อหลักธุรกิจ AI</span></div>
+  <div class="type-row"><span class="type-label">h2 / 1.5rem</span><span style="font-size:1.5rem;font-weight:700;">AI Automation Specialist</span></div>
+  <div class="type-row"><span class="type-label">h4 / 1.1rem</span><span style="font-size:1.1rem;font-weight:700;">Dashboard Overview</span></div>
+  <div class="type-row"><span class="type-label">body / 1rem</span><span style="font-size:1rem;">ข้อความทั่วไปในระบบ ภาษาไทยและอังกฤษ</span></div>
+  <div class="type-row"><span class="type-label">small / .87rem</span><span style="font-size:.87rem;color:var(--bs-secondary-color);">คำอธิบายและ label รายละเอียด</span></div>
+  <div class="type-row"><span class="type-label">label / .72rem</span><span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--bs-secondary-color);">SECTION LABEL</span></div>
+  <div class="alert alert-warning small mt-2 mb-0">
+    <i class="bi bi-exclamation-triangle me-1"></i>
+    <strong>Rule:</strong> ห้ามใช้ <code>font-style: italic</code> กับ Sarabun ทุกกรณี
+  </div>
+</div>
+
+<!-- === SECTION 3: BUTTONS === -->
+<div class="ds-section">
+  <div class="ds-section-title">Buttons</div>
+  <div class="d-flex flex-wrap gap-2 mb-3">
+    <button class="btn btn-outline-primary">btn-outline-primary (default)</button>
+    <button class="btn btn-outline-secondary">btn-outline-secondary</button>
+    <button class="btn btn-outline-success">btn-outline-success</button>
+    <button class="btn btn-outline-danger">btn-outline-danger</button>
+    <button class="btn btn-outline-warning">btn-outline-warning</button>
+  </div>
+  <div class="d-flex flex-wrap gap-2 mb-3">
+    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>btn-sm</button>
+    <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil me-1"></i>แก้ไข</button>
+    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash me-1"></i>ลบ</button>
+  </div>
+  <div class="alert alert-info small mb-0">
+    <i class="bi bi-info-circle me-1"></i>
+    ใช้ <code>btn-outline-primary</code> เป็น default ไปก่อน จนกว่า Theme Settings จะพร้อม
+  </div>
+</div>
+
+<!-- === SECTION 4: STATUS BADGES === -->
+<div class="ds-section">
+  <div class="ds-section-title">Status Badges</div>
+  <div class="badge-row mb-3">
+    <span class="badge bg-success">Active / Paid / Renewed</span>
+    <span class="badge bg-danger">Fail / Overdue / At Risk</span>
+    <span class="badge bg-warning text-dark">Partial / Pending / Draft</span>
+    <span class="badge bg-secondary">Inactive / Cancelled</span>
+    <span class="badge bg-primary">Sent / Active</span>
+    <span class="badge bg-info text-dark">In Progress</span>
+  </div>
+  <div class="badge-row">
+    <span class="badge bg-light text-dark border">bg-light (ช่อง label)</span>
+    <span class="badge" style="background:rgba(201,169,110,.15);color:#0f1b35;border:1px solid rgba(201,169,110,.3);">Gold Accent Badge</span>
+    <span class="badge" style="background:rgba(25,135,84,.12);color:#0a3622;border:1px solid rgba(25,135,84,.25);">Soft Green</span>
+    <span class="badge" style="background:rgba(220,53,69,.12);color:#58151c;border:1px solid rgba(220,53,69,.25);">Soft Red</span>
+  </div>
+</div>
+
+<!-- === SECTION 5: CARDS === -->
+<div class="ds-section">
+  <div class="ds-section-title">Card Components</div>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent border-bottom small fw-semibold text-muted text-uppercase">Card Header</div>
+        <div class="card-body">
+          <p class="mb-0 small">Card content ใช้ <code>border-0 shadow-sm</code> เสมอ</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="small text-muted mb-1 text-uppercase" style="font-size:.7rem;letter-spacing:.06em;">KPI Metric</div>
+          <div class="fs-3 fw-bold" style="color:var(--brand-gold,#c9a96e);">฿125,000</div>
+          <div class="small text-muted">ds-card-stat pattern</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="text-center py-4 text-muted border rounded">
+        <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:.75rem;opacity:.4;"></i>
+        <div class="fw-semibold small mb-1">Empty State</div>
+        <div class="small">ds-empty-state pattern</div>
+        <a href="#" class="btn btn-outline-primary btn-sm mt-2"><i class="bi bi-plus-lg me-1"></i>เพิ่มรายการ</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === SECTION 6: SPACING === -->
+<div class="ds-section">
+  <div class="ds-section-title">Spacing Scale</div>
+  <div class="d-flex align-items-end gap-2 flex-wrap">
+    {% for size, px in spacings %}
+    <div class="text-center">
+      <div class="spacing-box mb-1" style="width:{{ px }}px;height:{{ px }}px;">{{ size }}</div>
+      <div style="font-size:.65rem;color:var(--bs-secondary-color);">{{ px }}px</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- === SECTION 7: ICONS === -->
+<div class="ds-section">
+  <div class="ds-section-title">Bootstrap Icons — Common Usage</div>
+  <div class="d-flex flex-wrap gap-3">
+    {% for icon, label in icons %}
+    <div class="text-center" style="min-width:60px;">
+      <i class="bi {{ icon }}" style="font-size:1.5rem;display:block;margin-bottom:.3rem;"></i>
+      <div style="font-size:.62rem;color:var(--bs-secondary-color);">{{ label }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

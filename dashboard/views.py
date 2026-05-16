@@ -82,6 +82,105 @@ def coming_soon(request):
     })
 
 
+@staff_member_required
+def kpi_dashboard(request):
+    from crm.models import Customer, Renewal
+    from finance.models import Invoice
+    from pages.models import ContactLead
+
+    today = timezone.now().date()
+    first_of_month = today.replace(day=1)
+
+    # MRR = sum of active customer contract_value (monthly approximation)
+    customers = Customer.objects.filter(is_active=True)
+    mrr = customers.aggregate(t=Sum("contract_value"))["t"] or 0
+    total_customers = customers.count()
+
+    # Churn: customers churned this month (contract ended this month)
+    churned = customers.filter(contract_end__lt=today, contract_end__gte=first_of_month).count()
+    churn_rate = round(churned / total_customers * 100, 1) if total_customers else 0
+
+    # Health distribution
+    healthy = customers.filter(health_score__gte=70).count()
+    at_risk = customers.filter(health_score__lt=40).count()
+
+    # Lead conversion
+    total_leads = ContactLead.objects.count()
+    won_leads = ContactLead.objects.filter(status="closed_won").count()
+    conversion_rate = round(won_leads / total_leads * 100, 1) if total_leads else 0
+
+    # Revenue this month (paid invoices)
+    revenue_mtd = Invoice.objects.filter(
+        status="paid", paid_at__date__gte=first_of_month
+    ).aggregate(t=Sum("total_payable"))["t"] or 0
+
+    # Renewals at risk (30 days)
+    renewals_at_risk = Renewal.objects.filter(
+        renewal_date__lte=today + timedelta(days=30),
+        renewal_date__gte=today,
+        status__in=["upcoming", "at_risk"]
+    ).count()
+
+    # NPS average
+    from django.db.models import Avg
+    avg_nps = customers.aggregate(n=Avg("nps_score"))["n"] or 0
+
+    return render(request, "dashboard/kpi_dashboard.html", {
+        "mrr": mrr,
+        "total_customers": total_customers,
+        "churn_rate": churn_rate,
+        "healthy": healthy,
+        "at_risk": at_risk,
+        "conversion_rate": conversion_rate,
+        "revenue_mtd": revenue_mtd,
+        "renewals_at_risk": renewals_at_risk,
+        "avg_nps": round(avg_nps, 1),
+        "today": today,
+    })
+
+
+@staff_member_required
+def standup_view(request):
+    from dashboard.models import TeamStandup
+    standups = TeamStandup.objects.order_by("-date", "agent_name")
+    today = timezone.now().date()
+    if request.method == "POST":
+        from dashboard.forms import TeamStandupForm
+        form = TeamStandupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            from django.contrib import messages
+            messages.success(request, "บันทึก Standup แล้ว")
+            return redirect("dashboard:standup")
+    else:
+        from dashboard.forms import TeamStandupForm
+        form = TeamStandupForm(initial={"date": today})
+    return render(request, "dashboard/standup.html", {
+        "standups": standups,
+        "form": form,
+        "today": today,
+    })
+
+
+@staff_member_required
+def design_system_view(request):
+    spacings = [(f"sp-{n}", n * 4) for n in [1, 2, 3, 4, 6, 8, 12, 16]]
+    icons = [
+        ("bi-people-fill", "Leads"), ("bi-kanban-fill", "Pipeline"), ("bi-people", "Customers"),
+        ("bi-arrow-repeat", "Renewals"), ("bi-file-earmark-text", "Quote"), ("bi-megaphone", "Campaign"),
+        ("bi-calendar3", "Calendar"), ("bi-pencil-square", "Blog"), ("bi-search", "Keywords"),
+        ("bi-receipt", "Invoice"), ("bi-wallet2", "Expense"), ("bi-currency-exchange", "Revenue"),
+        ("bi-bar-chart-fill", "Analytics"), ("bi-speedometer2", "KPI"), ("bi-file-earmark-lock2", "Contract"),
+        ("bi-robot", "AI Project"), ("bi-collection", "Prompts"), ("bi-clipboard2-check", "QA"),
+        ("bi-palette", "Design"), ("bi-chat-square-text", "Standup"), ("bi-plus-lg", "Add"),
+        ("bi-pencil", "Edit"), ("bi-trash", "Delete"), ("bi-check-lg", "Done"),
+    ]
+    return render(request, "dashboard/design_system.html", {
+        "spacings": spacings,
+        "icons": icons,
+    })
+
+
 def redirect_to(url_name):
     """Return a view function that redirects to url_name (used in urls.py)."""
     @staff_member_required

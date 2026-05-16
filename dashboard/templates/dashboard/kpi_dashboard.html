@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}KPI Dashboard — Analytics{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">KPI Dashboard</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* === KPI CARDS === */
+  .kpi-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    height: 100%;
+    transition: border-color .15s;
+  }
+  .kpi-card:hover { border-color: var(--brand-gold, #c9a96e); }
+  .kpi-card .kpi-icon {
+    font-size: 1.5rem;
+    margin-bottom: .75rem;
+    opacity: .7;
+  }
+  .kpi-card .kpi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .kpi-card .kpi-label {
+    font-size: .78rem;
+    color: var(--bs-secondary-color);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 600;
+  }
+  .kpi-card .kpi-sub {
+    font-size: .8rem;
+    margin-top: .4rem;
+    color: var(--bs-secondary-color);
+  }
+
+  /* === TARGET GAUGE === */
+  .target-row {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: .5rem;
+    font-size: .78rem;
+  }
+  .target-bar { flex: 1; height: 6px; border-radius: 3px; background: var(--bs-border-color); }
+  .target-fill { height: 100%; border-radius: 3px; }
+  .target-label { min-width: 40px; text-align: right; font-weight: 600; color: var(--bs-secondary-color); }
+
+  /* === SECTION HEADER === */
+  .section-title {
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--bs-secondary-color);
+    margin-bottom: 1rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === PAGE HEADER === -->
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">KPI Dashboard</h4>
+    <p class="mb-0 text-muted small">Scoreboard ธุรกิจ Real-time — {{ today|date:"d F Y" }}</p>
+  </div>
+</div>
+
+<!-- === SECTION 1: REVENUE & MRR === -->
+<div class="section-title">Revenue & Growth</div>
+<div class="row g-3 mb-4">
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon" style="color:var(--brand-gold,#c9a96e);">💹</div>
+      <div class="kpi-value" style="color:var(--brand-gold,#c9a96e);">฿{{ mrr|intcomma }}</div>
+      <div class="kpi-label">MRR (Contract Value)</div>
+      <div class="kpi-sub">รวมสัญญาที่ active</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon text-success">🧾</div>
+      <div class="kpi-value text-success">฿{{ revenue_mtd|intcomma }}</div>
+      <div class="kpi-label">Revenue MTD</div>
+      <div class="kpi-sub">ใบแจ้งหนี้ที่ชำระแล้วเดือนนี้</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon {% if churn_rate > 5 %}text-danger{% else %}text-success{% endif %}">📉</div>
+      <div class="kpi-value {% if churn_rate > 5 %}text-danger{% else %}text-success{% endif %}">{{ churn_rate }}%</div>
+      <div class="kpi-label">Churn Rate</div>
+      <div class="target-row">
+        <div class="target-bar"><div class="target-fill" style="width:{% if churn_rate > 10 %}100{% else %}{{ churn_rate|floatformat:0 }}0{% endif %}%;background:{% if churn_rate <= 5 %}#198754{% elif churn_rate <= 10 %}#ffc107{% else %}#dc3545{% endif %};"></div></div>
+        <span class="target-label">เป้า &lt;5%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon" style="color:#8b5cf6;">⭐</div>
+      <div class="kpi-value" style="color:#8b5cf6;">{{ avg_nps }}</div>
+      <div class="kpi-label">NPS Score (avg)</div>
+      <div class="target-row">
+        <div class="target-bar"><div class="target-fill" style="width:{% if avg_nps >= 50 %}100{% else %}{{ avg_nps }}{% endif %}%;background:{% if avg_nps >= 50 %}#198754{% elif avg_nps >= 20 %}#ffc107{% else %}#dc3545{% endif %};"></div></div>
+        <span class="target-label">เป้า &gt;50</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === SECTION 2: CUSTOMERS === -->
+<div class="section-title">Customer Health</div>
+<div class="row g-3 mb-4">
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon text-primary">👥</div>
+      <div class="kpi-value text-primary">{{ total_customers }}</div>
+      <div class="kpi-label">ลูกค้าทั้งหมด</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon text-success">💚</div>
+      <div class="kpi-value text-success">{{ healthy }}</div>
+      <div class="kpi-label">Health ≥ 70 (ดี)</div>
+      <div class="kpi-sub">{{ total_customers|add:0 }} total</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon text-danger">⚠️</div>
+      <div class="kpi-value text-danger">{{ at_risk }}</div>
+      <div class="kpi-label">Health &lt; 40 (เสี่ยง)</div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon text-warning">🔄</div>
+      <div class="kpi-value text-warning">{{ renewals_at_risk }}</div>
+      <div class="kpi-label">Renewals ใน 30 วัน</div>
+      <div class="kpi-sub">ต้องติดตามด่วน</div>
+    </div>
+  </div>
+</div>
+
+<!-- === SECTION 3: SALES === -->
+<div class="section-title">Sales Performance</div>
+<div class="row g-3 mb-4">
+
+  <div class="col-6 col-md-3">
+    <div class="kpi-card">
+      <div class="kpi-icon" style="color:#f59e0b;">🎯</div>
+      <div class="kpi-value" style="color:#f59e0b;">{{ conversion_rate }}%</div>
+      <div class="kpi-label">Lead Conversion Rate</div>
+      <div class="target-row">
+        <div class="target-bar"><div class="target-fill" style="width:{% if conversion_rate >= 15 %}100{% else %}{{ conversion_rate|floatformat:0 }}0{% endif %}%;background:{% if conversion_rate >= 15 %}#198754{% elif conversion_rate >= 8 %}#ffc107{% else %}#dc3545{% endif %};"></div></div>
+        <span class="target-label">เป้า &gt;15%</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- === KPI TARGETS TABLE === -->
+<div class="section-title mt-2">KPI Targets vs Actual</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <table class="table mb-0" style="font-size:.88rem;">
+      <thead class="table-light">
+        <tr>
+          <th style="font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);">Metric</th>
+          <th style="font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);">เป้าหมาย</th>
+          <th style="font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);">ปัจจุบัน</th>
+          <th style="font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);">สถานะ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MRR Growth</td>
+          <td class="text-muted">&gt; 10% MoM</td>
+          <td>—</td>
+          <td><span class="badge bg-secondary" style="font-size:.65rem;">ยังไม่มีข้อมูลเปรียบเทียบ</span></td>
+        </tr>
+        <tr>
+          <td>Churn Rate</td>
+          <td class="text-muted">&lt; 5% ต่อเดือน</td>
+          <td class="fw-semibold {% if churn_rate <= 5 %}text-success{% else %}text-danger{% endif %}">{{ churn_rate }}%</td>
+          <td>{% if churn_rate <= 5 %}<span class="badge bg-success" style="font-size:.65rem;">✓ ผ่าน</span>{% else %}<span class="badge bg-danger" style="font-size:.65rem;">✗ เกินเป้า</span>{% endif %}</td>
+        </tr>
+        <tr>
+          <td>NPS Score</td>
+          <td class="text-muted">&gt; 50</td>
+          <td class="fw-semibold {% if avg_nps >= 50 %}text-success{% else %}text-warning{% endif %}">{{ avg_nps }}</td>
+          <td>{% if avg_nps >= 50 %}<span class="badge bg-success" style="font-size:.65rem;">✓ ผ่าน</span>{% else %}<span class="badge bg-warning text-dark" style="font-size:.65rem;">กำลังพัฒนา</span>{% endif %}</td>
+        </tr>
+        <tr>
+          <td>Lead Conversion</td>
+          <td class="text-muted">&gt; 15%</td>
+          <td class="fw-semibold {% if conversion_rate >= 15 %}text-success{% else %}text-warning{% endif %}">{{ conversion_rate }}%</td>
+          <td>{% if conversion_rate >= 15 %}<span class="badge bg-success" style="font-size:.65rem;">✓ ผ่าน</span>{% else %}<span class="badge bg-warning text-dark" style="font-size:.65rem;">กำลังพัฒนา</span>{% endif %}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

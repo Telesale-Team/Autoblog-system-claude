@@ -67,3 +67,39 @@ class CalendarEvent(models.Model):
             "delivery": "#059669",
             "personal": "#64748b",
         }.get(self.category, "#1a2744")
+
+
+# === TEAM STANDUP ===
+
+class TeamStandup(models.Model):
+    AGENT_CHOICES = [
+        ("chief-of-staff",       "Chief of Staff"),
+        ("hustler-sales",        "Hustler (Sales)"),
+        ("ai-orchestrator",      "AI Orchestrator"),
+        ("money-manager",        "Money Manager"),
+        ("ai-toolsmith",         "AI Toolsmith"),
+        ("qa-agent",             "QA Agent"),
+        ("marketing-specialist", "Marketing Specialist"),
+        ("customer-success",     "Customer Success"),
+        ("data-analyst",         "Data Analyst"),
+        ("legal-advisor",        "Legal Advisor"),
+        ("seo-specialist",       "SEO Specialist"),
+        ("content-writer-th",    "Content Writer (TH)"),
+        ("frontend-designer",    "Frontend Designer"),
+    ]
+
+    agent_name = models.CharField("Agent", max_length=30, choices=AGENT_CHOICES)
+    date       = models.DateField("วันที่")
+    yesterday  = models.TextField("ทำอะไรเมื่อวาน")
+    today      = models.TextField("วันนี้จะทำอะไร")
+    blocker    = models.TextField("Blocker / อุปสรรค", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Team Standup"
+        verbose_name_plural = "Team Standups"
+        ordering = ["-date", "agent_name"]
+        unique_together = [["agent_name", "date"]]
+
+    def __str__(self):
+        return f"{self.get_agent_name_display()} — {self.date}"

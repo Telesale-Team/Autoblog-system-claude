@@ -30,7 +30,7 @@ urlpatterns = [
 
     # ── Agent Feature Routes — redirect to feature apps ──────────────────
     # Chief of Staff
-    path("standup/",          views.coming_soon, name="standup"),
+    path("standup/",          views.standup_view,       name="standup"),
     # Hustler
     path("quotes/",           views.redirect_to("crm:quote_list"),          name="quotes"),
     # Money Manager
@@ -42,7 +42,7 @@ urlpatterns = [
     path("customers/",        views.redirect_to("crm:customer_list"),       name="customers"),
     path("renewals/",         views.redirect_to("crm:renewal_list"),        name="renewals"),
     # Data Analyst
-    path("kpi/",              views.coming_soon, name="kpi"),
+    path("kpi/",              views.kpi_dashboard,      name="kpi"),
     # Legal Advisor
     path("contracts/",        views.redirect_to("legal:contract_list"),     name="contracts"),
     # AI Orchestrator
@@ -56,5 +56,5 @@ urlpatterns = [
     # Content Writer
     path("content-calendar/", views.redirect_to("marketing:content_calendar"), name="content_calendar"),
     # Frontend Designer
-    path("design-system/",    views.coming_soon, name="design_system"),
+    path("design-system/",    views.design_system_view, name="design_system"),
 ]
