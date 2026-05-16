@@ -779,7 +779,7 @@ def calendar_view(request):
     for art in published:
         events.append({
             "title": f"📝 {art['title'][:40]}",
-            "start": art["published_at"].date().isoformat(),
+            "start": timezone.localtime(art["published_at"]).date().isoformat(),
             "color": "#198754",
             "category": "article",
             "description": "บทความ published",
@@ -791,7 +791,7 @@ def calendar_view(request):
         company = lead["company"] or lead["name"]
         events.append({
             "title": f"👤 {company[:30]}",
-            "start": lead["created_at"].date().isoformat(),
+            "start": timezone.localtime(lead["created_at"]).date().isoformat(),
             "color": "#0d6efd",
             "category": "lead",
             "description": f"Lead เข้า — {lead['status']}",
@@ -799,16 +799,17 @@ def calendar_view(request):
 
     # ── 3+4. System events จาก DB (milestones + recurring) ──────────────────
     system_qs = CalendarEvent.objects.filter(is_system=True).values(
-        "pk", "title", "start_datetime", "category", "description", "color", "is_completed"
+        "pk", "title", "start_datetime", "category", "description", "color", "is_completed", "assigned_to"
     )
     for evt in system_qs:
         events.append({
-            "id":          evt["pk"],
-            "title":       evt["title"],
-            "start":       evt["start_datetime"].date().isoformat(),
-            "category":    evt["category"],
-            "description": evt["description"],
+            "id":           evt["pk"],
+            "title":        evt["title"],
+            "start":        timezone.localtime(evt["start_datetime"]).date().isoformat(),
+            "category":     evt["category"],
+            "description":  evt["description"],
             "is_completed": evt["is_completed"],
+            "assigned_to":  evt["assigned_to"],
         })
 
     # ── 5. Content Backlog scheduled items ───────────────────────────────────
