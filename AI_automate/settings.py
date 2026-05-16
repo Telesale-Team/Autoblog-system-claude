@@ -100,8 +100,7 @@ if env("USE_MYSQL"):
             "PORT": env("DB_PORT", default="3306"),
             "OPTIONS": {
                 "charset": "utf8mb4",
-                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-                "TIME_ZONE": "Asia/Bangkok",
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES', time_zone='Asia/Bangkok'",
             },
         }
     }
