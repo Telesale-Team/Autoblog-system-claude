@@ -971,9 +971,29 @@ def calendar_view(request):
 
     from dashboard.models import Note
     notes = Note.objects.all()
+
+    # Icon mapping for filter toolbar (ตรง bsIcon ใน CAT_CFG ของ calendar.js)
+    cat_icon_map = {
+        "general":      "bi-pin-fill",
+        "priority":     "bi-exclamation-circle-fill",
+        "meeting":      "bi-people-fill",
+        "delivery":     "bi-box-seam",
+        "personal":     "bi-person-heart",
+        "milestone":    "bi-flag-fill",
+        "action":       "bi-lightning-charge-fill",
+        "recurring":    "bi-arrow-repeat",
+        "content_plan": "bi-file-text-fill",
+        "backlog":      "bi-calendar2-week",
+    }
+    category_filters = [
+        {"value": value, "label": label, "icon": cat_icon_map.get(value, "bi-circle")}
+        for value, label in CalendarEvent.CATEGORY_CHOICES
+    ]
+
     return render(request, "dashboard/calendar.html", {
         "events_json":       json.dumps(events, ensure_ascii=False),
         "category_choices":  CalendarEvent.CATEGORY_CHOICES,
+        "category_filters":  category_filters,
         "cal_stats":         cal_stats,
         "notes":             notes,
         "note_colors":       Note.Color.choices,

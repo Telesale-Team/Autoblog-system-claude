@@ -49,6 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ถ้า category ไม่ match ใน CAT_CFG ใช้ milestone เป็น fallback */
   function getCfg(cat) { return CAT_CFG[cat] || { color: '#c9a96e', label: cat, icon: '•', bsIcon: 'bi-flag-fill', filterGroup: 'milestone' }; }
 
+  /* Inject สีไอคอนใน Filter Toolbar จาก CAT_CFG */
+  document.querySelectorAll('#legendBar .cal-filter-tab [data-cat]').forEach(function (icon) {
+    const cfg = getCfg(icon.dataset.cat);
+    if (cfg && cfg.color) icon.style.color = cfg.color;
+  });
+
   /* สร้าง HTML icon element สำหรับใส่ใน event title */
   function iconHtml(cat) {
     const c = getCfg(cat);
@@ -131,10 +137,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
           if (activeFilter === 'done') {
             evts = evts.filter(function (e) { return e.extendedProps && e.extendedProps.isCompleted; });
-          } else if (activeFilter === 'recurring') {
-            evts = evts.filter(function (e) { return getCfg(e.category).filterGroup === 'recurring'; });
           } else if (activeFilter !== 'all') {
-            evts = evts.filter(function (e) { return getCfg(e.category).filterGroup === activeFilter; });
+            // match category ตรงๆ จาก DB value
+            evts = evts.filter(function (e) {
+              const cat = (e.extendedProps && e.extendedProps.category) || e.category || '';
+              return cat === activeFilter;
+            });
           }
           success(evts);
         },

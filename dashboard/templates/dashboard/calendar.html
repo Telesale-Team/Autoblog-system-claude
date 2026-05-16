@@ -121,17 +121,27 @@
   </div>
 </div>
 
-<!-- === ROW 3: Filter Toolbar === -->
+<!-- === ROW 3: Filter Toolbar — จาก CATEGORY_CHOICES ใน DB === -->
 <div class="cal-toolbar-row cal-toolbar-row--compact mb-2">
   <div class="cal-filter-tabs" id="legendBar" style="flex:1">
-    <button class="cal-filter-tab active" data-filter="all"><i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด</button>
-    <button class="cal-filter-tab" data-filter="milestone"><i class="bi bi-flag-fill tab-icon" style="color:#c9a96e"></i>แผน</button>
-    <button class="cal-filter-tab" data-filter="action"><i class="bi bi-lightning-charge-fill tab-icon" style="color:#3b5998"></i>งานต้องทำ</button>
-    <button class="cal-filter-tab" data-filter="content"><i class="bi bi-file-text-fill tab-icon" style="color:#5b7fa6"></i>Content</button>
-    <button class="cal-filter-tab" data-filter="recurring"><i class="bi bi-arrow-repeat tab-icon" style="color:#8fa8b8"></i>Recurring</button>
-    <button class="cal-filter-tab" data-filter="actual"><i class="bi bi-check-circle-fill tab-icon" style="color:#6b8cba"></i>Actual</button>
-    <button class="cal-filter-tab" data-filter="user-event"><i class="bi bi-person-fill tab-icon" style="color:#4e6680"></i>งานของฉัน</button>
-    <button class="cal-filter-tab tab-done" data-filter="done"><i class="bi bi-check2-all tab-icon" style="color:#8fa8b8"></i>เสร็จแล้ว</button>
+
+    <!-- ทั้งหมด (always first) -->
+    <button class="cal-filter-tab active" data-filter="all">
+      <i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด
+    </button>
+
+    <!-- Loop จาก DB CATEGORY_CHOICES — icon + color inject โดย JS หลัง load -->
+    {% for cat in category_filters %}
+    <button class="cal-filter-tab" data-filter="{{ cat.value }}">
+      <i class="bi {{ cat.icon }} tab-icon" data-cat="{{ cat.value }}"></i>{{ cat.label }}
+    </button>
+    {% endfor %}
+
+    <!-- เสร็จแล้ว (always last) -->
+    <button class="cal-filter-tab tab-done" data-filter="done">
+      <i class="bi bi-check2-all tab-icon"></i>เสร็จแล้ว
+    </button>
+
   </div>
   <button class="cal-recurring-toggle" id="btnToggleRecurring" title="แสดง/ซ่อน Recurring events">
     <i class="bi bi-arrow-repeat me-1"></i>
