@@ -54,6 +54,7 @@
       background: var(--brand-navy, #1a2744);
       transition: transform 0.3s ease;
       overflow-y: auto;
+      padding-bottom: env(safe-area-inset-bottom, 1rem);
     }
     #sidebar .sidebar-brand {
       padding: 1.2rem 1rem;
@@ -196,7 +197,7 @@
 
     {# Pre-compute counts for badges — guard against missing context vars #}
     {% with new_leads=sidebar_new_leads|default:0 draft_articles=sidebar_draft_articles|default:0 %}
-    <ul class="nav flex-column mt-2 px-1">
+    <ul class="nav flex-column mt-2 px-1 pb-4">
 
       <li class="nav-section-label">หน้าหลัก</li>
 
