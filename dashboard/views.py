@@ -87,6 +87,18 @@ def docs_index(request):
 
 
 @staff_member_required
+def docs_content(request, slug):
+    doc = _find_doc(slug)
+    if not doc:
+        return HttpResponse("<p class='text-danger'>ไม่พบเอกสาร</p>", status=404)
+    doc_path = BASE_DIR / "docs" / doc["filename"]
+    if not doc_path.exists():
+        return HttpResponse("<p class='text-danger'>ไฟล์เอกสารหายไป</p>", status=404)
+    html = doc_path.read_text(encoding="utf-8")
+    return HttpResponse(html, content_type="text/html; charset=utf-8")
+
+
+@staff_member_required
 def docs_view(request, slug):
     doc = _find_doc(slug)
     if not doc:

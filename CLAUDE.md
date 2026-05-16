@@ -2,7 +2,21 @@
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.2 | **Updated:** 2026-05-14
+**Version:** 2.3 | **Updated:** 2026-05-16
+
+---
+
+## 🔴 STARTUP PROTOCOL — ทำก่อนทุกอย่างเสมอ
+
+**ทุก session ใหม่ ทำตามลำดับนี้:**
+
+1. อ่าน `memory/MEMORY.md` ทุกบรรทัด
+2. อ่าน memory file ที่เกี่ยวข้องกับงานที่จะทำ
+3. รัน `check_calendar.py` ดูงานค้างจาก DB ก่อนรับงาน
+4. ค่อยตอบหรือรับงาน
+
+**ห้าม assume ว่าจำได้** — ต้อง verify จาก memory files จริงๆ ทุกครั้ง
+โดยเฉพาะก่อนทำงานกับ server ต้องอ่าน `memory/project_deploy_workflow.md` ก่อนเสมอ
 
 ---
 

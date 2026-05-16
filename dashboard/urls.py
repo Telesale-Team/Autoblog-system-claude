@@ -20,6 +20,7 @@ urlpatterns = [
     path("blog/<int:pk>/toggle/", views.article_toggle_status, name="article_toggle"),
     path("docs/", views.docs_index, name="docs_index"),
     path("docs/<slug:slug>/", views.docs_view, name="docs_view"),
+    path("docs/<slug:slug>/content/", views.docs_content, name="docs_content"),
     # legacy coming-soon routes (keep for backward compat)
     path("projects/", views.coming_soon, name="projects"),
     path("loi/", views.coming_soon, name="loi"),
