@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
      eventSources มี 2 แหล่ง:
        Source 1 (sysEvents) — static array จาก Django (milestone/action/etc.)
        Source 2 (API)       — user-created events จาก DB ผ่าน REST API
-     activeFilter   — ค่าจาก filter tab ที่กดอยู่
+     activeFilter   — ค่าจาก filter tab ที่กดอยู่                          */
   let activeFilter    = 'all';
   let currentViewType = 'dayGridMonth'; /* อัพเดทโดย datesSet callback */
 
