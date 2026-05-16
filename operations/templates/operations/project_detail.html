@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{ project.project_name }} — AI Projects{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'operations:project_list' %}">AI Projects</a></li>
+  <li class="breadcrumb-item active">{{ project.project_name }}</li>
+{% endblock %}
+{% block content %}
+<div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-1 page-title">{{ project.project_name }}</h4>
+    <span class="badge bg-secondary">{{ project.get_status_display }}</span>
+  </div>
+  <a href="{% url 'operations:project_edit' project.pk %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil me-1"></i>แก้ไข</a>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <dl class="row mb-0" style="font-size:.9rem;">
+      <dt class="col-4 text-muted fw-normal">ลูกค้า</dt><dd class="col-8">{{ project.customer.company_name|default:"—" }}</dd>
+      <dt class="col-4 text-muted fw-normal">Go-Live</dt><dd class="col-8">{{ project.go_live_date|date:"d M Y"|default:"—" }}</dd>
+      <dt class="col-4 text-muted fw-normal">ค่าบริการ/เดือน</dt><dd class="col-8 fw-semibold">฿{{ project.monthly_fee|intcomma }}</dd>
+      <dt class="col-4 text-muted fw-normal">Tech Stack</dt><dd class="col-8">{% for t in project.tech_stack %}<span class="badge bg-light text-dark border me-1" style="font-size:.7rem;">{{ t }}</span>{% empty %}—{% endfor %}</dd>
+      {% if project.description %}
+      <dt class="col-4 text-muted fw-normal">รายละเอียด</dt><dd class="col-8" style="white-space:pre-wrap;">{{ project.description }}</dd>
+      {% endif %}
+    </dl>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Finance{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'finance:invoice_list' %}">Invoices</a></li>
+  <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+{% block content %}
+<div class="mb-4"><h4 class="mb-0 page-title">{{ title }}</h4></div>
+<div class="card border-0 shadow-sm" style="max-width:700px;">
+  <div class="card-body p-4">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ form.customer.label }}</label>
+          {{ form.customer }}
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ form.service_description.label }}</label>
+          {{ form.service_description }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.subtotal.label }}</label>
+          <div class="input-group"><span class="input-group-text">฿</span>{{ form.subtotal }}</div>
+          <div class="form-text">{{ form.subtotal.help_text }}</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.wht_rate.label }}</label>
+          {{ form.wht_rate }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.issue_date.label }}</label>
+          {{ form.issue_date }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.due_date.label }}</label>
+          {{ form.due_date }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.payment_method.label }}</label>
+          {{ form.payment_method }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.withholding_cert_no.label }}</label>
+          {{ form.withholding_cert_no }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.status.label }}</label>
+          {{ form.status }}
+        </div>
+        <div class="col-md-6 d-flex align-items-end">
+          <div class="form-check">
+            {{ form.is_vat_registered }}
+            <label class="form-check-label fw-semibold">{{ form.is_vat_registered.label }}</label>
+          </div>
+        </div>
+      </div>
+      {% if form.errors %}
+      <div class="alert alert-danger mt-3">{{ form.errors }}</div>
+      {% endif %}
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check-lg me-1"></i>บันทึก</button>
+        <a href="{% url 'finance:invoice_list' %}" class="btn btn-outline-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(el => el.classList.add('form-control'));
+document.querySelectorAll('select').forEach(el => { el.classList.remove('form-control'); el.classList.add('form-select'); });
+</script>
+{% endblock %}

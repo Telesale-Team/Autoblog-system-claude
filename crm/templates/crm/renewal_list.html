@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Renewals — CRM{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Renewals</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .ds-table th { font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--bs-secondary-color); font-weight:600; white-space:nowrap; }
+  .ds-table td { vertical-align:middle; font-size:.88rem; }
+  .ds-badge { font-size:.68rem; font-weight:700; padding:.22em .65em; border-radius:999px; letter-spacing:.04em; display:inline-block; }
+  .badge-upcoming   { background:rgba(13,110,253,.1);  color:#084298; border:1px solid rgba(13,110,253,.2); }
+  .badge-contacted  { background:rgba(20,184,166,.12); color:#0c4a44; border:1px solid rgba(20,184,166,.25); }
+  .badge-negotiating{ background:rgba(245,158,11,.15); color:#664d03; border:1px solid rgba(245,158,11,.3); }
+  .badge-renewed    { background:rgba(25,135,84,.12);  color:#0a3622; border:1px solid rgba(25,135,84,.25); }
+  .badge-at_risk    { background:rgba(220,53,69,.12);  color:#58151c; border:1px solid rgba(220,53,69,.25); }
+  .badge-churned    { background:rgba(108,117,125,.12);color:#41464b; border:1px solid rgba(108,117,125,.2); }
+  .ds-empty-state { padding:3rem 1rem; text-align:center; color:var(--bs-secondary-color); }
+  .ds-empty-state i { font-size:2.5rem; margin-bottom:1rem; display:block; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === PAGE HEADER === -->
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">Renewals</h4>
+    <p class="mb-0 text-muted small">ติดตามสัญญาที่ใกล้หมดอายุ — วางแผน retention ก่อนลูกค้าออก</p>
+  </div>
+  <a href="{% url 'crm:renewal_add' %}" class="btn btn-outline-primary btn-sm">
+    <i class="bi bi-plus-lg me-1"></i>เพิ่ม Renewal
+  </a>
+</div>
+
+<!-- === TABLE === -->
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    {% if renewals %}
+    <div class="table-responsive">
+      <table class="table ds-table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ลูกค้า</th>
+            <th>วันต่อสัญญา</th>
+            <th>MRR</th>
+            <th>สถานะ</th>
+            <th>ผู้รับผิดชอบ</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in renewals %}
+          <tr>
+            <td class="fw-semibold">{{ r.customer.company_name }}</td>
+            <td>
+              {{ r.renewal_date|date:"d M Y" }}
+              {% if r.days_until_renewal <= 30 and r.days_until_renewal >= 0 %}
+                <span class="badge bg-danger ms-1" style="font-size:.6rem;">{{ r.days_until_renewal }}d</span>
+              {% elif r.days_until_renewal < 0 %}
+                <span class="badge bg-secondary ms-1" style="font-size:.6rem;">เกินแล้ว</span>
+              {% endif %}
+            </td>
+            <td>฿{{ r.mrr_value|intcomma }}</td>
+            <td><span class="ds-badge badge-{{ r.status }}">{{ r.get_status_display }}</span></td>
+            <td class="text-muted small">{{ r.assigned_to|default:"—" }}</td>
+            <td class="text-end">
+              <a href="{% url 'crm:renewal_edit' r.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2">
+                <i class="bi bi-pencil"></i>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="ds-empty-state">
+      <i class="bi bi-arrow-repeat"></i>
+      <div class="fw-semibold mb-1">ยังไม่มี Renewal รายการ</div>
+      <a href="{% url 'crm:renewal_add' %}" class="btn btn-outline-primary btn-sm mt-2">
+        <i class="bi bi-plus-lg me-1"></i>เพิ่ม Renewal
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

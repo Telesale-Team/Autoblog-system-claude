@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Keywords{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'marketing:keyword_list' %}">Keywords</a></li>
+  <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+{% block content %}
+<div class="mb-4"><h4 class="mb-0 page-title">{{ title }}</h4></div>
+<div class="card border-0 shadow-sm" style="max-width:600px;">
+  <div class="card-body p-4">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-12"><label class="form-label fw-semibold">{{ form.keyword.label }}</label>{{ form.keyword }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.intent.label }}</label>{{ form.intent }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.search_volume.label }}</label>{{ form.search_volume }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.difficulty.label }} <span class="text-muted">(0–100)</span></label>{{ form.difficulty }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.current_rank.label }}</label>{{ form.current_rank }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.target_position.label }}</label>{{ form.target_position }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.last_checked_date.label }}</label>{{ form.last_checked_date }}</div>
+        <div class="col-12"><label class="form-label fw-semibold">{{ form.article.label }}</label>{{ form.article }}</div>
+        <div class="col-12"><label class="form-label fw-semibold">{{ form.notes.label }}</label>{{ form.notes }}</div>
+      </div>
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check-lg me-1"></i>บันทึก</button>
+        <a href="{% url 'marketing:keyword_list' %}" class="btn btn-outline-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(el => el.classList.add('form-control'));
+document.querySelectorAll('select').forEach(el => { el.classList.remove('form-control'); el.classList.add('form-select'); });
+</script>
+{% endblock %}

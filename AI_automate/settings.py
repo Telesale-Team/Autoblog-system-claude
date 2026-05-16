@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     "blog",
     "portfolio",
     "dashboard",
+    "crm",
+    "finance",
+    "marketing",
+    "operations",
+    "legal",
 ]
 
 LOGIN_URL = "/admin/login/"

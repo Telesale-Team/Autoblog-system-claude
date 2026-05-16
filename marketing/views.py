@@ -1,0 +1,92 @@
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
+from .models import Campaign, ContentCalendar, Keyword
+from .forms import CampaignForm, ContentCalendarForm, KeywordForm
+
+
+# === CAMPAIGNS ===
+
+@staff_member_required
+def campaign_list(request):
+    campaigns = Campaign.objects.order_by("-start_date")
+    return render(request, "marketing/campaign_list.html", {"campaigns": campaigns})
+
+
+@staff_member_required
+def campaign_add(request):
+    form = CampaignForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "สร้าง Campaign ใหม่แล้ว")
+        return redirect("marketing:campaign_list")
+    return render(request, "marketing/campaign_form.html", {"form": form, "title": "สร้าง Campaign ใหม่"})
+
+
+@staff_member_required
+def campaign_edit(request, pk):
+    campaign = get_object_or_404(Campaign, pk=pk)
+    form = CampaignForm(request.POST or None, instance=campaign)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "อัพเดต Campaign แล้ว")
+        return redirect("marketing:campaign_list")
+    return render(request, "marketing/campaign_form.html", {"form": form, "title": "แก้ไข Campaign", "campaign": campaign})
+
+
+# === CONTENT CALENDAR ===
+
+@staff_member_required
+def content_calendar(request):
+    items = ContentCalendar.objects.select_related("article").order_by("scheduled_date")
+    return render(request, "marketing/content_calendar.html", {"items": items})
+
+
+@staff_member_required
+def content_calendar_add(request):
+    form = ContentCalendarForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "เพิ่มงานใน Content Calendar แล้ว")
+        return redirect("marketing:content_calendar")
+    return render(request, "marketing/content_calendar_form.html", {"form": form, "title": "เพิ่มงาน Content"})
+
+
+@staff_member_required
+def content_calendar_edit(request, pk):
+    item = get_object_or_404(ContentCalendar, pk=pk)
+    form = ContentCalendarForm(request.POST or None, instance=item)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "อัพเดต Content Calendar แล้ว")
+        return redirect("marketing:content_calendar")
+    return render(request, "marketing/content_calendar_form.html", {"form": form, "title": "แก้ไขงาน Content", "item": item})
+
+
+# === KEYWORDS ===
+
+@staff_member_required
+def keyword_list(request):
+    keywords = Keyword.objects.select_related("article").order_by("current_rank")
+    return render(request, "marketing/keyword_list.html", {"keywords": keywords})
+
+
+@staff_member_required
+def keyword_add(request):
+    form = KeywordForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "เพิ่ม Keyword แล้ว")
+        return redirect("marketing:keyword_list")
+    return render(request, "marketing/keyword_form.html", {"form": form, "title": "เพิ่ม Keyword ใหม่"})
+
+
+@staff_member_required
+def keyword_edit(request, pk):
+    keyword = get_object_or_404(Keyword, pk=pk)
+    form = KeywordForm(request.POST or None, instance=keyword)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "อัพเดต Keyword แล้ว")
+        return redirect("marketing:keyword_list")
+    return render(request, "marketing/keyword_form.html", {"form": form, "title": "แก้ไข Keyword", "keyword": keyword})

@@ -47,6 +47,12 @@ urlpatterns = [
     path("settings/", include(_settings_patterns)),
     path("accounts/", include(_accounts_patterns)),
     path("", include("pages.urls")),
+    # New feature apps
+    path("crm/", include("crm.urls")),
+    path("finance/", include("finance.urls")),
+    path("marketing/", include("marketing.urls")),
+    path("operations/", include("operations.urls")),
+    path("legal/", include("legal.urls")),
 ]
 
 urlpatterns += [

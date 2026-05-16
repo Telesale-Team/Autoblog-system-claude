@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Prompt Library — Operations{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Prompt Library</li>{% endblock %}
+{% block extra_css %}
+<style>
+  .prompt-card { border:1px solid var(--bs-border-color); border-radius:8px; padding:1rem; margin-bottom:.75rem; transition:border-color .15s; }
+  .prompt-card:hover { border-color:var(--brand-gold,#c9a96e); }
+  .prompt-card .prompt-text { font-family:Consolas,monospace; font-size:.78rem; background:rgba(0,0,0,.04); padding:.6rem; border-radius:4px; white-space:pre-wrap; max-height:80px; overflow:hidden; }
+  .ds-empty-state { padding:3rem 1rem; text-align:center; color:var(--bs-secondary-color); }
+  .ds-empty-state i { font-size:2.5rem; margin-bottom:1rem; display:block; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">Prompt Library</h4>
+    <p class="mb-0 text-muted small">ห้องสมุด Prompt และ Template ที่ทีมใช้งานประจำ</p>
+  </div>
+  <a href="{% url 'operations:prompt_add' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>เพิ่ม Prompt</a>
+</div>
+{% if prompts %}
+  {% regroup prompts by get_agent_display as agent_list %}
+  {% for agent_group in agent_list %}
+  <h6 class="fw-semibold text-muted small text-uppercase mb-2 mt-3" style="letter-spacing:.08em;">{{ agent_group.grouper }}</h6>
+  {% for p in agent_group.list %}
+  <div class="prompt-card">
+    <div class="d-flex align-items-start justify-content-between mb-2">
+      <div>
+        <span class="fw-semibold">{{ p.title }}</span>
+        <span class="badge bg-light text-dark border ms-2" style="font-size:.65rem;">{{ p.use_case }}</span>
+        <span class="badge {% if p.rating == 'good' %}bg-success{% elif p.rating == 'ok' %}bg-warning text-dark{% else %}bg-danger{% endif %} ms-1" style="font-size:.65rem;">{{ p.get_rating_display }}</span>
+        <span class="badge bg-light text-dark border ms-1" style="font-size:.65rem;">v{{ p.version }}</span>
+      </div>
+      <div class="d-flex gap-1">
+        <button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="navigator.clipboard.writeText(this.dataset.text)" data-text="{{ p.prompt_text|escapejs }}" title="Copy"><i class="bi bi-clipboard"></i></button>
+        <a href="{% url 'operations:prompt_edit' p.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2"><i class="bi bi-pencil"></i></a>
+      </div>
+    </div>
+    <div class="prompt-text">{{ p.prompt_text|truncatechars:200 }}</div>
+  </div>
+  {% endfor %}
+  {% endfor %}
+{% else %}
+<div class="ds-empty-state">
+  <i class="bi bi-collection"></i>
+  <div class="fw-semibold mb-1">ยังไม่มี Prompt</div>
+  <a href="{% url 'operations:prompt_add' %}" class="btn btn-outline-primary btn-sm mt-2"><i class="bi bi-plus-lg me-1"></i>เพิ่ม Prompt แรก</a>
+</div>
+{% endif %}
+{% endblock %}

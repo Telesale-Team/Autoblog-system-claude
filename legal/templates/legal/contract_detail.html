@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{ contract.title }} — Legal{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'legal:contract_list' %}">Contracts</a></li>
+  <li class="breadcrumb-item active">{{ contract.title|truncatechars:30 }}</li>
+{% endblock %}
+{% block content %}
+<div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-1 page-title">{{ contract.title }}</h4>
+    <span class="badge bg-secondary">{{ contract.get_status_display }}</span>
+    {% if contract.pdpa_compliant %}<span class="badge bg-success ms-1">PDPA ✓</span>{% else %}<span class="badge bg-danger ms-1">PDPA ✗</span>{% endif %}
+  </div>
+  <a href="{% url 'legal:contract_edit' contract.pk %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil me-1"></i>แก้ไข</a>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <dl class="row mb-0" style="font-size:.9rem;">
+      <dt class="col-4 text-muted fw-normal">ลูกค้า</dt><dd class="col-8 fw-semibold">{{ contract.customer.company_name }}</dd>
+      <dt class="col-4 text-muted fw-normal">ประเภท</dt><dd class="col-8">{{ contract.get_contract_type_display }}</dd>
+      <dt class="col-4 text-muted fw-normal">มูลค่า</dt><dd class="col-8 fw-semibold">฿{{ contract.value|intcomma }}</dd>
+      <dt class="col-4 text-muted fw-normal">เริ่มสัญญา</dt><dd class="col-8">{{ contract.start_date|date:"d M Y" }}</dd>
+      <dt class="col-4 text-muted fw-normal">หมดสัญญา</dt><dd class="col-8 {% if contract.days_until_expiry < 0 %}text-danger fw-semibold{% elif contract.days_until_expiry <= 30 %}text-warning fw-semibold{% endif %}">{{ contract.end_date|date:"d M Y" }} ({{ contract.days_until_expiry }}d)</dd>
+      {% if contract.file %}<dt class="col-4 text-muted fw-normal">ไฟล์</dt><dd class="col-8"><a href="{{ contract.file.url }}" target="_blank"><i class="bi bi-file-earmark me-1"></i>ดูไฟล์สัญญา</a></dd>{% endif %}
+      {% if contract.notes %}<dt class="col-4 text-muted fw-normal">บันทึก</dt><dd class="col-8" style="white-space:pre-wrap;">{{ contract.notes }}</dd>{% endif %}
+    </dl>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Quotes{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'crm:quote_list' %}">Quotes</a></li>
+  <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+{% block content %}
+<div class="mb-4"><h4 class="mb-0 page-title">{{ title }}</h4></div>
+<div class="card border-0 shadow-sm" style="max-width:600px;">
+  <div class="card-body p-4">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ form.lead.label }}</label>
+          {{ form.lead }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.valid_until.label }}</label>
+          {{ form.valid_until }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.status.label }}</label>
+          {{ form.status }}
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ form.notes.label }}</label>
+          {{ form.notes }}
+        </div>
+      </div>
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check-lg me-1"></i>บันทึก</button>
+        <a href="{% url 'crm:quote_list' %}" class="btn btn-outline-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(el => el.classList.add('form-control'));
+document.querySelectorAll('select').forEach(el => { el.classList.remove('form-control'); el.classList.add('form-select'); });
+</script>
+{% endblock %}

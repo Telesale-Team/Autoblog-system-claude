@@ -28,33 +28,33 @@ urlpatterns = [
     path("gap/", views.coming_soon, name="gap"),
     path("savings/", views.coming_soon, name="savings"),
 
-    # ── Agent Feature Routes (Phase 1 — coming soon) ──────────────────
+    # ── Agent Feature Routes — redirect to feature apps ──────────────────
     # Chief of Staff
-    path("standup/",         views.coming_soon, name="standup"),
+    path("standup/",          views.coming_soon, name="standup"),
     # Hustler
-    path("quotes/",          views.coming_soon, name="quotes"),
+    path("quotes/",           views.redirect_to("crm:quote_list"),          name="quotes"),
     # Money Manager
-    path("expenses/",        views.coming_soon, name="expenses"),
-    path("invoices/",        views.coming_soon, name="invoices"),
+    path("expenses/",         views.redirect_to("finance:expense_list"),    name="expenses"),
+    path("invoices/",         views.redirect_to("finance:invoice_list"),    name="invoices"),
     # Marketing Specialist
-    path("campaigns/",       views.coming_soon, name="campaigns"),
+    path("campaigns/",        views.redirect_to("marketing:campaign_list"), name="campaigns"),
     # Customer Success
-    path("customers/",       views.coming_soon, name="customers"),
-    path("renewals/",        views.coming_soon, name="renewals"),
+    path("customers/",        views.redirect_to("crm:customer_list"),       name="customers"),
+    path("renewals/",         views.redirect_to("crm:renewal_list"),        name="renewals"),
     # Data Analyst
-    path("kpi/",             views.coming_soon, name="kpi"),
+    path("kpi/",              views.coming_soon, name="kpi"),
     # Legal Advisor
-    path("contracts/",       views.coming_soon, name="contracts"),
+    path("contracts/",        views.redirect_to("legal:contract_list"),     name="contracts"),
     # AI Orchestrator
-    path("ai-projects/",     views.coming_soon, name="ai_projects"),
+    path("ai-projects/",      views.redirect_to("operations:project_list"), name="ai_projects"),
     # AI Toolsmith
-    path("prompt-library/",  views.coming_soon, name="prompt_library"),
+    path("prompt-library/",   views.redirect_to("operations:prompt_list"),  name="prompt_library"),
     # QA Agent
-    path("qa-log/",          views.coming_soon, name="qa_log"),
+    path("qa-log/",           views.redirect_to("operations:qa_list"),      name="qa_log"),
     # SEO Specialist
-    path("keywords/",        views.coming_soon, name="keywords"),
+    path("keywords/",         views.redirect_to("marketing:keyword_list"),  name="keywords"),
     # Content Writer
-    path("content-calendar/",views.coming_soon, name="content_calendar"),
+    path("content-calendar/", views.redirect_to("marketing:content_calendar"), name="content_calendar"),
     # Frontend Designer
-    path("design-system/",   views.coming_soon, name="design_system"),
+    path("design-system/",    views.coming_soon, name="design_system"),
 ]

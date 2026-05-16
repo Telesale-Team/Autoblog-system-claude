@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{{ customer.company_name }} — Customer Detail{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'crm:customer_list' %}">Customers</a></li>
+  <li class="breadcrumb-item active">{{ customer.company_name }}</li>
+{% endblock %}
+
+{% block content %}
+
+<!-- === PAGE HEADER === -->
+<div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-1 page-title">{{ customer.company_name }}</h4>
+    <span class="badge bg-secondary me-1">Tier {{ customer.tier }}</span>
+    <span class="badge" style="background:{% if customer.health_label == 'green' %}#198754{% elif customer.health_label == 'yellow' %}#ffc107;color:#000{% else %}#dc3545{% endif %}">
+      Health {{ customer.health_score }}
+    </span>
+  </div>
+  <a href="{% url 'crm:customer_edit' customer.pk %}" class="btn btn-outline-primary btn-sm">
+    <i class="bi bi-pencil me-1"></i>แก้ไขข้อมูล
+  </a>
+</div>
+
+<!-- === INFO CARDS === -->
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header bg-transparent border-bottom fw-semibold small text-uppercase text-muted">
+        ข้อมูลสัญญา
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0" style="font-size:.9rem;">
+          <dt class="col-5 text-muted fw-normal">มูลค่าสัญญา</dt>
+          <dd class="col-7 fw-semibold">฿{{ customer.contract_value|intcomma }}</dd>
+          <dt class="col-5 text-muted fw-normal">เริ่มสัญญา</dt>
+          <dd class="col-7">{{ customer.contract_start|date:"d M Y"|default:"—" }}</dd>
+          <dt class="col-5 text-muted fw-normal">หมดสัญญา</dt>
+          <dd class="col-7">{{ customer.contract_end|date:"d M Y"|default:"—" }}</dd>
+          <dt class="col-5 text-muted fw-normal">ผู้ดูแลบัญชี</dt>
+          <dd class="col-7">{{ customer.account_owner|default:"—" }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header bg-transparent border-bottom fw-semibold small text-uppercase text-muted">
+        KPI ลูกค้า
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0" style="font-size:.9rem;">
+          <dt class="col-5 text-muted fw-normal">Health Score</dt>
+          <dd class="col-7 fw-semibold">{{ customer.health_score }} / 100</dd>
+          <dt class="col-5 text-muted fw-normal">NPS Score</dt>
+          <dd class="col-7">{{ customer.nps_score }}</dd>
+          <dt class="col-5 text-muted fw-normal">อุตสาหกรรม</dt>
+          <dd class="col-7">{{ customer.industry|default:"—" }}</dd>
+          <dt class="col-5 text-muted fw-normal">สร้างเมื่อ</dt>
+          <dd class="col-7 text-muted small">{{ customer.created_at|date:"d M Y" }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === RELATED RENEWALS === -->
+{% if customer.renewals.all %}
+<div class="card border-0 shadow-sm mb-3">
+  <div class="card-header bg-transparent border-bottom fw-semibold small text-uppercase text-muted">
+    Renewals
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-sm mb-0" style="font-size:.86rem;">
+      <thead class="table-light">
+        <tr><th>วันต่อสัญญา</th><th>MRR</th><th>สถานะ</th><th>ผู้รับผิดชอบ</th></tr>
+      </thead>
+      <tbody>
+        {% for r in customer.renewals.all %}
+        <tr>
+          <td>{{ r.renewal_date|date:"d M Y" }}</td>
+          <td>฿{{ r.mrr_value|intcomma }}</td>
+          <td><span class="badge bg-secondary">{{ r.get_status_display }}</span></td>
+          <td>{{ r.assigned_to|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+<!-- === NOTES === -->
+{% if customer.notes %}
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-transparent border-bottom fw-semibold small text-uppercase text-muted">บันทึก</div>
+  <div class="card-body" style="font-size:.9rem; white-space:pre-wrap;">{{ customer.notes }}</div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — Finance{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'finance:expense_list' %}">Expenses</a></li>
+  <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+{% block content %}
+<div class="mb-4"><h4 class="mb-0 page-title">{{ title }}</h4></div>
+<div class="card border-0 shadow-sm" style="max-width:600px;">
+  <div class="card-body p-4">
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.date.label }}</label>{{ form.date }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.category.label }}</label>{{ form.category }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.amount.label }}</label><div class="input-group"><span class="input-group-text">฿</span>{{ form.amount }}</div></div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.payment_method.label }}</label>{{ form.payment_method }}</div>
+        <div class="col-12"><label class="form-label fw-semibold">{{ form.description.label }}</label>{{ form.description }}</div>
+        <div class="col-12"><label class="form-label fw-semibold">{{ form.vendor_name.label }}</label>{{ form.vendor_name }}</div>
+        <div class="col-md-6"><label class="form-label fw-semibold">{{ form.tax_invoice_no.label }}</label>{{ form.tax_invoice_no }}</div>
+        <div class="col-md-6 d-flex align-items-end">
+          <div class="form-check">{{ form.is_deductible }}<label class="form-check-label fw-semibold ms-1">{{ form.is_deductible.label }}</label></div>
+        </div>
+        <div class="col-12"><label class="form-label fw-semibold">{{ form.receipt.label }}</label>{{ form.receipt }}</div>
+      </div>
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check-lg me-1"></i>บันทึก</button>
+        <a href="{% url 'finance:expense_list' %}" class="btn btn-outline-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.querySelectorAll('input:not([type=checkbox]):not([type=file]), select, textarea').forEach(el => el.classList.add('form-control'));
+document.querySelectorAll('select').forEach(el => { el.classList.remove('form-control'); el.classList.add('form-select'); });
+</script>
+{% endblock %}

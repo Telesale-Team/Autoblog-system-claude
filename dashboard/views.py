@@ -10,7 +10,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Sum, Q
 from django.db.models.functions import TruncDate
 from django.http import Http404, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -79,6 +80,14 @@ def coming_soon(request):
     return render(request, "dashboard/coming_soon.html", {
         "page_title": "Coming Soon",
     })
+
+
+def redirect_to(url_name):
+    """Return a view function that redirects to url_name (used in urls.py)."""
+    @staff_member_required
+    def _view(request, *args, **kwargs):
+        return redirect(reverse_lazy(url_name))
+    return _view
 
 
 def _find_doc(slug):

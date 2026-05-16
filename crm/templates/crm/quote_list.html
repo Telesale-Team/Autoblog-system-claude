@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Quote Builder — CRM{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Quotes</li>{% endblock %}
+{% block extra_css %}
+<style>
+  .ds-table th { font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--bs-secondary-color); font-weight:600; }
+  .ds-table td { vertical-align:middle; font-size:.88rem; }
+  .ds-empty-state { padding:3rem 1rem; text-align:center; color:var(--bs-secondary-color); }
+  .ds-empty-state i { font-size:2.5rem; margin-bottom:1rem; display:block; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">Quote Builder</h4>
+    <p class="mb-0 text-muted small">สร้างและติดตามใบเสนอราคา</p>
+  </div>
+  <a href="{% url 'crm:quote_add' %}" class="btn btn-outline-primary btn-sm">
+    <i class="bi bi-plus-lg me-1"></i>สร้าง Quote ใหม่
+  </a>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    {% if quotes %}
+    <div class="table-responsive">
+      <table class="table ds-table table-hover mb-0">
+        <thead class="table-light">
+          <tr><th>เลขที่</th><th>Lead</th><th>ยอดรวม</th><th>หมดอายุ</th><th>สถานะ</th><th class="text-end">Action</th></tr>
+        </thead>
+        <tbody>
+          {% for q in quotes %}
+          <tr>
+            <td class="fw-semibold"><a href="{% url 'crm:quote_detail' q.pk %}" class="text-decoration-none">{{ q.quote_number }}</a></td>
+            <td>{{ q.lead.name|default:"—" }}</td>
+            <td>฿{{ q.total|intcomma }}</td>
+            <td>{{ q.valid_until|date:"d M Y" }}</td>
+            <td><span class="badge bg-secondary">{{ q.get_status_display }}</span></td>
+            <td class="text-end">
+              <a href="{% url 'crm:quote_edit' q.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2"><i class="bi bi-pencil"></i></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="ds-empty-state">
+      <i class="bi bi-file-earmark-text"></i>
+      <div class="fw-semibold mb-1">ยังไม่มีใบเสนอราคา</div>
+      <a href="{% url 'crm:quote_add' %}" class="btn btn-outline-primary btn-sm mt-2"><i class="bi bi-plus-lg me-1"></i>สร้าง Quote แรก</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

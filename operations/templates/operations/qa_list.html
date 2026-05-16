@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}QA Log — Operations{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">QA Log</li>{% endblock %}
+{% block extra_css %}
+<style>
+  .ds-table th { font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--bs-secondary-color); font-weight:600; }
+  .ds-table td { vertical-align:middle; font-size:.88rem; }
+  .ds-empty-state { padding:3rem 1rem; text-align:center; color:var(--bs-secondary-color); }
+  .ds-empty-state i { font-size:2.5rem; margin-bottom:1rem; display:block; }
+  .sev-critical { color:#dc3545; font-weight:700; }
+  .sev-major    { color:#fd7e14; font-weight:600; }
+  .sev-minor    { color:#ffc107; }
+  .sev-cosmetic { color:#6c757d; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">QA Log</h4>
+    <p class="mb-0 text-muted small">บันทึกผลการ QA ทุก Output — ตรวจจับ Pattern ผิดพลาดซ้ำ</p>
+  </div>
+  <a href="{% url 'operations:qa_add' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>บันทึก QA</a>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    {% if logs %}
+    <div class="table-responsive">
+      <table class="table ds-table table-hover mb-0">
+        <thead class="table-light">
+          <tr><th>ประเภท Output</th><th>Agent</th><th>ผล</th><th>หมวดปัญหา</th><th>Severity</th><th>ตรวจสอบเมื่อ</th><th class="text-end">Action</th></tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+          <tr>
+            <td class="fw-semibold">{{ log.output_type }}</td>
+            <td class="text-muted small">{{ log.get_agent_display }}</td>
+            <td>
+              <span class="badge {% if log.result == 'pass' %}bg-success{% elif log.result == 'fail' %}bg-danger{% elif log.result == 'partial' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                {{ log.get_result_display }}
+              </span>
+            </td>
+            <td class="text-muted small">{{ log.get_issue_category_display|default:"—" }}</td>
+            <td>
+              {% if log.severity %}
+              <span class="sev-{{ log.severity }}">{{ log.get_severity_display }}</span>
+              {% else %}—{% endif %}
+            </td>
+            <td class="text-muted small">{{ log.reviewed_at|date:"d M Y H:i"|default:"—" }}</td>
+            <td class="text-end">
+              <a href="{% url 'operations:qa_edit' log.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2"><i class="bi bi-pencil"></i></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="ds-empty-state">
+      <i class="bi bi-clipboard2-check"></i>
+      <div class="fw-semibold mb-1">ยังไม่มี QA Log</div>
+      <a href="{% url 'operations:qa_add' %}" class="btn btn-outline-primary btn-sm mt-2"><i class="bi bi-plus-lg me-1"></i>บันทึก QA แรก</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

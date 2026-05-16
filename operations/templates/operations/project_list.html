@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}AI Projects — Operations{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">AI Projects</li>{% endblock %}
+{% block extra_css %}
+<style>
+  .kanban-col { min-width:200px; }
+  .kanban-card { background:var(--bs-body-bg); border:1px solid var(--bs-border-color); border-radius:8px; padding:.75rem 1rem; margin-bottom:.6rem; font-size:.86rem; transition:box-shadow .15s; }
+  .kanban-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .kanban-header { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:.75rem; padding-bottom:.4rem; border-bottom:2px solid; }
+  .col-scoping  .kanban-header { color:#3b82f6; border-color:#3b82f6; }
+  .col-dev      .kanban-header { color:#f59e0b; border-color:#f59e0b; }
+  .col-testing  .kanban-header { color:#8b5cf6; border-color:#8b5cf6; }
+  .col-live     .kanban-header { color:#10b981; border-color:#10b981; }
+  .col-paused   .kanban-header { color:#6b7280; border-color:#6b7280; }
+  .ds-empty-state { padding:3rem 1rem; text-align:center; color:var(--bs-secondary-color); }
+  .ds-empty-state i { font-size:2.5rem; margin-bottom:1rem; display:block; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">AI Projects</h4>
+    <p class="mb-0 text-muted small">ติดตาม AI Project ที่กำลัง Build และ Deploy ให้ลูกค้า</p>
+  </div>
+  <a href="{% url 'operations:project_add' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>สร้าง Project</a>
+</div>
+{% if projects %}
+<div class="d-flex gap-3 overflow-auto pb-2">
+  {% for status_key, status_label in status_choices %}
+  <div class="kanban-col col-{{ status_key }}">
+    <div class="kanban-header">{{ status_label }}</div>
+    {% for p in projects %}
+      {% if p.status == status_key %}
+      <div class="kanban-card">
+        <div class="fw-semibold mb-1"><a href="{% url 'operations:project_detail' p.pk %}" class="text-decoration-none">{{ p.project_name }}</a></div>
+        {% if p.customer %}<div class="text-muted small">{{ p.customer.company_name }}</div>{% endif %}
+        {% if p.monthly_fee %}<div class="small mt-1" style="color:var(--brand-gold,#c9a96e);">฿{{ p.monthly_fee|intcomma }}/เดือน</div>{% endif %}
+        <a href="{% url 'operations:project_edit' p.pk %}" class="btn btn-sm btn-outline-secondary py-0 px-2 mt-2"><i class="bi bi-pencil"></i></a>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="ds-empty-state">
+  <i class="bi bi-robot"></i>
+  <div class="fw-semibold mb-1">ยังไม่มี AI Project</div>
+  <a href="{% url 'operations:project_add' %}" class="btn btn-outline-primary btn-sm mt-2"><i class="bi bi-plus-lg me-1"></i>สร้าง Project แรก</a>
+</div>
+{% endif %}
+{% endblock %}

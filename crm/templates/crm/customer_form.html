@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} — CRM{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'crm:customer_list' %}">Customers</a></li>
+  {% if customer %}
+    <li class="breadcrumb-item"><a href="{% url 'crm:customer_detail' customer.pk %}">{{ customer.company_name }}</a></li>
+  {% endif %}
+  <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+
+{% block content %}
+
+<!-- === PAGE HEADER === -->
+<div class="mb-4">
+  <h4 class="mb-0 page-title">{{ title }}</h4>
+</div>
+
+<div class="card border-0 shadow-sm" style="max-width:700px;">
+  <div class="card-body p-4">
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <!-- === COMPANY INFO === -->
+      <h6 class="fw-semibold text-muted text-uppercase small mb-3" style="letter-spacing:.06em;">ข้อมูลบริษัท</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ form.company_name.label }}</label>
+          {{ form.company_name }}
+          {% if form.company_name.errors %}<div class="text-danger small mt-1">{{ form.company_name.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="col-md-8">
+          <label class="form-label fw-semibold">{{ form.industry.label }}</label>
+          {{ form.industry }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">{{ form.tier.label }}</label>
+          {{ form.tier }}
+        </div>
+      </div>
+
+      <!-- === CONTRACT === -->
+      <h6 class="fw-semibold text-muted text-uppercase small mb-3 mt-4" style="letter-spacing:.06em;">สัญญาและการเงิน</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.contract_value.label }}</label>
+          <div class="input-group">
+            <span class="input-group-text">฿</span>
+            {{ form.contract_value }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.account_owner.label }}</label>
+          {{ form.account_owner }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.contract_start.label }}</label>
+          {{ form.contract_start }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.contract_end.label }}</label>
+          {{ form.contract_end }}
+        </div>
+      </div>
+
+      <!-- === KPI === -->
+      <h6 class="fw-semibold text-muted text-uppercase small mb-3 mt-4" style="letter-spacing:.06em;">KPI & Health</h6>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.health_score.label }} <span class="text-muted">(0–100)</span></label>
+          {{ form.health_score }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ form.nps_score.label }} <span class="text-muted">(-100–100)</span></label>
+          {{ form.nps_score }}
+        </div>
+      </div>
+
+      <!-- === NOTES === -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">{{ form.notes.label }}</label>
+        {{ form.notes }}
+      </div>
+
+      <!-- === BUTTONS === -->
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-outline-primary">
+          <i class="bi bi-check-lg me-1"></i>บันทึก
+        </button>
+        <a href="{% url 'crm:customer_list' %}" class="btn btn-outline-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Bootstrap form-control class on all inputs
+document.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(el => {
+  el.classList.add('form-control');
+});
+document.querySelectorAll('select').forEach(el => {
+  el.classList.remove('form-control');
+  el.classList.add('form-select');
+});
+</script>
+{% endblock %}

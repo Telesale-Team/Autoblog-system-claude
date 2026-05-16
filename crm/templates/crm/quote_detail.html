@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{ quote.quote_number }} — Quotes{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'crm:quote_list' %}">Quotes</a></li>
+  <li class="breadcrumb-item active">{{ quote.quote_number }}</li>
+{% endblock %}
+{% block content %}
+<div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-1 page-title">{{ quote.quote_number }}</h4>
+    <span class="badge bg-secondary">{{ quote.get_status_display }}</span>
+    {% if quote.discount_authority %}<span class="badge bg-warning text-dark ms-1">ต้องขออนุมัติส่วนลด</span>{% endif %}
+  </div>
+  <a href="{% url 'crm:quote_edit' quote.pk %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil me-1"></i>แก้ไข</a>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <dl class="row mb-0" style="font-size:.9rem;">
+      <dt class="col-4 text-muted fw-normal">Lead</dt><dd class="col-8">{{ quote.lead.name|default:"—" }}</dd>
+      <dt class="col-4 text-muted fw-normal">ยอดรวม</dt><dd class="col-8 fw-semibold">฿{{ quote.total|intcomma }}</dd>
+      <dt class="col-4 text-muted fw-normal">หมดอายุ</dt><dd class="col-8">{{ quote.valid_until|date:"d M Y" }}</dd>
+      <dt class="col-4 text-muted fw-normal">หมายเหตุ</dt><dd class="col-8">{{ quote.notes|default:"—" }}</dd>
+    </dl>
+  </div>
+</div>
+{% endblock %}
