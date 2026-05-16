@@ -22,6 +22,11 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  /* Init Bootstrap tooltips สำหรับ filter tabs */
+  document.querySelectorAll('#legendBar [data-bs-toggle="tooltip"]').forEach(function (el) {
+    new bootstrap.Tooltip(el, { trigger: 'hover', delay: { show: 400, hide: 100 } });
+  });
+
   /* ── [0] Django globals ───────────────────────────────────────── */
   const csrf = window.CALENDAR_CSRF;
   const API  = window.CALENDAR_API_URL;

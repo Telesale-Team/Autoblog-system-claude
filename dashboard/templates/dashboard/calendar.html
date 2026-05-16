@@ -126,14 +126,16 @@
   <div class="cal-filter-tabs" id="legendBar" style="flex:1">
 
     <!-- ทั้งหมด (always first) -->
-    <button class="cal-filter-tab active" data-filter="all">
+    <button class="cal-filter-tab active" data-filter="all"
+            data-bs-toggle="tooltip" data-bs-placement="bottom" title="แสดงงานทุกประเภท">
       <i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด
       <span class="tab-count" data-count="{{ total_count }}">{{ total_count }}</span>
     </button>
 
-    <!-- Loop จาก DB CATEGORY_CHOICES — icon + color inject โดย JS หลัง load -->
+    <!-- Loop จาก DB CATEGORY_CHOICES -->
     {% for cat in category_filters %}
-    <button class="cal-filter-tab" data-filter="{{ cat.value }}">
+    <button class="cal-filter-tab" data-filter="{{ cat.value }}"
+            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ cat.tooltip }}">
       <i class="bi {{ cat.icon }} tab-icon" data-cat="{{ cat.value }}"></i>{{ cat.label }}
       <span class="tab-count" data-count="{{ cat.count }}">{{ cat.count }}</span>
     </button>
@@ -141,7 +143,8 @@
 
     <!-- เสร็จแล้ว (always last) -->
     {% with done_count=cal_stats.done %}
-    <button class="cal-filter-tab tab-done" data-filter="done">
+    <button class="cal-filter-tab tab-done" data-filter="done"
+            data-bs-toggle="tooltip" data-bs-placement="bottom" title="งานที่ mark เสร็จแล้วทั้งหมด">
       <i class="bi bi-check2-all tab-icon"></i>เสร็จแล้ว
       <span class="tab-count" data-count="{{ done_count }}">{{ done_count }}</span>
     </button>

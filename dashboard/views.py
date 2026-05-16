@@ -979,6 +979,20 @@ def calendar_view(request):
     from dashboard.models import Note
     notes = Note.objects.all()
 
+    # Tooltip description ของแต่ละ category
+    cat_tooltip_map = {
+        "general":      "งานทั่วไปที่สร้างเอง",
+        "priority":     "งานสำคัญที่ต้องทำก่อน",
+        "meeting":      "นัดประชุม ทั้งภายในและภายนอก",
+        "delivery":     "งานส่งมอบให้ลูกค้า",
+        "personal":     "งานส่วนตัว ไม่เกี่ยวธุรกิจ",
+        "milestone":    "แผนงานหลัก Roadmap ธุรกิจ",
+        "action":       "งาน Action ที่ต้องลงมือทำ",
+        "recurring":    "งานประจำที่เกิดซ้ำทุกวัน/สัปดาห์",
+        "content_plan": "แผน Content สำหรับ Blog และ Social",
+        "backlog":      "หัวข้อ Content ที่รอเขียน",
+    }
+
     # Icon mapping for filter toolbar
     cat_icon_map = {
         "general":      "bi-pin-fill",
@@ -1009,10 +1023,11 @@ def calendar_view(request):
 
     category_filters = [
         {
-            "value": value,
-            "label": label,
-            "icon":  cat_icon_map.get(value, "bi-circle"),
-            "count": cat_counts.get(value, 0),
+            "value":   value,
+            "label":   label,
+            "icon":    cat_icon_map.get(value, "bi-circle"),
+            "count":   cat_counts.get(value, 0),
+            "tooltip": cat_tooltip_map.get(value, label),
         }
         for value, label in CalendarEvent.CATEGORY_CHOICES
     ]
