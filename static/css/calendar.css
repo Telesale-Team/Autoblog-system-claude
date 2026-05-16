@@ -923,22 +923,20 @@
 }
 [data-bs-theme="light"] #cal-subheader { background: rgba(201,169,110,.04); }
 
-/* Clock */
-.cal-sub-clock {
-  display: flex;
-  align-items: center;
-  gap: .45rem;
-  font-size: .82rem;
+/* Clock ใน fc-toolbar-title */
+.fc-clock-date {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--heading-dark-bg, #faf6ee);
   font-family: var(--font-th);
 }
-#calClockDate { color: #cbd5e1; font-weight: 500; }
-.cal-sub-sep  { color: rgba(201,169,110,.4); }
-#calClockTime {
+.fc-clock-sep { color: rgba(201,169,110,.5); margin: 0 .35rem; }
+.fc-clock-time {
   font-family: Consolas, monospace;
-  color: var(--brand-gold, #c9a96e);
+  font-size: .95rem;
   font-weight: 700;
-  font-size: .8rem;
-  letter-spacing: .05em;
+  color: var(--brand-gold, #c9a96e);
+  letter-spacing: .06em;
 }
 
 /* Picker */
