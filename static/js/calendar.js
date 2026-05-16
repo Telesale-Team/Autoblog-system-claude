@@ -142,25 +142,65 @@ document.addEventListener('DOMContentLoaded', function () {
       const dayModal = new bootstrap.Modal(document.getElementById('dayEventsModal'));
 
       list.innerHTML = '';
-      events.forEach(function (ev, idx) {
-        const cat  = (ev.extendedProps && ev.extendedProps.category) || 'milestone';
-        const cfg  = getCfg(cat);
-        const done = !!(ev.extendedProps && ev.extendedProps.isCompleted);
+      events.forEach(function (ev) {
+        const cat      = (ev.extendedProps && ev.extendedProps.category) || 'milestone';
+        const cfg      = getCfg(cat);
+        const done     = !!(ev.extendedProps && ev.extendedProps.isCompleted);
         const isSystem = !!(ev.extendedProps && ev.extendedProps.isSystem);
+        const dbId     = ev.extendedProps && ev.extendedProps.dbId;
 
         const item = document.createElement('div');
         item.className = 'day-ev-item' + (done ? ' day-ev-done' : '');
+
+        // Check button — toggle done (เฉพาะ event ที่มี DB id)
+        const hasId  = !!(dbId || (isSystem && ev.id && !String(ev.id).startsWith('db_')));
+        const evId   = dbId || ev.id;
+        const checkBtn = hasId
+          ? '<button class="day-ev-check-btn' + (done ? ' is-done' : '') + '" title="' + (done ? 'ยกเลิกเสร็จ' : 'ทำเครื่องหมายเสร็จ') + '">'
+            + '<i class="bi ' + (done ? 'bi-check-circle-fill' : 'bi-circle') + '"></i>'
+            + '</button>'
+          : '<span class="day-ev-check-placeholder"></span>';
+
+        // Edit button — เฉพาะ user events
+        const editBtn = !isSystem && dbId
+          ? '<button class="day-ev-edit-btn" title="แก้ไข"><i class="bi bi-pencil"></i></button>'
+          : '';
+
         item.innerHTML = '<i class="bi ' + cfg.bsIcon + ' day-ev-icon" style="color:' + cfg.color + ';"></i>'
           + '<span class="day-ev-title">' + ev.title + '</span>'
           + '<span class="day-ev-actions">'
-          + (done ? '<i class="bi bi-check2-circle day-ev-check"></i>' : '')
-          + '<i class="bi bi-chevron-right day-ev-arrow"></i>'
+          + editBtn
+          + checkBtn
           + '</span>';
 
-        item.style.cursor = 'pointer';
-        item.addEventListener('click', function () {
-          openDetailModal(ev);   /* เปิด detail modal ซ้อนบน — day modal ยังอยู่ */
-        });
+        // Toggle done
+        if (hasId) {
+          item.querySelector('.day-ev-check-btn').addEventListener('click', function (e) {
+            e.stopPropagation();
+            const newDone = !done;
+            fetch(API + evId + '/', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+              body: JSON.stringify({ is_completed: newDone }),
+            }).then(function () {
+              // อัพเดต UI ทันที
+              item.classList.toggle('day-ev-done', newDone);
+              const icon = e.currentTarget.querySelector('i');
+              icon.className = 'bi ' + (newDone ? 'bi-check-circle-fill' : 'bi-circle');
+              e.currentTarget.classList.toggle('is-done', newDone);
+              cal.refetchEvents();
+            });
+          });
+        }
+
+        // Edit
+        if (!isSystem && dbId) {
+          item.querySelector('.day-ev-edit-btn').addEventListener('click', function (e) {
+            e.stopPropagation();
+            dayModal.hide();
+            setTimeout(function () { openDetailModal(ev); }, 250);
+          });
+        }
 
         list.appendChild(item);
       });

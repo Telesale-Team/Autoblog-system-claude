@@ -295,11 +295,6 @@
 /* ── Event category badge (modal) ──────────────────────────────────── */
 .event-cat-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .7rem; font-weight: 600; padding: .2rem .55rem; border-radius: 20px; border: 1px solid; white-space: nowrap; }
 
-/* Stacked modals — detail modal ซ้อนบน day events modal */
-#eventModal     { z-index: 1060; }
-#eventModal + .modal-backdrop { z-index: 1059; }
-#dayEventsModal { z-index: 1050; }
-
 /* ── Todo-style Event Detail Modal ─────────────────────────────────── */
 .todo-modal-dialog { max-width: 420px; }
 .todo-modal-content {
@@ -833,20 +828,44 @@
   line-height: 1.4;
 }
 .day-ev-item.day-ev-done .day-ev-title { text-decoration: line-through; color: var(--brand-muted, #94a3b8); }
-.day-ev-check { color: var(--brand-green, #10b981); font-size: .85rem; }
-.day-ev-actions { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
-.day-ev-arrow {
+.day-ev-actions { display: flex; align-items: center; gap: .35rem; flex-shrink: 0; }
+.day-ev-check-placeholder { width: 28px; }
+
+/* Check button — toggle done */
+.day-ev-check-btn {
+  background: transparent;
+  border: none;
   color: var(--brand-muted, #94a3b8);
-  font-size: .72rem;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: .25rem;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s, background .15s;
+  width: 28px; height: 28px;
+}
+.day-ev-check-btn:hover { background: rgba(16,185,129,.12); color: var(--brand-green, #10b981); }
+.day-ev-check-btn.is-done { color: var(--brand-green, #10b981); }
+.day-ev-check-btn.is-done:hover { background: rgba(239,68,68,.1); color: #f87171; }
+
+/* Edit button */
+.day-ev-edit-btn {
+  background: transparent;
+  border: none;
+  color: var(--brand-muted, #94a3b8);
+  font-size: .8rem;
+  cursor: pointer;
+  padding: .25rem;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
   opacity: 0;
-  transition: opacity .15s, transform .15s;
+  transition: opacity .15s, color .15s, background .15s;
 }
-.day-ev-item:hover .day-ev-arrow {
-  opacity: 1;
-  transform: translateX(2px);
-  color: var(--brand-gold, #c9a96e);
-}
-.day-ev-item:hover { background: rgba(201,169,110,.06); }
+.day-ev-item:hover .day-ev-edit-btn { opacity: 1; }
+.day-ev-edit-btn:hover { background: rgba(201,169,110,.12); color: var(--brand-gold, #c9a96e); }
+
+.day-ev-item:hover { background: rgba(201,169,110,.04); }
 
 
 /* =============================================================
