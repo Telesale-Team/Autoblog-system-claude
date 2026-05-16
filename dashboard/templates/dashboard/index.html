@@ -9,6 +9,46 @@
 
 {% block extra_css %}
 <style>
+  /* === Premium Page Header === */
+  .ds-page-header--premium {
+    background: linear-gradient(135deg, rgba(201,169,110,.07) 0%, rgba(26,39,68,.4) 100%);
+    border: 1px solid rgba(201,169,110,.18);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    border-bottom: none;
+  }
+  .ds-page-header--premium::after { display: none; }
+  .ds-ph-bar {
+    width: 4px; height: 48px; flex-shrink: 0;
+    background: linear-gradient(180deg, var(--brand-gold, #c9a96e) 0%, transparent 100%);
+    border-radius: 2px;
+  }
+  .ds-ph-greeting {
+    font-size: .72rem; font-weight: 700;
+    color: var(--brand-gold, #c9a96e); letter-spacing: .08em;
+    text-transform: uppercase; margin-bottom: .15rem;
+  }
+  .ds-live-badge {
+    display: inline-flex; align-items: center; gap: .35rem;
+    background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.3);
+    color: #10b981; border-radius: 20px;
+    font-size: .7rem; font-weight: 700; padding: .2rem .65rem;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  .ds-live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #10b981;
+    animation: live-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes live-pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+  .ds-clock {
+    color: var(--brand-gold, #c9a96e); font-size: .85rem;
+    font-weight: 600; font-variant-numeric: tabular-nums;
+    background: rgba(201,169,110,.08);
+    border: 1px solid rgba(201,169,110,.2);
+    border-radius: 8px; padding: .3rem .75rem;
+  }
+
   /* === Unified Dashboard === */
   .ud-chart-card {
     background: var(--dash-surface, #111827);
@@ -89,13 +129,20 @@
 
 {% block content %}
 
-<!-- === Page Header + Clock === -->
-<div class="ds-page-header d-flex align-items-end justify-content-between flex-wrap gap-3 mb-3">
-  <div>
-    <h4 class="page-title">Dashboard</h4>
-    <div class="page-subtitle">ภาพรวมธุรกิจ — อัปเดตแบบ real-time</div>
+<!-- === Premium Page Header === -->
+<div class="ds-page-header ds-page-header--premium d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+  <div class="d-flex align-items-center gap-3">
+    <div class="ds-ph-bar"></div>
+    <div>
+      <div class="ds-ph-greeting">สวัสดี, {{ request.user.get_short_name|default:request.user.username }}</div>
+      <h4 class="page-title mb-0">Dashboard</h4>
+      <div class="page-subtitle">ภาพรวมธุรกิจ — อัปเดตแบบ real-time</div>
+    </div>
   </div>
-  <span class="text-muted small"><i class="bi bi-clock me-1"></i>{% now "j M Y, H:i" %}</span>
+  <div class="d-flex align-items-center gap-3">
+    <span class="ds-live-badge"><span class="ds-live-dot"></span>Live</span>
+    <div class="ds-clock"><i class="bi bi-clock me-1"></i>{% now "j M Y, H:i" %}</div>
+  </div>
 </div>
 
 <!-- === Smart Alerts === -->
