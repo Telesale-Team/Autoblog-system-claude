@@ -159,8 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         item.style.cursor = 'pointer';
         item.addEventListener('click', function () {
-          dayModal.hide();
-          setTimeout(function () { openDetailModal(ev); }, 250);
+          openDetailModal(ev);   /* เปิด detail modal ซ้อนบน — day modal ยังอยู่ */
         });
 
         list.appendChild(item);

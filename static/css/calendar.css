@@ -295,6 +295,11 @@
 /* ── Event category badge (modal) ──────────────────────────────────── */
 .event-cat-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .7rem; font-weight: 600; padding: .2rem .55rem; border-radius: 20px; border: 1px solid; white-space: nowrap; }
 
+/* Stacked modals — detail modal ซ้อนบน day events modal */
+#eventModal     { z-index: 1060; }
+#eventModal + .modal-backdrop { z-index: 1059; }
+#dayEventsModal { z-index: 1050; }
+
 /* ── Todo-style Event Detail Modal ─────────────────────────────────── */
 .todo-modal-dialog { max-width: 420px; }
 .todo-modal-content {
