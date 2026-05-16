@@ -31,8 +31,6 @@ urlpatterns = [
     path("savings/", views.coming_soon, name="savings"),
 
     # ── Agent Feature Routes — redirect to feature apps ──────────────────
-    # Chief of Staff
-    path("standup/",          views.standup_view,       name="standup"),
     # Hustler
     path("quotes/",           views.redirect_to("crm:quote_list"),          name="quotes"),
     # Money Manager

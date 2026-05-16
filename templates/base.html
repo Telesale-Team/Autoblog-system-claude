@@ -363,13 +363,6 @@
             <span class="nav-label">Work Calendar</span>
           </a>
         </li>
-        <li class="nav-item" data-label="standup ประชุม daily team">
-          <a href="{% url 'dashboard:standup' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'standup' %}active{% endif %}">
-            <i class="bi bi-chat-square-dots"></i>
-            <span class="nav-label">Team Standup</span>
-          </a>
-        </li>
 
         {# ── Sales & CRM (Hustler + Customer Success) ── #}
         <li class="nav-section-label" data-section>Sales &amp; CRM</li>

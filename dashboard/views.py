@@ -139,28 +139,6 @@ def kpi_dashboard(request):
     })
 
 
-@staff_member_required
-def standup_view(request):
-    from dashboard.models import TeamStandup
-    standups = TeamStandup.objects.order_by("-date", "agent_name")
-    today = timezone.now().date()
-    if request.method == "POST":
-        from dashboard.forms import TeamStandupForm
-        form = TeamStandupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            from django.contrib import messages
-            messages.success(request, "บันทึก Standup แล้ว")
-            return redirect("dashboard:standup")
-    else:
-        from dashboard.forms import TeamStandupForm
-        form = TeamStandupForm(initial={"date": today})
-    return render(request, "dashboard/standup.html", {
-        "standups": standups,
-        "form": form,
-        "today": today,
-    })
-
 
 @staff_member_required
 def design_system_view(request):

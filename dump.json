@@ -1,0 +1,4533 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$ps8YTjITnT2Xg322ZexuLy$De4K3rv3HR25EVHsOkprm7vAtVmtgTqCLcXzjY+KNVE=",
+    "last_login": "2026-05-16T05:53:26.792Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "dphoompat.pjs@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-05-08T11:16:35.709Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "29za34koz8bolkc9fbp01sfz02yyc8gs",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7gt:uqyq8CwoHS-m8ee618TxP3-eHM5XFJvZ5eoteo_jV9U",
+    "expire_date": "2026-05-30T05:35:59.622Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5edt6ica28nwyza16fsw36bhuw6t1v99",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7qd:etkBPHzqEcm4QLI2RLPqYeduHTbdm0FWrvpsSSGU9to",
+    "expire_date": "2026-05-30T05:46:03.921Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6x9kzhkhen8ronvuye5gss7c5dv4kno1",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7Og:xEaF6rkZQAK1e8nN8VZzkMdvtQX2za2q6NSG3WxPCAc",
+    "expire_date": "2026-05-30T05:17:10.026Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7zdxx2kom5xfgjffkw6u938plhrkjmvm",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wLJf1:G5lFOFPe3-arAtN-jrSKTKojw0Bl0PDtgM0thDGi79E",
+    "expire_date": "2026-05-22T11:46:27.320Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "c92mms5eoc948lrq1avh5inf17r2v374",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7JH:rj4K26Jf-AWX5Z-UsaJI7nvLz5GQFazR7lmskKqIg6s",
+    "expire_date": "2026-05-30T05:11:35.291Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "crhctxc5xo09db478qbzvnu9iq08auae",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wLJk7:i5GrKtDdwPPEEfbhlqz3Nuuzy-Bj9AB85lEPgC5Kx7o",
+    "expire_date": "2026-05-22T11:51:43.982Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "hkku59tnrd145njapw0h40tavxxaj4d6",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wNTNo:DEBfpnd-AJvkPTXlg2OQn_Kef54eLh2nBk_yHEIGvF0",
+    "expire_date": "2026-05-28T10:33:36.045Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "jgbd5x38i2z5bdsate9bsu5nqmr2ibb9",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7xm:S0KcQnWWz6gK6QjzOFzx8OOXmJhHswPuKfooDvT0ZGM",
+    "expire_date": "2026-05-30T05:53:26.796Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "l9v4qbrxou2qkyd8z28zy54pquuy7y7n",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7c7:jbdL_eJdxtPNdAb83V-Jei5Asc7Kfc3Ld-y-avs2PAI",
+    "expire_date": "2026-05-30T05:31:03.292Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "m6ruo5jketnws8t9lwyvrqqz33o4dkng",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7JR:rUuWsM5ICwMbdcVdEKYMCCtJVLE4Laq05r9mmRB-nGo",
+    "expire_date": "2026-05-30T05:11:45.649Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "mmfu9d6n76x29wlwpriyvjsk8omhdst2",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wNis9:sJCH-jubhWbW-nrBospRZP8PFGXBRufGiGBuRKf917U",
+    "expire_date": "2026-05-29T03:05:57.960Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "mzagefxg3ha4la7nz264erhfdagn9hzz",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wLJeO:QB2FW5zM7Fw-hT8FGWT4XldqLoNgAut4SmEQveL8sFI",
+    "expire_date": "2026-05-22T11:45:48.118Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "r107j85rgpumtjeiumro3rr8bwx41avk",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wO7Wm:IpCvYBCT1dZPiulraVZ0oyYTWoyuVkIJV5DOFEYrcuE",
+    "expire_date": "2026-05-30T05:25:32.677Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vef44d9gb6vhfo4wgihftmkj0wq91q8v",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wLJk0:mrQqxjZUiRIRTBgnH685VuBa1j2MmmnZjmbUJcZ4Rxc",
+    "expire_date": "2026-05-22T11:51:36.261Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "xqc5krwhr1dplyuz3fwkyluk7hefgckv",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wLJeZ:OBg0dSaK7MDpLMvZZqv6Uthw_cAUbQcC2sQyYqZkSJA",
+    "expire_date": "2026-05-22T11:45:59.654Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "yzjke5xyp8p7rdxfh8pyadoz3ux1zt8l",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wLJmO:7FwVvBpfnZTeMGDWInP17t-fZvlRIMVC5K9O3m57kKU",
+    "expire_date": "2026-05-22T11:54:04.119Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "zgi4am8hn99p87sh7ockt0ew42bd4us6",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUUkSrHDyM4ZIsd2SAGlUtNOiLtDpQ6w_vfef5lE61LT2nVOo5izcebwu2Xih7YNyJ3abbI8tWUes90Uu9Nur5Po87K7fweVev3WAQOEyC57OLECeRQBAnaeMnh1sWBwIkPxyohRnfhY6JhLkMA4oHl_AOVvOEk:1wLKAK:OA1Gw2Gt9c5DRFnuWfMcCNwxSvVxa8IOECxS1lRGEO4",
+    "expire_date": "2026-05-22T12:18:48.849Z"
+  }
+},
+{
+  "model": "blog.category",
+  "pk": 1,
+  "fields": {
+    "name": "Educational",
+    "slug": "educational",
+    "description": "บทความ how-to, tutorial, framework สำหรับให้ความรู้",
+    "display_order": 1,
+    "color": "secondary"
+  }
+},
+{
+  "model": "blog.category",
+  "pk": 2,
+  "fields": {
+    "name": "Industry Insight",
+    "slug": "insights",
+    "description": "Trend, news, prediction ในวงการ AI",
+    "display_order": 2,
+    "color": "secondary"
+  }
+},
+{
+  "model": "blog.category",
+  "pk": 3,
+  "fields": {
+    "name": "Case Study",
+    "slug": "case-studies",
+    "description": "เรื่องราวลูกค้าและ ROI ที่ได้จริง",
+    "display_order": 3,
+    "color": "secondary"
+  }
+},
+{
+  "model": "blog.category",
+  "pk": 4,
+  "fields": {
+    "name": "Behind the Scenes",
+    "slug": "behind-the-scenes",
+    "description": "เบื้องหลังการทำงาน, brand, personality",
+    "display_order": 4,
+    "color": "secondary"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 1,
+  "fields": {
+    "name": "OpenClaw",
+    "slug": "openclaw"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 2,
+  "fields": {
+    "name": "AI Gateway",
+    "slug": "ai-gateway"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 3,
+  "fields": {
+    "name": "Self-Hosted",
+    "slug": "self-hosted"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 4,
+  "fields": {
+    "name": "SME",
+    "slug": "sme"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 5,
+  "fields": {
+    "name": "PDPA",
+    "slug": "pdpa"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 6,
+  "fields": {
+    "name": "AI Chatbot",
+    "slug": "ai-chatbot"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 7,
+  "fields": {
+    "name": "LINE",
+    "slug": "line"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 8,
+  "fields": {
+    "name": "Tutorial",
+    "slug": "tutorial"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 9,
+  "fields": {
+    "name": "How-to",
+    "slug": "how-to"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 10,
+  "fields": {
+    "name": "Claude Code",
+    "slug": "claude-code"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 11,
+  "fields": {
+    "name": "AI Coding",
+    "slug": "ai-coding"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 12,
+  "fields": {
+    "name": "มือใหม่",
+    "slug": "muue-aihm"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 13,
+  "fields": {
+    "name": "Anthropic",
+    "slug": "anthropic"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 14,
+  "fields": {
+    "name": "AI",
+    "slug": "ai"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 15,
+  "fields": {
+    "name": "ธุรกิจ",
+    "slug": "thurkicch"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 16,
+  "fields": {
+    "name": "AI automation",
+    "slug": "ai-automation"
+  }
+},
+{
+  "model": "blog.tag",
+  "pk": 17,
+  "fields": {
+    "name": "ปรับตัว",
+    "slug": "prabtaw"
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 4,
+  "fields": {
+    "title": "OpenClaw คืออะไร? ทำไม SME ไทยควรรู้จัก AI Gateway แบบ Self-Hosted",
+    "slug": "openclaw-introduction-for-thai-sme",
+    "author": [
+      "admin"
+    ],
+    "category": 1,
+    "excerpt": "ทำความรู้จัก OpenClaw — AI Gateway แบบ open-source ที่ติดตั้งบน server ของคุณเอง เชื่อม LINE, Telegram, WhatsApp กับ Claude/GPT/Gemini พร้อมเหตุผลว่าทำไมมันเหมาะกับ SME ไทยมากกว่า SaaS Chatbot ทั่วไป",
+    "content": "<p>ในยุคที่ทุกธุรกิจพูดถึง AI กัน เจ้าของกิจการ SME หลายคนคงเริ่มมองหาวิธีนำ AI Chatbot มาใช้ตอบลูกค้า แต่พอลองหาข้อมูล กลับเจอตัวเลือกที่แพงกว่าที่คิด หรือไม่ก็ต้องส่งข้อมูลลูกค้าออกไปบน cloud ของบริษัทต่างประเทศ</p>\n\n<p><strong>OpenClaw</strong> คือคำตอบสำหรับโจทย์นี้ — โปรเจกต์ open-source ที่กำลังมาแรงในวงการ AI Automation ที่ออกแบบมาให้ติดตั้งบน server ของคุณเองได้ และเชื่อมต่อกับ AI ได้ทุกค่ายในตลาด</p>\n\n<h2>OpenClaw ทำงานอย่างไร</h2>\n<p>OpenClaw ทำหน้าที่เป็น \"Gateway\" หรือสะพานเชื่อมระหว่าง 3 ส่วนหลัก:</p>\n<ol>\n  <li><strong>ช่องทางสื่อสาร (Channels)</strong> — LINE, Telegram, WhatsApp, Facebook Messenger, WebChat, Slack, Discord และอื่น ๆ รวม 28+ ช่องทาง</li>\n  <li><strong>AI Models</strong> — Claude, GPT-4, Gemini, Llama, Mistral, Ollama (LLM ที่รัน local) รวม 35+ providers</li>\n  <li><strong>ระบบฝั่งคุณ</strong> — ฐานข้อมูลลูกค้า, CRM, ERP, ระบบสต็อก ฯลฯ</li>\n</ol>\n\n<p>เมื่อมีข้อความเข้ามาจากช่องทางใดก็ตาม OpenClaw จะรับ ส่งให้ AI ประมวลผล แล้วตอบกลับลูกค้าโดยอัตโนมัติ ทั้งหมดเกิดขึ้นบน server ของคุณเอง</p>\n\n<h2>ความต่างจาก Chatbot ทั่วไปในตลาด</h2>\n<p>Chatbot SaaS อย่าง Chatfuel, ManyChat หรือ Dialogflow มีข้อดีคือใช้งานง่าย แต่มีข้อจำกัดสำคัญ:</p>\n<ul>\n  <li>ข้อมูลลูกค้าทั้งหมดวิ่งผ่าน server ของผู้ให้บริการ — เป็นความเสี่ยงด้าน <strong>PDPA</strong></li>\n  <li>คิดเงินแบบ per-message หรือ per-user — ยิ่งใช้เยอะ ยิ่งจ่ายแพง</li>\n  <li>ผูกกับ AI provider เดียว ย้ายไม่ได้</li>\n  <li>ปรับแต่งได้จำกัด ทำ workflow ซับซ้อนยาก</li>\n</ul>\n\n<p>OpenClaw แก้ปัญหาเหล่านี้ทั้งหมด เพราะเป็น <strong>self-hosted</strong> และ <strong>MIT License</strong> — แปลว่าโค้ดทั้งหมดเป็นของคุณ ใช้เชิงพาณิชย์ได้ ไม่มีค่ารายเดือนผูกมัด</p>\n\n<h2>ทำไม SME ไทยถึงเหมาะ</h2>\n<p>SME ไทยส่วนใหญ่มีลูกค้าหลักอยู่บน LINE และต้องคำนึงถึง พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) ที่บังคับใช้แล้วตั้งแต่ปี 2565 OpenClaw ตอบโจทย์ทั้งสองข้อนี้พอดี:</p>\n\n<blockquote>\n\"ข้อมูลลูกค้าไม่ออกนอกบริษัท\" คือคำที่ลูกค้าทุกรายของเราพอใจมากที่สุด หลังเปลี่ยนจาก SaaS chatbot เดิม\n</blockquote>\n\n<p>นอกจากนี้ การจ่ายแบบครั้งเดียว + ค่า maintenance รายเดือน ทำให้ <strong>ประหยัดกว่า SaaS 60-80%</strong> เมื่อคำนวณค่าใช้จ่ายระยะยาว 3 ปี โดยเฉพาะธุรกิจที่มี volume ข้อความเยอะ</p>\n\n<h2>ใครเหมาะ ใครยังไม่เหมาะ</h2>\n<p><strong>เหมาะกับคุณถ้า:</strong></p>\n<ul>\n  <li>มีลูกค้าทักผ่าน LINE/Telegram มากกว่า 100 คน/วัน</li>\n  <li>ทีม CS ทำไม่ทัน หรืออยากตอบ 24/7</li>\n  <li>กังวลเรื่องข้อมูลลูกค้ารั่วหรือ PDPA</li>\n  <li>อยากควบคุมระบบเองทั้งหมด ไม่ผูกขาดกับ vendor</li>\n</ul>\n\n<p><strong>ยังไม่เหมาะถ้า:</strong></p>\n<ul>\n  <li>มีลูกค้าทักน้อยมาก (&lt; 20 คน/วัน) — SaaS plan ฟรี/ถูกอาจคุ้มกว่า</li>\n  <li>ไม่มีทีม IT เลย และไม่ต้องการจ้างคนดูแลระบบ</li>\n</ul>\n\n<h2>สรุป</h2>\n<p>OpenClaw คือทางเลือกที่ลงตัวระหว่าง <em>\"ใช้งานง่ายแบบ SaaS\"</em> กับ <em>\"ควบคุมข้อมูลเองแบบ on-premise\"</em> สำหรับ SME ไทยที่กำลังมองหาระบบ AI Chatbot ที่จริงจัง ไม่ใช่ของเล่น และไม่ต้องการเสี่ยงเรื่อง PDPA หรือค่าใช้จ่ายที่บานปลาย</p>\n\n<p>ในบทความถัดไป เราจะลงลึกเรื่อง <strong>\"5 เหตุผลที่ AI Gateway ดีกว่า SaaS Chatbot\"</strong> และ <strong>\"วิธีตั้งค่า OpenClaw เชื่อม LINE ใน 5 นาที\"</strong> ติดตามได้เลยครับ</p>\n",
+    "cover_image": "blog/covers/2026/05/openclaw-introduction-for-thai-sme_CS22OKV.jpg",
+    "cover_image_url": "",
+    "meta_title": "",
+    "meta_description": "",
+    "og_image": "",
+    "status": "published",
+    "is_featured": true,
+    "views_count": 8,
+    "published_at": "2026-05-06T12:01:00.188Z",
+    "created_at": "2026-05-08T12:01:00.189Z",
+    "updated_at": "2026-05-08T12:05:27.160Z",
+    "tags": [
+      2,
+      1,
+      4,
+      3
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 5,
+  "fields": {
+    "title": "5 เหตุผลที่ AI Gateway บน Server ตัวเอง ดีกว่า SaaS Chatbot สำหรับธุรกิจไทย",
+    "slug": "5-reasons-ai-gateway-better-than-saas",
+    "author": [
+      "admin"
+    ],
+    "category": 2,
+    "excerpt": "เทียบให้เห็นชัด ๆ ว่าทำไม AI Gateway แบบ self-hosted ถึงเหมาะกับ SME ไทยมากกว่า SaaS chatbot ทั่วไป — ทั้งเรื่องราคา, PDPA, การควบคุม, scaling และความยืดหยุ่นในระยะยาว",
+    "content": "<p>ทุกครั้งที่เราพูดคุยกับเจ้าของ SME ไทยเรื่อง AI Chatbot คำถามแรกที่เจอเสมอคือ \"แล้วต่างจาก ManyChat หรือ Chatfuel ยังไง?\" บทความนี้จะตอบให้เห็นภาพชัดที่สุด ผ่าน 5 เหตุผลที่ทำให้ AI Gateway แบบ self-hosted (เช่น OpenClaw) เหนือกว่าในระยะยาว</p>\n\n<h2>1. ค่าใช้จ่ายระยะยาวต่างกันเป็นเท่าตัว</h2>\n<p>SaaS Chatbot คิดเงินแบบ subscription รายเดือน + บางเจ้าคิด per-message อีก ตัวอย่างชัดเจน:</p>\n<ul>\n  <li>ManyChat Pro: $15-30/เดือน + ขึ้นตาม subscriber → ปีละ 6,000-15,000 บาท</li>\n  <li>Chatfuel Premium: $14.99-79.99/เดือน → ปีละ 6,000-32,000 บาท</li>\n  <li>Botpress, Tidio, Intercom: $39-200/เดือน → ปีละ 15,000-80,000+ บาท</li>\n</ul>\n<p>เทียบกับ self-hosted: <strong>จ่ายค่า setup ครั้งเดียว 15,000-80,000 + maintenance 2,000-8,000/เดือน</strong> ที่ไม่ขึ้นตาม volume ข้อความ คำนวณ 3 ปี ประหยัดกว่า 50-70% โดยเฉพาะถ้ามีลูกค้าเยอะ</p>\n\n<h2>2. ข้อมูลลูกค้าไม่ออกนอกบริษัท = PDPA-Safe จริง</h2>\n<p>นี่คือเหตุผลที่ <strong>คลินิก, สำนักงานกฎหมาย, สถาบันการเงิน</strong> ในไทยเลือก self-hosted กันเกือบทั้งหมด เพราะ:</p>\n\n<blockquote>\nพ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) กำหนดโทษปรับสูงสุด <strong>5 ล้านบาท</strong> สำหรับการประมวลผลข้อมูลส่วนบุคคลโดยไม่ได้รับความยินยอม หรือไม่มีมาตรการรักษาความปลอดภัยที่เหมาะสม\n</blockquote>\n\n<p>เมื่อข้อมูลลูกค้าวิ่งผ่าน server ของผู้ให้บริการ SaaS ที่ไหนก็ไม่รู้ในต่างประเทศ คุณต้อง:</p>\n<ul>\n  <li>มี Data Processing Agreement (DPA) ที่ชัดเจน</li>\n  <li>ตรวจสอบว่า vendor มี certification (เช่น ISO 27001, SOC 2)</li>\n  <li>แจ้งลูกค้าว่าข้อมูลถูกประมวลผลที่ไหน</li>\n</ul>\n<p>ในขณะที่ self-hosted = ข้อมูลทุกอย่างอยู่บน server ของคุณ ไม่ต้องเซ็น DPA ใด ๆ ความเสี่ยงเหลือศูนย์</p>\n\n<h2>3. AI Multi-Provider — ไม่ผูกขาดกับใคร</h2>\n<p>นี่คือข้อได้เปรียบที่หลายคนมองข้าม SaaS Chatbot ส่วนใหญ่ผูกกับ AI provider เดียว (มัก OpenAI) ถ้าวันนึง:</p>\n<ul>\n  <li>OpenAI ขึ้นราคา → คุณไม่มีทางเลือก</li>\n  <li>OpenAI ล่ม → bot คุณก็ล่ม</li>\n  <li>มี AI ใหม่ที่เก่งกว่า/ถูกกว่า → ย้ายไม่ได้</li>\n</ul>\n<p>OpenClaw และ AI Gateway แนวเดียวกันรองรับ <strong>35+ LLM providers</strong> สลับได้ในไม่กี่นาทีแค่เปลี่ยน config ไม่ต้องเขียนโค้ดใหม่</p>\n\n<h2>4. Customization ที่ทำได้จริง ไม่ใช่แค่หน้าตา</h2>\n<p>SaaS chatbot ส่วนใหญ่ให้ customize ได้แค่ flow และข้อความ แต่พอจะทำอะไรซับซ้อน เช่น:</p>\n<ul>\n  <li>เชื่อม CRM/ERP ของบริษัทเอง</li>\n  <li>ดึงข้อมูลจากฐานข้อมูล real-time</li>\n  <li>Multi-agent — แบ่ง AI หลายตัวทำหน้าที่ต่างกัน (sales/support/internal)</li>\n  <li>Custom workflow ที่ต้องเรียก API หลายเส้น</li>\n</ul>\n<p>ก็จะเจอข้อจำกัด หรือต้องจ่าย Enterprise plan แพงมาก ในขณะที่ self-hosted = เขียน code เองได้ทั้งหมด ไม่มีลิมิต</p>\n\n<h2>5. Scale ไม่กลัว — เพราะค่าใช้จ่ายไม่พุ่ง</h2>\n<p>ปัญหาที่เจอบ่อยมากในธุรกิจที่โต: SaaS plan เริ่มจาก 1,000 subscribers ฟรี แต่พอ 10,000 → 50,000 → 100,000 ราคากระโดด exponential</p>\n<p>self-hosted บน VPS เริ่มต้น 300-500 บาท/เดือน รองรับได้ <strong>หลักหมื่นถึงแสน users</strong> ก่อนต้อง upgrade server ค่าใช้จ่ายเพิ่มแบบ linear ไม่ใช่ exponential</p>\n\n<h2>แล้วเมื่อไหร่ SaaS เหมาะกว่า?</h2>\n<p>SaaS chatbot ก็มีจุดเด่น โดยเฉพาะถ้า:</p>\n<ul>\n  <li>คุณต้องการ launch ภายใน 1-2 วัน ไม่มีทีม IT</li>\n  <li>Volume ข้อความน้อยมาก (&lt; 1,000 messages/เดือน)</li>\n  <li>ไม่มี sensitive data ที่กังวล PDPA</li>\n  <li>ต้องการ no-code visual flow builder</li>\n</ul>\n\n<h2>สรุป</h2>\n<p>ถ้าธุรกิจคุณเริ่มจริงจัง — มีลูกค้าทักเข้ามาทุกวัน, มีข้อมูลที่อ่อนไหว, อยากควบคุมระยะยาว — <strong>AI Gateway แบบ self-hosted คือคำตอบที่ลงทุนคุ้มกว่ามาก</strong> โดยเฉพาะเมื่อมองในแง่ ROI 3 ปี</p>\n\n<p>บทความถัดไปเราจะแสดงวิธีตั้งค่า OpenClaw เชื่อม LINE จริง ๆ ใน 5 นาที</p>\n",
+    "cover_image": "blog/covers/2026/05/5-reasons-ai-gateway-better-than-saas_bqZPusz.jpg",
+    "cover_image_url": "",
+    "meta_title": "",
+    "meta_description": "",
+    "og_image": "",
+    "status": "published",
+    "is_featured": true,
+    "views_count": 11,
+    "published_at": "2026-05-07T12:01:00.201Z",
+    "created_at": "2026-05-08T12:01:00.213Z",
+    "updated_at": "2026-05-08T12:05:27.303Z",
+    "tags": [
+      6,
+      2,
+      5,
+      4
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 6,
+  "fields": {
+    "title": "คู่มือเริ่มต้น: ตั้งค่า OpenClaw เชื่อม LINE ใน 5 นาที (ฉบับ SME)",
+    "slug": "openclaw-line-setup-in-5-minutes",
+    "author": [
+      "admin"
+    ],
+    "category": 1,
+    "excerpt": "Step-by-step สำหรับเจ้าของ SME ที่อยากลอง deploy OpenClaw เชื่อม LINE Official Account เข้ากับ AI ตั้งแต่ขั้นเตรียม VPS, ตั้ง webhook, config AI provider จนถึงการทดสอบครั้งแรก",
+    "content": "<p>หลังจากบทความแนะนำ OpenClaw และเหตุผลที่ควรเลือก self-hosted ครั้งนี้เรามาลงมือจริง — คู่มือทีละขั้นตอนสำหรับการตั้งค่า OpenClaw เชื่อม LINE Official Account ให้ AI ตอบลูกค้าอัตโนมัติ</p>\n\n<blockquote>\nหมายเหตุ: บทความนี้เน้นภาพรวมและแนวคิด ไม่ใช่ technical doc ของ OpenClaw — สำหรับขั้นตอนละเอียดยิบ ดูที่ docs.openclaw.ai\n</blockquote>\n\n<h2>สิ่งที่ต้องเตรียม</h2>\n<ul>\n  <li><strong>VPS</strong> Linux (Ubuntu 22.04+) อย่างน้อย 2 GB RAM, 20 GB SSD — แนะนำ Hostinger, DigitalOcean, Cloudways (ราคาเริ่มต้น 200-500 บาท/เดือน)</li>\n  <li><strong>LINE Official Account</strong> + LINE Developers account (ฟรี ที่ <code>developers.line.biz</code>)</li>\n  <li><strong>API Key</strong> ของ LLM ที่จะใช้ (Claude/OpenAI/Gemini) — ราคาเริ่มต้นประมาณ $5</li>\n  <li><strong>Domain name</strong> 1 ตัว สำหรับ webhook (เช่น <code>bot.yourcompany.co.th</code>)</li>\n</ul>\n\n<h2>ขั้นที่ 1: ติดตั้ง OpenClaw บน VPS</h2>\n<p>หลัง SSH เข้า VPS แล้ว วิธีที่ง่ายที่สุดคือใช้ Docker:</p>\n<pre><code>curl -fsSL https://get.openclaw.ai/install.sh | bash</code></pre>\n<p>script จะติดตั้ง Docker, Docker Compose, และ pull image OpenClaw มาให้พร้อมใช้ ใช้เวลาประมาณ 2-3 นาที</p>\n\n<h3>ตั้งค่า config เริ่มต้น</h3>\n<p>OpenClaw จะถาม:</p>\n<ul>\n  <li>ชื่อโปรเจกต์</li>\n  <li>Admin email + password</li>\n  <li>Port ที่จะรัน (default 8080)</li>\n</ul>\n<p>เสร็จแล้วเข้า dashboard ผ่านเบราว์เซอร์: <code>http://your-server-ip:8080</code></p>\n\n<h2>ขั้นที่ 2: ตั้งค่า LINE Channel</h2>\n<p>ที่ LINE Developers Console:</p>\n<ol>\n  <li>สร้าง <strong>Provider</strong> และ <strong>Messaging API channel</strong></li>\n  <li>คัดลอก <code>Channel Secret</code> และ <code>Channel Access Token</code></li>\n  <li>ปิด \"Auto-reply messages\" และ \"Greeting messages\" (ป้องกัน LINE ตอบทับ AI)</li>\n</ol>\n\n<h3>เพิ่ม channel ใน OpenClaw</h3>\n<p>ที่ dashboard กด <em>Channels → Add new → LINE</em> วาง 2 ค่าที่คัดลอกมา OpenClaw จะคืนค่า <strong>Webhook URL</strong> ให้</p>\n\n<h3>ตั้ง webhook ที่ LINE</h3>\n<p>กลับไปที่ LINE Developers Console → Messaging API → Webhook URL → วาง URL ที่ได้ → กด <em>Verify</em></p>\n\n<p>ถ้าขึ้น <strong>Success</strong> แปลว่าเชื่อมต่อสำเร็จแล้ว!</p>\n\n<h2>ขั้นที่ 3: ตั้งค่า AI Agent</h2>\n<p>ที่ <em>Agents → Create new</em>:</p>\n<ul>\n  <li><strong>Provider</strong>: เลือก Claude, OpenAI, หรือ Gemini</li>\n  <li><strong>API Key</strong>: ใส่ API key ที่ได้</li>\n  <li><strong>Model</strong>: แนะนำ <code>claude-haiku</code> หรือ <code>gpt-4o-mini</code> (ถูก + เร็ว) สำหรับ SME ทั่วไป</li>\n  <li><strong>System Prompt</strong>: เขียนบทบาท เช่น \"คุณคือพนักงาน CS ของร้าน X ตอบคำถามลูกค้าเรื่องสินค้า ราคา และการจัดส่ง อย่างเป็นมิตร ใช้ภาษาไทย\"</li>\n</ul>\n\n<h2>ขั้นที่ 4: เชื่อม Agent กับ Channel</h2>\n<p>ที่ <em>Routing → New rule</em>:</p>\n<ul>\n  <li>Channel: เลือก LINE channel ที่สร้างไว้</li>\n  <li>Agent: เลือก agent ที่สร้างไว้</li>\n  <li>Memory: เปิด <strong>Per-user session</strong> เพื่อให้ AI จำบทสนทนาของลูกค้าแต่ละคนได้</li>\n</ul>\n\n<h2>ขั้นที่ 5: ทดสอบ</h2>\n<p>เพิ่ม LINE OA เป็นเพื่อน → ส่งข้อความทักทาย → AI ควรตอบกลับภายใน 2-3 วินาที</p>\n\n<p>ถ้า AI ไม่ตอบ ลอง check:</p>\n<ul>\n  <li>Webhook URL valid และ HTTPS (LINE บังคับ)</li>\n  <li>API key ของ AI ถูกต้องและมี credit เหลือ</li>\n  <li>Log ใน OpenClaw dashboard (มีบอกชัดเจนว่าผิดที่ขั้นไหน)</li>\n</ul>\n\n<h2>Tips สำหรับ SME</h2>\n<ol>\n  <li><strong>เริ่มที่ Claude Haiku หรือ GPT-4o-mini</strong> — ค่าใช้จ่ายประมาณ 500-2,000 บาท/เดือน สำหรับ traffic SME ทั่วไป</li>\n  <li><strong>System prompt ดี = บอทดี</strong> ใช้เวลาเขียน prompt ให้ละเอียด ระบุรายการสินค้า/ราคา/นโยบายไว้เลย</li>\n  <li><strong>ตั้ง confidence threshold + human handoff</strong> — เมื่อ AI ไม่แน่ใจ ส่งต่อให้ทีมงานทันที (สำคัญมากในธุรกิจที่ผิดไม่ได้)</li>\n  <li><strong>ดู log ทุกวัน 1-2 สัปดาห์แรก</strong> — จะเห็น pattern ว่าลูกค้าถามอะไร แล้วปรับ prompt ให้ดีขึ้นเรื่อย ๆ</li>\n</ol>\n\n<h2>สรุป</h2>\n<p>การ deploy OpenClaw ครั้งแรกใช้เวลาจริง ๆ ประมาณ 30-60 นาที ถ้ามีพื้นฐาน Linux เบื้องต้น สำหรับ SME ที่ไม่มีทีม IT แนะนำให้ใช้บริการติดตั้งกับ vendor (เริ่ม 15,000 บาท) จะคุ้มกว่ามากเพราะได้ทั้ง training + maintenance plan</p>\n\n<p>หลัง deploy แล้ว สิ่งที่จะได้ทันที: <strong>ลูกค้าได้คำตอบ 24/7</strong>, <strong>ทีม CS เหลือเวลาทำงานสำคัญ</strong>, และ <strong>ข้อมูลทุกอย่างอยู่บน server คุณเอง</strong></p>\n",
+    "cover_image": "blog/covers/2026/05/openclaw-line-setup-in-5-minutes_iW2Z95j.jpg",
+    "cover_image_url": "",
+    "meta_title": "",
+    "meta_description": "",
+    "og_image": "",
+    "status": "published",
+    "is_featured": true,
+    "views_count": 20,
+    "published_at": "2026-05-08T12:01:00.298Z",
+    "created_at": "2026-05-08T12:01:00.299Z",
+    "updated_at": "2026-05-08T12:05:27.455Z",
+    "tags": [
+      9,
+      7,
+      1,
+      8
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 7,
+  "fields": {
+    "title": "วิธีใช้ Claude Code สำหรับมือใหม่: เริ่มต้นใน 10 นาที",
+    "slug": "how-to-use-claude-code-beginner",
+    "author": [
+      "admin"
+    ],
+    "category": 1,
+    "excerpt": "สอนใช้ Claude Code AI coding assistant ตั้งแต่ติดตั้งจนใช้งานได้จริง พร้อมตัวอย่างเขียนโค้ด แก้ bug และ automation สำหรับ dev ไทยมือใหม่ — เริ่มฟรี!",
+    "content": "<blockquote><p><strong>เคยเสียเวลาทั้งบ่ายแก้ bug ตัวเดียวไหม?</strong> 😩</p><p>เขียนโค้ดติดตรงไหนก็ค้นใน Stack Overflow ทีละหน้า อ่าน docs ภาษาอังกฤษไม่เข้าใจ ถามใน LINE กลุ่มก็เงียบ — ปัญหานี้นัก dev ไทยทุกคนน่าจะเจอ</p><p>ถ้าเราบอกคุณว่ามี<strong>เครื่องมือฟรีที่ช่วยให้คุณเขียนโค้ดเร็วขึ้นมาก</strong> เข้าใจ codebase ของคุณ และตอบเป็นภาษาไทยได้ — คุณจะเชื่อไหม?</p><p>เครื่องมือนั้นชื่อ <strong>Claude Code</strong> บทความนี้จะสอนคุณตั้งแต่ติดตั้งจนใช้งานได้จริงใน <strong>10 นาที</strong></p></blockquote><p>สรุป Claude Code ใน 1 ภาพ</p><p>10 นาที</p><p>เริ่มต้นใช้งาน</p><p>ฟรี</p><p>มี Free tier</p><p>CLI</p><p>ใช้ใน terminal</p><p>TH ✓</p><p>เข้าใจไทย</p><hr><h2>Claude Code คืออะไร?</h2><p><strong>Claude Code</strong> คือ AI coding assistant อย่างเป็นทางการจาก <a href=\"https://anthropic.com\">Anthropic</a> (บริษัทเดียวกับที่สร้าง Claude AI ที่หลายคนใช้ผ่านเว็บ)</p><p>แต่ Claude Code ไม่ใช่แค่ chatbot ตอบคำถาม — มันคือ <strong>CLI tool ที่รันใน terminal ของคุณ</strong> สามารถ:</p><ul><li data-list-item-id=\"e6d85741eda2b3aa9a599a4cf9b7f119d\"><strong>อ่าน codebase ทั้ง project</strong> ของคุณได้ ไม่ใช่แค่ snippet ที่ copy ไปวาง</li><li data-list-item-id=\"e98fd6a3686aac40a41d91ef6895f85d8\"><strong>แก้ไขไฟล์จริง</strong> บนเครื่องคุณ ไม่ใช่แค่บอกว่าควรเขียนยังไง</li><li data-list-item-id=\"e5718f1487fdb10349a2d0afd734a318a\"><strong>รันคำสั่ง shell</strong> ได้ (เช่น <code>npm install</code>, <code>git commit</code>)</li><li data-list-item-id=\"e0a474dbb45389d584b50786d26fc30cf\"><strong>เข้าใจภาษาไทย</strong> ทั้ง prompt และ comment</li></ul><p>ลองเปรียบเทียบให้เห็นภาพ:</p><figure class=\"table\"><table><thead><tr><th>&nbsp;</th><th>ChatGPT</th><th>Claude Code</th></tr></thead><tbody><tr><td>รูปแบบ</td><td>เว็บ chat</td><td>CLI ใน terminal</td></tr><tr><td>เห็นไฟล์คุณไหม</td><td>❌ ต้อง copy-paste</td><td>✅ อ่านได้ทั้ง project</td></tr><tr><td>แก้ไฟล์ให้ได้ไหม</td><td>❌ บอกว่าต้องแก้</td><td>✅ แก้ให้เลย</td></tr><tr><td>รันคำสั่งได้ไหม</td><td>❌</td><td>✅</td></tr><tr><td>ภาษาไทย</td><td>✅</td><td>✅</td></tr></tbody></table></figure><hr><h2>ทำไม Dev มือใหม่ควรใช้ Claude Code</h2><p>ถ้าคุณเพิ่งเริ่มเขียนโค้ด หรือเป็น dev มาไม่นาน Claude Code จะเปลี่ยนวิธีทำงานของคุณ 3 ด้านหลัก:</p><p><strong>1. ประหยัดเวลาค้นหาคำตอบ</strong> แทนที่จะค้น \"javascript array filter syntax\" แล้วเปิด 5 แท็บเปรียบเทียบ — แค่บอก Claude Code ว่า \"ช่วยเขียน function กรอง user ที่อายุเกิน 18\" แล้วได้โค้ดพร้อมใช้ในไม่กี่วินาที</p><p><strong>2. อธิบายโค้ดเป็นภาษาไทยได้</strong> เจอโค้ดเก่าที่อ่านไม่ออก? พิมพ์ \"อธิบายไฟล์นี้ให้ฟังเป็นภาษาไทย\" Claude Code จะวิเคราะห์ไฟล์ทั้งหมดแล้วเล่าให้ฟังเหมือนพี่ในออฟฟิศสอนน้องใหม่</p><p><strong>3. ฟรี tier ใช้ได้พอสมควร</strong> ไม่ต้องจ่ายเงินก่อน — ลองใช้ฟรีก่อนตัดสินใจอัพเกรด</p><hr><p>ติดตั้ง Claude Code ใน 5 ขั้นตอน</p><ol><li data-list-item-id=\"ec72ff682ef5110256e64f53adf1d7cae\"><strong>สมัคร Anthropic Account</strong> — ที่ console.anthropic.com (ฟรี)</li><li data-list-item-id=\"e7228d01a9504d6b2063f808f86921565\"><strong>Install ผ่าน npm</strong> — รัน <code>npm install -g @anthropic-ai/claude-code</code></li><li data-list-item-id=\"eeff9c5a5ce6c55643073ed11dc291ffa\"><strong>Authenticate</strong> — รัน <code>claude</code> แล้วทำตามขั้นตอน</li><li data-list-item-id=\"e57757c12b8801ec54494714eb92c1f62\"><strong>ทดสอบด้วย /help</strong> — ดูคำสั่งทั้งหมดที่ใช้ได้</li><li data-list-item-id=\"e5b127c916b3140dcd6333e9e85f60d34\"><strong>ลองใช้กับ project แรก</strong> — พิมพ์เป็นภาษาไทยได้เลย</li></ol><h2>ติดตั้ง Claude Code ใน 5 Step</h2><blockquote><p>⚠️ <strong>ก่อนเริ่ม:</strong> คุณต้องมี Node.js (เวอร์ชัน 18 ขึ้นไป) ติดตั้งบนเครื่อง — ถ้ายังไม่มี ดาวน์โหลดที่ <a href=\"https://nodejs.org\">nodejs.org</a></p></blockquote><h3>Step 1 — สมัคร Anthropic Account</h3><p>ไปที่ <a href=\"https://console.anthropic.com\">console.anthropic.com</a> แล้วสมัครด้วย email หรือ Google</p><blockquote><p>💡 <strong>ถ้าอยากใช้ฟรี:</strong> สมัคร Claude Free ที่ <a href=\"https://claude.ai\">claude.ai</a> แทน — Claude Code รองรับการ login ผ่าน Claude account ได้</p></blockquote><h3>Step 2 — ติดตั้งผ่าน npm</h3><p>เปิด terminal (ถ้า Windows ใช้ PowerShell หรือ Command Prompt) แล้วรันคำสั่ง:</p><pre><code class=\"language-plaintext\">npm install -g @anthropic-ai/claude-code\r\n</code></pre><p>รอจนเสร็จ (ประมาณ 30 วินาที — 2 นาที ขึ้นกับความเร็วเน็ต)</p><h3>Step 3 — Authenticate ครั้งแรก</h3><p><code>cd</code> เข้าไปใน folder project ของคุณ (หรือสร้าง folder ใหม่ก็ได้) แล้วรัน:</p><pre><code class=\"language-plaintext\">claude\r\n</code></pre><p>ครั้งแรกจะให้เลือกวิธี login:</p><ul><li data-list-item-id=\"e881177c0d2dbb3046013e8526ae5eed5\"><strong>Claude Pro/Max subscription</strong> — ใช้ subscription ที่มีอยู่แล้ว (แนะนำสำหรับมือใหม่)</li><li data-list-item-id=\"e40aab0ae0651489c16a1a1e6b1033323\"><strong>Anthropic API key</strong> — สำหรับคนที่ใช้ API อยู่แล้ว</li></ul><p>เลือกวิธีที่สะดวก แล้วทำตาม instruction ที่ขึ้นบนจอ</p><h3>Step 4 — ทดสอบด้วย /help</h3><p>หลัง login สำเร็จจะเห็น prompt <code>&gt;</code> รออยู่ ลองพิมพ์:</p><pre><code class=\"language-plaintext\">/help\r\n</code></pre><p>จะขึ้นรายการคำสั่งที่ใช้ได้ทั้งหมด ถ้าเห็นแล้วแปลว่า <strong>install สำเร็จ</strong> 🎉</p><h3>Step 5 — ลองใช้กับ project แรก</h3><p>ลองพิมพ์เป็นภาษาไทยเลย:</p><pre><code class=\"language-plaintext\">ช่วยอธิบายโครงสร้าง project นี้ให้ฟังหน่อย\r\n</code></pre><p>Claude Code จะอ่านไฟล์ทั้ง folder แล้วเล่าให้ฟังว่ามีอะไรบ้าง — <strong>ยินดีด้วย คุณใช้เป็นแล้ว!</strong></p><hr><h2>ตัวอย่างใช้งานจริง 3 แบบ (ที่นัก dev มือใหม่ใช้บ่อย)</h2><h3>ตัวอย่าง 1 — แก้ bug ที่ติดมา 2 ชม. ใน 30 วินาที</h3><p>สมมุติว่าคุณเขียนโค้ด JavaScript แล้วเจอ error:</p><pre><code class=\"language-plaintext\">TypeError: Cannot read properties of undefined (reading 'map')\r\n</code></pre><p>แทนที่จะ Google คุณแค่พิมพ์ใน Claude Code:</p><pre><code class=\"language-plaintext\">ใน file app.js เจอ error \"Cannot read properties of undefined\" ตอน render list ช่วยหาว่าทำไม + แก้ให้หน่อย\r\n</code></pre><p>Claude Code จะ: 1. เปิดไฟล์ <code>app.js</code> อ่านโค้ด 2. หา root cause (เช่น state ยังไม่มีค่าตอน render ครั้งแรก) 3. แก้ไฟล์ให้คุณเลย พร้อมอธิบายว่าแก้อะไร</p><h3>ตัวอย่าง 2 — เขียน function ใหม่จาก spec</h3><p>คุณอยากได้ function แต่ไม่อยากเขียนเอง:</p><pre><code class=\"language-plaintext\">ช่วยเขียน function ที่รับวันที่แบบ \"2026-05-09\" แล้วคืนค่าเป็นภาษาไทยแบบ \"9 พฤษภาคม 2569\"\r\n</code></pre><p>Claude Code จะเขียนโค้ด, สร้างไฟล์ใหม่ (ถ้าจำเป็น), และ <strong>เขียน test ให้ด้วย</strong> ถ้าคุณขอ</p><h3>ตัวอย่าง 3 — Refactor โค้ดเก่าให้สะอาด</h3><p>เจอไฟล์เก่ารกๆ ที่คนอื่นเขียนไว้?</p><pre><code class=\"language-plaintext\">ไฟล์ utils.js อ่านยากมาก ช่วย refactor ให้สะอาดขึ้น แต่ห้ามเปลี่ยน behavior นะ\r\n</code></pre><p>Claude Code จะ refactor + รัน test (ถ้ามี) เพื่อ verify ว่า behavior ไม่เปลี่ยน</p><hr><h2>5 คำสั่งพื้นฐานที่ต้องรู้</h2><p>ใน Claude Code มี <strong>slash commands</strong> ที่ขึ้นต้นด้วย <code>/</code> — นี่คือ 5 ตัวที่มือใหม่ใช้บ่อยที่สุด:</p><p><strong>1. </strong><code><strong>/help</strong></code> แสดงรายการคำสั่งทั้งหมด — เปิดดูได้ตลอด ไม่ต้องจำ</p><p><strong>2. </strong><code><strong>/clear</strong></code> ล้าง conversation ปัจจุบัน เริ่มใหม่ — ใช้เมื่อจะเปลี่ยน topic</p><p><strong>3. </strong><code><strong>/init</strong></code> ให้ Claude Code อ่าน project ทั้งหมดแล้วสร้าง <code>CLAUDE.md</code> (ไฟล์อธิบายโปรเจกต์) — <strong>รันครั้งเดียวตอน setup project ใหม่</strong></p><p><strong>4. </strong><code><strong>/agents</strong></code> ดูรายการ subagents ที่มี — agents คือ AI ผู้เชี่ยวชาญเฉพาะด้านที่คุณสร้างได้เอง (advanced)</p><p><strong>5. </strong><code><strong>/model</strong></code> เปลี่ยนรุ่น AI ที่ใช้ — เช่น เปลี่ยนเป็น Haiku (เร็ว ถูก) หรือ Opus (ฉลาดสุด ช้ากว่า)</p><blockquote><p>💡 <strong>Pro tip:</strong> พิมพ์ <code>/</code> แล้ว Claude Code จะแสดง autocomplete ของทุกคำสั่ง — ไม่ต้องจำ</p></blockquote><hr><h2>ข้อควรระวัง + คำถามที่พบบ่อย (FAQ)</h2><h3>Claude Code ใช้ฟรีไหม?</h3><p><strong>ใช่ — มี free tier</strong> ถ้าคุณมี Claude Free account สามารถใช้งานได้แต่มี usage limit ถ้าใช้เยอะขึ้นแนะนำ Claude Pro ($20/เดือน) จะใช้ได้สบายกว่า สำหรับ business ที่ใช้หนักให้ดู Claude Max หรือใช้ผ่าน Anthropic API</p><h3>Windows install ติดอะไรบ่อย?</h3><p>ปัญหาที่เจอบ่อยที่สุดคือ <strong>Node.js เก่า</strong> — ตรวจด้วย <code>node --version</code> ต้อง ≥ 18 ถ้าติด permission error ลองรัน PowerShell แบบ \"Run as Administrator\"</p><h3>Claude Code ต่างจาก Cursor/Copilot ยังไง?</h3><figure class=\"table\"><table><thead><tr><th>&nbsp;</th><th>Claude Code</th><th>Cursor</th><th>Copilot</th></tr></thead><tbody><tr><td>รูปแบบ</td><td>CLI</td><td>IDE (fork ของ VS Code)</td><td>VS Code extension</td></tr><tr><td>ฟรี</td><td>มี free tier</td><td>มี free tier limit</td><td>ไม่มี (จ่ายอย่างเดียว)</td></tr><tr><td>รันคำสั่งได้</td><td>✅</td><td>⚠️ จำกัด</td><td>❌</td></tr><tr><td>เหมาะกับ</td><td>งาน automation, deep work</td><td>UI-first dev</td><td>autocomplete</td></tr></tbody></table></figure><p>แต่ละตัวมีจุดเด่นต่างกัน — <strong>ใช้คู่กันได้</strong> หลายคนใช้ Cursor เป็น IDE + Claude Code สำหรับงาน automation</p><h3>Claude Code ใช้กับ VS Code ได้ไหม?</h3><p>ได้ มี <strong>VS Code extension</strong> อย่างเป็นทางการ (ค้นใน Marketplace ว่า \"Claude Code\") หลังติดตั้ง เปิด terminal ใน VS Code แล้ว <code>claude</code> เข้าได้เลย — extension จะ enhance UX เพิ่มเติม</p><h3>ภาษาไทย support ดีแค่ไหน?</h3><p><strong>ดีมาก</strong> — Claude เข้าใจไทยทั้ง prompt, comment, และ string ในโค้ด แต่แนะนำให้ใช้ <strong>prompt ภาษาอังกฤษสำหรับชื่อ function</strong> (เพราะ codebase ส่วนใหญ่เป็น English) แต่ explain/discuss เป็นไทยได้สบาย</p><hr><p>5 คำสั่งพื้นฐานที่ต้องรู้</p><p>/h</p><p><strong>/help</strong> — ดูคำสั่งทั้งหมด เปิดได้ตลอด ไม่ต้องจำ</p><p>/c</p><p><strong>/clear</strong> — ล้าง conversation เริ่มใหม่</p><p>/i</p><p><strong>/init</strong> — สร้าง CLAUDE.md ให้ Claude อ่าน project (รันครั้งเดียว)</p><p>/a</p><p><strong>/agents</strong> — ดู subagents ที่มี (advanced)</p><p>/m</p><p><strong>/model</strong> — เปลี่ยนรุ่น AI (Haiku เร็ว / Opus ฉลาด)</p><h2>ขั้นต่อไปสำหรับคนที่อยากใช้เก่งขึ้น</h2><p>ตอนนี้คุณติดตั้งและใช้งานพื้นฐานเป็นแล้ว ขั้นต่อไปแนะนำ:</p><p>📚 <strong>อ่านบทความถัดไป:</strong> - <i>[เร็ว ๆ นี้]</i> \"10 Slash Commands ที่ทำให้ Claude Code เร็วขึ้น 5 เท่า\" - <i>[เร็ว ๆ นี้]</i> \"สอนใช้ Hooks ใน Claude Code ทำ automation\"</p><p>🎯 <strong>ลองสร้าง custom subagent</strong> สำหรับงานเฉพาะของคุณ (เช่น \"agent ตรวจ security ของโค้ด PHP\")</p><p>🛠️ <strong>เชื่อมกับ MCP server</strong> เพื่อให้ Claude Code เข้าถึง Slack, Google Drive, database ได้</p><hr><h2>💡 อยากเอา AI มาใช้ในธุรกิจหรือทีม dev คุณ?</h2><p>Claude Code คือเครื่องมือที่ดีสำหรับ dev เดี่ยว — แต่ถ้าคุณมีทีม หรือมีธุรกิจที่อยากใช้ AI workflow แบบเต็มระบบ (chatbot, automation, lead generation) — เราช่วยได้</p><p>ทีมเราเชี่ยวชาญด้าน <strong>AI Automation สำหรับ SME ไทย</strong> ตั้งแต่ออกแบบระบบ chatbot, สร้าง custom AI agent, ไปจนถึงเชื่อม AI กับ workflow ภายในองค์กร</p><p>🎁 <strong>ขอ AI Audit ฟรี 30 นาที</strong> — ทีมเราจะวิเคราะห์ workflow ของคุณแล้วบอกว่าจุดไหน AI ช่วยได้คุ้มที่สุด ไม่มีค่าใช้จ่าย ไม่มีการขายตรง</p><p>👉 <a href=\"/contact/\"><strong>จองเวลา AI Audit ฟรี →</strong></a></p><hr><p><i>บทความนี้อ้างอิงจาก </i><a href=\"https://code.claude.com/docs/\"><i>Claude Code Documentation อย่างเป็นทางการ</i></a><i> อัพเดต ณ พฤษภาคม 2026 — ฟีเจอร์อาจมีการเปลี่ยนแปลง โปรดตรวจ docs ทางการก่อนใช้งานจริง</i></p>",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80",
+    "meta_title": "วิธีใช้ Claude Code สำหรับมือใหม่: เริ่มต้นใน 10 นาที",
+    "meta_description": "สอนใช้ Claude Code AI coding assistant ตั้งแต่ติดตั้งจนใช้งานได้จริง พร้อมตัวอย่างเขียนโค้ด แก้ bug และ automation สำหรับ dev ไทยมือใหม่ — เริ่มฟรี!",
+    "og_image": "",
+    "status": "published",
+    "is_featured": false,
+    "views_count": 48,
+    "published_at": "2026-05-09T05:05:27Z",
+    "created_at": "2026-05-09T04:57:39.793Z",
+    "updated_at": "2026-05-09T06:17:53.569Z",
+    "tags": [
+      11,
+      13,
+      10,
+      8,
+      12
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 8,
+  "fields": {
+    "title": "คู่แข่งใช้ AI แล้ว ตอนนี้คุณยังไม่ใช้ กำลังแพ้อยู่โดยไม่รู้ตัว",
+    "slug": "competitor-using-ai-sme-thailand",
+    "author": [
+      "admin"
+    ],
+    "category": 2,
+    "excerpt": "กว่า 1 ใน 4 ของ SME ทั่วโลกเริ่มใช้ AI แล้วในปี 2025 ถ้าคุณยังไม่ใช้ คุณกำลังเสียลูกค้าและเวลาให้คู่แข่งทุกวัน เช็กสัญญาณเตือน + วิธีเริ่มใช้ AI ภายใน 1 สัปดาห์",
+    "content": "<p>สมมติว่าคุณเปิดร้านขายสินค้าออนไลน์มาหลายปี<br>ลูกค้าเริ่มทักมาช้าลง ยอดขายนิ่งๆ ไม่โต<br>คุณคิดว่าเป็นเพราะเศรษฐกิจ หรือเพราะโฆษณาไม่ดีพอ</p><p>แต่ความจริงอาจเป็นเรื่องอื่น</p><p>คู่แข่งของคุณตอบลูกค้าเร็วขึ้น เสนอโปรโมชันแม่นขึ้น และทำสิ่งเหล่านี้ได้โดยไม่ต้องเพิ่มพนักงานเลย เพราะเขาใช้ AI อยู่แล้ว</p><p>บทความนี้ไม่ได้จะขายอะไรคุณ แต่จะบอกตรงๆ ว่าตอนนี้มันเกิดอะไรขึ้นในตลาด และคุณยังมีเวลาเหลืออยู่ — ถ้าเริ่มเดี๋ยวนี้</p><h2>คู่แข่งคุณกำลังทำอะไรอยู่ ในขณะที่คุณยังทำแบบเดิม</h2><p>ลองนึกถึงร้านข้างๆ ที่ขายสินค้าคล้ายกัน เมื่อสองปีก่อน คุณกับเขาแทบไม่ต่างกัน</p><p>แต่วันนี้เขาทำสิ่งเหล่านี้ได้แล้ว โดยที่คุณยังทำแบบเดิม:</p><ul><li data-list-item-id=\"ec817498217a18893d39255fda44a3817\">ตอบลูกค้าบน LINE ได้ตลอด 24 ชั่วโมง — ไม่ต้องมีคนนั่งรอ Chatbot ของเขาทำแทน</li><li data-list-item-id=\"e30048e0397f0281e74eb1b589cd4d81a\">รู้ล่วงหน้าว่าลูกค้าคนไหนจะไม่กลับมาซื้ออีก — แล้วส่งโปรโมชันไปหาก่อนที่จะสาย</li><li data-list-item-id=\"eca2b38f777f81f19bc1c72f60dd694b4\">จัดการ stock และสั่งของเติมอัตโนมัติ — ไม่ต้องนั่งเช็กสเปรดชีตทุกเย็น</li><li data-list-item-id=\"e0ff8efebe8d86a209804a432bc748716\">วิเคราะห์ว่าโพสต์ไหนได้ยอดขาย โพสต์ไหนแค่ได้ไลก์ — ไม่ต้องเดาอีกต่อไป</li></ul><p>ความต่างไม่ได้อยู่ที่งบประมาณ แต่อยู่ที่ว่าใครเริ่มก่อน</p><p>จากรายงาน Small &amp; Medium Business Trends ของ Salesforce (2024) พบว่า <strong>มากกว่า 1 ใน 4 ของ SME ทั่วโลก</strong> นำ AI มาใช้ในกระบวนการทำงานแล้ว และตัวเลขนี้เพิ่มขึ้นเร็วกว่าที่หลายคนคาด</p><h2>5 สัญญาณที่บอกว่าธุรกิจคุณกำลังตกขบวน AI</h2><ol><li data-list-item-id=\"e900f3c87d5086249d2bfd87383aab39d\"><strong>ลูกค้าทักแล้วต้องรอนาน</strong> — คู่แข่งที่ใช้ Chatbot ตอบได้ใน 30 วินาที ตลอด 24 ชม.</li><li data-list-item-id=\"ec37a2ed97d930685a9cb8ec10e60fa5f\"><strong>ตัดสินใจจากความรู้สึก ไม่ใช่ข้อมูล</strong> — สต็อกเต็มแต่ขายไม่ออก หรือของหมดก่อนสั่งได้ทัน</li><li data-list-item-id=\"ed1abf75be26a4d7a4ae89394cb4de650\"><strong>ทีมเสียเวลากับงานซ้ำๆ ทุกวัน</strong> — คีย์ข้อมูล ส่งใบเสนอราคา ตอบคำถามซ้ำเดิม</li><li data-list-item-id=\"e26a34b6b8ef5dbefdfc600032922bddd\"><strong>ราคาสู้คู่แข่งไม่ได้ ทั้งที่ต้นทุนใกล้กัน</strong> — เพราะเขาลด overhead ด้วย automation ไปแล้ว</li><li data-list-item-id=\"e8cf337c2bc315ef7aa21594032f0291e\"><strong>ไม่รู้ว่าลูกค้าหายไปอยู่ที่ไหน</strong> — ไม่มีข้อมูลพฤติกรรม ไม่รู้จะดึงกลับมายังไง</li></ol><h2>ธุรกิจไม่ใช้ AI เสียเปรียบอย่างไร ในชีวิตจริง</h2><h3>กรณีที่ 1 — ร้านค้าออนไลน์ที่เสียลูกค้าให้คู่แข่งโดยไม่รู้ตัว</h3><p>คุณแอม เปิดร้านขายเครื่องสำอางบน Shopee มา 4 ปี มีลูกค้าประจำราว 800 คน ทุกวันมีข้อความทักเข้ามาเฉลี่ย 60-80 ข้อความ ส่วนใหญ่คือคำถามเดิมๆ — \"มีสีไหนบ้าง\", \"ส่งด่วนได้ไหม\", \"ราคาปลีก-ส่งต่างกันยังไง\"</p><p>คุณแอมและพนักงาน 1 คนนั่งตอบด้วยมือทุกวัน ใช้เวลาราว <strong>3-4 ชั่วโมงต่อวัน</strong> ช่วงกลางคืนหรือวันหยุด ถ้าตอบไม่ทัน ลูกค้าก็ไปซื้อที่อื่น</p><p>ร้านข้างๆ ที่ขายของคล้ายกัน เริ่มติดตั้ง Chatbot บน LINE OA เมื่อต้นปีที่ผ่านมา ตอบได้ทันทีตลอด 24 ชั่วโมง ภายใน 3 เดือน ลูกค้าหลายคนของคุณแอมย้ายไปซื้อที่ร้านนั้น ไม่ใช่เพราะของดีกว่า แต่เพราะ \"ตอบเร็วกว่า สะดวกกว่า\"</p><p><strong>หลังคุณแอมติดตั้ง Chatbot:</strong> เวลาตอบลูกค้าลดจาก 3-4 ชั่วโมง เหลือไม่ถึง 30 นาทีต่อวัน และตอบได้ตลอดคืนโดยไม่ต้องมีคนเฝ้า</p><h3>กรณีที่ 2 — บริษัท B2B โลจิสติกส์ที่เสียดีลเพราะ quotation ช้า</h3><p>บริษัทขนส่งขนาดเล็ก มีลูกค้า B2B ราว 40 ราย ทุกครั้งที่ลูกค้าขอใบเสนอราคา ทีม ops ต้องนั่งเปิด Excel คำนวณระยะทาง น้ำหนัก ค่าน้ำมัน ประกัน กระบวนการนี้ใช้เวลาเฉลี่ย <strong>1-2 วันทำการ</strong></p><p>ลูกค้ารายใหม่หลายรายบอกตรงๆ ว่า \"รอนานเกินไป ไปใช้เจ้าอื่นแล้ว\"</p><p><strong>หลังนำ AI มาช่วยสร้าง quotation อัตโนมัติ:</strong> ออก quotation ได้ภายใน <strong>15-30 นาที</strong> แทนที่จะเป็น 1-2 วัน ทีม ops มีเวลาไปดูแลความสัมพันธ์ลูกค้าและหาดีลใหม่แทน</p><h2>SME ไทยที่ใช้ AI แล้ว เปลี่ยนแปลงอะไรบ้าง</h2><p>ตัวอย่างด้านล่างมาจากลูกค้าจริงที่เราให้บริการ (ตัวเลขเป็นช่วงเฉลี่ยจากหลายเคส ไม่ใช่การรับประกันผลลัพธ์)</p><ul><li data-list-item-id=\"ef7117584c822703665b0da9084bc8827\">ร้านค้าออนไลน์: อัตราซื้อซ้ำเพิ่มขึ้น <strong>30-50%</strong> ใน 3-6 เดือนแรก</li><li data-list-item-id=\"e7cfc070eb57e8c78a87b5585f6730f5d\">บริษัท B2B: ลด quotation time จาก 1-2 วัน → <strong>15-30 นาที</strong></li><li data-list-item-id=\"e90107700656f82fdb40aa834cd1a41ad\">ร้านอาหารหลายสาขา: ต้นทุนอาหารลดลง <strong>15-25%</strong> จากการจัดการ stock ดีขึ้น</li></ul><h2>ยังไม่สาย — เริ่มใช้ AI automation ได้ภายใน 1 สัปดาห์</h2><p>หลายคนคิดว่า \"ใช้ AI\" แปลว่าต้องจ้างทีม IT หรือลงทุนหลักแสน ความจริงคือถ้าเริ่มจากจุดเล็กๆ ที่เจ็บปวดจริง — คุณเห็นผลได้ใน 7 วัน</p><ol><li data-list-item-id=\"e535fadb15c9e1da4dc6f40f6625946c1\"><strong>วันที่ 1-2: ระบุงานที่กินเวลาและซ้ำที่สุด</strong> — นั่งคุยกับทีม 1 ชั่วโมง ถามว่า \"งานอะไรที่ทำซ้ำทุกวัน\" เลือก 1 งานที่เจ็บปวดที่สุดมาแก้ก่อน อย่าพยายามทำทุกอย่างพร้อมกัน</li><li data-list-item-id=\"eb11472fb6a2dd9ee61323322eeaabe1e\"><strong>วันที่ 3-5: ทดสอบเครื่องมือกับงานจริง</strong> — ไม่ต้องรอให้ระบบ perfect ก่อน เริ่มด้วย pilot เล็กๆ แล้ววัดเวลาก่อนและหลัง ความสำคัญคือ <strong>วัดผลได้จริง</strong></li><li data-list-item-id=\"e959a85a4b70cff280cfc75564f70f1ed\"><strong>วันที่ 6-7: วัดผลและตัดสินใจขยาย</strong> — ดูตัวเลขที่ประหยัดได้ ถ้าผลดีขยายต่อ ถ้ายังไม่ชัดปรับแล้วรันอีกรอบ ไม่ต้องรีบ — <strong>ความสม่ำเสมอสำคัญกว่าความเร็ว</strong></li></ol><h2>FAQ — คำถามที่ SME ไทยถามบ่อย</h2><h3>ธุรกิจเล็กๆ ต้องใช้ AI ด้วยไหม?</h3><p>ขึ้นอยู่กับปัญหาที่มี ไม่ใช่ขนาดธุรกิจ ถ้าทีมคุณเสียเวลากับงานซ้ำๆ มากกว่า 2 ชั่วโมงต่อวัน — AI คุ้มค่าตั้งแต่ร้านเดียว ธุรกิจที่ได้ประโยชน์มากที่สุดมักไม่ใช่บริษัทใหญ่ แต่คือทีมเล็กที่ต้องการทำงานเยอะโดยไม่เพิ่มคน</p><h3>AI แพงไหม SME ใช้ได้จริงหรือเปล่า?</h3><p>เครื่องมือ AI หลายตัวเริ่มต้นที่ไม่กี่พันบาทต่อเดือน ถ้าระบบช่วยประหยัดเวลาพนักงาน 1 คนได้ 2 ชั่วโมงต่อวัน — มันคืนทุนภายใน 1-3 เดือน สิ่งที่แพงกว่าการลงทุนใช้ AI คือการไม่ใช้ และเสียลูกค้าให้คู่แข่งทุกวัน</p><h3>จะรู้ได้ยังไงว่าคู่แข่งใช้ AI แล้ว?</h3><p>สังเกตจากพฤติกรรม: ตอบเร็วผิดปกติ โปรโมชันแม่นยำขึ้น หรือลองทักหาในฐานะลูกค้า ถ้าได้รับการตอบโต้อัตโนมัติที่ฉลาด นั่นคือสัญญาณ ดูรีวิวลูกค้าของเขา ถ้าคนชมเรื่อง \"ตอบเร็ว\" หรือ \"สะดวกมาก\" บ่อยๆ แปลว่ามีระบบอยู่เบื้องหลัง</p><h3>ถ้าไม่ใช้ AI ตอนนี้ จะเกิดอะไรขึ้นในอีก 2 ปี?</h3><p>ช่องว่างระหว่างธุรกิจที่ใช้ AI กับที่ไม่ใช้จะกว้างขึ้นทุกเดือน คู่แข่งที่เริ่มวันนี้จะมีข้อมูลสะสม 2 ปี รู้พฤติกรรมลูกค้าลึกกว่า ต้นทุนต่ำกว่า และตอบสนองได้เร็วกว่า ไม่ใช่ว่าไม่ใช้ AI แล้วจะล้มเหลว แต่โอกาสที่จะ \"ตามทัน\" จะยิ่งยากและแพงขึ้นทุกปีที่ผ่านไป</p><h2>เริ่มต้นวันนี้ — ก่อนที่ช่องว่างจะยิ่งกว้างขึ้น</h2><p>ถ้าอ่านมาถึงตรงนี้ แปลว่าคุณรู้แล้วว่าเรื่องนี้สำคัญ คำถามที่เหลือคือ \"จะเริ่มจากตรงไหน\" — และนั่นคือสิ่งที่เราช่วยได้</p><p>เราช่วย SME ไทยออกแบบและตั้งค่าระบบ AI ที่เหมาะกับธุรกิจจริงๆ ไม่ใช่ขายโซลูชันสำเร็จรูปที่ต้องปรับทั้งบริษัทเพื่อให้มันใช้ได้</p><p><strong>นัดคุยฟรี 30 นาที — ไม่มีข้อผูกมัด</strong><br>เราจะช่วยระบุว่างานไหนในธุรกิจคุณ AI ช่วยได้มากที่สุด และประหยัดได้คร่าวๆ เท่าไหร่</p>",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200&q=80",
+    "meta_title": "คู่แข่งใช้ AI แล้ว คุณยังไม่ใช้ กำลังแพ้โดยไม่รู้ตัว",
+    "meta_description": "กว่า 1 ใน 4 ของ SME ทั่วโลกเริ่มใช้ AI แล้วในปี 2025 ถ้าคุณยังไม่ใช้ คุณกำลังเสียลูกค้าและเวลาให้คู่แข่งทุกวัน เช็กสัญญาณเตือน + วิธีเริ่มใช้ AI ภายใน 1 สัปดาห์",
+    "og_image": "",
+    "status": "published",
+    "is_featured": true,
+    "views_count": 7,
+    "published_at": "2026-05-14T13:14:12.695Z",
+    "created_at": "2026-05-14T05:15:03.092Z",
+    "updated_at": "2026-05-14T14:40:58.555Z",
+    "tags": [
+      14,
+      16,
+      4,
+      15
+    ]
+  }
+},
+{
+  "model": "blog.article",
+  "pk": 9,
+  "fields": {
+    "title": "ธุรกิจไม่ปรับตัว AI เสี่ยงตกขบวน — คุณพร้อมแล้วหรือยัง?",
+    "slug": "business-no-adapt-ai-fail",
+    "author": [
+      "admin"
+    ],
+    "category": 2,
+    "excerpt": "ธุรกิจที่ไม่ปรับตัวกับ AI กำลังเสี่ยงตกขบวน ดูสัญญาณเตือน 5 ข้อและแผน 30 วันสำหรับ SME ไทย ก่อนสายเกินแก้",
+    "content": "<h2>ธุรกิจที่ไม่ปรับตัวกับ AI กำลังเสี่ยงตกขบวน — คุณพร้อมแล้วหรือยัง?</h2><p>ถ้าคุณยังรู้สึกว่า AI เป็นเรื่องของบริษัทใหญ่ ไม่ใช่เรื่องของ SME อย่างเรา — บทความนี้อาจทำให้คุณคิดใหม่</p><p>ไม่ใช่เรื่องของ \"จะใช้หรือไม่ใช้\" อีกต่อไปแล้ว แต่เป็นเรื่องของ <strong>\"ยังมีเวลาเหลืออยู่แค่ไหน\"</strong></p><p>ตลาดกำลังเปลี่ยน เร็วกว่าที่คิด และธุรกิจที่ยังใช้วิธีเดิม กำลังสูญเสียส่วนแบ่งตลาดให้คู่แข่งทุกวัน โดยที่อาจยังไม่รู้ตัวด้วยซ้ำ</p><hr><h2>ตัวเลขที่น่ากลัว — สิ่งที่เกิดขึ้นกับธุรกิจที่ไม่ปรับตัว</h2><p>เราไม่ได้พูดจากความรู้สึก แต่พูดจากข้อมูลที่มีอยู่จริง</p><p>McKinsey Global Institute รายงานว่า <strong>ธุรกิจที่นำ AI มาใช้เชิงรุก มีแนวโน้มทำกำไรสูงกว่าคู่แข่งถึง 20-25%</strong> ในระยะ 5 ปี ขณะที่ฝั่งตรงข้าม — ธุรกิจที่ไม่ปรับตัว — กำลังเผชิญกับต้นทุนที่สูงขึ้น ลูกค้าที่ลดลง และพนักงานที่เริ่มมองหาที่ทำงานใหม่</p><p>World Economic Forum คาดการณ์ว่าภายในปี 2027 <strong>งาน 85 ล้านตำแหน่งทั่วโลกจะถูกแทนที่ด้วยระบบอัตโนมัติ</strong> แต่ในเวลาเดียวกัน จะมีงานใหม่เกิดขึ้น 97 ล้านตำแหน่ง — สำหรับธุรกิจที่รู้จักใช้เครื่องมือใหม่</p><p>นั่นหมายความว่าสิ่งที่เกิดขึ้นไม่ใช่ \"การสูญหายของงาน\" แต่คือ <strong>การโยกย้ายมูลค่าจากธุรกิจที่ล้าหลังไปสู่ธุรกิจที่ปรับตัว</strong></p><p style=\"margin-left:0;\"><strong>ตัวเลขที่ธุรกิจต้องรู้ในปี 2026</strong></p><p style=\"margin-left:0;text-align:center;\"><strong>85%</strong></p><p style=\"margin-left:0;text-align:center;\">ของโครงการ AI<br>ในองค์กรล้มเหลว<br>(MIT Sloan, 2023)</p><p style=\"margin-left:0;text-align:center;\"><strong>25%</strong></p><p style=\"margin-left:0;text-align:center;\">กำไรเพิ่มขึ้น<br>สำหรับธุรกิจที่ใช้<br>AI เชิงรุก (McKinsey)</p><p style=\"margin-left:0;text-align:center;\"><strong>80%</strong></p><p style=\"margin-left:0;text-align:center;\">องค์กรทั่วโลก<br>มองว่า AI สำคัญ<br>(JobThai Survey, 2025)</p><p style=\"margin-left:0;text-align:center;\"><strong>97M</strong></p><p style=\"margin-left:0;text-align:center;\">งานใหม่จะเกิดขึ้น<br>สำหรับธุรกิจ<br>ที่ปรับตัว (WEF)</p><p>ข้อมูลทั้งหมดนี้ชี้ไปทิศทางเดียวกัน — <strong>ไม่ใช่ว่า AI จะ \"มีประโยชน์\" ในอนาคต แต่คือมันกำลังเปลี่ยนเกมอยู่ตอนนี้</strong></p><hr><h2>บทเรียนจากยักษ์ใหญ่ที่ล้มหายไป</h2><p>ก่อนพูดถึง AI บทเรียนที่ดีที่สุดมาจากบริษัทระดับโลกที่เคยยิ่งใหญ่ แต่ล้มหายไปเพราะไม่ยอมเปลี่ยนแปลง</p><h3>โกดัก (Kodak) — บริษัทที่ประดิษฐ์กล้องดิจิทัล แต่ไม่กล้าใช้มัน</h3><p>เชื่อหรือไม่ว่า Kodak คือบริษัทที่คิดค้นกล้องดิจิทัลเครื่องแรกของโลกในปี 1975 แต่ผู้บริหารตัดสินใจเก็บเทคโนโลยีนั้นไว้ ด้วยเหตุผลเดียว — กลัวว่ามันจะกินตลาดฟิล์มที่ตัวเองมีอยู่</p><p>ผลที่ได้คือ คู่แข่งพัฒนากล้องดิจิทัลจนครองตลาด ฟิล์มหายไปในชั่วข้ามคืน และ Kodak ที่เคยมีพนักงาน 145,000 คน ยื่นล้มละลายในปี 2012</p><p><strong>บทเรียน:</strong> การปกป้องธุรกิจเดิมโดยไม่ยอมรับเทคโนโลยีใหม่ ไม่ได้ช่วยให้รอด — แต่ทำให้ล้มเร็วขึ้น</p><h3>โนเกีย (Nokia) — เจ้าตลาดมือถือที่หลับใน</h3><p>ในปี 2007 Nokia ครองตลาดมือถือโลก 40% ปีเดียวกันนั้น Apple เปิดตัว iPhone สิ่งที่ Nokia ทำคือบอกว่า \"มันเป็นแค่ซอฟต์แวร์ เราเก่งด้านฮาร์ดแวร์มากกว่า\"</p><p>ภายในเวลาไม่กี่ปี ส่วนแบ่งตลาดของ Nokia ร่วงลงอย่างรวดเร็ว จนต้องขายธุรกิจมือถือให้ Microsoft ในราคาที่ต่ำกว่าที่ควรจะเป็นมาก</p><p><strong>บทเรียน:</strong> ความแข็งแกร่งในวันนี้ ไม่ได้รับประกันความอยู่รอดพรุ่งนี้ ถ้าไม่ยอมปรับ platform ที่ลูกค้าต้องการ</p><h3>Blockbuster — อาณาจักรวิดีโอที่ดูถูก Netflix</h3><p>ปี 2000 Netflix เข้าไปเสนอขายธุรกิจให้ Blockbuster ในราคา 50 ล้านดอลลาร์ Blockbuster ปฏิเสธ เพราะคิดว่า \"ธุรกิจส่งวิดีโอทางไปรษณีย์ไม่มีอนาคต\"</p><p>ปี 2010 Blockbuster ยื่นล้มละลาย Netflix เติบโตจนมีมูลค่าตลาดหลายแสนล้านดอลลาร์ในปัจจุบัน</p><p><strong>บทเรียน:</strong> ธุรกิจที่มองว่า \"โมเดลใหม่ไม่ใช่ภัยคุกคาม\" มักจะรู้ตัวอีกทีก็สายเกินแก้แล้ว</p><p>ทั้งสามบริษัทนี้มีสิ่งเหมือนกัน — <strong>พวกเขารู้ว่ามีเทคโนโลยีใหม่ แต่เลือกที่จะไม่ปรับตัว</strong> และในปี 2026 AI คือเทคโนโลยีนั้น</p><hr><h2>5 สัญญาณที่บ่งบอกว่าธุรกิจของคุณกำลังตกขบวน</h2><p>ไม่ต้องรอให้รายได้ตกกว่าจะรู้ว่ามีปัญหา สัญญาณเตือนมักมาก่อนเสมอ ลองเช็กดูว่าธุรกิจของคุณมีอาการเหล่านี้ไหม</p><p style=\"margin-left:0;\"><strong>5 สัญญาณเตือน — ธุรกิจของคุณกำลังตกขบวนหรือเปล่า?</strong></p><p style=\"margin-left:0;\"><strong>1</strong></p><p style=\"margin-left:0;\"><strong>ทีมใช้เวลากับงาน manual มากกว่างานที่สร้างมูลค่า</strong></p><p style=\"margin-left:0;\">เช่น พิมพ์ข้อมูลซ้ำระหว่างระบบ, ตอบคำถามซ้ำๆ ทาง LINE, ทำ report ด้วย Excel ทุกอาทิตย์</p><p style=\"margin-left:0;\"><strong>2</strong></p><p style=\"margin-left:0;\"><strong>ลูกค้าต้องรอนานกว่าจะได้รับการตอบกลับ</strong></p><p style=\"margin-left:0;\">ถ้าคู่แข่งของคุณตอบทันที แต่คุณตอบได้เฉพาะเวลาทำการ — ลูกค้าเริ่มไปที่อื่นแล้ว</p><p style=\"margin-left:0;\"><strong>3</strong></p><p style=\"margin-left:0;\"><strong>คุณไม่รู้ว่าลูกค้ารู้สึกยังไงกับธุรกิจของคุณจริงๆ</strong></p><p style=\"margin-left:0;\">ไม่มีข้อมูล feedback อัตโนมัติ ไม่รู้ว่าใครเกือบซื้อแต่หายไป ตัดสินใจโดยใช้ความรู้สึกล้วนๆ</p><p style=\"margin-left:0;\"><strong>4</strong></p><p style=\"margin-left:0;\"><strong>ค่าใช้จ่ายเพิ่มแต่รายได้ไม่โต</strong></p><p style=\"margin-left:0;\">จ้างคนเพิ่มเพื่อรองรับ workload แต่ประสิทธิภาพต่อหัวไม่ได้ดีขึ้น — นี่คือสัญญาณ scaling problem</p><p style=\"margin-left:0;\"><strong>5</strong></p><p style=\"margin-left:0;\"><strong>คู่แข่งที่เล็กกว่าคุณเริ่มได้ลูกค้าเก่าของคุณไป</strong></p><p style=\"margin-left:0;\">ถ้าสตาร์ตอัพหน้าใหม่ที่มีคนน้อยกว่าสามารถให้บริการได้ดีกว่า — พวกเขาน่าจะใช้ AI อยู่แล้ว</p><p style=\"margin-left:0;text-align:center;\">ถ้าคุณพยักหน้าตาม 3 ข้อขึ้นไป — ถึงเวลาแล้วที่ต้องเริ่มทำบางอย่าง</p><p>อาการเหล่านี้ไม่ได้เกิดขึ้นชั่วข้ามคืน แต่สะสมทีละน้อย จนวันหนึ่งคุณหันไปดูก็พบว่า <strong>คู่แข่งวิ่งไปข้างหน้าไกลแล้ว</strong></p><hr><h2>ธุรกิจที่ไม่ใช้ AI เสียเปรียบยังไงบ้าง?</h2><p>มาพูดตรงๆ ว่าในทางปฏิบัติ ธุรกิจที่ไม่ใช้ AI เสียเปรียบอะไรบ้าง เทียบกับคู่แข่งที่เริ่มไปแล้ว</p><h3>ความเร็วในการบริการ</h3><p>ธุรกิจที่ใช้ AI chatbot ตอบลูกค้าได้ <strong>ทันที 24 ชั่วโมง 7 วัน</strong> ไม่ต้องรอให้พนักงานว่าง ในขณะที่คุณยังตอบ LINE เฉพาะเวลาทำการ ลูกค้าที่ถามตอนสี่ทุ่มอาจตัดสินใจซื้อของคู่แข่งได้ก่อนเช้า</p><h3>ต้นทุนในการ scale</h3><p>ธุรกิจทั่วไป: อยากรับลูกค้าเพิ่ม 2 เท่า ต้องจ้างคนเพิ่ม 2 เท่า<br>ธุรกิจที่ใช้ AI: รับลูกค้าเพิ่ม 5 เท่า โดยที่ทีมเท่าเดิม</p><p>นั่นคือข้อได้เปรียบเชิงโครงสร้างที่คุณไม่สามารถแข่งได้ด้วยการทำงานหนักขึ้นเพียงอย่างเดียว</p><h3>คุณภาพของการตัดสินใจ</h3><p>ธุรกิจที่ใช้ AI วิเคราะห์ข้อมูลรู้ว่า <strong>สินค้าไหนขายดี ลูกค้ากลุ่มไหนมีแนวโน้มซื้อซ้ำ และแคมเปญไหนทำให้เสียเงินเปล่า</strong> ในขณะที่ธุรกิจที่ไม่ใช้ AI ตัดสินใจจากประสบการณ์และความรู้สึก</p><p>ในตลาดที่แข่งขันสูง ข้อมูลชนะความรู้สึกเสมอ</p><h3>ต้นทุนด้านบุคลากร</h3><p>งานซ้ำๆ เช่น ตอบคำถาม FAQ, ออกใบเสนอราคา, ติดตาม lead, ส่ง follow-up อีเมล — สิ่งเหล่านี้กินเวลาพนักงานไปมาก ถ้า AI ทำแทนได้ พนักงานของคุณมีเวลาโฟกัสกับงานที่สร้างมูลค่าจริงๆ</p><p>ธุรกิจที่ทำแบบนี้ได้ <strong>ไม่ต้องจ้างคนเพิ่มเร็ว แต่ผลงานรวมดีขึ้น</strong></p><h3>ความน่าเชื่อถือในสายตาลูกค้า</h3><p>ลูกค้าในปี 2026 เริ่มตั้งคำถามว่า \"ธุรกิจนี้ทันสมัยไหม? ไว้ใจได้ไหมในระยะยาว?\" ธุรกิจที่มีระบบอัตโนมัติที่ดี สื่อสารได้เร็ว และให้ข้อมูลที่แม่นยำ — ให้ความรู้สึกเป็นมืออาชีพมากกว่า</p><hr><h2>SME ไทยเริ่มปรับตัวกับ AI ได้ยังไง — ใน 30 วัน</h2><p>ข่าวดีคือ คุณไม่ต้องเปลี่ยนทุกอย่างพร้อมกัน ไม่ต้องลงทุนหลักล้าน และไม่ต้องมีทีม IT ของตัวเอง</p><p>แผน 30 วันด้านล่างนี้ออกแบบมาสำหรับ SME ไทยที่มีทีม 5-20 คน งบประมาณจำกัด และอยากเห็นผลเร็ว</p><p style=\"margin-left:0;\"><strong>Action Plan 30 วัน — เริ่มใช้ AI สำหรับ SME ไทย</strong></p><p style=\"margin-left:0;\"><strong>วันที่ 1-5</strong></p><p style=\"margin-left:0;\"><strong>Audit ธุรกิจของคุณเอง</strong></p><p style=\"margin-left:0;\">จดรายการงานที่ทีมทำซ้ำๆ ทุกวัน คำนวณว่าแต่ละงานกินเวลากี่ชั่วโมงต่อสัปดาห์ เลือก 1-2 งานที่เสียเวลามากที่สุด</p><p style=\"margin-left:0;\"><strong>วันที่ 6-10</strong></p><p style=\"margin-left:0;\"><strong>เริ่มจาก AI ฟรีที่มีอยู่แล้ว</strong></p><p style=\"margin-left:0;\">ลองใช้ ChatGPT หรือ Claude ในงานเขียน เช่น ร่างอีเมล, สรุปประชุม, ตอบร่าง FAQ ให้ทีมเห็นว่า AI ช่วยได้จริงในงานประจำวัน</p><p style=\"margin-left:0;\"><strong>วันที่ 11-20</strong></p><p style=\"margin-left:0;\"><strong>ติดตั้ง AI Chatbot บนช่องทางหลัก</strong></p><p style=\"margin-left:0;\">เช่น LINE OA หรือเว็บไซต์ ให้ตอบคำถามพื้นฐาน, รับข้อมูลลูกค้า, ส่งต่อ lead ให้ทีมขายอัตโนมัติ ไม่ต้องเขียนโค้ด มีแพลตฟอร์มที่ทำได้ภายในงบ 2-5 พันบาทต่อเดือน</p><p style=\"margin-left:0;\"><strong>วันที่ 21-25</strong></p><p style=\"margin-left:0;\"><strong>วัดผลและปรับ</strong></p><p style=\"margin-left:0;\">เปรียบเทียบเวลาที่ทีมใช้ก่อนและหลังใช้ AI จำนวน lead ที่ได้รับ และ feedback ลูกค้า ปรับ chatbot ตามสิ่งที่พบ</p><p style=\"margin-left:0;\"><strong>วันที่ 26-30</strong></p><p style=\"margin-left:0;\"><strong>วางแผน AI ขั้นถัดไป</strong></p><p style=\"margin-left:0;\">หลังจากเห็นผลจริงใน 30 วัน คุณจะรู้แล้วว่างานไหนควร automate ต่อ เช่น ระบบ follow-up อัตโนมัติ, report ประจำวัน, หรือ AI วิเคราะห์ยอดขาย</p><p>ที่สำคัญที่สุดคือ <strong>เริ่มให้ได้ก่อน</strong> แม้จะเล็กก็ตาม การรอจนพร้อม 100% คือการให้คู่แข่งวิ่งไปข้างหน้าต่อ</p><p>ถ้าอยากรู้ว่าธุรกิจของคุณควรเริ่มจากตรงไหน ดู <a href=\"/services/ai-chatbot/\">บริการ AI Chatbot สำหรับธุรกิจ</a> และ <a href=\"/services/ai-workflow-automation/\">AI Workflow Automation</a> ที่เราออกแบบมาสำหรับ SME ไทยโดยเฉพาะ</p><hr><h2>FAQ — คำถามที่เจ้าของธุรกิจถามบ่อย</h2><h3>ธุรกิจที่ไม่ปรับตัวจะเกิดอะไรขึ้น?</h3><ul><li data-list-item-id=\"eb8f37f033f261f02d9a266bb9dd14cfb\"><strong>ระยะสั้น (1-2 ปี):</strong> ต้นทุนสูงขึ้นเพราะต้องใช้คนมากกว่าคู่แข่ง และตอบสนองลูกค้าได้ช้ากว่า</li><li data-list-item-id=\"e34a2c052c359dc969746946f67ef045b\"><strong>ระยะกลาง (3-5 ปี):</strong> ส่วนแบ่งตลาดลดลงต่อเนื่อง ลูกค้าโยกไปหาผู้เล่นที่ให้บริการดีกว่าด้วยราคาที่แข่งขันได้มากกว่า</li><li data-list-item-id=\"ed7294a6608f39bbf2deea0b686553094\"><strong>ระยะยาว:</strong> ยากที่จะกลับมาแข่งได้อีก เพราะคู่แข่งสะสมข้อมูลและประสบการณ์กับ AI ไปนานแล้ว</li></ul><h3>ทำไม SME ไทยถึงยังไม่ใช้ AI?</h3><p>จากประสบการณ์ที่เราพบบ่อยที่สุดมี 3 เหตุผล: หนึ่ง — คิดว่าแพงเกินไป (ในความเป็นจริงมีตัวเลือกเริ่มต้นที่หลักพันบาทต่อเดือน) สอง — ไม่รู้ว่าจะเริ่มจากตรงไหน สาม — กลัวว่าทีมจะรับไม่ได้หรือปรับตัวไม่ทัน ทั้งสามอย่างแก้ได้ ถ้ามีคนช่วยวางแผนให้ถูกจุด</p><h3>ตัวอย่างธุรกิจที่ล้มเหลวเพราะไม่ปรับตัวมีอะไรบ้าง?</h3><p>ระดับโลก: Kodak (ฟิล์มถ่ายรูป), Nokia (มือถือ), Blockbuster (เช่าวิดีโอ), Toys R Us (ร้านเล่น), Borders (ร้านหนังสือ) ทุกบริษัทเหล่านี้รู้ว่ามีเทคโนโลยีใหม่มา แต่เลือกที่จะรอ ผลที่ได้คือล้มหายตามกันไป</p><h3>SME ไทยจะเริ่มใช้ AI จากตรงไหน?</h3><p>แนะนำให้เริ่มจาก \"งานที่เจ็บปวดที่สุด\" ก่อน เช่น ถ้าทีมเสียเวลากับการตอบคำถามลูกค้าซ้ำๆ — เริ่มจาก AI chatbot ถ้าทำ report ด้วย Excel ทุกอาทิตย์ใช้เวลาครึ่งวัน — เริ่มจากระบบ dashboard อัตโนมัติ จุดที่เจ็บมากที่สุดคือจุดที่ AI จะให้ ROI เร็วที่สุด</p><h3>ต้องลงทุนเท่าไหร่ถึงจะใช้ AI ได้?</h3><p>ขึ้นอยู่กับขอบเขต แต่โดยทั่วไปสำหรับ SME ไทย:</p><ul><li data-list-item-id=\"e64ccaa11407e0a66d00416034727f113\"><strong>เริ่มต้น (ทดลอง):</strong> 0-2,000 บาท/เดือน (ใช้ AI tools ฟรีหรือราคาถูก เช่น ChatGPT, Notion AI)</li><li data-list-item-id=\"e82d4bf4fe76a65561fe934844b3209a2\"><strong>ระดับกลาง (AI chatbot + automation):</strong> 5,000-20,000 บาท/เดือน</li><li data-list-item-id=\"ef5f84518914661b83b7dfb81fc4fc9a4\"><strong>ระบบเต็ม (custom AI workflow):</strong> เริ่มต้นที่ลงทุนครั้งเดียว 50,000-200,000 บาท แล้ว ROI ภายใน 3-6 เดือน</li></ul><p>ส่วนใหญ่ที่เราเห็นคือลูกค้าที่ลังเลเรื่องต้นทุน แต่พอวิเคราะห์ดูพบว่าตอนนี้เสียเงินกับ \"คนทำงานซ้ำๆ\" มากกว่าค่า AI เสียอีก</p><hr><h2>สรุป — ยังไม่สาย ถ้าเริ่มวันนี้</h2><p>โกดัก โนเกีย และ Blockbuster ไม่ได้ล้มเพราะพวกเขาโง่ พวกเขาล้มเพราะ <strong>รอนานเกินไป</strong></p><p>ธุรกิจ SME ไทยส่วนใหญ่ยังมีเวลาอยู่ แต่หน้าต่างนั้นกำลังแคบลงทุกวัน คู่แข่งที่เริ่มใช้ AI วันนี้กำลังสะสม data, ปรับ workflow, และสร้างความสัมพันธ์กับลูกค้าในแบบที่คุณยังทำไม่ได้</p><p>ข่าวดีคือ: <strong>คุณยังไม่ต้องทำทุกอย่างพร้อมกัน</strong> แค่เริ่มจากจุดเดียวที่สร้างผลได้เร็วที่สุด แล้วขยายต่อเมื่อเห็นผลจริง</p><p>สิ่งที่อันตรายที่สุดคือการ \"รอดูก่อน\" ในขณะที่ตลาดกำลังเคลื่อนไปแล้ว</p><p>ถ้าคุณไม่แน่ใจว่าธุรกิจของคุณควรเริ่มจากตรงไหน ทีมเราพร้อมช่วย ไม่มีค่าใช้จ่าย และไม่มีข้อผูกมัด</p><p style=\"margin-left:0;text-align:center;\"><strong>ยังไม่รู้จะเริ่มจากตรงไหน?</strong></p><p style=\"margin-left:0;text-align:center;\">ขอ AI Business Audit ฟรี 30 นาที</p><p style=\"margin-left:0;text-align:center;\">เราวิเคราะห์ workflow ธุรกิจของคุณ และบอกว่า AI จะช่วยได้ตรงไหนบ้าง — ไม่มีข้อผูกมัด</p><p style=\"margin-left:0;text-align:center;\"><a href=\"/contact/\"><strong>ขอนัด AI Audit ฟรี</strong></a></p><p>อ่านต่อ: <a href=\"/blog/\">ดูบทความทั้งหมดเกี่ยวกับ AI สำหรับธุรกิจ</a> | <a href=\"/services/\">บริการ AI Automation ของเรา</a></p><p>---</p>",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80",
+    "meta_title": "ธุรกิจไม่ปรับตัว AI เสี่ยงตกขบวน — คุณพร้อมแล้วหรือยัง?",
+    "meta_description": "ธุรกิจที่ไม่ปรับตัวกับ AI กำลังเสี่ยงตกขบวน ดูสัญญาณเตือน 5 ข้อและแผน 30 วันสำหรับ SME ไทย ก่อนสายเกินแก้",
+    "og_image": "",
+    "status": "published",
+    "is_featured": false,
+    "views_count": 2,
+    "published_at": "2026-05-15T03:20:44.073Z",
+    "created_at": "2026-05-15T03:14:35.422Z",
+    "updated_at": "2026-05-15T07:28:17.553Z",
+    "tags": [
+      14,
+      4,
+      15,
+      17
+    ]
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 1,
+  "fields": {
+    "project_title": "AI Chatbot Line OA - ร้านเสื้อผ้าออนไลน์",
+    "slug": "ai-chatbot-line-oa-fashion",
+    "client_name": "",
+    "industry": "ecommerce",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
+    "problem": "ทีม 3 คนต้องนั่งตอบ Line OA ทั้งวัน ลูกค้าถามซ้ำเรื่องไซส์ ราคา สถานะออเดอร์ เสียเวลามากและพลาดลูกค้าช่วงดึก",
+    "solution": "<p>ออกแบบ AI Chatbot บน Line Messaging API เชื่อมกับ Claude AI สามารถตอบคำถามสินค้า ตรวจสอบออเดอร์ และรับจองสินค้าได้อัตโนมัติ</p><p>ระบบเชื่อมกับ Google Sheet สต็อกสินค้าแบบ real-time และส่ง notification ไปยังทีมขายเมื่อลูกค้าต้องการพูดคุยกับคน</p>",
+    "result": "ตอบลูกค้าได้ทันทีตลอด 24 ชั่วโมง ลด workload ทีม 80% ยอดขายเพิ่ม 35% เพราะไม่พลาด lead กลางคืน",
+    "roi_metric": "ลด workload 80% + ยอดขาย +35%",
+    "testimonial": "กอนหนานีตองนั่งตอบ Line ทั้งวัน ตอนนี้ AI จัดการให้หมด เราไปโฟกัสงานอื่นได้ ยอดขายก็เพิ่มขึ้นด้วย",
+    "testimonial_by": "คุณมินตรา เจ้าของร้าน MINTRA STYLE กรุงเทพฯ",
+    "tech_stack": "LINE Messaging API Claude AI Django Python",
+    "duration": "2 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": true,
+    "display_order": 1,
+    "published_at": "2026-01-15T10:00:00Z",
+    "created_at": "2026-01-10T10:00:00Z",
+    "updated_at": "2026-01-15T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 2,
+  "fields": {
+    "project_title": "Lead Qualification AI - บริษัท B2B Software",
+    "slug": "lead-qualification-ai-b2b",
+    "client_name": "",
+    "industry": "b2b",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+    "problem": "ทีมขาย 5 คนรับ inquiry มากกว่า 200 รายต่อเดือน แต่ปิดดีลได้แค่ 8% เพราะเสียเวลากับ lead ที่ไม่พร้อมซื้อ",
+    "solution": "<p>สร้างระบบ AI Lead Scoring ที่วิเคราะห์พฤติกรรม ข้อมูลบริษัท และสัญญาณการซื้อของแต่ละ lead โดยอัตโนมัติ</p><p>เชื่อมกับ CRM และส่ง alert ให้ทีมขายเฉพาะ lead ที่ score สูงกว่า threshold ที่กำหนด</p>",
+    "result": "Conversion rate เพิ่มจาก 8% เป็น 23% ภายใน 3 เดือน ทีมขายโฟกัสเฉพาะ lead คุณภาพสูง",
+    "roi_metric": "Conversion +188% ใน 3 เดือน",
+    "testimonial": "ทีมขายทำงานน้อยลงแต่ปิดดีลได้มากขึ้น AI ช่วยกรองคนที่พร้อมซื้อจริงๆ ออกมาให้",
+    "testimonial_by": "คุณสมชาย ผู้อำนวยการฝ่ายขาย",
+    "tech_stack": "Claude AI Python CRM Integration n8n",
+    "duration": "3 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": true,
+    "display_order": 2,
+    "published_at": "2026-02-01T10:00:00Z",
+    "created_at": "2026-01-25T10:00:00Z",
+    "updated_at": "2026-02-01T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 3,
+  "fields": {
+    "project_title": "Workflow Automation - คลินิกความงาม 3 สาขา",
+    "slug": "workflow-automation-clinic",
+    "client_name": "",
+    "industry": "clinic",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
+    "problem": "การนัดหมาย แจ้งเตือน และติดตามลูกค้าหลังรักษาทำด้วยมือทั้งหมด Staff เสียเวลา 3-4 ชั่วโมงต่อวัน ลูกค้าลืมนัด 30%",
+    "solution": "<p>ออกแบบระบบ Workflow อัตโนมัติครบวงจร ตั้งแต่รับนัด ส่ง reminder ก่อนนัด 24 ชั่วโมงและ 2 ชั่วโมง ไปจนถึงติดตามหลังรักษา</p><p>เชื่อมกับ Google Calendar และ LINE Notify ทำให้ทั้งลูกค้าและ Staff ได้รับการแจ้งเตือนอัตโนมัติ</p>",
+    "result": "ลูกค้าลืมนัดลดจาก 30% เหลือ 8% Staff ประหยัดเวลา 3 ชั่วโมงต่อวัน รายได้เพิ่ม 20%",
+    "roi_metric": "No-show ลด 73% + รายได้ +20%",
+    "testimonial": "ลูกค้าลืมนัดลดลงมากจริงๆ Staff ไม่ต้องโทรตามเองแล้ว ระบบจัดการให้หมดเลย",
+    "testimonial_by": "คุณวรรณา ผู้จัดการ WANNA CLINIC",
+    "tech_stack": "LINE Notify Google Calendar API Python n8n",
+    "duration": "2 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 3,
+    "published_at": "2026-02-15T10:00:00Z",
+    "created_at": "2026-02-10T10:00:00Z",
+    "updated_at": "2026-02-15T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 4,
+  "fields": {
+    "project_title": "AI Vision QC - โรงงานอาหารแปรรูป",
+    "slug": "ai-vision-qc-factory",
+    "client_name": "",
+    "industry": "factory",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&q=80",
+    "problem": "ตรวจ QC ด้วยสายตามนุษย์ ใช้พนักงาน 4 คนต่อกะ ความผิดพลาด 2.3% ทำให้ต้องคืนสินค้าและเสียค่าชดเชย",
+    "solution": "<p>ติดตั้งกล้อง Computer Vision บนสายการผลิต AI ตรวจสอบคุณภาพสินค้าแบบ real-time ทุกชิ้น</p><p>ระบบแจ้งเตือน defect ทันทีและหยุดสายการผลิตอัตโนมัติเมื่อพบปัญหาร้ายแรง บันทึก log ครบทุกชิ้น</p>",
+    "result": "ความผิดพลาดลดจาก 2.3% เหลือ 0.1% ลดพนักงาน QC จาก 4 เป็น 1 คนต่อกะ ประหยัด 80,000 บาทต่อเดือน",
+    "roi_metric": "ประหยัด 80,000 บาท/เดือน + Error -96%",
+    "testimonial": "ตอนแรกไม่เชื่อว่า AI จะตรวจ QC ได้ดีกว่าคน แต่ผลออกมาชัดเจน ลด error ไปมากและประหยัดต้นทุนได้จริง",
+    "testimonial_by": "คุณประสิทธิ์ ผู้จัดการโรงงาน",
+    "tech_stack": "Computer Vision Python Edge AI Raspberry Pi",
+    "duration": "4 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 4,
+    "published_at": "2026-03-01T10:00:00Z",
+    "created_at": "2026-02-20T10:00:00Z",
+    "updated_at": "2026-03-01T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 5,
+  "fields": {
+    "project_title": "AI Booking System - โรงแรมบูทีคเชียงใหม่",
+    "slug": "ai-booking-system-hotel-chiangmai",
+    "client_name": "",
+    "industry": "hotel",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
+    "problem": "ระบบรับจองกระจายหลายช่องทาง Staff อัพเดทด้วยมือ เกิด overbooking บ่อย check-in ใช้เวลานาน",
+    "solution": "<p>สร้าง AI Booking Assistant บน Line OA เชื่อมกับ Channel Manager กลาง อัพเดทห้องว่าง real-time ทุกช่องทาง รับจองและ upsell อัตโนมัติ</p>",
+    "result": "ยกเลิก overbooking 100% เวลา check-in ลดจาก 8 นาทีเหลือ 2 นาที รายได้ upsell เพิ่ม 18%",
+    "roi_metric": "Overbooking 0 + Upsell Revenue +18%",
+    "testimonial": "ปัญหา overbooking หายไปเลย แขกพอใจมากขึ้น Staff stress น้อยลงมาก",
+    "testimonial_by": "คุณพิชญา ผู้จัดการ The Bloom Boutique Hotel เชียงใหม่",
+    "tech_stack": "LINE Messaging API Channel Manager API Claude AI",
+    "duration": "3 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 5,
+    "published_at": "2026-03-10T10:00:00Z",
+    "created_at": "2026-03-05T10:00:00Z",
+    "updated_at": "2026-03-10T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 6,
+  "fields": {
+    "project_title": "AI Knowledge Base - ทีม HR และ Operations",
+    "slug": "ai-knowledge-base-internal-hr",
+    "client_name": "",
+    "industry": "internal",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
+    "problem": "พนักงานใหม่ Onboard 4-6 สัปดาห์ HR ตอบคำถามซ้ำทุกวัน ความรู้กระจายใน Google Drive หลายร้อยไฟล์",
+    "solution": "<p>สร้าง Internal AI Assistant ที่เรียนรู้จาก Employee Handbook และ Policy ทั้งหมด พนักงานถามผ่าน Line กลุ่มได้ตลอด 24 ชั่วโมง</p>",
+    "result": "เวลา Onboard ลดจาก 6 สัปดาห์เหลือ 2 สัปดาห์ HR ประหยัดเวลา 15 ชั่วโมงต่อสัปดาห์",
+    "roi_metric": "Onboarding เร็วขึ้น 67% + ประหยัด 15 ชม./สัปดาห์",
+    "testimonial": "พนักงานใหม่หาข้อมูลได้เองโดยไม่ต้องถาม HR ตลอดเวลา ความรู้องค์กรรวมอยู่ที่เดียว",
+    "testimonial_by": "คุณนภาพร HR Manager บริษัทค้าปลีก 200 คน",
+    "tech_stack": "RAG Claude AI Vector Database Line OA Django",
+    "duration": "4 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 6,
+    "published_at": "2026-03-20T10:00:00Z",
+    "created_at": "2026-03-15T10:00:00Z",
+    "updated_at": "2026-03-20T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 7,
+  "fields": {
+    "project_title": "AI Contract Review - สำนักงานกฎหมาย",
+    "slug": "ai-contract-review-legal",
+    "client_name": "",
+    "industry": "legal_finance",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80",
+    "problem": "ทนายความใช้เวลา 3-5 ชั่วโมงต่อฉบับในการตรวจสัญญา ลูกค้ารอนาน ค่าใช้จ่ายสูง แพ้คู่แข่ง",
+    "solution": "<p>พัฒนา AI Contract Analyzer ที่อ่านและสรุปสัญญา ระบุข้อความเสี่ยง และจุดที่ควรเจรจา ทนายความ Review และ Approve เท่านั้น</p>",
+    "result": "เวลาตรวจสัญญาลดจาก 4 ชั่วโมงเหลือ 45 นาที รับงานได้เพิ่ม 3 เท่า รายได้เพิ่ม 180%",
+    "roi_metric": "Review Time -81% + รายได้ +180%",
+    "testimonial": "ทำงานเร็วขึ้นโดยไม่ลดคุณภาพ ลูกค้าพอใจมากขึ้น รายได้เพิ่มขึ้นอย่างเห็นได้ชัด",
+    "testimonial_by": "คุณวีรชัย หุ้นส่วนสำนักงานกฎหมาย กรุงเทพฯ",
+    "tech_stack": "Claude AI PDF Processing Python Django RAG",
+    "duration": "3 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 7,
+    "published_at": "2026-04-01T10:00:00Z",
+    "created_at": "2026-03-25T10:00:00Z",
+    "updated_at": "2026-04-01T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 8,
+  "fields": {
+    "project_title": "AI Tutor ส่วนตัว - โรงเรียนกวดวิชา",
+    "slug": "ai-tutor-education",
+    "client_name": "",
+    "industry": "education",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80",
+    "problem": "นักเรียนมีคำถามนอกเวลาเรียนแต่ครูตอบไม่ได้ตลอด แต่ละคนมีจุดอ่อนต่างกัน ผลสัมฤทธิ์ไม่ดีเท่าที่ควร",
+    "solution": "<p>สร้าง AI Tutor ที่ตอบคำถาม อธิบายเนื้อหา และให้โจทย์ฝึกหัดที่เหมาะกับระดับของนักเรียนแต่ละคน ติดตาม progress และแจ้งครูเมื่อนักเรียนต้องการความช่วยเหลือ</p>",
+    "result": "คะแนนนักเรียนที่ใช้ AI Tutor เพิ่มขึ้นเฉลี่ย 22% ใน 3 เดือน อัตราต่ออายุเพิ่มจาก 65% เป็น 88%",
+    "roi_metric": "คะแนน +22% + Renewal Rate +35%",
+    "testimonial": "นักเรียนถามได้ตลอดเวลา AI อธิบายได้หลายแบบจนเข้าใจ ผลสัมฤทธิ์ดีขึ้นชัดเจน",
+    "testimonial_by": "คุณสุภาพร ผู้อำนวยการ Smart Learn Academy",
+    "tech_stack": "Claude AI RAG Line OA Django Vector DB",
+    "duration": "4 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 8,
+    "published_at": "2026-04-15T10:00:00Z",
+    "created_at": "2026-04-10T10:00:00Z",
+    "updated_at": "2026-04-15T10:00:00Z"
+  }
+},
+{
+  "model": "portfolio.casestudy",
+  "pk": 9,
+  "fields": {
+    "project_title": "AI Social Media Manager - แบรนด์เครื่องสำอาง",
+    "slug": "ai-social-media-cosmetics",
+    "client_name": "",
+    "industry": "other",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80",
+    "problem": "ทีม Marketing 2 คนจัดการ Instagram TikTok Facebook พร้อมกัน ไม่มีเวลาสร้าง content สม่ำเสมอ Engagement ลดลงเรื่อยๆ",
+    "solution": "<p>สร้าง AI Content Pipeline วิเคราะห์ trend สร้าง caption ภาษาไทยเหมาะกับแบรนด์ กำหนดเวลาโพสต์ที่ดีที่สุดแต่ละ platform ทีม Approve เท่านั้น</p>",
+    "result": "โพสต์เพิ่มจาก 3 เป็น 14 ครั้งต่อสัปดาห์ Engagement เพิ่ม 156% Follower เพิ่ม 8,000 คนใน 2 เดือน",
+    "roi_metric": "Engagement +156% + Follower +8K ใน 2 เดือน",
+    "testimonial": "ทีมเราเล็กมากแต่ตอนนี้สร้าง content ได้เยอะกว่าแบรนด์ใหญ่ AI ช่วยได้มากจริงๆ",
+    "testimonial_by": "คุณแพร ผู้ก่อตั้ง PARAE Cosmetics",
+    "tech_stack": "Claude AI Social Media API Python n8n",
+    "duration": "2 สัปดาห์",
+    "meta_title": "",
+    "meta_description": "",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 9,
+    "published_at": "2026-05-01T10:00:00Z",
+    "created_at": "2026-04-25T10:00:00Z",
+    "updated_at": "2026-05-01T10:00:00Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 102,
+  "fields": {
+    "title": "📱 [Day 2] สร้าง LINE Official Account",
+    "start_datetime": "2026-05-15T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Enable Messaging API + ดึง Channel Access Token + Channel Secret — บันทึกใน .env",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.057Z",
+    "updated_at": "2026-05-15T10:58:05.057Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 103,
+  "fields": {
+    "title": "🔗 [Day 3] เชื่อม LINE → OpenClaw",
+    "start_datetime": "2026-05-16T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ตั้ง webhook URL + ทดสอบ LINE echo bot พื้นฐาน — ยืนยัน Channel Access Token ใช้งานได้",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.060Z",
+    "updated_at": "2026-05-15T10:58:05.060Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 104,
+  "fields": {
+    "title": "🤖 [Day 4] เขียน System Prompt + 20+ FAQ",
+    "start_datetime": "2026-05-17T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ออกแบบ AI persona + สร้าง knowledge base ครอบคลุม 20+ FAQ — ทดสอบ tone และความถูกต้องของคำตอบ",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.064Z",
+    "updated_at": "2026-05-15T10:58:05.064Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 105,
+  "fields": {
+    "title": "🖥️ [Day 5] Deploy บน VPS ($6/เดือน)",
+    "start_datetime": "2026-05-18T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "DigitalOcean Droplet $6/เดือน + ติดตั้ง Node.js + PM2 + ตั้ง reverse proxy — live demo server running",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.067Z",
+    "updated_at": "2026-05-15T10:58:05.067Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 106,
+  "fields": {
+    "title": "✅ [Day 7] Demo Production-Ready",
+    "start_datetime": "2026-05-20T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "ทดสอบ 20+ scenarios ครบ + response time < 3 วินาที + no hallucination — Gate 1 ผ่าน",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.071Z",
+    "updated_at": "2026-05-15T10:58:05.071Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 107,
+  "fields": {
+    "title": "🎬 [Day 8] สร้าง Demo 3 แบบ",
+    "start_datetime": "2026-05-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "3 demo scenarios: (1) E-commerce FAQ 20+ คำถาม (2) Clinic appointment booking (3) Hotel booking + FAQ — แต่ละ demo มี 20+ FAQ",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.074Z",
+    "updated_at": "2026-05-15T10:58:05.074Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 108,
+  "fields": {
+    "title": "📹 [Day 10] ถ่าย Video Demo 60 วินาที",
+    "start_datetime": "2026-05-23T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Thai voiceover + CapCut editing — สาธิต conversation จริง ไม่ใช่ slides — highest conversion format สำหรับ SME",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.078Z",
+    "updated_at": "2026-05-15T10:58:05.078Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 109,
+  "fields": {
+    "title": "📄 [Day 11] สร้าง Sales Materials",
+    "start_datetime": "2026-05-24T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ครบชุด: (1) One-pager A4 (2) Proposal template พร้อม pricing (3) Invoice template (4) Service agreement + NDA — ทุกอย่าง editable",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.082Z",
+    "updated_at": "2026-05-15T10:58:05.082Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 110,
+  "fields": {
+    "title": "🌐 [Day 13] ตั้ง LinkedIn + Facebook + Salepage",
+    "start_datetime": "2026-05-26T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "LinkedIn Company Page + Facebook Page + Salepage (Netlify/GitHub Pages) — กรอก bio, portfolio, contact, pricing",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.086Z",
+    "updated_at": "2026-05-15T10:58:05.086Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 111,
+  "fields": {
+    "title": "✅ [Day 14] Sales Materials ครบ",
+    "start_datetime": "2026-05-27T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Demo video + Sales Kit (one-pager, proposal, invoice, service agreement) + Online presence — Gate 2 ผ่าน",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.089Z",
+    "updated_at": "2026-05-15T10:58:05.089Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 112,
+  "fields": {
+    "title": "📢 [Day 15] Publish Content ชุดแรก",
+    "start_datetime": "2026-05-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "LinkedIn post + video, FB post, TikTok — 3 platforms พร้อมกัน — เน้น pain point ลูกค้าและ ROI จริง",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.093Z",
+    "updated_at": "2026-05-15T10:58:05.093Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 113,
+  "fields": {
+    "title": "📋 [Day 17] สร้าง Prospect List 100 ราย",
+    "start_datetime": "2026-05-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "50 คลินิก + 50 e-commerce shops ใน Google Sheets CRM — คอลัมน์: ชื่อ, เจ้าของ, LINE/FB, สถานะ, วันติดต่อ — DM script พร้อม",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.096Z",
+    "updated_at": "2026-05-15T10:58:05.096Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 114,
+  "fields": {
+    "title": "💬 [Day 19] ส่ง Cold Message 30 ราย",
+    "start_datetime": "2026-06-01T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Personalized DM Facebook/LINE — mention ชื่อธุรกิจจริง + pain point เฉพาะ industry — expect 10-20% reply rate (3-6 replies)",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.099Z",
+    "updated_at": "2026-05-15T10:58:05.099Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 115,
+  "fields": {
+    "title": "👥 [Day 22] Join 3 Facebook Groups",
+    "start_datetime": "2026-06-03T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "SME Thailand + e-commerce Thailand + คลินิก/สาธารณสุข — ตอบคำถาม 2-3 ครั้ง/วัน เพื่อ build authority ก่อน pitch",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.102Z",
+    "updated_at": "2026-05-15T10:58:05.102Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 116,
+  "fields": {
+    "title": "📞 [Day 25] Discovery Calls 3+ ราย",
+    "start_datetime": "2026-06-07T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "คุยกับ prospect ที่สนใจ — ถาม pain point + budget + timeline — เป้า qualify 2 ในนั้นเพื่อ demo",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.107Z",
+    "updated_at": "2026-05-15T10:58:05.107Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 117,
+  "fields": {
+    "title": "✅ [Day 28] 3+ Discovery Calls Done",
+    "start_datetime": "2026-06-10T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Pipeline มี qualified leads พร้อม demo — เริ่ม Phase 4: ส่ง proposal + ปิดดีล",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.110Z",
+    "updated_at": "2026-05-15T10:58:05.110Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 118,
+  "fields": {
+    "title": "🎯 [Day 29] Demo Calls + ส่ง Proposal",
+    "start_datetime": "2026-06-11T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Demo 30 นาที + ตอบ objection + ส่ง Proposal deck (pricing + scope + timeline) ให้ 1-2 hot leads — ใช้ HelloSign สำหรับ e-signature",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.114Z",
+    "updated_at": "2026-05-15T10:58:05.114Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 119,
+  "fields": {
+    "title": "🤝 [Day 33] รับ Deposit ฿10,000!",
+    "start_datetime": "2026-06-15T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "50% setup fee = ฿10,000 — Project greenlit, onboarding checklist ส่งลูกค้า, เริ่มนัด kick-off call",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.117Z",
+    "updated_at": "2026-05-15T10:58:05.117Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 120,
+  "fields": {
+    "title": "✍️ [Day 38] Contract Signed",
+    "start_datetime": "2026-06-20T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Service Agreement + NDA signed via HelloSign + ฿10K received — Gate 4 ผ่าน, เริ่ม delivery",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.122Z",
+    "updated_at": "2026-05-15T10:58:05.122Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 121,
+  "fields": {
+    "title": "🔧 [Day 39] เริ่ม Customize ระบบ",
+    "start_datetime": "2026-06-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Kick-off call: รวบรวม FAQ จริง + brand voice + escalation rules + hours of operation — migrate ข้อมูลเข้า knowledge base",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.125Z",
+    "updated_at": "2026-05-15T10:58:05.125Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 122,
+  "fields": {
+    "title": "🚀 [Day 44] Deploy บน Customer VPS",
+    "start_datetime": "2026-06-25T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ตั้ง VPS ให้ลูกค้า + configure LINE OA + ทดสอบ webhook + integration ทุกตัว — staging → production",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.128Z",
+    "updated_at": "2026-05-15T10:58:05.128Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 123,
+  "fields": {
+    "title": "🧪 [Day 47] User Acceptance Testing",
+    "start_datetime": "2026-06-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ลูกค้า test 3 วัน — รวบรวม feedback → แก้ bug + ปรับ tone + เพิ่ม FAQ ที่ขาด — max 2 revision rounds",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.131Z",
+    "updated_at": "2026-05-15T10:58:05.131Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 124,
+  "fields": {
+    "title": "📚 [Day 48] Training ทีมลูกค้า",
+    "start_datetime": "2026-07-02T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "สอน Dashboard: ดู chat log + อัปเดต FAQ + ตั้ง escalation → LINE agent + แนะนำ monitoring — ส่งคู่มือ PDF",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.135Z",
+    "updated_at": "2026-05-15T10:58:05.135Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 125,
+  "fields": {
+    "title": "🟢 [Day 52] GO LIVE!",
+    "start_datetime": "2026-07-04T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "ระบบ production running + 48h close monitoring + hotline support — Gate 5 ผ่าน",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.138Z",
+    "updated_at": "2026-05-15T10:58:05.138Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 126,
+  "fields": {
+    "title": "🧾 [Day 53] ส่ง Invoice #2 ฿10,000",
+    "start_datetime": "2026-07-05T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Invoice #2 ฿10,000 (final 50%) ส่งทันทีหลัง go-live — setup รวม ฿20,000 ครบ + ตั้ง recurring invoice MRR ฿3,000/เดือน",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.142Z",
+    "updated_at": "2026-05-15T10:58:05.142Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 127,
+  "fields": {
+    "title": "💰 [Day 55] รับเงินครบ + MRR เริ่ม!",
+    "start_datetime": "2026-07-07T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Setup รวม ฿20,000 + MRR ฿3,000/เดือน เริ่มนับ — ตั้ง auto-invoice รายเดือนใน system",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.144Z",
+    "updated_at": "2026-05-15T10:58:05.144Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 128,
+  "fields": {
+    "title": "📊 [Day 56] สร้าง Case Study",
+    "start_datetime": "2026-07-08T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "วัด metrics จริง: response rate, FAQ coverage, จำนวน conversations — เขียน case study + ขอ testimonial → โพส LinkedIn",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.149Z",
+    "updated_at": "2026-05-15T10:58:05.149Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 129,
+  "fields": {
+    "title": "🔄 [Day 60] เริ่ม Cycle 2",
+    "start_datetime": "2026-07-12T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Follow-up pipeline ที่ยังค้างอยู่ + ขอ referral จากลูกค้าปัจจุบัน + target ปิดดีล #2 ภายใน Day 90",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.151Z",
+    "updated_at": "2026-05-15T10:58:05.151Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 130,
+  "fields": {
+    "title": "🏁 Sprint 1-3 Dashboard Complete",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Dashboard, Pipeline, Revenue, Analytics, Backlog ครบ — พร้อมใช้งานจริง",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.155Z",
+    "updated_at": "2026-05-15T10:58:05.155Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 131,
+  "fields": {
+    "title": "🚀 LINE AI Pro — Launch!",
+    "start_datetime": "2026-05-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Setup ฿20,000 | MRR ฿3,000/เดือน | Deliver 1-2 สัปดาห์ | Margin ~70% | Target: ร้านค้าออนไลน์, SME ทั่วไป | จุดขาย: Gen AI จริง vs rule-based, self-hosted, จ่ายครั้งเดียว",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.158Z",
+    "updated_at": "2026-05-15T10:58:05.158Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 132,
+  "fields": {
+    "title": "🎯 เป้าปิด 2-3 ดีลแรก",
+    "start_datetime": "2026-06-29T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Month 2 target — MRR เริ่มนับ + สร้าง 1 Case Study พร้อมตัวเลข ROI จริง",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.162Z",
+    "updated_at": "2026-05-15T10:58:05.162Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 133,
+  "fields": {
+    "title": "🏥 Private AI Clinic — Launch!",
+    "start_datetime": "2026-07-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Setup ฿80,000 | MRR ฿8,000/เดือน | Deliver 3-4 สัปดาห์ | Target: คลินิก 30,000+ แห่งในไทย | PDPA-proof: Ollama on-premise, zero data egress",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.167Z",
+    "updated_at": "2026-05-15T10:58:05.167Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 134,
+  "fields": {
+    "title": "📡 Omni AI Agent — Launch!",
+    "start_datetime": "2026-07-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Setup ฿50,000 | MRR ฿6,000/เดือน | LINE+FB+IG+TikTok+WebChat ใน gateway เดียว | Target: โรงแรม, ธุรกิจ multi-channel",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.170Z",
+    "updated_at": "2026-05-15T10:58:05.170Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 135,
+  "fields": {
+    "title": "🎯 เป้า MRR ฿20,000/เดือน",
+    "start_datetime": "2026-08-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Month 4 revenue target — 3 partners acquired + 2 case studies พร้อม",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.174Z",
+    "updated_at": "2026-05-15T10:58:05.174Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 136,
+  "fields": {
+    "title": "🔄 Quarterly Planning Q3",
+    "start_datetime": "2026-08-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "2-day strategy session — ทบทวน MRR + product mix + channels + เพิ่ม agent ตาม revenue milestone",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.177Z",
+    "updated_at": "2026-05-15T10:58:05.177Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 137,
+  "fields": {
+    "title": "⚙️ AI Workflow Bot — Launch!",
+    "start_datetime": "2026-09-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Setup ฿35,000 | MRR ฿4,500/เดือน | Daily reports 08:00, stock alerts, CRM update, lead follow-up, social monitoring",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.181Z",
+    "updated_at": "2026-05-15T10:58:05.181Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 138,
+  "fields": {
+    "title": "👥 Team AI Assistant — Launch!",
+    "start_datetime": "2026-09-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Setup ฿40,000 | MRR ฿5,000/เดือน | ประหยัด 20-30 นาที/คน/วัน | ทีม 20 คน = 400+ ชม./เดือน | Slack/Teams/LINE",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.185Z",
+    "updated_at": "2026-05-15T10:58:05.185Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 139,
+  "fields": {
+    "title": "📈 Google Ads เริ่ม (฿5K-15K/เดือน)",
+    "start_datetime": "2026-09-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "High-intent keywords: 'AI chatbot ร้านอาหาร', 'LINE chatbot ราคา' — เริ่มหลัง case study พร้อม เพื่อเพิ่ม conversion rate",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.189Z",
+    "updated_at": "2026-05-15T10:58:05.189Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 140,
+  "fields": {
+    "title": "💬 [Feature] Chat กับ Agent จาก Dashboard",
+    "start_datetime": "2026-09-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Integrate Anthropic API → กดที่ agent card ส่งคำสั่งได้เลย — ไม่ต้องออกไปหน้าอื่น",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.192Z",
+    "updated_at": "2026-05-15T10:58:05.192Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 141,
+  "fields": {
+    "title": "🎯 เป้า MRR ฿50,000/เดือน",
+    "start_datetime": "2026-10-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Month 6 target: 15+ customers | 5 case studies | 5 partners | พร้อม activate Data Analyst + Customer Success agents",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.197Z",
+    "updated_at": "2026-05-15T10:58:05.197Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 142,
+  "fields": {
+    "title": "🏆 Activate Data Analyst + Customer Success",
+    "start_datetime": "2026-10-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "MRR ฿50K+ → เพิ่ม agents ตาม revenue milestone — Data Analyst วิเคราะห์ churn + Customer Success ดูแล retention",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.201Z",
+    "updated_at": "2026-05-15T10:58:05.201Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 143,
+  "fields": {
+    "title": "📋 Lead Magnet: AI Readiness Checklist",
+    "start_datetime": "2026-05-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "สร้าง PDF 'AI Readiness Checklist 10 ข้อสำหรับ SME ไทย' + ฝัง Email Form ใน Blog (Mailchimp free tier 500 contacts) + CTA block ทุกบทความ + Thank You page",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.204Z",
+    "updated_at": "2026-05-15T10:58:05.204Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 144,
+  "fields": {
+    "title": "📧 Email Sequence 5 ฉบับ",
+    "start_datetime": "2026-06-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Day 0: ส่ง Checklist + แนะนำตัว | Day 2: Case study ธุรกิจคล้ายกัน | Day 4: 3 สัญญาณต้องเริ่มใช้ AI | Day 7: FAQ ราคา/เวลา/ความยุ่งยาก | Day 10: CTA 'ขอ AI Audit ฟรี 30 นาที'",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.209Z",
+    "updated_at": "2026-05-15T10:58:05.209Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 145,
+  "fields": {
+    "title": "📅 ตั้ง Calendly สำหรับ Free AI Audit",
+    "start_datetime": "2026-06-19T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Free tier + link ในบทความและ email signature + เป้า 2 calls/เดือน Month 1 — เพิ่มเป็น 8 calls/เดือน Month 3",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.213Z",
+    "updated_at": "2026-05-15T10:58:05.213Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 146,
+  "fields": {
+    "title": "🏛️ Pillar Pages 4 หน้า",
+    "start_datetime": "2026-06-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "P1: AI สำหรับ SME ไทยคืออะไร | P2: ระบบ AI ที่ SME ต้องมี | P3: เครื่องมือ AI เปรียบเทียบ | P4: ROI & ราคา AI สำหรับ SME — แต่ละหน้า 2,000+ คำ",
+    "color": "#b8924f",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.216Z",
+    "updated_at": "2026-05-15T10:58:05.216Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 147,
+  "fields": {
+    "title": "📊 KPI Check: เดือน 1",
+    "start_datetime": "2026-06-29T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "เป้า: บทความ publish 2/สัปดาห์ | MQL 10 leads | Free Audit 2 calls | ดีลปิด 1 | MRR ฿0→start",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.220Z",
+    "updated_at": "2026-05-15T10:58:05.220Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 148,
+  "fields": {
+    "title": "📊 KPI Check: เดือน 3",
+    "start_datetime": "2026-09-29T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "เป้า: MQL สะสม 50 leads | Free Audit 8 calls/เดือน | ดีลปิด 3 | MRR ฿30,000",
+    "color": "#c9a96e",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.224Z",
+    "updated_at": "2026-05-15T10:58:05.224Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 149,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-05-10T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.228Z",
+    "updated_at": "2026-05-15T10:58:05.228Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 150,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.231Z",
+    "updated_at": "2026-05-15T10:58:05.231Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 151,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-05-17T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.234Z",
+    "updated_at": "2026-05-15T10:58:05.234Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 152,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-05-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.237Z",
+    "updated_at": "2026-05-15T10:58:05.237Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 153,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-05-24T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.241Z",
+    "updated_at": "2026-05-15T10:58:05.241Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 154,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-05-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.246Z",
+    "updated_at": "2026-05-15T10:58:05.246Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 155,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-05-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.250Z",
+    "updated_at": "2026-05-15T10:58:05.250Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 156,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-06-04T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.254Z",
+    "updated_at": "2026-05-15T10:58:05.254Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 157,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-06-07T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.259Z",
+    "updated_at": "2026-05-15T10:58:05.259Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 158,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-06-11T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.264Z",
+    "updated_at": "2026-05-15T10:58:05.264Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 159,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-06-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.267Z",
+    "updated_at": "2026-05-15T10:58:05.267Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 160,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-06-18T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.270Z",
+    "updated_at": "2026-05-15T10:58:05.270Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 161,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-06-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.273Z",
+    "updated_at": "2026-05-15T10:58:05.274Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 162,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-06-25T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.277Z",
+    "updated_at": "2026-05-15T10:58:05.277Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 163,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-06-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.280Z",
+    "updated_at": "2026-05-15T10:58:05.280Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 164,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-07-02T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.284Z",
+    "updated_at": "2026-05-15T10:58:05.284Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 165,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-07-05T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.288Z",
+    "updated_at": "2026-05-15T10:58:05.288Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 166,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-07-09T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.292Z",
+    "updated_at": "2026-05-15T10:58:05.292Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 167,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-07-12T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.296Z",
+    "updated_at": "2026-05-15T10:58:05.296Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 168,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-07-16T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.300Z",
+    "updated_at": "2026-05-15T10:58:05.300Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 169,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-07-19T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.303Z",
+    "updated_at": "2026-05-15T10:58:05.303Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 170,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-07-23T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.307Z",
+    "updated_at": "2026-05-15T10:58:05.307Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 171,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-07-26T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.310Z",
+    "updated_at": "2026-05-15T10:58:05.310Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 172,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-07-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.314Z",
+    "updated_at": "2026-05-15T10:58:05.314Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 173,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-08-02T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.317Z",
+    "updated_at": "2026-05-15T10:58:05.317Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 174,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-08-06T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.320Z",
+    "updated_at": "2026-05-15T10:58:05.320Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 175,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-08-09T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.324Z",
+    "updated_at": "2026-05-15T10:58:05.324Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 176,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-08-13T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.413Z",
+    "updated_at": "2026-05-15T10:58:05.413Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 177,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-08-16T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.417Z",
+    "updated_at": "2026-05-15T10:58:05.417Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 178,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-08-20T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.423Z",
+    "updated_at": "2026-05-15T10:58:05.423Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 179,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-08-23T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.426Z",
+    "updated_at": "2026-05-15T10:58:05.426Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 180,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-08-27T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.430Z",
+    "updated_at": "2026-05-15T10:58:05.430Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 181,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-08-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.434Z",
+    "updated_at": "2026-05-15T10:58:05.434Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 182,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-09-03T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.438Z",
+    "updated_at": "2026-05-15T10:58:05.438Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 183,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-09-06T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.441Z",
+    "updated_at": "2026-05-15T10:58:05.441Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 184,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-09-10T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.445Z",
+    "updated_at": "2026-05-15T10:58:05.445Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 185,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-09-13T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.449Z",
+    "updated_at": "2026-05-15T10:58:05.449Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 186,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-09-17T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.452Z",
+    "updated_at": "2026-05-15T10:58:05.452Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 187,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-09-20T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.456Z",
+    "updated_at": "2026-05-15T10:58:05.456Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 188,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-09-24T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.459Z",
+    "updated_at": "2026-05-15T10:58:05.459Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 189,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-09-27T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.463Z",
+    "updated_at": "2026-05-15T10:58:05.463Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 190,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-10-01T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.466Z",
+    "updated_at": "2026-05-15T10:58:05.466Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 191,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-10-04T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.471Z",
+    "updated_at": "2026-05-15T10:58:05.471Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 192,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-10-08T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.474Z",
+    "updated_at": "2026-05-15T10:58:05.474Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 193,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-10-11T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.479Z",
+    "updated_at": "2026-05-15T10:58:05.479Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 194,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-10-15T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.482Z",
+    "updated_at": "2026-05-15T10:58:05.482Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 195,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-10-18T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.486Z",
+    "updated_at": "2026-05-15T10:58:05.486Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 196,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-10-22T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.491Z",
+    "updated_at": "2026-05-15T10:58:05.491Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 197,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-10-25T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.496Z",
+    "updated_at": "2026-05-15T10:58:05.496Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 198,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-10-29T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.499Z",
+    "updated_at": "2026-05-15T10:58:05.499Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 199,
+  "fields": {
+    "title": "☀️ Daily Stand-up",
+    "start_datetime": "2026-11-01T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Daily 09:00 — แต่ละ agent ส่ง stand-up",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.503Z",
+    "updated_at": "2026-05-15T10:58:05.503Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 200,
+  "fields": {
+    "title": "📊 Weekly Review",
+    "start_datetime": "2026-11-05T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกศุกร์ 17:00 — CEO + CoS + 3 agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.508Z",
+    "updated_at": "2026-05-15T10:58:05.508Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 201,
+  "fields": {
+    "title": "📅 Monthly Review",
+    "start_datetime": "2026-04-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Monthly Business Review — all agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.511Z",
+    "updated_at": "2026-05-15T10:58:05.511Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 202,
+  "fields": {
+    "title": "📅 Monthly Review",
+    "start_datetime": "2026-05-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Monthly Business Review — all agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.515Z",
+    "updated_at": "2026-05-15T10:58:05.515Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 203,
+  "fields": {
+    "title": "📅 Monthly Review",
+    "start_datetime": "2026-06-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Monthly Business Review — all agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.519Z",
+    "updated_at": "2026-05-15T10:58:05.519Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 204,
+  "fields": {
+    "title": "📅 Monthly Review",
+    "start_datetime": "2026-07-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Monthly Business Review — all agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.522Z",
+    "updated_at": "2026-05-15T10:58:05.522Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 205,
+  "fields": {
+    "title": "📅 Monthly Review",
+    "start_datetime": "2026-08-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Monthly Business Review — all agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.527Z",
+    "updated_at": "2026-05-15T10:58:05.527Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 206,
+  "fields": {
+    "title": "📅 Monthly Review",
+    "start_datetime": "2026-09-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "Monthly Business Review — all agents",
+    "color": "#6c757d",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T10:58:05.531Z",
+    "updated_at": "2026-05-15T10:58:05.531Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 211,
+  "fields": {
+    "title": "Feature: completed = green",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "is_completed field + Mark as Done button + green style",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T13:04:49.146Z",
+    "updated_at": "2026-05-15T13:04:49.146Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 212,
+  "fields": {
+    "title": "Feature: Tab filter with icons",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Redesign filter bar as tabs with Bootstrap Icons",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T13:04:49.887Z",
+    "updated_at": "2026-05-15T13:04:49.887Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 213,
+  "fields": {
+    "title": "Feature: fix icons in calendar",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Replace dot icons with Bootstrap Icons in filter tabs",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T13:04:50.589Z",
+    "updated_at": "2026-05-15T13:04:50.589Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 214,
+  "fields": {
+    "title": "Feature: auto-add tasks to calendar",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Management command add_calendar_task for AI agents",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T13:04:51.326Z",
+    "updated_at": "2026-05-15T13:04:51.326Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 215,
+  "fields": {
+    "title": "Feature: auto-add tasks to calendar",
+    "start_datetime": "2026-05-13T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Management command add_calendar_task for AI agents",
+    "color": "",
+    "is_system": false,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": [
+      "admin"
+    ],
+    "created_at": "2026-05-15T13:35:47.575Z",
+    "updated_at": "2026-05-15T13:35:47.575Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 216,
+  "fields": {
+    "title": "P1 D1 — ติดตั้ง Infrastructure",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ติดตั้ง Node.js 24 | ติดตั้ง OpenClaw: npm install -g openclaw | รัน openclaw onboard --install-daemon | สมัคร Anthropic API key (claude.ai/api) | ทดสอบ Control UI localhost:18789",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.414Z",
+    "updated_at": "2026-05-15T15:41:53.689Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 217,
+  "fields": {
+    "title": "P1 D2 — สมัคร LINE Official Account",
+    "start_datetime": "2026-05-15T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "สมัคร LINE OA ที่ manager.line.biz (ฟรี) | ตั้งชื่อ account เช่น 'AI Demo Thai' | เปิดใช้งาน Messaging API | คัดลอก Channel Access Token + Secret | ตั้ง Webhook URL ด้วย ngrok URL ชั่วคราว",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.472Z",
+    "updated_at": "2026-05-15T14:01:21.472Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 218,
+  "fields": {
+    "title": "P1 D3 — เชื่อมต่อ LINE กับ OpenClaw",
+    "start_datetime": "2026-05-16T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ติดตั้ง LINE channel ใน OpenClaw Control UI | ใส่ Channel Access Token + Secret | ทดสอบส่งข้อความจาก LINE → OpenClaw | ทดสอบ AI ตอบกลับ | แก้ bug ที่เจอ",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.504Z",
+    "updated_at": "2026-05-15T14:01:21.504Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 219,
+  "fields": {
+    "title": "P1 D4 — เขียน System Prompt ของ AI",
+    "start_datetime": "2026-05-17T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "สร้างไฟล์ AGENTS.md สำหรับ demo persona | กำหนดบุคลิก AI: ชื่อ น้ำเสียง ความรู้ | ใส่ FAQ สำหรับธุรกิจตัวอย่าง (ร้านค้า) | ตั้ง fallback message เมื่อ AI ไม่รู้ | ทดสอบถามหลาย scenario | ทำ demo เป็น 'ร้านค้าออนไลน์' ก่อน",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.506Z",
+    "updated_at": "2026-05-15T14:01:21.507Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 220,
+  "fields": {
+    "title": "P1 D5 — ซื้อ VPS + Deploy จริง",
+    "start_datetime": "2026-05-18T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "สมัคร DigitalOcean/Vultr VPS $6/เดือน ~220 บาท | สร้าง Ubuntu 22.04 droplet | ติดตั้ง Node.js 24 บน VPS | ติดตั้ง OpenClaw + daemon บน VPS | อัปเดต Webhook URL ใน LINE OA → IP จริง",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.509Z",
+    "updated_at": "2026-05-15T14:01:21.510Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 221,
+  "fields": {
+    "title": "P1 D6-7 — ทดสอบ + Refine ระบบ",
+    "start_datetime": "2026-05-19T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ทดสอบ end-to-end จาก LINE จริง | ทดสอบกับ scenario 20+ แบบ | ปรับ prompt ให้ตอบได้ดีขึ้น | ทดสอบ handoff 'ส่งต่อ staff' | จด bug list + แก้ทั้งหมด | OUTCOME: ทักไป LINE OA แล้วได้รับตอบ AI ทันที",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.513Z",
+    "updated_at": "2026-05-15T14:01:21.513Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 222,
+  "fields": {
+    "title": "Milestone — Phase 1 Complete: ระบบพร้อมทดสอบ",
+    "start_datetime": "2026-05-20T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "LINE OA เชื่อมกับ OpenClaw แล้ว | AI ตอบได้ทันที | Deploy บน VPS จริง | ทดสอบ 20+ scenarios ผ่านแล้ว",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.542Z",
+    "updated_at": "2026-05-15T14:01:21.542Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 223,
+  "fields": {
+    "title": "P2 D8-9 — สร้าง Demo Scenario 3 แบบ",
+    "start_datetime": "2026-05-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Demo A: ร้านเสื้อผ้าออนไลน์ (ถามสต็อก/ราคา) | Demo B: คลินิกความงาม (นัดหมาย/ถามบริการ) | Demo C: โรงแรม (จองห้อง/ถามโปรโมชั่น) | แต่ละ demo มี FAQ 20+ ข้อพร้อมใช้ | QR code สแกนแล้วทดลองได้เลย",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.545Z",
+    "updated_at": "2026-05-15T14:01:21.545Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 224,
+  "fields": {
+    "title": "P2 D10 — ถ่ายวิดีโอ Demo 60 วินาที",
+    "start_datetime": "2026-05-23T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ถ่าย screen recording + เสียงพากย์ไทย | แสดง: ลูกค้าถาม → AI ตอบใน 2 วินาที | แสดง: ถามนอกสคริปต์ AI ยังตอบได้ (Gen AI) | แสดง: ส่งต่อ staff เมื่อจำเป็น | ตัดต่อด้วย CapCut (ฟรี)",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.548Z",
+    "updated_at": "2026-05-15T14:01:21.548Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 225,
+  "fields": {
+    "title": "P2 D11-12 — สร้างเอกสารขาย",
+    "start_datetime": "2026-05-24T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "One-pager PDF: ปัญหา → วิธีแก้ → ราคา → CTA | Proposal template (Word/Canva) | Invoice template | Service agreement อย่างง่าย 1 หน้า | QR code สำหรับแต่ละ demo | ทำ one-pager เป็น PDF ส่ง LINE/WhatsApp ได้เลย",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.551Z",
+    "updated_at": "2026-05-15T14:01:21.551Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 226,
+  "fields": {
+    "title": "P2 D13-14 — Setup Online Presence",
+    "start_datetime": "2026-05-26T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "สร้าง LINE OA หลัก (demo + รับ lead) | LinkedIn profile อัปเดต (ใส่ AI Specialist) | สร้าง Facebook Page ของธุรกิจ | โพสต์ salepage.html บน Netlify/GitHub Pages | ใส่ QR code ทดลอง demo ใน salepage",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.555Z",
+    "updated_at": "2026-05-15T14:01:21.555Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 227,
+  "fields": {
+    "title": "Milestone — Phase 2 Complete: Demo พร้อม + Salepage Live",
+    "start_datetime": "2026-05-27T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Demo 3 แบบ (ร้านค้า/คลินิก/โรงแรม) พร้อมใช้ | วิดีโอ 60 วินาที พร้อม | เอกสารขายครบ | Salepage ออนไลน์แล้ว",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.558Z",
+    "updated_at": "2026-05-15T14:01:21.558Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 228,
+  "fields": {
+    "title": "P3 D15-16 — สร้าง Content ชุดแรก",
+    "start_datetime": "2026-05-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "LinkedIn post: 'ผมทำ AI ตอบ LINE แทนพนักงานได้แล้ว' + วิดีโอ demo | Facebook post: รูป before/after + ราคา | TikTok: วิดีโอ demo 60 วินาที + caption ภาษาไทย | ตั้ง auto-reply LINE OA ให้ส่ง demo link ทันที | อย่า polish มาก — post เลย",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.562Z",
+    "updated_at": "2026-05-15T14:01:21.562Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 229,
+  "fields": {
+    "title": "P3 D17-18 — สร้าง Prospect List 100 ราย",
+    "start_datetime": "2026-05-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Google 'คลินิกความงาม กรุงเทพ' → เก็บ LINE/FB 50 ราย | Facebook Group 'ร้านค้าออนไลน์' → เก็บ contact 50 ราย | LinkedIn search 'เจ้าของร้าน / owner / clinic manager' | บันทึกใน spreadsheet: ชื่อ, channel, pain point | แบ่งกลุ่ม: คลินิก 30 / ร้านค้า 30 / อื่นๆ 20 | เป้า: 100 contacts = 10-20 replies = 3-5 calls",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.564Z",
+    "updated_at": "2026-05-15T14:01:21.564Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 230,
+  "fields": {
+    "title": "P3 D19-21 — ส่ง Cold Message ชุดแรก 30 ราย",
+    "start_datetime": "2026-06-01T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ส่ง 30 messages (Facebook Messenger / LINE) | ใช้ template ที่ personalized ตาม industry | อย่าขายตรง — ส่ง demo ให้ทดลองก่อน | Follow-up คนที่เปิดแต่ไม่ตอบ (Day 3 หลังส่ง) | Track replies ใน spreadsheet",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.567Z",
+    "updated_at": "2026-05-15T14:01:21.567Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 231,
+  "fields": {
+    "title": "P3 D22-24 — Join & Engage Facebook Groups",
+    "start_datetime": "2026-06-04T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "เข้าร่วม 'เจ้าของธุรกิจ SME ไทย' | เข้าร่วม 'ร้านค้าออนไลน์ไทย' | เข้าร่วม 'คลินิก Beauty Thailand' | ตอบคำถามใน group (ไม่ขายตรง!) build trust ก่อน | แชร์ insight เรื่อง AI ใน LINE OA | ห้ามขายตรงใน group — โดนแบน! ให้ DM แทน",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.571Z",
+    "updated_at": "2026-05-15T14:01:21.571Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 232,
+  "fields": {
+    "title": "P3 D25-26 — เริ่ม Discovery Calls 3+ ราย",
+    "start_datetime": "2026-06-07T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "meeting",
+    "description": "นัด call กับ prospect ที่สนใจ (30 นาที/ราย) | เป้า: นัดให้ได้ 3+ ราย ใน Phase นี้ | ใช้ Discovery script | ฟังมากกว่าพูด — เข้าใจ pain point ลูกค้า | จบ call: 'ขอส่ง proposal ให้ภายใน 48 ชั่วโมงได้ไหม' | Call ผ่าน Zoom / LINE Video / โทรศัพท์",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.573Z",
+    "updated_at": "2026-05-15T14:01:21.573Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 233,
+  "fields": {
+    "title": "P3 D27-28 — ส่ง Proposal + ติดตาม",
+    "start_datetime": "2026-06-09T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "ส่ง proposal PDF ที่ customize ตามลูกค้าแต่ละราย | ใส่ ROI estimate ที่ specific กับ business เขา | ระบุ timeline ชัดเจน: เริ่ม X วันที่ Y เสร็จ | Follow-up ถ้าไม่ตอบใน 48 ชั่วโมง | เตรียมรับ objection",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.577Z",
+    "updated_at": "2026-05-15T14:01:21.577Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 234,
+  "fields": {
+    "title": "Milestone — Phase 3 Complete: Proposal ส่งไปแล้ว 3+ ราย",
+    "start_datetime": "2026-06-10T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Content ชุดแรก live บน LinkedIn + Facebook + TikTok | Prospect list 100 รายพร้อม | Cold messages ส่งแล้ว 30 ราย | Discovery calls 3+ ราย เสร็จสิ้น | Proposal ส่งแล้ว 3+ ราย",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.580Z",
+    "updated_at": "2026-05-15T14:01:21.580Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 235,
+  "fields": {
+    "title": "P4 D29-30 — Negotiation + Handle Objection",
+    "start_datetime": "2026-06-11T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "meeting",
+    "description": "'แพงเกินไป' → แสดง ROI: ประหยัดค่าแรง CS เท่าไหร่/เดือน | 'กลัวข้อมูลรั่ว' → อธิบาย self-hosted = ข้อมูลอยู่กับเขา | 'ขอดูตัวอย่างก่อน' → ส่ง QR demo ทดลองได้เลยตอนนี้ | 'ขอคิดก่อน' → 'เข้าใจครับ ขอกำหนด deadline ไหม?' | อย่า discount ง่าย — ให้ value เพิ่มแทน",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.584Z",
+    "updated_at": "2026-05-15T14:01:21.584Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 236,
+  "fields": {
+    "title": "P4 D31-32 — ส่งสัญญา + รอ Sign",
+    "start_datetime": "2026-06-13T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "ส่ง Service Agreement 1 หน้า (อ่านง่าย) | ระบุ: scope, timeline, payment terms, SLA | Payment: 50% upfront, 50% เมื่อ go live | ใช้ HelloSign/DocuSign (ฟรี tier) sign ออนไลน์ | สัญญา 1 หน้า ลูกค้า SME sign เร็วกว่า",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.586Z",
+    "updated_at": "2026-05-15T14:01:21.586Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 237,
+  "fields": {
+    "title": "Milestone — รับมัดจำ 50% เงินเข้าครั้งแรก!",
+    "start_datetime": "2026-06-15T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "ส่ง Invoice #001 พร้อม QR พร้อมเพย์ | รับโอนเงิน 10,000 บาท (จาก deal 20,000) | ส่ง receipt ยืนยันรับเงินทันที | ส่ง 'ยินดีต้อนรับ' message + timeline เริ่มงาน | นี่คือเงินเข้ากระเป๋าครั้งแรก!",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.589Z",
+    "updated_at": "2026-05-15T14:01:21.589Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 238,
+  "fields": {
+    "title": "P4 D34-38 — Kick-off + วางแผน Delivery",
+    "start_datetime": "2026-06-16T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "meeting",
+    "description": "Kick-off call 30 นาที กับลูกค้า | เก็บข้อมูล: สินค้า, FAQ, ชื่อ brand, น้ำเสียง | ส่ง 'Client Onboarding Form' (Google Form) | ตกลง timeline: เสร็จภายใน X วัน | ระหว่างรอ: ไป outreach ลูกค้ารายต่อไป — pipeline ต้องเดินต่อ",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.592Z",
+    "updated_at": "2026-05-15T14:01:21.592Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 239,
+  "fields": {
+    "title": "Marketing — สร้าง Lead Magnet: AI Readiness Checklist",
+    "start_datetime": "2026-05-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "สร้าง PDF: 'AI Readiness Checklist 10 ข้อสำหรับ SME ไทย' | ใช้เป็น lead magnet แลก email | ดีไซน์ด้วย Canva (ฟรี) | ต้องมีก่อน Phase 3 (Day 15)",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.600Z",
+    "updated_at": "2026-05-15T14:01:21.600Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 240,
+  "fields": {
+    "title": "Marketing — ฝัง Email Form + CTA ในบทความ",
+    "start_datetime": "2026-05-23T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ตั้ง Mailchimp free tier (รองรับ 500 contacts) | ฝัง Email Form ใน Blog | ใส่ CTA block ทุกบทความ | สร้าง Thank You page พร้อม next step | เป้า: เก็บ email ได้ 10 ราย/เดือนแรก",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.602Z",
+    "updated_at": "2026-05-15T14:01:21.602Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 241,
+  "fields": {
+    "title": "Marketing — Email Sequence 5 ฉบับ (Nurture)",
+    "start_datetime": "2026-05-29T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ฉบับ 1 (Day 0): ส่ง Checklist + แนะนำตัว | ฉบับ 2 (Day 2): Case study ธุรกิจที่คล้ายกัน | ฉบับ 3 (Day 4): 3 สัญญาณที่ต้องเริ่มใช้ AI | ฉบับ 4 (Day 7): FAQ ราคา เวลา ความยุ่งยาก | ฉบับ 5 (Day 10): CTA 'ขอ AI Audit ฟรี 30 นาที' | ตั้ง Calendly (free) สำหรับจอง Audit",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.605Z",
+    "updated_at": "2026-05-15T14:01:21.605Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 242,
+  "fields": {
+    "title": "Marketing — ตั้ง Calendly + Free AI Audit System",
+    "start_datetime": "2026-05-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "สร้าง Calendly account (ฟรี) | ตั้ง slot: Free AI Audit 30 นาที | ใส่ link ใน email sequence ฉบับที่ 5 | ใส่ link ใน blog CTA blocks | เป้า: 2 audit calls/เดือนแรก | script audit call ดูใน docs/action_plan.html section Scripts",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.609Z",
+    "updated_at": "2026-05-15T14:01:21.609Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 243,
+  "fields": {
+    "title": "Content #2 — คู่แข่งคุณใช้ AI แล้ว ตอนนี้คุณยังไม่ใช้",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "Status: review (Draft id=8) | Keyword: คู่แข่งใช้ AI ธุรกิจตกขบวน | Priority: High | รอพี่ตรวจ + กด publish | Fear angle: กลัวแพ้คู่แข่ง | Pillar 1 — Awareness",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.612Z",
+    "updated_at": "2026-05-15T14:01:21.612Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 244,
+  "fields": {
+    "title": "Content #3 — ธุรกิจที่ไม่ปรับตัวใน 2 ปี 70% จะหายไป",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "Status: review (Draft id=9) | Keyword: ธุรกิจไม่ปรับตัว AI ล้มเหลว | Priority: High | รอพี่ publish + cover image จาก Frontend Designer | Pillar 1 — Awareness",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.615Z",
+    "updated_at": "2026-05-15T14:01:21.615Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 245,
+  "fields": {
+    "title": "Content #4 — ทุกวันที่ไม่มี AI คุณจ่ายเงินให้คู่แข่ง",
+    "start_datetime": "2026-05-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "Status: pending | Keyword: ไม่มีระบบ AI เสียเปรียบคู่แข่ง | Priority: High | Fear: กลัวเสียเงินเปล่า | Pillar 1 — Awareness | หนูดีทำผ่าน Workflow E",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.648Z",
+    "updated_at": "2026-05-15T14:01:21.648Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 246,
+  "fields": {
+    "title": "Content #5 — ลูกค้าตัดสินใจ 5 นาที ตอบช้าเขาไปซื้อที่อื่น",
+    "start_datetime": "2026-05-23T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "Status: pending | Keyword: ตอบลูกค้าช้า เสียยอดขาย | Priority: High | Fear: กลัวเสียลูกค้า | Pillar 2 — Consideration | หนูดีทำผ่าน Workflow E",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.651Z",
+    "updated_at": "2026-05-15T14:01:21.651Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 247,
+  "fields": {
+    "title": "Content #6 — พนักงานดีๆ ลาออกเพราะงานซ้ำซาก",
+    "start_datetime": "2026-05-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "Status: pending | Keyword: พนักงานลาออก งานซ้ำซาก AI ช่วยได้ | Priority: Medium | Fear: กลัวสูญเสียทีม | Pillar 2 — Consideration | หนูดีทำผ่าน Workflow E",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.655Z",
+    "updated_at": "2026-05-15T14:01:21.655Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 248,
+  "fields": {
+    "title": "Content #7 — ร้านตอบช้า รีวิวแย่ Google ลดอันดับ",
+    "start_datetime": "2026-05-31T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "Status: pending | Keyword: ตอบช้า รีวิวแย่ Google อันดับลด | Priority: Medium | Fear: กลัวเสียชื่อเสียง | Pillar 2 — Consideration | หนูดีทำผ่าน Workflow E",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.658Z",
+    "updated_at": "2026-05-15T14:01:21.658Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 249,
+  "fields": {
+    "title": "Content #8 — ต้นทุนจ้างคนขึ้นทุกปี แต่ยังใช้วิธีเดิม",
+    "start_datetime": "2026-06-04T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "Status: pending | Keyword: ต้นทุนแรงงานสูง AI ลดค่าใช้จ่าย | Priority: Medium | Fear: กลัวต้นทุนพัง | Pillar 1 — Awareness | หนูดีทำผ่าน Workflow E",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.661Z",
+    "updated_at": "2026-05-15T14:01:21.661Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 250,
+  "fields": {
+    "title": "Weekly — โพสต์ Facebook Group 3x",
+    "start_datetime": "2026-05-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "ทุกสัปดาห์ตั้งแต่ Phase 3 | Share insight 3-5 บรรทัด ไม่ขายตรง | แปะ link บทความ | กลุ่มเป้าหมาย: SME ไทย รวมพลัง / รวมกลุ่มธุรกิจไทย / เจ้าของธุรกิจ SME / หาคู่ค้าธุรกิจ",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.664Z",
+    "updated_at": "2026-05-15T14:01:21.664Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 251,
+  "fields": {
+    "title": "Weekly — เขียน Blog 2 ชิ้น",
+    "start_datetime": "2026-05-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "recurring",
+    "description": "เป้า: 2 บทความ/สัปดาห์ตลอด | ใช้ Workflow E (SEO → Write → QA → Publish) | track ใน content_backlog/BACKLOG.md | KPI เดือน 1: 8 บทความ | ช่วย SEO organic เดือน 2-3 ต่อไป",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.667Z",
+    "updated_at": "2026-05-15T14:01:21.667Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 252,
+  "fields": {
+    "title": "Milestone — 10 MQL สะสมครบเดือนแรก",
+    "start_datetime": "2026-06-12T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "KPI เดือน 1: MQL สะสม 10 leads | Free Audit calls: 2 ราย | ดีลปิด: 1 ราย | MRR เดือน 1: ปิดดีลแรกให้ได้ | track ใน /owner/ Dashboard",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.670Z",
+    "updated_at": "2026-05-15T14:01:21.670Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 253,
+  "fields": {
+    "title": "Milestone — MRR 30,000 บาท (เดือน 3)",
+    "start_datetime": "2026-08-12T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "KPI เดือน 3: MQL สะสม 50 leads | Free Audit calls: 8/เดือน | ดีลปิด: 3 deals | MRR: 30,000 บาท | unlock Money Manager agent | เริ่ม Pillar Pages 4 หน้า + Pricing Page",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:01:21.672Z",
+    "updated_at": "2026-05-15T14:01:21.672Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 256,
+  "fields": {
+    "title": "P5 D39-40 — Setup VPS ลูกค้า",
+    "start_datetime": "2026-06-21T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "ซื้อ VPS ให้ลูกค้า หรือแนะนำให้ซื้อ DigitalOcean $6/เดือน ~220 บาท | ติดตั้ง Ubuntu 22.04 + Node.js 24 | ติดตั้ง OpenClaw + daemon | Configure firewall + SSL (Let's Encrypt ฟรี) | หมายเหตุ: VPS ของลูกค้า ไม่ใช่ของเรา — ข้อมูลอยู่กับเขา",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.189Z",
+    "updated_at": "2026-05-15T14:38:21.189Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 257,
+  "fields": {
+    "title": "P5 D41-42 — เชื่อมต่อ LINE OA ลูกค้า",
+    "start_datetime": "2026-06-23T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "ขอ Channel Access Token + Secret จากลูกค้า | Configure LINE channel ใน OpenClaw | ตั้ง Webhook URL → domain จริงของลูกค้า | ทดสอบ connection ว่า message ผ่านได้ | Setup auto-reply + greeting message | ถ้าลูกค้าไม่มี LINE OA ช่วย guide สมัครด้วย",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.194Z",
+    "updated_at": "2026-05-15T14:38:21.194Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 258,
+  "fields": {
+    "title": "P5 D43-45 — Build AI Knowledge Base",
+    "start_datetime": "2026-06-25T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "รวบรวม FAQ จาก Onboarding Form | เขียน System Prompt ตาม brand ลูกค้า | ใส่ข้อมูลสินค้า/บริการทั้งหมด | ตั้ง escalation path: AI ไม่รู้ → 'รอสักครู่นะคะ' | ทดสอบกับ 30+ คำถามจริงที่ลูกค้าเคยได้รับ | ยิ่งข้อมูลเยอะ AI ยิ่งตอบได้ดี — ขอ FAQ เก่าจากลูกค้าด้วย",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.200Z",
+    "updated_at": "2026-05-15T14:38:21.200Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 259,
+  "fields": {
+    "title": "P5 D46-47 — UAT ให้ลูกค้าทดสอบ 3 วัน",
+    "start_datetime": "2026-06-28T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "meeting",
+    "description": "ส่งลิงก์ทดสอบให้ลูกค้า 2-3 คนในทีม | ให้ทดสอบ 3 วัน เก็บ feedback ทุกข้อ | แก้ทุก issue ที่ลูกค้าแจ้ง | ปรับ prompt ตาม feedback | ทดสอบซ้ำจนลูกค้า sign off | UAT = หลักฐานว่าระบบทำงานได้ก่อนรับเงินที่เหลือ",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.203Z",
+    "updated_at": "2026-05-15T14:38:21.203Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 260,
+  "fields": {
+    "title": "P5 D48-49 — Training ทีมลูกค้า",
+    "start_datetime": "2026-06-30T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "สอน: วิธีดู Control UI dashboard | สอน: วิธีอัปเดต FAQ ใน AGENTS.md | สอน: วิธี escalate ถ้า AI ตอบผิด | สอน: วิธีดู conversation log | ส่ง User Manual PDF 5-10 หน้า | เป้าหมาย: ทีมลูกค้าต้องดูแลได้เอง = ลด support load ของเรา",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.208Z",
+    "updated_at": "2026-05-15T14:38:21.208Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 261,
+  "fields": {
+    "title": "P5 D50-52 — Go Live + Monitor 48 ชม.",
+    "start_datetime": "2026-07-02T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "เปิดระบบให้ลูกค้าจริงเริ่มใช้งาน | Monitor 48 ชั่วโมงแรกอย่างใกล้ชิด | ตอบ support ทันทีถ้ามีปัญหา | เก็บ metric: messages/วัน, % AI resolved | ส่ง go-live summary ให้ลูกค้า | Go live แล้ว = พร้อมรับเงินที่เหลือ!",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.211Z",
+    "updated_at": "2026-05-15T14:38:21.211Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 262,
+  "fields": {
+    "title": "Milestone — Phase 5 Complete: ระบบ Live ลูกค้าแฮปปี้",
+    "start_datetime": "2026-07-04T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "VPS ลูกค้า setup แล้ว | LINE OA เชื่อมสำเร็จ | AI Knowledge Base พร้อม | UAT ผ่าน ลูกค้า sign off | Training เสร็จ | Go Live และ monitor ครบ 48 ชม. | พร้อมออก Invoice งวด 2",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.216Z",
+    "updated_at": "2026-05-15T14:38:21.216Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 263,
+  "fields": {
+    "title": "Checklist — Decision Gate ก่อนรับเงินงวด 2",
+    "start_datetime": "2026-07-04T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Scope ชัดเจน ไม่มีคำว่า ฯลฯ | Payment terms ระบุในสัญญา | Timeline realistic ไม่ใช่ฝัน | ลูกค้ามี VPS หรือพร้อมซื้อ | ลูกค้ามี LINE OA หรือพร้อมสมัคร | Acceptance criteria ชัดเจน | ถ้าไม่ครบทุกข้ออย่าเพิ่งรับเงิน",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.219Z",
+    "updated_at": "2026-05-15T14:38:21.219Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 264,
+  "fields": {
+    "title": "P6 D53 — ส่ง Invoice งวดที่ 2 ฿10,000",
+    "start_datetime": "2026-07-05T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "ส่ง Invoice #001 งวด 2 ทันทีหลัง Go Live | แนบ Go-Live Report ยืนยันงานเสร็จ | ระบุ due date: 7 วัน | ใส่ QR พร้อมเพย์ + เลขบัญชี | Follow-up ถ้าไม่จ่ายใน 3 วัน | อย่าลืมส่ง Invoice — เงินไม่โอนเองถ้าไม่ขอ",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.317Z",
+    "updated_at": "2026-05-15T14:38:21.317Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 265,
+  "fields": {
+    "title": "P6 D55 — รับเงินงวด 2 ฿10,000 + เริ่ม MRR ฿3,000/เดือน",
+    "start_datetime": "2026-07-07T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "ยืนยันรับเงิน 10,000 บาท | ส่ง Receipt + ขอบคุณ | ส่ง Invoice MRR แรก 3,000 บาท/เดือน | ตั้ง reminder: Invoice วันที่ 1 ของทุกเดือน | รวมรับแล้ว: 20,000 บาท setup + MRR เริ่มต้น! | เป้าหมาย Phase 6 สำเร็จ!",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.321Z",
+    "updated_at": "2026-05-15T14:38:21.321Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 266,
+  "fields": {
+    "title": "P6 D56-57 — สร้าง Case Study + โพสต์ Social",
+    "start_datetime": "2026-07-08T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "content_plan",
+    "description": "ขอ permission ลูกค้าใช้เป็น case study | เก็บ metric: messages/วัน, % resolved, ความพอใจ | ถ่าย screenshot ระบบทำงานจริง | ขอ testimonial สั้น 2-3 ประโยค | โพสต์ LinkedIn + Facebook: 'ปิดดีลแรก + ผลลัพธ์' | Case study 1 อัน = lead ใหม่ 5-10 ราย",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.325Z",
+    "updated_at": "2026-05-15T14:38:21.325Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 267,
+  "fields": {
+    "title": "P6 D58-60 — Review + เริ่ม Cycle 2",
+    "start_datetime": "2026-07-10T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Review: อะไรได้ผล อะไรไม่ได้ผล | Outreach pipeline ที่ค้างอยู่ — follow-up ต่อ | ถาม referral: 'รู้จักธุรกิจไหนที่ต้องการแบบนี้บ้าง?' | ปรับ proposal ตาม objection ที่เจอ | ตั้งเป้า: ปิดดีลที่ 2 ใน 30 วัน | ดีลแรก = ที่ยากที่สุด ดีลที่ 2 ง่ายกว่าเสมอ",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.329Z",
+    "updated_at": "2026-05-15T14:38:21.329Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 268,
+  "fields": {
+    "title": "Milestone — Phase 6 Complete: ฿20,000 เข้ากระเป๋า + MRR เริ่ม",
+    "start_datetime": "2026-07-12T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "milestone",
+    "description": "Invoice งวด 2 ส่งแล้ว | รับเงินครบ 20,000 บาท | MRR 3,000 บาท/เดือน เริ่มแล้ว | Case Study สร้างแล้ว | Cycle 2 เริ่ม outreach แล้ว | ROI: ลงทุน ~1,070 บาท → รายได้ 20,000 บาท = ROI 1,770%",
+    "color": "",
+    "is_system": true,
+    "is_completed": false,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T14:38:21.333Z",
+    "updated_at": "2026-05-15T14:38:21.333Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 270,
+  "fields": {
+    "title": "Calendar: เพิ่ม is_completed field + migration",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "เพิ่ม is_completed BooleanField ใน CalendarEvent model | สร้าง migration 0003 | อัพเดท to_fc() และ API PATCH handler",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.923Z",
+    "updated_at": "2026-05-15T15:17:38.923Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 271,
+  "fields": {
+    "title": "Calendar: Color system — completed=gray, pending=green border",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "งานเสร็จ = สีเทา #475569 + filter:saturate(.2) + strikethrough | งาน pending = เส้นเขียวซ้าย border-left:#10b981 | ลอย Navy+Gold palette v3",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.959Z",
+    "updated_at": "2026-05-15T15:17:38.959Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 272,
+  "fields": {
+    "title": "Calendar: Todo-style Modal (ลอย)",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "Redesign event detail modal ให้เป็น Todoist style | checkbox circle + title + category badge + overdue badge + description bullets | action row icon-only buttons",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.963Z",
+    "updated_at": "2026-05-15T15:17:38.963Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 273,
+  "fields": {
+    "title": "Calendar: Tab filter bar redesign + Bootstrap Icons",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "แทนที่ legend-bar ด้วย cal-filter-tabs | เปลี่ยน dot icons เป็น Bootstrap Icons | เพิ่ม tab 'เสร็จแล้ว' filter | 8 tabs รวม",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.967Z",
+    "updated_at": "2026-05-15T15:17:38.967Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 274,
+  "fields": {
+    "title": "Calendar: Mark as Done — checkbox click → PATCH DB",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "กด checkbox circle → PATCH is_completed=true | อัพเดท sysEvents local copy | updateRevenueProgress() ทันที | visual feedback 350ms",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.970Z",
+    "updated_at": "2026-05-15T15:17:38.970Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 275,
+  "fields": {
+    "title": "Calendar: Road to Revenue — นับจาก is_completed จริง",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "เปลี่ยนจากนับ start<=today เป็นนับ is_completed=True จริงๆ | progress bar อัพเดทสดทุกครั้งที่ mark done",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.973Z",
+    "updated_at": "2026-05-15T15:17:38.973Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 276,
+  "fields": {
+    "title": "Calendar: แยก JS/CSS ออกเป็นไฟล์แยก",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ย้าย 748 บรรทัด CSS → static/css/calendar.css | ย้าย JS → static/js/calendar.js | template เหลือ 202 บรรทัด (-87%) | inject data ผ่าน window globals",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.977Z",
+    "updated_at": "2026-05-15T15:17:38.977Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 277,
+  "fields": {
+    "title": "Calendar: แก้ bug duplicate const isCompleted",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "SyntaxError: const isCompleted declared twice ใน openDetailModal() | ทำให้ FullCalendar ไม่ render | แก้โดยลบ declaration ที่ซ้ำออก",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.981Z",
+    "updated_at": "2026-05-15T15:17:38.981Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 278,
+  "fields": {
+    "title": "Calendar: Phase Bar → Journey Timeline (ลอย)",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "เปลี่ยนจากแถบสี่เหลี่ยมเป็น Node circles เชื่อมด้วย connector lines | phase-active: navy+gold glow ring scale 1.12 | phase-done: เขียว opacity .55 | future: จาง .45 + lock badge",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.985Z",
+    "updated_at": "2026-05-15T15:17:38.985Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 279,
+  "fields": {
+    "title": "Calendar: แทนที่ Info Panel ด้วย Stat Cards จริง",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "delivery",
+    "description": "แสดง Total / Done / Pending + breakdown ตาม category | ดึงจาก DB จริงผ่าน cal_stats context | แก้ views.py calendar_view เพิ่ม query stats",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.990Z",
+    "updated_at": "2026-05-15T15:17:38.990Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 280,
+  "fields": {
+    "title": "Calendar: แก้ icon event ให้ตรงกับ Stat Cards",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "เพิ่ม bsIcon field ใน CAT_CFG | ใช้ FullCalendar eventContent inject <i class='bi bi-...'> | milestone=flag-fill, action=lightning-charge-fill, recurring=arrow-repeat ฯลฯ",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.994Z",
+    "updated_at": "2026-05-15T15:17:38.994Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 281,
+  "fields": {
+    "title": "Django: ย้าย dashboard templates ไปที่ app-level",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "ย้าย 10 ไฟล์จาก templates/dashboard/ → dashboard/templates/dashboard/ | ตาม Django convention APP_DIRS | manage.py check: 0 issues",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:38.997Z",
+    "updated_at": "2026-05-15T15:17:38.997Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 282,
+  "fields": {
+    "title": "Calendar DB: บันทึกงาน Action Plan Phase 1-4 ลงปฏิทิน",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "เพิ่ม 38 tasks จาก docs/action_plan.html | Phase 1 Setup (D1-7) | Phase 2 Demo (D8-14) | Phase 3 Outreach (D15-28) | Phase 4 Close (D29-38) | Marketing Plan + Content Backlog",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:39.001Z",
+    "updated_at": "2026-05-15T15:17:39.001Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 283,
+  "fields": {
+    "title": "Calendar DB: บันทึกงาน Action Plan Phase 5-6 ลงปฏิทิน",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "เพิ่ม 13 tasks | Phase 5 Deliver (D39-52): VPS/LINE/KB/UAT/Training/GoLive | Phase 6 Get Paid (D53-60): Invoice/รับเงิน/Case Study/Cycle 2 | Decision Gate checklist",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:39.005Z",
+    "updated_at": "2026-05-15T15:17:39.005Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 284,
+  "fields": {
+    "title": "Code: เพิ่ม comments ทุกไฟล์ calendar",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "calendar.html: <!-- === Section === --> ทุก section | calendar.js: Table of Contents [0]-[11] + อธิบายทุก function | calendar.css: [keyword] สำหรับ Ctrl+F",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:17:39.008Z",
+    "updated_at": "2026-05-15T15:17:39.008Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 285,
+  "fields": {
+    "title": "Calendar UX: Smart Collapse + Dot Indicator",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Step 1: ซ่อน recurring ใน month view by default | Step 2: เพิ่ม toggle button แสดง/ซ่อน recurring | Step 3: Dot indicator สำหรับ recurring เมื่อ toggle เปิด | Step 4: ทดสอบทุก filter tab",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:22:56.567Z",
+    "updated_at": "2026-05-15T15:25:16.092Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 286,
+  "fields": {
+    "title": "เพิ่ม field assigned_to ใน CalendarEvent + รูปแบบบันทึกงานใหม่",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "Step 1: เพิ่ม assigned_to CharField ใน models.py | Step 2: makemigrations + migrate | Step 3: อัพเดท add_calendar_task command | Step 4: อัพเดท API view รองรับ assigned_to | Step 5: บันทึก memory กฎรูปแบบใหม่",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "",
+    "created_by": null,
+    "created_at": "2026-05-15T15:33:33.940Z",
+    "updated_at": "2026-05-15T15:36:05.745Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 287,
+  "fields": {
+    "title": "Modal: เพิ่มแสดง assigned_to ใน Event Detail Modal",
+    "start_datetime": "2026-05-14T17:00:00Z",
+    "end_datetime": null,
+    "all_day": true,
+    "category": "action",
+    "description": "เพิ่ม HTML ใน modal detail สำหรับแสดงผู้ทำงาน | เพิ่ม JS ใน openDetailModal() ดึง assignedTo จาก extendedProps | เพิ่ม CSS chip สำหรับ assigned_to",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-15T15:37:50.095Z",
+    "updated_at": "2026-05-15T15:38:36.029Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 288,
+  "fields": {
+    "title": "DB: ดึงงานค้างปฏิทินด้วย check_calendar.py",
+    "start_datetime": "2026-05-16T02:00:00Z",
+    "end_datetime": "2026-05-16T02:00:00Z",
+    "all_day": false,
+    "category": "action",
+    "description": "สร้าง check_calendar.py ใช้ sqlite3 ตรงๆ ดึงงาน pending/done วันที่ 15 พ.ค. — พบ 7 รายการยังไม่เสร็จ",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-16T04:14:42Z",
+    "updated_at": "2026-05-16T04:14:42Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 289,
+  "fields": {
+    "title": "Deploy: cleanup templates + timezone fix",
+    "start_datetime": "2026-05-16T02:30:00Z",
+    "end_datetime": "2026-05-16T02:30:00Z",
+    "all_day": false,
+    "category": "action",
+    "description": "Commit cleanup: ลบ root templates ที่ย้ายไป app-level แล้ว + fix timezone.localtime() ใน views.py + เพิ่ม assigned_to field → push → deploy server",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-16T04:14:42Z",
+    "updated_at": "2026-05-16T04:14:42Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 290,
+  "fields": {
+    "title": "Feature: Settings — Database Connection Page",
+    "start_datetime": "2026-05-16T03:00:00Z",
+    "end_datetime": "2026-05-16T03:00:00Z",
+    "all_day": false,
+    "category": "action",
+    "description": "สร้าง settings_index, settings_test_db, settings_save_db views | settings.html premium UI | /settings/ URLs | ติดตั้ง python-dotenv + pymysql | AJAX test + save to .env",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-16T04:14:42Z",
+    "updated_at": "2026-05-16T04:14:42Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 291,
+  "fields": {
+    "title": "Fix: Settings CSS/JS แยกเป็น static files",
+    "start_datetime": "2026-05-16T04:00:00Z",
+    "end_datetime": "2026-05-16T04:00:00Z",
+    "all_day": false,
+    "category": "action",
+    "description": "แก้ settings.html จาก inline <style>/<script> → แยกเป็น static/css/settings.css + static/js/settings.js ตาม pattern calendar.css/calendar.js",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-16T04:14:42Z",
+    "updated_at": "2026-05-16T04:14:42Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 292,
+  "fields": {
+    "title": "Fix: เพิ่ม Settings ใน Quick Actions (index.html)",
+    "start_datetime": "2026-05-16T04:15:00Z",
+    "end_datetime": "2026-05-16T04:15:00Z",
+    "all_day": false,
+    "category": "action",
+    "description": "เพิ่มปุ่ม ตั้งค่าระบบ (gear icon) ใน Quick Actions section บน Owner Dashboard index หลังผู้ใช้แจ้งว่าไม่เห็น",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-16T04:14:42Z",
+    "updated_at": "2026-05-16T04:14:42Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 293,
+  "fields": {
+    "title": "Deploy: Settings feature ขึ้น server",
+    "start_datetime": "2026-05-16T04:30:00Z",
+    "end_datetime": "2026-05-16T04:30:00Z",
+    "all_day": false,
+    "category": "action",
+    "description": "Commit + push + ssh deploy → collectstatic 455 files → service active | Server อยู่ที่ bfee64c",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-16T04:14:42Z",
+    "updated_at": "2026-05-16T04:14:42Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 294,
+  "fields": {
+    "title": "Memory: อัพเดต deploy workflow + rule อ่าน memory ก่อนทำงาน",
+    "start_datetime": "2026-05-16T05:00:00Z",
+    "end_datetime": "2026-05-16T05:00:00Z",
+    "all_day": false,
+    "category": "action",
+    "description": "อัพเดต project_deploy_workflow.md ให้ครบ | เพิ่ม feedback_read_memory_first.md — ต้องอ่าน memory ทุก session และทุกวันใหม่ก่อนรับงาน",
+    "color": "",
+    "is_system": true,
+    "is_completed": true,
+    "assigned_to": "หนูดี",
+    "created_by": null,
+    "created_at": "2026-05-16T04:14:42Z",
+    "updated_at": "2026-05-16T04:14:42Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 295,
+  "fields": {
+    "title": "Fix: Sidebar — แก้ route Portfolio (dashboard:projects)",
+    "start_datetime": "2026-05-16T09:00:00Z",
+    "end_datetime": null,
+    "all_day": false,
+    "category": "action",
+    "description": "",
+    "color": "#28a745",
+    "is_system": false,
+    "is_completed": true,
+    "assigned_to": "Claude Code",
+    "created_by": null,
+    "created_at": "2026-05-16T06:01:49Z",
+    "updated_at": "2026-05-16T06:01:49Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 296,
+  "fields": {
+    "title": "Fix: Sidebar — pin System section to bottom",
+    "start_datetime": "2026-05-16T09:30:00Z",
+    "end_datetime": null,
+    "all_day": false,
+    "category": "action",
+    "description": "",
+    "color": "#28a745",
+    "is_system": false,
+    "is_completed": true,
+    "assigned_to": "Claude Code",
+    "created_by": null,
+    "created_at": "2026-05-16T06:01:49Z",
+    "updated_at": "2026-05-16T06:01:49Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 297,
+  "fields": {
+    "title": "Fix: Sidebar — padding-bottom scroll clearance",
+    "start_datetime": "2026-05-16T09:45:00Z",
+    "end_datetime": null,
+    "all_day": false,
+    "category": "action",
+    "description": "",
+    "color": "#28a745",
+    "is_system": false,
+    "is_completed": true,
+    "assigned_to": "Claude Code",
+    "created_by": null,
+    "created_at": "2026-05-16T06:01:49Z",
+    "updated_at": "2026-05-16T06:01:49Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 298,
+  "fields": {
+    "title": "Fix: docs_index.html — rewrite to base.html design system",
+    "start_datetime": "2026-05-16T10:00:00Z",
+    "end_datetime": null,
+    "all_day": false,
+    "category": "action",
+    "description": "",
+    "color": "#28a745",
+    "is_system": false,
+    "is_completed": true,
+    "assigned_to": "Claude Code",
+    "created_by": null,
+    "created_at": "2026-05-16T06:01:49Z",
+    "updated_at": "2026-05-16T06:01:49Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 299,
+  "fields": {
+    "title": "Feature: Docs Viewer — split-pane AJAX ไม่เปลี่ยน URL",
+    "start_datetime": "2026-05-16T10:30:00Z",
+    "end_datetime": null,
+    "all_day": false,
+    "category": "delivery",
+    "description": "",
+    "color": "#28a745",
+    "is_system": false,
+    "is_completed": true,
+    "assigned_to": "Claude Code",
+    "created_by": null,
+    "created_at": "2026-05-16T06:01:49Z",
+    "updated_at": "2026-05-16T06:01:49Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 300,
+  "fields": {
+    "title": "UI: Docs left panel — VS Code flat list style",
+    "start_datetime": "2026-05-16T11:00:00Z",
+    "end_datetime": null,
+    "all_day": false,
+    "category": "action",
+    "description": "",
+    "color": "#28a745",
+    "is_system": false,
+    "is_completed": true,
+    "assigned_to": "Claude Code",
+    "created_by": null,
+    "created_at": "2026-05-16T06:01:49Z",
+    "updated_at": "2026-05-16T06:01:49Z"
+  }
+},
+{
+  "model": "dashboard.calendarevent",
+  "pk": 301,
+  "fields": {
+    "title": "Feature: Docs Viewer — AdminLTE sidebar + 29-menu agent roadmap",
+    "start_datetime": "2026-05-16T11:30:00Z",
+    "end_datetime": null,
+    "all_day": false,
+    "category": "delivery",
+    "description": "",
+    "color": "#28a745",
+    "is_system": false,
+    "is_completed": true,
+    "assigned_to": "Claude Code",
+    "created_by": null,
+    "created_at": "2026-05-16T06:01:49Z",
+    "updated_at": "2026-05-16T06:01:49Z"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-05-09T05:05:28.005Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "blog",
+      "article"
+    ],
+    "object_id": "7",
+    "object_repr": "วิธีใช้ Claude Code สำหรับมือใหม่: เริ่มต้นใน 10 นาที",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0e40\\u0e19\\u0e37\\u0e49\\u0e2d\\u0e2b\\u0e32\", \"Status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-05-09T05:38:34.755Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "blog",
+      "article"
+    ],
+    "object_id": "7",
+    "object_repr": "วิธีใช้ Claude Code สำหรับมือใหม่: เริ่มต้นใน 10 นาที",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0e40\\u0e19\\u0e37\\u0e49\\u0e2d\\u0e2b\\u0e32\", \"Status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-05-09T06:17:53.573Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "blog",
+      "article"
+    ],
+    "object_id": "7",
+    "object_repr": "วิธีใช้ Claude Code สำหรับมือใหม่: เริ่มต้นใน 10 นาที",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0e40\\u0e19\\u0e37\\u0e49\\u0e2d\\u0e2b\\u0e32\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-05-14T13:14:12.698Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "blog",
+      "article"
+    ],
+    "object_id": "8",
+    "object_repr": "คู่แข่งใช้ AI แล้ว ตอนนี้คุณยังไม่ใช้ กำลังแพ้อยู่โดยไม่รู้ตัว",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0e40\\u0e19\\u0e37\\u0e49\\u0e2d\\u0e2b\\u0e32\", \"\\u0e42\\u0e0a\\u0e27\\u0e4c\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e41\\u0e23\\u0e01\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-05-15T03:20:44.407Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "blog",
+      "article"
+    ],
+    "object_id": "9",
+    "object_repr": "ธุรกิจไม่ปรับตัว AI เสี่ยงตกขบวน — คุณพร้อมแล้วหรือยัง?",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0e40\\u0e19\\u0e37\\u0e49\\u0e2d\\u0e2b\\u0e32\", \"Status\"]}}]"
+  }
+}
+]
