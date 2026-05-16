@@ -213,9 +213,103 @@
 </div>
 </div>
 
-<!-- === Calendar: FullCalendar render ลงใน #calendar โดย calendar.js === -->
+<!-- === 2-Column Layout: Calendar (left) + Notes (right) === -->
+<div class="row g-3 align-items-start">
+
+<!-- === LEFT: Calendar === -->
+<div class="col-lg-8">
 <div id="calendar-wrap">
   <div id="calendar"></div>
+</div>
+</div><!-- /col-lg-8 -->
+
+<!-- === RIGHT: Notes Panel === -->
+<div class="col-lg-4">
+  <div class="notes-panel">
+
+    <!-- Notes Header -->
+    <div class="notes-panel-header">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-sticky-fill" style="color:var(--brand-gold);"></i>
+        <span class="fw-semibold" style="color:#f1f5f9;">บันทึก</span>
+        <span class="notes-count-badge" id="notesCount">0</span>
+      </div>
+      <button class="btn-add-note" id="btnAddNote" title="เพิ่ม Note">
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </div>
+
+    <!-- Notes List -->
+    <div class="notes-list" id="notesList">
+      {% for note in notes %}
+      <div class="note-card note-color-{{ note.color }}" data-id="{{ note.pk }}">
+        <div class="note-card-head">
+          <span class="note-title">{{ note.title }}</span>
+          <div class="note-actions">
+            {% if note.pinned %}<i class="bi bi-pin-angle-fill note-pin-icon"></i>{% endif %}
+            <button class="note-btn note-btn-edit" data-id="{{ note.pk }}" title="แก้ไข"><i class="bi bi-pencil"></i></button>
+            <button class="note-btn note-btn-del" data-id="{{ note.pk }}" title="ลบ"><i class="bi bi-trash"></i></button>
+          </div>
+        </div>
+        {% if note.content %}
+        <div class="note-content">{{ note.content }}</div>
+        {% endif %}
+        <div class="note-footer">{{ note.updated_at|date:"d M Y H:i" }}</div>
+      </div>
+      {% empty %}
+      <div class="notes-empty" id="notesEmpty">
+        <i class="bi bi-sticky"></i>
+        <div>ยังไม่มีบันทึก</div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div><!-- /col-lg-4 -->
+
+</div><!-- /row -->
+
+<!-- === Modal: Add / Edit Note === -->
+<div class="modal fade" id="noteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <h6 class="modal-title page-title mb-0" id="noteModalTitle">เพิ่ม Note</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="noteId">
+        <div class="mb-3">
+          <label class="form-label-sm">หัวข้อ <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-sm" id="noteTitle" placeholder="หัวข้อ Note...">
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">เนื้อหา</label>
+          <textarea class="form-control form-control-sm" id="noteContent" rows="4" placeholder="รายละเอียด..."></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label-sm">สี</label>
+          <div class="note-color-picker" id="noteColorPicker">
+            <button class="note-color-btn active" data-color="gold"   style="background:#c9a96e;" title="Gold"></button>
+            <button class="note-color-btn" data-color="blue"   style="background:#3b82f6;" title="Blue"></button>
+            <button class="note-color-btn" data-color="green"  style="background:#10b981;" title="Green"></button>
+            <button class="note-color-btn" data-color="red"    style="background:#ef4444;" title="Red"></button>
+            <button class="note-color-btn" data-color="purple" style="background:#8b5cf6;" title="Purple"></button>
+          </div>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="notePinned">
+          <label class="form-check-label form-label-sm" for="notePinned">ปักหมุดไว้ด้านบน</label>
+        </div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btnSaveNote">
+          <i class="bi bi-check2 me-1"></i>บันทึก
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- === Modal Detail: Todo-style popup เมื่อคลิก event ===
@@ -329,7 +423,9 @@
   window.CALENDAR_CSRF    = '{{ csrf_token }}';
   window.CALENDAR_API_URL = '{% url "dashboard:api_events" %}';
   window.CALENDAR_EVENTS  = {{ events_json|safe }};
+  window.NOTES_API_URL    = '{% url "dashboard:api_notes" %}';
 </script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script src="{% static 'js/calendar.js' %}"></script>
+<script src="{% static 'js/notes.js' %}"></script>
 {% endblock %}

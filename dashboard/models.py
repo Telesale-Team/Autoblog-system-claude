@@ -103,3 +103,30 @@ class TeamStandup(models.Model):
 
     def __str__(self):
         return f"{self.get_agent_name_display()} — {self.date}"
+
+
+# === NOTE ===
+
+class Note(models.Model):
+
+    class Color(models.TextChoices):
+        GOLD   = "gold",   "Gold"
+        BLUE   = "blue",   "Blue"
+        GREEN  = "green",  "Green"
+        RED    = "red",    "Red"
+        PURPLE = "purple", "Purple"
+
+    title      = models.CharField("หัวข้อ", max_length=200)
+    content    = models.TextField("เนื้อหา", blank=True)
+    color      = models.CharField("สี", max_length=10, choices=Color.choices, default=Color.GOLD)
+    pinned     = models.BooleanField("ปักหมุด", default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Note"
+        verbose_name_plural = "Notes"
+        ordering = ["-pinned", "-updated_at"]
+
+    def __str__(self):
+        return self.title

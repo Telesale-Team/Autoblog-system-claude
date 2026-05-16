@@ -969,10 +969,14 @@ def calendar_view(request):
         },
     }
 
+    from dashboard.models import Note
+    notes = Note.objects.all()
     return render(request, "dashboard/calendar.html", {
         "events_json":       json.dumps(events, ensure_ascii=False),
         "category_choices":  CalendarEvent.CATEGORY_CHOICES,
         "cal_stats":         cal_stats,
+        "notes":             notes,
+        "note_colors":       Note.Color.choices,
     })
 
 
@@ -1093,6 +1097,57 @@ def settings_save_db(request):
         msg = "บันทึกลง .env แล้ว — กรุณา restart server: sudo systemctl restart peyo-agent"
 
     return JsonResponse({"ok": True, "message": msg})
+
+
+# ── Notes API ────────────────────────────────────────────────────────────────
+
+@staff_member_required
+def api_notes(request):
+    from dashboard.models import Note
+    if request.method == "GET":
+        notes = list(Note.objects.values("id", "title", "content", "color", "pinned", "updated_at"))
+        for n in notes:
+            n["updated_at"] = n["updated_at"].strftime("%d %b %Y %H:%M")
+        return JsonResponse(notes, safe=False)
+
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+        note = Note.objects.create(
+            title   = data.get("title", "").strip() or "Note",
+            content = data.get("content", "").strip(),
+            color   = data.get("color", "gold"),
+            pinned  = data.get("pinned", False),
+        )
+        return JsonResponse({"id": note.pk, "ok": True})
+
+    return JsonResponse({"error": "Method not allowed"}, status=405)
+
+
+@staff_member_required
+def api_note_detail(request, pk):
+    from dashboard.models import Note
+    note = get_object_or_404(Note, pk=pk)
+
+    if request.method == "PATCH":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+        if "title"   in data: note.title   = data["title"].strip() or note.title
+        if "content" in data: note.content = data["content"]
+        if "color"   in data: note.color   = data["color"]
+        if "pinned"  in data: note.pinned  = data["pinned"]
+        note.save()
+        return JsonResponse({"ok": True})
+
+    if request.method == "DELETE":
+        note.delete()
+        return JsonResponse({"ok": True})
+
+    return JsonResponse({"error": "Method not allowed"}, status=405)
 
 
 # ── Calendar API ─────────────────────────────────────────────────────────────

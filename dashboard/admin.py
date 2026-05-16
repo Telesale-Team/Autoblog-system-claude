@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CalendarEvent, TeamStandup
+from .models import CalendarEvent, TeamStandup, Note
 
 @admin.register(CalendarEvent)
 class CalendarEventAdmin(admin.ModelAdmin):
@@ -10,3 +10,8 @@ class CalendarEventAdmin(admin.ModelAdmin):
 class TeamStandupAdmin(admin.ModelAdmin):
     list_display = ["agent_name", "date", "created_at"]
     list_filter = ["agent_name", "date"]
+
+@admin.register(Note)
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ["title", "color", "pinned", "updated_at"]
+    list_filter = ["color", "pinned"]
