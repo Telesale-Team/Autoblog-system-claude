@@ -828,7 +828,20 @@
   line-height: 1.4;
 }
 .day-ev-item.day-ev-done .day-ev-title { text-decoration: line-through; color: var(--brand-muted, #94a3b8); }
-.day-ev-check { color: var(--brand-green, #10b981); font-size: .85rem; flex-shrink: 0; }
+.day-ev-check { color: var(--brand-green, #10b981); font-size: .85rem; }
+.day-ev-actions { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+.day-ev-arrow {
+  color: var(--brand-muted, #94a3b8);
+  font-size: .72rem;
+  opacity: 0;
+  transition: opacity .15s, transform .15s;
+}
+.day-ev-item:hover .day-ev-arrow {
+  opacity: 1;
+  transform: translateX(2px);
+  color: var(--brand-gold, #c9a96e);
+}
+.day-ev-item:hover { background: rgba(201,169,110,.06); }
 
 
 /* =============================================================

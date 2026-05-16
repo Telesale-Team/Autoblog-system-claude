@@ -137,21 +137,37 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('dayEventsDate').textContent = dateStr;
       document.getElementById('dayEventsTitle').textContent = 'งานทั้งหมด ' + events.length + ' รายการ';
 
-      // สร้าง list
+      // สร้าง list + เก็บ event ref ไว้
       const list = document.getElementById('dayEventsList');
-      list.innerHTML = events.map(function (ev) {
+      const dayModal = new bootstrap.Modal(document.getElementById('dayEventsModal'));
+
+      list.innerHTML = '';
+      events.forEach(function (ev, idx) {
         const cat  = (ev.extendedProps && ev.extendedProps.category) || 'milestone';
         const cfg  = getCfg(cat);
         const done = !!(ev.extendedProps && ev.extendedProps.isCompleted);
-        return '<div class="day-ev-item' + (done ? ' day-ev-done' : '') + '">'
-          + '<i class="bi ' + cfg.bsIcon + ' day-ev-icon" style="color:' + cfg.color + ';"></i>'
-          + '<span class="day-ev-title">' + ev.title + '</span>'
-          + (done ? '<i class="bi bi-check2-circle day-ev-check"></i>' : '')
-          + '</div>';
-      }).join('');
+        const isSystem = !!(ev.extendedProps && ev.extendedProps.isSystem);
 
-      new bootstrap.Modal(document.getElementById('dayEventsModal')).show();
-      return 'stop'; /* หยุด default behavior */
+        const item = document.createElement('div');
+        item.className = 'day-ev-item' + (done ? ' day-ev-done' : '');
+        item.innerHTML = '<i class="bi ' + cfg.bsIcon + ' day-ev-icon" style="color:' + cfg.color + ';"></i>'
+          + '<span class="day-ev-title">' + ev.title + '</span>'
+          + '<span class="day-ev-actions">'
+          + (done ? '<i class="bi bi-check2-circle day-ev-check"></i>' : '')
+          + '<i class="bi bi-chevron-right day-ev-arrow"></i>'
+          + '</span>';
+
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', function () {
+          dayModal.hide();
+          setTimeout(function () { openDetailModal(ev); }, 250);
+        });
+
+        list.appendChild(item);
+      });
+
+      dayModal.show();
+      return 'stop';
     },
 
     eventSources: [
