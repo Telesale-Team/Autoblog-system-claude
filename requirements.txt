@@ -9,6 +9,7 @@ django-meta==2.5.1
 django-recaptcha==4.1.0
 easy-thumbnails==2.10.1
 mysqlclient==2.2.8
+pymysql==2.2.8
 pillow==12.2.0
 python-slugify==8.0.4
 whitenoise==6.12.0
