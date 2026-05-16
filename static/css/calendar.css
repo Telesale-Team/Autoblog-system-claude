@@ -909,6 +909,65 @@
    [cal-header-bar] — Premium Header Redesign v2
    ============================================================= */
 
+/* Live Clock */
+.cal-live-clock {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .82rem;
+  color: var(--brand-muted, #94a3b8);
+}
+.cal-clock-date { font-weight: 500; color: #cbd5e1; }
+.cal-clock-sep  { color: var(--dash-border, rgba(201,169,110,.3)); }
+.cal-clock-time {
+  font-family: Consolas, monospace;
+  font-size: .8rem;
+  color: var(--brand-gold, #c9a96e);
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+/* Month/Year Jump Picker */
+.cal-jump-picker {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  flex-shrink: 0;
+}
+.cal-pick-select {
+  background: var(--dash-surface, #111827);
+  border: 1px solid var(--dash-border, rgba(201,169,110,.2));
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: .82rem;
+  padding: .35rem .6rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+  font-family: var(--font-th);
+}
+.cal-pick-select:focus,
+.cal-pick-select:hover { border-color: var(--brand-gold, #c9a96e); }
+.cal-pick-select option { background: #1a2235; }
+
+.cal-pick-go {
+  background: transparent;
+  border: none;
+  color: var(--brand-gold, #c9a96e);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: .2rem;
+  display: flex;
+  align-items: center;
+  transition: color .15s, transform .15s;
+}
+.cal-pick-go:hover { color: #f1c882; transform: scale(1.1); }
+
+@media (max-width: 767.98px) {
+  .cal-jump-picker { flex-wrap: wrap; }
+  .cal-live-clock  { font-size: .75rem; }
+}
+
 /* ROW 1: Header Bar */
 .cal-header-bar {
   display: flex;

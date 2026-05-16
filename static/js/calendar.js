@@ -22,6 +22,50 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  /* ── Live Clock ─────────────────────────────────────────────────── */
+  function updateClock() {
+    const now = new Date();
+    const dateEl = document.getElementById('calClockDate');
+    const timeEl = document.getElementById('calClockTime');
+    if (!dateEl || !timeEl) return;
+
+    dateEl.textContent = now.toLocaleDateString('th-TH', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
+    timeEl.textContent = now.toLocaleTimeString('th-TH', {
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  /* ── Month/Year Picker ───────────────────────────────────────────── */
+  const pickMonth = document.getElementById('calPickMonth');
+  const pickYear  = document.getElementById('calPickYear');
+  const pickGo    = document.getElementById('calPickGo');
+
+  // สร้าง year options ย้อนหลัง 3 ปี ไปข้างหน้า 3 ปี
+  const thisYear = new Date().getFullYear();
+  for (let y = thisYear - 3; y <= thisYear + 3; y++) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y + 543; // แสดงเป็น พ.ศ.
+    if (y === thisYear) opt.selected = true;
+    pickYear.appendChild(opt);
+  }
+  // set current month
+  pickMonth.value = new Date().getMonth();
+
+  // กด Go หรือ Enter
+  function jumpToDate() {
+    const m = parseInt(pickMonth.value);
+    const y = parseInt(pickYear.value);
+    cal.gotoDate(new Date(y, m, 1));
+  }
+  pickGo.addEventListener('click', jumpToDate);
+  pickMonth.addEventListener('change', jumpToDate);
+  pickYear.addEventListener('change', jumpToDate);
+
   /* Init Bootstrap tooltips สำหรับ filter tabs */
   document.querySelectorAll('#legendBar [data-bs-toggle="tooltip"]').forEach(function (el) {
     new bootstrap.Tooltip(el, { trigger: 'hover', delay: { show: 400, hide: 100 } });
