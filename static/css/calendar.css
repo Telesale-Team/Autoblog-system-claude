@@ -37,8 +37,8 @@
 .fc .fc-button-primary:not(.fc-button-active):hover { background: var(--app-secondary) !important; border-color: var(--app-secondary) !important; }
 .fc .fc-button-primary.fc-button-active { background: var(--bs-secondary-bg) !important; border-color: var(--app-primary) !important; color: var(--app-primary) !important; }
 
-.fc-col-header { background: var(--brand-navy); }
-[data-bs-theme="dark"] .fc-col-header { background: rgba(26,39,68,.85); }
+.fc-col-header { background: #031633; }
+[data-bs-theme="dark"] .fc-col-header { background: #031633; }
 
 .fc .fc-col-header-cell-cushion { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: .45rem .5rem; color: var(--heading-dark-bg); }
 [data-bs-theme="dark"] .fc .fc-col-header-cell-cushion { color: var(--heading-dark-bg); }
