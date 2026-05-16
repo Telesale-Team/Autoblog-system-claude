@@ -122,9 +122,37 @@ document.addEventListener('DOMContentLoaded', function () {
     height:        'auto',
     headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listMonth' },
     buttonText:    { today: 'วันนี้', month: 'เดือน', listMonth: 'รายการ' },
-    dayMaxEvents:  5,           /* แสดงสูงสุด 5 งานต่อวัน — กด "+N more" เพื่อดูทั้งหมด */
+    dayMaxEvents:  5,
     moreLinkText:  function (n) { return '+ อีก ' + n + ' งาน'; },
-    moreLinkClick: 'popover',   /* คลิก → popover แสดงงานทั้งหมดของวันนั้น */
+    moreLinkClick: function (arg) {
+      /* เปิด modal แสดงงานทั้งหมดของวันที่คลิก */
+      const date   = arg.date;
+      const events = arg.allSegs.map(function (s) { return s.event; });
+
+      // format วันที่ภาษาไทย
+      const dateStr = date.toLocaleDateString('th-TH', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      document.getElementById('dayEventsDate').textContent = dateStr;
+      document.getElementById('dayEventsTitle').textContent = 'งานทั้งหมด ' + events.length + ' รายการ';
+
+      // สร้าง list
+      const list = document.getElementById('dayEventsList');
+      list.innerHTML = events.map(function (ev) {
+        const cat  = (ev.extendedProps && ev.extendedProps.category) || 'milestone';
+        const cfg  = getCfg(cat);
+        const done = !!(ev.extendedProps && ev.extendedProps.isCompleted);
+        return '<div class="day-ev-item' + (done ? ' day-ev-done' : '') + '">'
+          + '<i class="bi ' + cfg.bsIcon + ' day-ev-icon" style="color:' + cfg.color + ';"></i>'
+          + '<span class="day-ev-title">' + ev.title + '</span>'
+          + (done ? '<i class="bi bi-check2-circle day-ev-check"></i>' : '')
+          + '</div>';
+      }).join('');
+
+      new bootstrap.Modal(document.getElementById('dayEventsModal')).show();
+      return 'stop'; /* หยุด default behavior */
+    },
 
     eventSources: [
 
