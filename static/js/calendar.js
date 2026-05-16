@@ -55,10 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (cfg && cfg.color) icon.style.color = cfg.color;
   });
 
-  /* สร้าง HTML icon element สำหรับใส่ใน event title */
+  /* สร้าง HTML icon element — สีตาม category color (ไม่ใช่สีของ event bar) */
   function iconHtml(cat) {
     const c = getCfg(cat);
-    return '<i class="bi ' + c.bsIcon + ' cal-ev-icon"></i>';
+    return '<i class="bi ' + c.bsIcon + ' cal-ev-icon" style="color:' + c.color + ';opacity:1;filter:brightness(1.2);"></i>';
   }
 
   /* ── [2] Phase Journey — highlight phase ปัจจุบัน ────────────────
@@ -211,10 +211,12 @@ document.addEventListener('DOMContentLoaded', function () {
         };
       }
 
-      /* Default: Bootstrap Icon + title */
+      /* Default: Bootstrap Icon (สี category) + title */
       return {
         html: '<div class="fc-event-inner">'
-            + '<i class="bi ' + (cfg.bsIcon || 'bi-flag-fill') + ' cal-ev-icon"></i>'
+            + '<i class="bi ' + (cfg.bsIcon || 'bi-flag-fill') + ' cal-ev-icon"'
+            + ' style="color:' + cfg.color + ';opacity:1;filter:brightness(1.15);">'
+            + '</i>'
             + '<span class="fc-event-title-text">' + arg.event.title + '</span>'
             + '</div>',
       };
