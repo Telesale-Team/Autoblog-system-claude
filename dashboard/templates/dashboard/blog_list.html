@@ -89,6 +89,38 @@
     background: var(--app-secondary);
     color: #fff;
   }
+
+  /* === Premium Tab Bar === */
+  .prem-tabs {
+    display: flex; gap: 2px;
+    padding: .75rem 1rem .5rem;
+    border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    background: rgba(201,169,110,.03);
+  }
+  .prem-tab {
+    padding: .45rem 1.1rem;
+    border-radius: 6px 6px 0 0;
+    font-size: .84rem; font-weight: 600;
+    color: var(--brand-muted, #94a3b8);
+    border: 1px solid transparent; border-bottom: none;
+    cursor: pointer; text-decoration: none;
+    transition: color .15s, background .15s;
+    display: inline-flex; align-items: center; gap: .4rem;
+  }
+  .prem-tab:hover { color: var(--brand-gold, #c9a96e); background: rgba(201,169,110,.06); }
+  .prem-tab.active {
+    color: var(--brand-gold, #c9a96e);
+    background: var(--dash-surface, #111827);
+    border-color: var(--dash-border, rgba(201,169,110,.15));
+    border-bottom-color: var(--dash-surface, #111827);
+    margin-bottom: -1px;
+  }
+
+  /* Articles table header — gold */
+  .table-blog thead th {
+    color: var(--brand-gold, #c9a96e) !important;
+    background: rgba(201,169,110,.06);
+  }
 </style>
 {% endblock %}
 
@@ -107,21 +139,16 @@
 
 {# ── Tabs: บทความ / Backlog ───────────────────────────────────────────────── #}
 <div class="ud-panel">
-  <div class="ud-panel-head p-0" style="background:transparent;border-bottom:none;">
-    <ul class="nav nav-tabs px-3 pt-2" style="gap:.25rem;">
-      <li class="nav-item">
-        <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#tab-articles" style="font-size:.85rem;">
-          <i class="bi bi-file-earmark-text me-1"></i>บทความ
-          {% if draft_count > 0 %}<span class="badge ms-1" style="background:var(--app-secondary);font-size:.6rem;">{{ draft_count }} draft</span>{% endif %}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#tab-backlog" style="font-size:.85rem;">
-          <i class="bi bi-list-task me-1"></i>Backlog
-          {% if backlog_pending %}<span class="badge ms-1" style="background:rgba(201,169,110,.2);color:var(--brand-gold);font-size:.6rem;">{{ backlog_pending|length }}</span>{% endif %}
-        </a>
-      </li>
-    </ul>
+  <!-- === Premium Tab Bar === -->
+  <div class="prem-tabs">
+    <a class="prem-tab active" data-bs-toggle="tab" href="#tab-articles">
+      <i class="bi bi-file-earmark-text"></i>บทความ
+      {% if draft_count > 0 %}<span class="ds-badge ds-badge-warning">{{ draft_count }} draft</span>{% endif %}
+    </a>
+    <a class="prem-tab" data-bs-toggle="tab" href="#tab-backlog">
+      <i class="bi bi-list-task"></i>Backlog
+      {% if backlog_pending %}<span class="ds-badge ds-badge-gold">{{ backlog_pending|length }}</span>{% endif %}
+    </a>
   </div>
 
   <div class="tab-content">
