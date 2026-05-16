@@ -914,14 +914,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: .5rem 1rem;
-  background: var(--dash-surface, #0f1b35);
-  border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.2));
-  border-top: 1px solid var(--bs-border-color);
+  padding: .45rem 1rem;
+  background: rgba(201,169,110,.06);
+  border-top: 1px solid rgba(201,169,110,.2);
+  border-bottom: 1px solid rgba(201,169,110,.15);
   gap: 1rem;
   flex-wrap: wrap;
 }
-[data-bs-theme="light"] #cal-subheader { background: rgba(15,27,53,.05); }
+[data-bs-theme="light"] #cal-subheader { background: rgba(201,169,110,.04); }
 
 /* Clock */
 .cal-sub-clock {

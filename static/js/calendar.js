@@ -22,11 +22,11 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* ── เลื่อน subheader ไปอยู่ใต้ fc-header-toolbar หลัง cal.render() ── */
+  /* ── เลื่อน subheader ไปอยู่ระหว่าง toolbar กับ grid (ก่อน fc-view-harness) ── */
   function mountSubheader() {
-    const toolbar = document.querySelector('#calendar .fc-header-toolbar');
-    const sub     = document.getElementById('cal-subheader');
-    if (toolbar && sub) toolbar.insertAdjacentElement('afterend', sub);
+    const viewHarness = document.querySelector('#calendar .fc-view-harness');
+    const sub         = document.getElementById('cal-subheader');
+    if (viewHarness && sub) viewHarness.insertAdjacentElement('beforebegin', sub);
   }
 
   /* ── Live Clock ─────────────────────────────────────────────────── */
