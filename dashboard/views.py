@@ -1077,7 +1077,22 @@ def settings_save_db(request):
         if password:
             _write_env_key("DB_PASSWORD", password)
 
-    return JsonResponse({"ok": True, "message": "บันทึกลง .env แล้ว — กรุณา restart runserver"})
+    # Auto-restart peyo-agent service (production) หรือแจ้ง dev
+    import subprocess, shutil
+    restarted = False
+    if shutil.which("systemctl"):
+        result = subprocess.run(
+            ["sudo", "systemctl", "restart", "peyo-agent"],
+            capture_output=True, timeout=15
+        )
+        restarted = (result.returncode == 0)
+
+    if restarted:
+        msg = "บันทึกและ restart service แล้ว — การตั้งค่าใหม่มีผลทันที"
+    else:
+        msg = "บันทึกลง .env แล้ว — กรุณา restart server: sudo systemctl restart peyo-agent"
+
+    return JsonResponse({"ok": True, "message": msg})
 
 
 # ── Calendar API ─────────────────────────────────────────────────────────────
