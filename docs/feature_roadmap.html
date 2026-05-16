@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feature Roadmap — 29 Menus</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0f1b35;
+      --navy-2:  #1a2744;
+      --navy-3:  #1e3056;
+      --gold:    #c9a96e;
+      --gold-d:  #a07840;
+      --green:   #10b981;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --purple:  #8b5cf6;
+      --orange:  #f59e0b;
+      --teal:    #14b8a6;
+      --text:    #e2e8f0;
+      --muted:   #94a3b8;
+      --border:  rgba(255,255,255,.1);
+      --card-bg: #1e2d4a;
+    }
+
+    body {
+      font-family: 'Sarabun', 'Segoe UI', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      background: linear-gradient(135deg, var(--navy-2) 0%, var(--navy-3) 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 3rem 3rem 2.5rem;
+    }
+    .cover__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(201,169,110,.15);
+      border: 1px solid rgba(201,169,110,.3);
+      color: var(--gold);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .25rem .75rem;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+    }
+    .cover__title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: .5rem;
+    }
+    .cover__title span { color: var(--gold); }
+    .cover__sub {
+      font-size: .95rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .cover__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-size: .82rem;
+      color: var(--muted);
+    }
+    .cover__meta strong { color: var(--text); }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-box {
+      background: var(--navy-2);
+      padding: 1rem 1.25rem;
+      text-align: center;
+    }
+    .stat-box__num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-box__label {
+      font-size: .72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-top: .2rem;
+    }
+
+    /* ── Main layout ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: .35rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .85rem;
+      padding: .2rem .4rem;
+      border-radius: 4px;
+      transition: color .12s, background .12s;
+    }
+    .toc__link:hover { color: var(--gold); background: rgba(201,169,110,.08); }
+    .toc__link .num {
+      font-size: .68rem;
+      color: var(--gold-d);
+      font-weight: 700;
+      min-width: 20px;
+    }
+
+    /* ── Section header ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 2.5rem 0 1.25rem;
+      padding-bottom: .6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header__icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .section-header__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .section-header__agent {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    /* ── Feature card ── */
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+      transition: border-color .15s;
+    }
+    .feature-card:hover { border-color: rgba(201,169,110,.35); }
+
+    .feature-card__head {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+    }
+    .feature-card__num {
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 28px;
+    }
+    .feature-card__icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .feature-card__name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      flex: 1;
+    }
+    .feature-card__status {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: .18rem .6rem;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .status--exists   { background: rgba(16,185,129,.15); color: var(--green); border: 1px solid rgba(16,185,129,.3); }
+    .status--new      { background: rgba(201,169,110,.15); color: var(--gold); border: 1px solid rgba(201,169,110,.3); }
+    .status--planned  { background: rgba(59,130,246,.12); color: var(--blue); border: 1px solid rgba(59,130,246,.3); }
+
+    .feature-card__body {
+      padding: 1.25rem;
+    }
+
+    .feature-purpose {
+      font-size: .9rem;
+      color: var(--text);
+      margin-bottom: 1.1rem;
+      padding-left: .75rem;
+      border-left: 2px solid var(--gold);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 640px) { .feature-grid { grid-template-columns: 1fr; } }
+
+    .feature-block__label {
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--gold);
+      margin-bottom: .5rem;
+    }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .84rem;
+      color: var(--muted);
+      padding: .25rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li::before {
+      content: '›';
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: .05rem;
+    }
+
+    .agent-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: rgba(139,92,246,.12);
+      color: #a78bfa;
+      border: 1px solid rgba(139,92,246,.25);
+      font-size: .7rem;
+      padding: .15rem .55rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* ── Model table ── */
+    .model-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .8rem;
+      margin-top: .75rem;
+    }
+    .model-table th {
+      background: rgba(201,169,110,.1);
+      color: var(--gold);
+      padding: .4rem .75rem;
+      text-align: left;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      border: 1px solid var(--border);
+    }
+    .model-table td {
+      padding: .4rem .75rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      vertical-align: top;
+    }
+    .model-table tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+
+    code {
+      font-family: 'Consolas', monospace;
+      background: rgba(255,255,255,.07);
+      padding: .1rem .4rem;
+      border-radius: 3px;
+      font-size: .82rem;
+      color: #93c5fd;
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      margin-top: 4rem;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: .78rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- === COVER === -->
+<div class="cover">
+  <div class="cover__tag">📋 Internal Roadmap Document</div>
+  <h1 class="cover__title">Feature Roadmap — <span>29 Menus</span></h1>
+  <p class="cover__sub">แผนพัฒนา Feature ทั้งหมด 29 เมนูของ Owner Dashboard โดยรวบรวมจากการประชุมทีม 13 AI Agents</p>
+  <div class="cover__meta">
+    <span><strong>จัดทำโดย:</strong> Chief of Staff + 13 AI Agents</span>
+    <span><strong>วันที่:</strong> 16 พฤษภาคม 2569</span>
+    <span><strong>เวอร์ชัน:</strong> 1.0</span>
+    <span><strong>สถานะ:</strong> Phase 1 Planning</span>
+  </div>
+</div>
+
+<!-- === STATS BAR === -->
+<div class="stats-bar">
+  <div class="stat-box">
+    <div class="stat-box__num">29</div>
+    <div class="stat-box__label">เมนูทั้งหมด</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box__num">14</div>
+    <div class="stat-box__label">มีอยู่แล้ว</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box__num">15</div>
+    <div class="stat-box__label">พัฒนาใหม่</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box__num">8</div>
+    <div class="stat-box__label">หมวดหมู่</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box__num">13</div>
+    <div class="stat-box__label">AI Agents</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- === TABLE OF CONTENTS === -->
+  <div class="toc">
+    <div class="toc__title">📑 สารบัญ</div>
+    <div class="toc__grid">
+      <a class="toc__link" href="#sec-main"><span class="num">01</span> หน้าหลัก (3 เมนู)</a>
+      <a class="toc__link" href="#sec-sales"><span class="num">02</span> Sales & CRM (5 เมนู)</a>
+      <a class="toc__link" href="#sec-marketing"><span class="num">03</span> Marketing (5 เมนู)</a>
+      <a class="toc__link" href="#sec-finance"><span class="num">04</span> Finance (3 เมนู)</a>
+      <a class="toc__link" href="#sec-analytics"><span class="num">05</span> Analytics (2 เมนู)</a>
+      <a class="toc__link" href="#sec-legal"><span class="num">06</span> Legal (1 เมนู)</a>
+      <a class="toc__link" href="#sec-operations"><span class="num">07</span> Operations (4 เมนู)</a>
+      <a class="toc__link" href="#sec-docs"><span class="num">08</span> เอกสาร & ระบบ (6 เมนู)</a>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 1: หน้าหลัก
+       ================================================================ -->
+  <div id="sec-main" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(201,169,110,.15);color:var(--gold);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">🏠</div>
+    <div class="section-header__title">หน้าหลัก</div>
+    <div class="section-header__agent">Chief of Staff</div>
+  </div>
+
+  <!-- 1. Dashboard -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#01</span>
+      <span class="feature-card__icon">📊</span>
+      <span class="feature-card__name">Dashboard</span>
+      <span class="agent-tag">Chief of Staff</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ภาพรวมธุรกิจทั้งหมดในหน้าเดียว — KPI สำคัญ, lead ใหม่, revenue, blog views, งานสัปดาห์นี้</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>KPI Cards — Leads วันนี้, Pipeline, Blog Views, บทความสัปดาห์นี้</li>
+            <li>Lead Source Breakdown chart</li>
+            <li>Pipeline Status breakdown</li>
+            <li>Recent Articles list</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม (Phase 2)</div>
+          <ul class="feature-list">
+            <li>MRR / Revenue trending chart</li>
+            <li>Agent Performance summary</li>
+            <li>Upcoming renewals widget</li>
+            <li>Quick-action buttons (Add Lead, New Article)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Work Calendar -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#02</span>
+      <span class="feature-card__icon">📅</span>
+      <span class="feature-card__name">Work Calendar</span>
+      <span class="agent-tag">Chief of Staff</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ปฏิทินงานของทีม บันทึก event, deadline, meeting ทุกอย่างในที่เดียว</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>FullCalendar UI (Month/Week/Day/List view)</li>
+            <li>เพิ่ม/แก้ไข/ลบ event ผ่าน modal</li>
+            <li>5 ประเภท event (Meeting, Deadline, Task, Follow-up, Other)</li>
+            <li>Priority levels (Low / Medium / High / Critical)</li>
+            <li>DB storage ผ่าน <code>CalendarEvent</code> model</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม (Phase 2)</div>
+          <ul class="feature-list">
+            <li>เชื่อม Google Calendar sync</li>
+            <li>ส่ง reminder notification</li>
+            <li>Recurring events</li>
+            <li>แชร์ event กับ Agent คนอื่น</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Team Standup -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#03</span>
+      <span class="feature-card__icon">💬</span>
+      <span class="feature-card__name">Team Standup</span>
+      <span class="agent-tag">Chief of Staff</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">บันทึกและดู Daily Standup ของทุก Agent รวมในที่เดียว — ทำอะไรเมื่อวาน, วันนี้, มี blocker อะไร</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Form กรอก standup ประจำวัน (Yesterday / Today / Blocker)</li>
+            <li>Timeline view รายวัน</li>
+            <li>Filter ตาม Agent / วันที่</li>
+            <li>Summary สรุปของ CoS ประจำวัน</li>
+            <li>Export เป็น PDF / CSV</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>agent_name</code></td><td>CharField</td></tr>
+            <tr><td><code>date</code></td><td>DateField</td></tr>
+            <tr><td><code>yesterday</code></td><td>TextField</td></tr>
+            <tr><td><code>today</code></td><td>TextField</td></tr>
+            <tr><td><code>blocker</code></td><td>TextField (nullable)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 2: Sales & CRM
+       ================================================================ -->
+  <div id="sec-sales" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(239,68,68,.12);color:#f87171;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">💼</div>
+    <div class="section-header__title">Sales &amp; CRM</div>
+    <div class="section-header__agent">Hustler + Customer Success</div>
+  </div>
+
+  <!-- 4. Leads -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#04</span>
+      <span class="feature-card__icon">👥</span>
+      <span class="feature-card__name">Leads ทั้งหมด</span>
+      <span class="agent-tag">Hustler</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">รายการ Lead ทั้งหมดพร้อม status tracking — ตั้งแต่ติดต่อครั้งแรกจนถึงปิดดีล</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>ตาราง Lead พร้อม filter ตาม status/source</li>
+            <li>อัพเดต status แบบ inline (drag หรือ dropdown)</li>
+            <li>Badge นับ lead ใหม่ใน sidebar</li>
+            <li>แสดง deal value รายดีล</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม</div>
+          <ul class="feature-list">
+            <li>Lead detail page พร้อม activity log</li>
+            <li>อีเมล/LINE ส่งตรงจากระบบ</li>
+            <li>Assign Lead ให้ Hustler แต่ละคน</li>
+            <li>Import Lead จาก CSV / Google Sheets</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Pipeline -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#05</span>
+      <span class="feature-card__icon">📋</span>
+      <span class="feature-card__name">Pipeline</span>
+      <span class="agent-tag">Hustler</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">Kanban board แสดงดีลทุกรายการตาม stage ของ Sales Funnel</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>Kanban view แบ่งตาม status</li>
+            <li>Drag &amp; drop ย้าย stage</li>
+            <li>Deal value ต่อ stage</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม</div>
+          <ul class="feature-list">
+            <li>Revenue forecast ตาม Win Rate</li>
+            <li>Weighted Pipeline value</li>
+            <li>Expected close date tracking</li>
+            <li>Activity reminder ต่อดีล</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Customers -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#06</span>
+      <span class="feature-card__icon">🤝</span>
+      <span class="feature-card__name">Customers</span>
+      <span class="agent-tag">Customer Success</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ฐานข้อมูลลูกค้าปัจจุบัน — Health Score, ประวัติการใช้งาน, ความพึงพอใจ และ risk ที่จะ churn</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Customer list พร้อม Health Score (🟢🟡🔴)</li>
+            <li>ประวัติการติดต่อ + meeting notes</li>
+            <li>NPS Score tracking รายลูกค้า</li>
+            <li>Usage metrics (login, feature usage)</li>
+            <li>Churn risk indicator (ML score)</li>
+            <li>Support ticket history</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>company_name</code></td><td>CharField</td></tr>
+            <tr><td><code>contract_value</code></td><td>DecimalField</td></tr>
+            <tr><td><code>health_score</code></td><td>IntegerField (0-100)</td></tr>
+            <tr><td><code>nps_score</code></td><td>IntegerField (-100-100)</td></tr>
+            <tr><td><code>contract_start</code></td><td>DateField</td></tr>
+            <tr><td><code>contract_end</code></td><td>DateField</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Renewals -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#07</span>
+      <span class="feature-card__icon">🔄</span>
+      <span class="feature-card__name">Renewals</span>
+      <span class="agent-tag">Customer Success</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ติดตามสัญญาที่ใกล้หมดอายุ วางแผน retention และ upsell ก่อนลูกค้าตัดสินใจออก</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Renewal pipeline แบ่งตามระยะเวลา (30/60/90 วัน)</li>
+            <li>Auto-alert เมื่อสัญญาเหลือ 60 วัน</li>
+            <li>บันทึก renewal action (call, email, meeting)</li>
+            <li>Win/Loss tracking หลัง renewal</li>
+            <li>MRR at risk calculator</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>customer</code></td><td>FK → Customer</td></tr>
+            <tr><td><code>renewal_date</code></td><td>DateField</td></tr>
+            <tr><td><code>mrr_value</code></td><td>DecimalField</td></tr>
+            <tr><td><code>status</code></td><td>Choices</td></tr>
+            <tr><td><code>assigned_to</code></td><td>CharField</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Quote Builder -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#08</span>
+      <span class="feature-card__icon">📄</span>
+      <span class="feature-card__name">Quote Builder</span>
+      <span class="agent-tag">Hustler</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">สร้างใบเสนอราคาแบบ Professional ส่งให้ลูกค้าได้เลย พร้อม track ว่า Quote นั้น Win หรือ Lost</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>สร้าง Quote จาก Product catalog</li>
+            <li>คำนวณส่วนลด + VAT อัตโนมัติ</li>
+            <li>Export PDF พร้อม Logo บริษัท</li>
+            <li>ส่ง Quote ทาง Email/LINE ในระบบ</li>
+            <li>Track status (Draft → Sent → Won/Lost)</li>
+            <li>เชื่อม Lead → Quote → Invoice</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>quote_number</code></td><td>CharField (auto)</td></tr>
+            <tr><td><code>lead</code></td><td>FK → ContactLead</td></tr>
+            <tr><td><code>items</code></td><td>JSONField</td></tr>
+            <tr><td><code>total</code></td><td>DecimalField</td></tr>
+            <tr><td><code>valid_until</code></td><td>DateField</td></tr>
+            <tr><td><code>status</code></td><td>Choices</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 3: Marketing
+       ================================================================ -->
+  <div id="sec-marketing" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(245,158,11,.12);color:var(--orange);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">📣</div>
+    <div class="section-header__title">Marketing</div>
+    <div class="section-header__agent">Marketing Specialist + SEO + Content Writer</div>
+  </div>
+
+  <!-- 9. Campaigns -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#09</span>
+      <span class="feature-card__icon">📣</span>
+      <span class="feature-card__name">Campaigns</span>
+      <span class="agent-tag">Marketing Specialist</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">วางแผนและติดตามผล Campaign การตลาดทุกช่องทาง — Social, Email, LINE, Ads</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>สร้าง Campaign พร้อม objective และ budget</li>
+            <li>Multi-channel tracker (FB, LINE, Email, Google)</li>
+            <li>KPI ต่อ campaign (Reach, Click, Lead, Conversion)</li>
+            <li>ROI calculator อัตโนมัติ</li>
+            <li>Campaign calendar view</li>
+            <li>A/B test tracking</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>name</code></td><td>CharField</td></tr>
+            <tr><td><code>channel</code></td><td>Choices</td></tr>
+            <tr><td><code>budget</code></td><td>DecimalField</td></tr>
+            <tr><td><code>start_date</code></td><td>DateField</td></tr>
+            <tr><td><code>kpi_leads</code></td><td>IntegerField</td></tr>
+            <tr><td><code>actual_leads</code></td><td>IntegerField</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. Content Calendar -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#10</span>
+      <span class="feature-card__icon">🗓️</span>
+      <span class="feature-card__name">Content Calendar</span>
+      <span class="agent-tag">Content Writer</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ปฏิทินเผยแพร่ Content ล่วงหน้า — กำหนดวันเผยแพร่, ช่องทาง, ผู้รับผิดชอบ</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Calendar view รายสัปดาห์/เดือน</li>
+            <li>Drag &amp; drop เลื่อนวันเผยแพร่</li>
+            <li>เชื่อมกับ Blog article (status Draft→Scheduled→Published)</li>
+            <li>Multi-channel slot (Blog, LINE, Facebook, LinkedIn)</li>
+            <li>Content brief template ต่อ article</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>article</code></td><td>FK → Article</td></tr>
+            <tr><td><code>scheduled_date</code></td><td>DateTimeField</td></tr>
+            <tr><td><code>channel</code></td><td>Choices</td></tr>
+            <tr><td><code>assigned_agent</code></td><td>CharField</td></tr>
+            <tr><td><code>status</code></td><td>Choices</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. บทความ -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#11</span>
+      <span class="feature-card__icon">✏️</span>
+      <span class="feature-card__name">บทความ</span>
+      <span class="agent-tag">Content Writer</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">จัดการบทความ Blog ทั้งหมด — เขียน, แก้ไข, Publish, ติดตาม Views</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>รายการบทความ Draft / Published</li>
+            <li>Toggle publish status</li>
+            <li>Badge นับ Draft ใน Sidebar</li>
+            <li>Views count tracking</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม</div>
+          <ul class="feature-list">
+            <li>Rich text editor ในระบบ</li>
+            <li>SEO score checker ต่อบทความ</li>
+            <li>Scheduled publish</li>
+            <li>Social media auto-post</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. Content Backlog -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#12</span>
+      <span class="feature-card__icon">📝</span>
+      <span class="feature-card__name">Content Backlog</span>
+      <span class="agent-tag">Content Writer</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">คิวบทความที่รอเขียน — Priority, Keyword เป้าหมาย, Agent ที่รับผิดชอบ</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>รายการหัวข้อรอเขียน</li>
+            <li>Priority tagging</li>
+            <li>เชื่อม Blog ผ่าน BACKLOG.md</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม</div>
+          <ul class="feature-list">
+            <li>Kanban view (Idea → Outline → Writing → Review → Published)</li>
+            <li>เชื่อม Keywords research</li>
+            <li>Assign ให้ Content Writer Agent</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13. Keywords -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#13</span>
+      <span class="feature-card__icon">🔍</span>
+      <span class="feature-card__name">Keywords</span>
+      <span class="agent-tag">SEO Specialist</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ติดตาม Keyword Ranking ประจำสัปดาห์ และวางแผน On-Page SEO ต่อบทความ</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Keyword list พร้อม Search Volume, Difficulty, Intent</li>
+            <li>Ranking tracker รายสัปดาห์ (position ใน Google)</li>
+            <li>เชื่อม Article → Target keyword</li>
+            <li>Competitor gap analysis</li>
+            <li>SEO score ต่อบทความ (Title, Meta, H1, Internal link)</li>
+            <li>Cannibalization detector</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>keyword</code></td><td>CharField</td></tr>
+            <tr><td><code>search_volume</code></td><td>IntegerField</td></tr>
+            <tr><td><code>difficulty</code></td><td>IntegerField (0-100)</td></tr>
+            <tr><td><code>intent</code></td><td>Choices (Info/Trans/Nav)</td></tr>
+            <tr><td><code>current_rank</code></td><td>IntegerField</td></tr>
+            <tr><td><code>article</code></td><td>FK → Article (nullable)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 4: Finance
+       ================================================================ -->
+  <div id="sec-finance" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(16,185,129,.12);color:var(--green);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">💰</div>
+    <div class="section-header__title">Finance</div>
+    <div class="section-header__agent">Money Manager</div>
+  </div>
+
+  <!-- 14. Revenue -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#14</span>
+      <span class="feature-card__icon">💹</span>
+      <span class="feature-card__name">Revenue</span>
+      <span class="agent-tag">Money Manager</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ติดตาม Revenue รายเดือน, MRR, ARR เปรียบเทียบกับเป้าหมาย</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>Revenue dashboard พร้อม chart</li>
+            <li>MRR breakdown ตาม Product</li>
+            <li>เปรียบเทียบ YoY / MoM</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม</div>
+          <ul class="feature-list">
+            <li>Revenue Forecast 3 เดือนข้างหน้า</li>
+            <li>เชื่อม Invoices → Revenue recognition</li>
+            <li>Gross Margin per product</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15. Invoices -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#15</span>
+      <span class="feature-card__icon">🧾</span>
+      <span class="feature-card__name">Invoices</span>
+      <span class="agent-tag">Money Manager</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ออกใบแจ้งหนี้ให้ลูกค้า ติดตามสถานะชำระเงิน คำนวณ VAT 7% หัก ณ ที่จ่าย 3%</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>สร้าง Invoice จาก Quote อัตโนมัติ</li>
+            <li>คำนวณ VAT 7% + WHT 3% อัตโนมัติ</li>
+            <li>Export PDF (Thai tax format)</li>
+            <li>Status tracking (Draft → Sent → Paid → Overdue)</li>
+            <li>Auto-reminder เมื่อเกิน due date</li>
+            <li>Payment history per customer</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>invoice_number</code></td><td>CharField (auto)</td></tr>
+            <tr><td><code>customer</code></td><td>FK → Customer</td></tr>
+            <tr><td><code>subtotal</code></td><td>DecimalField</td></tr>
+            <tr><td><code>vat</code></td><td>DecimalField</td></tr>
+            <tr><td><code>wht</code></td><td>DecimalField</td></tr>
+            <tr><td><code>due_date</code></td><td>DateField</td></tr>
+            <tr><td><code>paid_at</code></td><td>DateTimeField (null)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16. Expenses -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#16</span>
+      <span class="feature-card__icon">👛</span>
+      <span class="feature-card__name">Expenses</span>
+      <span class="agent-tag">Money Manager</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">บันทึกรายจ่ายทั้งหมด แยกตามหมวดหมู่ วิเคราะห์ต้นทุนต่อ Product</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>บันทึก Expense พร้อม category (Software, Ads, Salary, Office)</li>
+            <li>อัพโหลด receipt/สลิป</li>
+            <li>Monthly expense breakdown chart</li>
+            <li>Budget vs Actual comparison</li>
+            <li>Export รายงานภาษี</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>date</code></td><td>DateField</td></tr>
+            <tr><td><code>category</code></td><td>Choices</td></tr>
+            <tr><td><code>amount</code></td><td>DecimalField</td></tr>
+            <tr><td><code>description</code></td><td>CharField</td></tr>
+            <tr><td><code>receipt</code></td><td>FileField (nullable)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 5: Analytics
+       ================================================================ -->
+  <div id="sec-analytics" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(59,130,246,.12);color:var(--blue);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">📈</div>
+    <div class="section-header__title">Analytics</div>
+    <div class="section-header__agent">Data Analyst</div>
+  </div>
+
+  <!-- 17. Analytics -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#17</span>
+      <span class="feature-card__icon">📊</span>
+      <span class="feature-card__name">Analytics</span>
+      <span class="agent-tag">Data Analyst</span>
+      <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">วิเคราะห์ข้อมูลเชิงลึก — Lead funnel, Conversion Rate, Blog Performance</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์ปัจจุบัน</div>
+          <ul class="feature-list">
+            <li>Lead Source chart</li>
+            <li>Conversion funnel</li>
+            <li>Blog views trending</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">พัฒนาเพิ่มเติม</div>
+          <ul class="feature-list">
+            <li>Cohort analysis (Customer retention)</li>
+            <li>Predictive lead scoring</li>
+            <li>Custom report builder</li>
+            <li>Google Analytics 4 integration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18. KPI Dashboard -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#18</span>
+      <span class="feature-card__icon">🏎️</span>
+      <span class="feature-card__name">KPI Dashboard</span>
+      <span class="agent-tag">Data Analyst</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">Scoreboard ธุรกิจ Real-time — MRR, Churn Rate, CAC, LTV, NPS ทุก metric สำคัญในหน้าเดียว</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>MRR, ARR, Churn Rate, Net Revenue Retention</li>
+            <li>CAC (Customer Acquisition Cost) per channel</li>
+            <li>LTV / LTV:CAC ratio</li>
+            <li>NPS Score trend</li>
+            <li>Lead-to-Customer conversion rate</li>
+            <li>Target vs Actual gauge charts</li>
+            <li>Weekly/Monthly auto-report email</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">KPI Targets</div>
+          <table class="model-table">
+            <tr><th>Metric</th><th>Target</th></tr>
+            <tr><td>MRR Growth</td><td>&gt; 10% MoM</td></tr>
+            <tr><td>Churn Rate</td><td>&lt; 5% ต่อเดือน</td></tr>
+            <tr><td>LTV:CAC</td><td>&gt; 3:1</td></tr>
+            <tr><td>NPS</td><td>&gt; 50</td></tr>
+            <tr><td>Lead Conversion</td><td>&gt; 15%</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 6: Legal
+       ================================================================ -->
+  <div id="sec-legal" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(139,92,246,.12);color:#a78bfa;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">⚖️</div>
+    <div class="section-header__title">Legal</div>
+    <div class="section-header__agent">Legal Advisor</div>
+  </div>
+
+  <!-- 19. Contracts -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#19</span>
+      <span class="feature-card__icon">📜</span>
+      <span class="feature-card__name">Contracts</span>
+      <span class="agent-tag">Legal Advisor</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">จัดเก็บสัญญาทุกฉบับ — ติดตามวันหมดอายุ, PDPA compliance, ข้อพิพาท</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Contract library พร้อม version control</li>
+            <li>วันหมดอายุ + auto-alert 90/30 วันล่วงหน้า</li>
+            <li>PDPA checklist ต่อสัญญา</li>
+            <li>E-signature integration (coming)</li>
+            <li>Contract template library</li>
+            <li>Clause library (NDA, SLA, IP)</li>
+            <li>Approval workflow (Lawyer → CEO)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>title</code></td><td>CharField</td></tr>
+            <tr><td><code>customer</code></td><td>FK → Customer</td></tr>
+            <tr><td><code>contract_type</code></td><td>Choices</td></tr>
+            <tr><td><code>start_date</code></td><td>DateField</td></tr>
+            <tr><td><code>end_date</code></td><td>DateField</td></tr>
+            <tr><td><code>value</code></td><td>DecimalField</td></tr>
+            <tr><td><code>file</code></td><td>FileField</td></tr>
+            <tr><td><code>pdpa_compliant</code></td><td>BooleanField</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 7: Operations
+       ================================================================ -->
+  <div id="sec-operations" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(20,184,166,.12);color:var(--teal);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">⚙️</div>
+    <div class="section-header__title">Operations</div>
+    <div class="section-header__agent">AI Orchestrator + AI Toolsmith + QA + Frontend Designer</div>
+  </div>
+
+  <!-- 20. AI Projects -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#20</span>
+      <span class="feature-card__icon">🤖</span>
+      <span class="feature-card__name">AI Projects</span>
+      <span class="agent-tag">AI Orchestrator</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ติดตาม AI Project ที่กำลัง Build และ Deploy ให้ลูกค้า — Tech Stack, Status, Timeline</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Project board (Scoping → Dev → Testing → Live)</li>
+            <li>Tech stack documentation</li>
+            <li>System architecture diagram (embedded)</li>
+            <li>Deployment checklist</li>
+            <li>API key / credential vault (encrypted)</li>
+            <li>Incident log</li>
+            <li>Client feedback tracker</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>project_name</code></td><td>CharField</td></tr>
+            <tr><td><code>customer</code></td><td>FK → Customer</td></tr>
+            <tr><td><code>tech_stack</code></td><td>JSONField</td></tr>
+            <tr><td><code>status</code></td><td>Choices</td></tr>
+            <tr><td><code>go_live_date</code></td><td>DateField</td></tr>
+            <tr><td><code>monthly_fee</code></td><td>DecimalField</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 21. Prompt Library -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#21</span>
+      <span class="feature-card__icon">📚</span>
+      <span class="feature-card__name">Prompt Library</span>
+      <span class="agent-tag">AI Toolsmith</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">ห้องสมุด Prompt และ Template ที่ทีมใช้งานประจำ — Version control, Tag, Test ได้เลย</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Prompt catalog แยกตาม Agent และ Use case</li>
+            <li>Version history ของแต่ละ Prompt</li>
+            <li>Test Prompt ใน Playground inline</li>
+            <li>Performance rating (ดี/พอใช้/ควรแก้)</li>
+            <li>Variable placeholders <code>{{variable}}</code></li>
+            <li>Copy to clipboard + Export</li>
+            <li>Tag system (SEO, Sales, Support, etc.)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>title</code></td><td>CharField</td></tr>
+            <tr><td><code>agent</code></td><td>CharField</td></tr>
+            <tr><td><code>use_case</code></td><td>CharField</td></tr>
+            <tr><td><code>prompt_text</code></td><td>TextField</td></tr>
+            <tr><td><code>tags</code></td><td>JSONField</td></tr>
+            <tr><td><code>version</code></td><td>IntegerField</td></tr>
+            <tr><td><code>rating</code></td><td>Choices</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 22. QA Log -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#22</span>
+      <span class="feature-card__icon">✅</span>
+      <span class="feature-card__name">QA Log</span>
+      <span class="agent-tag">QA Agent</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">บันทึกผลการ QA ทุก Output ของทีม — ตรวจจับ Pattern ผิดพลาดซ้ำ ปรับปรุงคุณภาพระบบ</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>บันทึก QA Result (Pass/Fail/Partial) ต่องาน</li>
+            <li>Issue category (Accuracy, Format, Tone, Factual)</li>
+            <li>Severity level (Critical/High/Medium/Low)</li>
+            <li>เชื่อม Output → Prompt → Agent</li>
+            <li>Error pattern analysis (recurring issues)</li>
+            <li>Quality score ต่อ Agent รายสัปดาห์</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">Data Model</div>
+          <table class="model-table">
+            <tr><th>Field</th><th>Type</th></tr>
+            <tr><td><code>output_type</code></td><td>Choices</td></tr>
+            <tr><td><code>agent</code></td><td>CharField</td></tr>
+            <tr><td><code>result</code></td><td>Choices (Pass/Fail)</td></tr>
+            <tr><td><code>issue_category</code></td><td>Choices</td></tr>
+            <tr><td><code>severity</code></td><td>Choices</td></tr>
+            <tr><td><code>notes</code></td><td>TextField</td></tr>
+            <tr><td><code>reviewed_at</code></td><td>DateTimeField</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 23. Design System -->
+  <div class="feature-card">
+    <div class="feature-card__head">
+      <span class="feature-card__num">#23</span>
+      <span class="feature-card__icon">🎨</span>
+      <span class="feature-card__name">Design System</span>
+      <span class="agent-tag">Frontend Designer</span>
+      <span class="feature-card__status status--new">ใหม่</span>
+    </div>
+    <div class="feature-card__body">
+      <p class="feature-purpose">เอกสาร Design System ของ AIBiz Thailand — Color Tokens, Typography, Component Library, UI Guidelines</p>
+      <div class="feature-grid">
+        <div>
+          <div class="feature-block__label">ฟีเจอร์หลัก</div>
+          <ul class="feature-list">
+            <li>Color palette live preview (Navy + Gold tokens)</li>
+            <li>Typography scale (Sarabun — ไทย/อังกฤษ)</li>
+            <li>Button component showcase (4 styles)</li>
+            <li>Form elements, Card, Badge, Alert</li>
+            <li>Icon library browser (Bootstrap Icons)</li>
+            <li>Spacing / Layout grid reference</li>
+            <li>Dark mode / Light mode toggle preview</li>
+          </ul>
+        </div>
+        <div>
+          <div class="feature-block__label">CSS Variables Reference</div>
+          <table class="model-table">
+            <tr><th>Variable</th><th>ใช้งาน</th></tr>
+            <tr><td><code>--brand-navy</code></td><td>Sidebar, Dark bg</td></tr>
+            <tr><td><code>--brand-gold</code></td><td>Primary accent</td></tr>
+            <tr><td><code>--brand-muted</code></td><td>Subtitle text</td></tr>
+            <tr><td><code>--app-primary</code></td><td>Dynamic (settings)</td></tr>
+            <tr><td><code>--font-th</code></td><td>Sarabun Thai</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 8: เอกสาร & ระบบ
+       ================================================================ -->
+  <div id="sec-docs" class="section-header">
+    <div class="feature-card__icon" style="background:rgba(255,255,255,.08);color:var(--muted);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">📁</div>
+    <div class="section-header__title">เอกสาร &amp; ระบบ</div>
+    <div class="section-header__agent">ทุก Agent</div>
+  </div>
+
+  <!-- 24-29: Brief summary cards -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+
+    <div class="feature-card">
+      <div class="feature-card__head">
+        <span class="feature-card__num">#24</span>
+        <span class="feature-card__icon">📖</span>
+        <span class="feature-card__name">คู่มือทีม</span>
+        <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+      </div>
+      <div class="feature-card__body">
+        <p class="feature-purpose">Docs Viewer แบบ VS Code — สารบัญซ้าย, Content ขวา, URL เปลี่ยนตาม Doc</p>
+        <ul class="feature-list">
+          <li>Team Manual, OpenClaw, Product Strategy</li>
+          <li>Action Plan, Salepage Copy</li>
+          <li>Feature Roadmap (เอกสารนี้)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__head">
+        <span class="feature-card__num">#25</span>
+        <span class="feature-card__icon">🤖</span>
+        <span class="feature-card__name">ทีม AI Agents</span>
+        <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+      </div>
+      <div class="feature-card__body">
+        <p class="feature-purpose">รายชื่อและบทบาทของ 13 AI Agents พร้อม System Prompt และ Routing Logic</p>
+        <ul class="feature-list">
+          <li>Agent card แต่ละคนพร้อม KPI</li>
+          <li>Routing decision tree</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__head">
+        <span class="feature-card__num">#26</span>
+        <span class="feature-card__icon">💼</span>
+        <span class="feature-card__name">Portfolio</span>
+        <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+      </div>
+      <div class="feature-card__body">
+        <p class="feature-purpose">ผลงาน Case Study ที่แสดงบนเว็บสาธารณะ — อัพโหลดและจัดการจาก Dashboard</p>
+        <ul class="feature-list">
+          <li>CRUD Case Studies</li>
+          <li>Publish/Unpublish toggle</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__head">
+        <span class="feature-card__num">#27</span>
+        <span class="feature-card__icon">🌐</span>
+        <span class="feature-card__name">ดูเว็บไซต์</span>
+        <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+      </div>
+      <div class="feature-card__body">
+        <p class="feature-purpose">เปิด Public Website ในแท็บใหม่เพื่อตรวจสอบหน้าเว็บที่ลูกค้าเห็น</p>
+        <ul class="feature-list">
+          <li>Link ไป blog.kooky-shop.com</li>
+          <li>Cloudflare Tunnel → Gunicorn</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__head">
+        <span class="feature-card__num">#28</span>
+        <span class="feature-card__icon">🛡️</span>
+        <span class="feature-card__name">Django Admin</span>
+        <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+      </div>
+      <div class="feature-card__body">
+        <p class="feature-purpose">Django Admin panel สำหรับจัดการ Database โดยตรง — User, Models, Permissions</p>
+        <ul class="feature-list">
+          <li>Full CRUD ทุก Model</li>
+          <li>User management</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-card__head">
+        <span class="feature-card__num">#29</span>
+        <span class="feature-card__icon">⚙️</span>
+        <span class="feature-card__name">ตั้งค่าระบบ</span>
+        <span class="feature-card__status status--exists">มีอยู่แล้ว</span>
+      </div>
+      <div class="feature-card__body">
+        <p class="feature-purpose">ปรับแต่ง Dashboard — ชื่อบริษัท, สี, Font, ขนาดตัวอักษร, Theme</p>
+        <ul class="feature-list">
+          <li>Company branding settings</li>
+          <li>Dark/Light mode</li>
+          <li>Typography customization</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- === Footer === -->
+  <div class="doc-footer">
+    <p>📋 Feature Roadmap — จัดทำโดยทีม 13 AI Agents | AIBiz Thailand | v1.0 | 2569</p>
+    <p style="margin-top:.4rem">เอกสารนี้จะอัพเดตเมื่อแต่ละ Feature พัฒนาเสร็จ สถานะ: <span style="color:var(--green)">✓ มีอยู่แล้ว</span> | <span style="color:var(--gold)">★ ใหม่ (Coming Soon)</span></p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -27,4 +27,34 @@ urlpatterns = [
     path("retail/", views.coming_soon, name="retail"),
     path("gap/", views.coming_soon, name="gap"),
     path("savings/", views.coming_soon, name="savings"),
+
+    # ── Agent Feature Routes (Phase 1 — coming soon) ──────────────────
+    # Chief of Staff
+    path("standup/",         views.coming_soon, name="standup"),
+    # Hustler
+    path("quotes/",          views.coming_soon, name="quotes"),
+    # Money Manager
+    path("expenses/",        views.coming_soon, name="expenses"),
+    path("invoices/",        views.coming_soon, name="invoices"),
+    # Marketing Specialist
+    path("campaigns/",       views.coming_soon, name="campaigns"),
+    # Customer Success
+    path("customers/",       views.coming_soon, name="customers"),
+    path("renewals/",        views.coming_soon, name="renewals"),
+    # Data Analyst
+    path("kpi/",             views.coming_soon, name="kpi"),
+    # Legal Advisor
+    path("contracts/",       views.coming_soon, name="contracts"),
+    # AI Orchestrator
+    path("ai-projects/",     views.coming_soon, name="ai_projects"),
+    # AI Toolsmith
+    path("prompt-library/",  views.coming_soon, name="prompt_library"),
+    # QA Agent
+    path("qa-log/",          views.coming_soon, name="qa_log"),
+    # SEO Specialist
+    path("keywords/",        views.coming_soon, name="keywords"),
+    # Content Writer
+    path("content-calendar/",views.coming_soon, name="content_calendar"),
+    # Frontend Designer
+    path("design-system/",   views.coming_soon, name="design_system"),
 ]

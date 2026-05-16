@@ -13,6 +13,7 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from pages.models import ContactLead
 from blog.models import Article
@@ -25,47 +26,50 @@ INTERNAL_DOCS = [
     {
         "slug": "team-manual",
         "filename": "team_manual.html",
-        "title": "คู่มือทีมงาน — 10 Agents System",
+        "title": "Team Manual",
         "description": "ภาพรวมระบบ 10 agents, routing logic, workflows, approval matrix และตารางการทำงาน",
-        "audience": "ทุก agent (Operations)",
-        "icon": "fas fa-users-cog",
-        "color": "primary",
+        "audience": "all",
+        "bi_icon": "bi-people-fill",
     },
     {
         "slug": "openclaw-manual",
         "filename": "openclaw_manual.html",
-        "title": "OpenClaw — คู่มือผลิตภัณฑ์",
+        "title": "OpenClaw Manual",
         "description": "คู่มือเต็มของ OpenClaw — สถาปัตยกรรม, ฟีเจอร์, channels, multi-agent, การติดตั้ง, model การเงิน",
-        "audience": "AI Orchestrator + ทุก agent ที่ขายของ",
-        "icon": "fas fa-cogs",
-        "color": "info",
+        "audience": "tech",
+        "bi_icon": "bi-terminal-fill",
     },
     {
         "slug": "product-strategy",
         "filename": "product_strategy.html",
-        "title": "Product Strategy — ช่องว่างตลาดไทย AI",
-        "description": "วิเคราะห์ตลาด, คู่แข่ง (Broadpang/Oho.chat), 5 Products, customer segments, channels, pricing, roadmap",
-        "audience": "CEO + Marketing + Hustler",
-        "icon": "fas fa-chart-line",
-        "color": "success",
+        "title": "Product Strategy",
+        "description": "วิเคราะห์ตลาด, คู่แข่ง, 5 Products, customer segments, channels, pricing, roadmap",
+        "audience": "owner",
+        "bi_icon": "bi-rocket-takeoff-fill",
     },
     {
         "slug": "action-plan",
         "filename": "action_plan.html",
-        "title": "Action Plan — แผนปฏิบัติการ",
+        "title": "Action Plan",
         "description": "Roadmap และ action items ระยะสั้น/กลาง/ยาว สำหรับ launch business",
-        "audience": "CEO + Chief of Staff",
-        "icon": "fas fa-rocket",
-        "color": "warning",
+        "audience": "all",
+        "bi_icon": "bi-kanban-fill",
     },
     {
         "slug": "salepage",
         "filename": "salepage.html",
-        "title": "Sales Page Reference",
+        "title": "Salepage Copy",
         "description": "ต้นแบบ landing page ที่ใช้สร้างหน้าเว็บลูกค้าจริง — เก็บไว้เป็น design reference",
-        "audience": "Marketing Specialist",
-        "icon": "fas fa-bullhorn",
-        "color": "danger",
+        "audience": "sales",
+        "bi_icon": "bi-megaphone-fill",
+    },
+    {
+        "slug": "feature-roadmap",
+        "filename": "feature_roadmap.html",
+        "title": "Feature Roadmap",
+        "description": "แผนพัฒนา Feature ทั้งหมด 29 เมนู — จากการประชุมทีม 13 AI Agents พร้อม Data Model และ KPI",
+        "audience": "owner",
+        "bi_icon": "bi-map-fill",
     },
 ]
 
@@ -83,9 +87,13 @@ def _find_doc(slug):
 
 @staff_member_required
 def docs_index(request):
-    return render(request, "dashboard/docs_index.html", {"docs": INTERNAL_DOCS})
+    return render(request, "dashboard/docs_index.html", {
+        "docs": INTERNAL_DOCS,
+        "active_slug": None,
+    })
 
 
+@xframe_options_exempt
 @staff_member_required
 def docs_content(request, slug):
     doc = _find_doc(slug)
@@ -103,10 +111,10 @@ def docs_view(request, slug):
     doc = _find_doc(slug)
     if not doc:
         raise Http404("Doc not found")
-    path = Path(settings.BASE_DIR) / "docs" / doc["filename"]
-    if not path.exists():
-        raise Http404(f"File missing: {doc['filename']}")
-    return HttpResponse(path.read_bytes(), content_type="text/html; charset=utf-8")
+    return render(request, "dashboard/docs_index.html", {
+        "docs": INTERNAL_DOCS,
+        "active_slug": slug,
+    })
 
 
 @staff_member_required

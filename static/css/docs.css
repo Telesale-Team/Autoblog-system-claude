@@ -1,7 +1,7 @@
 /* ============================================================
    DOCS VIEWER — /owner/docs/
    Design System: Option A Navy + Gold
-   Component: Split-pane Docs Viewer (Notion/VS Code style)
+   Component: Split-pane Docs Viewer (VS Code style)
    ============================================================ */
 
 /* ── Layout Root ── */
@@ -13,56 +13,118 @@
 }
 
 /* ================================================================
-   LEFT PANEL — Doc List
+   LEFT PANEL — VS Code Explorer
    ================================================================ */
 .docs-sidebar {
-  width: 280px;
-  min-width: 280px;
+  width: 260px;
+  min-width: 180px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--bs-border-color);
   background: var(--bs-body-bg);
   position: relative;
-  transition: width 0.25s ease;
 }
 
-/* Panel Header */
-.docs-sidebar__header {
-  padding: 1.25rem 1rem 0.75rem;
-  border-bottom: 1px solid var(--bs-border-color);
+/* "EXPLORER" heading — VS Code style */
+.docs-explorer-title {
   flex-shrink: 0;
+  padding: 0.65rem 1rem 0.45rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--bs-body-color);
+  text-transform: uppercase;
+  user-select: none;
 }
 
-.docs-sidebar__title {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--brand-muted);
-  margin-bottom: 0.75rem;
+/* Section (collapsible) */
+.docs-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.docs-section__label {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.3rem 0.5rem 0.3rem 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  text-align: left;
+  transition: background 0.12s;
 }
 
-.docs-sidebar__title i {
-  font-size: 0.8rem;
-  color: var(--brand-gold);
+.docs-section__label:hover {
+  background: rgba(201, 169, 110, 0.06);
+}
+
+.docs-section__chevron {
+  font-size: 0.6rem;
+  color: var(--brand-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.docs-section__chevron.is-collapsed {
+  transform: rotate(-90deg);
+}
+
+.docs-section__count {
+  margin-left: auto;
+  font-size: 0.62rem;
+  color: var(--brand-muted);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Collapsible nav */
+.docs-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.15rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-border) transparent;
+  transition: opacity 0.15s;
+}
+
+.docs-list.is-collapsed {
+  display: none;
+}
+
+.docs-list::-webkit-scrollbar { width: 4px; }
+.docs-list::-webkit-scrollbar-track { background: transparent; }
+.docs-list::-webkit-scrollbar-thumb {
+  background: var(--brand-border);
+  border-radius: 2px;
 }
 
 /* Search Box */
 .docs-search {
+  flex-shrink: 0;
   position: relative;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--bs-border-color);
 }
 
 .docs-search__input {
   width: 100%;
-  padding: 0.45rem 0.75rem 0.45rem 2rem;
-  font-size: 0.82rem;
+  padding: 0.4rem 0.75rem 0.4rem 2rem;
+  font-size: 0.8rem;
   font-family: var(--font-th);
   border: 1px solid var(--bs-border-color);
-  border-radius: 6px;
+  border-radius: 4px;
   background: var(--bs-body-bg);
   color: var(--bs-body-color);
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -89,35 +151,17 @@
   pointer-events: none;
 }
 
-/* Doc List */
-.docs-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0.5rem 0.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--brand-border) transparent;
-}
-
-.docs-list::-webkit-scrollbar { width: 4px; }
-.docs-list::-webkit-scrollbar-track { background: transparent; }
-.docs-list::-webkit-scrollbar-thumb {
-  background: var(--brand-border);
-  border-radius: 2px;
-}
-
-/* ── Doc Item — Clean Flat List (VS Code / Notion style) ── */
+/* ── Doc Item — VS Code file tree style ── */
 .doc-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 0.65rem;
-  border-radius: 6px;
+  gap: 0.45rem;
+  padding: 0.32rem 0.75rem 0.32rem 1.25rem;
   cursor: pointer;
-  transition: background 0.12s;
-  margin-bottom: 0;
-  position: relative;
+  transition: background 0.1s;
   user-select: none;
-  box-shadow: none;
+  position: relative;
+  border-radius: 0;
 }
 
 .doc-item:hover {
@@ -125,13 +169,22 @@
 }
 
 .doc-item.active {
-  background: rgba(201, 169, 110, 0.1);
-  box-shadow: inset 3px 0 0 var(--brand-gold);
+  background: rgba(201, 169, 110, 0.12);
+}
+
+.doc-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--brand-gold);
 }
 
 .doc-item.active .doc-item__title {
-  color: var(--brand-gold);
-  font-weight: 600;
+  color: var(--bs-body-color);
+  font-weight: 500;
 }
 
 .doc-item.active .doc-item__icon {
@@ -141,72 +194,41 @@
 /* Hidden during search filter */
 .doc-item.d-none-search { display: none !important; }
 
-/* Inline icon — no box wrapper */
+/* File icon */
 .doc-item__icon {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--brand-muted);
   flex-shrink: 0;
-  transition: color 0.12s;
   line-height: 1;
+  transition: color 0.1s;
 }
 
-/* Title — truncate if overflow */
+/* Title */
 .doc-item__title {
   flex: 1;
   min-width: 0;
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   font-weight: 400;
   color: var(--bs-body-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.3;
-  transition: color 0.12s;
 }
 
-/* Audience Badge — pinned right */
+/* Audience dot indicator (colour only, no text) */
 .doc-item__audience {
   flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
   margin-left: auto;
 }
 
-/* Audience Badge */
-.audience-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.08rem 0.38rem;
-  border-radius: 20px;
-  font-size: 0.62rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  line-height: 1.6;
-}
-
-.audience-badge--all {
-  background: rgba(16, 185, 129, 0.12);
-  color: var(--brand-green);
-}
-
-.audience-badge--sales {
-  background: rgba(201, 169, 110, 0.15);
-  color: var(--brand-gold-d, #b8924f);
-}
-
-.audience-badge--tech {
-  background: rgba(37, 99, 235, 0.12);
-  color: var(--brand-blue);
-}
-
-.audience-badge--owner {
-  background: rgba(26, 39, 68, 0.15);
-  color: var(--brand-navy);
-}
-
-[data-bs-theme="dark"] .audience-badge--owner {
-  background: rgba(201, 169, 110, 0.08);
-  color: var(--brand-gold);
-}
+.doc-item__audience--all   { background: var(--brand-green, #10b981); }
+.doc-item__audience--tech  { background: var(--brand-blue,  #2563eb); }
+.doc-item__audience--owner { background: var(--brand-gold); }
+.doc-item__audience--sales { background: #f59e0b; }
 
 /* Sidebar Footer */
 .docs-sidebar__footer {
@@ -231,76 +253,93 @@
   min-width: 0;
 }
 
-/* Viewer Header */
-.docs-viewer__header {
+/* ── Tab Bar (VS Code style) ── */
+.docs-tabs {
   flex-shrink: 0;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--bs-border-color);
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
+  align-items: stretch;
+  border-bottom: 1px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
+  min-height: 36px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.docs-tabs::-webkit-scrollbar { display: none; }
+
+.docs-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0 1rem;
+  font-size: 0.8rem;
+  color: var(--brand-muted);
+  border-right: 1px solid var(--bs-border-color);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  user-select: none;
+  transition: background 0.1s, color 0.1s;
+}
+
+.docs-tab.active {
+  color: var(--bs-body-color);
   background: var(--bs-body-bg);
 }
 
-.docs-viewer__header-left {
-  flex: 1;
-  min-width: 0;
+.docs-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--brand-gold);
 }
 
-.docs-viewer__doc-title {
-  font-size: 1.1rem;
-  font-weight: 700;
+.docs-tab__icon {
+  font-size: 0.78rem;
   color: var(--brand-gold);
-  margin-bottom: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  line-height: 1.3;
+  flex-shrink: 0;
 }
 
-.docs-viewer__doc-title i {
-  font-size: 1rem;
-  opacity: 0.8;
+.docs-tab__name {
+  font-size: 0.8rem;
+  font-weight: 400;
 }
 
-.docs-viewer__description {
-  font-size: 0.82rem;
-  color: var(--brand-muted);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-
-.docs-viewer__divider {
-  color: var(--bs-border-color);
-}
-
-/* Open in new tab button */
-.btn-docs-external {
+.docs-tab__external {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.35rem 0.8rem;
-  font-size: 0.78rem;
-  font-weight: 500;
-  font-family: var(--font-th);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 6px;
-  background: transparent;
   color: var(--brand-muted);
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  font-size: 0.7rem;
+  margin-left: 0.25rem;
+  padding: 0.1rem 0.2rem;
+  border-radius: 3px;
   text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
 }
 
-.btn-docs-external:hover {
-  border-color: var(--brand-gold);
+.docs-tab:hover .docs-tab__external,
+.docs-tab.active .docs-tab__external {
+  opacity: 1;
+}
+
+.docs-tab__external:hover {
   color: var(--brand-gold);
-  background: rgba(201, 169, 110, 0.06);
+  background: rgba(201, 169, 110, 0.1);
+}
+
+/* Hint when no tab is open */
+.docs-tabs__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 1rem;
+  font-size: 0.78rem;
+  color: var(--brand-muted);
+  font-style: italic;
 }
 
 /* ── Content Area ── */
@@ -434,15 +473,32 @@
   border-right-color: var(--brand-border);
 }
 
+[data-bs-theme="dark"] .docs-explorer-title {
+  color: #8b9ab5;
+}
+
+[data-bs-theme="dark"] .docs-section__label {
+  color: #8b9ab5;
+}
+
 [data-bs-theme="dark"] .docs-search__input {
   background: #111827;
   border-color: var(--brand-border);
   color: #e2e8f0;
 }
 
-[data-bs-theme="dark"] .docs-viewer__header {
+[data-bs-theme="dark"] .docs-tabs {
   background: #0d1322;
   border-bottom-color: var(--brand-border);
+}
+
+[data-bs-theme="dark"] .docs-tab {
+  background: #0a1025;
+  border-right-color: var(--brand-border);
+}
+
+[data-bs-theme="dark"] .docs-tab.active {
+  background: #0d1322;
 }
 
 [data-bs-theme="dark"] .docs-content-inject {

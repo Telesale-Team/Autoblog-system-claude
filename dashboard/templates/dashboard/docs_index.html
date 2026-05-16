@@ -8,159 +8,112 @@
 <link rel="stylesheet" href="{% static 'css/docs.css' %}">
 {% endblock %}
 
+<!-- === ลบ padding wrapper และ footer สำหรับหน้า Docs === -->
+{% block page_content_class %}p-0{% endblock %}
+{% block footer %}{% endblock %}
+
 <!-- === Page Content === -->
 {% block content %}
 
-<!-- === DOCS SPLIT-PANE LAYOUT === -->
+<!-- === DOCS VS CODE LAYOUT === -->
 <div class="docs-layout">
 
   <!-- ================================================================
-       LEFT PANEL — Doc Navigator
+       LEFT PANEL — VS Code Explorer
        ================================================================ -->
-  <aside class="docs-sidebar" id="docsSidebar" aria-label="Document list">
+  <aside class="docs-sidebar" id="docsSidebar">
 
-    <!-- Panel Header -->
-    <div class="docs-sidebar__header">
+    <!-- Explorer Title -->
+    <div class="docs-explorer-title">EXPLORER</div>
 
-      <div class="docs-sidebar__title">
-        <i class="bi bi-folder2-open"></i>
-        Team Documents
-      </div>
+    <!-- Section: Documents -->
+    <div class="docs-section">
 
-      <!-- Search Box -->
-      <div class="docs-search">
-        <i class="bi bi-search docs-search__icon"></i>
-        <input
-          type="search"
-          class="docs-search__input"
-          id="docsSearchInput"
-          placeholder="ค้นหาเอกสาร..."
-          autocomplete="off"
-          aria-label="ค้นหาเอกสาร"
-        >
-      </div>
+      <button class="docs-section__label" id="docsSectionToggle" aria-expanded="true">
+        <i class="bi bi-chevron-down docs-section__chevron" id="docsSectionChevron"></i>
+        <span>DOCUMENTS</span>
+        <span class="docs-section__count">{{ docs|length }}</span>
+      </button>
 
-    </div><!-- /docs-sidebar__header -->
+      <nav class="docs-list" id="docsList" role="list">
+        {% for doc in docs %}
+        <!-- === {{ doc.title }} === -->
+        <div class="doc-item{% if active_slug == doc.slug %} active{% endif %}"
+             role="listitem"
+             tabindex="0"
+             data-slug="{{ doc.slug }}"
+             data-title="{{ doc.title }}"
+             data-bi-icon="{{ doc.bi_icon }}"
+             data-content-url="{% url 'dashboard:docs_content' doc.slug %}"
+             data-page-url="{% url 'dashboard:docs_view' doc.slug %}"
+             aria-selected="{% if active_slug == doc.slug %}true{% else %}false{% endif %}">
+          <i class="bi {{ doc.bi_icon }} doc-item__icon"></i>
+          <span class="doc-item__title">{{ doc.title }}</span>
+          <span class="doc-item__audience doc-item__audience--{{ doc.audience }}"></span>
+        </div>
+        {% endfor %}
+      </nav>
 
-    <!-- Doc List -->
-    <nav class="docs-list" id="docsList" role="list">
+    </div><!-- /docs-section -->
 
-      <!-- === Doc: Team Manual === -->
-      <div class="doc-item active"
-           role="listitem" tabindex="0" aria-selected="true"
-           data-doc-id="team-manual"
-           data-doc-title="Team Manual"
-           data-doc-desc="คู่มือการทำงานร่วมกันของทีม"
-           data-doc-audience="all"
-           data-doc-url="{% url 'dashboard:docs_content' 'team-manual' %}">
-        <i class="bi bi-people-fill doc-item__icon"></i>
-        <span class="doc-item__title">Team Manual</span>
-        <span class="doc-item__audience">
-          <span class="audience-badge audience-badge--all">ทุกคน</span>
-        </span>
-      </div>
+    <!-- Search -->
+    <div class="docs-search">
+      <i class="bi bi-search docs-search__icon"></i>
+      <input
+        type="search"
+        class="docs-search__input"
+        id="docsSearchInput"
+        placeholder="ค้นหาเอกสาร..."
+        autocomplete="off"
+        aria-label="ค้นหาเอกสาร"
+      >
+    </div>
 
-      <!-- === Doc: OpenClaw Manual === -->
-      <div class="doc-item"
-           role="listitem" tabindex="0"
-           data-doc-id="openclaw-manual"
-           data-doc-title="OpenClaw Manual"
-           data-doc-desc="คู่มือการใช้งาน OpenClaw Platform"
-           data-doc-audience="tech"
-           data-doc-url="{% url 'dashboard:docs_content' 'openclaw-manual' %}">
-        <i class="bi bi-terminal-fill doc-item__icon"></i>
-        <span class="doc-item__title">OpenClaw Manual</span>
-        <span class="doc-item__audience">
-          <span class="audience-badge audience-badge--tech">Tech</span>
-        </span>
-      </div>
-
-      <!-- === Doc: Product Strategy === -->
-      <div class="doc-item"
-           role="listitem" tabindex="0"
-           data-doc-id="product-strategy"
-           data-doc-title="Product Strategy"
-           data-doc-desc="กลยุทธ์ผลิตภัณฑ์และแผนการพัฒนา"
-           data-doc-audience="owner"
-           data-doc-url="{% url 'dashboard:docs_content' 'product-strategy' %}">
-        <i class="bi bi-rocket-takeoff-fill doc-item__icon"></i>
-        <span class="doc-item__title">Product Strategy</span>
-        <span class="doc-item__audience">
-          <span class="audience-badge audience-badge--owner">Owner</span>
-        </span>
-      </div>
-
-      <!-- === Doc: Action Plan === -->
-      <div class="doc-item"
-           role="listitem" tabindex="0"
-           data-doc-id="action-plan"
-           data-doc-title="Action Plan"
-           data-doc-desc="แผนปฏิบัติการ 60 วัน"
-           data-doc-audience="all"
-           data-doc-url="{% url 'dashboard:docs_content' 'action-plan' %}">
-        <i class="bi bi-kanban-fill doc-item__icon"></i>
-        <span class="doc-item__title">Action Plan</span>
-        <span class="doc-item__audience">
-          <span class="audience-badge audience-badge--all">ทุกคน</span>
-        </span>
-      </div>
-
-      <!-- === Doc: Salepage === -->
-      <div class="doc-item"
-           role="listitem" tabindex="0"
-           data-doc-id="salepage"
-           data-doc-title="Salepage Copy"
-           data-doc-desc="สคริปต์และ copy สำหรับทีมขาย"
-           data-doc-audience="sales"
-           data-doc-url="{% url 'dashboard:docs_content' 'salepage' %}">
-        <i class="bi bi-megaphone-fill doc-item__icon"></i>
-        <span class="doc-item__title">Salepage Copy</span>
-        <span class="doc-item__audience">
-          <span class="audience-badge audience-badge--sales">Sales</span>
-        </span>
-      </div>
-
-    </nav><!-- /docsList -->
-
-    <!-- Sidebar Footer -->
+    <!-- Footer -->
     <div class="docs-sidebar__footer">
-      <i class="bi bi-info-circle"></i>
-      <span id="docsCount">5 เอกสาร</span>
+      <i class="bi bi-layers"></i>
+      <span id="docsCount">{{ docs|length }} เอกสาร</span>
     </div>
 
   </aside><!-- /docs-sidebar -->
 
   <!-- Drag-to-resize handle -->
-  <div class="docs-resize-handle" id="docsResizeHandle" title="ลากเพื่อปรับขนาด"></div>
+  <div class="docs-resize-handle" id="docsResizeHandle"></div>
 
   <!-- ================================================================
        RIGHT PANEL — Content Viewer
        ================================================================ -->
-  <main class="docs-viewer" id="docsViewer" aria-live="polite" aria-label="Document viewer">
+  <main class="docs-viewer" id="docsViewer">
 
-    <!-- ── Viewer Header (hidden until doc is selected) ── -->
-    <header class="docs-viewer__header" id="docsViewerHeader" style="display:none;">
-
-      <div class="docs-viewer__header-left">
-        <div class="docs-viewer__doc-title" id="docsViewerTitle">
-          <i class="bi bi-file-text-fill" id="docsViewerTitleIcon"></i>
-          <span id="docsViewerTitleText">—</span>
+    <!-- ── Tab Bar (VS Code style) ── -->
+    <div class="docs-tabs" id="docsTabBar" role="tablist">
+      <!-- Tab injected by JS; server-renders initial tab if active_slug set -->
+      {% if active_slug %}
+        {% for doc in docs %}{% if doc.slug == active_slug %}
+        <div class="docs-tab active"
+             data-slug="{{ doc.slug }}"
+             role="tab"
+             aria-selected="true">
+          <i class="bi {{ doc.bi_icon }} docs-tab__icon"></i>
+          <span class="docs-tab__name">{{ doc.title }}</span>
+          <a href="{% url 'dashboard:docs_view' doc.slug %}"
+             class="docs-tab__external"
+             target="_blank" rel="noopener"
+             title="เปิดในแท็บใหม่"
+             onclick="event.stopPropagation()">
+            <i class="bi bi-box-arrow-up-right"></i>
+          </a>
         </div>
-        <div class="docs-viewer__description">
-          <span id="docsViewerDesc" class="docs-viewer__desc-text"></span>
-          <span class="docs-viewer__divider">·</span>
-          <span id="docsViewerAudience"></span>
-        </div>
+        {% endif %}{% endfor %}
+      {% else %}
+      <div class="docs-tabs__hint">
+        <i class="bi bi-arrow-left-short"></i>
+        เลือกเอกสารจากแผงซ้าย
       </div>
+      {% endif %}
+    </div><!-- /docs-tabs -->
 
-      <a href="#" id="docsOpenExternal" class="btn-docs-external" target="_blank" rel="noopener">
-        <i class="bi bi-box-arrow-up-right"></i>
-        เปิดในแท็บใหม่
-      </a>
-
-    </header><!-- /docs-viewer__header -->
-
-    <!-- ── Body ── -->
+    <!-- ── Viewer Body ── -->
     <div class="docs-viewer__body">
 
       <!-- Loading Skeleton -->
@@ -174,21 +127,25 @@
         <div class="skeleton-bar skeleton-bar--full"></div>
         <div class="skeleton-bar skeleton-bar--full"></div>
         <div class="skeleton-bar skeleton-bar--three-quarter"></div>
-        <div class="skeleton-bar skeleton-bar--full"></div>
-        <div class="skeleton-bar skeleton-bar--half"></div>
-      </div><!-- /docs-skeleton -->
-
-      <!-- Empty State (shown by default) -->
-      <div class="docs-empty" id="docsEmpty">
-        <i class="bi bi-file-earmark-text docs-empty__icon"></i>
-        <div class="docs-empty__title">เลือกเอกสารที่ต้องการดู</div>
-        <div class="docs-empty__sub">คลิกที่รายการเอกสารด้านซ้ายเพื่อแสดงเนื้อหา</div>
-      </div><!-- /docs-empty -->
-
-      <!-- Content Area (inject HTML here via JS) -->
-      <div class="docs-content-inject" id="docsContentInject" style="display:none;" aria-label="Document content">
-        <!-- AJAX response HTML injected here -->
       </div>
+
+      <!-- Empty State -->
+      <div class="docs-empty" id="docsEmpty"
+           {% if active_slug %}style="display:none;"{% endif %}>
+        <i class="bi bi-file-earmark-code docs-empty__icon"></i>
+        <div class="docs-empty__title">ยังไม่ได้เลือกเอกสาร</div>
+        <div class="docs-empty__sub">คลิกที่ชื่อเอกสารในแผงซ้ายเพื่อเปิดอ่าน</div>
+      </div>
+
+      <!-- Content Frame (iframe — each doc has its own CSS/body) -->
+      <iframe class="docs-content-frame"
+              id="docsContentFrame"
+              src=""
+              title="Document viewer"
+              {% if not active_slug %}style="display:none;"{% endif %}
+              sandbox="allow-same-origin allow-scripts"
+              aria-label="Document content">
+      </iframe>
 
     </div><!-- /docs-viewer__body -->
 
@@ -202,119 +159,105 @@
 {% block extra_js %}
 <script>
 /* ================================================================
-   DOCS VIEWER — JS Structure
-   URL: /owner/docs/
-   Pattern: AJAX load → inject innerHTML (URL stays same)
+   DOCS VIEWER — VS Code style, URL navigation
+   URL pattern: /owner/docs/<slug>/
+   Strategy: AJAX load content + history.pushState for URL
    ================================================================ */
 
 (function () {
   'use strict';
 
+  /* ── Bootstrap Icons map (slug → bi class) — mirrors INTERNAL_DOCS ── */
+  const ICON_MAP = {};
+  document.querySelectorAll('.doc-item').forEach(el => {
+    ICON_MAP[el.dataset.slug] = el.dataset.biIcon;
+  });
+
   /* ── State ── */
   const state = {
-    activeDocId:  null,
-    isLoading:    false,
+    activeSlug: '{{ active_slug|default:"" }}' || null,
+    isLoading:  false,
   };
 
-  /* ── Element refs ── */
+  /* ── Elements ── */
   const els = {
-    docItems:       document.querySelectorAll('.doc-item'),
-    searchInput:    document.getElementById('docsSearchInput'),
-    docsCount:      document.getElementById('docsCount'),
-
-    viewerHeader:   document.getElementById('docsViewerHeader'),
-    titleText:      document.getElementById('docsViewerTitleText'),
-    titleIcon:      document.getElementById('docsViewerTitleIcon'),
-    desc:           document.getElementById('docsViewerDesc'),
-    audience:       document.getElementById('docsViewerAudience'),
-    openExternal:   document.getElementById('docsOpenExternal'),
-
-    skeleton:       document.getElementById('docsSkeleton'),
-    empty:          document.getElementById('docsEmpty'),
-    contentInject:  document.getElementById('docsContentInject'),
-
-    resizeHandle:   document.getElementById('docsResizeHandle'),
-    sidebar:        document.getElementById('docsSidebar'),
-  };
-
-  /* ── Icon map (doc-id → Bootstrap Icon class) ── */
-  const ICON_MAP = {
-    'team-manual':      'bi-people-fill',
-    'openclaw-manual':  'bi-terminal-fill',
-    'product-strategy': 'bi-rocket-takeoff-fill',
-    'action-plan':      'bi-kanban-fill',
-    'salepage':         'bi-megaphone-fill',
-  };
-
-  /* ── Audience label map ── */
-  const AUDIENCE_LABELS = {
-    all:   '<span class="audience-badge audience-badge--all"><i class="bi bi-globe2 me-1"></i>ทุกคน</span>',
-    tech:  '<span class="audience-badge audience-badge--tech"><i class="bi bi-code-slash me-1"></i>Tech</span>',
-    owner: '<span class="audience-badge audience-badge--owner"><i class="bi bi-shield-lock me-1"></i>Owner</span>',
-    sales: '<span class="audience-badge audience-badge--sales"><i class="bi bi-currency-dollar me-1"></i>Sales</span>',
+    docItems:      document.querySelectorAll('.doc-item'),
+    searchInput:   document.getElementById('docsSearchInput'),
+    docsCount:     document.getElementById('docsCount'),
+    tabBar:        document.getElementById('docsTabBar'),
+    skeleton:      document.getElementById('docsSkeleton'),
+    empty:         document.getElementById('docsEmpty'),
+    frame:         document.getElementById('docsContentFrame'),
+    resizeHandle:  document.getElementById('docsResizeHandle'),
+    sidebar:       document.getElementById('docsSidebar'),
+    sectionToggle: document.getElementById('docsSectionToggle'),
+    sectionChevron:document.getElementById('docsSectionChevron'),
+    docsList:      document.getElementById('docsList'),
   };
 
   /* ================================================================
      SHOW STATES
      ================================================================ */
   function showSkeleton() {
-    els.empty.style.display         = 'none';
-    els.contentInject.style.display = 'none';
+    els.empty.style.display   = 'none';
+    els.frame.style.display   = 'none';
     els.skeleton.classList.add('is-visible');
   }
 
-  function showContent(html) {
+  function showFrame() {
     els.skeleton.classList.remove('is-visible');
-    els.empty.style.display         = 'none';
-    els.contentInject.innerHTML     = html;
-    els.contentInject.style.display = 'block';
-    els.contentInject.scrollTop     = 0;
+    els.empty.style.display   = 'none';
+    els.frame.style.display   = 'block';
   }
 
   function showEmpty() {
     els.skeleton.classList.remove('is-visible');
-    els.contentInject.style.display = 'none';
-    els.empty.style.display         = 'flex';
-    els.viewerHeader.style.display  = 'none';
-  }
-
-  function showError(msg) {
-    showContent(`
-      <div class="alert alert-danger d-flex align-items-center gap-2 mt-2">
-        <i class="bi bi-exclamation-triangle-fill"></i>
-        <span>${msg}</span>
-      </div>
-    `);
+    els.frame.style.display   = 'none';
+    els.frame.src             = '';
+    els.empty.style.display   = 'flex';
+    renderTab(null);
   }
 
   /* ================================================================
-     UPDATE HEADER
+     TAB BAR
      ================================================================ */
-  function updateHeader(item) {
-    const docId    = item.dataset.docId;
-    const title    = item.dataset.docTitle;
-    const desc     = item.dataset.docDesc;
-    const audience = item.dataset.docAudience;
-    const url      = item.dataset.docUrl;
+  function renderTab(item) {
+    if (!item) {
+      els.tabBar.innerHTML = `
+        <div class="docs-tabs__hint">
+          <i class="bi bi-arrow-left-short"></i>
+          เลือกเอกสารจากแผงซ้าย
+        </div>`;
+      return;
+    }
+    const slug    = item.dataset.slug;
+    const title   = item.dataset.title;
+    const biIcon  = item.dataset.biIcon;
+    const pageUrl = item.dataset.pageUrl;
 
-    els.titleText.textContent  = title;
-    els.titleIcon.className    = `bi ${ICON_MAP[docId] || 'bi-file-text-fill'}`;
-    els.desc.textContent       = desc;
-    els.audience.innerHTML     = AUDIENCE_LABELS[audience] || audience;
-    els.openExternal.href      = url;
-    els.viewerHeader.style.display = 'flex';
+    els.tabBar.innerHTML = `
+      <div class="docs-tab active" data-slug="${slug}" role="tab" aria-selected="true">
+        <i class="bi ${biIcon} docs-tab__icon"></i>
+        <span class="docs-tab__name">${title}</span>
+        <a href="${pageUrl}" class="docs-tab__external"
+           target="_blank" rel="noopener" title="เปิดในแท็บใหม่"
+           onclick="event.stopPropagation()">
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+      </div>`;
   }
 
   /* ================================================================
-     LOAD DOC VIA AJAX
+     LOAD DOC
      ================================================================ */
-  function loadDoc(item) {
-    const docId = item.dataset.docId;
-    const url   = item.dataset.docUrl;
+  function loadDoc(item, pushUrl = true) {
+    const slug       = item.dataset.slug;
+    const contentUrl = item.dataset.contentUrl;
+    const pageUrl    = item.dataset.pageUrl;
 
-    if (state.activeDocId === docId || state.isLoading) return;
+    if (state.activeSlug === slug || state.isLoading) return;
 
-    /* Update active state in list */
+    /* Update sidebar active state */
     els.docItems.forEach(el => {
       el.classList.remove('active');
       el.setAttribute('aria-selected', 'false');
@@ -322,57 +265,68 @@
     item.classList.add('active');
     item.setAttribute('aria-selected', 'true');
 
-    state.activeDocId = docId;
-    state.isLoading   = true;
+    state.activeSlug = slug;
+    state.isLoading  = true;
 
-    updateHeader(item);
+    renderTab(item);
     showSkeleton();
 
-    /* AJAX fetch — replace with actual endpoint */
-    fetch(url, {
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRFToken': getCsrf(),
-      }
-    })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.text();
-      })
-      .then(html => {
-        showContent(html);
-      })
-      .catch(err => {
-        console.error('[Docs] Load failed:', err);
-        showError('ไม่สามารถโหลดเอกสารได้ กรุณาลองใหม่อีกครั้ง');
-      })
-      .finally(() => {
-        state.isLoading = false;
-      });
+    /* Update browser URL without page reload */
+    if (pushUrl) {
+      history.pushState({ slug }, document.title, pageUrl);
+    }
+
+    /* Load full HTML doc in iframe (preserves each doc's own CSS/body) */
+    els.frame.onload = () => {
+      showFrame();
+      state.isLoading = false;
+    };
+    els.frame.onerror = () => {
+      els.skeleton.classList.remove('is-visible');
+      els.frame.style.display = 'none';
+      els.empty.style.display = 'flex';
+      state.isLoading = false;
+    };
+    els.frame.src = contentUrl;
   }
 
   /* ================================================================
-     SEARCH / FILTER
+     BROWSER BACK / FORWARD
+     ================================================================ */
+  window.addEventListener('popstate', e => {
+    if (!e.state || !e.state.slug) { showEmpty(); return; }
+    const item = document.querySelector(`.doc-item[data-slug="${e.state.slug}"]`);
+    if (item) loadDoc(item, false);
+  });
+
+  /* ================================================================
+     SEARCH
      ================================================================ */
   function filterDocs(query) {
     const q = query.trim().toLowerCase();
     let visible = 0;
-
     els.docItems.forEach(item => {
-      const title    = item.dataset.docTitle.toLowerCase();
-      const desc     = item.dataset.docDesc.toLowerCase();
-      const audience = item.dataset.docAudience.toLowerCase();
-      const match    = !q || title.includes(q) || desc.includes(q) || audience.includes(q);
-
+      const match = !q || item.dataset.title.toLowerCase().includes(q);
       item.classList.toggle('d-none-search', !match);
       if (match) visible++;
     });
-
     els.docsCount.textContent = `${visible} เอกสาร`;
   }
 
   /* ================================================================
-     RESIZE HANDLE (drag to resize left panel)
+     SECTION COLLAPSE TOGGLE
+     ================================================================ */
+  function initSectionToggle() {
+    els.sectionToggle.addEventListener('click', () => {
+      const isOpen = els.sectionToggle.getAttribute('aria-expanded') === 'true';
+      els.sectionToggle.setAttribute('aria-expanded', !isOpen);
+      els.sectionChevron.classList.toggle('is-collapsed', isOpen);
+      els.docsList.classList.toggle('is-collapsed', isOpen);
+    });
+  }
+
+  /* ================================================================
+     RESIZE HANDLE
      ================================================================ */
   function initResize() {
     let startX, startW;
@@ -381,11 +335,11 @@
       startX = e.clientX;
       startW = els.sidebar.offsetWidth;
       els.resizeHandle.classList.add('dragging');
-      document.body.style.cursor = 'col-resize';
+      document.body.style.cursor    = 'col-resize';
       document.body.style.userSelect = 'none';
 
       function onMove(e) {
-        const newW = Math.min(Math.max(startW + e.clientX - startX, 200), 420);
+        const newW = Math.min(Math.max(startW + e.clientX - startX, 180), 440);
         els.sidebar.style.width    = newW + 'px';
         els.sidebar.style.minWidth = newW + 'px';
       }
@@ -404,34 +358,24 @@
   }
 
   /* ================================================================
-     CSRF helper
-     ================================================================ */
-  function getCsrf() {
-    const el = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
-    return el ? el.split('=')[1] : '';
-  }
-
-  /* ================================================================
-     KEYBOARD NAVIGATION (↑↓ in doc list)
+     KEYBOARD NAVIGATION
      ================================================================ */
   function initKeyboard() {
-    els.docItems.forEach((item, idx) => {
+    els.docItems.forEach(item => {
       item.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           loadDoc(item);
         }
-        if (e.key === 'ArrowDown') {
+        const visible = [...els.docItems].filter(el => !el.classList.contains('d-none-search'));
+        const cur = visible.indexOf(item);
+        if (e.key === 'ArrowDown' && cur < visible.length - 1) {
           e.preventDefault();
-          const next = [...els.docItems].filter(el => !el.classList.contains('d-none-search'));
-          const cur  = next.indexOf(item);
-          if (cur < next.length - 1) next[cur + 1].focus();
+          visible[cur + 1].focus();
         }
-        if (e.key === 'ArrowUp') {
+        if (e.key === 'ArrowUp' && cur > 0) {
           e.preventDefault();
-          const prev = [...els.docItems].filter(el => !el.classList.contains('d-none-search'));
-          const cur  = prev.indexOf(item);
-          if (cur > 0) prev[cur - 1].focus();
+          visible[cur - 1].focus();
         }
       });
     });
@@ -441,25 +385,22 @@
      INIT
      ================================================================ */
   function init() {
-    /* Click handlers */
-    els.docItems.forEach(item => {
-      item.addEventListener('click', () => loadDoc(item));
-    });
-
-    /* Search */
+    els.docItems.forEach(item => item.addEventListener('click', () => loadDoc(item)));
     els.searchInput.addEventListener('input', e => filterDocs(e.target.value));
-
-    /* Keyboard */
+    initSectionToggle();
     initKeyboard();
-
-    /* Resize handle */
     initResize();
 
-    /* Auto-load first active doc on page load */
-    const activeItem = document.querySelector('.doc-item.active');
-    if (activeItem) {
-      /* Small delay so layout paints first */
-      setTimeout(() => loadDoc(activeItem), 80);
+    /* Auto-load on page entry (direct URL or first visit) */
+    const slug = state.activeSlug;
+    if (slug) {
+      const item = document.querySelector(`.doc-item[data-slug="${slug}"]`);
+      if (item) {
+        history.replaceState({ slug }, document.title, window.location.href);
+        /* Reset so loadDoc doesn't skip due to same-slug early-return */
+        state.activeSlug = null;
+        setTimeout(() => loadDoc(item, false), 80);
+      }
     }
   }
 

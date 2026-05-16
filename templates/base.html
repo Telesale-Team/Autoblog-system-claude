@@ -44,60 +44,181 @@
     h5, .h5 { font-size: calc(var(--app-h1-size) * 0.55) !important; }
     h6, .h6 { font-size: var(--app-h6-size) !important; color: var(--app-h6-color) !important; }
 
-    /* === Sidebar === */
+    /* ================================================================
+       SIDEBAR — AdminLTE 3 style
+       ================================================================ */
     #sidebar {
       width: var(--sidebar-width);
       height: 100vh;
       position: fixed;
       top: 0; left: 0;
       z-index: 1040;
-      background: var(--brand-navy, #1a2744);
+      background: #1a2744;
       transition: transform 0.3s ease;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
+
+    /* Brand */
+    #sidebar .sidebar-brand {
+      flex-shrink: 0;
+      padding: 1rem 1rem .9rem;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      text-decoration: none;
+    }
+    #sidebar .sidebar-brand .brand-accent { color: var(--app-primary, #c9a96e); font-size: 1.3rem; }
+    #sidebar .sidebar-brand .brand-name   { color: #fff; font-weight: 700; font-size: .95rem; line-height: 1.2; }
+
+    /* Search */
+    .sidebar-search {
+      flex-shrink: 0;
+      padding: .65rem .8rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      position: relative;
+    }
+    .sidebar-search__input {
+      width: 100%;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 4px;
+      color: rgba(255,255,255,.85);
+      padding: .38rem 2rem .38rem .75rem;
+      font-size: .82rem;
+      font-family: var(--app-font-family);
+      outline: none;
+      transition: background .15s, border-color .15s;
+    }
+    .sidebar-search__input::placeholder { color: rgba(255,255,255,.3); }
+    .sidebar-search__input:focus {
+      background: rgba(255,255,255,.13);
+      border-color: var(--app-primary, #c9a96e);
+    }
+    .sidebar-search__icon {
+      position: absolute;
+      right: 1.3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.35);
+      font-size: .85rem;
+      pointer-events: none;
+    }
+
+    /* Scrollable nav */
     #sidebar-nav-scroll {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,.1) transparent;
     }
-    #sidebar-bottom {
-      flex-shrink: 0;
-      border-top: 1px solid rgba(255,255,255,.1);
-      padding: .4rem .5rem;
-      background: var(--brand-navy, #1a2744);
-      padding-bottom: env(safe-area-inset-bottom, .5rem);
+    #sidebar-nav-scroll::-webkit-scrollbar { width: 4px; }
+    #sidebar-nav-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 2px; }
+
+    /* Section labels */
+    #sidebar .nav-section-label {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(255,255,255,.35);
+      padding: .9rem 1rem .3rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
     }
-    #sidebar .sidebar-brand {
-      padding: 1.2rem 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
+    #sidebar .nav-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,.08);
     }
-    #sidebar .sidebar-brand .brand-accent { color: var(--app-primary, #c9a96e); }
+
+    /* Nav item */
     #sidebar .nav-link {
-      color: rgba(255,255,255,0.75);
-      padding: .55rem 1.2rem;
-      border-radius: 0.4rem;
-      margin: 2px 8px;
-      font-size: .92rem;
-      transition: background .2s, color .2s;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      color: rgba(255,255,255,.72);
+      padding: .48rem 1rem;
+      border-radius: 0;
+      margin: 0;
+      font-size: .88rem;
+      transition: background .12s, color .12s;
+      border-left: 3px solid transparent;
+      position: relative;
     }
     #sidebar .nav-link:hover {
-      background: rgba(201,169,110,.12);
-      color: var(--app-primary, #c9a96e);
+      background: rgba(255,255,255,.07);
+      color: #fff;
+      border-left-color: rgba(201,169,110,.4);
     }
     #sidebar .nav-link.active {
-      background: rgba(201,169,110,.18);
+      background: rgba(201,169,110,.14);
       color: var(--app-primary, #c9a96e);
+      border-left-color: var(--app-primary, #c9a96e);
       font-weight: 600;
     }
-    #sidebar .nav-link i { width: 22px; font-size: 1.05rem; }
-    #sidebar .nav-section-label {
-      font-size: .7rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: rgba(255,255,255,0.40);
-      padding: .7rem 1.2rem .2rem;
+    #sidebar .nav-link i {
+      width: 18px;
+      font-size: .95rem;
+      flex-shrink: 0;
+      text-align: center;
     }
+    #sidebar .nav-link .nav-label { flex: 1; min-width: 0; }
+
+    /* Nav badge */
+    .sidebar-badge-draft {
+      background: var(--app-secondary, #b8924f);
+      color: #fff;
+      font-size: .6rem;
+      padding: .15rem .45rem;
+    }
+
+    /* Search filter — hidden items */
+    #sidebar .nav-item.d-none-search { display: none !important; }
+    #sidebar .nav-section-label.d-none-search { display: none !important; }
+
+    /* User bar at bottom */
+    .sidebar-user {
+      flex-shrink: 0;
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding: .6rem .8rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .sidebar-user__avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--app-primary, #c9a96e);
+      color: #1a2744;
+      font-weight: 700;
+      font-size: .8rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sidebar-user__name {
+      font-size: .8rem;
+      color: rgba(255,255,255,.8);
+      font-weight: 600;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sidebar-user__logout {
+      color: rgba(255,255,255,.4);
+      font-size: .8rem;
+      text-decoration: none;
+      transition: color .15s;
+      flex-shrink: 0;
+    }
+    .sidebar-user__logout:hover { color: #fc8181; }
 
     /* === Page Title (ใช้แทน inline style="color:var(--app-primary)") === */
     .page-title {
@@ -200,139 +321,286 @@
 
   {# ===================== SIDEBAR ===================== #}
   <nav id="sidebar">
-    <div class="sidebar-brand d-flex align-items-center gap-2">
-      <i class="bi bi-bar-chart-fill fs-4 brand-accent"></i>
-      <span class="fw-bold text-white fs-6">
-        {{ user_settings.company_name|default:"Analytics Co." }}
-      </span>
+
+    {# === Brand === #}
+    <a href="{% url 'dashboard:index' %}" class="sidebar-brand">
+      <i class="bi bi-bar-chart-fill brand-accent"></i>
+      <span class="brand-name">{{ user_settings.company_name|default:"Analytics Co." }}</span>
+    </a>
+
+    {# === Search === #}
+    <div class="sidebar-search">
+      <input type="search"
+             class="sidebar-search__input"
+             id="sidebarSearchInput"
+             placeholder="ค้นหาเมนู..."
+             autocomplete="off"
+             aria-label="ค้นหาเมนู">
+      <i class="bi bi-search sidebar-search__icon"></i>
     </div>
 
-    {# Pre-compute counts for badges — guard against missing context vars #}
+    {# Pre-compute badge counts #}
     {% with new_leads=sidebar_new_leads|default:0 draft_articles=sidebar_draft_articles|default:0 %}
 
-    {# === Scrollable nav area === #}
+    {# === Scrollable nav — all agent sections === #}
     <div id="sidebar-nav-scroll">
-    <ul class="nav flex-column mt-2 px-1 pb-2">
+      <ul class="nav flex-column pb-3" id="sidebarNavList">
 
-      <li class="nav-section-label">หน้าหลัก</li>
+        {# ── หน้าหลัก (Chief of Staff) ── #}
+        <li class="nav-section-label" data-section>หน้าหลัก</li>
 
-      <li class="nav-item">
-        <a href="{% url 'dashboard:index' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
-          <i class="bi bi-grid-1x2-fill"></i> Dashboard
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'dashboard:calendar' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">
-          <i class="bi bi-calendar3"></i> Work Calendar
-        </a>
-      </li>
-
-      <li class="nav-section-label">Content</li>
-
-      <li class="nav-item">
-        <a href="{% url 'dashboard:blog' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %} d-flex align-items-center justify-content-between">
-          <span><i class="bi bi-pencil-square"></i> บทความ</span>
-          {% if draft_articles > 0 %}
-            <span class="badge rounded-pill sidebar-badge-draft">{{ draft_articles }} draft</span>
-          {% endif %}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'dashboard:backlog' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'backlog' %}active{% endif %}">
-          <i class="bi bi-list-task"></i> Content Backlog
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'dashboard:projects' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}">
-          <i class="bi bi-briefcase"></i> Portfolio
-        </a>
-      </li>
-
-      <li class="nav-section-label">Leads &amp; Sales</li>
-
-      <li class="nav-item">
-        <a href="{% url 'dashboard:leads' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %} d-flex align-items-center justify-content-between">
-          <span><i class="bi bi-people-fill"></i> Leads ทั้งหมด</span>
-          {% if new_leads > 0 %}
-            <span class="badge rounded-pill bg-danger" style="font-size:.65rem">{{ new_leads }} ใหม่</span>
-          {% endif %}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'dashboard:pipeline' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'pipeline' %}active{% endif %}">
-          <i class="bi bi-kanban-fill"></i> Pipeline
-        </a>
-      </li>
-
-      <li class="nav-section-label">การเงิน</li>
-
-      <li class="nav-item">
-        <a href="{% url 'dashboard:revenue' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'revenue' %}active{% endif %}">
-          <i class="bi bi-currency-exchange"></i> Revenue
-        </a>
-      </li>
-
-      <li class="nav-section-label">Analytics</li>
-
-      <li class="nav-item">
-        <a href="{% url 'dashboard:analytics' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
-          <i class="bi bi-bar-chart-fill"></i> Analytics
-        </a>
-      </li>
-
-      <li class="nav-section-label">เอกสาร</li>
-
-      <li class="nav-item">
-        <a href="{% url 'dashboard:docs_index' %}"
-           class="nav-link {% if 'docs' in request.resolver_match.url_name %}active{% endif %}">
-          <i class="bi bi-journal-bookmark-fill"></i> คู่มือทีม
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'dashboard:team' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'team' %}active{% endif %}">
-          <i class="bi bi-people-fill"></i> ทีม AI Agents
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="/" class="nav-link" target="_blank" rel="noopener">
-          <i class="bi bi-globe"></i> ดูเว็บไซต์
-        </a>
-      </li>
-
-    </ul>
-    </div>
-
-    {# === Pinned bottom: ระบบ — เห็นเสมอไม่ต้อง scroll === #}
-    <div id="sidebar-bottom">
-      <ul class="nav flex-column px-1">
-        <li class="nav-section-label" style="padding-top:.5rem">ระบบ</li>
-        <li class="nav-item">
-          <a href="/admin/" class="nav-link" target="_blank" rel="noopener">
-            <i class="bi bi-shield-lock-fill"></i> Django Admin
+        <li class="nav-item" data-label="dashboard หน้าหลัก overview">
+          <a href="{% url 'dashboard:index' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span class="nav-label">Dashboard</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-label="work calendar ปฏิทิน งาน">
+          <a href="{% url 'dashboard:calendar' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">
+            <i class="bi bi-calendar3"></i>
+            <span class="nav-label">Work Calendar</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="standup ประชุม daily team">
+          <a href="{% url 'dashboard:standup' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'standup' %}active{% endif %}">
+            <i class="bi bi-chat-square-dots"></i>
+            <span class="nav-label">Team Standup</span>
+          </a>
+        </li>
+
+        {# ── Sales & CRM (Hustler + Customer Success) ── #}
+        <li class="nav-section-label" data-section>Sales &amp; CRM</li>
+
+        <li class="nav-item" data-label="leads ลูกค้า เป้าหมาย new">
+          <a href="{% url 'dashboard:leads' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %}">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-label">Leads ทั้งหมด</span>
+            {% if new_leads > 0 %}
+              <span class="badge rounded-pill bg-danger ms-auto" style="font-size:.6rem">{{ new_leads }}</span>
+            {% endif %}
+          </a>
+        </li>
+        <li class="nav-item" data-label="pipeline deal ดีล kanban">
+          <a href="{% url 'dashboard:pipeline' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'pipeline' %}active{% endif %}">
+            <i class="bi bi-kanban-fill"></i>
+            <span class="nav-label">Pipeline</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="customers ลูกค้า health retention">
+          <a href="{% url 'dashboard:customers' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'customers' %}active{% endif %}">
+            <i class="bi bi-people"></i>
+            <span class="nav-label">Customers</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="renewals ต่อสัญญา retention">
+          <a href="{% url 'dashboard:renewals' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'renewals' %}active{% endif %}">
+            <i class="bi bi-arrow-repeat"></i>
+            <span class="nav-label">Renewals</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="quotes ใบเสนอราคา proposal deal">
+          <a href="{% url 'dashboard:quotes' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'quotes' %}active{% endif %}">
+            <i class="bi bi-file-earmark-text"></i>
+            <span class="nav-label">Quote Builder</span>
+          </a>
+        </li>
+
+        {# ── Marketing (Marketing Specialist + SEO + Content Writer) ── #}
+        <li class="nav-section-label" data-section>Marketing</li>
+
+        <li class="nav-item" data-label="campaigns แคมเปญ การตลาด">
+          <a href="{% url 'dashboard:campaigns' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'campaigns' %}active{% endif %}">
+            <i class="bi bi-megaphone"></i>
+            <span class="nav-label">Campaigns</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="content calendar ปฏิทิน เนื้อหา ตาราง">
+          <a href="{% url 'dashboard:content_calendar' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'content_calendar' %}active{% endif %}">
+            <i class="bi bi-calendar3"></i>
+            <span class="nav-label">Content Calendar</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="บทความ blog article เขียน">
+          <a href="{% url 'dashboard:blog' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}">
+            <i class="bi bi-pencil-square"></i>
+            <span class="nav-label">บทความ</span>
+            {% if draft_articles > 0 %}
+              <span class="badge rounded-pill sidebar-badge-draft ms-auto">{{ draft_articles }}</span>
+            {% endif %}
+          </a>
+        </li>
+        <li class="nav-item" data-label="content backlog คิว งานเขียน">
+          <a href="{% url 'dashboard:backlog' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'backlog' %}active{% endif %}">
+            <i class="bi bi-list-task"></i>
+            <span class="nav-label">Content Backlog</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="keywords seo ranking คำค้นหา">
+          <a href="{% url 'dashboard:keywords' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'keywords' %}active{% endif %}">
+            <i class="bi bi-search"></i>
+            <span class="nav-label">Keywords</span>
+          </a>
+        </li>
+
+        {# ── Finance (Money Manager) ── #}
+        <li class="nav-section-label" data-section>Finance</li>
+
+        <li class="nav-item" data-label="revenue รายได้ income เงิน">
+          <a href="{% url 'dashboard:revenue' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'revenue' %}active{% endif %}">
+            <i class="bi bi-currency-exchange"></i>
+            <span class="nav-label">Revenue</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="invoices ใบแจ้งหนี้ billing">
+          <a href="{% url 'dashboard:invoices' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'invoices' %}active{% endif %}">
+            <i class="bi bi-receipt"></i>
+            <span class="nav-label">Invoices</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="expenses ค่าใช้จ่าย รายจ่าย">
+          <a href="{% url 'dashboard:expenses' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'expenses' %}active{% endif %}">
+            <i class="bi bi-wallet2"></i>
+            <span class="nav-label">Expenses</span>
+          </a>
+        </li>
+
+        {# ── Analytics & KPI (Data Analyst) ── #}
+        <li class="nav-section-label" data-section>Analytics</li>
+
+        <li class="nav-item" data-label="analytics วิเคราะห์ สถิติ chart">
+          <a href="{% url 'dashboard:analytics' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+            <i class="bi bi-bar-chart-fill"></i>
+            <span class="nav-label">Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="kpi metric dashboard real-time mrr">
+          <a href="{% url 'dashboard:kpi' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'kpi' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i>
+            <span class="nav-label">KPI Dashboard</span>
+          </a>
+        </li>
+
+        {# ── Legal (Legal Advisor) ── #}
+        <li class="nav-section-label" data-section>Legal</li>
+
+        <li class="nav-item" data-label="contracts สัญญา pdpa กฎหมาย">
+          <a href="{% url 'dashboard:contracts' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'contracts' %}active{% endif %}">
+            <i class="bi bi-file-earmark-lock2"></i>
+            <span class="nav-label">Contracts</span>
+          </a>
+        </li>
+
+        {# ── Operations (AI Orchestrator + AI Toolsmith + QA + Frontend Designer) ── #}
+        <li class="nav-section-label" data-section>Operations</li>
+
+        <li class="nav-item" data-label="ai projects build deploy workflow">
+          <a href="{% url 'dashboard:ai_projects' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'ai_projects' %}active{% endif %}">
+            <i class="bi bi-robot"></i>
+            <span class="nav-label">AI Projects</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="prompt library template เครื่องมือ">
+          <a href="{% url 'dashboard:prompt_library' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'prompt_library' %}active{% endif %}">
+            <i class="bi bi-collection"></i>
+            <span class="nav-label">Prompt Library</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="qa log ตรวจสอบ quality issue">
+          <a href="{% url 'dashboard:qa_log' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'qa_log' %}active{% endif %}">
+            <i class="bi bi-clipboard2-check"></i>
+            <span class="nav-label">QA Log</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="design system ui component color token">
+          <a href="{% url 'dashboard:design_system' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'design_system' %}active{% endif %}">
+            <i class="bi bi-palette"></i>
+            <span class="nav-label">Design System</span>
+          </a>
+        </li>
+
+        {# ── เอกสาร ── #}
+        <li class="nav-section-label" data-section>เอกสาร</li>
+
+        <li class="nav-item" data-label="docs คู่มือ เอกสาร manual">
+          <a href="{% url 'dashboard:docs_index' %}"
+             class="nav-link {% if 'docs' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span class="nav-label">คู่มือทีม</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="team ai agents ทีม bot">
+          <a href="{% url 'dashboard:team' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'team' %}active{% endif %}">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-label">ทีม AI Agents</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="portfolio project โปรเจกต์ ผลงาน">
+          <a href="{% url 'dashboard:projects' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}">
+            <i class="bi bi-briefcase"></i>
+            <span class="nav-label">Portfolio</span>
+          </a>
+        </li>
+        <li class="nav-item" data-label="website เว็บไซต์ public">
+          <a href="/" class="nav-link" target="_blank" rel="noopener">
+            <i class="bi bi-globe"></i>
+            <span class="nav-label">ดูเว็บไซต์</span>
+            <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
+          </a>
+        </li>
+
+        {# ── ระบบ ── #}
+        <li class="nav-section-label" data-section>ระบบ</li>
+
+        <li class="nav-item" data-label="django admin ระบบหลัง">
+          <a href="/admin/" class="nav-link" target="_blank" rel="noopener">
+            <i class="bi bi-shield-lock-fill"></i>
+            <span class="nav-label">Django Admin</span>
+            <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
+          </a>
+        </li>
+        <li class="nav-item" data-label="settings ตั้งค่า system config">
           <a href="{% url 'settings:index' %}"
              class="nav-link {% if 'settings' in request.resolver_match.namespace %}active{% endif %}">
-            <i class="bi bi-gear-fill"></i> ตั้งค่าระบบ
+            <i class="bi bi-gear-fill"></i>
+            <span class="nav-label">ตั้งค่าระบบ</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="{% url 'accounts:logout' %}" class="nav-link">
-            <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
-          </a>
-        </li>
+
       </ul>
+    </div>{# /sidebar-nav-scroll #}
+
+    {# === User bar (bottom) === #}
+    <div class="sidebar-user">
+      <div class="sidebar-user__avatar">{{ request.user.username|first|upper }}</div>
+      <span class="sidebar-user__name">{{ request.user.username }}</span>
+      <a href="{% url 'accounts:logout' %}" class="sidebar-user__logout" title="ออกจากระบบ">
+        <i class="bi bi-box-arrow-right"></i>
+      </a>
     </div>
 
     {% endwith %}
@@ -401,7 +669,7 @@
     {# === END TOPBAR === #}
 
     {# === PAGE CONTENT === #}
-    <div class="p-3 p-md-4">
+    <div class="{% block page_content_class %}p-3 p-md-4{% endblock %}">
 
       {# Django Messages #}
       {% if messages %}
@@ -421,6 +689,7 @@
     {# === END PAGE CONTENT === #}
 
     {# === FOOTER === #}
+    {% block footer %}
     <footer class="px-4 py-3 border-top mt-auto">
       <div class="d-flex justify-content-between align-items-center">
         <small class="text-muted">
@@ -430,6 +699,7 @@
         <small class="text-muted">v{{ app_version|default:"1.0.0" }}</small>
       </div>
     </footer>
+    {% endblock footer %}
 
   </div>
   {# === END MAIN CONTENT === #}
@@ -502,6 +772,44 @@
 
       toggleBtn?.addEventListener('click', openSidebar);
       overlay?.addEventListener('click', closeSidebar);
+    })();
+
+    /* ── Sidebar search filter ── */
+    (function () {
+      const input    = document.getElementById('sidebarSearchInput');
+      if (!input) return;
+      const items    = document.querySelectorAll('#sidebarNavList .nav-item[data-label]');
+      const sections = document.querySelectorAll('#sidebarNavList .nav-section-label[data-section]');
+
+      input.addEventListener('input', function () {
+        const q = this.value.trim().toLowerCase();
+
+        if (!q) {
+          items.forEach(el => el.classList.remove('d-none-search'));
+          sections.forEach(el => el.classList.remove('d-none-search'));
+          return;
+        }
+
+        /* Show items that match; hide section labels with no visible items */
+        items.forEach(el => {
+          const label = (el.dataset.label || '') + ' ' + (el.querySelector('.nav-label')?.textContent || '');
+          el.classList.toggle('d-none-search', !label.toLowerCase().includes(q));
+        });
+
+        /* Hide section labels when all siblings below are hidden */
+        sections.forEach(section => {
+          let next = section.nextElementSibling;
+          let hasVisible = false;
+          while (next && !next.hasAttribute('data-section')) {
+            if (next.classList.contains('nav-item') && !next.classList.contains('d-none-search')) {
+              hasVisible = true;
+              break;
+            }
+            next = next.nextElementSibling;
+          }
+          section.classList.toggle('d-none-search', !hasVisible);
+        });
+      });
     })();
   </script>
 
