@@ -84,10 +84,13 @@ document.addEventListener('DOMContentLoaded', function () {
      - is_completed=true  → สีเทา #475569 + class fc-event-completed
      - is_completed=false → สีตาม category  + class fc-event-pending   */
   const rawEvents = window.CALENDAR_EVENTS || [];
+  const PENDING_COLOR = '#3b82f6';   // Blue-500 — งานยังไม่ทำ
+  const DONE_COLOR    = '#64748b';   // Slate-500 — งานเสร็จแล้ว
+
   const sysEvents = rawEvents.map(function (e) {
     const completed = !!e.is_completed;
     return Object.assign({}, e, {
-      color:      completed ? '#475569' : getCfg(e.category).color,
+      color:      completed ? DONE_COLOR : PENDING_COLOR,
       borderColor:'transparent',
       classNames: completed ? ['fc-event-completed'] : ['fc-event-pending'],
       editable:   false,
@@ -161,20 +164,20 @@ document.addEventListener('DOMContentLoaded', function () {
               let filtered = data;
               if (activeFilter === 'done') {
                 filtered = data.filter(function (e) { return e.extendedProps && e.extendedProps.isCompleted; });
-              } else if (activeFilter === 'user-event') {
-                filtered = data.filter(function (e) { return getCfg((e.extendedProps && e.extendedProps.category) || 'general').userOwned; });
               } else if (activeFilter !== 'all') {
-                filtered = []; /* filter อื่น (milestone/action/etc.) ไม่แสดง user events */
+                filtered = data.filter(function (e) {
+                  const cat = (e.extendedProps && e.extendedProps.category) || 'general';
+                  return cat === activeFilter;
+                });
               }
 
               successCb(filtered.map(function (e) {
-                const cat  = (e.extendedProps && e.extendedProps.category) || 'general';
                 const done = !!(e.extendedProps && e.extendedProps.isCompleted);
                 return {
-                  id:          'db_' + e.id,          /* prefix db_ ป้องกัน id ชน sysEvents */
-                  title:       e.title,  /* icon inject โดย eventContent ด้านล่าง */
+                  id:          'db_' + e.id,
+                  title:       e.title,
                   start:       e.start, end: e.end, allDay: e.allDay,
-                  color:       done ? '#475569' : (e.color || getCfg(cat).color),
+                  color:       done ? DONE_COLOR : PENDING_COLOR,
                   borderColor: 'transparent',
                   classNames:  done ? ['fc-cat-user-event','fc-event-completed'] : ['fc-cat-user-event','fc-event-pending'],
                   extendedProps: Object.assign({}, e.extendedProps, {

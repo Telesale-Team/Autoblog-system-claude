@@ -721,6 +721,22 @@
 
 
 /* =============================================================
+   [event-status-v2] — 2-color system: pending=blue, done=gray
+   ============================================================= */
+:root {
+  --cal-pending: #3b82f6;
+  --cal-done:    #64748b;
+}
+.fc-event.fc-event-pending { background-color: var(--cal-pending) !important; }
+.fc-event.fc-event-completed {
+  background-color: var(--cal-done) !important;
+  opacity: .65;
+}
+.fc-event.fc-event-completed .fc-event-title,
+.fc-event.fc-event-completed .fc-event-title-text { text-decoration: line-through; }
+
+
+/* =============================================================
    [cal-header-bar] — Premium Header Redesign v2
    ============================================================= */
 

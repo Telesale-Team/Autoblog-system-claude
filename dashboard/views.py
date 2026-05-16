@@ -901,6 +901,9 @@ def calendar_view(request):
     now = timezone.now()
     events = []
 
+    PENDING_COLOR = "#3b82f6"   # Blue-500 — งานยังไม่ทำ
+    DONE_COLOR    = "#64748b"   # Slate-500 — งานเสร็จแล้ว
+
     # ── 1. Published Articles (from DB) ──────────────────────────────────────
     published = Article.objects.filter(
         status="published", published_at__isnull=False
@@ -909,7 +912,8 @@ def calendar_view(request):
         events.append({
             "title": f"📝 {art['title'][:40]}",
             "start": timezone.localtime(art["published_at"]).date().isoformat(),
-            "color": "#198754",
+            "color":        DONE_COLOR,
+            "is_completed": True,
             "category": "article",
             "description": "บทความ published",
         })
@@ -917,11 +921,13 @@ def calendar_view(request):
     # ── 2. Lead activities (created_at) ──────────────────────────────────────
     leads_qs = ContactLead.objects.values("name", "company", "status", "created_at")
     for lead in leads_qs:
-        company = lead["company"] or lead["name"]
+        company  = lead["company"] or lead["name"]
+        is_done  = lead["status"] in ("closed_won", "closed_lost")
         events.append({
             "title": f"👤 {company[:30]}",
             "start": timezone.localtime(lead["created_at"]).date().isoformat(),
-            "color": "#0d6efd",
+            "color":        DONE_COLOR if is_done else PENDING_COLOR,
+            "is_completed": is_done,
             "category": "lead",
             "description": f"Lead เข้า — {lead['status']}",
         })
@@ -952,7 +958,8 @@ def calendar_view(request):
         events.append({
             "title": f"{status_icon} {item['topic'][:38]}",
             "start": sched_date.isoformat(),
-            "color": "#856404" if item["status"] == "review" else "#495057",
+            "color":        PENDING_COLOR,
+            "is_completed": False,
             "category": "backlog",
             "description": f"[{item['status']}] {item['keyword']}",
         })
