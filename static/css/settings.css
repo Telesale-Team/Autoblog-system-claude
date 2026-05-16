@@ -376,6 +376,67 @@
 }
 .step-list li strong { color: var(--bs-body-color); }
 
+/* ── SQLite Action Card ── */
+.sqlite-action-card {
+  border: 1.5px solid rgba(201,169,110,.45);
+  border-radius: .65rem;
+  background: rgba(201,169,110,.06);
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.sqlite-action-info {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+}
+.sqlite-action-icon {
+  font-size: 1.35rem;
+  color: var(--brand-gold);
+  flex-shrink: 0;
+}
+.sqlite-action-title {
+  font-size: .92rem;
+  font-weight: 700;
+  margin-bottom: .2rem;
+}
+.sqlite-action-desc {
+  font-size: .78rem;
+  color: var(--bs-secondary-color);
+}
+.sqlite-action-desc code {
+  font-size: .76rem;
+  background: rgba(201,169,110,.12);
+  border-radius: .25rem;
+  padding: .05em .35em;
+}
+.btn-apply-sqlite {
+  background: var(--brand-gold);
+  border: none;
+  color: var(--brand-dark);
+  font-weight: 700;
+  font-size: .9rem;
+  border-radius: .5rem;
+  padding: .6rem 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(201,169,110,.35);
+  transition: background .2s, box-shadow .2s, transform .15s;
+  cursor: pointer;
+}
+.btn-apply-sqlite:hover {
+  background: var(--brand-gold-d);
+  box-shadow: 0 6px 18px rgba(201,169,110,.45);
+  transform: translateY(-1px);
+}
+.btn-apply-sqlite:active { transform: translateY(0); }
+.btn-apply-sqlite:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
 /* ── Spinner ── */
 .spin-gold {
   border-color: rgba(201,169,110,.2);
