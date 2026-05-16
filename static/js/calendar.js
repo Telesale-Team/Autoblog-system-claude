@@ -122,6 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
     height:        'auto',
     headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listMonth' },
     buttonText:    { today: 'วันนี้', month: 'เดือน', listMonth: 'รายการ' },
+    dayMaxEvents:  5,           /* แสดงสูงสุด 5 งานต่อวัน — กด "+N more" เพื่อดูทั้งหมด */
+    moreLinkText:  function (n) { return '+ อีก ' + n + ' งาน'; },
+    moreLinkClick: 'popover',   /* คลิก → popover แสดงงานทั้งหมดของวันนั้น */
 
     eventSources: [
 
