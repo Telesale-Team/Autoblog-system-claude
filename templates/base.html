@@ -364,24 +364,17 @@
           </a>
         </li>
 
-        {# ── Marketing (Marketing Specialist + SEO + Content Writer) ── #}
+        {# ── Marketing ── #}
         <li class="nav-section-label" data-section>Marketing</li>
 
-        <li class="nav-item" data-label="campaigns แคมเปญ การตลาด">
-          <a href="{% url 'dashboard:campaigns' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'campaigns' %}active{% endif %}">
-            <i class="bi bi-megaphone"></i>
-            <span class="nav-label">Campaigns</span>
+        <li class="nav-item" data-label="keywords seo ranking คำค้นหา">
+          <a href="{% url 'dashboard:keywords' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'keywords' %}active{% endif %}">
+            <i class="bi bi-search"></i>
+            <span class="nav-label">Keywords</span>
           </a>
         </li>
-        <li class="nav-item" data-label="content calendar ปฏิทิน เนื้อหา ตาราง">
-          <a href="{% url 'dashboard:content_calendar' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'content_calendar' %}active{% endif %}">
-            <i class="bi bi-calendar3"></i>
-            <span class="nav-label">Content Calendar</span>
-          </a>
-        </li>
-        <li class="nav-item" data-label="บทความ blog article เขียน">
+        <li class="nav-item" data-label="บทความ blog article backlog เขียน">
           <a href="{% url 'dashboard:blog' %}"
              class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}">
             <i class="bi bi-pencil-square"></i>
@@ -391,18 +384,11 @@
             {% endif %}
           </a>
         </li>
-        <li class="nav-item" data-label="content backlog คิว งานเขียน">
-          <a href="{% url 'dashboard:backlog' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'backlog' %}active{% endif %}">
-            <i class="bi bi-list-task"></i>
-            <span class="nav-label">Content Backlog</span>
-          </a>
-        </li>
-        <li class="nav-item" data-label="keywords seo ranking คำค้นหา">
-          <a href="{% url 'dashboard:keywords' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'keywords' %}active{% endif %}">
-            <i class="bi bi-search"></i>
-            <span class="nav-label">Keywords</span>
+        <li class="nav-item" data-label="campaigns แคมเปญ การตลาด">
+          <a href="{% url 'dashboard:campaigns' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'campaigns' %}active{% endif %}">
+            <i class="bi bi-megaphone"></i>
+            <span class="nav-label">Campaigns</span>
           </a>
         </li>
 

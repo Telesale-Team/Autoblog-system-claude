@@ -53,8 +53,8 @@ urlpatterns = [
     path("qa-log/",           views.redirect_to("operations:qa_list"),      name="qa_log"),
     # SEO Specialist
     path("keywords/",         views.redirect_to("marketing:keyword_list"),  name="keywords"),
-    # Content Writer
-    path("content-calendar/", views.redirect_to("marketing:content_calendar"), name="content_calendar"),
+    # Content Calendar ถูกลบแล้ว redirect ไป blog
+    path("content-calendar/", views.redirect_to("dashboard:blog"), name="content_calendar"),
     # Frontend Designer
     path("design-system/",    views.design_system_view, name="design_system"),
 ]

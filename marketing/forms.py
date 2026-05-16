@@ -1,5 +1,5 @@
 from django import forms
-from .models import Campaign, ContentCalendar, Keyword
+from .models import Campaign, Keyword
 
 
 class CampaignForm(forms.ModelForm):
@@ -13,14 +13,6 @@ class CampaignForm(forms.ModelForm):
         }
 
 
-class ContentCalendarForm(forms.ModelForm):
-    class Meta:
-        model = ContentCalendar
-        fields = ["article", "title", "scheduled_date", "channel", "assigned_agent", "status", "notes"]
-        widgets = {
-            "scheduled_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
-            "notes":          forms.Textarea(attrs={"rows": 3}),
-        }
 
 
 class KeywordForm(forms.ModelForm):

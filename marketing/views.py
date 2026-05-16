@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from .models import Campaign, ContentCalendar, Keyword
-from .forms import CampaignForm, ContentCalendarForm, KeywordForm
+from .models import Campaign, Keyword
+from .forms import CampaignForm, KeywordForm
 
 
 # === CAMPAIGNS ===
@@ -36,31 +36,6 @@ def campaign_edit(request, pk):
 
 # === CONTENT CALENDAR ===
 
-@staff_member_required
-def content_calendar(request):
-    items = ContentCalendar.objects.select_related("article").order_by("scheduled_date")
-    return render(request, "marketing/content_calendar.html", {"items": items})
-
-
-@staff_member_required
-def content_calendar_add(request):
-    form = ContentCalendarForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        messages.success(request, "เพิ่มงานใน Content Calendar แล้ว")
-        return redirect("marketing:content_calendar")
-    return render(request, "marketing/content_calendar_form.html", {"form": form, "title": "เพิ่มงาน Content"})
-
-
-@staff_member_required
-def content_calendar_edit(request, pk):
-    item = get_object_or_404(ContentCalendar, pk=pk)
-    form = ContentCalendarForm(request.POST or None, instance=item)
-    if form.is_valid():
-        form.save()
-        messages.success(request, "อัพเดต Content Calendar แล้ว")
-        return redirect("marketing:content_calendar")
-    return render(request, "marketing/content_calendar_form.html", {"form": form, "title": "แก้ไขงาน Content", "item": item})
 
 
 # === KEYWORDS ===

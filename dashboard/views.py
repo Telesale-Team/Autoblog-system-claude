@@ -428,11 +428,17 @@ def blog_list(request):
     articles = articles.order_by("-created_at")
 
     draft_count = Article.objects.filter(status="draft").count()
+    backlog_items   = _parse_backlog()
+    backlog_pending = [i for i in backlog_items if i["status"] in ("pending", "review")]
+    backlog_done    = [i for i in backlog_items if i["status"] == "done"]
 
     return render(request, "dashboard/blog_list.html", {
-        "articles": articles,
-        "status_filter": status_filter,
-        "draft_count": draft_count,
+        "articles":        articles,
+        "status_filter":   status_filter,
+        "draft_count":     draft_count,
+        "backlog_pending": backlog_pending,
+        "backlog_done":    backlog_done,
+        "backlog_total":   len(backlog_items),
     })
 
 

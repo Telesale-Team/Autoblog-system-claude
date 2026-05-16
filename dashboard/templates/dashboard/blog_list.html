@@ -95,41 +95,48 @@
 {% block content %}
 
 {# ── Page Header ─────────────────────────────────────────────────────────── #}
-<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+<div class="ds-page-header d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
   <div>
-    <h4 class="mb-0 page-title">จัดการบทความ</h4>
-    <p class="mb-0 text-muted small">toggle publish/draft ได้โดยตรงจากตารางนี้</p>
+    <h4 class="page-title">บทความ</h4>
+    <div class="page-subtitle">จัดการบทความ + Content Backlog</div>
   </div>
-  <div class="d-flex align-items-center gap-2">
-    {% if draft_count > 0 %}
-      <span class="badge rounded-pill badge-draft-count">{{ draft_count }} draft</span>
-    {% endif %}
-    <a href="/admin/blog/article/add/" target="_blank" rel="noopener"
-       class="btn btn-sm btn-app-filled btn-app">
-      <i class="bi bi-plus-lg me-1"></i>เขียนบทความใหม่
-    </a>
-  </div>
-</div>
-
-{# ── Filter Tabs ──────────────────────────────────────────────────────────── #}
-<div class="d-flex flex-wrap gap-2 mb-3">
-  <a href="{% url 'dashboard:blog' %}"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter %}active{% endif %}">
-    ทั้งหมด
-  </a>
-  <a href="{% url 'dashboard:blog' %}?status=published"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'published' %}active{% endif %}">
-    Published
-  </a>
-  <a href="{% url 'dashboard:blog' %}?status=draft"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'draft' %}active{% endif %}">
-    Draft
+  <a href="/admin/blog/article/add/" target="_blank" rel="noopener" class="btn btn-gold btn-sm px-3">
+    <i class="bi bi-plus-lg me-1"></i>เขียนบทความใหม่
   </a>
 </div>
 
-{# ── Articles Table ───────────────────────────────────────────────────────── #}
-<div class="card border" style="border-radius:.6rem">
-  <div class="card-body p-0">
+{# ── Tabs: บทความ / Backlog ───────────────────────────────────────────────── #}
+<div class="ud-panel">
+  <div class="ud-panel-head p-0" style="background:transparent;border-bottom:none;">
+    <ul class="nav nav-tabs px-3 pt-2" style="gap:.25rem;">
+      <li class="nav-item">
+        <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#tab-articles" style="font-size:.85rem;">
+          <i class="bi bi-file-earmark-text me-1"></i>บทความ
+          {% if draft_count > 0 %}<span class="badge ms-1" style="background:var(--app-secondary);font-size:.6rem;">{{ draft_count }} draft</span>{% endif %}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#tab-backlog" style="font-size:.85rem;">
+          <i class="bi bi-list-task me-1"></i>Backlog
+          {% if backlog_pending %}<span class="badge ms-1" style="background:rgba(201,169,110,.2);color:var(--brand-gold);font-size:.6rem;">{{ backlog_pending|length }}</span>{% endif %}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+
+    {# === TAB 1: Articles === #}
+    <div class="tab-pane fade show active" id="tab-articles">
+
+      {# Filter row #}
+      <div class="d-flex flex-wrap gap-2 px-3 pt-3 pb-2">
+        <a href="{% url 'dashboard:blog' %}" class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter %}active{% endif %}">ทั้งหมด</a>
+        <a href="{% url 'dashboard:blog' %}?status=published" class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'published' %}active{% endif %}">Published</a>
+        <a href="{% url 'dashboard:blog' %}?status=draft" class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'draft' %}active{% endif %}">Draft</a>
+      </div>
+
+      <div class="p-0">
     {% if articles %}
     <div class="table-responsive">
       <table class="table table-blog table-hover mb-0">
@@ -235,8 +242,76 @@
       </a>
     </div>
     {% endif %}
-  </div>
-</div>
+      </div>
+    </div>{# /tab-pane articles #}
+
+    {# === TAB 2: Content Backlog === #}
+    <div class="tab-pane fade" id="tab-backlog">
+      <div class="p-3">
+        {% if backlog_pending %}
+        <div class="ds-section-label mb-3">รอดำเนินการ ({{ backlog_pending|length }})</div>
+        <div class="ds-table-wrap mb-4">
+          <div class="ds-table-scroll">
+            <table class="ds-table">
+              <thead>
+                <tr><th>#</th><th>หัวข้อ</th><th>Keyword</th><th>Priority</th><th>สถานะ</th></tr>
+              </thead>
+              <tbody>
+                {% for item in backlog_pending %}
+                <tr>
+                  <td class="td-muted">{{ item.num }}</td>
+                  <td class="td-primary">{{ item.topic }}</td>
+                  <td class="td-muted">{{ item.keyword|default:"—" }}</td>
+                  <td>
+                    <span class="ds-badge {% if item.priority == 'P1' %}ds-badge-danger{% elif item.priority == 'P2' %}ds-badge-warning{% else %}ds-badge-muted{% endif %}">
+                      {{ item.priority|default:"—" }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="ds-badge {% if item.status == 'review' %}ds-badge-gold{% else %}ds-badge-blue{% endif %}">
+                      {{ item.status }}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if backlog_done %}
+        <div class="ds-section-label mb-3">เสร็จแล้ว ({{ backlog_done|length }})</div>
+        <div class="ds-table-wrap">
+          <div class="ds-table-scroll">
+            <table class="ds-table">
+              <thead><tr><th>#</th><th>หัวข้อ</th><th>Keyword</th></tr></thead>
+              <tbody>
+                {% for item in backlog_done %}
+                <tr style="opacity:.55;">
+                  <td class="td-muted">{{ item.num }}</td>
+                  <td style="text-decoration:line-through;color:#94a3b8;">{{ item.topic }}</td>
+                  <td class="td-muted">{{ item.keyword|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if not backlog_pending and not backlog_done %}
+        <div class="ds-empty-state">
+          <i class="bi bi-list-task empty-icon"></i>
+          <div class="empty-title">ยังไม่มี Backlog</div>
+          <div class="empty-sub">เพิ่มหัวข้อใน content_backlog/BACKLOG.md</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>{# /tab-pane backlog #}
+
+  </div>{# /tab-content #}
+</div>{# /ud-panel #}
 
 {# ── Toast Feedback ───────────────────────────────────────────────────────── #}
 <div id="statusToast" class="toast toast-feedback align-items-center border-0" role="alert"

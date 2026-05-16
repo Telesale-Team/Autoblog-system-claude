@@ -51,44 +51,6 @@ class Campaign(models.Model):
         return 0
 
 
-# === CONTENT CALENDAR ===
-
-class ContentCalendar(models.Model):
-
-    class Channel(models.TextChoices):
-        BLOG     = "blog",     "Blog"
-        LINE     = "line",     "LINE"
-        FACEBOOK = "facebook", "Facebook"
-        LINKEDIN = "linkedin", "LinkedIn"
-        YOUTUBE  = "youtube",  "YouTube"
-        OTHER    = "other",    "อื่นๆ"
-
-    class Status(models.TextChoices):
-        IDEA        = "idea",        "Idea"
-        BRIEFED     = "briefed",     "Briefed"
-        IN_PROGRESS = "in_progress", "In Progress"
-        REVIEW      = "review",      "Review"
-        SCHEDULED   = "scheduled",   "Scheduled"
-        PUBLISHED   = "published",   "Published"
-        CANCELLED   = "cancelled",   "Cancelled"
-
-    article        = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="บทความ", related_name="calendar_slots")
-    title          = models.CharField("หัวข้อ (ถ้ายังไม่มีบทความ)", max_length=300, blank=True)
-    scheduled_date = models.DateTimeField("วันเผยแพร่ที่กำหนด")
-    channel        = models.CharField("ช่องทาง", max_length=10, choices=Channel.choices, default=Channel.BLOG)
-    assigned_agent = models.CharField("Agent รับผิดชอบ", max_length=100, blank=True)
-    status         = models.CharField("สถานะ", max_length=15, choices=Status.choices, default=Status.IDEA)
-    notes          = models.TextField("หมายเหตุ", blank=True)
-    created_at     = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Content Calendar"
-        verbose_name_plural = "Content Calendar"
-        ordering = ["scheduled_date"]
-
-    def __str__(self):
-        return self.title or (self.article.title if self.article else f"Content #{self.pk}")
-
 
 # === KEYWORD ===
 
