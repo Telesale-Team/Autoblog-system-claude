@@ -47,124 +47,78 @@
 
       <!-- === Doc: Team Manual === -->
       <div class="doc-item active"
-           role="listitem"
+           role="listitem" tabindex="0" aria-selected="true"
            data-doc-id="team-manual"
            data-doc-title="Team Manual"
            data-doc-desc="คู่มือการทำงานร่วมกันของทีม"
            data-doc-audience="all"
-           data-doc-url="{% url 'dashboard:docs_content' 'team-manual' %}"
-           tabindex="0"
-           aria-selected="true">
-        <div class="doc-item__icon-wrap">
-          <i class="bi bi-people-fill doc-item__icon"></i>
-        </div>
-        <div class="doc-item__body">
-          <div class="doc-item__title">Team Manual</div>
-          <div class="doc-item__meta">
-            <span class="audience-badge audience-badge--all">
-              <i class="bi bi-globe2 me-1"></i>ทุกคน
-            </span>
-            <span class="docs-viewer__divider">·</span>
-            <span>คู่มือทีม</span>
-          </div>
-        </div>
-      </div><!-- /team-manual -->
+           data-doc-url="{% url 'dashboard:docs_content' 'team-manual' %}">
+        <i class="bi bi-people-fill doc-item__icon"></i>
+        <span class="doc-item__title">Team Manual</span>
+        <span class="doc-item__audience">
+          <span class="audience-badge audience-badge--all">ทุกคน</span>
+        </span>
+      </div>
 
       <!-- === Doc: OpenClaw Manual === -->
       <div class="doc-item"
-           role="listitem"
+           role="listitem" tabindex="0"
            data-doc-id="openclaw-manual"
            data-doc-title="OpenClaw Manual"
            data-doc-desc="คู่มือการใช้งาน OpenClaw Platform"
            data-doc-audience="tech"
-           data-doc-url="{% url 'dashboard:docs_content' 'openclaw-manual' %}"
-           tabindex="0">
-        <div class="doc-item__icon-wrap">
-          <i class="bi bi-terminal-fill doc-item__icon"></i>
-        </div>
-        <div class="doc-item__body">
-          <div class="doc-item__title">OpenClaw Manual</div>
-          <div class="doc-item__meta">
-            <span class="audience-badge audience-badge--tech">
-              <i class="bi bi-code-slash me-1"></i>Tech
-            </span>
-            <span class="docs-viewer__divider">·</span>
-            <span>Platform guide</span>
-          </div>
-        </div>
-      </div><!-- /openclaw-manual -->
+           data-doc-url="{% url 'dashboard:docs_content' 'openclaw-manual' %}">
+        <i class="bi bi-terminal-fill doc-item__icon"></i>
+        <span class="doc-item__title">OpenClaw Manual</span>
+        <span class="doc-item__audience">
+          <span class="audience-badge audience-badge--tech">Tech</span>
+        </span>
+      </div>
 
       <!-- === Doc: Product Strategy === -->
       <div class="doc-item"
-           role="listitem"
+           role="listitem" tabindex="0"
            data-doc-id="product-strategy"
            data-doc-title="Product Strategy"
            data-doc-desc="กลยุทธ์ผลิตภัณฑ์และแผนการพัฒนา"
            data-doc-audience="owner"
-           data-doc-url="{% url 'dashboard:docs_content' 'product-strategy' %}"
-           tabindex="0">
-        <div class="doc-item__icon-wrap">
-          <i class="bi bi-rocket-takeoff-fill doc-item__icon"></i>
-        </div>
-        <div class="doc-item__body">
-          <div class="doc-item__title">Product Strategy</div>
-          <div class="doc-item__meta">
-            <span class="audience-badge audience-badge--owner">
-              <i class="bi bi-shield-lock me-1"></i>Owner
-            </span>
-            <span class="docs-viewer__divider">·</span>
-            <span>Strategic plan</span>
-          </div>
-        </div>
-      </div><!-- /product-strategy -->
+           data-doc-url="{% url 'dashboard:docs_content' 'product-strategy' %}">
+        <i class="bi bi-rocket-takeoff-fill doc-item__icon"></i>
+        <span class="doc-item__title">Product Strategy</span>
+        <span class="doc-item__audience">
+          <span class="audience-badge audience-badge--owner">Owner</span>
+        </span>
+      </div>
 
       <!-- === Doc: Action Plan === -->
       <div class="doc-item"
-           role="listitem"
+           role="listitem" tabindex="0"
            data-doc-id="action-plan"
            data-doc-title="Action Plan"
            data-doc-desc="แผนปฏิบัติการ 60 วัน"
            data-doc-audience="all"
-           data-doc-url="{% url 'dashboard:docs_content' 'action-plan' %}"
-           tabindex="0">
-        <div class="doc-item__icon-wrap">
-          <i class="bi bi-kanban-fill doc-item__icon"></i>
-        </div>
-        <div class="doc-item__body">
-          <div class="doc-item__title">Action Plan</div>
-          <div class="doc-item__meta">
-            <span class="audience-badge audience-badge--all">
-              <i class="bi bi-globe2 me-1"></i>ทุกคน
-            </span>
-            <span class="docs-viewer__divider">·</span>
-            <span>60-Day roadmap</span>
-          </div>
-        </div>
-      </div><!-- /action-plan -->
+           data-doc-url="{% url 'dashboard:docs_content' 'action-plan' %}">
+        <i class="bi bi-kanban-fill doc-item__icon"></i>
+        <span class="doc-item__title">Action Plan</span>
+        <span class="doc-item__audience">
+          <span class="audience-badge audience-badge--all">ทุกคน</span>
+        </span>
+      </div>
 
       <!-- === Doc: Salepage === -->
       <div class="doc-item"
-           role="listitem"
+           role="listitem" tabindex="0"
            data-doc-id="salepage"
            data-doc-title="Salepage Copy"
            data-doc-desc="สคริปต์และ copy สำหรับทีมขาย"
            data-doc-audience="sales"
-           data-doc-url="{% url 'dashboard:docs_content' 'salepage' %}"
-           tabindex="0">
-        <div class="doc-item__icon-wrap">
-          <i class="bi bi-megaphone-fill doc-item__icon"></i>
-        </div>
-        <div class="doc-item__body">
-          <div class="doc-item__title">Salepage Copy</div>
-          <div class="doc-item__meta">
-            <span class="audience-badge audience-badge--sales">
-              <i class="bi bi-currency-dollar me-1"></i>Sales
-            </span>
-            <span class="docs-viewer__divider">·</span>
-            <span>สคริปต์ขาย</span>
-          </div>
-        </div>
-      </div><!-- /salepage -->
+           data-doc-url="{% url 'dashboard:docs_content' 'salepage' %}">
+        <i class="bi bi-megaphone-fill doc-item__icon"></i>
+        <span class="doc-item__title">Salepage Copy</span>
+        <span class="doc-item__audience">
+          <span class="audience-badge audience-badge--sales">Sales</span>
+        </span>
+      </div>
 
     </nav><!-- /docsList -->
 
