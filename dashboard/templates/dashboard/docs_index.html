@@ -1,117 +1,86 @@
-{% load static %}<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Internal Docs — AIBiz Admin</title>
+{% extends "base.html" %}
+{% load static %}
 
-  <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}">
-  <link rel="stylesheet" href="{% static 'vendor/adminlte3/css/adminlte.min.css' %}">
-  <link rel="stylesheet" href="{% static 'vendor/sarabun/sarabun.css' %}">
-  <style>body{ font-family:'Sarabun','Source Sans Pro',sans-serif; }</style>
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
+{% block title %}คู่มือทีม — Dashboard{% endblock %}
 
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <ul class="navbar-nav">
-      <li class="nav-item"><a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a></li>
-      <li class="nav-item d-none d-sm-inline-block"><a href="{% url 'dashboard:index' %}" class="nav-link">Dashboard</a></li>
-      <li class="nav-item d-none d-sm-inline-block"><a href="/" target="_blank" class="nav-link">ดูเว็บไซต์</a></li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="/admin/logout/"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a></li>
-    </ul>
-  </nav>
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">คู่มือทีม</li>
+{% endblock %}
 
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="{% url 'dashboard:index' %}" class="brand-link">
-      <span class="brand-text font-weight-light"><strong>AI</strong>Biz Thailand</span>
-    </a>
-    <div class="sidebar">
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="info"><a href="#" class="d-block">{{ request.user.username }}</a></div>
-      </div>
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-          <li class="nav-item"><a href="{% url 'dashboard:index' %}" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Dashboard</p></a></li>
-          <li class="nav-header">CONTENT</li>
-          <li class="nav-item"><a href="/admin/blog/article/" class="nav-link"><i class="nav-icon fas fa-newspaper"></i><p>บทความ</p></a></li>
-          <li class="nav-item"><a href="/admin/portfolio/casestudy/" class="nav-link"><i class="nav-icon fas fa-briefcase"></i><p>Case Studies</p></a></li>
-          <li class="nav-header">CRM</li>
-          <li class="nav-item"><a href="/admin/pages/contactlead/" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Leads</p></a></li>
-          <li class="nav-header">REFERENCE</li>
-          <li class="nav-item"><a href="{% url 'dashboard:docs_index' %}" class="nav-link active"><i class="nav-icon fas fa-book"></i><p>Internal Docs</p></a></li>
-          <li class="nav-header">SYSTEM</li>
-          <li class="nav-item"><a href="/admin/auth/user/" class="nav-link"><i class="nav-icon fas fa-users"></i><p>ผู้ใช้งาน</p></a></li>
-          <li class="nav-item"><a href="/" target="_blank" class="nav-link"><i class="nav-icon fas fa-external-link-alt"></i><p>ดูเว็บไซต์</p></a></li>
-        </ul>
-      </nav>
-    </div>
-  </aside>
+{% block content %}
 
-  <div class="content-wrapper">
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6"><h1 class="m-0">Internal Docs</h1></div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
-              <li class="breadcrumb-item active">Internal Docs</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <section class="content">
-      <div class="container-fluid">
-        <div class="callout callout-info">
-          <h5><i class="fas fa-info-circle"></i> เอกสารอ้างอิงภายในทีม</h5>
-          เอกสารต่อไปนี้เป็น reference สำหรับทีมงานเท่านั้น (staff only) — ใช้สำหรับเรียนรู้ผลิตภัณฑ์, กลยุทธ์, และวิธีการทำงานของระบบ
-        </div>
-
-        <div class="row">
-          {% for doc in docs %}
-          <div class="col-md-6 col-lg-4 mb-3">
-            <div class="card card-{{ doc.color }} card-outline h-100">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="{{ doc.icon }} mr-2 text-{{ doc.color }}"></i>{{ doc.title }}
-                </h3>
-              </div>
-              <div class="card-body">
-                <p class="text-muted">{{ doc.description }}</p>
-                <p class="mb-0"><small><strong>เหมาะกับ:</strong> {{ doc.audience }}</small></p>
-              </div>
-              <div class="card-footer">
-                <a href="{% url 'dashboard:docs_view' doc.slug %}" target="_blank" class="btn btn-{{ doc.color }} btn-sm">
-                  <i class="fas fa-book-open"></i> เปิดอ่าน
-                </a>
-                <small class="float-right text-muted pt-1">{{ doc.filename }}</small>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-
-        <div class="callout callout-warning mt-3">
-          <h5><i class="fas fa-folder-open"></i> ที่อยู่ไฟล์</h5>
-          ไฟล์ทั้งหมดเก็บที่ <code>docs/</code> ในโปรเจกต์ — แก้ไขโดยตรงได้ผ่าน editor หรือ git
-        </div>
-      </div>
-    </section>
+<!-- === Header === -->
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">
+      <i class="bi bi-journal-bookmark-fill me-2" style="color:var(--brand-gold)"></i>คู่มือทีม
+    </h4>
+    <p class="text-secondary mb-0 mt-1" style="font-size:.87rem">
+      เอกสารอ้างอิงภายในทีม — สำหรับ staff เท่านั้น
+    </p>
   </div>
-
-  <footer class="main-footer">
-    <strong>© {% now "Y" %} <a href="/">AIBiz Thailand</a>.</strong>
-    <div class="float-right d-none d-sm-inline-block"><b>Internal Docs</b> v1.0</div>
-  </footer>
 </div>
 
-<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'vendor/adminlte3/js/adminlte.min.js' %}"></script>
-</body>
-</html>
+<!-- === Info Banner === -->
+<div class="alert-smart primary mb-4 d-flex align-items-start gap-2">
+  <i class="bi bi-info-circle-fill mt-1" style="color:var(--brand-gold)"></i>
+  <span>
+    เอกสารต่อไปนี้เป็น reference สำหรับทีมงานเท่านั้น —
+    ใช้เรียนรู้ผลิตภัณฑ์, กลยุทธ์, และวิธีการทำงานของระบบ
+  </span>
+</div>
+
+<!-- === Docs Grid === -->
+<div class="row g-3">
+  {% for doc in docs %}
+  <div class="col-md-6 col-lg-4">
+    <div class="stat-card h-100 d-flex flex-column" style="border-radius:.6rem;padding:0;overflow:hidden">
+
+      <!-- Card Header -->
+      <div class="d-flex align-items-center gap-3 p-3" style="border-bottom:1px solid var(--bs-border-color)">
+        <div class="stat-icon" style="width:38px;height:38px;font-size:1.1rem;flex-shrink:0">
+          <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <div class="fw-700" style="font-size:.92rem;font-weight:700;line-height:1.3">{{ doc.title }}</div>
+      </div>
+
+      <!-- Card Body -->
+      <div class="p-3 flex-grow-1">
+        <p class="text-secondary mb-2" style="font-size:.85rem">{{ doc.description }}</p>
+        <p class="mb-0" style="font-size:.78rem">
+          <span class="text-secondary">เหมาะกับ:</span>
+          <span class="fw-600">{{ doc.audience }}</span>
+        </p>
+      </div>
+
+      <!-- Card Footer -->
+      <div class="d-flex align-items-center justify-content-between p-3"
+           style="border-top:1px solid var(--bs-border-color);background:rgba(201,169,110,.03)">
+        <a href="{% url 'dashboard:docs_view' doc.slug %}" target="_blank"
+           class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-book me-1"></i> เปิดอ่าน
+        </a>
+        <small class="text-secondary" style="font-size:.72rem">{{ doc.filename }}</small>
+      </div>
+
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="text-center text-secondary py-5">
+      <i class="bi bi-journal-x" style="font-size:2.5rem;opacity:.3"></i>
+      <p class="mt-2 mb-0">ยังไม่มีเอกสาร</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- === File Location Note === -->
+<div class="alert-smart warning mt-4 d-flex align-items-start gap-2">
+  <i class="bi bi-folder-fill mt-1" style="color:#856404"></i>
+  <span>
+    ไฟล์ทั้งหมดเก็บที่ <code>docs/</code> ในโปรเจกต์ — แก้ไขได้โดยตรงผ่าน editor หรือ git
+  </span>
+</div>
+
+{% endblock %}
