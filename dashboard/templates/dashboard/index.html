@@ -49,6 +49,39 @@
     border-radius: 8px; padding: .3rem .75rem;
   }
 
+  /* === KPI Cards (ตรงกับ ud-chart-card) === */
+  .ud-kpi-card {
+    background: var(--dash-surface, #111827);
+    border: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    border-top: 2px solid var(--brand-gold, #c9a96e);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    height: 100%;
+    box-shadow: var(--shadow-card, 0 4px 24px rgba(0,0,0,.35));
+    transition: box-shadow var(--transition-ui,.18s), transform var(--transition-ui,.18s);
+  }
+  .ud-kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
+  .ud-kpi-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(201,169,110,.12); border: 1px solid rgba(201,169,110,.2);
+    color: var(--brand-gold, #c9a96e);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-bottom: .75rem;
+  }
+  .ud-kpi-value {
+    font-size: 1.75rem; font-weight: 700; color: #f1f5f9;
+    line-height: 1.1; margin-bottom: .2rem;
+  }
+  .ud-kpi-denom { font-size: .95rem; opacity: .5; }
+  .ud-kpi-label {
+    font-size: .72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--brand-muted, #94a3b8);
+    margin-bottom: .3rem;
+  }
+  .ud-kpi-sub { font-size: .78rem; color: var(--brand-muted, #94a3b8); }
+  .ud-kpi-sub.sub-up   { color: #10b981; }
+  .ud-kpi-sub.sub-down { color: #f87171; }
+
   /* === Unified Dashboard === */
   .ud-chart-card {
     background: var(--dash-surface, #111827);
@@ -164,21 +197,21 @@
 <!-- === ROW 1: KPI Cards === -->
 <div class="row g-3 mb-3">
   <div class="col-6 col-xl-3">
-    <div class="ds-card-stat">
-      <div class="stat-icon"><i class="bi bi-person-plus-fill"></i></div>
-      <div class="stat-value">{{ leads_today|intcomma }}</div>
-      <div class="stat-label">Lead ใหม่วันนี้</div>
-      <div class="stat-delta flat">MQL สะสม {{ mql_total|intcomma }}</div>
+    <div class="ud-kpi-card">
+      <div class="ud-kpi-icon"><i class="bi bi-person-plus-fill"></i></div>
+      <div class="ud-kpi-value">{{ leads_today|intcomma }}</div>
+      <div class="ud-kpi-label">Lead ใหม่วันนี้</div>
+      <div class="ud-kpi-sub">MQL สะสม {{ mql_total|intcomma }}</div>
     </div>
   </div>
   <div class="col-6 col-xl-3">
-    <div class="ds-card-stat">
-      <div class="stat-icon" style="background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.2);color:#60a5fa;">
+    <div class="ud-kpi-card">
+      <div class="ud-kpi-icon" style="background:rgba(96,165,250,.12);border-color:rgba(96,165,250,.2);color:#60a5fa;">
         <i class="bi bi-funnel-fill"></i>
       </div>
-      <div class="stat-value" style="color:#60a5fa;">{{ active_pipeline|intcomma }}</div>
-      <div class="stat-label">Active Pipeline</div>
-      <div class="stat-delta {% if leads_delta_pct > 0 %}up{% elif leads_delta_pct < 0 %}down{% else %}flat{% endif %}">
+      <div class="ud-kpi-value" style="color:#60a5fa;">{{ active_pipeline|intcomma }}</div>
+      <div class="ud-kpi-label">Active Pipeline</div>
+      <div class="ud-kpi-sub {% if leads_delta_pct > 0 %}sub-up{% elif leads_delta_pct < 0 %}sub-down{% endif %}">
         {% if leads_delta_pct > 0 %}<i class="bi bi-arrow-up-short"></i>{{ leads_delta_pct }}% MoM
         {% elif leads_delta_pct < 0 %}<i class="bi bi-arrow-down-short"></i>{{ leads_delta_pct|cut:"-" }}% MoM
         {% else %}<i class="bi bi-dash"></i>เท่าเดือนที่แล้ว{% endif %}
@@ -186,23 +219,23 @@
     </div>
   </div>
   <div class="col-6 col-xl-3">
-    <div class="ds-card-stat">
-      <div class="stat-icon" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.2);color:#34d399;">
+    <div class="ud-kpi-card">
+      <div class="ud-kpi-icon" style="background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.2);color:#34d399;">
         <i class="bi bi-eye-fill"></i>
       </div>
-      <div class="stat-value" style="color:#34d399;">{{ total_views|intcomma }}</div>
-      <div class="stat-label">Blog Views สะสม</div>
-      <div class="stat-delta flat">{{ published_articles }} บทความ published</div>
+      <div class="ud-kpi-value" style="color:#34d399;">{{ total_views|intcomma }}</div>
+      <div class="ud-kpi-label">Blog Views สะสม</div>
+      <div class="ud-kpi-sub">{{ published_articles }} บทความ published</div>
     </div>
   </div>
   <div class="col-6 col-xl-3">
-    <div class="ds-card-stat">
-      <div class="stat-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2);color:#fbbf24;">
+    <div class="ud-kpi-card">
+      <div class="ud-kpi-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2);color:#fbbf24;">
         <i class="bi bi-pencil-square"></i>
       </div>
-      <div class="stat-value" style="color:#fbbf24;">{{ articles_this_week }}<span style="font-size:.9rem;opacity:.6;">/{{ article_weekly_goal }}</span></div>
-      <div class="stat-label">บทความสัปดาห์นี้</div>
-      <div class="stat-delta {% if articles_this_week >= article_weekly_goal %}up{% else %}down{% endif %}">
+      <div class="ud-kpi-value" style="color:#fbbf24;">{{ articles_this_week }}<span class="ud-kpi-denom">/{{ article_weekly_goal }}</span></div>
+      <div class="ud-kpi-label">บทความสัปดาห์นี้</div>
+      <div class="ud-kpi-sub {% if articles_this_week >= article_weekly_goal %}sub-up{% else %}sub-down{% endif %}">
         {% if articles_this_week >= article_weekly_goal %}<i class="bi bi-check-circle me-1"></i>ครบเป้า
         {% else %}<i class="bi bi-exclamation-circle me-1"></i>ขาดอีก {{ article_weekly_goal|add:"-"|add:articles_this_week }} ชิ้น{% endif %}
       </div>
