@@ -921,6 +921,29 @@
   line-height: 1;
 }
 
+/* Toggle done button บน event card */
+.fc-ev-toggle {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,.55);
+  font-size: .72rem;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: none;        /* ซ่อนไว้ แสดงเมื่อ hover */
+  align-items: center;
+  margin-left: auto;
+  transition: color .15s;
+}
+.fc-event:hover .fc-ev-toggle { display: flex; }
+.fc-ev-toggle:hover { color: #fff; }
+.fc-event.fc-event-completed .fc-ev-toggle {
+  display: flex;        /* งาน done แสดงเสมอ */
+  color: #10b981;
+}
+.fc-event.fc-event-completed .fc-ev-toggle:hover { color: #f87171; }
+
 
 /* =============================================================
    [cal-header-bar] — Premium Header Redesign v2

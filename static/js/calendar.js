@@ -301,19 +301,46 @@ document.addEventListener('DOMContentLoaded', function () {
         };
       }
 
-      /* Default: Bootstrap Icon (สี category) + title */
+      const done   = !!(arg.event.extendedProps && arg.event.extendedProps.isCompleted);
+      const evId   = arg.event.extendedProps && (arg.event.extendedProps.dbId || arg.event.id);
+      const canToggle = !!(evId && !String(evId).startsWith('temp'));
+
+      /* Default: Bootstrap Icon (สี category) + title + toggle */
       return {
         html: '<div class="fc-event-inner">'
             + '<i class="bi ' + (cfg.bsIcon || 'bi-flag-fill') + ' cal-ev-icon"'
             + ' style="color:' + cfg.color + ';opacity:1;filter:brightness(1.15);">'
             + '</i>'
             + '<span class="fc-event-title-text">' + arg.event.title + '</span>'
+            + (canToggle
+              ? '<button class="fc-ev-toggle" data-id="' + evId + '" data-done="' + done + '" title="' + (done ? 'ยกเลิกเสร็จ' : 'เสร็จแล้ว') + '">'
+                + '<i class="bi ' + (done ? 'bi-check-circle-fill' : 'bi-circle') + '"></i>'
+                + '</button>'
+              : '')
             + '</div>',
       };
     },
 
     /* eventDidMount: เรียกทุกครั้งที่ event render บน calendar */
     eventDidMount: function (info) {
+
+      /* Toggle done button บน card */
+      const toggleBtn = info.el.querySelector('.fc-ev-toggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function (e) {
+          e.stopPropagation(); /* ไม่ trigger eventClick */
+          const evId   = toggleBtn.dataset.id;
+          const isDone = toggleBtn.dataset.done === 'true';
+          const newDone = !isDone;
+          fetch(API + evId + '/', {
+            method:  'PATCH',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+            body:    JSON.stringify({ is_completed: newDone }),
+          }).then(function () {
+            cal.refetchEvents();
+          });
+        });
+      }
 
       /* tooltip แสดง description เมื่อ hover */
       const desc = info.event.extendedProps.description;
