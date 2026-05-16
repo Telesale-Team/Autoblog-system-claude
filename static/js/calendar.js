@@ -34,17 +34,17 @@ document.addEventListener('DOMContentLoaded', function () {
      icon   = emoji fallback (ใช้ใน category badge ของ modal)            */
   const CAT_CFG = {
     milestone:    { color: '#c9a96e', label: 'แผน (Roadmap)',  icon: '🎯', bsIcon: 'bi-flag-fill',              filterGroup: 'milestone'                    },
-    action:       { color: '#3b5998', label: 'งานต้องทำ',      icon: '⚡', bsIcon: 'bi-lightning-charge-fill',  filterGroup: 'action'                       },
-    article:      { color: '#6b8cba', label: 'Actual',          icon: '📝', bsIcon: 'bi-newspaper',               filterGroup: 'actual'                       },
-    lead:         { color: '#7fa0c9', label: 'Actual',          icon: '👤', bsIcon: 'bi-person-check-fill',       filterGroup: 'actual'                       },
-    recurring:    { color: '#8fa8b8', label: 'Recurring',       icon: '🔄', bsIcon: 'bi-arrow-repeat',            filterGroup: 'recurring'                    },
-    content_plan: { color: '#5b7fa6', label: 'Content',         icon: '📄', bsIcon: 'bi-file-text-fill',          filterGroup: 'content'                      },
-    backlog:      { color: '#6b7f94', label: 'Content',         icon: '🗓️', bsIcon: 'bi-calendar2-week',          filterGroup: 'content'                      },
-    general:      { color: '#4e6680', label: 'งานของฉัน',      icon: '📌', bsIcon: 'bi-pin-fill',                filterGroup: 'user-event', userOwned: true   },
-    priority:     { color: '#b8924f', label: 'งานสำคัญ',       icon: '🔥', bsIcon: 'bi-exclamation-circle-fill', filterGroup: 'user-event', userOwned: true   },
-    meeting:      { color: '#4a6fa5', label: 'ประชุม',          icon: '👥', bsIcon: 'bi-people-fill',             filterGroup: 'user-event', userOwned: true   },
-    delivery:     { color: '#2d4373', label: 'ส่งมอบงาน',      icon: '📦', bsIcon: 'bi-box-seam',                filterGroup: 'user-event', userOwned: true   },
-    personal:     { color: '#9eb3c2', label: 'ส่วนตัว',         icon: '🙋', bsIcon: 'bi-person-heart',            filterGroup: 'user-event', userOwned: true   },
+    action:       { color: '#60a5fa', label: 'งานต้องทำ',      icon: '⚡', bsIcon: 'bi-lightning-charge-fill',  filterGroup: 'action'                       },
+    article:      { color: '#34d399', label: 'Actual',          icon: '📝', bsIcon: 'bi-newspaper',               filterGroup: 'actual'                       },
+    lead:         { color: '#10b981', label: 'Actual',          icon: '👤', bsIcon: 'bi-person-check-fill',       filterGroup: 'actual'                       },
+    recurring:    { color: '#a78bfa', label: 'Recurring',       icon: '🔄', bsIcon: 'bi-arrow-repeat',            filterGroup: 'recurring'                    },
+    content_plan: { color: '#fbbf24', label: 'Content',         icon: '📄', bsIcon: 'bi-file-text-fill',          filterGroup: 'content'                      },
+    backlog:      { color: '#f59e0b', label: 'Content',         icon: '🗓️', bsIcon: 'bi-calendar2-week',          filterGroup: 'content'                      },
+    general:      { color: '#94a3b8', label: 'งานของฉัน',      icon: '📌', bsIcon: 'bi-pin-fill',                filterGroup: 'user-event', userOwned: true   },
+    priority:     { color: '#c9a96e', label: 'งานสำคัญ',       icon: '🔥', bsIcon: 'bi-exclamation-circle-fill', filterGroup: 'user-event', userOwned: true   },
+    meeting:      { color: '#818cf8', label: 'ประชุม',          icon: '👥', bsIcon: 'bi-people-fill',             filterGroup: 'user-event', userOwned: true   },
+    delivery:     { color: '#2dd4bf', label: 'ส่งมอบงาน',      icon: '📦', bsIcon: 'bi-box-seam',                filterGroup: 'user-event', userOwned: true   },
+    personal:     { color: '#94a3b8', label: 'ส่วนตัว',         icon: '🙋', bsIcon: 'bi-person-heart',            filterGroup: 'user-event', userOwned: true   },
   };
   /* ถ้า category ไม่ match ใน CAT_CFG ใช้ milestone เป็น fallback */
   function getCfg(cat) { return CAT_CFG[cat] || { color: '#c9a96e', label: cat, icon: '•', bsIcon: 'bi-flag-fill', filterGroup: 'milestone' }; }

@@ -297,7 +297,19 @@
 
 /* ── Todo-style Event Detail Modal ─────────────────────────────────── */
 .todo-modal-dialog { max-width: 420px; }
-.todo-modal-content { border-radius: 1rem; border: 1px solid var(--bs-border-color); box-shadow: 0 8px 32px rgba(0,0,0,.18); overflow: hidden; position: relative; }
+.todo-modal-content {
+  border-radius: 14px;
+  border: 1px solid var(--dash-border, rgba(201,169,110,.18));
+  border-top: 2px solid var(--brand-gold, #c9a96e);
+  box-shadow: var(--shadow-card-hover, 0 8px 40px rgba(0,0,0,.55), 0 2px 8px rgba(201,169,110,.12));
+  overflow: hidden;
+  position: relative;
+  background: var(--dash-surface, var(--bs-body-bg));
+}
+[data-bs-theme="dark"] .todo-modal-content {
+  background: #111827;
+  border-color: rgba(201,169,110,.2);
+}
 .todo-modal-close { position: absolute; top: .85rem; right: .85rem; z-index: 10; opacity: .45; transition: opacity .15s; }
 .todo-modal-close:hover { opacity: .85; }
 
@@ -358,6 +370,17 @@
 [data-bs-theme="dark"] .todo-checkbox:hover { border-color: var(--app-primary,#c9a96e); }
 
 /* ── Add/Edit form modal ────────────────────────────────────────────── */
+#editEventModal .modal-content,
+#noteModal .modal-content {
+  border-radius: 14px;
+  border: 1px solid var(--dash-border, rgba(201,169,110,.18));
+  border-top: 2px solid var(--brand-gold, #c9a96e);
+  box-shadow: var(--shadow-card-hover, 0 8px 40px rgba(0,0,0,.55));
+  background: var(--dash-surface, var(--bs-body-bg));
+}
+[data-bs-theme="dark"] #editEventModal .modal-content,
+[data-bs-theme="dark"] #noteModal .modal-content { background: #111827; }
+
 .form-label-sm { font-size: .8rem; font-weight: 600; margin-bottom: .25rem; }
 .fc-cat-user-event { outline: 1.5px dashed rgba(255,255,255,.5) !important; }
 .modal-desc-item { font-size: .85rem; padding: .2rem 0; color: var(--bs-secondary-color); border-bottom: 1px solid var(--bs-border-color); }
