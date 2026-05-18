@@ -17,7 +17,8 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 from pages.models import ContactLead
-from blog.models import Article
+from blog.models import Article, Category, Tag
+from blog.forms import ArticleForm
 from portfolio.models import CaseStudy
 from dashboard.models import CalendarEvent
 
@@ -68,7 +69,7 @@ INTERNAL_DOCS = [
         "slug": "feature-roadmap",
         "filename": "feature_roadmap.html",
         "title": "Feature Roadmap",
-        "description": "แผนพัฒนา Feature ทั้งหมด 29 เมนู — จากการประชุมทีม 13 AI Agents พร้อม Data Model และ KPI",
+        "description": "แผนพัฒนา Feature ทั้งหมด 29 เมนู — จากการประชุมทีม 14 AI Agents พร้อม Data Model และ KPI",
         "audience": "owner",
         "bi_icon": "bi-map-fill",
     },
@@ -455,6 +456,30 @@ def article_toggle_status(request, pk):
             article.published_at = timezone.now()
     article.save(update_fields=["status", "published_at", "updated_at"])
     return JsonResponse({"ok": True, "status": article.status, "status_display": article.get_status_display()})
+
+
+@staff_member_required
+def article_edit(request, pk=None):
+    article = get_object_or_404(Article, pk=pk) if pk else None
+    if request.method == "POST":
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if not pk:
+                obj.author = request.user
+            if obj.status == "published" and not obj.published_at:
+                obj.published_at = timezone.now()
+            obj.save()
+            form.save_m2m()
+            return redirect("dashboard:article_edit", pk=obj.pk)
+    else:
+        form = ArticleForm(instance=article)
+    return render(request, "dashboard/article_edit.html", {
+        "form": form,
+        "article": article,
+        "is_new": article is None,
+        "categories": Category.objects.order_by("display_order", "name"),
+    })
 
 
 # ── Pipeline ─────────────────────────────────────────────────────────────────
@@ -1010,6 +1035,8 @@ def calendar_view(request):
         "recurring":    "งานประจำที่เกิดซ้ำทุกวัน/สัปดาห์",
         "content_plan": "แผน Content สำหรับ Blog และ Social",
         "backlog":      "หัวข้อ Content ที่รอเขียน",
+        "article":      "บทความที่ publish แล้ว",
+        "lead":         "Leads ที่เข้ามาในระบบ",
     }
 
     # Icon mapping for filter toolbar
@@ -1024,6 +1051,8 @@ def calendar_view(request):
         "recurring":    "bi-arrow-repeat",
         "content_plan": "bi-file-text-fill",
         "backlog":      "bi-calendar2-week",
+        "article":      "bi-newspaper",
+        "lead":         "bi-person-check-fill",
     }
     # Count งานแต่ละ category จาก DB
     from django.db.models import Count as DbCount
@@ -1034,12 +1063,16 @@ def calendar_view(request):
                                         .annotate(c=DbCount("id"))
     }
     # รวม published articles และ leads ใน count ด้วย
-    cat_counts["article"] = Article.objects.filter(status="published").count()
-    cat_counts["lead"]    = ContactLead.objects.count()
+    article_count = Article.objects.filter(status="published").count()
+    lead_count    = ContactLead.objects.count()
+    cat_counts["article"] = article_count
+    cat_counts["lead"]    = lead_count
 
-    # Total count สำหรับปุ่ม "ทั้งหมด"
-    total_count = CalendarEvent.objects.filter(is_system=True).count()
+    # Total count รวม articles + leads ด้วย
+    total_count = CalendarEvent.objects.filter(is_system=True).count() + article_count + lead_count
 
+    # สร้าง category_filters จาก CATEGORY_CHOICES + article + lead
+    _extra_cats = [("article", "บทความ"), ("lead", "Leads")]
     category_filters = [
         {
             "value":   value,
@@ -1048,7 +1081,8 @@ def calendar_view(request):
             "count":   cat_counts.get(value, 0),
             "tooltip": cat_tooltip_map.get(value, label),
         }
-        for value, label in CalendarEvent.CATEGORY_CHOICES
+        for value, label in list(CalendarEvent.CATEGORY_CHOICES) + _extra_cats
+        if cat_counts.get(value, 0) > 0   # แสดงเฉพาะ category ที่มี event
     ]
 
     return render(request, "dashboard/calendar.html", {
@@ -1059,6 +1093,7 @@ def calendar_view(request):
         "cal_stats":         cal_stats,
         "notes":             notes,
         "note_colors":       Note.Color.choices,
+        "docs_count":        len(INTERNAL_DOCS),
     })
 
 
@@ -1259,19 +1294,33 @@ def api_calendar_events(request):
             return JsonResponse({"error": "title และ start จำเป็น"}, status=400)
 
         evt = CalendarEvent.objects.create(
-            title       = title,
+            title          = title,
             start_datetime = parse_datetime(start) or timezone.now(),
             end_datetime   = parse_datetime(data["end"]) if data.get("end") else None,
-            all_day     = data.get("allDay", True),
-            category    = data.get("category", "general"),
-            description = data.get("description", ""),
-            color       = data.get("color", ""),
-            is_system   = False,
-            created_by  = request.user,
+            all_day        = data.get("allDay", True),
+            category       = data.get("category", "general"),
+            description    = data.get("description", ""),
+            color          = data.get("color", ""),
+            assigned_to    = data.get("assigned_to", ""),
+            is_system      = False,
+            created_by     = request.user,
         )
         return JsonResponse(evt.to_fc(), status=201)
 
     return JsonResponse({"error": "Method not allowed"}, status=405)
+
+
+@staff_member_required
+def api_ep_articles(request):
+    """คืน published articles ที่ title ขึ้นต้นด้วย 'EP X:' → { "EP 4": "/blog/slug/" }"""
+    import re as _re
+    from blog.models import Article
+    result = {}
+    for a in Article.objects.filter(status="published").only("title", "slug"):
+        m = _re.match(r"^(EP \d+):", a.title)
+        if m:
+            result[m.group(1)] = f"/blog/{a.slug}/"
+    return JsonResponse(result)
 
 
 @staff_member_required

@@ -1,54 +1,122 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg border-bottom">
-  <div class="container">
+<!-- === NAVBAR === -->
+<nav class="navbar navbar-expand-lg sticky-top site-navbar" aria-label="Main navigation">
+  <div class="container-fluid px-3 px-lg-4">
 
-    <!-- Brand / Logo -->
-    <a class="navbar-brand fw-bold fs-4 me-4" href="{% url 'pages:home' %}">
+    <!-- === BRAND / LOGO === -->
+    <a class="navbar-brand fw-bold fs-5 me-3 me-lg-4" href="{% url 'pages:home' %}">
       AI<span class="text-gold">Biz</span>
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Mobile toggler -->
+    <button class="navbar-toggler border-0 p-1" type="button"
+            data-bs-toggle="collapse" data-bs-target="#siteNav"
+            aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="siteNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+      <!-- === NAV LINKS — center === -->
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-1">
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'pages:home' %}">Home</a>
+          <a class="nav-link site-nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+             href="{% url 'pages:home' %}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.app_name == 'blog' %}active{% endif %}" href="{% url 'blog:list' %}">Blog</a>
+          <a class="nav-link site-nav-link {% if request.resolver_match.app_name == 'blog' %}active{% endif %}"
+             href="{% url 'blog:list' %}">Blog</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.app_name == 'portfolio' %}active{% endif %}" href="{% url 'portfolio:list' %}">Portfolio</a>
+          <a class="nav-link site-nav-link {% if request.resolver_match.app_name == 'portfolio' %}active{% endif %}"
+             href="{% url 'portfolio:list' %}">Portfolio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'pages:services' %}">Services</a>
+          <a class="nav-link site-nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}"
+             href="{% url 'pages:services' %}">Services</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'pages:about' %}">About</a>
+          <a class="nav-link site-nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+             href="{% url 'pages:about' %}">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'pages:contact' %}">Contact</a>
+          <a class="nav-link site-nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+             href="{% url 'pages:contact' %}">Contact</a>
         </li>
       </ul>
 
-      <!-- Search bar -->
-      <form class="d-flex" role="search" action="{% url 'blog:list' %}" method="get">
-        <div class="input-group input-group-sm">
-          <input class="form-control" type="search" name="q" placeholder="ค้นหาบทความ..." aria-label="Search" value="{{ request.GET.q }}">
-          <button class="btn btn-outline-primary" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
+      <!-- === SEARCH BAR — pill style, Ctrl+K badge === -->
+      <form class="d-flex align-items-center me-3 site-search-form"
+            role="search" action="{% url 'blog:list' %}" method="get">
+        <div class="site-search-wrap position-relative">
+          <i class="bi bi-search site-search-icon"></i>
+          <input class="form-control site-search-input"
+                 type="search" name="q"
+                 placeholder="ค้นหา..."
+                 aria-label="Search"
+                 value="{{ request.GET.q }}">
+          <kbd class="site-search-kbd">Ctrl K</kbd>
         </div>
       </form>
 
-      <!-- Social links -->
-      <div class="d-flex align-items-center gap-2 ms-3">
-        <a href="#" class="text-body-secondary" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="text-body-secondary" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-      </div>
-    </div>
+      <!-- === SOCIAL ICONS + THEME TOGGLE — right === -->
+      <div class="d-flex align-items-center gap-2">
 
+        <!-- Facebook -->
+        <a href="#" class="site-icon-link" aria-label="Facebook" title="Facebook">
+          <i class="bi bi-facebook fs-5"></i>
+        </a>
+
+        <!-- LinkedIn -->
+        <a href="#" class="site-icon-link" aria-label="LinkedIn" title="LinkedIn">
+          <i class="bi bi-linkedin fs-5"></i>
+        </a>
+
+        <!-- Divider -->
+        <span class="site-icon-divider d-none d-lg-block"></span>
+
+        <!-- Theme Toggle -->
+        <div class="dropdown">
+          <button class="btn btn-link site-icon-link p-1 dropdown-toggle-no-caret"
+                  id="navbarTheme" type="button"
+                  aria-expanded="false" data-bs-toggle="dropdown"
+                  aria-label="Toggle theme" title="เปลี่ยน theme">
+            <svg class="theme-icon-active" width="16" height="16" aria-hidden="true">
+              <use href="#circle-half"></use>
+            </svg>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="navbarTheme">
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center gap-2"
+                      data-bs-theme-value="light" aria-pressed="false">
+                <svg width="16" height="16" aria-hidden="true"><use href="#sun-fill"></use></svg>
+                Light
+                <svg class="ms-auto d-none" width="16" height="16" aria-hidden="true"><use href="#check2"></use></svg>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center gap-2"
+                      data-bs-theme-value="dark" aria-pressed="false">
+                <svg width="16" height="16" aria-hidden="true"><use href="#moon-stars-fill"></use></svg>
+                Dark
+                <svg class="ms-auto d-none" width="16" height="16" aria-hidden="true"><use href="#check2"></use></svg>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item d-flex align-items-center gap-2"
+                      data-bs-theme-value="auto" aria-pressed="true">
+                <svg width="16" height="16" aria-hidden="true"><use href="#circle-half"></use></svg>
+                Auto
+                <svg class="ms-auto" width="16" height="16" aria-hidden="true"><use href="#check2"></use></svg>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <!-- === END RIGHT SIDE === -->
+
+    </div>
   </div>
 </nav>
+<!-- === END NAVBAR === -->

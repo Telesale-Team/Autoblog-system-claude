@@ -149,24 +149,143 @@ body {
   line-height: 1.75;
 }
 
-/* Navbar */
-.navbar .nav-link { font-size: .92rem; font-weight: 500; }
-.navbar .nav-link:hover, .navbar .nav-link.active { color: var(--brand-gold) !important; }
+/* ============================================================
+   NAVBAR — Bootstrap docs style (Navy solid bg)
+   ============================================================ */
+
+/* Base navbar — solid navy bg, ข้อความขาว */
+.site-navbar {
+  background-color: var(--brand-navy);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+  min-height: 56px;
+}
+
+/* Brand */
+.site-navbar .navbar-brand {
+  color: #fff;
+  letter-spacing: -.01em;
+}
+.site-navbar .navbar-brand:hover { color: var(--brand-gold); }
 .navbar-brand span { color: var(--brand-gold); }
 
-/* Search box — gold border ทั้งกล่อง */
-.navbar .input-group,
-.navbar .input-group .form-control,
-.navbar .input-group .btn {
+/* Nav links — white, gold on hover/active */
+.site-nav-link {
+  color: rgba(255, 255, 255, .80) !important;
+  font-size: .875rem;
+  font-weight: 500;
+  padding: .4rem .65rem !important;
+  border-radius: 6px;
+  transition: color .15s, background-color .15s;
+}
+.site-nav-link:hover {
+  color: var(--brand-gold) !important;
+  background: rgba(201, 169, 110, .08);
+}
+.site-nav-link.active {
+  color: var(--brand-gold) !important;
+  background: rgba(201, 169, 110, .12);
+  font-weight: 600;
+}
+
+/* Toggler icon — white on dark bg */
+.site-navbar .navbar-toggler-icon {
+  filter: invert(1) grayscale(1) brightness(2);
+}
+.site-navbar .navbar-toggler { color: rgba(255,255,255,.75); }
+
+/* === SEARCH BAR — pill style === */
+.site-search-form { flex-shrink: 0; }
+
+.site-search-wrap {
+  display: flex;
+  align-items: center;
+}
+.site-search-icon {
+  position: absolute;
+  left: .65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, .5);
+  font-size: .85rem;
+  pointer-events: none;
+  z-index: 1;
+}
+.site-search-input {
+  background: rgba(255, 255, 255, .08) !important;
+  border: 1px solid rgba(255, 255, 255, .18) !important;
+  border-radius: 20px !important;
+  color: #fff !important;
+  font-size: .825rem;
+  padding: .35rem 4.5rem .35rem 2rem !important;
+  width: 210px;
+  transition: background .2s, border-color .2s, width .2s;
+  box-shadow: none !important;
+}
+.site-search-input::placeholder { color: rgba(255, 255, 255, .45); }
+.site-search-input:focus {
+  background: rgba(255, 255, 255, .13) !important;
   border-color: var(--brand-gold) !important;
+  width: 260px;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, .18) !important;
 }
-.navbar .form-control {
-  background: transparent;
-  box-shadow: none !important;
+
+/* Ctrl K badge inside search */
+.site-search-kbd {
+  position: absolute;
+  right: .5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .20);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, .60);
+  font-size: .65rem;
+  font-family: var(--font-th);
+  padding: .1rem .35rem;
+  pointer-events: none;
+  white-space: nowrap;
+  line-height: 1.4;
 }
-.navbar .form-control:focus {
-  background: transparent;
-  box-shadow: none !important;
+
+/* === SOCIAL / ICON LINKS === */
+.site-icon-link {
+  color: rgba(255, 255, 255, .65) !important;
+  text-decoration: none;
+  transition: color .15s;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.site-icon-link:hover { color: var(--brand-gold) !important; }
+
+/* Divider between social icons and theme toggle */
+.site-icon-divider {
+  width: 1px;
+  height: 1.2rem;
+  background: rgba(255, 255, 255, .20);
+}
+
+/* Theme toggle button — remove default btn-link underline/arrow */
+.dropdown-toggle-no-caret::after { display: none; }
+.btn-link.site-icon-link {
+  background: none;
+  border: none;
+  padding: .25rem .3rem;
+}
+
+/* Mobile collapse — dark bg continuity */
+@media (max-width: 991.98px) {
+  .site-navbar .navbar-collapse {
+    background: var(--brand-navy);
+    padding: .75rem 0;
+    border-top: 1px solid rgba(201, 169, 110, .12);
+    margin-top: .25rem;
+  }
+  .site-search-input { width: 100% !important; border-radius: 20px !important; }
+  .site-search-wrap { width: 100%; }
+  .site-search-form { width: 100%; margin-bottom: .5rem; }
+  .site-search-kbd { display: none; }
 }
 
 /* Hero gradient background */

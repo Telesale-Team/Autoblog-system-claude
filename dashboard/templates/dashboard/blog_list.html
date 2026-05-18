@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load humanize %}
 
+<!-- === blog_list.html — Article Table v2 | Design System Navy+Gold === -->
+
 {% block title %}จัดการบทความ — Dashboard{% endblock %}
 
 {% block breadcrumb %}
@@ -9,90 +11,15 @@
 
 {% block extra_css %}
 <style>
-  .table-blog th {
-    font-size: .72rem;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--bs-secondary-color);
-    font-weight: 600;
-    border-bottom-width: 1px;
-    white-space: nowrap;
-  }
-  .table-blog td { vertical-align: middle; font-size: .88rem; }
-
-  .filter-btn {
-    font-size: .8rem;
-    padding: .3rem .75rem;
-    border-radius: 999px;
-  }
-  .filter-btn.active {
-    background: var(--app-primary) !important;
-    border-color: var(--app-primary) !important;
-    color: #fff !important;
-  }
-
-  .toggle-btn {
-    font-size: .75rem;
-    padding: .25rem .7rem;
-    border-radius: 999px;
-    border: 1px solid;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background .15s, color .15s, opacity .15s;
-  }
-  .toggle-btn.published {
-    border-color: #198754;
-    color: #198754;
-    background: rgba(25,135,84,.08);
-  }
-  .toggle-btn.published:hover {
-    background: rgba(25,135,84,.18);
-  }
-  .toggle-btn.draft {
-    border-color: #ffc107;
-    color: #856404;
-    background: rgba(255,193,7,.1);
-  }
-  .toggle-btn.draft:hover {
-    background: rgba(255,193,7,.22);
-  }
-  .toggle-btn.saving { opacity: .45; pointer-events: none; }
-
-  .article-cover {
-    width: 48px;
-    height: 36px;
-    object-fit: cover;
-    border-radius: .3rem;
-    background: var(--bs-secondary-bg);
-  }
-  .article-cover-placeholder {
-    width: 48px;
-    height: 36px;
-    border-radius: .3rem;
-    background: var(--bs-secondary-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--bs-secondary-color);
-    font-size: 1rem;
-  }
-
-  .toast-feedback {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    z-index: 9999;
-    min-width: 220px;
-    font-size: .88rem;
-  }
-  .badge-draft-count {
-    background: var(--app-secondary);
-    color: #fff;
-  }
+  /* ============================================================
+     BLOG LIST — Article Table v2
+     Design System: Navy+Gold | Bootstrap 5 | Sarabun
+     ============================================================ */
 
   /* === Premium Tab Bar === */
   .prem-tabs {
-    display: flex; gap: 2px;
+    display: flex;
+    gap: 2px;
     padding: .75rem 1rem .5rem;
     border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
     background: rgba(201,169,110,.03);
@@ -100,12 +27,17 @@
   .prem-tab {
     padding: .45rem 1.1rem;
     border-radius: 6px 6px 0 0;
-    font-size: .84rem; font-weight: 600;
+    font-size: .84rem;
+    font-weight: 600;
     color: var(--brand-muted, #94a3b8);
-    border: 1px solid transparent; border-bottom: none;
-    cursor: pointer; text-decoration: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    cursor: pointer;
+    text-decoration: none;
     transition: color .15s, background .15s;
-    display: inline-flex; align-items: center; gap: .4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
   }
   .prem-tab:hover { color: var(--brand-gold, #c9a96e); background: rgba(201,169,110,.06); }
   .prem-tab.active {
@@ -116,32 +48,191 @@
     margin-bottom: -1px;
   }
 
-  /* Articles table header — gold */
-  .table-blog thead th {
-    color: var(--brand-gold, #c9a96e) !important;
-    background: rgba(201,169,110,.06);
+  /* === Filter Buttons === */
+  .filter-btn {
+    font-size: .8rem;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+  }
+  .filter-btn.active {
+    background: var(--brand-gold, #c9a96e) !important;
+    border-color: var(--brand-gold, #c9a96e) !important;
+    color: #0f172a !important;
   }
 
-  /* === Backlog Table extras === */
+  /* === Article Table Core === */
+  .table-blog {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table-blog thead tr {
+    border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
+  }
+  .table-blog thead th {
+    font-size: .71rem;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-weight: 700;
+    color: var(--brand-gold, #c9a96e);
+    background: rgba(201,169,110,.05);
+    border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    white-space: nowrap;
+    padding-top: .65rem;
+    padding-bottom: .65rem;
+  }
+  .table-blog tbody td {
+    vertical-align: middle;
+    font-size: .875rem;
+    border-bottom: 1px solid rgba(201,169,110,.07);
+    padding-top: .6rem;
+    padding-bottom: .6rem;
+    overflow: hidden;
+  }
+
+  /* === Clickable Row — gold left border บน td:first-child === */
+  .table-blog tbody tr.article-row { cursor: pointer; transition: background .12s; }
+  .table-blog tbody tr.article-row:hover { background: rgba(201,169,110,.055) !important; }
+  .table-blog tbody tr.article-row td:first-child {
+    border-left: 3px solid transparent;
+    transition: border-color .15s;
+    padding-left: calc(.75rem - 3px);
+  }
+  .table-blog tbody tr.article-row:hover td:first-child {
+    border-left-color: var(--brand-gold, #c9a96e);
+  }
+
+  /* === Cover Image === */
+  .article-cover,
+  .article-cover-placeholder {
+    width: 48px;
+    height: 36px;
+    border-radius: .35rem;
+    display: block;
+  }
+  .article-cover { object-fit: cover; background: rgba(201,169,110,.08); }
+  .article-cover-placeholder {
+    background: rgba(201,169,110,.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-gold, #c9a96e);
+    font-size: .95rem;
+    border: 1px solid rgba(201,169,110,.15);
+  }
+
+  /* === Title Cell === */
+  .art-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: .88rem;
+    color: #f1f5f9;
+    display: block;
+  }
+  .art-title a { color: inherit; text-decoration: none; }
+  .art-title a:hover { color: var(--brand-gold, #c9a96e) !important; }
+  .art-meta {
+    font-size: .73rem;
+    color: var(--brand-muted, #94a3b8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin-top: .1rem;
+  }
+
+  /* === Category Badge === */
+  .art-cat-badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    padding: .22rem .6rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: .02em;
+  }
+
+  /* === Status Badge === */
+  .art-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .22rem .6rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: .03em;
+  }
+  .art-status-badge.is-published {
+    background: rgba(16,185,129,.12);
+    color: #6ee7b7;
+    border: 1px solid rgba(16,185,129,.25);
+  }
+  .art-status-badge.is-draft {
+    background: rgba(251,191,36,.1);
+    color: #fcd34d;
+    border: 1px solid rgba(251,191,36,.25);
+  }
+
+  /* === Views === */
+  .art-views {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--brand-gold, #c9a96e);
+    white-space: nowrap;
+  }
+
+  /* === Toggle Button — fixed width ทั้ง 2 สถานะ === */
+  .toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .3rem;
+    width: 76px;
+    height: 28px;
+    font-size: .72rem;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s, opacity .15s;
+    letter-spacing: .02em;
+    background: transparent;
+  }
+  .toggle-btn.published { border-color: rgba(16,185,129,.4); color: #6ee7b7; background: rgba(16,185,129,.08); }
+  .toggle-btn.published:hover { background: rgba(16,185,129,.18); }
+  .toggle-btn.draft { border-color: rgba(201,169,110,.4); color: var(--brand-gold, #c9a96e); background: rgba(201,169,110,.08); }
+  .toggle-btn.draft:hover { background: rgba(201,169,110,.18); }
+  .toggle-btn.saving { opacity: .4; pointer-events: none; }
+
+  /* === Toast === */
+  .toast-feedback {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    min-width: 230px;
+    font-size: .875rem;
+  }
+
+  /* === Backlog Table === */
   .bl-num   { font-size: .7rem; color: var(--brand-muted, #94a3b8); font-weight: 600; }
   .bl-topic { font-size: .88rem; font-weight: 600; color: #f1f5f9; line-height: 1.4; }
   .bl-kw    { font-size: .78rem; color: var(--brand-muted, #94a3b8); margin-top: .15rem; }
 
-  /* Priority badges */
-  .bl-p1 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;
-    background:rgba(239,68,68,.15); color:#fca5a5; border:1px solid rgba(239,68,68,.3); }
-  .bl-p2 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;
-    background:rgba(245,158,11,.12); color:#fcd34d; border:1px solid rgba(245,158,11,.3); }
-  .bl-p3 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;
-    background:rgba(148,163,184,.08); color:var(--brand-muted,#94a3b8); border:1px solid rgba(148,163,184,.2); }
+  .bl-p1 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3); }
+  .bl-p2 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(245,158,11,.3); }
+  .bl-p3 { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:700;background:rgba(148,163,184,.08);color:var(--brand-muted,#94a3b8);border:1px solid rgba(148,163,184,.2); }
 
-  /* Status badges */
-  .s-pending  { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;
-    background:rgba(148,163,184,.1); color:var(--brand-muted,#94a3b8); border:1px solid rgba(148,163,184,.2); }
-  .s-review   { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;
-    background:rgba(201,169,110,.15); color:var(--brand-gold,#c9a96e); border:1px solid rgba(201,169,110,.3); }
-  .s-done     { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;
-    background:rgba(34,197,94,.12); color:#86efac; border:1px solid rgba(34,197,94,.25); }
+  .s-pending { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;background:rgba(148,163,184,.1);color:var(--brand-muted,#94a3b8);border:1px solid rgba(148,163,184,.2); }
+  .s-review  { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;background:rgba(201,169,110,.15);color:var(--brand-gold,#c9a96e);border:1px solid rgba(201,169,110,.3); }
+  .s-inprog  { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.25); }
+  .s-done    { display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:20px;font-size:.68rem;font-weight:600;background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.25); }
   .bl-done-row td { opacity: .5; }
   .bl-done-row .bl-topic { text-decoration: line-through; }
 </style>
@@ -149,26 +240,27 @@
 
 {% block content %}
 
-{# ── Page Header ─────────────────────────────────────────────────────────── #}
+<!-- === Page Header === -->
 <div class="ds-page-header d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
   <div>
     <h4 class="page-title">บทความ</h4>
     <div class="page-subtitle">จัดการบทความ + Content Backlog</div>
   </div>
-  <a href="/admin/blog/article/add/" target="_blank" rel="noopener" class="btn btn-gold btn-sm px-3">
+  <a href="{% url 'dashboard:article_new' %}" target="_blank" rel="noopener" class="btn btn-gold btn-sm px-3">
     <i class="bi bi-plus-lg me-1"></i>เขียนบทความใหม่
   </a>
 </div>
 
-{# ── Tabs: บทความ / Backlog ───────────────────────────────────────────────── #}
+<!-- === Tabs === -->
 <div class="ud-panel">
-  <!-- === Premium Tab Bar === -->
+
+  <!-- === Tab Bar === -->
   <div class="prem-tabs" role="tablist">
-    <a class="prem-tab active" data-bs-toggle="tab" href="#tab-articles" role="tab" aria-selected="true">
+    <a class="prem-tab active" data-target="tab-articles" role="tab">
       <i class="bi bi-file-earmark-text"></i>บทความ
       {% if draft_count > 0 %}<span class="ds-badge ds-badge-warning">{{ draft_count }} draft</span>{% endif %}
     </a>
-    <a class="prem-tab" data-bs-toggle="tab" href="#tab-backlog" role="tab" aria-selected="false">
+    <a class="prem-tab" data-target="tab-backlog" role="tab">
       <i class="bi bi-list-task"></i>Backlog
       {% if backlog_pending %}<span class="ds-badge ds-badge-gold">{{ backlog_pending|length }}</span>{% endif %}
     </a>
@@ -176,137 +268,151 @@
 
   <div class="tab-content">
 
-    {# === TAB 1: Articles === #}
-    <div class="tab-pane fade show active" id="tab-articles">
+    <!-- ================================================================
+         TAB 1: Articles
+         ================================================================ -->
+    <div class="tab-pane show active" id="tab-articles">
 
-      {# Filter row #}
+      <!-- Filter row -->
       <div class="d-flex flex-wrap gap-2 px-3 pt-3 pb-2">
         <a href="{% url 'dashboard:blog' %}" class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter %}active{% endif %}">ทั้งหมด</a>
         <a href="{% url 'dashboard:blog' %}?status=published" class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'published' %}active{% endif %}">Published</a>
         <a href="{% url 'dashboard:blog' %}?status=draft" class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'draft' %}active{% endif %}">Draft</a>
       </div>
 
-      <div class="p-0">
-    {% if articles %}
-    <div class="table-responsive">
-      <table class="table table-blog table-hover mb-0">
-        <thead>
-          <tr>
-            <th class="ps-3" style="width:52px"></th>
-            <th>หัวข้อ</th>
-            <th>หมวด</th>
-            <th>ผู้เขียน</th>
-            <th class="text-end">Views</th>
-            <th class="text-center">สถานะ</th>
-            <th class="pe-3 text-center">จัดการ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for article in articles %}
-          <tr id="article-row-{{ article.pk }}">
-            {# Cover image #}
-            <td class="ps-3">
-              {% if article.display_cover %}
-                <img src="{{ article.display_cover }}" alt="" class="article-cover">
-              {% else %}
-                <div class="article-cover-placeholder"><i class="bi bi-image"></i></div>
-              {% endif %}
-            </td>
+      {% if articles %}
+      <!-- === Article Table v2 === -->
+      <div class="table-responsive">
+        <table class="table table-blog mb-0">
+          <colgroup>
+            <col style="width:68px;">    <!-- cover -->
+            <col>                        <!-- title: auto -->
+            <col style="width:130px;">   <!-- หมวด -->
+            <col style="width:110px;">   <!-- สถานะ -->
+            <col style="width:72px;">    <!-- views -->
+            <col style="width:96px;">    <!-- จัดการ -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="ps-3"></th>
+              <th class="ps-2">หัวข้อ</th>
+              <th>หมวด</th>
+              <th class="text-center">สถานะ</th>
+              <th class="text-end pe-3">Views</th>
+              <th class="text-center pe-3">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for article in articles %}
+            <!-- === row: {{ article.pk }} === -->
+            <tr id="article-row-{{ article.pk }}"
+                class="article-row"
+                data-edit-url="{% url 'dashboard:article_edit' article.pk %}">
 
-            {# Title #}
-            <td>
-              <div class="fw-semibold" style="max-width:280px">
-                <a href="{{ article.get_absolute_url }}" target="_blank" rel="noopener"
-                   class="text-decoration-none text-body">
-                  {{ article.title|truncatechars:55 }}
-                </a>
-              </div>
-              <div class="text-muted" style="font-size:.75rem">
-                {{ article.created_at|date:"d M Y" }}
-                {% if article.published_at %} · published {{ article.published_at|date:"d M Y" }}{% endif %}
-              </div>
-            </td>
-
-            {# Category #}
-            <td>
-              <span class="badge bg-{{ article.category.color|default:'secondary' }}" style="font-size:.72rem">
-                {{ article.category.name }}
-              </span>
-            </td>
-
-            {# Author #}
-            <td>
-              <span class="text-muted" style="font-size:.83rem">
-                {{ article.author.get_full_name|default:article.author.username }}
-              </span>
-            </td>
-
-            {# Views #}
-            <td class="text-end fw-semibold text-gold">
-              {{ article.views_count|intcomma }}
-            </td>
-
-            {# Status badge (updated via JS) #}
-            <td class="text-center" id="status-cell-{{ article.pk }}">
-              <span class="status-text-{{ article.pk }}">
-                {% if article.status == 'published' %}
-                  <span class="badge bg-success" style="font-size:.72rem">Published</span>
+              <!-- Cover -->
+              <td class="ps-3">
+                {% if article.display_cover %}
+                  <img src="{{ article.display_cover }}" alt="" class="article-cover">
                 {% else %}
-                  <span class="badge bg-warning text-dark" style="font-size:.72rem">Draft</span>
+                  <div class="article-cover-placeholder"><i class="bi bi-image"></i></div>
                 {% endif %}
-              </span>
-            </td>
+              </td>
 
-            {# Toggle button #}
-            <td class="pe-3 text-center">
-              <button class="toggle-btn {{ article.status }}"
-                      data-pk="{{ article.pk }}"
-                      data-url="{% url 'dashboard:article_toggle' article.pk %}"
-                      data-current="{{ article.status }}"
-                      aria-label="toggle publish สำหรับ {{ article.title }}">
-                {% if article.status == 'published' %}
-                  <i class="bi bi-arrow-down-circle me-1"></i>Draft
-                {% else %}
-                  <i class="bi bi-arrow-up-circle me-1"></i>Publish
-                {% endif %}
-              </button>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    {% else %}
-    <div class="text-center text-muted py-5">
-      <i class="bi bi-file-earmark-text fs-1"></i>
-      <p class="mt-3 mb-0">
-        {% if status_filter %}
-          ไม่มีบทความที่มีสถานะ "{{ status_filter }}"
-        {% else %}
-          ยังไม่มีบทความในระบบ
-        {% endif %}
-      </p>
-      <a href="/admin/blog/article/add/" target="_blank" rel="noopener"
-         class="btn btn-sm btn-app-filled btn-app mt-3">
-        <i class="bi bi-plus-lg me-1"></i>เขียนบทความแรก
-      </a>
-    </div>
-    {% endif %}
+              <!-- Title + Meta -->
+              <td class="ps-2">
+                <span class="art-title">
+                  <a href="{{ article.get_absolute_url }}"
+                     target="_blank" rel="noopener"
+                     onclick="event.stopPropagation()">{{ article.title }}</a>
+                </span>
+                <span class="art-meta">
+                  {{ article.created_at|date:"d M Y" }}{% if article.published_at %}&ensp;&middot;&ensp;{{ article.published_at|date:"d M Y" }}{% endif %}
+                </span>
+              </td>
+
+              <!-- Category -->
+              <td>
+                <span class="art-cat-badge bg-{{ article.category.color|default:'secondary' }}">
+                  {{ article.category.name }}
+                </span>
+              </td>
+
+              <!-- Status -->
+              <td class="text-center" id="status-cell-{{ article.pk }}">
+                <span class="status-text-{{ article.pk }}">
+                  {% if article.status == 'published' %}
+                    <span class="art-status-badge is-published">
+                      <i class="bi bi-check-circle-fill"></i>Published
+                    </span>
+                  {% else %}
+                    <span class="art-status-badge is-draft">
+                      <i class="bi bi-pencil-fill"></i>Draft
+                    </span>
+                  {% endif %}
+                </span>
+              </td>
+
+              <!-- Views -->
+              <td class="text-end pe-3">
+                <span class="art-views">{{ article.views_count|intcomma }}</span>
+              </td>
+
+              <!-- Action -->
+              <td class="text-center pe-3" onclick="event.stopPropagation()">
+                <button class="toggle-btn {{ article.status }}"
+                        data-pk="{{ article.pk }}"
+                        data-url="{% url 'dashboard:article_toggle' article.pk %}"
+                        data-current="{{ article.status }}"
+                        aria-label="toggle สถานะ {{ article.title }}">
+                  {% if article.status == 'published' %}
+                    <i class="bi bi-arrow-down-circle"></i>Draft
+                  {% else %}
+                    <i class="bi bi-arrow-up-circle"></i>Publish
+                  {% endif %}
+                </button>
+              </td>
+
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-    </div>{# /tab-pane articles #}
 
-    {# === TAB 2: Content Backlog === #}
-    <div class="tab-pane fade" id="tab-backlog">
+      {% else %}
+      <!-- Empty state -->
+      <div class="text-center py-5" style="color: var(--brand-muted, #94a3b8);">
+        <i class="bi bi-file-earmark-text" style="font-size:2.5rem; color: var(--brand-gold, #c9a96e); opacity:.4;"></i>
+        <p class="mt-3 mb-0" style="font-size:.9rem;">
+          {% if status_filter %}ไม่มีบทความที่มีสถานะ "{{ status_filter }}"{% else %}ยังไม่มีบทความในระบบ{% endif %}
+        </p>
+        <a href="{% url 'dashboard:article_new' %}" target="_blank" rel="noopener" class="btn btn-sm btn-gold mt-3">
+          <i class="bi bi-plus-lg me-1"></i>เขียนบทความแรก
+        </a>
+      </div>
+      {% endif %}
+
+    </div>{# /tab-articles #}
+
+    <!-- ================================================================
+         TAB 2: Content Backlog
+         ================================================================ -->
+    <div class="tab-pane" id="tab-backlog">
       <div class="p-3">
         {% if backlog_pending or backlog_done %}
         <div class="table-responsive">
-          <table class="table table-blog table-hover mb-0">
+          <table class="table table-blog mb-0">
+            <colgroup>
+              <col style="width:42px;">
+              <col>
+              <col style="width:80px;">
+              <col style="width:100px;">
+            </colgroup>
             <thead>
               <tr>
-                <th class="ps-3" style="width:42px;">#</th>
+                <th class="ps-3">#</th>
                 <th>หัวข้อ / Keyword</th>
-                <th style="width:80px;">Priority</th>
-                <th style="width:100px;">สถานะ</th>
+                <th>Priority</th>
+                <th>สถานะ</th>
               </tr>
             </thead>
             <tbody>
@@ -324,7 +430,7 @@
                 </td>
                 <td>
                   {% if item.status == 'review' %}<span class="s-review"><i class="bi bi-eye-fill"></i>Review</span>
-                  {% elif item.status == 'in_progress' %}<span class="s-review" style="color:#60a5fa;background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.25);"><i class="bi bi-pencil-fill"></i>In Progress</span>
+                  {% elif item.status == 'in_progress' %}<span class="s-inprog"><i class="bi bi-pencil-fill"></i>In Progress</span>
                   {% else %}<span class="s-pending"><i class="bi bi-clock"></i>Pending</span>{% endif %}
                 </td>
               </tr>
@@ -351,14 +457,13 @@
         </div>
         {% endif %}
       </div>
-    </div>{# /tab-pane backlog #}
+    </div>{# /tab-backlog #}
 
   </div>{# /tab-content #}
 </div>{# /ud-panel #}
 
-{# ── Toast Feedback ───────────────────────────────────────────────────────── #}
-<div id="statusToast" class="toast toast-feedback align-items-center border-0" role="alert"
-     aria-live="assertive" aria-atomic="true">
+<!-- === Toast === -->
+<div id="statusToast" class="toast toast-feedback align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
   <div class="d-flex">
     <div class="toast-body" id="toastMessage">อัปเดตสถานะแล้ว</div>
     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -369,35 +474,27 @@
 
 {% block extra_js %}
 <script>
-/* === Premium Tab switching === */
+/* === Tab switching === */
 (function () {
   document.querySelectorAll('.prem-tab').forEach(function (tab) {
     tab.addEventListener('click', function (e) {
       e.preventDefault();
-      // Remove active from all tabs
-      document.querySelectorAll('.prem-tab').forEach(function (t) {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      // Activate clicked tab
+      document.querySelectorAll('.prem-tab').forEach(function (t) { t.classList.remove('active'); });
       tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-      // Show target pane
-      const target = document.querySelector(tab.getAttribute('href'));
-      document.querySelectorAll('.tab-pane').forEach(function (p) {
-        p.classList.remove('show', 'active');
-      });
+      var targetId = tab.dataset.target;
+      document.querySelectorAll('.tab-pane').forEach(function (p) { p.classList.remove('show', 'active'); });
+      var target = document.getElementById(targetId);
       if (target) { target.classList.add('show', 'active'); }
     });
   });
 })();
 
-/* === Toggle publish === */
+/* === Toggle publish/draft === */
 (function () {
-  const csrfToken = '{{ csrf_token }}';
-  const toast     = new bootstrap.Toast(document.getElementById('statusToast'), { delay: 2500 });
-  const toastMsg  = document.getElementById('toastMessage');
-  const toastEl   = document.getElementById('statusToast');
+  var csrfToken = '{{ csrf_token }}';
+  var toastEl   = document.getElementById('statusToast');
+  var toastMsg  = document.getElementById('toastMessage');
+  var toast     = new bootstrap.Toast(toastEl, { delay: 2500 });
 
   function showToast(msg, isError) {
     toastMsg.textContent = msg;
@@ -408,54 +505,51 @@
 
   document.querySelectorAll('.toggle-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      const pk      = btn.dataset.pk;
-      const url     = btn.dataset.url;
-      const current = btn.dataset.current;
-
+      var pk  = btn.dataset.pk;
+      var url = btn.dataset.url;
       btn.classList.add('saving');
 
       fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken
-        },
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
         body: JSON.stringify({})
       })
       .then(function (res) { return res.json(); })
       .then(function (data) {
         btn.classList.remove('saving');
         if (data.ok) {
-          const newStatus = data.status;
-          btn.dataset.current = newStatus;
+          var s = data.status;
+          btn.dataset.current = s;
+          btn.className = 'toggle-btn ' + s;
+          btn.innerHTML = s === 'published'
+            ? '<i class="bi bi-arrow-down-circle"></i>Draft'
+            : '<i class="bi bi-arrow-up-circle"></i>Publish';
 
-          // Update button appearance
-          btn.className = 'toggle-btn ' + newStatus;
-          if (newStatus === 'published') {
-            btn.innerHTML = '<i class="bi bi-arrow-down-circle me-1"></i>Draft';
-          } else {
-            btn.innerHTML = '<i class="bi bi-arrow-up-circle me-1"></i>Publish';
-          }
-
-          // Update status badge cell
-          const statusCell = document.querySelector('.status-text-' + pk);
+          var statusCell = document.querySelector('.status-text-' + pk);
           if (statusCell) {
-            if (newStatus === 'published') {
-              statusCell.innerHTML = '<span class="badge bg-success" style="font-size:.72rem">Published</span>';
-            } else {
-              statusCell.innerHTML = '<span class="badge bg-warning text-dark" style="font-size:.72rem">Draft</span>';
-            }
+            statusCell.innerHTML = s === 'published'
+              ? '<span class="art-status-badge is-published"><i class="bi bi-check-circle-fill"></i>Published</span>'
+              : '<span class="art-status-badge is-draft"><i class="bi bi-pencil-fill"></i>Draft</span>';
           }
-
           showToast('"' + data.status_display + '" แล้ว', false);
         } else {
-          showToast('เกิดข้อผิดพลาด: ' + (data.error || 'unknown'), true);
+          showToast('เกิดข้อผิดพลาด', true);
         }
       })
       .catch(function () {
         btn.classList.remove('saving');
-        showToast('ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่', true);
+        showToast('ไม่สามารถเชื่อมต่อได้', true);
       });
+    });
+  });
+})();
+
+/* === Clickable row → Custom Editor (new tab) === */
+(function () {
+  document.querySelectorAll('tr.article-row').forEach(function (row) {
+    row.addEventListener('click', function () {
+      var url = row.dataset.editUrl;
+      if (url) { window.location.href = url; }
     });
   });
 })();

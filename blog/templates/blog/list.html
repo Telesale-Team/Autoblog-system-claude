@@ -1,71 +1,995 @@
 {% extends "base_public.html" %}
+{#
+  ════════════════════════════════════════════════════════════════
+  BLOG LIST PAGE — หน้ารายการบทความ (Newspaper Layout)
+  ════════════════════════════════════════════════════════════════
+  Layout: Bootstrap Blog Example (getbootstrap.com/docs/5.3/examples/blog)
+  Theme:  Navy + Gold (var tokens จาก static/css/main.css)
+  Fonts:  Prompt (heading) + Noto Sans Thai (body) จาก base_public.html
 
-{% block title %}บทความ{% if active_category %} — {{ active_category.name }}{% endif %}{% if active_tag %} — #{{ active_tag.name }}{% endif %}{% endblock %}
+  Context Variables ที่ใช้ในหน้านี้ (ส่งมาจาก blog/views.py):
+  ─────────────────────────────────────────────────────────────
+  articles        QuerySet — บทความของ page ปัจจุบัน (paginated)
+  categories      QuerySet — หมวดหมู่ทั้งหมด (ใช้ใน category nav + sidebar)
+  active_category Category object — หมวดที่กำลัง filter อยู่ (None = ทั้งหมด)
+  active_tag      Tag object      — แท็กที่กำลัง filter อยู่ (None = ไม่ได้ filter)
+  q               str             — search query ที่พิมพ์ใน search box
+  is_paginated    bool            — True ถ้ามีมากกว่า 1 หน้า
+  page_obj        Page object     — Django paginator page object
+
+  Context Variables จาก Context Processor (base_public.html ใช้ร่วมกัน):
+  ─────────────────────────────────────────────────────────────
+  recent_articles QuerySet — บทความล่าสุด 5 รายการ (ใช้ใน sidebar + footer)
+  tags            QuerySet — แท็กทั้งหมด (ใช้ใน sidebar + footer)
+
+  โครงสร้าง Layout (ดูส่วน HTML ด้านล่าง):
+  ─────────────────────────────────────────────────────────────
+  1. Category Nav       — Horizontal scrollable tabs (sticky top)
+  2. Page Header        — Title + Description + Search
+  3. Hero Feature Post  — เต็ม 12 Col (แสดงเฉพาะ page 1, ไม่มี filter)
+  4. Row หลัก (col-md-8 + col-md-4):
+     ├── Content Col:   Secondary (2 cards) → Divider → Article List → Pagination
+     └── Sidebar Col:   About | Recent Posts | Categories | Tags | CTA
+  ════════════════════════════════════════════════════════════════
+#}
+
+<!-- === Page Title (ใช้ใน <title> tag และ SEO) ===
+     - ถ้า filter หมวด: "ชื่อหมวด — บทความ"
+     - ถ้า filter แท็ก: "#tagname — บทความ"
+     - ถ้า search: "ค้นหา 'xxx' — บทความ"
+     - ถ้าไม่มี filter: "บทความ — AI สำหรับ SME ไทย"
+-->
+{% block title %}
+  {% if active_category %}{{ active_category.name }} — บทความ
+  {% elif active_tag %}#{{ active_tag.name }} — บทความ
+  {% elif q %}ค้นหา "{{ q }}" — บทความ
+  {% else %}บทความ — AI สำหรับ SME ไทย{% endif %}
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+/* ════════════════════════════════════════════════════════════════
+   BLOG LIST CSS — Newspaper Layout
+   ════════════════════════════════════════════════════════════════
+   โครงสร้าง CSS แบ่งตาม component (เรียงตาม order ที่ปรากฏในหน้า):
+   1.  Category Nav       — แถบหมวดหมู่ horizontal
+   2.  Page Header        — ส่วนหัวหน้า + search
+   3.  Featured Hero      — บทความเด่นอันดับ 1 (dark card, full width)
+   4.  Secondary Cards    — บทความอันดับ 2-3 (card นอนพร้อม thumbnail)
+   5.  Section Divider    — เส้นคั่นระหว่าง featured กับ list
+   6.  Article List       — รายการบทความ newspaper style
+   7.  Sidebar            — คอลัมน์ขวา (widgets ต่างๆ)
+   8.  Pagination         — ปุ่มเปลี่ยนหน้า
+   ════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────
+   1. CATEGORY NAV
+   แถบ horizontal ด้านบน แสดงหมวดหมู่ทั้งหมด
+   - ใช้ flex + overflow-x:auto → scroll ในมือถือ
+   - ซ่อน scrollbar (scrollbar-width:none) ให้ดูสะอาด
+   - active = หมวดที่กำลัง filter อยู่ → สีทอง + underline
+   - background: var(--brand-dark) ให้ match กับ navbar
+   ────────────────────────────────────────────── */
+.bl-cat-nav {
+  background: var(--brand-dark);
+  border-bottom: 1px solid rgba(201,169,110,0.15);
+}
+.bl-cat-nav-inner {
+  display: flex;
+  overflow-x: auto;       /* scroll ซ้าย-ขวาในมือถือ */
+  scrollbar-width: none;  /* Firefox: ซ่อน scrollbar */
+  gap: 0;
+}
+.bl-cat-nav-inner::-webkit-scrollbar { display: none; } /* Chrome/Safari: ซ่อน scrollbar */
+
+/* แต่ละ tab ใน category nav */
+.bl-cat-link {
+  padding: 0.9rem 1.1rem;
+  font-family: 'Prompt', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);   /* สีจางเมื่อ inactive */
+  text-decoration: none;
+  white-space: nowrap;            /* ห้าม wrap เพื่อให้ scroll ได้ */
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  flex-shrink: 0;                 /* ห้ามหด ให้ scroll แทน */
+}
+.bl-cat-link:hover { color: rgba(255,255,255,0.75); }
+.bl-cat-link.active {
+  color: var(--brand-gold);
+  border-bottom-color: var(--brand-gold); /* underline ทอง = active state */
+}
+
+/* ──────────────────────────────────────────────
+   2. PAGE HEADER
+   ส่วนหัวของหน้า ประกอบด้วย:
+   - H1: ชื่อหน้า (เปลี่ยนตาม filter state)
+   - Description: คำอธิบายสั้น
+   - Search Form: input ค้นหาบทความ
+   Layout: H1+desc ซ้าย, Search ขวา (flex)
+   ────────────────────────────────────────────── */
+.bl-page-header {
+  padding: 2.5rem 0 1.5rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  margin-bottom: 2.5rem;
+}
+.bl-page-header h1 {
+  font-size: clamp(1.6rem, 4vw, 2.5rem); /* responsive: เล็กในมือถือ, ใหญ่ใน desktop */
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+.bl-page-header .bl-page-desc {
+  font-size: 0.95rem;
+  color: var(--brand-muted);
+}
+
+/* Search form: input กลม รองรับ light/dark mode */
+.bl-search-form .form-control {
+  border-radius: 50px;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.25rem;
+  border-color: var(--bs-border-color);
+  background: transparent; /* ใช้ bg ของ theme ปัจจุบัน */
+}
+.bl-search-form .form-control:focus {
+  border-color: var(--brand-gold);
+  box-shadow: 0 0 0 3px rgba(201,169,110,0.15); /* gold glow ตอน focus */
+}
+
+/* ──────────────────────────────────────────────
+   3. FEATURED HERO CARD
+   บทความเด่นอันดับ 1 — เต็ม 12 Col
+   แสดงเฉพาะ: page 1 + ไม่มี filter + ไม่ได้ search
+   Design:
+   - Dark gradient background (เข้มกว่า background ปกติ)
+   - Gold left border (4px) = accent signature
+   - Hover: border ทอง + subtle glow
+   - Title ใหญ่กว่า article ทั่วไป
+   - Excerpt: clamp 3 บรรทัด (-webkit-line-clamp)
+   ────────────────────────────────────────────── */
+.bl-hero-card {
+  background: linear-gradient(135deg, #0c1220, #0a0f1a);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 2.25rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.25s;
+}
+.bl-hero-card:hover { border-color: rgba(201,169,110,0.35); }
+
+/* Gold left border — signature design element */
+.bl-hero-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--brand-gold), rgba(201,169,110,0.3));
+  border-radius: 16px 0 0 16px;
+}
+
+/* Category label เหนือ title: "— CATEGORY NAME" */
+.bl-hero-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--brand-gold);
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 6px;
+}
+.bl-hero-label::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: var(--brand-gold); /* เส้นสั้นๆ ก่อน label */
+}
+
+/* Title ของ Hero — ใหญ่กว่า article ทั่วไป */
+.bl-hero-card h2 {
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+}
+.bl-hero-card h2 a { color: inherit; text-decoration: none; }
+.bl-hero-card h2 a:hover { color: var(--brand-gold); }
+
+/* Excerpt — จำกัด 3 บรรทัด ป้องกัน card สูงเกินไป */
+.bl-hero-excerpt {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.52);
+  line-height: 1.8;
+  margin-bottom: 1.1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta row: วันที่ + เวลาอ่าน */
+.bl-hero-meta {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  font-size: 0.78rem; color: rgba(255,255,255,0.35);
+}
+
+/* "อ่านต่อ →" link — gap เพิ่มตอน hover (arrow เลื่อน) */
+.bl-read-more {
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: 'Prompt', sans-serif;
+  color: var(--brand-gold);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: gap 0.2s; /* arrow เลื่อนขวาตอน hover */
+}
+.bl-read-more:hover { color: var(--brand-gold); gap: 9px; }
+
+/* ──────────────────────────────────────────────
+   4. SECONDARY FEATURED CARDS
+   บทความอันดับ 2-3 — อยู่ใน col-md-8
+   แสดงเฉพาะ: page 1 + ไม่มี filter + articles >= 2
+   Design:
+   - Card นอน (flex row): text ซ้าย, thumbnail ขวา
+   - ขนาด thumbnail: 100px fixed width
+   - Hover: gold border + float up + shadow
+   - Excerpt: clamp 3 บรรทัด
+   ────────────────────────────────────────────── */
+.bl-secondary-card {
+  display: flex;                  /* text ซ้าย, thumbnail ขวา */
+  background: var(--bs-body-bg); /* รองรับ light/dark mode */
+  border: 1px solid var(--bs-border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  height: 100%;
+  transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+}
+.bl-secondary-card:hover {
+  border-color: var(--brand-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.18);
+}
+
+/* Body (text area) — flex column ให้ date อยู่ด้านล่าง */
+.bl-secondary-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex; flex-direction: column;
+}
+.bl-secondary-body h3 {
+  font-size: 0.97rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+.bl-secondary-body h3 a { color: var(--bs-body-color); text-decoration: none; }
+.bl-secondary-body h3 a:hover { color: var(--brand-gold); }
+.bl-secondary-body p {
+  font-size: 0.83rem;
+  color: var(--brand-muted);
+  line-height: 1.7;
+  flex-grow: 1;               /* ดัน date ไปอยู่ด้านล่าง */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+/* Thumbnail ขวา — fixed 100px width */
+.bl-secondary-thumb {
+  width: 100px;
+  object-fit: cover;
+  flex-shrink: 0;             /* ห้ามหด ให้ text ย่อแทน */
+}
+
+/* Placeholder เมื่อไม่มีรูป */
+.bl-secondary-thumb-ph {
+  width: 100px;
+  background: var(--brand-card);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brand-muted);
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────────
+   5. SECTION DIVIDER
+   เส้นคั่นระหว่าง Secondary Cards กับ Article List
+   แสดงเฉพาะ: articles >= 4 (มีบทความเหลือหลัง featured 3 ชิ้น)
+   Design: เส้นซ้าย + label ตรงกลาง + เส้นขวา
+   ────────────────────────────────────────────── */
+.bl-divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 2rem 0 1.5rem;
+}
+.bl-divider-line { flex: 1; height: 1px; background: var(--bs-border-color); }
+.bl-divider-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--brand-gold);
+  white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────
+   6. ARTICLE LIST ITEMS
+   รายการบทความสไตล์หนังสือพิมพ์ — อยู่ใน col-md-8
+   แสดง: บทความที่ 4 เป็นต้นไป (page 1) หรือทั้งหมด (page 2+, filtered)
+   Design:
+   - ไม่มี card box — ใช้ border-bottom แทน
+   - Meta row บน: category badge + วันที่ + เวลาอ่าน
+   - H2 title: ใหญ่กว่า secondary แต่เล็กกว่า hero
+   - Excerpt: clamp 2 บรรทัด
+   - "อ่านต่อ →" link ด้านล่าง
+   ────────────────────────────────────────────── */
+.bl-article-item {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--bs-border-color); /* คั่นด้วยเส้น ไม่ใช่ card */
+}
+.bl-article-item:first-child { padding-top: 0; }    /* ชิ้นแรกไม่ต้อง padding บน */
+.bl-article-item:last-child { border-bottom: none; } /* ชิ้นสุดท้ายไม่ต้องเส้นล่าง */
+
+/* Meta row: category badge | วันที่ | เวลาอ่าน */
+.bl-article-meta-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 0.5rem; flex-wrap: wrap;
+}
+
+/* Category badge: pill สีทอง — กดได้ เพื่อ filter หมวดนั้น */
+.bl-cat-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand-gold);
+  border: 1px solid rgba(201,169,110,0.4);
+  padding: 2px 10px; border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.bl-cat-tag:hover { background: rgba(201,169,110,0.1); color: var(--brand-gold); }
+
+.bl-article-date { font-size: 0.75rem; color: var(--brand-muted); }
+
+/* H2 title — hierarchy: Hero > Secondary > Article List */
+.bl-article-item h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+.bl-article-item h2 a { color: var(--bs-body-color); text-decoration: none; }
+.bl-article-item h2 a:hover { color: var(--brand-gold); }
+
+/* Excerpt — 2 บรรทัด เพื่อให้ list ไม่ยาวเกิน */
+.bl-article-excerpt {
+  font-size: 0.9rem;
+  color: var(--brand-muted);
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ──────────────────────────────────────────────
+   7. SIDEBAR (col-md-4)
+   คอลัมน์ขวา — แสดงข้อมูลเสริมและ navigation
+   Mobile: ซ่อน left border, เพิ่ม top border + padding
+   Widgets ที่มี:
+   - About        — แนะนำ AIBiz Thailand
+   - Recent Posts — บทความล่าสุด 5 รายการ (จาก recent_articles context)
+   - Categories   — หมวดหมู่ทั้งหมด (pill style, กดเพื่อ filter)
+   - Tags         — แท็กทั้งหมด (cloud style)
+   - CTA          — ปุ่มปรึกษาฟรี
+   ────────────────────────────────────────────── */
+.bl-sidebar {
+  border-left: 1px solid var(--bs-border-color); /* เส้นแบ่ง content/sidebar */
+  padding-left: 2rem;
+}
+/* Mobile: ย้ายเส้นแบ่งจาก left เป็น top */
+@media (max-width: 767.98px) {
+  .bl-sidebar {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--bs-border-color);
+    padding-top: 2rem;
+    margin-top: 2rem;
+  }
+}
+
+/* Widget container */
+.bl-widget { margin-bottom: 2.5rem; }
+
+/* Widget title: uppercase gold label พร้อม underline ทอง */
+.bl-widget-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--brand-gold);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(201,169,110,0.25);
+  margin-bottom: 1.1rem;
+}
+
+/* About widget: ข้อความแนะนำ */
+.bl-widget-about {
+  font-size: 0.88rem;
+  color: var(--brand-muted);
+  line-height: 1.8;
+}
+
+/* Recent Posts list: border-bottom ระหว่างแต่ละรายการ */
+.bl-recent-list { list-style: none; padding: 0; margin: 0; }
+.bl-recent-list li {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+.bl-recent-list li:last-child { border-bottom: none; }
+.bl-recent-list a {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  display: block;
+  line-height: 1.4;
+  margin-bottom: 3px;
+}
+.bl-recent-list a:hover { color: var(--brand-gold); }
+.bl-recent-list .bl-recent-date { font-size: 0.73rem; color: var(--brand-muted); }
+
+/* Categories: pill style — กด filter หมวดได้ทันที */
+.bl-cat-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.bl-cat-pill-link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 4px 14px; border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.bl-cat-pill-link:hover,
+.bl-cat-pill-link.active {
+  color: var(--brand-gold);
+  border-color: rgba(201,169,110,0.45);
+  background: rgba(201,169,110,0.08);
+}
+
+/* Tag cloud: เล็กกว่า category pills */
+.bl-tag-cloud { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.bl-tag-link {
+  font-size: 0.75rem;
+  color: var(--brand-muted);
+  border: 1px solid var(--bs-border-color);
+  padding: 3px 12px; border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.bl-tag-link:hover { color: var(--brand-gold); border-color: rgba(201,169,110,0.4); }
+
+/* ──────────────────────────────────────────────
+   8. PAGINATION
+   ปุ่มเปลี่ยนหน้า — อยู่ด้านล่าง content col
+   Design: ปุ่มกลม ← [หน้า/ทั้งหมด] →
+   ────────────────────────────────────────────── */
+.bl-pagination {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-top: 2rem; justify-content: center;
+}
+
+/* ปุ่ม ← และ → : วงกลม hover ทอง */
+.bl-page-btn {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: 0.85rem; font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
+  transition: all 0.2s;
+}
+.bl-page-btn:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
+.bl-page-btn.active { background: var(--brand-gold); border-color: var(--brand-gold); color: var(--brand-dark); }
+
+/* Page info: "1 / 5" ตรงกลาง */
+.bl-page-info { font-size: 0.83rem; color: var(--brand-muted); padding: 0 0.5rem; }
+</style>
+{% endblock %}
 
 
 {% block content %}
-<section class="py-5">
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1: CATEGORY NAV
+     แถบหมวดหมู่แนวนอน scroll ได้
+     ─────────────────────────────────────────────
+     Data:  categories (QuerySet ทุกหมวด)
+            active_category (หมวดที่ filter อยู่)
+            active_tag (แท็กที่ filter อยู่)
+     Logic: "ทั้งหมด" active = ไม่มี category และไม่มี tag filter
+            แต่ละ category link active = slug ตรงกัน
+     Note:  รองรับหมวดใหม่อัตโนมัติ (loop จาก DB)
+══════════════════════════════════════════════ -->
+<nav class="bl-cat-nav" aria-label="หมวดหมู่บทความ">
   <div class="container">
-    <div class="text-center mb-4">
-      <h1 class="fw-bold text-body">
-        {% if active_category %}{{ active_category.name }}
-        {% elif active_tag %}#{{ active_tag.name }}
-        {% else %}บทความล่าสุด{% endif %}
-      </h1>
-      <p class="text-secondary">
-        {% if active_category %}{{ active_category.description|default:"" }}
-        {% elif active_tag %}บทความที่แท็ก {{ active_tag.name }}
-        {% else %}Insight, How-to, และ Case Study เกี่ยวกับ AI สำหรับธุรกิจไทย{% endif %}
-      </p>
-    </div>
+    <div class="bl-cat-nav-inner">
 
-    <form method="get" class="mx-auto mb-4" style="max-width:480px;">
-      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="ค้นหาบทความ...">
-    </form>
+      <!-- "ทั้งหมด" — active เมื่อไม่มี filter ใดๆ -->
+      <a href="{% url 'blog:list' %}"
+         class="bl-cat-link {% if not active_category and not active_tag %}active{% endif %}">
+        ทั้งหมด
+      </a>
 
-    <div class="filter-pills-scroll gap-2 mb-4">
-      <a href="{% url 'blog:list' %}" class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline-primary{% endif %}">ทั้งหมด</a>
+      <!-- Loop หมวดหมู่จาก DB — active เมื่อ slug ตรงกับ active_category -->
       {% for c in categories %}
-        <a href="{% url 'blog:category' c.slug %}" class="btn btn-sm {% if active_category.slug == c.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ c.name }}</a>
+      <a href="{% url 'blog:category' c.slug %}"
+         class="bl-cat-link {% if active_category.slug == c.slug %}active{% endif %}">
+        {{ c.name }}
+      </a>
       {% endfor %}
-    </div>
 
-    {% if articles %}
-    <div class="row g-4">
-      {% for a in articles %}
-      <div class="col-md-6 col-lg-4">
-        <div class="brand-card d-block h-100 overflow-hidden position-relative">
-          <div class="thumb" {% if a.display_cover %}style="background-image:url('{{ a.display_cover }}');"{% endif %}>
-            {% if not a.display_cover %}<div class="thumb-fallback">📝</div>{% endif %}
+    </div>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2: PAGE HEADER
+     หัวหน้าที่เปลี่ยนตาม filter state
+     ─────────────────────────────────────────────
+     Logic ชื่อ H1:
+       - มี active_category → ชื่อหมวด
+       - มี active_tag       → #ชื่อแท็ก
+       - มี q (search)       → ผลการค้นหา "xxx"
+       - ไม่มีอะไร          → บทความล่าสุด
+     Logic คำอธิบาย (description):
+       - หมวด → category.description (ถ้ามี) หรือว่าง
+       - แท็ก → "บทความที่แท็ก ..."
+       - ค้นหา → ไม่แสดง (เปล่า)
+       - ทั้งหมด → slogan ของ blog
+     Search form: GET method → ?q=xxx
+══════════════════════════════════════════════ -->
+<div class="bl-page-header">
+  <div class="container">
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+
+      <!-- Title + Description: ซ้าย -->
+      <div>
+        <h1>
+          {% if active_category %}{{ active_category.name }}
+          {% elif active_tag %}#{{ active_tag.name }}
+          {% elif q %}ผลการค้นหา "{{ q }}"
+          {% else %}บทความล่าสุด{% endif %}
+        </h1>
+        <p class="bl-page-desc mb-0">
+          {% if active_category %}{{ active_category.description|default:"" }}
+          {% elif active_tag %}บทความที่แท็ก {{ active_tag.name }}
+          {% elif q %}{# search: ไม่แสดง description #}
+          {% else %}Insight, How-to และ Case Study เกี่ยวกับ AI สำหรับธุรกิจไทย
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Search Form: ขวา — ส่ง q ผ่าน GET -->
+      <form method="get" class="bl-search-form flex-shrink-0" style="min-width:220px;">
+        <input type="text" name="q" value="{{ q }}"
+               class="form-control" placeholder="ค้นหาบทความ…" aria-label="ค้นหาบทความ">
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     MAIN LAYOUT CONTAINER
+     ครอบทุกส่วนตั้งแต่ Hero ลงไปถึง Sidebar
+══════════════════════════════════════════════ -->
+<div class="container mb-5">
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3: HERO FEATURE POST — เต็ม 12 Col
+       บทความเด่นอันดับ 1 แสดงแบบ full-width
+       ──────────────────────────────────────────
+       Data:   articles.0 (บทความแรกของ page ปัจจุบัน)
+       แสดงเมื่อ:
+         ✓ มีบทความอยู่ (articles ไม่ว่าง)
+         ✓ ไม่ได้ filter หมวด (active_category = None)
+         ✓ ไม่ได้ filter แท็ก (active_tag = None)
+         ✓ ไม่ได้ search (q = "")
+         ✓ อยู่ที่ page 1 (ไม่มี pagination หรือ page_obj.number == 1)
+       ซ่อนเมื่อ: filter/search ใดๆ หรือ page 2+
+  ══════════════════════════════════════════════ -->
+  {% if articles %}
+    {% if not active_category and not active_tag and not q %}
+      {% if not is_paginated or page_obj.number == 1 %}
+
+      {# บทความแรก = Hero (articles.0 = index 0 ของ queryset page นี้) #}
+      {% with hero=articles.0 %}
+      <article class="bl-hero-card mb-4" aria-label="บทความเด่น">
+
+        <!-- Category label เหนือ title -->
+        <div class="bl-hero-label">
+          {% if hero.category %}{{ hero.category.name }}{% else %}บทความ{% endif %}
+        </div>
+
+        <!-- Title — H2 (ไม่ใช่ H1 เพราะ Page Header มี H1 แล้ว) -->
+        <h2><a href="{{ hero.get_absolute_url }}">{{ hero.title }}</a></h2>
+
+        <!-- Excerpt — แสดงเมื่อมี (อาจว่างถ้าไม่ได้กรอก) -->
+        {% if hero.excerpt %}
+        <p class="bl-hero-excerpt">{{ hero.excerpt }}</p>
+        {% endif %}
+
+        <!-- Meta: วันที่ + เวลาอ่าน -->
+        <div class="bl-hero-meta">
+          <span>{{ hero.published_at|date:"d M Y" }}</span>
+          {% if hero.reading_time %}<span>· {{ hero.reading_time }} นาที</span>{% endif %}
+        </div>
+
+        <!-- CTA link -->
+        <div class="mt-3">
+          <a href="{{ hero.get_absolute_url }}" class="bl-read-more">
+            อ่านต่อ <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+
+      </article>
+      {% endwith %}
+
+      {% endif %}{# end: page 1 check #}
+    {% endif %}{# end: no filter check #}
+  {% endif %}{# end: articles exist check #}
+
+
+  <!-- ══════════════════════════════════════════
+       ROW หลัก: CONTENT COL (8) + SIDEBAR COL (4)
+       Layout:
+       ┌─────────────────────┬──────────────┐
+       │ col-md-8            │ col-md-4     │
+       │ Secondary (2 cards) │ Sidebar      │
+       │ Divider             │ - About      │
+       │ Article List        │ - Recent     │
+       │ Pagination          │ - Categories │
+       │                     │ - Tags       │
+       │                     │ - CTA        │
+       └─────────────────────┴──────────────┘
+  ══════════════════════════════════════════════ -->
+  <div class="row g-5">
+
+    <!-- ────────────────────────────────────────
+         CONTENT COLUMN — col-md-8
+         ประกอบด้วย:
+         A) Secondary Cards (บทความ 2-3)
+         B) Divider (แสดงเมื่อ articles >= 4)
+         C) Article List (บทความ 4+)
+         D) Pagination
+         ─────────────────────────────────────── -->
+    <main class="col-md-8">
+
+      {% if articles %}
+
+        <!-- ── กรณี: page 1 + ไม่มี filter ── -->
+        {% if not active_category and not active_tag and not q %}
+          {% if not is_paginated or page_obj.number == 1 %}
+
+            <!-- ══════════════════════════════
+                 A) SECONDARY FEATURED CARDS
+                 บทความอันดับ 2-3 (index 1, 2)
+                 ──────────────────────────────
+                 แสดงเมื่อ: articles >= 2
+                 Layout: 2 คอลัมน์เท่ากัน (col-sm-6)
+                 Design: card นอน, thumbnail ขวา
+            ══════════════════════════════ -->
+            {% if articles|length > 1 %}
+            <div class="row g-3 mb-2">
+
+              {# slice "1:3" = index 1 และ 2 (บทความที่ 2-3) #}
+              {% for art in articles|slice:"1:3" %}
+              <div class="col-sm-6">
+                <article class="bl-secondary-card">
+
+                  <!-- Text body: ซ้าย -->
+                  <div class="bl-secondary-body">
+                    {% if art.category %}
+                    <a href="{% url 'blog:category' art.category.slug %}" class="bl-cat-tag mb-2 d-inline-block">
+                      {{ art.category.name }}
+                    </a>
+                    {% endif %}
+                    <h3><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></h3>
+                    {% if art.excerpt %}<p>{{ art.excerpt }}</p>{% endif %}
+                    <small class="bl-article-date">{{ art.published_at|date:"d M Y" }}</small>
+                  </div>
+
+                  <!-- Thumbnail: ขวา (100px fixed) -->
+                  {% if art.display_cover %}
+                  <img src="{{ art.display_cover }}" alt="{{ art.title }}" class="bl-secondary-thumb" loading="lazy">
+                  {% else %}
+                  <div class="bl-secondary-thumb-ph"><i class="bi bi-image"></i></div>
+                  {% endif %}
+
+                </article>
+              </div>
+              {% endfor %}
+
+            </div>
+            {% endif %}{# end: articles >= 2 #}
+
+
+            <!-- ══════════════════════════════
+                 B) SECTION DIVIDER
+                 คั่นระหว่าง featured กับ list
+                 แสดงเมื่อ: articles >= 4
+                 (มีบทความเหลือหลัง featured 3 ชิ้น)
+            ══════════════════════════════ -->
+            {% if articles|length > 3 %}
+            <div class="bl-divider" role="separator">
+              <span class="bl-divider-line"></span>
+              <span class="bl-divider-label">บทความอื่นๆ</span>
+              <span class="bl-divider-line"></span>
+            </div>
+            {% endif %}
+
+
+            <!-- ══════════════════════════════
+                 C) ARTICLE LIST (บทความที่ 4+)
+                 Newspaper style: ไม่มี card box
+                 ──────────────────────────────
+                 Data: articles|slice:"3:" = index 3 เป็นต้นไป
+                 แสดงเมื่อ: articles >= 4
+            ══════════════════════════════ -->
+            <div class="bl-article-list">
+              {% for art in articles|slice:"3:" %}
+              <article class="bl-article-item">
+
+                <!-- Meta: category + วันที่ + เวลาอ่าน -->
+                <div class="bl-article-meta-row">
+                  {% if art.category %}
+                  <a href="{% url 'blog:category' art.category.slug %}" class="bl-cat-tag">
+                    {{ art.category.name }}
+                  </a>
+                  {% endif %}
+                  <span class="bl-article-date">{{ art.published_at|date:"d M Y" }}</span>
+                  {% if art.reading_time %}
+                  <span class="bl-article-date">· {{ art.reading_time }} นาที</span>
+                  {% endif %}
+                </div>
+
+                <!-- Title: H2 (ใหญ่สุดใน article list) -->
+                <h2><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></h2>
+
+                <!-- Excerpt: จำกัด 2 บรรทัด -->
+                {% if art.excerpt %}
+                <p class="bl-article-excerpt">{{ art.excerpt }}</p>
+                {% endif %}
+
+                <!-- CTA -->
+                <a href="{{ art.get_absolute_url }}" class="bl-read-more small">
+                  อ่านต่อ <i class="bi bi-arrow-right"></i>
+                </a>
+
+              </article>
+              {% endfor %}
+            </div>
+
+
+          {% else %}
+          <!-- ── กรณี: page 2+ (ไม่มี Hero/Secondary) ── -->
+          <!-- แสดงบทความทั้งหมดในหน้าเป็น list -->
+          <div class="bl-article-list">
+            {% for art in articles %}
+            <article class="bl-article-item">
+              <div class="bl-article-meta-row">
+                {% if art.category %}
+                <a href="{% url 'blog:category' art.category.slug %}" class="bl-cat-tag">{{ art.category.name }}</a>
+                {% endif %}
+                <span class="bl-article-date">{{ art.published_at|date:"d M Y" }}</span>
+                {% if art.reading_time %}<span class="bl-article-date">· {{ art.reading_time }} นาที</span>{% endif %}
+              </div>
+              <h2><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></h2>
+              {% if art.excerpt %}<p class="bl-article-excerpt">{{ art.excerpt }}</p>{% endif %}
+              <a href="{{ art.get_absolute_url }}" class="bl-read-more small">อ่านต่อ <i class="bi bi-arrow-right"></i></a>
+            </article>
+            {% endfor %}
           </div>
-          <div class="p-3">
-            <span class="badge badge-outline fw-normal mb-1">{{ a.category.name }}</span>
-            <h3 class="fs-6 fw-bold mt-1 mb-2">
-              <a href="{{ a.get_absolute_url }}" class="text-body text-decoration-none stretched-link">{{ a.title }}</a>
-            </h3>
-            <p class="text-secondary small">{{ a.excerpt|default:""|truncatechars:120 }}</p>
-            <small class="text-secondary">{{ a.published_at|date:"d M Y" }} · {{ a.reading_time }} นาที</small>
+          {% endif %}{# end: page 1 vs page 2+ #}
+
+
+        {% else %}
+        <!-- ── กรณี: มี filter (หมวด/แท็ก/search) ── -->
+        <!-- ไม่แสดง Hero/Secondary — แสดง list ทั้งหมด -->
+        <div class="bl-article-list">
+          {% for art in articles %}
+          <article class="bl-article-item">
+            <div class="bl-article-meta-row">
+              {% if art.category %}
+              <a href="{% url 'blog:category' art.category.slug %}" class="bl-cat-tag">{{ art.category.name }}</a>
+              {% endif %}
+              <span class="bl-article-date">{{ art.published_at|date:"d M Y" }}</span>
+              {% if art.reading_time %}<span class="bl-article-date">· {{ art.reading_time }} นาที</span>{% endif %}
+            </div>
+            <h2><a href="{{ art.get_absolute_url }}">{{ art.title }}</a></h2>
+            {% if art.excerpt %}<p class="bl-article-excerpt">{{ art.excerpt }}</p>{% endif %}
+            <a href="{{ art.get_absolute_url }}" class="bl-read-more small">อ่านต่อ <i class="bi bi-arrow-right"></i></a>
+          </article>
+          {% endfor %}
+        </div>
+        {% endif %}{# end: filter state check #}
+
+
+        <!-- ══════════════════════════════
+             D) PAGINATION
+             แสดงเมื่อ: is_paginated = True
+             ──────────────────────────────
+             ปุ่ม ← ถ้า has_previous
+             "หน้า / ทั้งหมด" ตรงกลาง
+             ปุ่ม → ถ้า has_next
+             q parameter ส่งต่อไปด้วยเพื่อ preserve search
+        ══════════════════════════════ -->
+        {% if is_paginated %}
+        <nav class="bl-pagination" aria-label="หน้าของบทความ">
+
+          {# ปุ่ม ← ก่อนหน้า — แสดงเฉพาะมีหน้าก่อนหน้า #}
+          {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}"
+             class="bl-page-btn" aria-label="หน้าก่อนหน้า">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+          {% endif %}
+
+          {# แสดง "หน้าปัจจุบัน / ทั้งหมด" #}
+          <span class="bl-page-info">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+          {# ปุ่ม → ถัดไป — แสดงเฉพาะมีหน้าถัดไป #}
+          {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}"
+             class="bl-page-btn" aria-label="หน้าถัดไป">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+          {% endif %}
+
+        </nav>
+        {% endif %}{# end: pagination #}
+
+
+      {% else %}
+      <!-- ══════════════════════════════
+           Empty State — ไม่มีบทความ
+           แสดงเมื่อ: articles queryset ว่าง
+           เหตุ: หมวดว่าง, search ไม่เจอ,
+                 หรือยังไม่มีบทความเลย
+      ══════════════════════════════ -->
+      <div class="text-center py-5">
+        <i class="bi bi-newspaper" style="font-size:3rem;opacity:.2;color:var(--brand-muted);"></i>
+        <p class="mt-3 text-body-secondary">
+          {% if q %}ไม่พบบทความที่ตรงกับ "{{ q }}"
+          {% else %}ยังไม่มีบทความในหมวดนี้{% endif %}
+        </p>
+        <a href="{% url 'blog:list' %}" class="btn btn-sm btn-outline-secondary mt-2">ดูทั้งหมด</a>
+      </div>
+      {% endif %}{# end: articles check #}
+
+    </main>{# end: col-md-8 #}
+
+
+    <!-- ────────────────────────────────────────
+         SIDEBAR COLUMN — col-md-4
+         5 Widgets:
+         1. About       — แนะนำ AIBiz Thailand
+         2. Recent      — บทความล่าสุด (recent_articles จาก context processor)
+         3. Categories  — filter หมวดได้ทันที
+         4. Tags        — filter แท็กได้ทันที
+         5. CTA         — ปุ่มปรึกษาฟรี
+         ─────────────────────────────────────── -->
+    <aside class="col-md-4" aria-label="Sidebar">
+      <div class="bl-sidebar">
+
+        <!-- ══ Widget 1: ABOUT ══
+             แนะนำ AIBiz Thailand สั้นๆ
+             + link ไปหน้า Contact
+        ══════════════════════════ -->
+        <div class="bl-widget">
+          <h2 class="bl-widget-title">เกี่ยวกับ</h2>
+          <p class="bl-widget-about">
+            AIBiz Thailand คือผู้เชี่ยวชาญ AI Automation สำหรับ SME ไทย 5–50 คน
+            เราช่วยลดงาน Manual เพิ่ม Lead และขยายธุรกิจโดยไม่ต้องจ้างคนเพิ่ม
+          </p>
+          <a href="{% url 'pages:contact' %}" class="bl-read-more small mt-2 d-inline-flex">
+            ปรึกษาฟรี <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- ══ Widget 2: RECENT POSTS ══
+             Data: recent_articles (จาก context processor ใน base_public.html)
+             แสดง: 5 บทความล่าสุด
+             แสดงเฉพาะ: recent_articles มีข้อมูล
+        ══════════════════════════ -->
+        {% if recent_articles %}
+        <div class="bl-widget">
+          <h2 class="bl-widget-title">บทความล่าสุด</h2>
+          <ul class="bl-recent-list">
+            {% for art in recent_articles|slice:":5" %}
+            <li>
+              <a href="{{ art.get_absolute_url }}">{{ art.title }}</a>
+              <span class="bl-recent-date">{{ art.published_at|date:"d M Y" }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}{# end: recent_articles #}
+
+        <!-- ══ Widget 3: CATEGORIES ══
+             Data: categories (จาก blog views)
+             กด pill → filter หมวดนั้นทันที
+             active = หมวดที่ filter อยู่ปัจจุบัน
+             แสดงเฉพาะ: มีหมวดหมู่ใน DB
+        ══════════════════════════ -->
+        {% if categories %}
+        <div class="bl-widget">
+          <h2 class="bl-widget-title">หมวดหมู่</h2>
+          <div class="bl-cat-pills">
+            {# "ทั้งหมด" active เมื่อไม่ได้ filter #}
+            <a href="{% url 'blog:list' %}"
+               class="bl-cat-pill-link {% if not active_category %}active{% endif %}">ทั้งหมด</a>
+            {% for c in categories %}
+            <a href="{% url 'blog:category' c.slug %}"
+               class="bl-cat-pill-link {% if active_category.slug == c.slug %}active{% endif %}">
+              {{ c.name }}
+            </a>
+            {% endfor %}
           </div>
         </div>
+        {% endif %}{# end: categories #}
+
+        <!-- ══ Widget 4: TAGS ══
+             Data: tags (จาก context processor ใน base_public.html)
+             กด tag → filter บทความที่มีแท็กนั้น
+             แสดงเฉพาะ: มีแท็กใน DB
+        ══════════════════════════ -->
+        {% if tags %}
+        <div class="bl-widget">
+          <h2 class="bl-widget-title">แท็ก</h2>
+          <div class="bl-tag-cloud">
+            {% for tag in tags %}
+            <a href="{{ tag.get_absolute_url }}" class="bl-tag-link">{{ tag.name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}{# end: tags #}
+
+        <!-- ══ Widget 5: CTA ══
+             ปุ่มปรึกษาฟรี — แสดงตลอดเวลา
+             เพื่อ convert ผู้อ่านบทความเป็น lead
+        ══════════════════════════ -->
+        <div class="bl-widget">
+          <div class="p-3 rounded-3 text-center"
+               style="background:rgba(201,169,110,0.07);border:1px solid rgba(201,169,110,0.2);">
+            <i class="bi bi-stars mb-2 d-block" style="font-size:1.5rem;color:var(--brand-gold);"></i>
+            <p class="small mb-2" style="color:rgba(255,255,255,0.55);">
+              สนใจนำ AI มาใช้กับธุรกิจของคุณ?
+            </p>
+            <a href="{% url 'pages:contact' %}" class="btn btn-sm w-100"
+               style="background:var(--brand-gold);color:var(--brand-dark);font-weight:700;border-radius:50px;">
+              ปรึกษาฟรี 45 นาที
+            </a>
+          </div>
+        </div>
+
       </div>
-      {% endfor %}
-    </div>
+    </aside>{# end: col-md-4 #}
 
-    {% if is_paginated %}
-    <nav class="d-flex justify-content-center mt-5">
-      <ul class="pagination">
-        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">←</a></li>{% endif %}
-        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
-        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}">→</a></li>{% endif %}
-      </ul>
-    </nav>
-    {% endif %}
+  </div>{# end: row g-5 #}
 
-    {% else %}
-    <div class="text-center text-secondary py-5">
-      {% if q %}ไม่พบบทความที่ตรงกับ "{{ q }}"{% else %}ยังไม่มีบทความ{% endif %}
-    </div>
-    {% endif %}
-  </div>
-</section>
+</div>{# end: container #}
+
 {% endblock %}

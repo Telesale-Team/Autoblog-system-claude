@@ -87,30 +87,31 @@
 
     <!-- ── Tab Bar (VS Code style) ── -->
     <div class="docs-tabs" id="docsTabBar" role="tablist">
-      <!-- Tab injected by JS; server-renders initial tab if active_slug set -->
-      {% if active_slug %}
-        {% for doc in docs %}{% if doc.slug == active_slug %}
-        <div class="docs-tab active"
-             data-slug="{{ doc.slug }}"
-             role="tab"
-             aria-selected="true">
-          <i class="bi {{ doc.bi_icon }} docs-tab__icon"></i>
-          <span class="docs-tab__name">{{ doc.title }}</span>
-          <a href="{% url 'dashboard:docs_view' doc.slug %}"
-             class="docs-tab__external"
-             target="_blank" rel="noopener"
-             title="เปิดในแท็บใหม่"
-             onclick="event.stopPropagation()">
-            <i class="bi bi-box-arrow-up-right"></i>
-          </a>
-        </div>
-        {% endif %}{% endfor %}
-      {% else %}
-      <div class="docs-tabs__hint">
-        <i class="bi bi-arrow-left-short"></i>
-        เลือกเอกสารจากแผงซ้าย
+      <!-- Home button — ถาวร ไม่ถูก innerHTML ทับ -->
+      <button class="docs-tab-home" id="btnDocsHome" title="กลับหน้าหลัก Docs">
+        <i class="bi bi-house-fill"></i>
+      </button>
+      <!-- Tab slot — JS เขียนใน div นี้เท่านั้น -->
+      <div id="docsTabSlot">
+        {% if active_slug %}
+          {% for doc in docs %}{% if doc.slug == active_slug %}
+          <div class="docs-tab active"
+               data-slug="{{ doc.slug }}"
+               role="tab"
+               aria-selected="true">
+            <i class="bi {{ doc.bi_icon }} docs-tab__icon"></i>
+            <span class="docs-tab__name">{{ doc.title }}</span>
+            <a href="{% url 'dashboard:docs_view' doc.slug %}"
+               class="docs-tab__external"
+               target="_blank" rel="noopener"
+               title="เปิดในแท็บใหม่"
+               onclick="event.stopPropagation()">
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          </div>
+          {% endif %}{% endfor %}
+        {% endif %}
       </div>
-      {% endif %}
     </div><!-- /docs-tabs -->
 
     <!-- ── Viewer Body ── -->
@@ -129,12 +130,46 @@
         <div class="skeleton-bar skeleton-bar--three-quarter"></div>
       </div>
 
-      <!-- Empty State -->
-      <div class="docs-empty" id="docsEmpty"
+      <!-- === Welcome Screen (แสดงเมื่อยังไม่เลือกเอกสาร) === -->
+      <div class="docs-welcome" id="docsEmpty"
            {% if active_slug %}style="display:none;"{% endif %}>
-        <i class="bi bi-file-earmark-code docs-empty__icon"></i>
-        <div class="docs-empty__title">ยังไม่ได้เลือกเอกสาร</div>
-        <div class="docs-empty__sub">คลิกที่ชื่อเอกสารในแผงซ้ายเพื่อเปิดอ่าน</div>
+
+        <div class="docs-welcome__head">
+          <i class="bi bi-journal-bookmark-fill docs-welcome__logo"></i>
+          <div>
+            <div class="docs-welcome__title">คู่มือทีมงาน</div>
+            <div class="docs-welcome__sub">เลือกเอกสารที่ต้องการ หรือเริ่มจากรายการแนะนำด้านล่าง</div>
+          </div>
+        </div>
+
+        <div class="docs-welcome__section-label">All Documents</div>
+
+        <div class="docs-welcome__grid">
+          {% for doc in docs %}
+          <button class="docs-welcome-card"
+                  data-slug="{{ doc.slug }}"
+                  data-title="{{ doc.title }}"
+                  data-bi-icon="{{ doc.bi_icon }}"
+                  data-content-url="{% url 'dashboard:docs_content' doc.slug %}"
+                  data-page-url="{% url 'dashboard:docs_view' doc.slug %}"
+                  type="button">
+            <div class="dwc-icon-wrap">
+              <i class="bi {{ doc.bi_icon }} dwc-icon"></i>
+            </div>
+            <div class="dwc-body">
+              <div class="dwc-title">{{ doc.title }}</div>
+              <div class="dwc-desc">{{ doc.description }}</div>
+            </div>
+            <span class="dwc-badge dwc-badge--{{ doc.audience }}">
+              {% if doc.audience == 'all' %}ทีมงาน
+              {% elif doc.audience == 'tech' %}Tech
+              {% elif doc.audience == 'sales' %}Sales
+              {% else %}{{ doc.audience }}{% endif %}
+            </span>
+          </button>
+          {% endfor %}
+        </div>
+
       </div>
 
       <!-- Content Frame (iframe — each doc has its own CSS/body) -->
@@ -212,22 +247,21 @@
 
   function showEmpty() {
     els.skeleton.classList.remove('is-visible');
+    els.frame.onload          = null;
     els.frame.style.display   = 'none';
     els.frame.src             = '';
-    els.empty.style.display   = 'flex';
+    els.empty.style.display   = 'block';
     renderTab(null);
   }
 
   /* ================================================================
      TAB BAR
      ================================================================ */
+  const tabSlot = document.getElementById('docsTabSlot');
+
   function renderTab(item) {
     if (!item) {
-      els.tabBar.innerHTML = `
-        <div class="docs-tabs__hint">
-          <i class="bi bi-arrow-left-short"></i>
-          เลือกเอกสารจากแผงซ้าย
-        </div>`;
+      tabSlot.innerHTML = '';
       return;
     }
     const slug    = item.dataset.slug;
@@ -235,7 +269,7 @@
     const biIcon  = item.dataset.biIcon;
     const pageUrl = item.dataset.pageUrl;
 
-    els.tabBar.innerHTML = `
+    tabSlot.innerHTML = `
       <div class="docs-tab active" data-slug="${slug}" role="tab" aria-selected="true">
         <i class="bi ${biIcon} docs-tab__icon"></i>
         <span class="docs-tab__name">${title}</span>
@@ -284,7 +318,7 @@
     els.frame.onerror = () => {
       els.skeleton.classList.remove('is-visible');
       els.frame.style.display = 'none';
-      els.empty.style.display = 'flex';
+      els.empty.style.display = 'block';
       state.isLoading = false;
     };
     els.frame.src = contentUrl;
@@ -386,6 +420,18 @@
      ================================================================ */
   function init() {
     els.docItems.forEach(item => item.addEventListener('click', () => loadDoc(item)));
+
+    /* Welcome screen cards — same dataset shape as .doc-item */
+    document.querySelectorAll('.docs-welcome-card').forEach(card => {
+      card.addEventListener('click', () => loadDoc(card));
+    });
+
+    /* Home button — กลับ welcome screen */
+    document.getElementById('btnDocsHome').addEventListener('click', () => {
+      showEmpty();
+      history.pushState(null, '', '{% url "dashboard:docs_index" %}');
+    });
+
     els.searchInput.addEventListener('input', e => filterDocs(e.target.value));
     initSectionToggle();
     initKeyboard();
@@ -406,6 +452,131 @@
 
   document.addEventListener('DOMContentLoaded', init);
 
+})();
+</script>
+
+<!-- === EP Calendar: postMessage receiver + Modal === -->
+<div id="epCalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#1e293b; border:1px solid rgba(201,169,110,.35); border-radius:14px; padding:28px 32px; max-width:460px; width:90%;">
+    <div style="font-size:2rem; margin-bottom:10px;">📅</div>
+    <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--brand-gold); margin-bottom:6px;">เพิ่มลงปฏิทิน — ส่งให้ Agent รับงาน</div>
+    <div id="epCalTitle" style="font-size:1rem; font-weight:700; color:#f1f5f9; margin-bottom:18px; line-height:1.4;">—</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
+      <span style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:6px 12px; font-size:0.8rem; color:#94a3b8;">✏️ Content Writer TH</span>
+      <span style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:6px 12px; font-size:0.8rem; color:#94a3b8;">🔍 SEO Specialist</span>
+      <span style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:6px 12px; font-size:0.8rem; color:#94a3b8;">✅ QA Agent</span>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="display:block; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#64748b; margin-bottom:8px;">เลือกวันและเวลา</label>
+      <div style="display:flex; gap:8px;">
+        <input type="date" id="epCalDate" style="flex:1; background:#0f172a; border:1px solid #334155; border-radius:8px; padding:9px 14px; color:#f1f5f9; font-size:0.9rem; outline:none; cursor:pointer;"
+               onfocus="this.style.borderColor='rgba(201,169,110,.6)'" onblur="this.style.borderColor='#334155'">
+        <input type="time" id="epCalTime" value="09:00" style="width:110px; background:#0f172a; border:1px solid #334155; border-radius:8px; padding:9px 14px; color:#f1f5f9; font-size:0.9rem; outline:none; cursor:pointer;"
+               onfocus="this.style.borderColor='rgba(201,169,110,.6)'" onblur="this.style.borderColor='#334155'">
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button id="epCalCancel" style="background:transparent; border:1px solid #334155; color:#64748b; padding:8px 20px; border-radius:8px; font-size:0.85rem; cursor:pointer;">ยกเลิก</button>
+      <button id="epCalConfirm" style="background:rgba(201,169,110,.15); border:1px solid rgba(201,169,110,.4); color:var(--brand-gold); padding:8px 22px; border-radius:8px; font-size:0.85rem; font-weight:700; cursor:pointer;">ยืนยัน เพิ่มลงปฏิทิน</button>
+    </div>
+  </div>
+</div>
+<div id="epCalToast" style="position:fixed; bottom:28px; right:28px; background:#1e293b; border:1px solid #334155; border-radius:10px; padding:12px 20px; font-size:0.85rem; color:#f1f5f9; z-index:99999; transform:translateY(80px); opacity:0; transition:all .25s; pointer-events:none;"></div>
+
+<script>
+(function() {
+  const overlay  = document.getElementById('epCalOverlay');
+  const titleEl  = document.getElementById('epCalTitle');
+  const dateEl   = document.getElementById('epCalDate');
+  const timeEl   = document.getElementById('epCalTime');
+  const btnOk    = document.getElementById('epCalConfirm');
+  const btnNo    = document.getElementById('epCalCancel');
+  const toast    = document.getElementById('epCalToast');
+  let cur = {};
+
+  function showToast(msg, ok) {
+    toast.textContent = msg;
+    toast.style.borderColor = ok ? 'rgba(201,169,110,.5)' : 'rgba(239,68,68,.5)';
+    toast.style.color = ok ? 'var(--brand-gold)' : '#f87171';
+    toast.style.opacity = '1'; toast.style.transform = 'translateY(0)';
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(80px)'; }, 3500);
+  }
+
+  function todayStr() {
+    const d = new Date();
+    const p = n => n < 10 ? '0' + n : '' + n;
+    return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+  }
+
+  /* ดึง EP ที่ลงปฏิทินไปแล้ว แล้วส่งเข้า iframe */
+  function sendEpStatus() {
+    const frame = document.getElementById('docsContentFrame');
+    if (!frame || !frame.contentWindow) return;
+    Promise.all([
+      fetch('{% url "dashboard:api_events" %}').then(r => r.json()),
+      fetch('{% url "dashboard:api_ep_articles" %}').then(r => r.json()).catch(() => ({}))
+    ]).then(([events, articles]) => {
+      // added map: { "EP 4": { date: "17 พ.ค. 2569 09:00", url: "/blog/slug/" | null } }
+      const added = {};
+      events.forEach(ev => {
+        const m = (ev.title || '').match(/^(EP \d+):/);
+        if (!m) return;
+        const dt = new Date(ev.start);
+        const thDate = dt.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+        const thTime = dt.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+        added[m[1]] = { date: thDate + ' ' + thTime, url: articles[m[1]] || null };
+      });
+      frame.contentWindow.postMessage({ type: 'epStatus', added }, '*');
+    }).catch(() => {});
+  }
+
+  /* เรียก sendEpStatus เมื่อ iframe โหลดเสร็จ */
+  document.getElementById('docsContentFrame').addEventListener('load', () => {
+    setTimeout(sendEpStatus, 300);
+  });
+
+  /* รับ postMessage จาก iframe */
+  window.addEventListener('message', e => {
+    if (!e.data || e.data.type !== 'addEpToCalendar') return;
+    cur = { num: e.data.epNum, title: e.data.epTitle };
+    titleEl.textContent = cur.num + ': ' + cur.title;
+    dateEl.value = todayStr();
+    dateEl.min   = todayStr();
+    overlay.style.display = 'flex';
+    setTimeout(() => dateEl.focus(), 100);
+  });
+
+  btnNo.addEventListener('click', () => { overlay.style.display = 'none'; });
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.style.display = 'none'; });
+
+  btnOk.addEventListener('click', () => {
+    if (!dateEl.value) { dateEl.style.borderColor = 'rgba(239,68,68,.6)'; dateEl.focus(); return; }
+    btnOk.disabled = true;
+    btnOk.textContent = 'กำลังบันทึก...';
+    const time = timeEl.value || '09:00';
+    const iso  = dateEl.value + 'T' + time + ':00';
+    fetch('{% url "dashboard:api_events" %}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+      body: JSON.stringify({
+        title:       cur.num + ': ' + cur.title,
+        start:       iso,
+        allDay:      false,
+        category:    'content_plan',
+        assigned_to: 'Content Writer TH',
+        description: '[EP Series] OpenClaw Tutorial — เขียนตาม Workflow E แล้ว post ผ่าน blog',
+        color:       '#C9A84C'
+      })
+    })
+    .then(r => r.json().then(j => ({ok: r.ok, j})))
+    .then(({ok, j}) => {
+      overlay.style.display = 'none';
+      showToast(ok ? 'เพิ่ม ' + cur.num + ' ลงปฏิทินแล้ว' : 'เกิดข้อผิดพลาด: ' + (j.error || ''), ok);
+      if (ok) setTimeout(sendEpStatus, 200);
+    })
+    .catch(() => showToast('ไม่สามารถเชื่อมต่อ server', false))
+    .finally(() => { btnOk.disabled = false; btnOk.textContent = 'ยืนยัน เพิ่มลงปฏิทิน'; });
+  });
 })();
 </script>
 {% endblock %}

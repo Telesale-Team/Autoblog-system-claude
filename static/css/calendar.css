@@ -254,6 +254,15 @@
 .cal-stat-card--pending .cal-stat-icon { color: #f59e0b; }
 .cal-stat-card--pending { border-left: 3px solid #f59e0b; }
 
+.cal-stat-card--docs {
+  border-left: 3px solid var(--brand-gold, #c9a96e);
+  text-decoration: none;
+  color: inherit;
+  transition: background .15s;
+}
+.cal-stat-card--docs:hover { background: rgba(201,169,110,.08); }
+.cal-stat-card--docs .cal-stat-icon { color: var(--brand-gold, #c9a96e); }
+
 /* === Category breakdown strip === */
 .cal-stat-breakdown {
   display: flex;

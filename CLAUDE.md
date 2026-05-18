@@ -1,8 +1,8 @@
-# AI Automation Business — 13-Agent System
+# AI Automation Business — 14-Agent System
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.3 | **Updated:** 2026-05-16
+**Version:** 2.4 | **Updated:** 2026-05-17
 
 ---
 
@@ -22,7 +22,7 @@
 
 ## สิ่งที่ต้องรู้ก่อนทำงาน
 
-โปรเจกต์นี้คือระบบ multi-agent สำหรับบริหารธุรกิจ AI Automation ครบวงจร ประกอบด้วย 10 agents แต่ละตัวมีหน้าที่ชัดเจน ทุก agent มี system prompt อยู่ใน `.claude/agents/` directory
+โปรเจกต์นี้คือระบบ multi-agent สำหรับบริหารธุรกิจ AI Automation ครบวงจร ประกอบด้วย 14 agents แต่ละตัวมีหน้าที่ชัดเจน ทุก agent มี system prompt อยู่ใน `.claude/agents/` directory
 
 **สินค้าและบริการ:**
 - AI Chatbot สำหรับธุรกิจ
@@ -35,7 +35,7 @@
 
 ---
 
-## 13 Agents
+## 14 Agents
 
 | # | Agent | ไฟล์ | บทบาทหลัก |
 |---|-------|------|-----------|
@@ -52,6 +52,7 @@
 | 11 | SEO Specialist | `.claude/agents/11_seo_specialist.md` | Keyword research, on-page SEO, ranking |
 | 12 | Content Writer (TH) | `.claude/agents/12_content_writer_th.md` | เขียนบทความไทยคุณภาพสูงสำหรับ SEO + lead |
 | 13 | Frontend Designer | `.claude/agents/13_frontend_designer.md` | Design System, UI/UX, Color Palette, Component Library |
+| 14 | AI News Scout | `.claude/agents/14_ai_news_scout.md` | ล่าข่าว AI จากค่ายใหญ่ + ส่ง brief ให้ Content Writer TH |
 
 ## Skills (ใน `.claude/skills/`)
 
@@ -60,6 +61,7 @@
 | `agent-creator` | Meta-skill — สร้าง/audit agent ตาม rubric 10/10 พร้อมลงทะเบียนใน CLAUDE.md |
 | `skill-creator` | Meta-skill — สร้าง skill ใหม่แบบมีมาตรฐาน พร้อมลงทะเบียนใน CLAUDE.md |
 | `scrape-claude-docs` | ดึงข้อมูลจาก code.claude.com/docs เพื่อใช้เป็น source material |
+| `scrape-ai-news` | ดึงข่าว AI ล่าสุดจากค่ายใหญ่ + return brief JSON พร้อม summary ไทย (ใช้ใน Workflow F) |
 | `seo-keyword-research-th` | วิจัย keyword ภาษาไทย ก่อนเขียนทุกบทความ |
 | `django-blog-publisher` | โพสบทความเข้า Django blog app พร้อม SEO meta |
 
@@ -82,6 +84,7 @@ Activate Money Manager - [คำถาม]
 Activate AI Toolsmith - [คำถาม]
 Activate QA Agent - [คำถาม]
 Activate Frontend Designer - [คำถาม]
+Activate AI News Scout - [คำถาม]
 ```
 
 ### Alias สั้น:
@@ -110,6 +113,7 @@ Activate Frontend Designer - [คำถาม]
 | `seo-specialist` | SEO Specialist |
 | `content-writer-th` | Content Writer (TH) |
 | `frontend-designer` | Frontend Designer |
+| `ai-news-scout` | AI News Scout |
 
 ### Auto-routing ผ่าน Chief of Staff:
 ```
@@ -135,6 +139,7 @@ Chief of Staff จะเลือก agent ที่เหมาะสมให�
 | Design System / UI/UX | Frontend Designer | Marketing Specialist, AI Orchestrator, QA |
 | Keyword research / on-page SEO | SEO Specialist | Content Writer, Data Analyst |
 | เขียนบทความภาษาไทย | Content Writer (TH) | SEO, AI Toolsmith, QA |
+| ข่าว AI / AI News Pipeline | AI News Scout | Content Writer TH, QA, Data Analyst |
 
 ---
 
@@ -147,6 +152,7 @@ Chief of Staff จะเลือก agent ที่เหมาะสมให�
 - **Workflow C:** Contract Negotiation (Sales → Money → Legal → Sign)
 - **Workflow D:** Data-Driven Decision Loop
 - **Workflow E:** Content Pipeline (SEO → Write → QA → Publish → Track)
+- **Workflow F:** AI News Pipeline (Scout → Write → QA → Draft → Human Publish)
 
 ---
 

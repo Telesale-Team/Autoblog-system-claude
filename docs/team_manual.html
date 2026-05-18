@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>คู่มือระบบ AI Agent Team — 10 Agents</title>
+  <title>คู่มือระบบ AI Agent Team — 14 Agents</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -420,13 +420,13 @@
 <div class="hero">
   <h1>🤖 ระบบ AI Agent Team</h1>
   <p>คู่มือทีมงานสำหรับ AI Automation Specialist — SME ไทย</p>
-  <div class="badge">Version 2.0 · 10 Agents · Updated 2026-05-07</div>
+  <div class="badge">Version 2.4 · 14 Agents · Updated 2026-05-17</div>
 </div>
 
 <!-- NAV -->
 <nav>
   <a href="#overview">ภาพรวม</a>
-  <a href="#agents">10 Agents</a>
+  <a href="#agents">14 Agents</a>
   <a href="#routing">การ Route</a>
   <a href="#workflows">Workflows</a>
   <a href="#approval">Approval Matrix</a>
@@ -441,8 +441,8 @@
   <section id="overview">
     <h2>📌 ภาพรวมระบบ</h2>
     <p style="color:#94a3b8; margin-bottom:24px;">
-      ระบบ AI Agent สำหรับบริหารธุรกิจ AI Automation ครบวงจร ประกอบด้วย <strong style="color:#f1f5f9;">10 agents</strong>
-      แต่ละตัวมีหน้าที่ชัดเจน ทำงานร่วมกันผ่าน Chief of Staff (Header Staff)
+      ระบบ AI Agent สำหรับบริหารธุรกิจ AI Automation ครบวงจร ประกอบด้วย <strong style="color:#f1f5f9;">14 agents</strong>
+      แต่ละตัวมีหน้าที่ชัดเจน ทำงานร่วมกันผ่าน Chief of Staff (หนูดี)
     </p>
 
     <div class="callout callout-tip">
@@ -455,11 +455,11 @@
 
     <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:12px; margin-top:24px;">
       <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
-        <div style="font-size:2rem; margin-bottom:6px;">10</div>
+        <div style="font-size:2rem; margin-bottom:6px;">14</div>
         <div style="color:#64748b; font-size:0.85rem;">Agents ทั้งหมด</div>
       </div>
       <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
-        <div style="font-size:2rem; margin-bottom:6px;">4</div>
+        <div style="font-size:2rem; margin-bottom:6px;">6</div>
         <div style="color:#64748b; font-size:0.85rem;">Workflow หลัก</div>
       </div>
       <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; text-align:center;">
@@ -495,7 +495,7 @@
 
   <!-- 10 AGENTS -->
   <section id="agents">
-    <h2>👥 10 Agents</h2>
+    <h2>👥 14 Agents</h2>
 
     <div class="agent-grid">
 
@@ -669,6 +669,74 @@
         </ul>
       </div>
 
+      <div class="agent-card layer-specialist">
+        <div class="agent-header">
+          <div class="agent-icon">🔍</div>
+          <div>
+            <div class="agent-name">SEO Specialist</div>
+            <span class="agent-tag">Specialist · SEO · ใหม่</span>
+          </div>
+        </div>
+        <p>วิจัย keyword ไทย, on-page SEO, ติดตาม ranking และ organic traffic</p>
+        <ul class="agent-duties">
+          <li>Thai keyword research</li>
+          <li>On-page SEO audit</li>
+          <li>Google Search Console tracking</li>
+          <li>SEO score ต่อบทความ</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-revenue">
+        <div class="agent-header">
+          <div class="agent-icon">✏️</div>
+          <div>
+            <div class="agent-name">Content Writer (TH)</div>
+            <span class="agent-tag">Revenue · Content · ใหม่</span>
+          </div>
+        </div>
+        <p>เขียนบทความไทยคุณภาพสูงสำหรับ SEO และ lead generation</p>
+        <ul class="agent-duties">
+          <li>Long-form blog 1,500-3,000 คำ</li>
+          <li>ภาษาไทยธรรมชาติ ไม่แปลตรง</li>
+          <li>SEO-optimized structure</li>
+          <li>เผยแพร่ผ่าน django-blog-publisher</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-operations">
+        <div class="agent-header">
+          <div class="agent-icon">🎨</div>
+          <div>
+            <div class="agent-name">Frontend Designer</div>
+            <span class="agent-tag">Operations · UI/UX · ใหม่</span>
+          </div>
+        </div>
+        <p>เจ้าของ Design System, UI/UX standards และ Component Library ของ AIBiz Thailand</p>
+        <ul class="agent-duties">
+          <li>Navy+Gold Design System</li>
+          <li>Bootstrap CSS customization</li>
+          <li>Component standards (ds-table, ds-card)</li>
+          <li>UI review ก่อน implement</li>
+        </ul>
+      </div>
+
+      <div class="agent-card layer-specialist">
+        <div class="agent-header">
+          <div class="agent-icon">📡</div>
+          <div>
+            <div class="agent-name">AI News Scout</div>
+            <span class="agent-tag">Specialist · News · ใหม่</span>
+          </div>
+        </div>
+        <p>ล่าข่าว AI จากค่ายใหญ่ คัดกรอง relevance ส่ง brief ให้ Content Writer TH เขียนบทความ</p>
+        <ul class="agent-duties">
+          <li>Monitor Anthropic, OpenAI, Google, Meta, xAI</li>
+          <li>Relevance scoring สำหรับ SME ไทย</li>
+          <li>ส่ง brief + angle ให้ Content Writer</li>
+          <li>รัน Workflow F (AI News Pipeline)</li>
+        </ul>
+      </div>
+
     </div>
 
     <div class="callout callout-warn" style="margin-top:24px;">
@@ -751,13 +819,33 @@
           <td class="primary">QA Agent</td>
           <td class="support">—</td>
         </tr>
+        <tr>
+          <td class="topic">Keyword research / on-page SEO</td>
+          <td class="primary">SEO Specialist</td>
+          <td class="support">Content Writer · Data Analyst</td>
+        </tr>
+        <tr>
+          <td class="topic">เขียนบทความภาษาไทย / blog</td>
+          <td class="primary">Content Writer (TH)</td>
+          <td class="support">SEO Specialist · AI Toolsmith · QA</td>
+        </tr>
+        <tr>
+          <td class="topic">Design System / UI ใหม่</td>
+          <td class="primary">Frontend Designer</td>
+          <td class="support">Marketing Specialist · QA</td>
+        </tr>
+        <tr>
+          <td class="topic">ข่าว AI / AI News Pipeline</td>
+          <td class="primary">AI News Scout</td>
+          <td class="support">Content Writer TH · QA · Data Analyst</td>
+        </tr>
       </tbody>
     </table>
   </section>
 
   <!-- WORKFLOWS -->
   <section id="workflows">
-    <h2>🔄 4 Workflows หลัก</h2>
+    <h2>🔄 6 Workflows หลัก</h2>
 
     <div class="workflow-grid">
 
@@ -872,6 +960,56 @@
           <div class="flow-step">
             <span class="step-agent">📊 Data Analyst (ต่อ)</span>
             <span class="step-desc">Measure results → Iterate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="workflow-card">
+        <h3>🅔 Content Pipeline (SEO → Blog → Publish)</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <span class="step-agent">🔍 SEO Specialist</span>
+            <span class="step-desc">Keyword research + brief</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">✏️ Content Writer TH</span>
+            <span class="step-desc">เขียนบทความ 1,500-3,000 คำ</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">✅ QA Agent</span>
+            <span class="step-desc">ตรวจคุณภาพ + SEO checklist</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">🚀 django-blog-publisher</span>
+            <span class="step-desc">โพสเป็น draft → ผู้ใช้ publish</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="workflow-card">
+        <h3>🅕 AI News Pipeline (Scout → Write → Publish)</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <span class="step-agent">📡 AI News Scout</span>
+            <span class="step-desc">scrape-ai-news → brief + angle ภาษาไทย</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">✏️ Content Writer TH</span>
+            <span class="step-desc">เขียนข่าว 400-800 คำ format ข่าว</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">✅ QA Agent</span>
+            <span class="step-desc">ตรวจ fact + ภาษา + SEO meta</span>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <span class="step-agent">🚀 django-blog-publisher</span>
+            <span class="step-desc">โพสเป็น draft → ผู้ใช้ publish เอง</span>
           </div>
         </div>
       </div>
@@ -1127,7 +1265,11 @@
         <span class="keyword">Activate Customer Success</span> - <span class="value">ทำ QBR ให้ลูกค้า XYZ</span><br>
         <span class="keyword">Activate Data Analyst</span> - <span class="value">สร้าง weekly revenue report</span><br>
         <span class="keyword">Activate Legal Advisor</span> - <span class="value">review สัญญาฉบับนี้</span><br>
-        <span class="keyword">Activate Money Manager</span> - <span class="value">เช็ค cash flow เดือนนี้</span>
+        <span class="keyword">Activate Money Manager</span> - <span class="value">เช็ค cash flow เดือนนี้</span><br>
+        <span class="keyword">Activate SEO Specialist</span> - <span class="value">วิเคราะห์ keyword สำหรับบทความใหม่</span><br>
+        <span class="keyword">Activate Content Writer</span> - <span class="value">เขียนบทความเรื่อง AI ใน SME ไทย</span><br>
+        <span class="keyword">Activate Frontend Designer</span> - <span class="value">ออกแบบ UI component ใหม่</span><br>
+        <span class="keyword">Activate AI News Scout</span> - <span class="value">ดึงข่าว AI ล่าสุดวันนี้</span>
       </div>
     </div>
 
@@ -1201,9 +1343,9 @@
 
 <!-- FOOTER -->
 <footer>
-  <strong>AI Automation Business — Agent System v2.0</strong><br>
-  คู่มือสำหรับทีมงาน · อัปเดต 2026-05-07<br><br>
-  <span style="color:#334155;">สร้างจาก agent_expansion_v2.md · Single source of truth: ดูไฟล์ CLAUDE.md</span>
+  <strong>AI Automation Business — Agent System v2.4</strong><br>
+  คู่มือสำหรับทีมงาน · อัปเดต 2026-05-17<br><br>
+  <span style="color:#334155;">14 Agents · 6 Workflows · Single source of truth: ดูไฟล์ CLAUDE.md</span>
 </footer>
 
 </body>

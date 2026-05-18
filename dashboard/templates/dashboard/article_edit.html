@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!-- === article_edit.html — Custom article editor (WordPress-style) === -->
+
+{% block title %}{% if is_new %}เขียนบทความใหม่{% else %}แก้ไขบทความ{% endif %} — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'dashboard:blog' %}">บทความ</a></li>
+  <li class="breadcrumb-item active">{% if is_new %}เขียนใหม่{% else %}แก้ไข{% endif %}</li>
+{% endblock %}
+
+{% block extra_css %}
+{{ form.media.css }}
+<style>
+  /* === Editor Layout === */
+  .editor-wrap {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  /* === Main area === */
+  .editor-main { min-width: 0; }
+
+  .input-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    border: none;
+    border-bottom: 2px solid var(--dash-border, rgba(201,169,110,.2));
+    border-radius: 0;
+    padding: .5rem 0;
+    background: transparent;
+    color: var(--bs-body-color);
+    width: 100%;
+    outline: none;
+    margin-bottom: 1rem;
+  }
+  .input-title:focus {
+    border-bottom-color: var(--brand-gold, #c9a96e);
+    box-shadow: none;
+  }
+  .input-title::placeholder { color: var(--bs-secondary-color); }
+
+  /* CKEditor wrapper */
+  .ck-editor__editable_inline {
+    min-height: 420px;
+    background: var(--dash-surface, #111827) !important;
+    color: var(--bs-body-color) !important;
+    border-color: var(--dash-border, rgba(201,169,110,.2)) !important;
+    border-radius: 0 0 8px 8px !important;
+  }
+  .ck.ck-toolbar {
+    background: var(--dash-bg, #0d1117) !important;
+    border-color: var(--dash-border, rgba(201,169,110,.2)) !important;
+    border-radius: 8px 8px 0 0 !important;
+  }
+  .ck.ck-button, .ck.ck-button__label { color: var(--bs-body-color) !important; }
+  .ck.ck-button:hover { background: rgba(201,169,110,.1) !important; }
+
+  /* === Right Sidebar === */
+  .editor-sidebar { display: flex; flex-direction: column; gap: .85rem; }
+
+  .side-panel {
+    background: var(--dash-surface, #111827);
+    border: 1px solid var(--dash-border, rgba(201,169,110,.15));
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .side-panel-head {
+    padding: .6rem 1rem;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--brand-gold, #c9a96e);
+    border-bottom: 1px solid var(--dash-border, rgba(201,169,110,.12));
+    background: rgba(201,169,110,.05);
+  }
+  .side-panel-body { padding: .85rem 1rem; }
+  .side-panel-body .form-label {
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+    margin-bottom: .3rem;
+  }
+  .side-panel-body .form-control,
+  .side-panel-body .form-select {
+    background: rgba(0,0,0,.15);
+    border-color: var(--dash-border, rgba(201,169,110,.2));
+    color: var(--bs-body-color);
+    font-size: .82rem;
+  }
+  .side-panel-body .form-control:focus,
+  .side-panel-body .form-select:focus {
+    border-color: var(--brand-gold, #c9a96e);
+    box-shadow: 0 0 0 2px rgba(201,169,110,.15);
+    background: rgba(0,0,0,.2);
+  }
+
+  /* Publish button area */
+  .publish-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+  .btn-publish {
+    background: var(--brand-gold, #c9a96e);
+    border-color: var(--brand-gold, #c9a96e);
+    color: #0d1117;
+    font-weight: 700;
+    font-size: .88rem;
+  }
+  .btn-publish:hover {
+    background: #b8924f;
+    border-color: #b8924f;
+    color: #0d1117;
+  }
+  .btn-save-draft {
+    font-size: .82rem;
+    color: var(--bs-secondary-color);
+    background: transparent;
+    border: 1px solid var(--dash-border, rgba(201,169,110,.2));
+  }
+  .btn-save-draft:hover {
+    background: rgba(201,169,110,.08);
+    color: var(--brand-gold, #c9a96e);
+    border-color: rgba(201,169,110,.3);
+  }
+
+  /* Status row */
+  .status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: .8rem;
+    color: var(--bs-secondary-color);
+    margin-bottom: .6rem;
+  }
+  .status-row strong { color: var(--bs-body-color); }
+
+  /* Tags checkboxes */
+  .tag-check-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+  }
+  .tag-check-list label {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    font-size: .75rem;
+    background: rgba(201,169,110,.07);
+    border: 1px solid rgba(201,169,110,.2);
+    border-radius: 20px;
+    padding: .2rem .65rem;
+    cursor: pointer;
+    color: var(--bs-secondary-color);
+    transition: background .12s, color .12s;
+  }
+  .tag-check-list input[type=checkbox] { display: none; }
+  .tag-check-list input[type=checkbox]:checked + span,
+  .tag-check-list label:has(input:checked) {
+    background: rgba(201,169,110,.2);
+    border-color: rgba(201,169,110,.5);
+    color: var(--brand-gold, #c9a96e);
+  }
+
+  /* char counter */
+  .char-count { font-size: .7rem; color: var(--bs-secondary-color); text-align: right; margin-top: .2rem; }
+  .char-count.warn { color: #fbbf24; }
+  .char-count.over { color: #f87171; }
+
+  /* Cover preview */
+  #coverPreview {
+    width: 100%; height: 80px;
+    object-fit: cover; border-radius: 6px;
+    display: none; margin-top: .5rem;
+    border: 1px solid var(--dash-border, rgba(201,169,110,.2));
+  }
+
+  /* featured checkbox */
+  .featured-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .82rem;
+    color: var(--bs-secondary-color);
+    margin-top: .5rem;
+  }
+
+  /* Save toast */
+  .save-toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    z-index: 9999; min-width: 200px; font-size: .85rem;
+  }
+
+  @media (max-width: 900px) {
+    .editor-wrap { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Page Header === -->
+<div class="ds-page-header d-flex align-items-end justify-content-between flex-wrap gap-2 mb-3">
+  <div>
+    <h4 class="page-title">{% if is_new %}เขียนบทความใหม่{% else %}แก้ไขบทความ{% endif %}</h4>
+    {% if not is_new %}
+    <div class="page-subtitle" style="font-size:.78rem;">
+      สร้าง {{ article.created_at|date:"d M Y H:i" }}
+      {% if article.views_count %} · {{ article.views_count }} views{% endif %}
+    </div>
+    {% endif %}
+  </div>
+  {% if not is_new and article.status == 'published' %}
+  <a href="{{ article.get_absolute_url }}" target="_blank" rel="noopener"
+     class="btn btn-sm btn-outline-secondary" style="font-size:.8rem;">
+    <i class="bi bi-box-arrow-up-right me-1"></i>ดูบทความ
+  </a>
+  {% endif %}
+</div>
+
+<form method="post" id="articleForm">
+  {% csrf_token %}
+
+  <div class="editor-wrap">
+
+    <!-- === Main: Title + Content === -->
+    <div class="editor-main ud-panel p-3">
+      <!-- Title -->
+      <input type="text" name="title" id="id_title"
+             class="input-title"
+             value="{{ form.title.value|default_if_none:'' }}"
+             placeholder="ชื่อบทความ"
+             required>
+      {% if form.title.errors %}
+        <div class="text-danger" style="font-size:.78rem;">{{ form.title.errors.0 }}</div>
+      {% endif %}
+
+      <!-- CKEditor content -->
+      <div style="margin-top:.5rem;">
+        {{ form.content }}
+      </div>
+    </div>
+
+    <!-- === Right Sidebar === -->
+    <div class="editor-sidebar">
+
+      <!-- Publish panel -->
+      <div class="side-panel">
+        <div class="side-panel-head">เผยแพร่</div>
+        <div class="side-panel-body">
+          <div class="status-row">
+            <span>สถานะ:</span>
+            <strong id="statusLabel">
+              {% if form.instance.status == 'published' %}Published{% else %}Draft{% endif %}
+            </strong>
+          </div>
+          <!-- Hidden status field — controlled by buttons -->
+          <select name="status" id="id_status" class="form-select form-select-sm mb-3">
+            <option value="draft" {% if form.instance.status != 'published' %}selected{% endif %}>Draft</option>
+            <option value="published" {% if form.instance.status == 'published' %}selected{% endif %}>Published</option>
+          </select>
+          <div class="publish-actions">
+            <button type="submit" class="btn btn-publish btn-sm w-100"
+                    onclick="document.getElementById('id_status').value='published';
+                             document.getElementById('statusLabel').textContent='Published';">
+              <i class="bi bi-arrow-up-circle me-1"></i>
+              {% if article and article.status == 'published' %}อัปเดตบทความ{% else %}เผยแพร่{% endif %}
+            </button>
+            <button type="submit" class="btn btn-save-draft btn-sm w-100"
+                    onclick="document.getElementById('id_status').value='draft';
+                             document.getElementById('statusLabel').textContent='Draft';">
+              บันทึก Draft
+            </button>
+          </div>
+          {% if not is_new %}
+          <div class="mt-2 text-center">
+            <a href="{% url 'dashboard:blog' %}" class="text-muted" style="font-size:.75rem;">
+              กลับรายการบทความ
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Category -->
+      <div class="side-panel">
+        <div class="side-panel-head">หมวดหมู่</div>
+        <div class="side-panel-body">
+          <select name="category" id="id_category" class="form-select form-select-sm" required>
+            {% for cat in categories %}
+            <option value="{{ cat.pk }}"
+              {% if form.instance.category_id == cat.pk %}selected{% endif %}>
+              {{ cat.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="side-panel">
+        <div class="side-panel-head">Tags</div>
+        <div class="side-panel-body">
+          <div class="tag-check-list">
+            {% for choice in form.tags %}
+            <label>
+              {{ choice.tag }}
+              <span>{{ choice.choice_label }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Cover image -->
+      <div class="side-panel">
+        <div class="side-panel-head">รูปปก</div>
+        <div class="side-panel-body">
+          <label class="form-label">URL รูปภาพ</label>
+          <input type="url" name="cover_image_url" id="id_cover_image_url"
+                 class="form-control form-control-sm"
+                 value="{{ form.cover_image_url.value|default_if_none:'' }}"
+                 placeholder="https://images.unsplash.com/...">
+          <img id="coverPreview" src="" alt="cover preview">
+        </div>
+      </div>
+
+      <!-- Excerpt -->
+      <div class="side-panel">
+        <div class="side-panel-head">สรุปย่อ</div>
+        <div class="side-panel-body">
+          <textarea name="excerpt" id="id_excerpt" class="form-control form-control-sm"
+                    rows="3" maxlength="300"
+                    placeholder="สรุปย่อ ~160 chars">{{ form.excerpt.value|default_if_none:'' }}</textarea>
+          <div class="char-count" id="excerptCount">0 / 160</div>
+        </div>
+      </div>
+
+      <!-- SEO -->
+      <div class="side-panel">
+        <div class="side-panel-head">SEO</div>
+        <div class="side-panel-body">
+          <label class="form-label">Meta Title</label>
+          <input type="text" name="meta_title" id="id_meta_title"
+                 class="form-control form-control-sm mb-1"
+                 value="{{ form.meta_title.value|default_if_none:'' }}"
+                 placeholder="≤60 chars" maxlength="70">
+          <div class="char-count" id="metaTitleCount">0 / 60</div>
+
+          <label class="form-label mt-2">Meta Description</label>
+          <input type="text" name="meta_description" id="id_meta_description"
+                 class="form-control form-control-sm"
+                 value="{{ form.meta_description.value|default_if_none:'' }}"
+                 placeholder="≤155 chars" maxlength="160">
+          <div class="char-count" id="metaDescCount">0 / 155</div>
+
+          <div class="featured-row mt-2">
+            <input type="checkbox" name="is_featured" id="id_is_featured"
+                   class="form-check-input"
+                   {% if form.is_featured.value %}checked{% endif %}>
+            <label for="id_is_featured">โชว์หน้าแรก (Featured)</label>
+          </div>
+        </div>
+      </div>
+
+    </div>{# /editor-sidebar #}
+  </div>{# /editor-wrap #}
+</form>
+
+<!-- === Save Toast === -->
+<div id="saveToast" class="toast save-toast align-items-center text-white border-0" role="alert">
+  <div class="d-flex">
+    <div class="toast-body" id="toastMsg">บันทึกแล้ว</div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{{ form.media.js }}
+<script>
+(function () {
+  /* === Char counters === */
+  function counter(inputId, counterId, limit) {
+    var el = document.getElementById(inputId);
+    var ct = document.getElementById(counterId);
+    if (!el || !ct) return;
+    function update() {
+      var len = el.value.length;
+      ct.textContent = len + ' / ' + limit;
+      ct.className = 'char-count' + (len > limit ? ' over' : len > limit * 0.85 ? ' warn' : '');
+    }
+    el.addEventListener('input', update);
+    update();
+  }
+  counter('id_excerpt', 'excerptCount', 160);
+  counter('id_meta_title', 'metaTitleCount', 60);
+  counter('id_meta_description', 'metaDescCount', 155);
+
+  /* === Cover image preview === */
+  var coverInput = document.getElementById('id_cover_image_url');
+  var coverPreview = document.getElementById('coverPreview');
+  if (coverInput && coverPreview) {
+    function updatePreview() {
+      var url = coverInput.value.trim();
+      if (url) {
+        coverPreview.src = url;
+        coverPreview.style.display = 'block';
+        coverPreview.onerror = function () { coverPreview.style.display = 'none'; };
+      } else {
+        coverPreview.style.display = 'none';
+      }
+    }
+    coverInput.addEventListener('input', updatePreview);
+    updatePreview();
+  }
+
+  /* === Tags: pill-style checkbox toggle === */
+  document.querySelectorAll('.tag-check-list label').forEach(function (label) {
+    label.addEventListener('click', function () {
+      var cb = label.querySelector('input[type=checkbox]');
+      if (cb) {
+        setTimeout(function () {
+          label.style.background = cb.checked ? 'rgba(201,169,110,.2)' : '';
+          label.style.borderColor = cb.checked ? 'rgba(201,169,110,.5)' : '';
+          label.style.color = cb.checked ? 'var(--brand-gold, #c9a96e)' : '';
+        }, 0);
+      }
+    });
+    /* init state on load */
+    var cb = label.querySelector('input[type=checkbox]');
+    if (cb && cb.checked) {
+      label.style.background = 'rgba(201,169,110,.2)';
+      label.style.borderColor = 'rgba(201,169,110,.5)';
+      label.style.color = 'var(--brand-gold, #c9a96e)';
+    }
+  });
+})();
+</script>
+{% endblock %}
