@@ -259,15 +259,13 @@ body {
 }
 .site-icon-link:hover { color: var(--brand-gold) !important; }
 
-/* Divider between social icons and theme toggle */
+/* Divider between social icons */
 .site-icon-divider {
   width: 1px;
   height: 1.2rem;
   background: rgba(255, 255, 255, .20);
 }
 
-/* Theme toggle button — remove default btn-link underline/arrow */
-.dropdown-toggle-no-caret::after { display: none; }
 .btn-link.site-icon-link {
   background: none;
   border: none;
