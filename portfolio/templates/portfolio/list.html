@@ -1,730 +1,142 @@
-{% extends "base_public.html" %}
+{% extends "base_sidebar.html" %}
+<!-- ===================================================================
+     PORTFOLIO LIST — YouTube-style grid, industries as sidebar
+     =================================================================== -->
 
 {% block title %}ผลงานของเรา — Case Studies | AIBiz Thailand{% endblock %}
 {% block meta_description %}ดู Case Studies จริงจากลูกค้าที่ใช้ AI Automation กับ AIBiz Thailand — ทุกโปรเจกต์มีตัวเลขผลลัพธ์ที่วัดได้{% endblock %}
 
 {% block extra_css %}
 <style>
-  /* ── Design Tokens ── */
-  :root {
-    --brand-gold:   #c9a96e;
-    --brand-gold-d: #b8924f;
-    --brand-gold-l: #e8c97a;
-    --brand-dark:   #0f172a;
-    --brand-navy:   #1a2744;
-    --brand-card:   #111827;
-    --glass-bg:     rgba(255, 255, 255, 0.06);
-    --glass-border: rgba(201, 169, 110, 0.25);
-  }
+/* === INDUSTRY CHIPS === */
+.yt-chips-wrap {
+  display: flex; gap: .5rem; overflow-x: auto;
+  padding: 1rem 1.25rem .5rem; scrollbar-width: none;
+}
+.yt-chips-wrap::-webkit-scrollbar { display: none; }
+.yt-chip {
+  padding: .35rem .9rem; border-radius: 20px; font-size: .82rem; font-weight: 600;
+  white-space: nowrap; text-decoration: none; flex-shrink: 0;
+  border: 1px solid var(--bs-border-color); color: var(--bs-body-color);
+  background: var(--bs-body-bg); transition: all .15s;
+}
+.yt-chip:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
+.yt-chip.active { background: var(--bs-body-color); color: var(--bs-body-bg); border-color: var(--bs-body-color); }
 
-  /* ── HERO ── */
-  .port-hero {
-    position: relative;
-    min-height: 52vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-  }
-  .port-hero-bg {
-    position: absolute;
-    inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1920&q=80&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center 40%;
-    filter: brightness(0.45) saturate(1.15);
-    transform: scale(1.04);
-    transition: transform 10s ease;
-  }
-  .port-hero:hover .port-hero-bg {
-    transform: scale(1.0);
-  }
-  .port-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(10, 14, 26, 0.90) 0%,
-      rgba(26, 39, 68, 0.65) 55%,
-      rgba(10, 14, 26, 0.55) 100%
-    );
-  }
-  .port-hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 6rem 0 4.5rem;
-  }
-  .port-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.73rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--brand-gold);
-    margin-bottom: 1.25rem;
-  }
-  .port-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 24px;
-    height: 2px;
-    background: var(--brand-gold);
-    border-radius: 2px;
-  }
-  .port-hero h1 {
-    font-size: clamp(2rem, 5vw, 3.4rem);
-    font-weight: 900;
-    line-height: 1.12;
-    color: #faf6ee;
-    margin-bottom: 1.1rem;
-  }
-  .port-hero h1 span {
-    background: linear-gradient(135deg, var(--brand-gold), var(--brand-gold-l));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .port-hero-lead {
-    font-size: 1.08rem;
-    color: rgba(255,255,255,0.75);
-    max-width: 560px;
-    line-height: 1.8;
-    margin-bottom: 0;
-  }
+/* === PORTFOLIO GRID === */
+.pf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  padding: .75rem 1.25rem 3rem;
+}
+@media (max-width: 1199.98px) { .pf-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 575.98px)  { .pf-grid { grid-template-columns: 1fr; } }
 
-  /* ── FILTER BAR ── */
-  .filter-bar-wrap {
-    background: var(--brand-dark);
-    border-bottom: 1px solid rgba(201,169,110,0.12);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .filter-bar {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 0;
-  }
-  .filter-bar::-webkit-scrollbar { display: none; }
-  .filter-link {
-    display: inline-block;
-    padding: 1rem 1.2rem;
-    font-size: 0.86rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.52);
-    text-decoration: none;
-    border-bottom: 3px solid transparent;
-    white-space: nowrap;
-    transition: color 0.2s ease, border-color 0.2s ease;
-  }
-  .filter-link:hover {
-    color: rgba(255,255,255,0.85);
-    border-bottom-color: rgba(201,169,110,0.4);
-  }
-  .filter-link.active {
-    color: var(--brand-gold);
-    border-bottom-color: var(--brand-gold);
-    font-weight: 700;
-  }
+/* === CASE STUDY CARD === */
+.pf-card {
+  display: block;
+  text-decoration: none;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.pf-card:hover {
+  border-color: rgba(201,169,110,.45);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,.18);
+}
+.pf-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; display: block;
+}
+.pf-thumb-ph {
+  width: 100%; aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--brand-navy), #0a0f1a);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(201,169,110,.2); font-size: 2.5rem;
+}
+.pf-body { padding: 1rem; }
+.pf-industry {
+  font-size: .65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--brand-gold); margin-bottom: .35rem;
+}
+.pf-title {
+  font-size: .95rem; font-weight: 700; color: var(--bs-body-color);
+  line-height: 1.4; margin-bottom: .4rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pf-card:hover .pf-title { color: var(--brand-gold); }
+.pf-roi {
+  display: inline-block; font-size: .75rem; font-weight: 700;
+  color: var(--brand-dark); background: var(--brand-gold);
+  padding: 2px 10px; border-radius: 20px; margin-bottom: .4rem;
+}
+.pf-meta { font-size: .75rem; color: var(--brand-muted); }
 
-  /* ── CARDS GRID ── */
-  .port-grid-section {
-    background: var(--brand-dark);
-    padding: 4rem 0 5rem;
-    min-height: 60vh;
-  }
-  .port-card {
-    background: var(--brand-card);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 18px;
-    overflow: hidden;
-    position: relative;
-    height: 100%;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-  .port-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 56px rgba(0,0,0,0.5);
-    border-color: var(--brand-gold);
-  }
-  .port-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-  .port-card:hover::after { opacity: 1; }
+.pf-empty { grid-column: 1/-1; text-align: center; padding: 5rem 1rem; }
 
-  /* Cover image — 16:9 */
-  .port-card-cover {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 */
-    overflow: hidden;
-    background: #0d1420;
-  }
-  .port-card-cover img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: brightness(0.88);
-    transition: filter 0.3s ease, transform 0.4s ease;
-  }
-  .port-card:hover .port-card-cover img {
-    filter: brightness(0.96);
-    transform: scale(1.04);
-  }
-  .port-card-cover-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #0d1420, #111827);
-  }
-  .port-card-cover-placeholder i {
-    font-size: 3rem;
-    color: rgba(201,169,110,0.22);
-  }
-
-  /* Industry badge on cover */
-  .port-industry-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 2;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--brand-gold);
-    background: var(--brand-navy);
-    border: 1px solid rgba(201,169,110,0.35);
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
-
-  /* Card body */
-  .port-card-body {
-    padding: 1.5rem 1.5rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    flex-grow: 1;
-  }
-
-  /* ROI metric — large gold */
-  .port-roi {
-    font-size: 1.95rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--brand-gold), var(--brand-gold-l));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.1;
-    margin-bottom: 0.1rem;
-  }
-
-  /* Project title */
-  .port-card-title {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: #faf6ee;
-    line-height: 1.45;
-    margin-bottom: 0;
-    transition: color 0.2s ease;
-  }
-  .port-card:hover .port-card-title {
-    color: var(--brand-gold);
-  }
-
-  /* Testimonial snippet — 2 lines */
-  .port-testimonial-snippet {
-    font-size: 0.86rem;
-    color: #64748b;
-    line-height: 1.65;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    margin-bottom: 0;
-  }
-
-  /* Duration badge */
-  .port-duration-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #94a3b8;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-  .port-duration-badge i { color: var(--brand-gold); }
-
-  /* CTA link */
-  .port-card-footer {
-    padding: 0 1.5rem 1.4rem;
-    margin-top: auto;
-  }
-  .port-cta-link {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--brand-gold);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: gap 0.2s ease, opacity 0.2s ease;
-  }
-  .port-cta-link:hover {
-    gap: 10px;
-    opacity: 0.85;
-    color: var(--brand-gold);
-  }
-
-  /* Stretched-link for the card */
-  .port-card .stretched-link::after {
-    position: absolute;
-    inset: 0;
-    content: '';
-    z-index: 1;
-  }
-  .port-card-footer .port-cta-link {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* ── EMPTY STATE ── */
-  .port-empty {
-    text-align: center;
-    padding: 5rem 2rem;
-  }
-  .port-empty-icon {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: rgba(201,169,110,0.08);
-    border: 2px solid rgba(201,169,110,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.75rem;
-    font-size: 2.2rem;
-    color: var(--brand-gold);
-    opacity: 0.6;
-  }
-  .port-empty h3 {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #faf6ee;
-    margin-bottom: 0.6rem;
-  }
-  .port-empty p {
-    font-size: 0.95rem;
-    color: #475569;
-    max-width: 380px;
-    margin: 0 auto 2rem;
-    line-height: 1.75;
-  }
-
-  /* ── PAGINATION ── */
-  .port-pagination .page-link {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.55);
-    border-radius: 10px;
-    padding: 0.55rem 1rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-    min-width: 44px;
-    text-align: center;
-  }
-  .port-pagination .page-link:hover {
-    background: rgba(201,169,110,0.1);
-    border-color: rgba(201,169,110,0.4);
-    color: var(--brand-gold);
-  }
-  .port-pagination .page-item.active .page-link {
-    background: var(--brand-gold);
-    border-color: var(--brand-gold);
-    color: var(--brand-dark);
-    font-weight: 800;
-    box-shadow: 0 4px 16px rgba(201,169,110,0.35);
-  }
-  .port-pagination .page-item.disabled .page-link {
-    opacity: 0.3;
-    pointer-events: none;
-  }
-  .port-pagination .page-item + .page-item {
-    margin-left: 6px;
-  }
-
-  /* ── CTA SECTION ── */
-  .port-cta-section {
-    background: linear-gradient(135deg, #0d1735 0%, var(--brand-navy) 50%, #0f1f3d 100%);
-    padding: 6rem 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .port-cta-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.08) 0%, transparent 70%);
-  }
-  .port-cta-glow {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-  .port-cta-section h2 {
-    font-size: clamp(1.9rem, 4vw, 3rem);
-    font-weight: 900;
-    color: #faf6ee;
-    line-height: 1.2;
-    position: relative;
-    z-index: 1;
-    margin-bottom: 1rem;
-  }
-  .port-cta-section h2 span {
-    background: linear-gradient(135deg, var(--brand-gold), var(--brand-gold-l));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .port-cta-lead {
-    font-size: 1.05rem;
-    color: rgba(255,255,255,0.6);
-    max-width: 520px;
-    margin: 0 auto 2.5rem;
-    line-height: 1.8;
-    position: relative;
-    z-index: 1;
-  }
-  .btn-gold-filled {
-    background: linear-gradient(135deg, var(--brand-gold), var(--brand-gold-l));
-    color: var(--brand-dark);
-    border: none;
-    padding: 1rem 2.5rem;
-    font-size: 1.05rem;
-    font-weight: 800;
-    border-radius: 50px;
-    box-shadow: 0 8px 32px rgba(201,169,110,0.35);
-    transition: all 0.25s ease;
-    position: relative;
-    z-index: 1;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-gold-filled:hover {
-    box-shadow: 0 12px 48px rgba(201,169,110,0.5);
-    transform: translateY(-3px);
-    color: var(--brand-dark);
-  }
-  .btn-outline-light-soft {
-    background: transparent;
-    color: rgba(255,255,255,0.7);
-    border: 1px solid rgba(255,255,255,0.22);
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 50px;
-    transition: all 0.25s ease;
-    text-decoration: none;
-    display: inline-block;
-    position: relative;
-    z-index: 1;
-  }
-  .btn-outline-light-soft:hover {
-    border-color: rgba(201,169,110,0.55);
-    color: var(--brand-gold);
-    background: rgba(201,169,110,0.06);
-    transform: translateY(-2px);
-  }
-  .cta-trust-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
-  }
-  .cta-trust-item {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.42);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .cta-trust-item i { color: var(--brand-gold); opacity: 0.7; }
-
-  /* ── Responsive ── */
-  @media (max-width: 767.98px) {
-    .port-hero-content { padding: 4.5rem 0 3.5rem; }
-    .port-card-body { padding: 1.25rem 1.25rem 1rem; }
-    .port-card-footer { padding: 0 1.25rem 1.25rem; }
-    .port-roi { font-size: 1.6rem; }
-  }
+/* Pagination */
+.yt-pagination { display: flex; align-items: center; gap: .4rem; margin: 0 1.25rem 2rem; justify-content: center; }
+.yt-page-btn {
+  width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-size: .85rem; text-decoration: none;
+  border: 1px solid var(--bs-border-color); color: var(--bs-body-color); transition: all .2s;
+}
+.yt-page-btn:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
+.yt-page-info { font-size: .82rem; color: var(--brand-muted); padding: 0 .4rem; }
 </style>
 {% endblock %}
 
-{% block content %}
-
-<!-- ==========================================
-     HERO SECTION
-========================================== -->
-<section class="port-hero">
-  <div class="port-hero-bg"></div>
-  <div class="port-hero-overlay"></div>
-  <div class="container port-hero-content">
-    <div class="row">
-      <div class="col-lg-7">
-        <div class="port-eyebrow">Case Studies &amp; Portfolio</div>
-        <h1>ผลงานของเรา<br><span>AI ที่ธุรกิจไทยใช้แล้วได้ผล</span></h1>
-        <p class="port-hero-lead">
-          ทุกโปรเจกต์คือหลักฐานจริง — ตัวเลข ROI ที่วัดได้ เสียงจากลูกค้า
-          และการเปลี่ยนแปลงที่เกิดขึ้นจริงในธุรกิจ SME ไทย
-        </p>
-      </div>
-    </div>
+{% block page_content %}
+  <!-- Industry chips -->
+  <div class="yt-chips-wrap">
+    <a href="{% url 'portfolio:list' %}" class="yt-chip {% if not active_industry %}active{% endif %}">ทั้งหมด</a>
+    {% for val, label in industries %}
+    <a href="?industry={{ val }}" class="yt-chip {% if active_industry == val %}active{% endif %}">{{ label }}</a>
+    {% endfor %}
   </div>
-</section>
 
-
-<!-- ==========================================
-     INDUSTRY FILTER BAR
-========================================== -->
-<div class="filter-bar-wrap">
-  <div class="container">
-    <nav class="filter-bar" aria-label="กรองตามอุตสาหกรรม">
-      <a href="{% url 'portfolio:list' %}"
-         class="filter-link {% if not active_industry %}active{% endif %}">
-        ทั้งหมด
-      </a>
-      {% for value, label in industries %}
-      <a href="?industry={{ value }}"
-         class="filter-link {% if active_industry == value %}active{% endif %}">
-        {{ label }}
-      </a>
-      {% endfor %}
-    </nav>
-  </div>
-</div>
-
-
-<!-- ==========================================
-     CASE STUDIES GRID
-========================================== -->
-<section class="port-grid-section">
-  <div class="container">
-
+  <!-- Grid -->
+  <div class="pf-grid">
     {% if case_studies %}
-
-    <div class="row g-4">
       {% for cs in case_studies %}
-      <div class="col-sm-6 col-lg-4">
-
-        <div class="port-card d-flex flex-column position-relative">
-
-          <!-- Cover Image — 16:9 -->
-          <div class="port-card-cover flex-shrink-0">
-            {% if cs.display_cover %}
-            <img src="{{ cs.display_cover }}" alt="{{ cs.project_title }}">
-            {% else %}
-            <div class="port-card-cover-placeholder">
-              <i class="bi bi-grid-3x3-gap"></i>
-            </div>
-            {% endif %}
-            <!-- Industry Badge overlay -->
-            <span class="port-industry-badge">{{ cs.get_industry_display }}</span>
-          </div>
-
-          <!-- Card Body -->
-          <div class="port-card-body flex-grow-1">
-
-            <!-- ROI metric (large gold, shown only if exists) -->
-            {% if cs.roi_metric %}
-            <div class="port-roi">{{ cs.roi_metric }}</div>
-            {% endif %}
-
-            <!-- Project title with stretched-link -->
-            <h3 class="port-card-title">
-              <a href="{{ cs.get_absolute_url }}" class="stretched-link text-decoration-none" style="color: inherit;">
-                {{ cs.project_title }}
-              </a>
-            </h3>
-
-            <!-- Testimonial snippet — 2 lines -->
-            {% if cs.testimonial %}
-            <p class="port-testimonial-snippet">
-              "{{ cs.testimonial }}"
-              {% if cs.testimonial_by %}
-              <span style="color:#475569; font-size:0.8rem; display:block; margin-top:3px;">— {{ cs.testimonial_by }}</span>
-              {% endif %}
-            </p>
-            {% endif %}
-
-            <!-- Duration badge -->
-            {% if cs.duration %}
-            <div>
-              <span class="port-duration-badge">
-                <i class="bi bi-clock"></i>
-                {{ cs.duration }}
-              </span>
-            </div>
-            {% endif %}
-
-          </div>
-
-          <!-- Card Footer — CTA -->
-          <div class="port-card-footer">
-            <a href="{{ cs.get_absolute_url }}" class="port-cta-link" tabindex="-1" aria-hidden="true">
-              ดู Case Study <i class="bi bi-arrow-right"></i>
-            </a>
-          </div>
-
+      <a href="{{ cs.get_absolute_url }}" class="pf-card">
+        {% if cs.display_cover %}
+        <img src="{{ cs.display_cover }}" alt="{{ cs.project_title }}" class="pf-thumb" loading="lazy">
+        {% else %}
+        <div class="pf-thumb-ph"><i class="bi bi-briefcase"></i></div>
+        {% endif %}
+        <div class="pf-body">
+          <p class="pf-industry">{{ cs.get_industry_display }}</p>
+          <p class="pf-title">{{ cs.project_title }}</p>
+          {% if cs.roi_metric %}<span class="pf-roi">{{ cs.roi_metric }}</span>{% endif %}
+          <p class="pf-meta">
+            {% if cs.duration %}<i class="bi bi-clock me-1"></i>{{ cs.duration }}{% endif %}
+            {% if cs.tech_stack %} · {{ cs.tech_stack|truncatechars:40 }}{% endif %}
+          </p>
         </div>
-      </div>
+      </a>
       {% endfor %}
-    </div>
-
-    <!-- ==========================================
-         PAGINATION
-    ========================================== -->
-    {% if is_paginated %}
-    <nav aria-label="Pagination" class="d-flex justify-content-center mt-5">
-      <ul class="pagination port-pagination gap-0">
-
-        <!-- Previous -->
-        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
-          <a class="page-link"
-             href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}{% else %}#{% endif %}"
-             aria-label="หน้าก่อนหน้า">
-            <i class="bi bi-chevron-left"></i>
-          </a>
-        </li>
-
-        <!-- Page numbers -->
-        {% for num in page_obj.paginator.page_range %}
-          {% if num == page_obj.number %}
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">{{ num }}</span>
-          </li>
-          {% elif num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ num }}{% if active_industry %}&industry={{ active_industry }}{% endif %}">{{ num }}</a>
-          </li>
-          {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
-          <li class="page-item disabled"><span class="page-link">…</span></li>
-          {% endif %}
-        {% endfor %}
-
-        <!-- Next -->
-        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
-          <a class="page-link"
-             href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}{% else %}#{% endif %}"
-             aria-label="หน้าถัดไป">
-            <i class="bi bi-chevron-right"></i>
-          </a>
-        </li>
-
-      </ul>
-    </nav>
-    {% endif %}
-    <!-- END PAGINATION -->
-
     {% else %}
-
-    <!-- ==========================================
-         EMPTY STATE
-    ========================================== -->
-    <div class="port-empty">
-      <div class="port-empty-icon">
-        <i class="bi bi-folder2-open"></i>
-      </div>
-      <h3>ยังไม่มีผลงานในหมวดนี้</h3>
-      <p>
-        เรากำลังเพิ่มผลงานใหม่อยู่ ลองดูหมวดหมู่อื่น
-        หรือดูผลงานทั้งหมดของเราก่อนนะครับ
-      </p>
-      <a href="{% url 'portfolio:list' %}" class="btn-gold-filled">
-        ดูผลงานทั้งหมด
-      </a>
+    <div class="pf-empty">
+      <i class="bi bi-briefcase" style="font-size:3rem;opacity:.2;color:var(--brand-muted);"></i>
+      <p class="mt-3 text-body-secondary">ยังไม่มีผลงานในหมวดนี้</p>
+      <a href="{% url 'portfolio:list' %}" class="btn btn-sm btn-outline-secondary mt-2">ดูทั้งหมด</a>
     </div>
-
     {% endif %}
-
   </div>
-</section>
 
-
-<!-- ==========================================
-     CTA SECTION
-========================================== -->
-<section class="port-cta-section">
-  <div class="port-cta-glow"></div>
-  <div class="container text-center position-relative" style="z-index:1;">
-
-    <div class="port-eyebrow justify-content-center mb-4" style="display:inline-flex;">
-      มีโปรเจกต์ในใจแล้วหรือยัง?
-    </div>
-
-    <h2>
-      มีโปรเจกต์ในใจ?<br>
-      <span>ปรึกษาฟรี ไม่มีข้อผูกมัด</span>
-    </h2>
-
-    <p class="port-cta-lead mx-auto">
-      เล่าโจทย์ธุรกิจให้ฟัง ทีมเราจะวิเคราะห์ว่า AI จะช่วยได้อย่างไร
-      และ ROI ที่คาดหวังได้จริงใน 45 นาที — ฟรี ไม่มีค่าใช้จ่าย
-    </p>
-
-    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-4">
-      <a href="{% url 'pages:contact' %}" class="btn-gold-filled">
-        <i class="bi bi-chat-dots me-2"></i>ปรึกษาฟรีเดี๋ยวนี้
-      </a>
-      <a href="{% url 'portfolio:list' %}" class="btn-outline-light-soft">
-        <i class="bi bi-grid me-2"></i>ดูผลงานทั้งหมด
-      </a>
-    </div>
-
-    <div class="cta-trust-row">
-      <div class="cta-trust-item">
-        <i class="bi bi-shield-check"></i> ฟรี ไม่มีข้อผูกมัด
-      </div>
-      <div class="cta-trust-item">
-        <i class="bi bi-clock"></i> Response ภายใน 24 ชั่วโมง
-      </div>
-      <div class="cta-trust-item">
-        <i class="bi bi-award"></i> รับประกันผลลัพธ์ 30 วัน
-      </div>
-    </div>
-
-  </div>
-</section>
-
+  {% if is_paginated %}
+  <nav class="yt-pagination" aria-label="หน้าของผลงาน">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}" class="yt-page-btn"><i class="bi bi-chevron-left"></i></a>
+    {% endif %}
+    <span class="yt-page-info">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if active_industry %}&industry={{ active_industry }}{% endif %}" class="yt-page-btn"><i class="bi bi-chevron-right"></i></a>
+    {% endif %}
+  </nav>
+  {% endif %}
 {% endblock %}

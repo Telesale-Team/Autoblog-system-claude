@@ -1,457 +1,311 @@
-{% extends "base_public.html" %}
-<!-- ===================================================================
-     BLOG LIST — YouTube-style Layout
-     Left: sidebar nav/categories | Main: video-card grid
-     =================================================================== -->
+{% extends 'base_sidebar.html' %}
+<!--  ===================================================================
+     BLOG LIST — extends base_sidebar.html (YouTube-style layout)
+     ===================================================================  -->
 
 {% block title %}
-  {% if active_category %}{{ active_category.name }} — บทความ
-  {% elif active_tag %}#{{ active_tag.name }} — บทความ
-  {% elif q %}ค้นหา "{{ q }}" — บทความ
-  {% else %}บทความ — AI สำหรับ SME ไทย{% endif %}
+  {% if active_category %}
+    {{ active_category.name }} — บทความ
+  {% elif active_tag %}
+    #{{ active_tag.name }} — บทความ
+  {% elif q %}
+    ค้นหา "{{ q }}" — บทความ
+  {% else %}
+    บทความ — AI สำหรับ SME ไทย
+  {% endif %}
 {% endblock %}
-
 
 {% block extra_css %}
-<style>
-/* ===================================================================
-   YOUTUBE-STYLE BLOG LAYOUT
-   =================================================================== */
-
-/* === OUTER FLEX WRAPPER === */
-.yt-outer {
-  display: flex;
-  min-height: calc(100vh - 56px);
-}
-
-/* === LEFT SIDEBAR === */
-.yt-sidebar {
-  width: 240px;
-  flex-shrink: 0;
-  padding: 1rem 0;
-  position: sticky;
-  top: 56px;
-  height: calc(100vh - 56px);
-  overflow-y: auto;
-  border-right: 1px solid var(--bs-border-color);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(201,169,110,.2) transparent;
-}
-.yt-sidebar::-webkit-scrollbar { width: 3px; }
-.yt-sidebar::-webkit-scrollbar-thumb { background: rgba(201,169,110,.2); border-radius: 3px; }
-
-/* Nav items — YouTube style */
-.yt-nav-item {
-  display: flex;
-  align-items: center;
-  gap: .85rem;
-  padding: .55rem 1.25rem;
-  font-size: .88rem;
-  font-weight: 500;
-  color: var(--bs-body-color);
-  text-decoration: none;
-  border-radius: 0;
-  transition: background .15s;
-  white-space: nowrap;
-}
-.yt-nav-item:hover { background: rgba(201,169,110,.08); color: var(--brand-gold); }
-.yt-nav-item.active {
-  background: rgba(201,169,110,.12);
-  color: var(--brand-gold);
-  font-weight: 700;
-}
-.yt-nav-item i { font-size: 1.1rem; width: 20px; text-align: center; }
-
-.yt-nav-divider {
-  height: 1px;
-  background: var(--bs-border-color);
-  margin: .6rem 1.25rem;
-}
-
-.yt-nav-section-title {
-  font-size: .7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-  color: var(--brand-muted);
-  padding: .75rem 1.25rem .35rem;
-}
-
-/* Category items in sidebar */
-.yt-cat-item {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  padding: .45rem 1.25rem;
-  font-size: .85rem;
-  color: var(--bs-body-color);
-  text-decoration: none;
-  transition: background .15s;
-}
-.yt-cat-item:hover { background: rgba(201,169,110,.08); color: var(--brand-gold); }
-.yt-cat-item.active { color: var(--brand-gold); font-weight: 600; }
-.yt-cat-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand-navy), var(--brand-gold));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .65rem;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-}
-
-/* === MAIN CONTENT === */
-.yt-main {
-  flex: 1;
-  min-width: 0;
-  padding: 1.25rem 1.5rem 3rem;
-}
-
-/* Filter chips (หมวดหมู่ horizontal scroll) */
-.yt-chips-wrap {
-  display: flex;
-  gap: .5rem;
-  overflow-x: auto;
-  padding-bottom: .75rem;
-  margin-bottom: 1.25rem;
-  scrollbar-width: none;
-}
-.yt-chips-wrap::-webkit-scrollbar { display: none; }
-.yt-chip {
-  padding: .35rem .9rem;
-  border-radius: 20px;
-  font-size: .82rem;
-  font-weight: 600;
-  white-space: nowrap;
-  text-decoration: none;
-  border: 1px solid var(--bs-border-color);
-  color: var(--bs-body-color);
-  background: var(--bs-body-bg);
-  transition: all .15s;
-  flex-shrink: 0;
-}
-.yt-chip:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
-.yt-chip.active {
-  background: var(--bs-body-color);
-  color: var(--bs-body-bg);
-  border-color: var(--bs-body-color);
-}
-
-/* === VIDEO/ARTICLE GRID === */
-.yt-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem 1rem;
-}
-@media (max-width: 1399.98px) { .yt-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 991.98px)  { .yt-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 575.98px)  { .yt-grid { grid-template-columns: 1fr; } }
-
-/* Article card — YouTube video card style */
-.yt-card {
-  display: block;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* Thumbnail */
-.yt-thumb-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: .75rem;
-  background: var(--brand-dark);
-}
-.yt-thumb-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform .3s ease;
-}
-.yt-card:hover .yt-thumb-wrap img { transform: scale(1.04); }
-.yt-thumb-ph {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--brand-navy), #0a0f1a);
-  color: rgba(201,169,110,.25);
-  font-size: 2.5rem;
-}
-
-/* Duration badge (เวลาอ่าน) */
-.yt-duration {
-  position: absolute;
-  bottom: .45rem;
-  right: .45rem;
-  background: rgba(0,0,0,.82);
-  color: #fff;
-  font-size: .7rem;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
-/* Card body */
-.yt-card-body {
-  display: flex;
-  gap: .6rem;
-  align-items: flex-start;
-}
-
-/* Channel avatar (author) */
-.yt-author-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand-navy), var(--brand-gold));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .72rem;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-/* Card text */
-.yt-card-info { flex: 1; min-width: 0; }
-.yt-card-title {
-  font-size: .9rem;
-  font-weight: 700;
-  color: var(--bs-body-color);
-  line-height: 1.4;
-  margin-bottom: .2rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.yt-card:hover .yt-card-title { color: var(--brand-gold); }
-.yt-card-channel {
-  font-size: .78rem;
-  color: var(--brand-muted);
-  margin-bottom: .15rem;
-}
-.yt-card-meta {
-  font-size: .75rem;
-  color: var(--brand-muted);
-}
-.yt-card-meta span::after { content: ' · '; }
-.yt-card-meta span:last-child::after { content: ''; }
-
-/* Category tag on thumbnail */
-.yt-cat-badge {
-  position: absolute;
-  top: .5rem;
-  left: .5rem;
-  background: rgba(0,0,0,.75);
-  color: var(--brand-gold);
-  font-size: .62rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  padding: 2px 8px;
-  border-radius: 4px;
-  backdrop-filter: blur(4px);
-}
-
-/* Empty state */
-.yt-empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 5rem 1rem;
-}
-
-/* Pagination */
-.yt-pagination {
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-  margin-top: 2.5rem;
-  justify-content: center;
-}
-.yt-page-btn {
-  width: 38px; height: 38px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  font-size: .85rem;
-  text-decoration: none;
-  border: 1px solid var(--bs-border-color);
-  color: var(--bs-body-color);
-  transition: all .2s;
-}
-.yt-page-btn:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
-.yt-page-info { font-size: .83rem; color: var(--brand-muted); padding: 0 .5rem; }
-
-/* Hide sidebar on mobile */
-@media (max-width: 767.98px) {
-  .yt-sidebar { display: none; }
-  .yt-main { padding: 1rem .75rem 2rem; }
-}
-</style>
+  <style>
+    /* === FILTER CHIPS === */
+    .yt-chips-wrap {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 1rem 1.25rem 0.5rem;
+      scrollbar-width: none;
+    }
+    .yt-chips-wrap::-webkit-scrollbar {
+      display: none;
+    }
+    .yt-chip {
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-decoration: none;
+      border: 1px solid var(--bs-border-color);
+      color: var(--bs-body-color);
+      background: var(--bs-body-bg);
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .yt-chip:hover {
+      border-color: var(--brand-gold);
+      color: var(--brand-gold);
+    }
+    .yt-chip.active {
+      background: var(--bs-body-color);
+      color: var(--bs-body-bg);
+      border-color: var(--bs-body-color);
+    }
+    
+    /* === ARTICLE GRID === */
+    .yt-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      padding: 0.75rem 1.25rem 3rem;
+    }
+    @media (max-width: 1399.98px) {
+      .yt-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 991.98px) {
+      .yt-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 575.98px) {
+      .yt-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* === ARTICLE CARD === */
+    .yt-card {
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .yt-thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+      background: var(--brand-dark);
+    }
+    .yt-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .yt-card:hover .yt-thumb-wrap img {
+      transform: scale(1.04);
+    }
+    .yt-thumb-ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--brand-navy), #0a0f1a);
+      color: rgba(201, 169, 110, 0.25);
+      font-size: 2.5rem;
+    }
+    .yt-duration {
+      position: absolute;
+      bottom: 0.45rem;
+      right: 0.45rem;
+      background: rgba(0, 0, 0, 0.82);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .yt-cat-badge {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      background: rgba(0, 0, 0, 0.75);
+      color: var(--brand-gold);
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .yt-card-body {
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+    .yt-author-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand-navy), var(--brand-gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .yt-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .yt-card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--bs-body-color);
+      line-height: 1.4;
+      margin-bottom: 0.2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .yt-card:hover .yt-card-title {
+      color: var(--brand-gold);
+    }
+    .yt-card-channel {
+      font-size: 0.78rem;
+      color: var(--brand-muted);
+    }
+    .yt-card-meta {
+      font-size: 0.75rem;
+      color: var(--brand-muted);
+    }
+    .yt-card-meta span::after {
+      content: ' · ';
+    }
+    .yt-card-meta span:last-child::after {
+      content: '';
+    }
+    
+    /* Empty / Pagination */
+    .yt-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 5rem 1rem;
+    }
+    .yt-pagination {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0 1.25rem 2rem;
+      justify-content: center;
+    }
+    .yt-page-btn {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border: 1px solid var(--bs-border-color);
+      color: var(--bs-body-color);
+      transition: all 0.2s;
+    }
+    .yt-page-btn:hover {
+      border-color: var(--brand-gold);
+      color: var(--brand-gold);
+    }
+    .yt-page-info {
+      font-size: 0.82rem;
+      color: var(--brand-muted);
+      padding: 0 0.4rem;
+    }
+  </style>
 {% endblock %}
 
-
-{% block content %}
-<div class="yt-outer">
-
-  <!-- ===================================================
-       LEFT SIDEBAR — YouTube style nav
-       =================================================== -->
-  <aside class="yt-sidebar" aria-label="เมนูหลัก">
-
-    <!-- Main nav -->
-    <a href="{% url 'blog:list' %}" class="yt-nav-item {% if not active_category and not active_tag %}active{% endif %}">
-      <i class="bi bi-house-fill"></i> หน้าหลัก
-    </a>
-    <a href="{% url 'blog:list' %}" class="yt-nav-item">
-      <i class="bi bi-newspaper"></i> บทความทั้งหมด
-    </a>
-    <a href="{% url 'pages:about' %}" class="yt-nav-item">
-      <i class="bi bi-info-circle"></i> เกี่ยวกับเรา
-    </a>
-    <a href="{% url 'pages:contact' %}" class="yt-nav-item">
-      <i class="bi bi-chat-dots"></i> ปรึกษาฟรี
-    </a>
-
-    <div class="yt-nav-divider"></div>
-
-    <!-- Categories as subscriptions -->
-    {% if categories %}
-    <p class="yt-nav-section-title">หมวดหมู่</p>
+{% block page_content %}
+  <!-- Filter chips -->
+  <div class="yt-chips-wrap">
+    <a href="{% url 'blog:list' %}" class="yt-chip {% if not active_category and not active_tag and not q %}active{% endif %}">ทั้งหมด</a>
     {% for c in categories %}
-    <a href="{% url 'blog:category' c.slug %}"
-       class="yt-cat-item {% if active_category.slug == c.slug %}active{% endif %}">
-      <span class="yt-cat-avatar">{{ c.name|slice:":2"|upper }}</span>
-      {{ c.name }}
-    </a>
+      <a href="{% url 'blog:category' c.slug %}" class="yt-chip {% if active_category.slug == c.slug %}active{% endif %}">{{ c.name }}</a>
     {% endfor %}
-    {% endif %}
+  </div>
 
-    <div class="yt-nav-divider"></div>
-
-    <!-- Tags -->
-    {% if tags %}
-    <p class="yt-nav-section-title">แท็กยอดนิยม</p>
-    {% for tag in tags|slice:":8" %}
-    <a href="{{ tag.get_absolute_url }}" class="yt-nav-item {% if active_tag.slug == tag.slug %}active{% endif %}">
-      <i class="bi bi-hash"></i> {{ tag.name }}
-    </a>
-    {% endfor %}
-    {% endif %}
-
-  </aside>
-  <!-- === END SIDEBAR === -->
-
-
-  <!-- ===================================================
-       MAIN — Filter chips + Article grid
-       =================================================== -->
-  <main class="yt-main">
-
-    <!-- Filter chips -->
-    <div class="yt-chips-wrap">
-      <a href="{% url 'blog:list' %}"
-         class="yt-chip {% if not active_category and not active_tag and not q %}active{% endif %}">ทั้งหมด</a>
-      {% for c in categories %}
-      <a href="{% url 'blog:category' c.slug %}"
-         class="yt-chip {% if active_category.slug == c.slug %}active{% endif %}">{{ c.name }}</a>
-      {% endfor %}
-    </div>
-
-    <!-- Article grid -->
-    <div class="yt-grid">
-
-      {% if articles %}
-        {% for art in articles %}
+  <!-- Article grid -->
+  <div class="yt-grid">
+    {% if articles %}
+      {% for art in articles %}
         <a href="{{ art.get_absolute_url }}" class="yt-card">
-
-          <!-- Thumbnail -->
           <div class="yt-thumb-wrap">
             {% if art.display_cover %}
-            <img src="{{ art.display_cover }}" alt="{{ art.title }}" loading="lazy">
+              <img src="{{ art.display_cover }}" alt="{{ art.title }}" loading="lazy" />
             {% else %}
-            <div class="yt-thumb-ph"><i class="bi bi-file-text"></i></div>
+              <div class="yt-thumb-ph">
+                <i class="bi bi-file-text"></i>
+              </div>
             {% endif %}
-
             {% if art.category %}
-            <span class="yt-cat-badge">{{ art.category.name }}</span>
+              <span class="yt-cat-badge">{{ art.category.name }}</span>
             {% endif %}
-
             {% if art.reading_time %}
-            <span class="yt-duration">{{ art.reading_time }} นาที</span>
+              <span class="yt-duration">{{ art.reading_time }} นาที</span>
             {% endif %}
           </div>
-
-          <!-- Card body -->
           <div class="yt-card-body">
-
-            <!-- Author avatar -->
             <div class="yt-author-avatar">
-              {% if art.author %}{{ art.author.username|slice:":2"|upper }}{% else %}AI{% endif %}
+              {% if art.author %}
+                {{ art.author.username|slice:':2'|upper }}
+              {% else %}
+                AI
+              {% endif %}
             </div>
-
-            <!-- Info -->
             <div class="yt-card-info">
               <p class="yt-card-title">{{ art.title }}</p>
               <p class="yt-card-channel">AIBiz Thailand</p>
               <p class="yt-card-meta">
                 <span>{{ art.views_count }} views</span>
-                <span>{{ art.published_at|date:"d M Y" }}</span>
+                <span>{{ art.published_at|date:'d M Y' }}</span>
               </p>
             </div>
-
           </div>
         </a>
-        {% endfor %}
-
-      {% else %}
-      <!-- Empty state -->
+      {% endfor %}
+    {% else %}
       <div class="yt-empty">
         <i class="bi bi-camera-video" style="font-size:3rem;opacity:.2;color:var(--brand-muted);"></i>
         <p class="mt-3 text-body-secondary">
-          {% if q %}ไม่พบบทความที่ตรงกับ "{{ q }}"
-          {% else %}ยังไม่มีบทความในหมวดนี้{% endif %}
+          {% if q %}
+            ไม่พบบทความที่ตรงกับ "{{ q }}"
+          {% else %}
+            ยังไม่มีบทความในหมวดนี้
+          {% endif %}
         </p>
         <a href="{% url 'blog:list' %}" class="btn btn-sm btn-outline-secondary mt-2">ดูทั้งหมด</a>
       </div>
-      {% endif %}
+    {% endif %}
+  </div>
 
-    </div>
-    <!-- === END GRID === -->
-
-    <!-- Pagination -->
-    {% if is_paginated %}
+  <!-- Pagination -->
+  {% if is_paginated %}
     <nav class="yt-pagination" aria-label="หน้าของบทความ">
       {% if page_obj.has_previous %}
-      <a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}"
-         class="yt-page-btn" aria-label="หน้าก่อนหน้า">
-        <i class="bi bi-chevron-left"></i>
-      </a>
+        <a href="?page={{ page_obj.previous_page_number }}{% if q %}
+            &q={{ q }}
+          {% endif %}"
+          class="yt-page-btn">
+          <i class="bi bi-chevron-left"></i>
+        </a>
       {% endif %}
       <span class="yt-page-info">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
       {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}"
-         class="yt-page-btn" aria-label="หน้าถัดไป">
-        <i class="bi bi-chevron-right"></i>
-      </a>
+        <a href="?page={{ page_obj.next_page_number }}{% if q %}
+            &q={{ q }}
+          {% endif %}"
+          class="yt-page-btn">
+          <i class="bi bi-chevron-right"></i>
+        </a>
       {% endif %}
     </nav>
-    {% endif %}
-
-  </main>
-  <!-- === END MAIN === -->
-
-</div>
-<!-- === END OUTER === -->
+  {% endif %}
 {% endblock %}

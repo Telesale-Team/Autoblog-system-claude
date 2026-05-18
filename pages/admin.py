@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import ContactLead
+from .models import ContactLead, Service
+
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ("name", "display_order", "price_start", "price_label", "is_featured", "status")
+    list_editable = ("display_order", "is_featured", "status")
+    list_filter = ("status", "is_featured")
+    search_fields = ("name", "tagline")
+    prepopulated_fields = {"slug": ("name",)}
 
 
 @admin.register(ContactLead)

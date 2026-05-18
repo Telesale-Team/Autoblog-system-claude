@@ -1,6 +1,38 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
+
+
+class Service(models.Model):
+    name = models.CharField("ชื่อบริการ", max_length=100)
+    slug = models.SlugField(max_length=120, unique=True)
+    tagline = models.CharField("Tagline สั้น", max_length=160)
+    description = models.TextField("รายละเอียด")
+    icon = models.CharField("Bootstrap Icon class", max_length=60, default="bi-stars",
+                            help_text="เช่น bi-robot, bi-graph-up-arrow")
+    cover_image_url = models.URLField("รูปปก (URL)", max_length=500, blank=True,
+                                      help_text="Unsplash หรือ CDN URL สำหรับรูปหน้าการ์ด")
+    price_start = models.PositiveIntegerField("ราคาเริ่มต้น (บาท)", default=0)
+    price_label = models.CharField("Label ราคา", max_length=60, default="เริ่มต้น",
+                                   help_text="เช่น 'เริ่มต้น', 'ต่อเดือน', 'ต่อโปรเจกต์'")
+    features = models.TextField("Features (แต่ละบรรทัด = 1 feature)")
+    is_featured = models.BooleanField("เด่น", default=False)
+    display_order = models.IntegerField("ลำดับ", default=0)
+    status = models.CharField(max_length=20,
+                              choices=[("published", "Published"), ("draft", "Draft")],
+                              default="published")
+
+    class Meta:
+        ordering = ["display_order"]
+        verbose_name = "Service"
+        verbose_name_plural = "Services"
+
+    def __str__(self):
+        return self.name
+
+    def get_feature_list(self):
+        return [f.strip() for f in self.features.splitlines() if f.strip()]
 
 
 class ContactLead(models.Model):

@@ -1,1176 +1,172 @@
-{% extends "base_public.html" %}
+{% extends "base_sidebar.html" %}
+<!-- ===================================================================
+     SERVICES PAGE — YouTube-style grid, ข้อมูลจาก DB
+     =================================================================== -->
 
 {% block title %}บริการ AI Automation สำหรับ SME ไทย — AIBiz Thailand{% endblock %}
-{% block meta_description %}ครบทุกโซลูชัน AI สำหรับธุรกิจ SME ไทย ตั้งแต่ AI Chatbot, Lead Generation, Workflow Automation ไปจนถึง Custom AI Agent ราคาเริ่มต้น 15,000 บาท{% endblock %}
+{% block meta_description %}ครบทุกโซลูชัน AI สำหรับธุรกิจ SME ไทย ตั้งแต่ AI Chatbot, Lead Generation, Workflow Automation ไปจนถึง Custom AI Agent{% endblock %}
 
 {% block extra_css %}
 <style>
-  /* ── Services Page Variables ── */
-  :root {
-    --svc-hero-h: 90vh;
-    --svc-glass-bg: rgba(255, 255, 255, 0.06);
-    --svc-glass-border: rgba(201, 169, 110, 0.25);
-    --svc-gold: #c9a96e;
-    --svc-gold-d: #b8924f;
-    --svc-navy: #1a2744;
-    --svc-dark: #0f172a;
-    --svc-card: #111827;
-  }
+/* === PAGE HEADER === */
+.svc-page-header {
+  padding: 1.5rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  margin-bottom: 0;
+}
+.svc-page-header h1 { font-size: clamp(1.3rem, 2.5vw, 1.75rem); font-weight: 900; margin-bottom: .3rem; }
+.svc-page-header p { font-size: .9rem; color: var(--brand-muted); margin: 0; }
 
-  /* ── HERO ── */
-  .svc-hero {
-    position: relative;
-    min-height: var(--svc-hero-h);
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-  }
-  .svc-hero-bg {
-    position: absolute;
-    inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1920&q=80&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center 30%;
-    filter: brightness(0.55) saturate(1.2);
-    transform: scale(1.04);
-    transition: transform 8s ease;
-  }
-  .svc-hero:hover .svc-hero-bg {
-    transform: scale(1.0);
-  }
-  .svc-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(10, 14, 26, 0.85) 0%,
-      rgba(26, 39, 68, 0.60) 60%,
-      rgba(10, 14, 26, 0.50) 100%
-    );
-  }
-  .svc-hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 7rem 0 5rem;
-  }
-  .svc-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--svc-gold);
-    margin-bottom: 1.25rem;
-  }
-  .svc-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 24px;
-    height: 2px;
-    background: var(--svc-gold);
-    border-radius: 2px;
-  }
-  .svc-hero h1 {
-    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
-    font-weight: 900;
-    line-height: 1.12;
-    color: #faf6ee;
-    margin-bottom: 1.25rem;
-  }
-  .svc-hero h1 span {
-    background: linear-gradient(135deg, var(--svc-gold), #e8c97a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .svc-hero-lead {
-    font-size: 1.15rem;
-    color: rgba(255,255,255,0.82);
-    max-width: 520px;
-    line-height: 1.8;
-    margin-bottom: 2rem;
-  }
-  .glass-stat-number {
-    font-size: 2.4rem;
-    font-weight: 900;
-    color: var(--svc-gold);
-    line-height: 1;
-    display: block;
-  }
-  .glass-stat-label {
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.65);
-    margin-top: 4px;
-    font-weight: 500;
-  }
+/* === SERVICE GRID — YouTube style === */
+.svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  padding: 1.25rem 1.25rem 3rem;
+}
+@media (max-width: 1199.98px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 575.98px)  { .svc-grid { grid-template-columns: 1fr; } }
 
-  /* Glassmorphism Stats Card */
-  .glass-stats-card {
-    position: absolute;
-    right: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 3;
-    background: var(--svc-glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--svc-glass-border);
-    border-radius: 20px;
-    padding: 2rem 1.75rem;
-    min-width: 220px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(201,169,110,0.08);
-  }
-  .glass-stat-item {
-    text-align: center;
-    padding: 0.9rem 0;
-    border-bottom: 1px solid rgba(201,169,110,0.12);
-  }
-  .glass-stat-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-  .glass-stat-item:first-child {
-    padding-top: 0;
-  }
+/* === SERVICE CARD — matches Blog yt-card === */
+.svc-card {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .2s;
+}
+.svc-card:hover { transform: translateY(-2px); }
 
-  /* ── PAIN POINTS ── */
-  .pain-section {
-    background: #080d18;
-    padding: 5rem 0;
-    position: relative;
-  }
-  .pain-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--svc-gold), transparent);
-  }
-  .pain-card-premium {
-    background: linear-gradient(160deg, #0d1420 0%, #10172b 100%);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 2rem 1.75rem;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-  .pain-card-premium:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
-  }
-  .pain-card-premium::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    border-radius: 16px 16px 0 0;
-  }
-  .pain-card-premium.red::before   { background: linear-gradient(90deg, #ef4444, #dc2626); }
-  .pain-card-premium.amber::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
-  .pain-card-premium.blue::before  { background: linear-gradient(90deg, #3b82f6, #2563eb); }
-  .pain-card-premium.red:hover   { border-color: rgba(239,68,68,0.3); }
-  .pain-card-premium.amber:hover { border-color: rgba(245,158,11,0.3); }
-  .pain-card-premium.blue:hover  { border-color: rgba(59,130,246,0.3); }
-  .pain-icon-wrap {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    margin-bottom: 1.25rem;
-  }
-  .pain-icon-wrap.red   { background: rgba(239,68,68,0.12);  color: #f87171; }
-  .pain-icon-wrap.amber { background: rgba(245,158,11,0.12); color: #fbbf24; }
-  .pain-icon-wrap.blue  { background: rgba(59,130,246,0.12); color: #60a5fa; }
-  .pain-card-premium h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #faf6ee;
-    margin-bottom: 0.75rem;
-  }
-  .pain-card-premium p {
-    font-size: 0.9rem;
-    color: #64748b;
-    line-height: 1.7;
-    margin-bottom: 0;
-  }
-  .pain-card-premium p strong {
-    color: #94a3b8;
-  }
+/* Thumbnail — 16:9 like Blog */
+.svc-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: .75rem;
+  background: var(--brand-dark);
+}
+.svc-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .3s ease;
+}
+.svc-card:hover .svc-thumb img { transform: scale(1.04); }
 
-  /* ── SERVICES SECTION ── */
-  .services-section {
-    padding: 5.5rem 0;
-  }
-  .svc-featured-card {
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.07);
-    background: var(--svc-card);
-    position: relative;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-  .svc-featured-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-    border-color: var(--svc-gold);
-  }
-  .svc-featured-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--svc-gold), transparent);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-  .svc-featured-card:hover::after {
-    opacity: 1;
-  }
-  .svc-featured-img {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-    display: block;
-    filter: brightness(0.85);
-    transition: filter 0.3s ease;
-  }
-  .svc-featured-card:hover .svc-featured-img {
-    filter: brightness(0.95);
-  }
-  .svc-featured-body {
-    padding: 2rem;
-  }
-  .svc-tag {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--svc-gold);
-    border: 1px solid rgba(201,169,110,0.4);
-    padding: 3px 12px;
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
-  .svc-featured-body h3 {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #faf6ee;
-    margin-bottom: 0.75rem;
-  }
-  .svc-featured-body p {
-    font-size: 0.92rem;
-    color: #94a3b8;
-    line-height: 1.75;
-    margin-bottom: 1.25rem;
-  }
-  .svc-check-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem;
-  }
-  .svc-check-list li {
-    font-size: 0.88rem;
-    color: #94a3b8;
-    padding: 5px 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .svc-check-list li::before {
-    content: '';
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='rgba(201,169,110,0.15)' stroke='rgba(201,169,110,0.5)' stroke-width='1'/%3E%3Cpath d='M5 8l2 2 4-4' stroke='%23c9a96e' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
-    margin-top: 2px;
-  }
-  .svc-price {
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-bottom: 0;
-  }
-  .svc-price strong {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--svc-gold);
-  }
-  .svc-grid-card {
-    background: linear-gradient(160deg, #111827 0%, #0f172a 100%);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    padding: 1.75rem;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-  .svc-grid-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
-    border-color: var(--svc-gold);
-  }
-  .svc-grid-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--svc-gold), transparent);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-  .svc-grid-card:hover::after {
-    opacity: 1;
-  }
-  .svc-grid-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    background: rgba(201,169,110,0.1);
-    border: 1px solid rgba(201,169,110,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1.25rem;
-    color: var(--svc-gold);
-    transition: background 0.25s ease, transform 0.25s ease;
-  }
-  .svc-grid-card:hover .svc-grid-icon {
-    background: rgba(201,169,110,0.18);
-    transform: scale(1.08);
-  }
-  .svc-grid-card h4 {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: #faf6ee;
-    margin-bottom: 0.6rem;
-  }
-  .svc-grid-card p {
-    font-size: 0.87rem;
-    color: #64748b;
-    line-height: 1.7;
-    margin-bottom: 0.75rem;
-  }
+/* Placeholder */
+.svc-thumb-ph {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--brand-navy), #0a0f1a);
+  font-size: 3rem; color: rgba(201,169,110,.25);
+}
 
-  /* ── STATS SECTION ── */
-  .stats-dark-section {
-    position: relative;
-    background: var(--svc-dark);
-    padding: 5rem 0;
-    overflow: hidden;
-  }
-  .stats-bg-image {
-    position: absolute;
-    inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=60&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.06;
-    filter: grayscale(50%);
-  }
-  .stats-bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(201,169,110,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,169,110,0.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-  .stat-big-number {
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--svc-gold), #e8c97a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  .stat-big-label {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.6);
-    font-weight: 500;
-  }
-  .stat-divider {
-    width: 1px;
-    background: linear-gradient(to bottom, transparent, rgba(201,169,110,0.3), transparent);
-    align-self: stretch;
-  }
+/* Featured badge on thumbnail */
+.svc-badge-featured {
+  position: absolute; top: .5rem; left: .5rem;
+  background: var(--brand-gold); color: var(--brand-dark);
+  font-size: .62rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .08em; padding: 2px 8px; border-radius: 4px;
+}
 
-  /* ── PROCESS SECTION ── */
-  .process-section {
-    padding: 5.5rem 0;
-    background: #080d18;
-    position: relative;
-  }
-  .process-section::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--svc-gold), transparent);
-  }
-  .process-step {
-    text-align: center;
-    position: relative;
-    padding: 0 1rem;
-  }
-  .process-step-number {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(201,169,110,0.15), rgba(201,169,110,0.05));
-    border: 2px solid rgba(201,169,110,0.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--svc-gold);
-    position: relative;
-    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-  }
-  .process-step:hover .process-step-number {
-    background: linear-gradient(135deg, rgba(201,169,110,0.3), rgba(201,169,110,0.1));
-    border-color: var(--svc-gold);
-    transform: scale(1.08);
-  }
-  .process-connector {
-    position: absolute;
-    top: 36px;
-    left: calc(50% + 40px);
-    right: calc(-50% + 40px);
-    height: 2px;
-    background: linear-gradient(90deg, rgba(201,169,110,0.4), rgba(201,169,110,0.1));
-  }
-  .process-step h4 {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #faf6ee;
-    margin-bottom: 0.6rem;
-  }
-  .process-step p {
-    font-size: 0.86rem;
-    color: #64748b;
-    line-height: 1.7;
-    margin-bottom: 0;
-  }
-  .process-step-icon {
-    display: block;
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-    color: var(--svc-gold);
-    opacity: 0.7;
-  }
+/* Icon badge on thumbnail (bottom-right) */
+.svc-icon-badge {
+  position: absolute; bottom: .5rem; right: .5rem;
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(0,0,0,.75); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: var(--brand-gold);
+}
 
-  /* ── TESTIMONIALS ── */
-  .testimonials-section {
-    padding: 5.5rem 0;
-  }
-  .testimonial-card {
-    background: linear-gradient(160deg, #111827 0%, #0d1220 100%);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 20px;
-    padding: 2.25rem 2rem;
-    position: relative;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-  .testimonial-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 56px rgba(0,0,0,0.45);
-    border-color: rgba(201,169,110,0.35);
-  }
-  .testimonial-quote-icon {
-    font-size: 3.5rem;
-    line-height: 1;
-    color: var(--svc-gold);
-    opacity: 0.25;
-    position: absolute;
-    top: 1.25rem;
-    right: 1.75rem;
-    font-family: Georgia, serif;
-  }
-  .testimonial-stars {
-    color: var(--svc-gold);
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
-  }
-  .testimonial-text {
-    font-size: 1rem;
-    color: #94a3b8;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-  }
-  .testimonial-author-name {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #faf6ee;
-    margin-bottom: 2px;
-  }
-  .testimonial-author-role {
-    font-size: 0.82rem;
-    color: #64748b;
-  }
-  .testimonial-author-logo {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: rgba(201,169,110,0.12);
-    border: 1px solid rgba(201,169,110,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 0.95rem;
-    color: var(--svc-gold);
-    flex-shrink: 0;
-  }
-  .social-proof-bar {
-    background: rgba(201,169,110,0.06);
-    border: 1px solid rgba(201,169,110,0.18);
-    border-radius: 16px;
-    padding: 1.5rem 2rem;
-    margin-top: 3rem;
-  }
-  .social-proof-number {
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: var(--svc-gold);
-    display: block;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .social-proof-label {
-    font-size: 0.8rem;
-    color: #64748b;
-    font-weight: 500;
-  }
+/* Price badge on thumbnail (bottom-left) */
+.svc-price-badge {
+  position: absolute; bottom: .5rem; left: .5rem;
+  background: rgba(0,0,0,.82); color: #fff;
+  font-size: .7rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+}
 
-  /* ── CTA FINAL ── */
-  .cta-final-section {
-    background: linear-gradient(135deg, #0d1735 0%, var(--svc-navy) 50%, #0f1f3d 100%);
-    padding: 6rem 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .cta-final-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.08) 0%, transparent 70%);
-  }
-  .cta-gold-glow {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-  .cta-final-section h2 {
-    font-size: clamp(2rem, 4.5vw, 3.2rem);
-    font-weight: 900;
-    color: #faf6ee;
-    line-height: 1.2;
-    position: relative;
-    z-index: 1;
-  }
-  .cta-final-section h2 span {
-    background: linear-gradient(135deg, var(--svc-gold), #e8c97a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .cta-final-lead {
-    font-size: 1.05rem;
-    color: rgba(255,255,255,0.65);
-    max-width: 540px;
-    margin: 0 auto 2.5rem;
-    position: relative;
-    z-index: 1;
-  }
-  .btn-cta-primary {
-    background: linear-gradient(135deg, var(--svc-gold), #e8c97a);
-    color: var(--svc-dark);
-    border: none;
-    padding: 1rem 2.5rem;
-    font-size: 1.05rem;
-    font-weight: 800;
-    border-radius: 50px;
-    box-shadow: 0 8px 32px rgba(201,169,110,0.35);
-    transition: all 0.25s ease;
-    position: relative;
-    z-index: 1;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-cta-primary:hover {
-    background: linear-gradient(135deg, #d4b87a, var(--svc-gold));
-    box-shadow: 0 12px 48px rgba(201,169,110,0.5);
-    transform: translateY(-3px);
-    color: var(--svc-dark);
-  }
-  .btn-cta-outline {
-    background: transparent;
-    color: rgba(255,255,255,0.75);
-    border: 1px solid rgba(255,255,255,0.25);
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 50px;
-    transition: all 0.25s ease;
-    text-decoration: none;
-    display: inline-block;
-    position: relative;
-    z-index: 1;
-  }
-  .btn-cta-outline:hover {
-    border-color: rgba(201,169,110,0.6);
-    color: var(--svc-gold);
-    background: rgba(201,169,110,0.06);
-    transform: translateY(-2px);
-  }
-  .cta-trust-badges {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
-  }
-  .cta-trust-badge {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.45);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .cta-trust-badge i {
-    color: var(--svc-gold);
-    opacity: 0.7;
-  }
+/* Card body — same as Blog */
+.svc-card-body { display: flex; gap: .6rem; align-items: flex-start; }
+.svc-icon-avatar {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  background: linear-gradient(135deg, var(--brand-navy), var(--brand-gold));
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; color: #fff;
+}
+.svc-card-info { flex: 1; min-width: 0; }
+.svc-card-title {
+  font-size: .92rem; font-weight: 700; color: var(--bs-body-color);
+  line-height: 1.4; margin-bottom: .2rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.svc-card:hover .svc-card-title { color: var(--brand-gold); }
+.svc-card-tagline {
+  font-size: .78rem; color: var(--brand-muted); margin-bottom: .15rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.svc-card-price { font-size: .75rem; color: var(--brand-gold); font-weight: 700; }
 
-  /* ── Section headings shared ── */
-  .section-heading {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 900;
-    color: #faf6ee;
-    line-height: 1.2;
-    margin-bottom: 0.75rem;
-  }
-  .section-sub {
-    font-size: 1rem;
-    color: #64748b;
-    max-width: 540px;
-    line-height: 1.75;
-  }
-
-  /* ── Responsive ── */
-  @media (max-width: 991.98px) {
-    .glass-stats-card { display: none; }
-    .svc-hero-content { padding: 5rem 0 4rem; }
-    .svc-hero h1 { font-size: clamp(1.9rem, 7vw, 2.8rem); }
-    .process-connector { display: none; }
-  }
-  @media (max-width: 575.98px) {
-    .stat-divider { display: none; }
-  }
+/* Hover overlay on thumb */
+.svc-thumb::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(201,169,110,0);
+  transition: background .2s;
+  pointer-events: none;
+}
+.svc-card:hover .svc-thumb::after { background: rgba(201,169,110,.08); }
 </style>
 {% endblock %}
 
-{% block content %}
+{% block page_content %}
 
-<!-- HERO SECTION — Full 90vh + Glassmorphism Stats Card -->
-<section class="svc-hero">
-  <div class="svc-hero-bg"></div>
-  <div class="svc-hero-overlay"></div>
-
-  <!-- Glassmorphism Stats Card -->
-  <div class="glass-stats-card d-none d-lg-block">
-    <div class="glass-stat-item">
-      <span class="glass-stat-number">80%</span>
-      <div class="glass-stat-label">ลดงาน Manual เฉลี่ย</div>
-    </div>
-    <div class="glass-stat-item">
-      <span class="glass-stat-number">24/7</span>
-      <div class="glass-stat-label">AI ทำงานไม่หยุด</div>
-    </div>
-    <div class="glass-stat-item">
-      <span class="glass-stat-number">30</span>
-      <div class="glass-stat-label">วัน เห็นผลลัพธ์จริง</div>
-    </div>
-    <div class="glass-stat-item">
-      <span class="glass-stat-number">3x</span>
-      <div class="glass-stat-label">ROI เฉลี่ยใน 6 เดือน</div>
-    </div>
+  <!-- Page header -->
+  <div class="svc-page-header">
+    <h1>บริการของเรา</h1>
+    <p>โซลูชัน AI และระบบดิจิทัลครบวงจรสำหรับ SME ไทย เริ่มต้นได้ทันที</p>
   </div>
 
-  <div class="container svc-hero-content">
-    <div class="row">
-      <div class="col-lg-7">
-        <div class="svc-eyebrow">AI Automation Solutions</div>
-        <h1>
-          ระบบ AI ที่<span> ธุรกิจไทย</span><br>
-          ใช้แล้วได้ผลจริง
-        </h1>
-        <p class="svc-hero-lead">
-          เปลี่ยน SME ของคุณให้แข่งขันได้ในยุค AI ด้วยโซลูชันที่ติดตั้งง่าย
-          ใช้งานได้จริง และเห็นผลภายใน 30 วัน
-        </p>
-        <div class="d-flex flex-wrap gap-3">
-          <a href="{% url 'pages:contact' %}" class="btn-cta-primary">
-            <i class="bi bi-chat-dots me-2"></i>ปรึกษาฟรี ไม่มีข้อผูกมัด
-          </a>
-          <a href="{% url 'portfolio:list' %}" class="btn-cta-outline">
-            ดูผลงานจริง <i class="bi bi-arrow-right ms-1"></i>
-          </a>
-        </div>
-        <!-- Mobile stats -->
-        <div class="d-flex d-lg-none gap-4 mt-4 flex-wrap">
-          <div class="text-center">
-            <span class="glass-stat-number" style="font-size:1.8rem;">80%</span>
-            <div class="glass-stat-label">ลดงาน Manual</div>
-          </div>
-          <div class="text-center">
-            <span class="glass-stat-number" style="font-size:1.8rem;">24/7</span>
-            <div class="glass-stat-label">AI ทำงาน</div>
-          </div>
-          <div class="text-center">
-            <span class="glass-stat-number" style="font-size:1.8rem;">3x</span>
-            <div class="glass-stat-label">ROI เฉลี่ย</div>
-          </div>
+  <!-- Services grid -->
+  <div class="svc-grid">
+    {% for svc in services %}
+    <a href="{% url 'pages:service_detail' svc.slug %}" class="svc-card">
+
+      <!-- Thumbnail -->
+      <div class="svc-thumb">
+        {% if svc.cover_image_url %}
+        <img src="{{ svc.cover_image_url }}" alt="{{ svc.name }}" loading="lazy">
+        {% else %}
+        <div class="svc-thumb-ph"><i class="bi {{ svc.icon }}"></i></div>
+        {% endif %}
+
+        {% if svc.is_featured %}
+        <span class="svc-badge-featured">แนะนำ</span>
+        {% endif %}
+
+        <span class="svc-price-badge">฿{{ svc.price_start|floatformat:0 }}+</span>
+        <span class="svc-icon-badge"><i class="bi {{ svc.icon }}"></i></span>
+      </div>
+
+      <!-- Card body — same structure as Blog -->
+      <div class="svc-card-body">
+        <div class="svc-icon-avatar"><i class="bi {{ svc.icon }}"></i></div>
+        <div class="svc-card-info">
+          <p class="svc-card-title">{{ svc.name }}</p>
+          <p class="svc-card-tagline">{{ svc.tagline }}</p>
+          <p class="svc-card-price">เริ่มต้น ฿{{ svc.price_start|floatformat:0 }} · {{ svc.price_label }}</p>
         </div>
       </div>
+
+    </a>
+    {% empty %}
+    <div style="grid-column:1/-1;text-align:center;padding:5rem 1rem;color:var(--brand-muted);">
+      <i class="bi bi-stars" style="font-size:3rem;opacity:.2;"></i>
+      <p class="mt-3">ยังไม่มีบริการในระบบ</p>
     </div>
+    {% endfor %}
   </div>
-</section>
-
-
-<!-- PAIN POINTS SECTION — Dark bg + 3 Accent-Top Cards -->
-<section class="pain-section">
-  <div class="container">
-    <div class="text-center mb-5">
-      <div class="svc-eyebrow justify-content-center">ปัญหาที่ SME ไทยเผชิญ</div>
-      <h2 class="section-heading">คุณกำลังแพ้คู่แข่ง<br>โดยไม่รู้ตัว</h2>
-      <p class="section-sub mx-auto mt-3">
-        ธุรกิจที่ไม่ปรับตัวเรื่อง AI วันนี้ จะใช้ต้นทุนสูงกว่าคู่แข่งถึง 3 เท่าในอีก 2 ปีข้างหน้า
-      </p>
-    </div>
-    <div class="row g-4">
-
-      <div class="col-md-4">
-        <div class="pain-card-premium red">
-          <div class="pain-icon-wrap red">
-            <i class="bi bi-clock-history"></i>
-          </div>
-          <h3>เสียเวลางาน Repeat ทุกวัน</h3>
-          <p>
-            พนักงานใช้เวลา <strong>4-6 ชั่วโมงต่อวัน</strong> กับงาน
-            ตอบ Line, ส่งรายงาน, คีย์ข้อมูล — งานที่ AI ทำแทนได้ทั้งหมด
-          </p>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="pain-card-premium amber">
-          <div class="pain-icon-wrap amber">
-            <i class="bi bi-funnel"></i>
-          </div>
-          <h3>Lead หลุดมือ ปิดดีลไม่ทัน</h3>
-          <p>
-            <strong>68% ของ lead</strong> ไม่ได้รับการติดตามภายใน 1 ชั่วโมงแรก
-            นั่นหมายถึงรายได้ที่คุณสูญเสียให้คู่แข่งทุกวัน
-          </p>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="pain-card-premium blue">
-          <div class="pain-icon-wrap blue">
-            <i class="bi bi-graph-down-arrow"></i>
-          </div>
-          <h3>ขยายธุรกิจ แต่ต้นทุนพุ่ง</h3>
-          <p>
-            ยอดขายโตขึ้น แต่ต้องจ้างคนเพิ่มทุกครั้ง
-            <strong>วงจรนี้จะจบ</strong>เมื่อคุณให้ AI รับภาระการทำงานซ้ำซ้อน
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- SERVICES SECTION — 2 Featured Cards + 4 Grid -->
-<section class="services-section">
-  <div class="container">
-    <div class="text-center mb-5">
-      <div class="svc-eyebrow justify-content-center">โซลูชันของเรา</div>
-      <h2 class="section-heading">บริการ AI ครบวงจร<br>สำหรับธุรกิจไทย</h2>
-      <p class="section-sub mx-auto mt-3">
-        ทุกบริการออกแบบมาสำหรับ SME ไทยโดยเฉพาะ ติดตั้งเร็ว ใช้งานได้จริง และวัดผลได้ชัดเจน
-      </p>
-    </div>
-
-    <!-- 2 Featured Cards -->
-    <div class="row g-4 mb-4">
-
-      <div class="col-lg-6">
-        <div class="svc-featured-card h-100">
-          <img
-            src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=800&q=80&auto=format&fit=crop"
-            alt="AI Chatbot สำหรับธุรกิจ"
-            class="svc-featured-img"
-          />
-          <div class="svc-featured-body">
-            <span class="svc-tag">Most Popular</span>
-            <h3>AI Chatbot สำหรับธุรกิจ</h3>
-            <p>
-              Chatbot อัจฉริยะที่ตอบคำถามลูกค้าได้ 24/7 บน Line Official, Facebook, และเว็บไซต์
-              เรียนรู้สินค้าและบริการของคุณโดยเฉพาะ ไม่ใช่คำตอบสำเร็จรูป
-            </p>
-            <ul class="svc-check-list">
-              <li>ตอบถามสินค้า ราคา และโปรโมชันได้ทันที</li>
-              <li>รับออเดอร์และนัดหมายอัตโนมัติ</li>
-              <li>ส่งต่อ human agent เมื่อจำเป็น</li>
-              <li>Dashboard แสดงสถิติ real-time</li>
-            </ul>
-            <div class="d-flex align-items-center justify-content-between">
-              <p class="svc-price mb-0">เริ่มต้น <strong>15,000 บาท</strong> / ครั้ง</p>
-              <a href="{% url 'pages:contact' %}" class="btn btn-primary btn-sm px-4 fw-bold">สอบถาม</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-6">
-        <div class="svc-featured-card h-100">
-          <img
-            src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80&auto=format&fit=crop"
-            alt="AI Lead Generation"
-            class="svc-featured-img"
-          />
-          <div class="svc-featured-body">
-            <span class="svc-tag">High ROI</span>
-            <h3>AI Lead Generation</h3>
-            <p>
-              ระบบหา qualify lead และ nurture อัตโนมัติ ตั้งแต่ดึงดูด lead จนถึงส่งให้ทีมขาย
-              พร้อม lead score และ insight ที่ช่วยให้ทีมปิดดีลได้เร็วขึ้น
-            </p>
-            <ul class="svc-check-list">
-              <li>Qualify lead อัตโนมัติด้วย AI scoring</li>
-              <li>Nurture campaign ผ่าน Line/Email/SMS</li>
-              <li>แจ้งเตือนทีมขายเมื่อ lead พร้อมซื้อ</li>
-              <li>Integration กับ CRM ที่มีอยู่แล้ว</li>
-            </ul>
-            <div class="d-flex align-items-center justify-content-between">
-              <p class="svc-price mb-0">เริ่มต้น <strong>25,000 บาท</strong> / ครั้ง</p>
-              <a href="{% url 'pages:contact' %}" class="btn btn-primary btn-sm px-4 fw-bold">สอบถาม</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- 4 Grid Cards -->
-    <div class="row g-4">
-
-      <div class="col-sm-6 col-lg-3">
-        <div class="svc-grid-card">
-          <div class="svc-grid-icon">
-            <i class="bi bi-diagram-3"></i>
-          </div>
-          <h4>AI Workflow Automation</h4>
-          <p>
-            เชื่อมระบบทุกอย่างในธุรกิจด้วย AI ลดขั้นตอน Manual ที่ซ้ำซ้อน
-            ตั้งแต่ HR, Inventory ถึง Finance
-          </p>
-          <p class="svc-price">เริ่มต้น <strong>20,000 บาท</strong></p>
-        </div>
-      </div>
-
-      <div class="col-sm-6 col-lg-3">
-        <div class="svc-grid-card">
-          <div class="svc-grid-icon">
-            <i class="bi bi-cpu"></i>
-          </div>
-          <h4>Custom AI Agent</h4>
-          <p>
-            AI Agent สั่งทำพิเศษตามความต้องการธุรกิจ ทำงานซับซ้อนได้อัตโนมัติ
-            วิเคราะห์ข้อมูล ตัดสินใจ
-          </p>
-          <p class="svc-price">เริ่มต้น <strong>50,000 บาท</strong></p>
-        </div>
-      </div>
-
-      <div class="col-sm-6 col-lg-3">
-        <div class="svc-grid-card">
-          <div class="svc-grid-icon">
-            <i class="bi bi-hdd-network"></i>
-          </div>
-          <h4>AI + Hardware Integration</h4>
-          <p>
-            เชื่อม AI เข้ากับฮาร์ดแวร์จริง เช่น กล้อง CCTV อัจฉริยะ,
-            IoT Sensor, ระบบ POS และคลังสินค้า
-          </p>
-          <p class="svc-price">เริ่มต้น <strong>80,000 บาท</strong></p>
-        </div>
-      </div>
-
-      <div class="col-sm-6 col-lg-3">
-        <div class="svc-grid-card">
-          <div class="svc-grid-icon">
-            <i class="bi bi-lightbulb"></i>
-          </div>
-          <h4>AI Strategy Consulting</h4>
-          <p>
-            วางแผน AI Roadmap สำหรับธุรกิจ วิเคราะห์ process ที่ควร automate
-            ก่อน และ ROI ที่คาดหวัง
-          </p>
-          <p class="svc-price">เริ่มต้น <strong>8,000 บาท</strong></p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- STATS SECTION — Dark + Big Gold Numbers + bg image opacity -->
-<section class="stats-dark-section">
-  <div class="stats-bg-image"></div>
-  <div class="stats-bg-grid"></div>
-  <div class="container position-relative" style="z-index:1;">
-    <div class="text-center mb-5">
-      <div class="svc-eyebrow justify-content-center">ผลลัพธ์ที่พิสูจน์แล้ว</div>
-      <h2 class="section-heading">ตัวเลขที่ลูกค้าเราได้รับจริง</h2>
-    </div>
-    <div class="row justify-content-center align-items-center g-0">
-      <div class="col-6 col-md-3 text-center py-3">
-        <span class="stat-big-number">80%</span>
-        <div class="stat-big-label">ลดเวลางาน Manual</div>
-      </div>
-      <div class="d-none d-md-flex col-md-auto">
-        <div class="stat-divider mx-3" style="min-height:80px;"></div>
-      </div>
-      <div class="col-6 col-md-3 text-center py-3">
-        <span class="stat-big-number">3x</span>
-        <div class="stat-big-label">ROI ใน 6 เดือน</div>
-      </div>
-      <div class="d-none d-md-flex col-md-auto">
-        <div class="stat-divider mx-3" style="min-height:80px;"></div>
-      </div>
-      <div class="col-6 col-md-3 text-center py-3">
-        <span class="stat-big-number">20+</span>
-        <div class="stat-big-label">ลูกค้าที่ไว้ใจเรา</div>
-      </div>
-      <div class="d-none d-md-flex col-md-auto">
-        <div class="stat-divider mx-3" style="min-height:80px;"></div>
-      </div>
-      <div class="col-6 col-md-3 text-center py-3">
-        <span class="stat-big-number">30</span>
-        <div class="stat-big-label">วัน เห็นผลแรก</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- PROCESS SECTION — 4 Steps + Connector -->
-<section class="process-section">
-  <div class="container">
-    <div class="text-center mb-5">
-      <div class="svc-eyebrow justify-content-center">ขั้นตอนการทำงาน</div>
-      <h2 class="section-heading">จาก 0 ถึง AI ใน 4 ขั้นตอน</h2>
-      <p class="section-sub mx-auto mt-3">
-        กระบวนการที่เป็นระบบ ไม่มีความเสี่ยง และมีทีมดูแลตลอดการใช้งาน
-      </p>
-    </div>
-    <div class="row g-4">
-
-      <div class="col-6 col-md-3">
-        <div class="process-step">
-          <div class="process-step-number">
-            01
-            <div class="process-connector d-none d-md-block"></div>
-          </div>
-          <span class="process-step-icon"><i class="bi bi-chat-square-quote"></i></span>
-          <h4>ปรึกษาฟรี</h4>
-          <p>เล่าปัญหาธุรกิจให้ฟัง ทีมเราวิเคราะห์ว่า AI จะช่วยได้อย่างไรและคุ้มแค่ไหน</p>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div class="process-step">
-          <div class="process-step-number">
-            02
-            <div class="process-connector d-none d-md-block"></div>
-          </div>
-          <span class="process-step-icon"><i class="bi bi-search"></i></span>
-          <h4>วิเคราะห์ Process</h4>
-          <p>ลงลึกวิเคราะห์ workflow เพื่อหาจุดที่ AI จะสร้างผลกระทบสูงสุดและเร็วที่สุด</p>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div class="process-step">
-          <div class="process-step-number">
-            03
-            <div class="process-connector d-none d-md-block"></div>
-          </div>
-          <span class="process-step-icon"><i class="bi bi-code-square"></i></span>
-          <h4>พัฒนาและติดตั้ง</h4>
-          <p>สร้างและติดตั้งระบบ AI พร้อม training ทีมงานให้ใช้งานได้จริงทันที</p>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div class="process-step">
-          <div class="process-step-number">04</div>
-          <span class="process-step-icon"><i class="bi bi-graph-up-arrow"></i></span>
-          <h4>เห็นผลและปรับปรุง</h4>
-          <p>วัดผลชัดเจนใน 30 วัน พร้อม Support และปรับปรุงระบบต่อเนื่อง</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- TESTIMONIALS SECTION — 2 Quote Cards + Social Proof Bar -->
-<section class="testimonials-section">
-  <div class="container">
-    <div class="text-center mb-5">
-      <div class="svc-eyebrow justify-content-center">เสียงจากลูกค้า</div>
-      <h2 class="section-heading">ผลลัพธ์จริงจากธุรกิจจริง</h2>
-    </div>
-    <div class="row g-4">
-
-      <div class="col-md-6">
-        <div class="testimonial-card h-100">
-          <div class="testimonial-quote-icon">"</div>
-          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="testimonial-text">
-            ก่อนใช้ Chatbot ทีม CS ต้องตอบ Line ทั้งวัน หลังติดตั้งเพียง 2 สัปดาห์
-            80% ของคำถามถูกตอบอัตโนมัติ ทีมมีเวลาไปโฟกัสงานที่สำคัญกว่า
-            ยอดขายเพิ่มขึ้น 40% ในเดือนแรก
-          </p>
-          <div class="d-flex align-items-center gap-3">
-            <div class="testimonial-author-logo">KS</div>
-            <div>
-              <div class="testimonial-author-name">คุณกัญญา สิริมงคล</div>
-              <div class="testimonial-author-role">เจ้าของร้าน Kooky Shop — E-Commerce</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="testimonial-card h-100">
-          <div class="testimonial-quote-icon">"</div>
-          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="testimonial-text">
-            ระบบ Lead Gen AI ช่วยให้เราตามติด lead ได้เร็วขึ้นมาก จากเดิมที่บางทีรอ 2-3 วัน
-            ตอนนี้ response ใน 5 นาทีทุกราย อัตราปิดดีลเพิ่มขึ้น 65%
-            คุ้มค่ามากเมื่อเทียบกับต้นทุนที่จ่าย
-          </p>
-          <div class="d-flex align-items-center gap-3">
-            <div class="testimonial-author-logo">PT</div>
-            <div>
-              <div class="testimonial-author-name">คุณปิยะ ทองดี</div>
-              <div class="testimonial-author-role">MD บริษัท Prime Tech Solutions — B2B SaaS</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Social Proof Bar -->
-    <div class="social-proof-bar">
-      <div class="row g-3 align-items-center">
-        <div class="col-4">
-          <div class="text-center">
-            <span class="social-proof-number">20+</span>
-            <div class="social-proof-label">ลูกค้าที่ไว้วางใจ</div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="text-center">
-            <span class="social-proof-number">4.9&#9733;</span>
-            <div class="social-proof-label">คะแนนเฉลี่ยจากลูกค้า</div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="text-center">
-            <span class="social-proof-number">92%</span>
-            <div class="social-proof-label">อัตราต่อสัญญา</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- CTA FINAL — Navy bg + Gold Glow + ปุ่มปิดดีล -->
-<section class="cta-final-section">
-  <div class="cta-gold-glow"></div>
-  <div class="container text-center position-relative" style="z-index:1;">
-
-    <div class="svc-eyebrow justify-content-center mb-4">พร้อมเริ่มต้นแล้วหรือยัง?</div>
-    <h2>
-      ปล่อยให้ AI ทำงานแทนคุณ<br>
-      <span>คุณโฟกัสที่การเติบโต</span>
-    </h2>
-    <p class="cta-final-lead mx-auto">
-      ปรึกษาฟรี 45 นาที ไม่มีค่าใช้จ่าย ไม่มีข้อผูกมัด
-      ทีมเราจะวิเคราะห์ธุรกิจของคุณและบอกว่า AI จะช่วยได้อย่างไร
-    </p>
-
-    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-4">
-      <a href="{% url 'pages:contact' %}" class="btn-cta-primary">
-        <i class="bi bi-calendar-check me-2"></i>นัดปรึกษาฟรีเดี๋ยวนี้
-      </a>
-      <a href="tel:+66800000000" class="btn-cta-outline">
-        <i class="bi bi-telephone me-2"></i>โทรหาเรา
-      </a>
-    </div>
-
-    <div class="cta-trust-badges">
-      <div class="cta-trust-badge">
-        <i class="bi bi-shield-check"></i> ปรึกษาฟรี ไม่มีข้อผูกมัด
-      </div>
-      <div class="cta-trust-badge">
-        <i class="bi bi-clock"></i> Response ภายใน 24 ชั่วโมง
-      </div>
-      <div class="cta-trust-badge">
-        <i class="bi bi-award"></i> รับประกันผลลัพธ์ 30 วัน
-      </div>
-    </div>
-
-  </div>
-</section>
 
 {% endblock %}

@@ -1,0 +1,83 @@
+<!-- ===================================================================
+     CONTACT FORM PARTIAL — ต้นแบบฟอร์มปิดการขาย
+     ใช้ร่วมกันโดย: contact.html, service_detail.html
+     =================================================================== -->
+
+{% if messages %}
+{% for message in messages %}
+<div style="background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.3);border-radius:10px;padding:.85rem 1rem;margin-bottom:1.25rem;display:flex;gap:.65rem;align-items:flex-start;font-size:.88rem;">
+  <i class="bi bi-check-circle-fill" style="color:var(--brand-gold);flex-shrink:0;font-size:1rem;margin-top:1px;"></i>
+  <div><strong>ส่งสำเร็จแล้ว!</strong> {{ message }}</div>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- Perks -->
+<ul style="list-style:none;padding:0;margin:0 0 1.25rem;display:flex;flex-direction:column;gap:.4rem;">
+  <li style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;">
+    <i class="bi bi-check-circle-fill" style="color:var(--brand-gold);flex-shrink:0;"></i> ทีมงานโทรกลับใน 30 นาที
+  </li>
+  <li style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;">
+    <i class="bi bi-check-circle-fill" style="color:var(--brand-gold);flex-shrink:0;"></i> ฟรี ไม่มีข้อผูกมัด
+  </li>
+  <li style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;">
+    <i class="bi bi-check-circle-fill" style="color:var(--brand-gold);flex-shrink:0;"></i> ประเมินราคาภายใน 3 วันทำการ
+  </li>
+</ul>
+
+<!-- LINE button -->
+<a href="https://line.me/ti/p/~@aibizthailand" target="_blank" rel="noopener"
+   style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.75rem;border-radius:50px;background:#06C755;color:#fff;font-size:.92rem;font-weight:700;margin-bottom:.75rem;text-decoration:none;transition:background .2s,color .2s;"
+   onmouseover="this.style.background='#05b34b';this.style.color='#000';"
+   onmouseout="this.style.background='#06C755';this.style.color='#fff';">
+  <i class="bi bi-line" style="font-size:1.1rem;"></i> คุยผ่าน LINE ได้เลย
+</a>
+<div style="text-align:center;font-size:.72rem;color:var(--brand-muted);margin-bottom:1rem;">— หรือกรอกฟอร์มด้านล่าง —</div>
+
+<!-- Form — 3 fields -->
+<form method="post" novalidate>
+  {% csrf_token %}
+  <input type="hidden" name="email" value="no-email@aibizth.ai">
+  <input type="hidden" name="consent_given" value="true">
+  {% if service_slug %}
+  <input type="hidden" name="service_slug" value="{{ service_slug }}">
+  {% endif %}
+
+  <div class="mb-2">
+    <label style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;display:block;">ชื่อ-สกุล *</label>
+    <input type="text" name="name" class="form-control"
+           value="{{ form.name.value|default:'' }}" required
+           placeholder="ชื่อ-นามสกุลของคุณ">
+    {% if form.name.errors %}<div style="color:#ef4444;font-size:.75rem;margin-top:.2rem;">{{ form.name.errors.0 }}</div>{% endif %}
+  </div>
+
+  <div class="mb-2">
+    <label style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;display:block;">เบอร์โทร (ที่รับสายได้) *</label>
+    <input type="tel" name="phone" class="form-control"
+           value="{{ form.phone.value|default:'' }}" required
+           placeholder="เบอร์ที่ติดต่อได้ เช่น 081-234-5678">
+  </div>
+
+  <div class="mb-3">
+    <label style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;display:block;">ต้องการปรึกษาเรื่องอะไร? *</label>
+    <textarea name="message" class="form-control" rows="3" required
+              placeholder="บอกสั้นๆ ว่าธุรกิจคุณทำอะไร และต้องการอะไร">{{ form.message.value|default:'' }}</textarea>
+    {% if form.message.errors %}<div style="color:#ef4444;font-size:.75rem;margin-top:.2rem;">{{ form.message.errors.0 }}</div>{% endif %}
+  </div>
+
+  {% if form.errors and not messages %}
+  <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.65rem 1rem;margin-bottom:.75rem;font-size:.82rem;color:#ef4444;">
+    <i class="bi bi-exclamation-triangle me-1"></i>กรุณาตรวจสอบข้อมูลให้ครบถ้วน
+  </div>
+  {% endif %}
+
+  <button type="submit"
+          style="width:100%;padding:.75rem;border-radius:50px;background:var(--brand-gold);color:var(--brand-dark);font-size:.95rem;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:background .2s;"
+          onmouseover="this.style.background='var(--brand-gold-d)'"
+          onmouseout="this.style.background='var(--brand-gold)'">
+    <i class="bi bi-telephone-fill"></i> ให้ทีมงานโทรกลับใน 30 นาที
+  </button>
+  <p style="font-size:.72rem;color:var(--brand-muted);text-align:center;margin-top:.65rem;margin-bottom:0;">
+    <i class="bi bi-shield-check me-1"></i>ข้อมูลของคุณปลอดภัย ไม่มีการ Spam
+  </p>
+</form>

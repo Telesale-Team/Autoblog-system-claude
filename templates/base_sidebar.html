@@ -1,0 +1,140 @@
+{% extends "base_public.html" %}
+<!-- ===================================================================
+     BASE SIDEBAR LAYOUT — ชุดข้อมูลเดียวกันทุกหน้า
+     =================================================================== -->
+
+{% block content %}
+<div class="yt-outer">
+
+  <!-- === LEFT SIDEBAR === -->
+  <aside class="yt-sidebar" aria-label="เมนูหลัก">
+
+    <!-- === Main navigation === -->
+    <a href="{% url 'pages:home' %}"
+       class="yt-nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+      <i class="bi bi-house-fill"></i> หน้าแรก
+    </a>
+    <a href="{% url 'blog:list' %}"
+       class="yt-nav-item {% if request.resolver_match.app_name == 'blog' %}active{% endif %}">
+      <i class="bi bi-newspaper"></i> บทความ
+    </a>
+    <a href="{% url 'portfolio:list' %}"
+       class="yt-nav-item {% if request.resolver_match.app_name == 'portfolio' %}active{% endif %}">
+      <i class="bi bi-briefcase"></i> ผลงาน
+    </a>
+    <a href="{% url 'pages:services' %}"
+       class="yt-nav-item {% if request.resolver_match.url_name == 'services' or request.resolver_match.url_name == 'service_detail' %}active{% endif %}">
+      <i class="bi bi-stars"></i> บริการ
+    </a>
+    <a href="{% url 'pages:about' %}"
+       class="yt-nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+      <i class="bi bi-info-circle"></i> เกี่ยวกับ
+    </a>
+    <a href="{% url 'pages:contact' %}"
+       class="yt-nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+      <i class="bi bi-chat-dots"></i> ติดต่อ
+    </a>
+
+    <div class="yt-nav-divider"></div>
+
+    <!-- === Portfolio Industries === -->
+    {% if portfolio_industries %}
+    <div class="yt-collapsible-section">
+      <div class="yt-section-header" onclick="sbToggle('sb-ind')">
+        <p class="yt-nav-section-title mb-0">ผลงานตามอุตสาหกรรม</p>
+        <i class="bi bi-chevron-down yt-chevron" id="sb-ind-chevron"></i>
+      </div>
+      {% for val, label in portfolio_industries|slice:":6" %}
+      <a href="{% url 'portfolio:list' %}?industry={{ val }}"
+         class="yt-cat-item {% if request.GET.industry == val %}active{% endif %}">
+        <span class="yt-cat-avatar">{{ label|slice:":2" }}</span>{{ label }}
+      </a>
+      {% endfor %}
+      {% if portfolio_industries|length > 6 %}
+      <div id="sb-ind" class="yt-collapse-content">
+        {% for val, label in portfolio_industries|slice:"6:" %}
+        <a href="{% url 'portfolio:list' %}?industry={{ val }}"
+           class="yt-cat-item {% if request.GET.industry == val %}active{% endif %}">
+          <span class="yt-cat-avatar">{{ label|slice:":2" }}</span>{{ label }}
+        </a>
+        {% endfor %}
+      </div>
+      <button class="yt-collapse-btn" onclick="sbToggle('sb-ind')" type="button">
+        <i class="bi bi-chevron-down yt-collapse-icon" id="sb-ind-icon"></i>
+        <span id="sb-ind-label">ดูเพิ่ม {{ portfolio_industries|length|add:"-6" }} อุตสาหกรรม</span>
+      </button>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- === Services === -->
+    {% if sidebar_services %}
+    <div class="yt-collapsible-section">
+      <div class="yt-section-header" onclick="sbToggle('sb-svc')">
+        <p class="yt-nav-section-title mb-0">บริการของเรา</p>
+        <i class="bi bi-chevron-down yt-chevron" id="sb-svc-chevron"></i>
+      </div>
+      {% for svc in sidebar_services|slice:":6" %}
+      <a href="{% url 'pages:service_detail' svc.slug %}"
+         class="yt-cat-item {% if request.resolver_match.kwargs.slug == svc.slug %}active{% endif %}">
+        <span class="yt-cat-avatar"><i class="bi {{ svc.icon }}" style="font-size:.7rem;"></i></span>
+        {{ svc.name }}
+      </a>
+      {% endfor %}
+      {% if sidebar_services|length > 6 %}
+      <div id="sb-svc" class="yt-collapse-content">
+        {% for svc in sidebar_services|slice:"6:" %}
+        <a href="{% url 'pages:service_detail' svc.slug %}"
+           class="yt-cat-item {% if request.resolver_match.kwargs.slug == svc.slug %}active{% endif %}">
+          <span class="yt-cat-avatar"><i class="bi {{ svc.icon }}" style="font-size:.7rem;"></i></span>
+          {{ svc.name }}
+        </a>
+        {% endfor %}
+      </div>
+      <button class="yt-collapse-btn" onclick="sbToggle('sb-svc')" type="button">
+        <i class="bi bi-chevron-down yt-collapse-icon" id="sb-svc-icon"></i>
+        <span id="sb-svc-label">ดูเพิ่ม {{ sidebar_services|length|add:"-6" }} บริการ</span>
+      </button>
+      {% endif %}
+    </div>
+    {% endif %}
+
+  </aside>
+  <!-- === END LEFT SIDEBAR === -->
+
+  <!-- === MAIN CONTENT === -->
+  <main class="yt-main">
+    {% block page_content %}{% endblock %}
+  </main>
+
+</div>
+
+<!-- Sidebar toggle JS — inline เพื่อไม่ถูก child template override -->
+<script>
+function sbToggle(id) {
+  var el    = document.getElementById(id);
+  var icon  = document.getElementById(id + '-icon');
+  var label = document.getElementById(id + '-label');
+  if (!el) return;
+  var open = el.classList.toggle('open');
+  if (icon)  icon.classList.toggle('open', open);
+  if (label) {
+    if (!label.dataset.orig) label.dataset.orig = label.textContent;
+    label.textContent = open ? 'ย่อ' : label.dataset.orig;
+  }
+}
+document.addEventListener('DOMContentLoaded', function () {
+  ['sb-cat','sb-tag','sb-ind','sb-svc'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.querySelector('.active')) {
+      el.classList.add('open');
+      var icon  = document.getElementById(id + '-icon');
+      var label = document.getElementById(id + '-label');
+      if (icon)  icon.classList.add('open');
+      if (label) { label.dataset.orig = label.textContent; label.textContent = 'ย่อ'; }
+    }
+  });
+});
+</script>
+
+{% endblock %}

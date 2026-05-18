@@ -1,6 +1,7 @@
 from django.db import models
 from blog.models import Article, Category, Tag
-from pages.models import ContactLead
+from pages.models import ContactLead, Service
+from portfolio.models import CaseStudy
 
 
 def global_context(request):
@@ -23,10 +24,26 @@ def global_context(request):
         sidebar_new_leads = ContactLead.objects.filter(status="new").count()
         sidebar_draft_articles = Article.objects.filter(status="draft").count()
 
+    # Portfolio industries ที่มีข้อมูลจริง
+    active_industries = CaseStudy.objects.filter(
+        status="published"
+    ).values_list("industry", flat=True).distinct()
+    portfolio_industries = [
+        (val, label) for val, label in CaseStudy.INDUSTRY_CHOICES
+        if val in active_industries
+    ]
+
+    # Services ทั้งหมด
+    sidebar_services = Service.objects.filter(
+        status="published"
+    ).order_by("display_order").values("name", "slug", "icon")
+
     return {
         "recent_articles": recent_articles,
         "categories": categories,
         "tags": tags,
+        "portfolio_industries": portfolio_industries,
+        "sidebar_services": sidebar_services,
         "sidebar_new_leads": sidebar_new_leads,
         "sidebar_draft_articles": sidebar_draft_articles,
     }

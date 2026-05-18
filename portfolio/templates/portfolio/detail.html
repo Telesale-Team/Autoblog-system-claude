@@ -40,11 +40,10 @@
   /* ── Hero ── */
   .case-hero {
     position: relative;
-    min-height: 360px;
-    max-height: 480px;
+    min-height: 480px;
     overflow: hidden;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     background-color: var(--brand-dark);
   }
   .case-hero__img {
@@ -65,7 +64,7 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    padding: 2rem 0 2.5rem;
+    padding: 4rem 0;
   }
   .roi-display {
     font-size: clamp(2.25rem, 5vw, 3.5rem);
@@ -346,7 +345,7 @@
   <div class="case-hero__overlay"></div>
 
   <div class="case-hero__content">
-    <div class="container">
+    <div class="site-container">
 
       <!-- Breadcrumb -->
       <nav class="detail-breadcrumb mb-3">
@@ -372,7 +371,7 @@
 <!-- ══════════════════════════════════════
      MAIN CONTENT AREA
 ════════════════════════════════════════ -->
-<div class="container py-5">
+<div class="site-container py-5">
   <div class="row g-5">
 
     <!-- LEFT: Main Content -->
@@ -573,7 +572,7 @@
 ════════════════════════════════════════ -->
 {% if related %}
 <section class="py-5 bg-body-secondary">
-  <div class="container">
+  <div class="site-container">
     <div class="text-center mb-4">
       <span class="badge-outline mb-2 d-inline-block">ผลงานที่เกี่ยวข้อง</span>
       <h2 class="fw-bold mt-2" style="font-size:1.4rem;">ดูเคสอื่นที่น่าสนใจ</h2>
@@ -610,7 +609,7 @@
      10. CTA Final
 ════════════════════════════════════════ -->
 <section class="cta-final">
-  <div class="container" style="max-width:640px;">
+  <div class="site-container" style="max-width:640px;">
     <div class="badge-outline mb-3 d-inline-block">ปรึกษาฟรี ไม่มีข้อผูกมัด</div>
     <h2 class="fw-bold mb-3">อยากได้ผลแบบนี้?<br>ปรึกษาเราได้เลย</h2>
     <p class="mb-4">ทีม AI Automation Specialist พร้อมวิเคราะห์ปัญหาและออกแบบระบบ AI ที่เหมาะกับธุรกิจคุณโดยเฉพาะ — ตอบกลับภายใน 24 ชั่วโมง</p>

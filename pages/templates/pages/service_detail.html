@@ -1,0 +1,444 @@
+{% extends "base_public.html" %}
+{% load static %}
+<!-- ===================================================================
+     SERVICE DETAIL — Sales Landing Page
+     =================================================================== -->
+
+{% block title %}{{ svc.name }} — AIBiz Thailand{% endblock %}
+{% block meta_description %}{{ svc.tagline }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===================================================================
+   SERVICE DETAIL — Sales Page Layout
+   =================================================================== */
+
+/* === HERO === */
+.sd-hero {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.sd-hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--brand-navy) 0%, #0a0f1a 100%);
+  z-index: 0;
+}
+.sd-hero-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover; opacity: .22;
+}
+.sd-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, rgba(10,15,26,.92) 0%, rgba(10,15,26,.6) 70%, transparent 100%);
+  z-index: 1;
+}
+.sd-hero-content {
+  position: relative; z-index: 2;
+  width: 100%;
+  padding-top: 5rem;
+  padding-bottom: 4rem;
+}
+.sd-hero-text {
+  max-width: 680px;
+}
+.sd-hero-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--brand-gold); border: 1px solid rgba(201,169,110,.4);
+  padding: 3px 12px; border-radius: 20px; margin-bottom: 1rem;
+}
+.sd-hero-title {
+  font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 900;
+  color: #fff; line-height: 1.15; margin-bottom: .85rem;
+}
+.sd-hero-tagline {
+  font-size: clamp(1rem, 2vw, 1.2rem); color: rgba(255,255,255,.7);
+  line-height: 1.75; max-width: 560px; margin-bottom: 2rem;
+}
+.sd-hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.sd-btn-primary {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .8rem 1.75rem; border-radius: 50px;
+  background: var(--brand-gold); color: var(--brand-dark);
+  font-size: .95rem; font-weight: 800; text-decoration: none;
+  transition: background .2s, transform .15s;
+}
+.sd-btn-primary:hover { background: var(--brand-gold-d); color: var(--brand-dark); transform: translateY(-1px); }
+.sd-btn-outline {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .8rem 1.5rem; border-radius: 50px;
+  border: 1px solid rgba(255,255,255,.3); color: rgba(255,255,255,.8);
+  font-size: .95rem; font-weight: 600; text-decoration: none;
+  transition: border-color .2s, color .2s;
+}
+.sd-btn-outline:hover { border-color: var(--brand-gold); color: var(--brand-gold); }
+
+/* === LAYOUT: Content + Sticky CTA === */
+.sd-body {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 2.5rem;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+  align-items: start;
+}
+@media (max-width: 991.98px) {
+  .sd-body { grid-template-columns: 1fr; }
+  .sd-sticky { position: static !important; }
+}
+
+/* === CONTENT SIDE === */
+.sd-section { margin-bottom: 2.5rem; }
+.sd-section-title {
+  font-size: .65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .15em; color: var(--brand-gold);
+  padding-bottom: .5rem; border-bottom: 1px solid rgba(201,169,110,.2);
+  margin-bottom: 1.25rem;
+}
+
+/* Description */
+.sd-description { font-size: 1rem; line-height: 1.85; color: var(--bs-body-color); }
+
+/* Features grid */
+.sd-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+@media (max-width: 575.98px) { .sd-features { grid-template-columns: 1fr; } }
+
+.sd-feature-item {
+  display: flex; gap: .65rem; align-items: flex-start;
+  padding: .85rem 1rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 10px;
+  background: var(--bs-body-bg);
+  transition: border-color .2s;
+}
+.sd-feature-item:hover { border-color: rgba(201,169,110,.3); }
+.sd-feature-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(201,169,110,.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brand-gold); font-size: .9rem; flex-shrink: 0;
+}
+.sd-feature-text { font-size: .88rem; line-height: 1.5; font-weight: 500; color: var(--bs-body-color); }
+
+/* Process steps */
+.sd-steps { display: flex; flex-direction: column; gap: 1rem; }
+.sd-step {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: rgba(201,169,110,.04);
+  border: 1px solid rgba(201,169,110,.12);
+}
+.sd-step-num {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  background: var(--brand-gold); color: var(--brand-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .82rem; font-weight: 800;
+}
+.sd-step-title { font-size: .92rem; font-weight: 700; margin-bottom: .2rem; }
+.sd-step-desc  { font-size: .83rem; color: var(--brand-muted); line-height: 1.6; }
+
+/* Other services */
+.sd-others {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+@media (max-width: 575.98px) { .sd-others { grid-template-columns: 1fr; } }
+
+.sd-other-card {
+  display: flex; gap: .6rem; align-items: center;
+  padding: .75rem; border: 1px solid var(--bs-border-color); border-radius: 10px;
+  text-decoration: none; transition: border-color .15s;
+}
+.sd-other-card:hover { border-color: rgba(201,169,110,.4); }
+.sd-other-icon {
+  width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(201,169,110,.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--brand-gold);
+}
+.sd-other-name { font-size: .83rem; font-weight: 700; color: var(--bs-body-color); line-height: 1.3; }
+.sd-other-card:hover .sd-other-name { color: var(--brand-gold); }
+.sd-other-price { font-size: .72rem; color: var(--brand-muted); }
+
+/* === STICKY CTA CARD === */
+.sd-sticky { position: sticky; top: 72px; }
+.sd-cta-card {
+  border: 1px solid rgba(201,169,110,.25);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bs-body-bg);
+  box-shadow: 0 8px 40px rgba(0,0,0,.15);
+}
+.sd-cta-header {
+  background: linear-gradient(135deg, var(--brand-navy), #0d1829);
+  padding: 1.5rem;
+}
+.sd-cta-price-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.5); }
+.sd-cta-price { font-size: 2rem; font-weight: 900; color: var(--brand-gold); line-height: 1; }
+.sd-cta-price-unit { font-size: .78rem; color: rgba(255,255,255,.4); margin-top: .2rem; }
+.sd-cta-name { font-size: 1rem; font-weight: 700; color: #fff; margin-top: .75rem; }
+
+.sd-cta-body { padding: 1.5rem; }
+.sd-cta-perks { list-style: none; padding: 0; margin: 0 0 1.25rem; }
+.sd-cta-perks li {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: .85rem; padding: .4rem 0;
+  border-bottom: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+.sd-cta-perks li:last-child { border-bottom: none; }
+.sd-cta-perks li i { color: var(--brand-gold); font-size: .9rem; flex-shrink: 0; }
+
+/* Form */
+.sd-form-title { font-size: .9rem; font-weight: 700; margin-bottom: 1rem; }
+.sd-form .form-control, .sd-form .form-select {
+  font-size: .85rem; border-radius: 8px;
+  background: transparent; border-color: var(--bs-border-color);
+}
+.sd-form .form-control:focus, .sd-form .form-select:focus {
+  border-color: var(--brand-gold); box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+}
+.sd-form label { font-size: .8rem; font-weight: 600; color: var(--brand-muted); margin-bottom: .3rem; }
+.sd-submit-btn {
+  width: 100%; padding: .85rem; border-radius: 50px;
+  background: var(--brand-gold); color: var(--brand-dark);
+  font-size: .95rem; font-weight: 800; border: none; cursor: pointer;
+  transition: background .2s, transform .15s;
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+}
+.sd-submit-btn:hover { background: var(--brand-gold-d); transform: translateY(-1px); }
+.sd-guarantee {
+  display: flex; align-items: center; gap: .4rem; justify-content: center;
+  font-size: .75rem; color: var(--brand-muted); margin-top: .75rem;
+}
+
+/* Alert success */
+.alert-gold {
+  background: rgba(201,169,110,.08); border: 1px solid rgba(201,169,110,.3);
+  color: var(--brand-gold); border-radius: 10px; padding: .85rem 1rem;
+  font-size: .88rem; font-weight: 600;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- === HERO === -->
+<section class="sd-hero">
+  <div class="sd-hero-bg">
+    {% if svc.cover_image_url %}
+    <img src="{{ svc.cover_image_url }}" alt="{{ svc.name }}" loading="eager">
+    {% endif %}
+  </div>
+  <div class="sd-hero-overlay"></div>
+  <div class="sd-hero-content site-container">
+    <div class="sd-hero-text">
+      <span class="sd-hero-badge"><i class="bi {{ svc.icon }}"></i> บริการของเรา</span>
+      <h1 class="sd-hero-title">{{ svc.name }}</h1>
+      <p class="sd-hero-tagline">{{ svc.tagline }}</p>
+      <div class="sd-hero-actions">
+        <a href="#contact-form" class="sd-btn-primary">
+          <i class="bi bi-chat-dots-fill"></i> ปรึกษาฟรีเลย
+        </a>
+        <a href="{% url 'pages:services' %}" class="sd-btn-outline">
+          <i class="bi bi-arrow-left"></i> ดูบริการทั้งหมด
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- === SOCIAL PROOF BAR === -->
+<div style="background:rgba(201,169,110,.06);border-bottom:1px solid rgba(201,169,110,.15);">
+  <div style="max-width:1200px;margin:0 auto;padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:3rem;flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--brand-gold);line-height:1;">50+</div>
+      <div style="font-size:.72rem;color:var(--brand-muted);margin-top:.15rem;">โปรเจกต์ที่ส่งมอบแล้ว</div>
+    </div>
+    <div style="width:1px;height:2rem;background:rgba(201,169,110,.2);"></div>
+    <div style="text-align:center;">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--brand-gold);line-height:1;">15+ ชม.</div>
+      <div style="font-size:.72rem;color:var(--brand-muted);margin-top:.15rem;">ที่ลูกค้าประหยัดได้ต่อสัปดาห์</div>
+    </div>
+    <div style="width:1px;height:2rem;background:rgba(201,169,110,.2);"></div>
+    <div style="text-align:center;">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--brand-gold);line-height:1;">2-3x</div>
+      <div style="font-size:.72rem;color:var(--brand-muted);margin-top:.15rem;">Lead เพิ่มขึ้นในเดือนแรก</div>
+    </div>
+  </div>
+</div>
+
+<!-- === BODY === -->
+<div class="sd-body site-container">
+
+  <!-- ===== LEFT: Content ===== -->
+  <div>
+
+    <!-- Description -->
+    <div class="sd-section">
+      <p class="sd-section-title">{{ svc.name }} คืออะไร</p>
+      <p class="sd-description">{{ svc.description }}</p>
+    </div>
+
+    <!-- Features -->
+    <div class="sd-section">
+      <p class="sd-section-title">สิ่งที่คุณได้รับ</p>
+
+      <!-- 6 รายการแรก — แสดงเสมอ -->
+      <div class="sd-features">
+        {% for feature in svc.get_feature_list|slice:":6" %}
+        <div class="sd-feature-item">
+          <div class="sd-feature-icon"><i class="bi bi-check-circle-fill"></i></div>
+          <span class="sd-feature-text">{{ feature }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- รายการที่ 7+ — collapse -->
+      {% if svc.get_feature_list|length > 6 %}
+      <div id="sd-features-more" style="max-height:0;overflow:hidden;transition:max-height .35s ease;">
+        <div class="sd-features mt-2">
+          {% for feature in svc.get_feature_list|slice:"6:" %}
+          <div class="sd-feature-item">
+            <div class="sd-feature-icon"><i class="bi bi-check-circle-fill"></i></div>
+            <span class="sd-feature-text">{{ feature }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button type="button" onclick="sdToggleFeatures(this)"
+              style="margin-top:.85rem;display:inline-flex;align-items:center;gap:.4rem;background:none;border:1px solid rgba(201,169,110,.35);color:var(--brand-gold);font-size:.82rem;font-weight:700;padding:.4rem 1rem;border-radius:20px;cursor:pointer;transition:background .15s;">
+        <i class="bi bi-chevron-down" id="sd-feat-icon" style="transition:transform .25s;font-size:.7rem;"></i>
+        <span id="sd-feat-label">ดูทั้งหมด {{ svc.get_feature_list|length }} รายการ</span>
+      </button>
+      {% endif %}
+    </div>
+
+    <!-- Pain Point -->
+    <div class="sd-section">
+      <p class="sd-section-title">ปัญหาที่ธุรกิจของคุณอาจกำลังเผชิญ</p>
+      <div style="display:flex;flex-direction:column;gap:.75rem;">
+        <div style="display:flex;gap:.75rem;align-items:flex-start;padding:.9rem 1rem;border-radius:10px;background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.15);">
+          <i class="bi bi-check-circle-fill" style="color:var(--brand-gold);font-size:1rem;margin-top:2px;flex-shrink:0;"></i>
+          <span style="font-size:.9rem;line-height:1.6;">ทีมงานจมอยู่กับงานเอกสารและข้อมูลซ้ำซาก — เวลาที่ควรใช้ปิดดีลกลับหายไปกับงาน manual ทั้งวัน</span>
+        </div>
+        <div style="display:flex;gap:.75rem;align-items:flex-start;padding:.9rem 1rem;border-radius:10px;background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.15);">
+          <i class="bi bi-check-circle-fill" style="color:var(--brand-gold);font-size:1rem;margin-top:2px;flex-shrink:0;"></i>
+          <span style="font-size:.9rem;line-height:1.6;">Lead หลุดมือทุกคืน เพราะไม่มีใครรับข้อความหลัง 18:00 — ลูกค้าถามแล้วไม่มีคนตอบ เขาไปหาเจ้าอื่นแทน</span>
+        </div>
+        <div style="display:flex;gap:.75rem;align-items:flex-start;padding:.9rem 1rem;border-radius:10px;background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.15);">
+          <i class="bi bi-check-circle-fill" style="color:var(--brand-gold);font-size:1rem;margin-top:2px;flex-shrink:0;"></i>
+          <span style="font-size:.9rem;line-height:1.6;">ตัดสินใจทางธุรกิจด้วยความรู้สึก — ไม่มีข้อมูลจริงในมือ ไม่รู้ว่าแคมเปญไหนได้ผล สินค้าไหนขายดี</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="sd-section">
+      <p class="sd-section-title">ขั้นตอนการทำงาน</p>
+      <div class="sd-steps">
+        <div class="sd-step">
+          <div class="sd-step-num">1</div>
+          <div>
+            <p class="sd-step-title">ปรึกษาและวิเคราะห์ความต้องการ</p>
+            <p class="sd-step-desc">นัดหมายพูดคุย 45 นาที ฟรี เพื่อเข้าใจ Pain Point และเป้าหมายของธุรกิจคุณ</p>
+          </div>
+        </div>
+        <div class="sd-step">
+          <div class="sd-step-num">2</div>
+          <div>
+            <p class="sd-step-title">เสนอ Solution และ Proposal</p>
+            <p class="sd-step-desc">ทีมงานออกแบบ Solution เฉพาะให้ธุรกิจคุณ พร้อม Timeline และราคาชัดเจน ภายใน 3 วันทำการ</p>
+          </div>
+        </div>
+        <div class="sd-step">
+          <div class="sd-step-num">3</div>
+          <div>
+            <p class="sd-step-title">พัฒนาและ Implement</p>
+            <p class="sd-step-desc">เริ่มงานทันที มีการ Update ความคืบหน้าสม่ำเสมอ พร้อม Demo ก่อน Launch</p>
+          </div>
+        </div>
+        <div class="sd-step">
+          <div class="sd-step-num">4</div>
+          <div>
+            <p class="sd-step-title">Training และ Go-Live</p>
+            <p class="sd-step-desc">อบรมทีมงานของคุณให้ใช้ระบบได้คล่อง พร้อม Support หลัง Launch 30 วัน</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other services -->
+    {% if others %}
+    <div class="sd-section">
+      <p class="sd-section-title">บริการอื่นที่น่าสนใจ</p>
+      <div class="sd-others">
+        {% for other in others %}
+        <a href="{% url 'pages:service_detail' other.slug %}" class="sd-other-card">
+          <div class="sd-other-icon"><i class="bi {{ other.icon }}"></i></div>
+          <div>
+            <p class="sd-other-name">{{ other.name }}</p>
+            <p class="sd-other-price">เริ่มต้น ฿{{ other.price_start|floatformat:0 }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+  <!-- ===== END LEFT ===== -->
+
+
+  <!-- ===== RIGHT: Sticky CTA ===== -->
+  <div class="sd-sticky">
+    <div class="sd-cta-card" id="contact-form">
+
+      <!-- Price header -->
+      <div class="sd-cta-header">
+        <p class="sd-cta-price-label">{{ svc.price_label }}</p>
+        <p class="sd-cta-price">฿{{ svc.price_start|floatformat:0 }}<span style="font-size:1rem;font-weight:400;color:rgba(255,255,255,.4);"> บาท</span></p>
+        <p class="sd-cta-price-unit">ไม่รวม VAT 7% · ราคาอาจปรับตาม Scope</p>
+        <p class="sd-cta-name"><i class="bi {{ svc.icon }} me-1"></i> {{ svc.name }}</p>
+      </div>
+
+      <div class="sd-cta-body">
+
+        <!-- ใช้ฟอร์มต้นแบบจาก contact form partial -->
+        {% with service_slug=svc.slug %}
+        {% include "pages/_contact_form.html" %}
+        {% endwith %}
+
+      </div>
+    </div>
+  </div>
+  <!-- ===== END RIGHT ===== -->
+
+</div>
+<!-- === END BODY === -->
+
+<script>
+function sdToggleFeatures(btn) {
+  var el   = document.getElementById('sd-features-more');
+  var icon = document.getElementById('sd-feat-icon');
+  var lbl  = document.getElementById('sd-feat-label');
+  var open = el.style.maxHeight === '0px' || el.style.maxHeight === '';
+  el.style.maxHeight = open ? el.scrollHeight + 'px' : '0px';
+  icon.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+  if (!btn.dataset.orig) btn.dataset.orig = lbl.textContent;
+  lbl.textContent = open ? 'ย่อ' : btn.dataset.orig;
+}
+</script>
+
+{% endblock %}

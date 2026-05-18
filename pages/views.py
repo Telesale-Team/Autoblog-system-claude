@@ -39,12 +39,56 @@ def about(request):
 
 
 def services(request):
-    return render(request, "pages/services.html")
+    from .models import Service
+    all_services = Service.objects.filter(status="published").order_by("display_order")
+    return render(request, "pages/services.html", {"services": all_services})
+
+
+def service_detail(request, slug):
+    from django.shortcuts import get_object_or_404
+    from .models import Service
+    svc = get_object_or_404(Service, slug=slug, status="published")
+    others = Service.objects.filter(status="published").exclude(slug=slug).order_by("display_order")[:4]
+    form = ContactForm(initial={"message": f"สนใจบริการ: {svc.name}\n\n"})
+    if request.method == "POST":
+        data = request.POST.copy()
+        if not data.get("email") or data["email"] == "no-email@aibizth.ai":
+            data["email"] = f"{data.get('phone','no-phone').replace('-','')}@aibizth.ai"
+        form = ContactForm(data)
+        if form.is_valid():
+            lead = form.save(
+                ip_address=get_client_ip(request),
+                source="portfolio",
+                utm=get_utm(request),
+            )
+            try:
+                send_mail(
+                    subject=f"[Lead บริการ] {svc.name} — {lead.name}",
+                    message=(
+                        f"บริการ: {svc.name}\nชื่อ: {lead.name}\nอีเมล: {lead.email}\n"
+                        f"เบอร์: {lead.phone}\nบริษัท: {lead.company}\n\nข้อความ:\n{lead.message}"
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[settings.CONTACT_NOTIFY_EMAIL],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
+            messages.success(request, "ส่งข้อความเรียบร้อย เราจะติดต่อกลับภายใน 24 ชั่วโมงครับ")
+            return redirect("pages:service_detail", slug=slug)
+    return render(request, "pages/service_detail.html", {
+        "svc": svc,
+        "others": others,
+        "form": form,
+    })
 
 
 def contact(request):
     if request.method == "POST":
-        form = ContactForm(request.POST)
+        data = request.POST.copy()
+        if not data.get("email") or data["email"] == "no-email@aibizth.ai":
+            data["email"] = f"{data.get('phone','no-phone').replace('-','')}@aibizth.ai"
+        form = ContactForm(data)
         if form.is_valid():
             lead = form.save(
                 ip_address=get_client_ip(request),
