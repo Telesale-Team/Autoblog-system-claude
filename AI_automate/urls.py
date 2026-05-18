@@ -47,7 +47,6 @@ urlpatterns = [
     path("receipt/", include(_receipt_patterns)),
     path("settings/", include(_settings_patterns)),
     path("accounts/", include(_accounts_patterns)),
-    path("", RedirectView.as_view(pattern_name="blog:list", permanent=False)),
     path("", include("pages.urls")),
     # New feature apps
     path("crm/", include("crm.urls")),
