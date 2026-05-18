@@ -1,5 +1,9 @@
 {% extends "base_public.html" %}
 {% load static %}
+<!-- ===================================================================
+     BLOG DETAIL — YouTube Watch Page Layout
+     Main: cover + title + meta + content | Right: related articles list
+     =================================================================== -->
 
 {% block title %}{{ article.meta_title|default:article.title }}{% endblock %}
 {% block meta_description %}{{ article.display_meta_description }}{% endblock %}
@@ -7,157 +11,469 @@
 
 {% block extra_css %}
 <style>
-  /* ── Blog Detail Layout ── */
-  .blog-detail-wrapper { max-width: 1100px; }
-  .blog-grid {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-  @media (max-width: 767px) {
-    .blog-grid { grid-template-columns: 1fr; }
-    .blog-sidebar { display: none; }
-  }
+/* ===================================================================
+   YOUTUBE WATCH PAGE LAYOUT
+   =================================================================== */
 
-  /* ── TOC Sidebar ── */
-  .sidebar-sticky { position: sticky; top: 80px; }
-  .toc-nav a:hover, .toc-nav a.active {
-    border-left-color: var(--brand-gold);
-    color: var(--brand-gold) !important;
-    background: rgba(201,169,110,.07);
-  }
+/* === OUTER WRAPPER === */
+.yw-outer {
+  display: flex;
+  gap: 1.5rem;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 4rem;
+  align-items: flex-start;
+}
 
-  /* ── Article blockquote ── */
-  .article-body blockquote {
-    border-left: 4px solid var(--brand-gold);
-    padding-left: 1rem;
-    color: var(--bs-secondary-color);
-    font-style: italic;
-  }
+/* === MAIN CONTENT === */
+.yw-main {
+  flex: 1;
+  min-width: 0;
+}
 
-  /* ── Tag pills ── */
-  .tag-pill:hover {
-    border-color: var(--brand-gold);
-    color: var(--brand-gold) !important;
+/* Cover image — like YouTube player */
+.yw-player {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  margin-bottom: 1rem;
+}
+.yw-player img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.yw-player-ph {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--brand-navy), #0a0f1a);
+  color: rgba(201,169,110,.2);
+  font-size: 4rem;
+}
+
+/* Title */
+.yw-title {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 900;
+  line-height: 1.3;
+  color: var(--bs-body-color);
+  margin-bottom: .75rem;
+}
+
+/* Meta row — author, date, views */
+.yw-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem;
+  padding: .75rem 0;
+  border-top: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-color);
+  margin-bottom: 1.5rem;
+}
+.yw-author {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+}
+.yw-author-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-navy), var(--brand-gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.yw-author-name {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--bs-body-color);
+}
+.yw-author-sub {
+  font-size: .75rem;
+  color: var(--brand-muted);
+}
+.yw-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: .8rem;
+  color: var(--brand-muted);
+}
+.yw-stats span { display: flex; align-items: center; gap: .3rem; }
+
+/* Category badge */
+.yw-cat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--brand-gold);
+  border: 1px solid rgba(201,169,110,.35);
+  padding: 3px 12px;
+  border-radius: 20px;
+  text-decoration: none;
+  margin-bottom: .75rem;
+  display: inline-block;
+}
+.yw-cat-badge:hover { background: rgba(201,169,110,.08); color: var(--brand-gold); }
+
+/* Article body */
+.yw-article-body {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--bs-body-color);
+}
+.yw-article-body h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-top: 2rem;
+  margin-bottom: .75rem;
+  padding-bottom: .4rem;
+  border-bottom: 2px solid rgba(201,169,110,.2);
+}
+.yw-article-body h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: .5rem;
+  color: var(--brand-gold);
+}
+.yw-article-body blockquote {
+  border-left: 4px solid var(--brand-gold);
+  padding: .75rem 1.25rem;
+  margin: 1.5rem 0;
+  background: rgba(201,169,110,.05);
+  border-radius: 0 8px 8px 0;
+  color: var(--brand-muted);
+  font-style: italic;
+}
+.yw-article-body img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+.yw-article-body pre {
+  background: var(--brand-dark);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: .88rem;
+}
+
+/* Tags */
+.yw-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bs-border-color);
+}
+.yw-tag {
+  font-size: .78rem;
+  color: var(--brand-muted);
+  border: 1px solid var(--bs-border-color);
+  padding: 3px 12px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all .2s;
+}
+.yw-tag:hover { color: var(--brand-gold); border-color: rgba(201,169,110,.4); }
+
+/* CTA below article */
+.yw-cta {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(201,169,110,.06);
+  border: 1px solid rgba(201,169,110,.2);
+  border-radius: 12px;
+  text-align: center;
+}
+.yw-cta h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: .5rem;
+}
+.yw-cta p { font-size: .88rem; color: var(--brand-muted); margin-bottom: 1rem; }
+
+/* === RIGHT SIDEBAR — Recommended === */
+.yw-sidebar {
+  width: 380px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 70px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201,169,110,.2) transparent;
+}
+.yw-sidebar::-webkit-scrollbar { width: 3px; }
+.yw-sidebar::-webkit-scrollbar-thumb { background: rgba(201,169,110,.2); border-radius: 3px; }
+
+.yw-sidebar-title {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--brand-muted);
+  margin-bottom: .85rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* Related article card — horizontal YouTube style */
+.yw-rec-card {
+  display: flex;
+  gap: .65rem;
+  margin-bottom: .75rem;
+  text-decoration: none;
+  align-items: flex-start;
+  padding: .4rem;
+  border-radius: 8px;
+  transition: background .15s;
+}
+.yw-rec-card:hover { background: rgba(201,169,110,.05); }
+
+/* Thumbnail */
+.yw-rec-thumb {
+  width: 160px;
+  flex-shrink: 0;
+  position: relative;
+}
+.yw-rec-thumb img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+.yw-rec-thumb-ph {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--brand-navy), #0a0f1a);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(201,169,110,.2);
+  font-size: 1.25rem;
+}
+.yw-rec-duration {
+  position: absolute;
+  bottom: .3rem;
+  right: .3rem;
+  background: rgba(0,0,0,.82);
+  color: #fff;
+  font-size: .62rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* Info */
+.yw-rec-info { flex: 1; min-width: 0; }
+.yw-rec-title {
+  font-size: .83rem;
+  font-weight: 700;
+  color: var(--bs-body-color);
+  line-height: 1.4;
+  margin-bottom: .25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.yw-rec-card:hover .yw-rec-title { color: var(--brand-gold); }
+.yw-rec-channel { font-size: .75rem; color: var(--brand-muted); }
+.yw-rec-meta { font-size: .72rem; color: var(--brand-muted); }
+
+/* Responsive */
+@media (max-width: 1199.98px) {
+  .yw-sidebar { width: 300px; }
+  .yw-rec-thumb { width: 120px; }
+}
+@media (max-width: 991.98px) {
+  .yw-outer { flex-direction: column; padding: 1rem; }
+  .yw-sidebar {
+    width: 100%;
+    position: static;
+    max-height: none;
+    overflow: visible;
   }
+  .yw-rec-thumb { width: 140px; }
+}
 </style>
 {% endblock %}
 
+
 {% block content %}
-<div class="container py-5 blog-detail-wrapper">
-  <nav class="mb-3 small text-secondary">
-    <a href="{% url 'blog:list' %}" class="text-decoration-none">บทความ</a>
-    › <a href="{% url 'blog:category' article.category.slug %}" class="text-decoration-none">{{ article.category.name }}</a>
-  </nav>
+<div class="yw-outer">
 
-  <div class="blog-grid">
+  <!-- ===================================================
+       MAIN CONTENT — Article
+       =================================================== -->
+  <main class="yw-main">
 
-    {# ============ LEFT SIDEBAR: TOC + Ad slot ============ #}
-    <aside class="blog-sidebar" aria-label="สารบัญ">
-      <div class="sidebar-sticky">
-        <div class="toc-card">
-          <div class="toc-header">
-            <span class="toc-icon">📑</span>
-            <span>สารบัญ</span>
-            <button class="toc-toggle d-md-none" aria-label="แสดง/ซ่อนสารบัญ">▼</button>
-          </div>
-          <nav id="article-toc" class="toc-nav" aria-label="article table of contents">
-            {# Auto-populated by JS from H2/H3 in .article-body #}
-            <p class="text-secondary small mb-0 px-3 py-2">กำลังโหลดสารบัญ…</p>
-          </nav>
-        </div>
+    <!-- Breadcrumb -->
+    <nav class="d-flex align-items-center gap-1 flex-wrap mb-3" style="font-size:.78rem;color:var(--brand-muted);" aria-label="breadcrumb">
+      <a href="{% url 'blog:list' %}" style="color:var(--brand-muted);text-decoration:none;">บทความ</a>
+      <span style="opacity:.4;">›</span>
+      {% if article.category %}
+      <a href="{% url 'blog:category' article.category.slug %}" style="color:var(--brand-muted);text-decoration:none;">{{ article.category.name }}</a>
+      <span style="opacity:.4;">›</span>
+      {% endif %}
+      <span style="color:var(--brand-gold);">{{ article.title|truncatechars:50 }}</span>
+    </nav>
 
-        {# Ad slot — populate ในอนาคต #}
-        <div class="ad-slot mt-3" data-ad-slot="blog-sidebar-1">
-          <div class="ad-placeholder">
-            <small class="text-secondary">โฆษณา</small>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    {# ============ RIGHT: Article content ============ #}
-    <article class="blog-main">
-      <h1 class="fw-bold text-body mb-3">{{ article.title }}</h1>
-      <div class="text-secondary small mb-4">
-        {{ article.author.get_full_name|default:article.author.username }} ·
-        {{ article.published_at|date:"d M Y" }} ·
-        {{ article.reading_time }} นาที ·
-        👁 {{ article.views_count }}
-      </div>
-
+    <!-- Cover image — YouTube player style -->
+    <div class="yw-player">
       {% if article.display_cover %}
-        <img src="{{ article.display_cover }}"
-             alt="{{ article.title }}"
-             width="1200" height="675"
-             loading="eager"
-             decoding="async"
-             referrerpolicy="no-referrer"
-             class="img-fluid rounded mb-4 cover-image"
-             style="aspect-ratio:16/9; object-fit:cover; width:100%; height:auto;">
+      <img src="{{ article.display_cover }}" alt="{{ article.title }}" loading="eager">
+      {% else %}
+      <div class="yw-player-ph"><i class="bi bi-file-text"></i></div>
       {% endif %}
-
-      <div class="article-body">{{ article.content|safe }}</div>
-
-      {% if article.tags.all %}
-      <div class="d-flex flex-wrap gap-2 mt-4">
-        {% for t in article.tags.all %}
-          <a href="{% url 'blog:tag' t.slug %}" class="tag-pill">#{{ t.name }}</a>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </article>
-
-  </div>
-</div>
-
-{% if related %}
-<section class="py-5 bg-body-secondary">
-  <div class="container">
-    <div class="text-center mb-4">
-      <div class="section-label mb-2 text-body-secondary">บทความที่เกี่ยวข้อง</div>
-      <h2 class="fw-bold fs-4">อ่านต่อ</h2>
     </div>
-    <div class="row g-4">
-      {% for a in related %}
-      <div class="col-md-6 col-lg-4">
-        <div class="brand-card d-block h-100 overflow-hidden position-relative">
-          <div class="thumb" {% if a.display_cover %}style="background-image:url('{{ a.display_cover }}');"{% endif %}>
-            {% if not a.display_cover %}<div class="thumb-fallback">📝</div>{% endif %}
-          </div>
-          <div class="p-3">
-            <span class="badge badge-outline fw-normal mb-1">{{ a.category.name }}</span>
-            <h3 class="fs-6 fw-bold mt-1">
-              <a href="{{ a.get_absolute_url }}" class="text-body-emphasis text-decoration-none stretched-link">{{ a.title }}</a>
-            </h3>
-            <p class="text-secondary small mb-0">{{ a.excerpt|default:""|truncatechars:120 }}</p>
-          </div>
+
+    <!-- Category badge -->
+    {% if article.category %}
+    <a href="{% url 'blog:category' article.category.slug %}" class="yw-cat-badge">
+      <i class="bi bi-tag"></i> {{ article.category.name }}
+    </a>
+    {% endif %}
+
+    <!-- Title -->
+    <h1 class="yw-title">{{ article.title }}</h1>
+
+    <!-- Meta bar -->
+    <div class="yw-meta">
+      <div class="yw-author">
+        <div class="yw-author-avatar">
+          {{ article.author.username|slice:":2"|upper }}
+        </div>
+        <div>
+          <div class="yw-author-name">{{ article.author.get_full_name|default:article.author.username }}</div>
+          <div class="yw-author-sub">AIBiz Thailand</div>
         </div>
       </div>
+      <div class="yw-stats">
+        <span><i class="bi bi-eye"></i> {{ article.views_count }} views</span>
+        <span><i class="bi bi-clock"></i> {{ article.reading_time }} นาที</span>
+        <span><i class="bi bi-calendar3"></i> {{ article.published_at|date:"d M Y" }}</span>
+      </div>
+    </div>
+
+    <!-- Article content -->
+    <div class="yw-article-body">
+      {{ article.content|safe }}
+    </div>
+
+    <!-- Tags -->
+    {% if article.tags.all %}
+    <div class="yw-tags">
+      {% for t in article.tags.all %}
+      <a href="{% url 'blog:tag' t.slug %}" class="yw-tag">#{{ t.name }}</a>
       {% endfor %}
     </div>
-  </div>
-</section>
-{% endif %}
+    {% endif %}
 
-<section class="cta-section bg-dark text-center">
-  <div class="container">
-    <h2 class="fw-bold text-white mb-3">สนใจให้ AI ทำงานในธุรกิจคุณ?</h2>
-    <p class="text-secondary mb-4">ปรึกษาฟรี ตอบกลับภายใน 24 ชั่วโมง</p>
-    <a href="{% url 'pages:contact' %}?source=blog" class="btn btn-primary btn-lg px-4">💬 ปรึกษาฟรี</a>
-  </div>
-</section>
+    <!-- CTA -->
+    <div class="yw-cta">
+      <h3>สนใจให้ AI ทำงานในธุรกิจคุณ?</h3>
+      <p>ปรึกษาฟรี ตอบกลับภายใน 24 ชั่วโมง</p>
+      <a href="{% url 'pages:contact' %}?source=blog" class="btn btn-sm px-4"
+         style="background:var(--brand-gold);color:var(--brand-dark);font-weight:700;border-radius:50px;">
+        <i class="bi bi-chat-dots me-1"></i> ปรึกษาฟรี
+      </a>
+    </div>
 
+  </main>
+  <!-- === END MAIN === -->
+
+
+  <!-- ===================================================
+       RIGHT SIDEBAR — Recommended / Related Articles
+       =================================================== -->
+  <aside class="yw-sidebar" aria-label="บทความที่เกี่ยวข้อง">
+
+    <p class="yw-sidebar-title">บทความที่เกี่ยวข้อง</p>
+
+    {% if related %}
+      {% for a in related %}
+      <a href="{{ a.get_absolute_url }}" class="yw-rec-card">
+
+        <!-- Thumbnail -->
+        <div class="yw-rec-thumb">
+          {% if a.display_cover %}
+          <img src="{{ a.display_cover }}" alt="{{ a.title }}" loading="lazy">
+          {% else %}
+          <div class="yw-rec-thumb-ph"><i class="bi bi-file-text"></i></div>
+          {% endif %}
+          {% if a.reading_time %}
+          <span class="yw-rec-duration">{{ a.reading_time }} นาที</span>
+          {% endif %}
+        </div>
+
+        <!-- Info -->
+        <div class="yw-rec-info">
+          <p class="yw-rec-title">{{ a.title }}</p>
+          <p class="yw-rec-channel">AIBiz Thailand</p>
+          <p class="yw-rec-meta">{{ a.published_at|date:"d M Y" }}</p>
+        </div>
+
+      </a>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Recent articles from context processor -->
+    {% if recent_articles %}
+    <p class="yw-sidebar-title mt-3">บทความล่าสุด</p>
+    {% for a in recent_articles %}
+      {% if a.slug != article.slug %}
+      <a href="{{ a.get_absolute_url }}" class="yw-rec-card">
+        <div class="yw-rec-thumb">
+          {% if a.display_cover %}
+          <img src="{{ a.display_cover }}" alt="{{ a.title }}" loading="lazy">
+          {% else %}
+          <div class="yw-rec-thumb-ph"><i class="bi bi-file-text"></i></div>
+          {% endif %}
+          {% if a.reading_time %}
+          <span class="yw-rec-duration">{{ a.reading_time }} นาที</span>
+          {% endif %}
+        </div>
+        <div class="yw-rec-info">
+          <p class="yw-rec-title">{{ a.title }}</p>
+          <p class="yw-rec-channel">AIBiz Thailand</p>
+          <p class="yw-rec-meta">{{ a.published_at|date:"d M Y" }}</p>
+        </div>
+      </a>
+      {% endif %}
+    {% endfor %}
+    {% endif %}
+
+  </aside>
+  <!-- === END SIDEBAR === -->
+
+</div>
+<!-- === END OUTER === -->
 {% endblock %}
 
+
 {% block extra_js %}
-<script src="{% static 'js/blog-toc.js' %}" defer></script>
 <script src="{% static 'js/blog-code-copy.js' %}" defer></script>
-<script>
-  document.querySelector('.toc-toggle')?.addEventListener('click', function() {
-    document.querySelector('#article-toc').classList.toggle('open');
-    this.textContent = document.querySelector('#article-toc').classList.contains('open') ? '▲' : '▼';
-  });
-</script>
 {% endblock %}
