@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include, re_path
-from blog.views import ArticleListView
+from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
@@ -47,7 +47,6 @@ urlpatterns = [
     path("receipt/", include(_receipt_patterns)),
     path("settings/", include(_settings_patterns)),
     path("accounts/", include(_accounts_patterns)),
-    path("", ArticleListView.as_view(), name="root"),
     path("", include("pages.urls")),
     # New feature apps
     path("crm/", include("crm.urls")),
