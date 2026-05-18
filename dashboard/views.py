@@ -976,7 +976,7 @@ def calendar_view(request):
             "description": f"Lead เข้า — {lead['status']}",
         })
 
-    # ── 3+4. System events จาก DB (milestones + recurring) ──────────────────
+    # ── 3+4. System events จาก DB (milestones + recurring + action) ──────────
     system_qs = CalendarEvent.objects.filter(is_system=True).values(
         "pk", "title", "start_datetime", "category", "description", "color", "is_completed", "assigned_to"
     )
@@ -1275,7 +1275,11 @@ def api_calendar_events(request):
     if request.method == "GET":
         start = request.GET.get("start")
         end   = request.GET.get("end")
-        qs = CalendarEvent.objects.filter(created_by=request.user)
+        # ดึง user events: created_by=request.user หรือ created_by=None (สร้างจาก management command)
+        qs = CalendarEvent.objects.filter(
+            Q(created_by=request.user) | Q(created_by__isnull=True),
+            is_system=False,
+        )
         if start:
             qs = qs.filter(start_datetime__gte=start)
         if end:
