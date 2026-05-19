@@ -1685,15 +1685,18 @@ def website_backlog_add(request):
     from marketing.models import ContentBacklog
     import json
     data    = json.loads(request.body)
-    topic   = data.get("topic", "").strip()
-    keyword = data.get("keyword", "").strip()
-    priority= data.get("priority", "P2")
+    topic    = data.get("topic", "").strip()
+    keyword  = data.get("keyword", "").strip()
+    priority = data.get("priority", "P2")
+    notes    = data.get("notes", "").strip()
     if not topic:
         return JsonResponse({"ok": False, "error": "กรุณาใส่หัวข้อ"}, status=400)
     num = (ContentBacklog.objects.order_by("-num").values_list("num", flat=True).first() or 0) + 1
     item = ContentBacklog.objects.create(
         num=num, topic=topic, keyword=keyword,
         priority=priority, status="pending",
+        notes=notes,
+        added_by=request.user.get_full_name() or request.user.username,
     )
     return JsonResponse({
         "ok": True, "id": item.pk,

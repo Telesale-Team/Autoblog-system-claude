@@ -1044,13 +1044,18 @@
           <input type="text" id="backlogKeyword" class="form-control"
                  placeholder="เช่น AI ธุรกิจ SME">
         </div>
-        <div class="mb-2">
+        <div class="mb-3">
           <label class="form-label">Priority</label>
           <select id="backlogPriority" class="form-select">
             <option value="P1">P1 — High</option>
             <option value="P2" selected>P2 — Medium</option>
             <option value="P3">P3 — Low</option>
           </select>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Notes <span class="text-muted">(ไม่บังคับ)</span></label>
+          <textarea id="backlogNotes" class="form-control form-control-sm" rows="2"
+                    placeholder="หมายเหตุเพิ่มเติม เช่น แนวทางเขียน, reference..."></textarea>
         </div>
         <div id="addBacklogError" class="text-danger small d-none"></div>
       </div>
@@ -1116,7 +1121,7 @@ document.getElementById('btnSaveBacklog').addEventListener('click', function() {
   fetch('{% url "dashboard:website_backlog_add" %}', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf ? csrf[1] : '' },
-    body: JSON.stringify({ topic: topic, keyword: keyword, priority: priority })
+    body: JSON.stringify({ topic: topic, keyword: keyword, priority: priority, notes: document.getElementById('backlogNotes').value.trim() })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
@@ -1145,12 +1150,14 @@ document.getElementById('btnSaveBacklog').addEventListener('click', function() {
     document.getElementById('backlogTopic').value = '';
     document.getElementById('backlogKeyword').value = '';
     document.getElementById('backlogPriority').value = 'P2';
+    document.getElementById('backlogNotes').value = '';
   })
   .catch(function() { errEl.textContent = 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); })
   .finally(function() { btn.disabled = false; });
 });
 document.getElementById('addBacklogModal').addEventListener('hidden.bs.modal', function() {
   document.getElementById('backlogTopic').value = '';
+  document.getElementById('backlogNotes').value = '';
   document.getElementById('addBacklogError').classList.add('d-none');
 });
 </script>
