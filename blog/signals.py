@@ -16,7 +16,8 @@ def sync_article_to_calendar(sender, instance, **kwargs):
 
     event_date = instance.published_at or instance.created_at
 
-    if instance.status in ("published", "waiting") and event_date:
+    if event_date:
+        status_label = {"published": "เผยแพร่แล้ว", "waiting": "รอเขียน", "draft": "Draft"}.get(instance.status, instance.status)
         CalendarEvent.objects.update_or_create(
             category="article",
             title=instance.title,
@@ -26,14 +27,7 @@ def sync_article_to_calendar(sender, instance, **kwargs):
                 "all_day":        True,
                 "is_system":      True,
                 "is_completed":   instance.status == "published",
-                "description":    f"{'รอเขียน' if instance.status == 'waiting' else 'เผยแพร่แล้ว'}: {instance.title}",
+                "description":    f"{status_label}: {instance.title}",
                 "created_by":     None,
             },
         )
-    else:
-        # draft → ลบออกจาก Calendar
-        CalendarEvent.objects.filter(
-            category="article",
-            title=instance.title,
-            is_system=True,
-        ).delete()
