@@ -1594,9 +1594,9 @@ def website_backlog_to_blog(request, pk):
         messages.warning(request, f'"{item.topic[:40]}" อยู่ใน Blog list แล้ว')
         return redirect("/owner/website-content/?tab=blog")
 
-    # สร้าง slug จาก topic
-    slug_base = re.sub(r"[^\w\s-]", "", item.topic.lower())
-    slug_base = re.sub(r"\s+", "-", slug_base.strip())[:200]
+    # สร้าง slug — ใช้ Django slugify (ASCII only) + fallback เป็น backlog-{pk}
+    from django.utils.text import slugify
+    slug_base = slugify(item.topic)[:180] or f"backlog-{item.pk}"
     slug = slug_base
     i = 1
     while Article.objects.filter(slug=slug).exists():
