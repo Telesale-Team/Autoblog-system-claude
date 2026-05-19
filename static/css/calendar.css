@@ -451,6 +451,18 @@
 
 /* ── [filter-tabs] → ใช้ .filter-btn จาก dashboard-base.css แทน ──── */
 
+/* ── List view — day header background = Navy ───────────────────────── */
+.fc-list-day-cushion,
+.fc .fc-list-day-cushion {
+  background: #1a2744 !important;
+  color: var(--app-primary, #c9a96e) !important;
+}
+.fc-list-day-text,
+.fc-list-day-side-text {
+  color: var(--app-primary, #c9a96e) !important;
+  font-weight: 700;
+}
+
 /* wrapper row: filter tabs (flex:1) + toggle recurring button (right) */
 .cal-toolbar-row {
   display: flex;
