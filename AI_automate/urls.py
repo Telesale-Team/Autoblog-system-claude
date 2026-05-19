@@ -42,18 +42,17 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("owner/", include("dashboard.urls")),
+    path("owner/settings/", include(_settings_patterns)),
+    path("owner/crm/", include("crm.urls")),
+    path("owner/finance/", include("finance.urls")),
+    path("owner/marketing/", include("marketing.urls")),
+    path("owner/operations/", include("operations.urls")),
+    path("owner/legal/", include("legal.urls")),
     path("blog/", include("blog.urls")),
     path("portfolio/", include("portfolio.urls")),
     path("receipt/", include(_receipt_patterns)),
-    path("settings/", include(_settings_patterns)),
     path("accounts/", include(_accounts_patterns)),
     path("", include("pages.urls")),
-    # New feature apps
-    path("crm/", include("crm.urls")),
-    path("finance/", include("finance.urls")),
-    path("marketing/", include("marketing.urls")),
-    path("operations/", include("operations.urls")),
-    path("legal/", include("legal.urls")),
 ]
 
 urlpatterns += [

@@ -60,4 +60,11 @@ urlpatterns = [
     path("content-calendar/", views.redirect_to("dashboard:blog"), name="content_calendar"),
     # Frontend Designer
     path("design-system/",    views.design_system_view, name="design_system"),
+    # Website Content Manager
+    path("website-content/",                         views.website_content_view,    name="website_content"),
+    path("website-content/service/<int:pk>/toggle/", views.website_service_toggle,  name="website_service_toggle"),
+    path("website-content/portfolio/<int:pk>/toggle/",views.website_portfolio_toggle,name="website_portfolio_toggle"),
+    path("website-content/stats/save/",              views.website_stats_save,      name="website_stats_save"),
+    path("website-content/value/<int:pk>/save/",     views.website_value_save,      name="website_value_save"),
+    path("website-content/contact/save/",            views.website_contact_save,    name="website_contact_save"),
 ]

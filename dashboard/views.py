@@ -1371,3 +1371,82 @@ def api_calendar_event_detail(request, pk):
         return JsonResponse({"ok": True})
 
     return JsonResponse({"error": "Method not allowed"}, status=405)
+
+
+# ── Website Content Manager ───────────────────────────────────────────────────
+
+@staff_member_required
+def website_content_view(request):
+    from pages.models import Service, SiteSetting, AboutStat, AboutValue
+    from portfolio.models import CaseStudy
+    return render(request, "dashboard/website_content.html", {
+        "services":  Service.objects.all().order_by("display_order"),
+        "portfolio": CaseStudy.objects.all().order_by("display_order", "-published_at"),
+        "stats":     AboutStat.objects.all(),
+        "values":    AboutValue.objects.all(),
+        "site":      SiteSetting.get(),
+        "active_tab": request.GET.get("tab", "services"),
+    })
+
+
+@staff_member_required
+@require_POST
+def website_service_toggle(request, pk):
+    from pages.models import Service
+    from django.shortcuts import get_object_or_404
+    svc = get_object_or_404(Service, pk=pk)
+    svc.status = "draft" if svc.status == "published" else "published"
+    svc.save()
+    return JsonResponse({"status": svc.status})
+
+
+@staff_member_required
+@require_POST
+def website_portfolio_toggle(request, pk):
+    from portfolio.models import CaseStudy
+    from django.shortcuts import get_object_or_404
+    cs = get_object_or_404(CaseStudy, pk=pk)
+    cs.status = "draft" if cs.status == "published" else "published"
+    cs.save()
+    return JsonResponse({"status": cs.status})
+
+
+@staff_member_required
+@require_POST
+def website_stats_save(request):
+    from pages.models import AboutStat
+    for key, val in request.POST.items():
+        if key.startswith("number_"):
+            AboutStat.objects.filter(pk=key.split("_", 1)[1]).update(number=val.strip())
+        elif key.startswith("label_"):
+            AboutStat.objects.filter(pk=key.split("_", 1)[1]).update(label=val.strip())
+    messages.success(request, "บันทึกสถิติแล้ว")
+    return redirect("/owner/website-content/?tab=stats")
+
+
+@staff_member_required
+@require_POST
+def website_value_save(request, pk):
+    from pages.models import AboutValue
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(AboutValue, pk=pk)
+    obj.icon = request.POST.get("icon", obj.icon).strip()
+    obj.title = request.POST.get("title", obj.title).strip()
+    obj.description = request.POST.get("description", obj.description).strip()
+    obj.save()
+    messages.success(request, f'บันทึก "{obj.title}" แล้ว')
+    return redirect("/owner/website-content/?tab=values")
+
+
+@staff_member_required
+@require_POST
+def website_contact_save(request):
+    from pages.models import SiteSetting
+    site = SiteSetting.get()
+    site.contact_email  = request.POST.get("contact_email", site.contact_email).strip()
+    site.line_id        = request.POST.get("line_id", site.line_id).strip()
+    site.phone          = request.POST.get("phone", site.phone).strip()
+    site.business_hours = request.POST.get("business_hours", site.business_hours).strip()
+    site.save()
+    messages.success(request, "บันทึกข้อมูลติดต่อแล้ว")
+    return redirect("/owner/website-content/?tab=contact")

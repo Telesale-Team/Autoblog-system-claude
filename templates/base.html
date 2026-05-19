@@ -572,39 +572,11 @@
         {# ── เนื้อหาเว็บไซต์ ── #}
         <li class="nav-section-label" data-section>เนื้อหาเว็บไซต์</li>
 
-        <li class="nav-item" data-label="บริการ services เพิ่มแก้ไข">
-          <a href="/admin/pages/service/" class="nav-link" target="_blank" rel="noopener">
-            <i class="bi bi-stars"></i>
-            <span class="nav-label">จัดการบริการ</span>
-            <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
-          </a>
-        </li>
-        <li class="nav-item" data-label="portfolio case study ผลงาน เพิ่มแก้ไข">
-          <a href="/admin/portfolio/casestudy/" class="nav-link" target="_blank" rel="noopener">
-            <i class="bi bi-briefcase-fill"></i>
-            <span class="nav-label">จัดการ Portfolio</span>
-            <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
-          </a>
-        </li>
-        <li class="nav-item" data-label="about สถิติ ค่านิยม หน้าเกี่ยวกับ">
-          <a href="/admin/pages/aboutstat/" class="nav-link" target="_blank" rel="noopener">
-            <i class="bi bi-bar-chart-fill"></i>
-            <span class="nav-label">สถิติ About</span>
-            <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
-          </a>
-        </li>
-        <li class="nav-item" data-label="about ค่านิยม values หน้าเกี่ยวกับ">
-          <a href="/admin/pages/aboutvalue/" class="nav-link" target="_blank" rel="noopener">
-            <i class="bi bi-award-fill"></i>
-            <span class="nav-label">ค่านิยม About</span>
-            <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
-          </a>
-        </li>
-        <li class="nav-item" data-label="contact ติดต่อ อีเมล line เวลาทำการ">
-          <a href="/admin/pages/sitesetting/" class="nav-link" target="_blank" rel="noopener">
-            <i class="bi bi-sliders"></i>
-            <span class="nav-label">ตั้งค่าหน้าติดต่อ</span>
-            <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
+        <li class="nav-item" data-label="บริการ portfolio about contact เนื้อหา เว็บไซต์ services">
+          <a href="{% url 'dashboard:website_content' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'website_content' %}active{% endif %}">
+            <i class="bi bi-globe2"></i>
+            <span class="nav-label">จัดการเนื้อหาเว็บ</span>
           </a>
         </li>
 

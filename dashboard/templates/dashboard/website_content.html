@@ -1,0 +1,484 @@
+{% extends "base.html" %}
+{% load static humanize %}
+<!-- ===================================================================
+     WEBSITE CONTENT MANAGER — จัดการเนื้อหาเว็บไซต์
+     Design pattern: settings page (hero + tabs + scard)
+     =================================================================== -->
+
+{% block title %}เนื้อหาเว็บไซต์ — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">เนื้อหาเว็บไซต์</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<style>
+  /* === Tab nav — gold active underline === */
+  .wc-tabs { display: flex; gap: .25rem; flex-wrap: wrap; margin-bottom: 1.75rem; border-bottom: 1px solid var(--bs-border-color); }
+  .wc-tab-btn {
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .65rem 1.1rem; border: none; background: transparent;
+    font-size: .88rem; font-weight: 600; color: var(--bs-secondary-color);
+    border-bottom: 3px solid transparent; margin-bottom: -1px;
+    cursor: pointer; transition: color .15s, border-color .15s;
+    border-radius: .35rem .35rem 0 0;
+  }
+  .wc-tab-btn:hover { color: var(--bs-body-color); }
+  .wc-tab-btn.active { color: var(--app-primary); border-bottom-color: var(--app-primary); }
+  .wc-tab-btn .tab-badge {
+    font-size: .65rem; background: rgba(201,169,110,.15);
+    color: var(--app-primary); border-radius: 999px; padding: .1rem .5rem; font-weight: 700;
+  }
+
+  /* === Tab pane === */
+  .wc-pane { display: none; }
+  .wc-pane.active { display: block; }
+
+  /* === Service / Portfolio table === */
+  .wc-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  .wc-table th {
+    padding: .6rem 1rem; font-size: .72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .07em;
+    color: var(--bs-secondary-color); border-bottom: 1px solid var(--bs-border-color);
+    white-space: nowrap;
+  }
+  .wc-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--bs-border-color); vertical-align: middle; }
+  .wc-table tr:last-child td { border-bottom: none; }
+  .wc-table tr:hover td { background: rgba(201,169,110,.04); }
+
+  /* Status badge toggle */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .25rem .7rem; border-radius: 999px; font-size: .72rem;
+    font-weight: 700; cursor: pointer; border: 1px solid transparent;
+    transition: all .18s; user-select: none;
+  }
+  .status-badge.published { background: rgba(16,185,129,.1); color: #059669; border-color: rgba(16,185,129,.25); }
+  .status-badge.draft     { background: rgba(100,116,139,.1); color: #64748b; border-color: rgba(100,116,139,.2); }
+  .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .status-badge:hover { opacity: .75; transform: scale(.97); }
+
+  /* === Stat cards (inline edit) === */
+  .stat-edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .stat-edit-card {
+    border: 1px solid var(--bs-border-color); border-radius: .75rem;
+    padding: 1.25rem; background: var(--bs-body-bg);
+    transition: border-color .18s;
+  }
+  .stat-edit-card:focus-within { border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12); }
+  .stat-edit-number { font-size: 1.6rem; font-weight: 800; color: var(--app-primary); margin-bottom: .5rem; }
+  .stat-edit-card input {
+    width: 100%; border: none; background: transparent;
+    font-family: var(--app-font-family); outline: none;
+    border-bottom: 1px dashed var(--bs-border-color); padding: .15rem 0;
+    transition: border-color .15s;
+  }
+  .stat-edit-card input:focus { border-bottom-color: var(--app-primary); }
+  .stat-edit-card input.number-input { font-size: 1.4rem; font-weight: 800; color: var(--app-primary); }
+  .stat-edit-card input.label-input  { font-size: .82rem; color: var(--bs-secondary-color); margin-top: .4rem; }
+
+  /* === Value cards (inline edit) === */
+  .value-edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .value-edit-card {
+    border: 1px solid var(--bs-border-color); border-radius: .75rem;
+    padding: 1.5rem; background: var(--bs-body-bg);
+  }
+  .value-edit-card:focus-within { border-color: var(--app-primary); }
+  .value-edit-card .field-label {
+    font-size: .72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--bs-secondary-color); margin-bottom: .35rem; display: block;
+  }
+  .value-edit-card .form-control {
+    font-size: .88rem; margin-bottom: .75rem;
+    border-color: var(--bs-border-color); background: transparent;
+  }
+  .value-edit-card .form-control:focus { border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12); }
+  .value-icon-preview { font-size: 1.5rem; color: var(--app-primary); margin-bottom: .75rem; }
+
+  /* === Contact form === */
+  .contact-form-grid { max-width: 560px; }
+  .contact-form-grid .form-label {
+    font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  }
+  .contact-form-grid .form-control {
+    border-color: var(--bs-border-color); background: transparent;
+  }
+  .contact-form-grid .form-control:focus {
+    border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+  }
+
+  /* === Action buttons === */
+  .btn-wc-primary {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem 1.1rem; border-radius: .4rem; border: none;
+    background: var(--app-primary); color: #fff; font-weight: 700;
+    font-size: .85rem; cursor: pointer; transition: opacity .18s;
+  }
+  .btn-wc-primary:hover { opacity: .85; }
+  .btn-wc-outline {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem 1.1rem; border-radius: .4rem;
+    border: 1.5px solid var(--app-primary); background: transparent;
+    color: var(--app-primary); font-weight: 700; font-size: .85rem;
+    cursor: pointer; transition: background .15s; text-decoration: none;
+  }
+  .btn-wc-outline:hover { background: rgba(201,169,110,.08); color: var(--app-primary); }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Page Hero (settings style) === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-globe2"></i></span>
+      เนื้อหาเว็บไซต์
+    </h1>
+    <p class="settings-hero-sub">จัดการ Services, Portfolio, About และข้อมูลติดต่อ</p>
+  </div>
+  <a href="/" target="_blank" rel="noopener" class="btn-wc-outline">
+    <i class="bi bi-box-arrow-up-right"></i> ดูเว็บจริง
+  </a>
+</div>
+
+<!-- === Django Messages === -->
+{% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+    <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+{% endif %}
+
+<!-- === Tab Navigation === -->
+<div class="wc-tabs">
+  <button class="wc-tab-btn {% if active_tab == 'services' %}active{% endif %}" data-tab="services">
+    <i class="bi bi-stars"></i> บริการ
+    <span class="tab-badge">{{ services|length }}</span>
+  </button>
+  <button class="wc-tab-btn {% if active_tab == 'portfolio' %}active{% endif %}" data-tab="portfolio">
+    <i class="bi bi-briefcase"></i> Portfolio
+    <span class="tab-badge">{{ portfolio|length }}</span>
+  </button>
+  <button class="wc-tab-btn {% if active_tab == 'stats' %}active{% endif %}" data-tab="stats">
+    <i class="bi bi-bar-chart-fill"></i> สถิติ About
+  </button>
+  <button class="wc-tab-btn {% if active_tab == 'values' %}active{% endif %}" data-tab="values">
+    <i class="bi bi-award-fill"></i> ค่านิยม About
+  </button>
+  <button class="wc-tab-btn {% if active_tab == 'contact' %}active{% endif %}" data-tab="contact">
+    <i class="bi bi-sliders"></i> ข้อมูลติดต่อ
+  </button>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 1: บริการ
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'services' %}active{% endif %}" id="pane-services">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-stars"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">จัดการบริการ</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            คลิก Status เพื่อเปลี่ยน — แก้ไขเนื้อหาเต็มผ่าน Admin
+          </div>
+        </div>
+      </div>
+      <a href="/admin/pages/service/add/" target="_blank" class="btn-wc-primary">
+        <i class="bi bi-plus-lg"></i> เพิ่มบริการ
+      </a>
+    </div>
+    <div class="scard-body" style="padding:0;">
+      <table class="wc-table">
+        <thead>
+          <tr>
+            <th>ชื่อบริการ</th>
+            <th>Tagline</th>
+            <th>ราคาเริ่มต้น</th>
+            <th>ลำดับ</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for svc in services %}
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi {{ svc.icon }}" style="color:var(--app-primary);font-size:1.1rem;width:20px;text-align:center;"></i>
+                <strong>{{ svc.name }}</strong>
+              </div>
+            </td>
+            <td style="color:var(--bs-secondary-color);font-size:.82rem;">{{ svc.tagline|truncatechars:40 }}</td>
+            <td>฿{{ svc.price_start|intcomma }} <small class="text-muted">{{ svc.price_label }}</small></td>
+            <td style="color:var(--bs-secondary-color);">{{ svc.display_order }}</td>
+            <td>
+              <span class="status-badge {{ svc.status }}"
+                    data-url="{% url 'dashboard:website_service_toggle' svc.pk %}"
+                    onclick="toggleStatus(this)">
+                <span class="dot"></span>
+                <span class="status-text">{% if svc.status == 'published' %}Published{% else %}Draft{% endif %}</span>
+              </span>
+            </td>
+            <td>
+              <a href="/admin/pages/service/{{ svc.pk }}/change/" target="_blank"
+                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
+                <i class="bi bi-pencil"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-muted py-4">ยังไม่มีบริการ</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 2: Portfolio
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'portfolio' %}active{% endif %}" id="pane-portfolio">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-briefcase"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">จัดการ Portfolio</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            Case Studies — คลิก Status เพื่อเปลี่ยน
+          </div>
+        </div>
+      </div>
+      <a href="/admin/portfolio/casestudy/add/" target="_blank" class="btn-wc-primary">
+        <i class="bi bi-plus-lg"></i> เพิ่ม Case Study
+      </a>
+    </div>
+    <div class="scard-body" style="padding:0;">
+      <table class="wc-table">
+        <thead>
+          <tr>
+            <th>ชื่อโปรเจกต์</th>
+            <th>อุตสาหกรรม</th>
+            <th>ROI เด่น</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cs in portfolio %}
+          <tr>
+            <td><strong>{{ cs.project_title }}</strong></td>
+            <td>
+              <span class="badge bg-secondary" style="font-size:.72rem;">{{ cs.get_industry_display }}</span>
+            </td>
+            <td style="color:var(--app-primary);font-size:.82rem;font-weight:600;">{{ cs.roi_metric|default:"—" }}</td>
+            <td>
+              <span class="status-badge {{ cs.status }}"
+                    data-url="{% url 'dashboard:website_portfolio_toggle' cs.pk %}"
+                    onclick="toggleStatus(this)">
+                <span class="dot"></span>
+                <span class="status-text">{% if cs.status == 'published' %}Published{% else %}Draft{% endif %}</span>
+              </span>
+            </td>
+            <td>
+              <a href="/admin/portfolio/casestudy/{{ cs.pk }}/change/" target="_blank"
+                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
+                <i class="bi bi-pencil"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-4">ยังไม่มี Portfolio</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 3: สถิติ About
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'stats' %}active{% endif %}" id="pane-stats">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-bar-chart-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">สถิติในหน้า About</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            แก้ไขตัวเลขและคำอธิบาย แล้วกด บันทึก
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <form method="post" action="{% url 'dashboard:website_stats_save' %}">
+        {% csrf_token %}
+        <div class="stat-edit-grid mb-4">
+          {% for stat in stats %}
+          <div class="stat-edit-card">
+            <input type="text" name="number_{{ stat.pk }}" value="{{ stat.number }}"
+                   class="number-input" placeholder="เช่น 20+" autocomplete="off">
+            <input type="text" name="label_{{ stat.pk }}" value="{{ stat.label }}"
+                   class="label-input" placeholder="คำอธิบาย" autocomplete="off">
+          </div>
+          {% empty %}
+          <p class="text-muted">ยังไม่มีสถิติ</p>
+          {% endfor %}
+        </div>
+        <button type="submit" class="btn-wc-primary">
+          <i class="bi bi-check-lg"></i> บันทึกสถิติ
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 4: ค่านิยม About
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'values' %}active{% endif %}" id="pane-values">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-award-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">ค่านิยมในหน้า About</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            แก้ไขแต่ละค่านิยม แล้วกด บันทึก ทีละใบ
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <div class="value-edit-grid">
+        {% for val in values %}
+        <form method="post" action="{% url 'dashboard:website_value_save' val.pk %}">
+          {% csrf_token %}
+          <div class="value-edit-card">
+            <div class="value-icon-preview" id="icon-preview-{{ val.pk }}">
+              <i class="bi {{ val.icon }}"></i>
+            </div>
+            <label class="field-label">Bootstrap Icon</label>
+            <input type="text" name="icon" value="{{ val.icon }}" class="form-control mb-2"
+                   placeholder="เช่น bi-bar-chart-line-fill"
+                   oninput="previewIcon(this, '{{ val.pk }}')">
+            <label class="field-label">หัวข้อ</label>
+            <input type="text" name="title" value="{{ val.title }}" class="form-control mb-2"
+                   placeholder="หัวข้อค่านิยม">
+            <label class="field-label">รายละเอียด</label>
+            <textarea name="description" class="form-control mb-3" rows="3"
+                      placeholder="อธิบายค่านิยม">{{ val.description }}</textarea>
+            <button type="submit" class="btn-wc-primary w-100">
+              <i class="bi bi-check-lg"></i> บันทึก
+            </button>
+          </div>
+        </form>
+        {% empty %}
+        <p class="text-muted">ยังไม่มีค่านิยม</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 5: ข้อมูลติดต่อ
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'contact' %}active{% endif %}" id="pane-contact">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-sliders"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">ตั้งค่าหน้าติดต่อ</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            ข้อมูลที่แสดงในหน้า /contact/
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <form method="post" action="{% url 'dashboard:website_contact_save' %}" class="contact-form-grid">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">อีเมลติดต่อ</label>
+          <input type="email" name="contact_email" value="{{ site.contact_email }}"
+                 class="form-control" placeholder="email@example.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">LINE ID</label>
+          <div class="input-group">
+            <span class="input-group-text" style="background:transparent;border-color:var(--bs-border-color);">
+              <i class="bi bi-line" style="color:#06C755;"></i>
+            </span>
+            <input type="text" name="line_id" value="{{ site.line_id }}"
+                   class="form-control" placeholder="@aibizthailand">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">เบอร์โทร <span class="text-muted">(ไม่บังคับ)</span></label>
+          <input type="text" name="phone" value="{{ site.phone }}"
+                 class="form-control" placeholder="02-xxx-xxxx">
+        </div>
+        <div class="mb-4">
+          <label class="form-label">เวลาทำการ</label>
+          <input type="text" name="business_hours" value="{{ site.business_hours }}"
+                 class="form-control" placeholder="จ–ศ 09:00–18:00">
+          <small class="text-muted">แสดงใน LINE channel และ info sidebar</small>
+        </div>
+        <button type="submit" class="btn-wc-primary">
+          <i class="bi bi-check-lg"></i> บันทึกข้อมูลติดต่อ
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* === Tab switching === */
+document.querySelectorAll('.wc-tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var tab = this.dataset.tab;
+    document.querySelectorAll('.wc-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.wc-pane').forEach(function(p) { p.classList.remove('active'); });
+    this.classList.add('active');
+    document.getElementById('pane-' + tab).classList.add('active');
+    history.replaceState(null, '', '?tab=' + tab);
+  });
+});
+
+/* === Status badge toggle (AJAX) === */
+function toggleStatus(el) {
+  var url = el.dataset.url;
+  var csrf = document.cookie.match(/csrftoken=([^;]+)/);
+  if (!csrf) return;
+  fetch(url, {
+    method: 'POST',
+    headers: { 'X-CSRFToken': csrf[1], 'Content-Type': 'application/json' }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    el.className = 'status-badge ' + data.status;
+    el.querySelector('.status-text').textContent = data.status === 'published' ? 'Published' : 'Draft';
+  });
+}
+
+/* === Icon preview (ค่านิยม tab) === */
+function previewIcon(input, id) {
+  var prev = document.getElementById('icon-preview-' + id);
+  if (prev) prev.innerHTML = '<i class="bi ' + input.value + '"></i>';
+}
+</script>
+{% endblock %}
