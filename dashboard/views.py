@@ -6,6 +6,7 @@ from pathlib import Path
 from django.utils.dateparse import parse_datetime
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Sum, Q
 from django.db.models.functions import TruncDate
@@ -1381,7 +1382,7 @@ def website_content_view(request):
     from portfolio.models import CaseStudy
     from blog.models import Article
     from marketing.models import ContentBacklog
-    backlog_qs = ContentBacklog.objects.exclude(status="done").order_by("num")[:30]
+    backlog_qs = ContentBacklog.objects.exclude(status="done").filter(articles__isnull=True).order_by("num")[:30]
     return render(request, "dashboard/website_content.html", {
         "services":     Service.objects.all().order_by("display_order"),
         "portfolio":    CaseStudy.objects.all().order_by("display_order", "-published_at"),
