@@ -504,6 +504,101 @@
       </div>
       {% endif %}
 
+      <!-- ── 9. Portfolio อื่นๆ (Swiper Slider) ── -->
+      {% if related %}
+      <div class="mb-2">
+        <h2 class="section-heading">
+          <span class="section-icon">💼</span>
+          <span>Portfolio อื่นๆ</span>
+        </h2>
+      </div>
+
+      <!-- Swiper -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+      <style>
+        .portfolio-swiper { padding-bottom: 2.5rem !important; }
+        .portfolio-swiper .swiper-slide { height: auto; }
+        .port-slide-card {
+          background: rgba(26,39,68,.55);
+          border: 1px solid rgba(201,169,110,.2);
+          border-radius: .75rem;
+          overflow: hidden;
+          text-decoration: none;
+          display: block;
+          transition: border-color .2s, transform .2s;
+          height: 100%;
+        }
+        .port-slide-card:hover {
+          border-color: rgba(201,169,110,.55);
+          transform: translateY(-4px);
+        }
+        .port-slide-img {
+          width: 100%; height: 160px;
+          object-fit: cover; display: block;
+        }
+        .port-slide-body { padding: .9rem 1rem; }
+        .port-slide-industry {
+          font-size: .68rem; font-weight: 700; text-transform: uppercase;
+          letter-spacing: .08em; color: var(--brand-gold); margin-bottom: .3rem;
+        }
+        .port-slide-title {
+          font-size: .9rem; font-weight: 700;
+          color: #f1f5f9; line-height: 1.4; margin-bottom: .4rem;
+        }
+        .port-slide-roi {
+          font-size: .78rem; color: var(--brand-gold); font-weight: 600;
+        }
+        .swiper-pagination-bullet { background: rgba(201,169,110,.4); }
+        .swiper-pagination-bullet-active { background: var(--brand-gold); }
+        .swiper-button-next, .swiper-button-prev {
+          color: var(--brand-gold) !important;
+          width: 32px !important; height: 32px !important;
+        }
+        .swiper-button-next::after, .swiper-button-prev::after { font-size: 1rem !important; }
+      </style>
+
+      <div class="swiper portfolio-swiper mb-4" id="portfolioSwiper">
+        <div class="swiper-wrapper">
+          {% for item in related %}
+          <div class="swiper-slide">
+            <a href="{% url 'portfolio:detail' item.slug %}" class="port-slide-card">
+              {% if item.display_cover %}
+              <img src="{{ item.display_cover }}" alt="{{ item.project_title }}" class="port-slide-img">
+              {% else %}
+              <div class="port-slide-img" style="background:linear-gradient(135deg,#1a2744,#0f172a);display:flex;align-items:center;justify-content:center;">
+                <i class="bi bi-briefcase-fill" style="font-size:2rem;color:rgba(201,169,110,.3);"></i>
+              </div>
+              {% endif %}
+              <div class="port-slide-body">
+                <div class="port-slide-industry">{{ item.get_industry_display }}</div>
+                <div class="port-slide-title">{{ item.project_title }}</div>
+                {% if item.roi_metric %}
+                <div class="port-slide-roi"><i class="bi bi-graph-up-arrow me-1"></i>{{ item.roi_metric }}</div>
+                {% endif %}
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+      <script>
+        new Swiper('#portfolioSwiper', {
+          slidesPerView: 1, spaceBetween: 16,
+          pagination: { el: '.swiper-pagination', clickable: true },
+          navigation: { prevEl: '.swiper-button-prev', nextEl: '.swiper-button-next' },
+          breakpoints: {
+            576: { slidesPerView: 2 },
+            992: { slidesPerView: 3 },
+          }
+        });
+      </script>
+      {% endif %}
+
     </div>
     <!-- /col-lg-8 -->
 

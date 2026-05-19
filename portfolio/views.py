@@ -34,7 +34,8 @@ class CaseStudyDetailView(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["related"] = (
-            CaseStudy.objects.filter(status="published", industry=self.object.industry)
-            .exclude(pk=self.object.pk)[:3]
+            CaseStudy.objects.filter(status="published")
+            .exclude(pk=self.object.pk)
+            .order_by("display_order", "-published_at")[:8]
         )
         return ctx
