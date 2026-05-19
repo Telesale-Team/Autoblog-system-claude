@@ -444,25 +444,7 @@
         </div>
       </div>
 
-      <hr class="gold-divider">
-
-      <!-- ── 6. Tech Stack ── -->
-      {% if case.tech_stack %}
-      <div class="mb-4">
-        <h2 class="section-heading">
-          <span class="section-icon">⚙️</span>
-          <span>Tech Stack ที่ใช้</span>
-        </h2>
-        <div class="ps-1">
-          {% for tech in case.tech_stack.split %}
-          <span class="tech-badge">{{ tech }}</span>
-          {% endfor %}
-        </div>
-      </div>
-      <hr class="gold-divider">
-      {% endif %}
-
-      <!-- ── 7. Gallery ── -->
+      <!-- ── Gallery (ใต้ผลลัพธ์) ── -->
       {% if case.images.all %}
       <div class="mb-4">
         <h2 class="section-heading">
@@ -482,6 +464,23 @@
             <small class="text-secondary d-block mt-1 ps-1">{{ img.caption }}</small>
             {% endif %}
           </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <hr class="gold-divider">
+
+      <!-- ── 6. Tech Stack ── -->
+      {% if case.tech_stack %}
+      <div class="mb-4">
+        <h2 class="section-heading">
+          <span class="section-icon">⚙️</span>
+          <span>Tech Stack ที่ใช้</span>
+        </h2>
+        <div class="ps-1">
+          {% for tech in case.tech_stack.split %}
+          <span class="tech-badge">{{ tech }}</span>
           {% endfor %}
         </div>
       </div>
