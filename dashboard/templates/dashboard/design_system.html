@@ -182,12 +182,22 @@
       </div>
       <div class="col-md-4">
         <div style="margin-bottom:.5rem;display:flex;gap:.35rem;flex-wrap:wrap;">
-          <button class="btn btn-sm btn-outline-secondary filter-btn active">ทั้งหมด</button>
-          <button class="btn btn-sm btn-outline-secondary filter-btn">Published</button>
-          <button class="btn btn-sm btn-outline-secondary filter-btn">Draft</button>
+          <button class="filter-btn active">
+            <i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด
+            <span class="tab-count">24</span>
+          </button>
+          <button class="filter-btn">
+            <i class="bi bi-check2-all tab-icon"></i>Published
+            <span class="tab-count">18</span>
+          </button>
+          <button class="filter-btn">Draft</button>
         </div>
-        <div class="btn-label">filter-btn (active state)</div>
-        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.25rem;">Filter tabs — ใช้ใน list views<br>active class เพิ่ม gold border</div>
+        <div class="btn-label">.filter-btn / .filter-btn.active</div>
+        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.25rem;">
+          Filter tabs — ใช้ใน list views + Calendar<br>
+          active = <strong>Navy bg + Gold text</strong><br>
+          รองรับ <code>.tab-icon</code> และ <code>.tab-count</code>
+        </div>
       </div>
       <div class="col-md-4">
         <div style="margin-bottom:.5rem;">
