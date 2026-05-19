@@ -409,8 +409,13 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     },
 
-    /* datesSet: เรียกทุกครั้งที่เปลี่ยน view หรือ navigate — เก็บ view type ไว้ใช้ใน callbacks อื่น */
-    datesSet: function (info) { currentViewType = info.view.type; },
+    /* datesSet: เรียกทุกครั้งที่เปลี่ยน view หรือ navigate */
+    datesSet: function (info) {
+      currentViewType = info.view.type;
+      if (info.view.type === 'listMonth') {
+        setTimeout(reformatListView, 50);
+      }
+    },
 
     dateClick:  function (info) { openEditModal(null, info.dateStr); },  /* คลิกวันว่าง → เปิด add form */
     eventClick: function (info) { openDetailModal(info.event); },         /* คลิก event → เปิด detail modal */
@@ -665,6 +670,94 @@ document.addEventListener('DOMContentLoaded', function () {
       .finally(function () { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check2 me-1"></i>บันทึก'; });
   });
 
+  /* ── [10] List View — reformat day headers + collapse > 6 events ──── */
+  function reformatListView() {
+    reformatListHeaders();
+    applyListCollapse();
+  }
+
+  /* แปลงหัว list view เป็น "วันศุกร์ 1 เดือนพฤษภาคม 2569" */
+  function reformatListHeaders() {
+    document.querySelectorAll('#calendar .fc-list-day[data-date]').forEach(function (dayRow) {
+      const dateStr = dayRow.dataset.date;
+      if (!dateStr || dayRow.dataset.reformatted) return;
+      dayRow.dataset.reformatted = '1';
+
+      var d = new Date(dateStr + 'T12:00:00');
+      var weekday = d.toLocaleDateString('th-TH-u-ca-buddhist', { weekday: 'long' });     /* วันศุกร์ */
+      var day     = d.toLocaleDateString('th-TH-u-ca-buddhist', { day: 'numeric' });      /* 1 */
+      var month   = d.toLocaleDateString('th-TH-u-ca-buddhist', { month: 'long' });       /* พฤษภาคม */
+      var year    = d.toLocaleDateString('th-TH-u-ca-buddhist', { year: 'numeric' });     /* 2569 */
+      var label   = weekday + ' ' + day + ' เดือน' + month + ' ' + year;
+
+      var cushion = dayRow.querySelector('.fc-list-day-cushion');
+      if (cushion) {
+        cushion.innerHTML =
+          '<span class="fc-list-day-text" style="font-size:.82rem;font-weight:700;color:var(--app-primary);">' +
+          label + '</span>';
+      }
+    });
+  }
+
+  /* ย่อ/ขยาย event ถ้าวันนั้นมีมากกว่า 6 รายการ */
+  var LIST_MAX = 6;
+  function applyListCollapse() {
+    /* ลบ collapse buttons เก่าออกก่อน */
+    document.querySelectorAll('#calendar .fc-list-collapse-row').forEach(function (el) { el.remove(); });
+    /* reset hidden events */
+    document.querySelectorAll('#calendar .fc-list-event[data-collapsed]').forEach(function (el) {
+      el.style.display = '';
+      delete el.dataset.collapsed;
+    });
+
+    var rows     = Array.from(document.querySelectorAll('#calendar .fc-list-table tbody tr'));
+    var dayMap   = [];   /* [{day: tr, events: [tr, ...]}] */
+    var current  = null;
+
+    rows.forEach(function (row) {
+      if (row.classList.contains('fc-list-day')) {
+        current = { day: row, events: [] };
+        dayMap.push(current);
+      } else if (row.classList.contains('fc-list-event') && current) {
+        current.events.push(row);
+      }
+    });
+
+    dayMap.forEach(function (group) {
+      if (group.events.length <= LIST_MAX) return;
+      var extra = group.events.length - LIST_MAX;
+
+      /* ซ่อน event ที่เกิน */
+      group.events.slice(LIST_MAX).forEach(function (ev) {
+        ev.style.display = 'none';
+        ev.dataset.collapsed = '1';
+      });
+
+      /* สร้าง toggle row */
+      var toggleRow = document.createElement('tr');
+      toggleRow.className = 'fc-list-collapse-row';
+      toggleRow.innerHTML =
+        '<td colspan="4" style="padding:.5rem 1rem;">' +
+        '<button class="filter-btn" style="font-size:.78rem;width:100%;justify-content:center;" data-expanded="false">' +
+        '<i class="bi bi-chevron-down me-1"></i>ดูเพิ่มอีก ' + extra + ' รายการ' +
+        '</button></td>';
+
+      /* แทรกหลัง event ตัวสุดท้ายที่ show */
+      group.events[LIST_MAX - 1].insertAdjacentElement('afterend', toggleRow);
+
+      toggleRow.querySelector('button').addEventListener('click', function () {
+        var expanded = this.dataset.expanded === 'true';
+        group.events.slice(LIST_MAX).forEach(function (ev) {
+          ev.style.display = expanded ? 'none' : '';
+        });
+        this.dataset.expanded = expanded ? 'false' : 'true';
+        this.innerHTML = expanded
+          ? '<i class="bi bi-chevron-down me-1"></i>ดูเพิ่มอีก ' + extra + ' รายการ'
+          : '<i class="bi bi-chevron-up me-1"></i>ย่อ';
+      });
+    });
+  }
+
   /* ── [10] Filter Tabs ─────────────────────────────────────────────
      ใช้ event.setProp('display') แทน refetchEvents()
      เพราะ refetchEvents กับ function-based source ใน FC6 มีปัญหา cache */
@@ -693,6 +786,7 @@ document.addEventListener('DOMContentLoaded', function () {
     item.classList.add('active');
     activeFilter = item.dataset.filter;
     applyFilter();
+    if (currentViewType === 'listMonth') setTimeout(reformatListView, 50);
   });
 
 
