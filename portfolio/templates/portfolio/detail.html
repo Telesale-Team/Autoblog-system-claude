@@ -372,6 +372,26 @@
   </div>
 </section>
 
+<!-- ── Gallery (ใต้ Hero) ── -->
+{% if case.images.all %}
+<div class="site-container py-4">
+  <div class="row g-3">
+    {% for img in case.images.all %}
+    <div class="col-6 col-md-4 col-lg-3">
+      <img src="{{ img.image.url }}"
+           alt="{{ img.caption|default:case.project_title }}"
+           class="gallery-img"
+           data-lightbox="{{ img.image.url }}"
+           style="height:180px;object-fit:cover;">
+      {% if img.caption %}
+      <small class="text-secondary d-block mt-1 ps-1">{{ img.caption }}</small>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
 <!-- ══════════════════════════════════════
      MAIN CONTENT AREA
 ════════════════════════════════════════ -->
@@ -447,31 +467,6 @@
           </div>
         </div>
       </div>
-
-      <!-- ── Gallery (ใต้ผลลัพธ์) ── -->
-      {% if case.images.all %}
-      <div class="mb-4">
-        <h2 class="section-heading">
-          <span class="section-icon">📸</span>
-          <span>Gallery</span>
-        </h2>
-        <div class="row g-3">
-          {% for img in case.images.all %}
-          <div class="col-sm-6">
-            <img
-              src="{{ img.image.url }}"
-              alt="{{ img.caption|default:case.project_title }}"
-              class="gallery-img"
-              data-lightbox="{{ img.image.url }}"
-            >
-            {% if img.caption %}
-            <small class="text-secondary d-block mt-1 ps-1">{{ img.caption }}</small>
-            {% endif %}
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
 
       <hr class="gold-divider">
 
