@@ -272,6 +272,7 @@
     <!-- HTML Usage -->
     <div class="mt-4">
       <p class="ds-section-title mb-2">HTML Usage</p>
+{% verbatim %}
       <pre style="background:var(--bs-tertiary-bg,rgba(0,0,0,.04));border:1px solid var(--bs-border-color);border-radius:.375rem;padding:1rem;font-size:.8rem;overflow-x:auto;"><code>{# Static badge #}
 &lt;span class="ds-badge published"&gt;
   &lt;span class="ds-dot"&gt;&lt;/span&gt;Published
@@ -284,11 +285,12 @@
 
 {# Clickable toggle (table) #}
 &lt;span class="ds-badge clickable {{ obj.status }}"
-      data-url="{% url '...' obj.pk %}"
+      data-url="{% url 'app:view_name' obj.pk %}"
       onclick="event.stopPropagation(); toggleStatus(this)"&gt;
   &lt;span class="ds-dot"&gt;&lt;/span&gt;
   &lt;span class="status-text"&gt;...&lt;/span&gt;
 &lt;/span&gt;</code></pre>
+{% endverbatim %}
     </div>
   </div>
 </div>
