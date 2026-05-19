@@ -182,21 +182,24 @@
 .fc-theme-standard .fc-scrollgrid { border-color: var(--bs-border-color) !important; }
 .fc .fc-today-button { text-transform: capitalize; }
 
-/* ── More link — Collapse button ── */
-.fc .fc-daygrid-more-link { text-decoration: none !important; }
-.fc-more-link-btn {
-  display: inline-block;
-  font-size: .68rem;
-  font-weight: 700;
+/* ── Day Collapse — CSS-based (ทนทาน re-render) ── */
+/* ซ่อน event ที่ 5+ เมื่อ cell ยังไม่ได้ขยาย */
+.fc-daygrid-day:not([data-day-expanded="1"]) .fc-daygrid-event-harness:nth-child(n+5) {
+  display: none !important;
+}
+.fc-day-collapse-btn {
+  font-size: .68rem; font-weight: 700;
   color: var(--app-primary);
   background: rgba(201,169,110,.1);
   border: 1px solid rgba(201,169,110,.3);
   border-radius: .25rem;
   padding: .1rem .4rem;
   cursor: pointer;
+  margin: .1rem .25rem;
+  display: inline-block;
   transition: background .15s;
 }
-.fc-more-link-btn:hover { background: rgba(201,169,110,.2); }
+.fc-day-collapse-btn:hover { background: rgba(201,169,110,.2); }
 
 /* ── [phase-bar] Phase Journey Timeline ─────────────────────────────── */
 

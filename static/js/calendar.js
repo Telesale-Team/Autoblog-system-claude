@@ -591,37 +591,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('#calendar .fc-daygrid-day').forEach(function(cell) {
       var events = cell.querySelectorAll('.fc-daygrid-event-harness');
-      if (events.length <= DAY_MAX) return;
+      if (events.length <= DAY_MAX) {
+        /* ลบปุ่มถ้ามี (กรณี filter ทำให้งานน้อยลง) */
+        var oldBtn = cell.querySelector('.fc-day-collapse-btn');
+        if (oldBtn) oldBtn.remove();
+        return;
+      }
 
       var extra    = events.length - DAY_MAX;
       var expanded = cell.dataset.dayExpanded === '1';
 
-      /* apply ซ่อน/แสดงตาม state ปัจจุบัน */
-      events.forEach(function(e, i) {
-        e.style.display = (!expanded && i >= DAY_MAX) ? 'none' : '';
-      });
-
-      /* ถ้ายังไม่มีปุ่ม ให้สร้างใหม่ */
+      /* สร้างปุ่มครั้งเดียว — CSS จัดการซ่อน/แสดง */
       if (!cell.querySelector('.fc-day-collapse-btn')) {
         var btn = document.createElement('div');
         btn.className = 'fc-day-collapse-btn';
-        btn.innerHTML = expanded ? '▲ ย่อ' : '+ ' + extra + ' เพิ่มเติม ▼';
-        btn.style.cssText = 'font-size:.68rem;font-weight:700;color:var(--app-primary);background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:.25rem;padding:.1rem .4rem;cursor:pointer;margin:.1rem .25rem;display:inline-block;';
-        cell.querySelector('.fc-daygrid-day-events').appendChild(btn);
+        btn.innerHTML = '+ ' + extra + ' เพิ่มเติม ▼';
+        var eventsEl = cell.querySelector('.fc-daygrid-day-events');
+        if (eventsEl) eventsEl.appendChild(btn);
 
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
           var isExpanded = cell.dataset.dayExpanded === '1';
-          events.forEach(function(ev, i) {
-            ev.style.display = (isExpanded && i >= DAY_MAX) ? 'none' : '';
-          });
           cell.dataset.dayExpanded = isExpanded ? '' : '1';
           btn.innerHTML = isExpanded ? ('+ ' + extra + ' เพิ่มเติม ▼') : '▲ ย่อ';
         });
-      } else {
-        /* อัปเดตข้อความปุ่มให้ตรงกับ state */
-        var existBtn = cell.querySelector('.fc-day-collapse-btn');
-        existBtn.innerHTML = expanded ? '▲ ย่อ' : '+ ' + extra + ' เพิ่มเติม ▼';
       }
     });
   }
