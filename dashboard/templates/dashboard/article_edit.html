@@ -222,32 +222,32 @@
         {% endif %}
       </div>
 
-      <!-- Slug -->
-      <div class="mb-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
+      <!-- Content Editor -->
+      <div class="scard" style="overflow:visible;">
+        <div class="scard-body" style="padding:.75rem;overflow:visible;">
+          {{ form.content }}
+        </div>
+      </div>
+
+      <!-- Slug — อยู่ใต้ editor -->
+      <div class="mt-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
         <div class="d-flex align-items-center justify-content-between mb-1">
           <label style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);margin:0;">
-            Slug (URL ของบทความ)
+            Slug — URL ของบทความ
           </label>
-          <span style="font-size:.72rem;color:var(--bs-secondary-color);">ถ้าว่าง — ระบบ auto-generate ให้อัตโนมัติ</span>
+          <span style="font-size:.72rem;color:var(--bs-secondary-color);">ว่างไว้ = ระบบ auto-generate อัตโนมัติ</span>
         </div>
         <div class="d-flex align-items-center gap-1 mb-1">
-          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;white-space:nowrap;">blog.kooky-shop.com/blog/</span>
+          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;white-space:nowrap;flex-shrink:0;">blog.kooky-shop.com/blog/</span>
           <input type="text" name="slug" id="id_slug"
                  class="form-control form-control-sm"
                  value="{{ form.slug.value|default_if_none:'' }}"
                  placeholder="my-article-slug"
                  style="font-family:monospace;font-size:.82rem;min-width:0;">
-          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;">/</span>
+          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;flex-shrink:0;">/</span>
         </div>
         <div style="font-size:.72rem;color:var(--bs-secondary-color);">
-          <i class="bi bi-info-circle me-1"></i>ใช้สำหรับ URL ของบทความ — รองรับเฉพาะ a-z, 0-9, และ - (ขีดกลาง) เท่านั้น
-        </div>
-      </div>
-
-      <!-- Content Editor -->
-      <div class="scard" style="overflow:visible;">
-        <div class="scard-body" style="padding:.75rem;overflow:visible;">
-          {{ form.content }}
+          <i class="bi bi-info-circle me-1"></i>ใช้เป็น URL สำหรับ SEO — รองรับเฉพาะ a-z, 0-9, และ - (ขีดกลาง)
         </div>
       </div>
 
