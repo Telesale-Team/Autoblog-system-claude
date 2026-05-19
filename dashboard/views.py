@@ -1428,6 +1428,38 @@ def blog_category_add(request):
 
 
 @staff_member_required
+def portfolio_image_add(request, pk):
+    from portfolio.models import CaseStudy, CaseStudyImage
+    from django.shortcuts import get_object_or_404
+    cs = get_object_or_404(CaseStudy, pk=pk)
+    if request.method == "POST" and request.FILES.get("image"):
+        img = CaseStudyImage.objects.create(
+            case_study   = cs,
+            image        = request.FILES["image"],
+            caption      = request.POST.get("caption", "").strip(),
+            display_order= CaseStudyImage.objects.filter(case_study=cs).count(),
+        )
+        return JsonResponse({
+            "ok": True, "id": img.pk,
+            "url": img.image.url,
+            "caption": img.caption,
+        })
+    return JsonResponse({"ok": False, "error": "ไม่มีไฟล์"}, status=400)
+
+
+@staff_member_required
+def portfolio_image_delete(request, pk):
+    from portfolio.models import CaseStudyImage
+    from django.shortcuts import get_object_or_404
+    if request.method == "POST":
+        img = get_object_or_404(CaseStudyImage, pk=pk)
+        img.image.delete(save=False)
+        img.delete()
+        return JsonResponse({"ok": True})
+    return JsonResponse({"ok": False}, status=405)
+
+
+@staff_member_required
 def blog_tag_delete(request, pk):
     if request.method == "POST":
         from blog.models import Tag
