@@ -251,12 +251,11 @@
             <th>Featured</th>
             <th>Status</th>
             <th>วันที่</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for art in articles %}
-          <tr>
+          <tr style="cursor:pointer;" onclick="window.location='{% url 'dashboard:article_edit' art.pk %}'">
             <td>
               <div style="font-weight:600;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
                 {{ art.title }}
@@ -277,7 +276,7 @@
             <td>
               <span class="status-badge {{ art.status }}"
                     data-url="{% url 'dashboard:website_article_toggle' art.pk %}"
-                    onclick="toggleStatus(this)">
+                    onclick="event.stopPropagation(); toggleStatus(this)">
                 <span class="dot"></span>
                 <span class="status-text">{% if art.status == 'published' %}Published{% else %}Draft{% endif %}</span>
               </span>
@@ -285,15 +284,9 @@
             <td style="font-size:.78rem;color:var(--bs-secondary-color);white-space:nowrap;">
               {{ art.created_at|date:"d M Y" }}
             </td>
-            <td>
-              <a href="{% url 'dashboard:article_edit' art.pk %}"
-                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
-                <i class="bi bi-pencil"></i>
-              </a>
-            </td>
           </tr>
           {% empty %}
-          <tr><td colspan="6" class="text-center text-muted py-4">ยังไม่มีบทความ</td></tr>
+          <tr><td colspan="5" class="text-center text-muted py-4">ยังไม่มีบทความ</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -328,12 +321,11 @@
             <th>อุตสาหกรรม</th>
             <th>ROI เด่น</th>
             <th>Status</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for cs in portfolio %}
-          <tr>
+          <tr style="cursor:pointer;" onclick="window.open('/admin/portfolio/casestudy/{{ cs.pk }}/change/', '_blank')">
             <td><strong>{{ cs.project_title }}</strong></td>
             <td>
               <span class="badge bg-secondary" style="font-size:.72rem;">{{ cs.get_industry_display }}</span>
@@ -342,20 +334,14 @@
             <td>
               <span class="status-badge {{ cs.status }}"
                     data-url="{% url 'dashboard:website_portfolio_toggle' cs.pk %}"
-                    onclick="toggleStatus(this)">
+                    onclick="event.stopPropagation(); toggleStatus(this)">
                 <span class="dot"></span>
                 <span class="status-text">{% if cs.status == 'published' %}Published{% else %}Draft{% endif %}</span>
               </span>
             </td>
-            <td>
-              <a href="/admin/portfolio/casestudy/{{ cs.pk }}/change/" target="_blank"
-                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
-                <i class="bi bi-pencil"></i>
-              </a>
-            </td>
           </tr>
           {% empty %}
-          <tr><td colspan="5" class="text-center text-muted py-4">ยังไม่มี Portfolio</td></tr>
+          <tr><td colspan="4" class="text-center text-muted py-4">ยังไม่มี Portfolio</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -391,12 +377,11 @@
             <th>ราคาเริ่มต้น</th>
             <th>ลำดับ</th>
             <th>Status</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for svc in services %}
-          <tr>
+          <tr style="cursor:pointer;" onclick="window.open('/admin/pages/service/{{ svc.pk }}/change/', '_blank')">
             <td>
               <div class="d-flex align-items-center gap-2">
                 <i class="bi {{ svc.icon }}" style="color:var(--app-primary);font-size:1.1rem;width:20px;text-align:center;"></i>
@@ -409,20 +394,14 @@
             <td>
               <span class="status-badge {{ svc.status }}"
                     data-url="{% url 'dashboard:website_service_toggle' svc.pk %}"
-                    onclick="toggleStatus(this)">
+                    onclick="event.stopPropagation(); toggleStatus(this)">
                 <span class="dot"></span>
                 <span class="status-text">{% if svc.status == 'published' %}Published{% else %}Draft{% endif %}</span>
               </span>
             </td>
-            <td>
-              <a href="/admin/pages/service/{{ svc.pk }}/change/" target="_blank"
-                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
-                <i class="bi bi-pencil"></i>
-              </a>
-            </td>
           </tr>
           {% empty %}
-          <tr><td colspan="6" class="text-center text-muted py-4">ยังไม่มีบริการ</td></tr>
+          <tr><td colspan="5" class="text-center text-muted py-4">ยังไม่มีบริการ</td></tr>
           {% endfor %}
         </tbody>
       </table>
