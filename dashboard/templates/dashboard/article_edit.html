@@ -366,9 +366,13 @@
             </div>
             <span style="font-weight:700;font-size:.9rem;">Tags</span>
           </div>
+          <button type="button" class="ds-btn" style="padding:.25rem .6rem;font-size:.75rem;"
+                  data-bs-toggle="modal" data-bs-target="#addTagModal" title="เพิ่ม Tag ใหม่">
+            <i class="bi bi-plus-lg"></i>
+          </button>
         </div>
         <div class="scard-body">
-          <div class="tag-pill-list">
+          <div class="tag-pill-list" id="tagPillList">
             {% for choice in form.tags %}
             <label class="tag-pill {% if choice.data.selected %}selected{% endif %}">
               {{ choice.tag }}
@@ -436,6 +440,32 @@
         <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ยกเลิก</button>
         <button type="button" class="ds-btn" id="btnSaveCat">
           <i class="bi bi-check2 me-1"></i>เพิ่มหมวดหมู่
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === Modal: เพิ่ม Tag ใหม่ === -->
+<div class="modal fade" id="addTagModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <h6 class="fw-bold mb-0" style="font-size:.97rem;">เพิ่ม Tag ใหม่</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-2">
+          <label class="form-label">ชื่อ Tag <span class="text-danger">*</span></label>
+          <input type="text" id="newTagName" class="form-control form-control-sm"
+                 placeholder="เช่น AI, SME, Automation">
+        </div>
+        <div id="addTagError" class="text-danger small d-none"></div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="ds-btn" id="btnSaveTag">
+          <i class="bi bi-check2 me-1"></i>เพิ่ม Tag
         </button>
       </div>
     </div>
@@ -547,6 +577,51 @@
   document.getElementById('addCatModal').addEventListener('hidden.bs.modal', function() {
     document.getElementById('newCatName').value = '';
     document.getElementById('addCatError').classList.add('d-none');
+  });
+
+  /* ── Add Tag ── */
+  document.getElementById('btnSaveTag').addEventListener('click', function() {
+    var name  = document.getElementById('newTagName').value.trim();
+    var errEl = document.getElementById('addTagError');
+    errEl.classList.add('d-none');
+    if (!name) { errEl.textContent = 'กรุณาใส่ชื่อ Tag'; errEl.classList.remove('d-none'); return; }
+
+    var btn = this;
+    btn.disabled = true;
+    fetch('{% url "dashboard:blog_tag_add" %}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+      body: JSON.stringify({ name: name })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.ok) { errEl.textContent = data.error || 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); return; }
+      // เพิ่ม pill ใหม่เข้า tag list + เลือกทันที
+      var list = document.getElementById('tagPillList');
+      var label = document.createElement('label');
+      label.className = 'tag-pill selected';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.name = 'tags'; cb.value = data.id; cb.checked = true;
+      cb.style.display = 'none';
+      var span = document.createElement('span');
+      span.textContent = data.name;
+      label.appendChild(cb);
+      label.appendChild(span);
+      label.addEventListener('click', function() {
+        cb.checked = !cb.checked;
+        label.classList.toggle('selected', cb.checked);
+      });
+      list.appendChild(label);
+      bootstrap.Modal.getInstance(document.getElementById('addTagModal')).hide();
+      document.getElementById('newTagName').value = '';
+      showToast(data.exists ? 'Tag "' + data.name + '" มีอยู่แล้ว — เลือกให้แล้ว' : 'เพิ่ม Tag "' + data.name + '" แล้ว');
+    })
+    .catch(function() { errEl.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่'; errEl.classList.remove('d-none'); })
+    .finally(function() { btn.disabled = false; });
+  });
+  document.getElementById('addTagModal').addEventListener('hidden.bs.modal', function() {
+    document.getElementById('newTagName').value = '';
+    document.getElementById('addTagError').classList.add('d-none');
   });
 
   /* ── Tag pills ── */

@@ -1428,6 +1428,28 @@ def blog_category_add(request):
 
 
 @staff_member_required
+def blog_tag_add(request):
+    if request.method == "POST":
+        import json
+        from blog.models import Tag
+        from django.utils.text import slugify
+        data = json.loads(request.body)
+        name = data.get("name", "").strip()
+        if not name:
+            return JsonResponse({"ok": False, "error": "กรุณาใส่ชื่อ Tag"}, status=400)
+        if Tag.objects.filter(name=name).exists():
+            tag = Tag.objects.get(name=name)
+            return JsonResponse({"ok": True, "id": tag.pk, "name": tag.name, "exists": True})
+        slug = slugify(name)[:70] or f"tag-{name[:20]}"
+        i = 1
+        while Tag.objects.filter(slug=slug).exists():
+            slug = f"{slugify(name)[:60]}-{i}"; i += 1
+        tag = Tag.objects.create(name=name, slug=slug)
+        return JsonResponse({"ok": True, "id": tag.pk, "name": tag.name})
+    return JsonResponse({"ok": False}, status=405)
+
+
+@staff_member_required
 def website_service_create(request):
     from pages.models import Service
     if request.method == "POST":
