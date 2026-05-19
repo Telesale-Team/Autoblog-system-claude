@@ -667,7 +667,7 @@
 .notes-list::-webkit-scrollbar-thumb { background: rgba(201,169,110,.18); border-radius: 2px; }
 
 /* Note Card — floating */
-.note-card { border-radius: 12px; padding: .9rem 1rem; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); box-shadow: 0 2px 12px rgba(0,0,0,.28),0 1px 3px rgba(0,0,0,.2); transition: transform var(--transition-ui,.18s), box-shadow var(--transition-ui,.18s), border-color var(--transition-ui,.18s); cursor: default; position: relative; overflow: hidden; }
+.note-card { border-radius: 12px; padding: .75rem 1rem; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); box-shadow: 0 2px 12px rgba(0,0,0,.28),0 1px 3px rgba(0,0,0,.2); transition: transform var(--transition-ui,.18s), box-shadow var(--transition-ui,.18s), border-color var(--transition-ui,.18s); cursor: default; position: relative; overflow: hidden; }
 .note-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 12px 12px 0 0; opacity: .7; }
 .note-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card-hover,0 8px 40px rgba(0,0,0,.55),0 2px 8px rgba(201,169,110,.12)); border-color: rgba(255,255,255,.12); }
 
@@ -684,7 +684,7 @@
 .note-color-purple::before { background: linear-gradient(90deg,#8b5cf6,transparent); }
 
 /* Card internals */
-.note-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .45rem; }
+.note-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .5rem; }
 .note-title { font-size: .87rem; font-weight: 700; color: #f1f5f9; line-height: 1.4; flex: 1; letter-spacing: .01em; }
 .note-actions { display: flex; align-items: center; gap: .2rem; flex-shrink: 0; opacity: 0; transition: opacity var(--transition-ui,.18s); }
 .note-card:hover .note-actions { opacity: 1; }
@@ -696,7 +696,7 @@
 .note-content { font-size: .81rem; color: #94a3b8; line-height: 1.65; white-space: pre-wrap; margin-bottom: .55rem; }
 
 /* Footer — elegant metadata */
-.note-footer { display: flex; align-items: center; justify-content: flex-end; gap: .35rem; font-size: .66rem; color: rgba(148,163,184,.38); font-weight: 500; letter-spacing: .02em; padding-top: .45rem; border-top: 1px solid rgba(255,255,255,.05); }
+.note-footer { display: flex; align-items: center; justify-content: flex-end; gap: .35rem; font-size: .66rem; color: rgba(148,163,184,.38); font-weight: 500; letter-spacing: .02em; margin-top: .5rem; padding-top: .5rem; border-top: 1px solid rgba(255,255,255,.05); }
 .note-footer::before { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg,transparent,rgba(255,255,255,.05)); }
 
 /* Empty state — premium */
