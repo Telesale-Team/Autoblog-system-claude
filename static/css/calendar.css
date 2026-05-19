@@ -1026,33 +1026,6 @@
   border-top-color: rgba(26,39,68,.18);
 }
 
-/* Clock ใน fc-toolbar-title */
-.fc-clock-date {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--heading-dark-bg, #faf6ee);
-  font-family: var(--font-th);
-  letter-spacing: .01em;
-}
-[data-bs-theme="light"] .fc-clock-date { color: var(--brand-navy, #1a2744); }
-
-.fc-clock-sep {
-  color: var(--brand-gold, #c9a96e);
-  margin: 0 .4rem;
-  opacity: .45;
-  font-weight: 300;
-}
-
-@keyframes clock-pulse { 0%,100% { text-shadow: 0 0 8px rgba(201,169,110,.55); } 50% { text-shadow: 0 0 18px rgba(201,169,110,.85), 0 0 4px rgba(201,169,110,.4); } }
-.fc-clock-time {
-  font-family: 'Courier New', Consolas, monospace;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--brand-gold, #c9a96e);
-  letter-spacing: .1em;
-  animation: clock-pulse 2s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) { .fc-clock-time { animation: none; } }
 
 /* Picker */
 .cal-sub-picker {

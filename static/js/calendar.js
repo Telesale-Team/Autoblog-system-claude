@@ -29,31 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (viewHarness && sub) viewHarness.insertAdjacentElement('beforebegin', sub);
   }
 
-  /* ── Live Clock — inject เข้าแทน fc-toolbar-title ─────────────────
-     หลัง cal.render() หา .fc-toolbar-title แล้วแทนที่ด้วย clock HTML
-     อัพเดตทุก 1 วินาที                                                */
-  function mountClock() {
-    const titleEl = document.querySelector('#calendar .fc-toolbar-title');
-    if (!titleEl) return;
-    titleEl.innerHTML =
-      '<span id="calClockDate" class="fc-clock-date"></span>' +
-      '<span class="fc-clock-sep"> · </span>' +
-      '<span id="calClockTime" class="fc-clock-time"></span>';
-  }
-
-  function updateClock() {
-    const dateEl = document.getElementById('calClockDate');
-    const timeEl = document.getElementById('calClockTime');
-    if (!dateEl || !timeEl) return;
-    const now = new Date();
-    dateEl.textContent = now.toLocaleDateString('th-TH', {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-    });
-    timeEl.textContent = now.toLocaleTimeString('th-TH', {
-      hour: '2-digit', minute: '2-digit', second: '2-digit'
-    });
-  }
-  setInterval(updateClock, 1000);
 
   /* ── Month/Year Picker ───────────────────────────────────────────── */
   const pickMonth = document.getElementById('calPickMonth');
@@ -452,8 +427,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   cal.render();
-  mountClock();     /* แทน fc-toolbar-title ด้วย live clock */
-  updateClock();    /* set ทันทีก่อน interval */
   mountSubheader(); /* เลื่อน picker ใต้ toolbar */
 
   /* ── [5] Road to Revenue Progress Bar ────────────────────────────
