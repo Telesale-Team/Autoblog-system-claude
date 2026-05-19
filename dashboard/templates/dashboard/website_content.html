@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load static humanize %}
 <!-- ===================================================================
-     WEBSITE CONTENT MANAGER — จัดการเนื้อหาเว็บไซต์
-     Design pattern: settings page (hero + tabs + scard)
+     WEBSITE CONTENT MANAGER
+     Tabs ตรงกับ Public Navbar: Home | Blog | Portfolio | Services | About | Contact
      =================================================================== -->
 
 {% block title %}เนื้อหาเว็บไซต์ — Dashboard{% endblock %}
@@ -15,7 +15,10 @@
 <link rel="stylesheet" href="{% static 'css/settings.css' %}">
 <style>
   /* === Tab nav — gold active underline === */
-  .wc-tabs { display: flex; gap: .25rem; flex-wrap: wrap; margin-bottom: 1.75rem; border-bottom: 1px solid var(--bs-border-color); }
+  .wc-tabs {
+    display: flex; gap: .25rem; flex-wrap: wrap;
+    margin-bottom: 1.75rem; border-bottom: 1px solid var(--bs-border-color);
+  }
   .wc-tab-btn {
     display: inline-flex; align-items: center; gap: .45rem;
     padding: .65rem 1.1rem; border: none; background: transparent;
@@ -35,7 +38,7 @@
   .wc-pane { display: none; }
   .wc-pane.active { display: block; }
 
-  /* === Service / Portfolio table === */
+  /* === Table === */
   .wc-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
   .wc-table th {
     padding: .6rem 1rem; font-size: .72rem; font-weight: 700;
@@ -47,7 +50,7 @@
   .wc-table tr:last-child td { border-bottom: none; }
   .wc-table tr:hover td { background: rgba(201,169,110,.04); }
 
-  /* Status badge toggle */
+  /* === Status badge toggle === */
   .status-badge {
     display: inline-flex; align-items: center; gap: .35rem;
     padding: .25rem .7rem; border-radius: 999px; font-size: .72rem;
@@ -59,26 +62,23 @@
   .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
   .status-badge:hover { opacity: .75; transform: scale(.97); }
 
-  /* === Stat cards (inline edit) === */
+  /* === Stat cards === */
   .stat-edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
   .stat-edit-card {
     border: 1px solid var(--bs-border-color); border-radius: .75rem;
-    padding: 1.25rem; background: var(--bs-body-bg);
-    transition: border-color .18s;
+    padding: 1.25rem; background: var(--bs-body-bg); transition: border-color .18s;
   }
   .stat-edit-card:focus-within { border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12); }
-  .stat-edit-number { font-size: 1.6rem; font-weight: 800; color: var(--app-primary); margin-bottom: .5rem; }
   .stat-edit-card input {
     width: 100%; border: none; background: transparent;
     font-family: var(--app-font-family); outline: none;
-    border-bottom: 1px dashed var(--bs-border-color); padding: .15rem 0;
-    transition: border-color .15s;
+    border-bottom: 1px dashed var(--bs-border-color); padding: .15rem 0; transition: border-color .15s;
   }
   .stat-edit-card input:focus { border-bottom-color: var(--app-primary); }
   .stat-edit-card input.number-input { font-size: 1.4rem; font-weight: 800; color: var(--app-primary); }
   .stat-edit-card input.label-input  { font-size: .82rem; color: var(--bs-secondary-color); margin-top: .4rem; }
 
-  /* === Value cards (inline edit) === */
+  /* === Value cards === */
   .value-edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
   .value-edit-card {
     border: 1px solid var(--bs-border-color); border-radius: .75rem;
@@ -98,17 +98,20 @@
 
   /* === Contact form === */
   .contact-form-grid { max-width: 560px; }
-  .contact-form-grid .form-label {
-    font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
-  }
-  .contact-form-grid .form-control {
-    border-color: var(--bs-border-color); background: transparent;
-  }
-  .contact-form-grid .form-control:focus {
-    border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12);
-  }
+  .contact-form-grid .form-label { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .contact-form-grid .form-control { border-color: var(--bs-border-color); background: transparent; }
+  .contact-form-grid .form-control:focus { border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12); }
 
-  /* === Action buttons === */
+  /* === Home info cards === */
+  .home-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .home-info-card {
+    border: 1px solid var(--bs-border-color); border-radius: .75rem;
+    padding: 1.25rem; background: var(--bs-body-bg); text-align: center;
+  }
+  .home-info-card .hi-value { font-size: 1.8rem; font-weight: 800; color: var(--app-primary); }
+  .home-info-card .hi-label { font-size: .78rem; color: var(--bs-secondary-color); margin-top: .25rem; }
+
+  /* === Buttons === */
   .btn-wc-primary {
     display: inline-flex; align-items: center; gap: .4rem;
     padding: .5rem 1.1rem; border-radius: .4rem; border: none;
@@ -129,21 +132,20 @@
 
 {% block content %}
 
-<!-- === Page Hero (settings style) === -->
+<!-- === Page Hero === -->
 <div class="settings-hero">
   <div>
     <h1 class="settings-hero-title">
       <span class="hero-icon"><i class="bi bi-globe2"></i></span>
       เนื้อหาเว็บไซต์
     </h1>
-    <p class="settings-hero-sub">จัดการ Services, Portfolio, About และข้อมูลติดต่อ</p>
+    <p class="settings-hero-sub">จัดการเนื้อหาทุกหน้าให้ตรงกับเมนูของเว็บ</p>
   </div>
   <a href="/" target="_blank" rel="noopener" class="btn-wc-outline">
     <i class="bi bi-box-arrow-up-right"></i> ดูเว็บจริง
   </a>
 </div>
 
-<!-- === Django Messages === -->
 {% if messages %}
   {% for message in messages %}
   <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
@@ -153,29 +155,216 @@
   {% endfor %}
 {% endif %}
 
-<!-- === Tab Navigation === -->
+<!-- === Tab Navigation — ตรงกับ Public Navbar === -->
 <div class="wc-tabs">
-  <button class="wc-tab-btn {% if active_tab == 'services' %}active{% endif %}" data-tab="services">
-    <i class="bi bi-stars"></i> บริการ
-    <span class="tab-badge">{{ services|length }}</span>
+  <button class="wc-tab-btn {% if active_tab == 'home' %}active{% endif %}" data-tab="home">
+    <i class="bi bi-house-fill"></i> Home
+  </button>
+  <button class="wc-tab-btn {% if active_tab == 'blog' %}active{% endif %}" data-tab="blog">
+    <i class="bi bi-newspaper"></i> Blog
+    <span class="tab-badge">{{ articles|length }}</span>
   </button>
   <button class="wc-tab-btn {% if active_tab == 'portfolio' %}active{% endif %}" data-tab="portfolio">
     <i class="bi bi-briefcase"></i> Portfolio
     <span class="tab-badge">{{ portfolio|length }}</span>
   </button>
-  <button class="wc-tab-btn {% if active_tab == 'stats' %}active{% endif %}" data-tab="stats">
-    <i class="bi bi-bar-chart-fill"></i> สถิติ About
+  <button class="wc-tab-btn {% if active_tab == 'services' %}active{% endif %}" data-tab="services">
+    <i class="bi bi-stars"></i> Services
+    <span class="tab-badge">{{ services|length }}</span>
   </button>
-  <button class="wc-tab-btn {% if active_tab == 'values' %}active{% endif %}" data-tab="values">
-    <i class="bi bi-award-fill"></i> ค่านิยม About
+  <button class="wc-tab-btn {% if active_tab == 'about' %}active{% endif %}" data-tab="about">
+    <i class="bi bi-info-circle-fill"></i> About
   </button>
   <button class="wc-tab-btn {% if active_tab == 'contact' %}active{% endif %}" data-tab="contact">
-    <i class="bi bi-sliders"></i> ข้อมูลติดต่อ
+    <i class="bi bi-envelope-fill"></i> Contact
   </button>
 </div>
 
 <!-- ══════════════════════════════════
-     TAB 1: บริการ
+     TAB: Home
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'home' %}active{% endif %}" id="pane-home">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-house-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Home Page</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            หน้าแรกดึงบทความจาก Blog โดยอัตโนมัติ
+          </div>
+        </div>
+      </div>
+      <a href="/" target="_blank" rel="noopener" class="btn-wc-outline">
+        <i class="bi bi-eye"></i> ดูหน้าแรก
+      </a>
+    </div>
+    <div class="scard-body">
+      <div class="home-info-grid">
+        <div class="home-info-card">
+          <div class="hi-value">{{ articles|length }}</div>
+          <div class="hi-label">บทความทั้งหมด</div>
+        </div>
+        <div class="home-info-card">
+          <div class="hi-value">{{ services|length }}</div>
+          <div class="hi-label">Services ที่แสดง</div>
+        </div>
+        <div class="home-info-card">
+          <div class="hi-value">{{ portfolio|length }}</div>
+          <div class="hi-label">Portfolio ที่แสดง</div>
+        </div>
+      </div>
+      <div style="background:rgba(201,169,110,.06);border:1px solid rgba(201,169,110,.2);border-radius:.75rem;padding:1rem 1.25rem;font-size:.88rem;">
+        <i class="bi bi-info-circle-fill me-2" style="color:var(--app-primary);"></i>
+        หน้าแรกแสดงบทความ Featured และ Recent จาก Blog อัตโนมัติ
+        — ไปที่แท็บ <strong>Blog</strong> เพื่อตั้งค่า Featured article
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB: Blog
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'blog' %}active{% endif %}" id="pane-blog">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-newspaper"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Blog</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            คลิก Status เพื่อเปลี่ยน Published/Draft — แก้ไขเนื้อหาผ่านหน้าบทความ
+          </div>
+        </div>
+      </div>
+      <a href="{% url 'dashboard:article_new' %}" class="btn-wc-primary">
+        <i class="bi bi-plus-lg"></i> เขียนบทความ
+      </a>
+    </div>
+    <div class="scard-body" style="padding:0;">
+      <table class="wc-table">
+        <thead>
+          <tr>
+            <th>หัวข้อบทความ</th>
+            <th>หมวดหมู่</th>
+            <th>Featured</th>
+            <th>Status</th>
+            <th>วันที่</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for art in articles %}
+          <tr>
+            <td>
+              <div style="font-weight:600;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                {{ art.title }}
+              </div>
+            </td>
+            <td>
+              {% if art.category %}
+              <span class="badge bg-secondary" style="font-size:.72rem;">{{ art.category }}</span>
+              {% else %}<span class="text-muted">—</span>{% endif %}
+            </td>
+            <td>
+              {% if art.is_featured %}
+              <i class="bi bi-star-fill" style="color:var(--app-primary);"></i>
+              {% else %}
+              <i class="bi bi-star" style="color:var(--bs-secondary-color);"></i>
+              {% endif %}
+            </td>
+            <td>
+              <span class="status-badge {{ art.status }}"
+                    data-url="{% url 'dashboard:website_article_toggle' art.pk %}"
+                    onclick="toggleStatus(this)">
+                <span class="dot"></span>
+                <span class="status-text">{% if art.status == 'published' %}Published{% else %}Draft{% endif %}</span>
+              </span>
+            </td>
+            <td style="font-size:.78rem;color:var(--bs-secondary-color);white-space:nowrap;">
+              {{ art.created_at|date:"d M Y" }}
+            </td>
+            <td>
+              <a href="{% url 'dashboard:article_edit' art.pk %}"
+                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
+                <i class="bi bi-pencil"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-muted py-4">ยังไม่มีบทความ</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB: Portfolio
+══════════════════════════════════ -->
+<div class="wc-pane {% if active_tab == 'portfolio' %}active{% endif %}" id="pane-portfolio">
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-briefcase"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Portfolio</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+            Case Studies — คลิก Status เพื่อเปลี่ยน
+          </div>
+        </div>
+      </div>
+      <a href="/admin/portfolio/casestudy/add/" target="_blank" class="btn-wc-primary">
+        <i class="bi bi-plus-lg"></i> เพิ่ม Case Study
+      </a>
+    </div>
+    <div class="scard-body" style="padding:0;">
+      <table class="wc-table">
+        <thead>
+          <tr>
+            <th>ชื่อโปรเจกต์</th>
+            <th>อุตสาหกรรม</th>
+            <th>ROI เด่น</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cs in portfolio %}
+          <tr>
+            <td><strong>{{ cs.project_title }}</strong></td>
+            <td>
+              <span class="badge bg-secondary" style="font-size:.72rem;">{{ cs.get_industry_display }}</span>
+            </td>
+            <td style="color:var(--app-primary);font-size:.82rem;font-weight:600;">{{ cs.roi_metric|default:"—" }}</td>
+            <td>
+              <span class="status-badge {{ cs.status }}"
+                    data-url="{% url 'dashboard:website_portfolio_toggle' cs.pk %}"
+                    onclick="toggleStatus(this)">
+                <span class="dot"></span>
+                <span class="status-text">{% if cs.status == 'published' %}Published{% else %}Draft{% endif %}</span>
+              </span>
+            </td>
+            <td>
+              <a href="/admin/portfolio/casestudy/{{ cs.pk }}/change/" target="_blank"
+                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
+                <i class="bi bi-pencil"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-4">ยังไม่มี Portfolio</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB: Services
 ══════════════════════════════════ -->
 <div class="wc-pane {% if active_tab == 'services' %}active{% endif %}" id="pane-services">
   <div class="scard">
@@ -183,7 +372,7 @@
       <div class="d-flex align-items-center gap-3">
         <div class="scard-header-icon"><i class="bi bi-stars"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">จัดการบริการ</div>
+          <div style="font-weight:700;font-size:.97rem">Services</div>
           <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
             คลิก Status เพื่อเปลี่ยน — แก้ไขเนื้อหาเต็มผ่าน Admin
           </div>
@@ -242,80 +431,18 @@
 </div>
 
 <!-- ══════════════════════════════════
-     TAB 2: Portfolio
+     TAB: About (สถิติ + ค่านิยม)
 ══════════════════════════════════ -->
-<div class="wc-pane {% if active_tab == 'portfolio' %}active{% endif %}" id="pane-portfolio">
-  <div class="scard">
-    <div class="scard-header">
-      <div class="d-flex align-items-center gap-3">
-        <div class="scard-header-icon"><i class="bi bi-briefcase"></i></div>
-        <div>
-          <div style="font-weight:700;font-size:.97rem">จัดการ Portfolio</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
-            Case Studies — คลิก Status เพื่อเปลี่ยน
-          </div>
-        </div>
-      </div>
-      <a href="/admin/portfolio/casestudy/add/" target="_blank" class="btn-wc-primary">
-        <i class="bi bi-plus-lg"></i> เพิ่ม Case Study
-      </a>
-    </div>
-    <div class="scard-body" style="padding:0;">
-      <table class="wc-table">
-        <thead>
-          <tr>
-            <th>ชื่อโปรเจกต์</th>
-            <th>อุตสาหกรรม</th>
-            <th>ROI เด่น</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for cs in portfolio %}
-          <tr>
-            <td><strong>{{ cs.project_title }}</strong></td>
-            <td>
-              <span class="badge bg-secondary" style="font-size:.72rem;">{{ cs.get_industry_display }}</span>
-            </td>
-            <td style="color:var(--app-primary);font-size:.82rem;font-weight:600;">{{ cs.roi_metric|default:"—" }}</td>
-            <td>
-              <span class="status-badge {{ cs.status }}"
-                    data-url="{% url 'dashboard:website_portfolio_toggle' cs.pk %}"
-                    onclick="toggleStatus(this)">
-                <span class="dot"></span>
-                <span class="status-text">{% if cs.status == 'published' %}Published{% else %}Draft{% endif %}</span>
-              </span>
-            </td>
-            <td>
-              <a href="/admin/portfolio/casestudy/{{ cs.pk }}/change/" target="_blank"
-                 class="btn btn-sm btn-outline-secondary" title="แก้ไข">
-                <i class="bi bi-pencil"></i>
-              </a>
-            </td>
-          </tr>
-          {% empty %}
-          <tr><td colspan="5" class="text-center text-muted py-4">ยังไม่มี Portfolio</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<div class="wc-pane {% if active_tab == 'about' %}active{% endif %}" id="pane-about">
 
-<!-- ══════════════════════════════════
-     TAB 3: สถิติ About
-══════════════════════════════════ -->
-<div class="wc-pane {% if active_tab == 'stats' %}active{% endif %}" id="pane-stats">
-  <div class="scard">
+  <!-- สถิติ -->
+  <div class="scard mb-4">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
         <div class="scard-header-icon"><i class="bi bi-bar-chart-fill"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">สถิติในหน้า About</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
-            แก้ไขตัวเลขและคำอธิบาย แล้วกด บันทึก
-          </div>
+          <div style="font-weight:700;font-size:.97rem">สถิติ About</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ตัวเลขและคำอธิบายใน Hero section</div>
         </div>
       </div>
     </div>
@@ -330,8 +457,7 @@
             <input type="text" name="label_{{ stat.pk }}" value="{{ stat.label }}"
                    class="label-input" placeholder="คำอธิบาย" autocomplete="off">
           </div>
-          {% empty %}
-          <p class="text-muted">ยังไม่มีสถิติ</p>
+          {% empty %}<p class="text-muted">ยังไม่มีสถิติ</p>
           {% endfor %}
         </div>
         <button type="submit" class="btn-wc-primary">
@@ -340,21 +466,15 @@
       </form>
     </div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════
-     TAB 4: ค่านิยม About
-══════════════════════════════════ -->
-<div class="wc-pane {% if active_tab == 'values' %}active{% endif %}" id="pane-values">
+  <!-- ค่านิยม -->
   <div class="scard">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
         <div class="scard-header-icon"><i class="bi bi-award-fill"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">ค่านิยมในหน้า About</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
-            แก้ไขแต่ละค่านิยม แล้วกด บันทึก ทีละใบ
-          </div>
+          <div style="font-weight:700;font-size:.97rem">ค่านิยม About</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">แก้ไขแต่ละค่านิยม แล้วกด บันทึก ทีละใบ</div>
         </div>
       </div>
     </div>
@@ -372,37 +492,33 @@
                    placeholder="เช่น bi-bar-chart-line-fill"
                    oninput="previewIcon(this, '{{ val.pk }}')">
             <label class="field-label">หัวข้อ</label>
-            <input type="text" name="title" value="{{ val.title }}" class="form-control mb-2"
-                   placeholder="หัวข้อค่านิยม">
+            <input type="text" name="title" value="{{ val.title }}" class="form-control mb-2">
             <label class="field-label">รายละเอียด</label>
-            <textarea name="description" class="form-control mb-3" rows="3"
-                      placeholder="อธิบายค่านิยม">{{ val.description }}</textarea>
+            <textarea name="description" class="form-control mb-3" rows="3">{{ val.description }}</textarea>
             <button type="submit" class="btn-wc-primary w-100">
               <i class="bi bi-check-lg"></i> บันทึก
             </button>
           </div>
         </form>
-        {% empty %}
-        <p class="text-muted">ยังไม่มีค่านิยม</p>
+        {% empty %}<p class="text-muted">ยังไม่มีค่านิยม</p>
         {% endfor %}
       </div>
     </div>
   </div>
+
 </div>
 
 <!-- ══════════════════════════════════
-     TAB 5: ข้อมูลติดต่อ
+     TAB: Contact
 ══════════════════════════════════ -->
 <div class="wc-pane {% if active_tab == 'contact' %}active{% endif %}" id="pane-contact">
   <div class="scard">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
-        <div class="scard-header-icon"><i class="bi bi-sliders"></i></div>
+        <div class="scard-header-icon"><i class="bi bi-envelope-fill"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">ตั้งค่าหน้าติดต่อ</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
-            ข้อมูลที่แสดงในหน้า /contact/
-          </div>
+          <div style="font-weight:700;font-size:.97rem">Contact</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ข้อมูลที่แสดงในหน้า /contact/</div>
         </div>
       </div>
     </div>
@@ -411,8 +527,7 @@
         {% csrf_token %}
         <div class="mb-3">
           <label class="form-label">อีเมลติดต่อ</label>
-          <input type="email" name="contact_email" value="{{ site.contact_email }}"
-                 class="form-control" placeholder="email@example.com">
+          <input type="email" name="contact_email" value="{{ site.contact_email }}" class="form-control">
         </div>
         <div class="mb-3">
           <label class="form-label">LINE ID</label>
@@ -420,23 +535,20 @@
             <span class="input-group-text" style="background:transparent;border-color:var(--bs-border-color);">
               <i class="bi bi-line" style="color:#06C755;"></i>
             </span>
-            <input type="text" name="line_id" value="{{ site.line_id }}"
-                   class="form-control" placeholder="@aibizthailand">
+            <input type="text" name="line_id" value="{{ site.line_id }}" class="form-control" placeholder="@aibizthailand">
           </div>
         </div>
         <div class="mb-3">
           <label class="form-label">เบอร์โทร <span class="text-muted">(ไม่บังคับ)</span></label>
-          <input type="text" name="phone" value="{{ site.phone }}"
-                 class="form-control" placeholder="02-xxx-xxxx">
+          <input type="text" name="phone" value="{{ site.phone }}" class="form-control">
         </div>
         <div class="mb-4">
           <label class="form-label">เวลาทำการ</label>
-          <input type="text" name="business_hours" value="{{ site.business_hours }}"
-                 class="form-control" placeholder="จ–ศ 09:00–18:00">
+          <input type="text" name="business_hours" value="{{ site.business_hours }}" class="form-control">
           <small class="text-muted">แสดงใน LINE channel และ info sidebar</small>
         </div>
         <button type="submit" class="btn-wc-primary">
-          <i class="bi bi-check-lg"></i> บันทึกข้อมูลติดต่อ
+          <i class="bi bi-check-lg"></i> บันทึก
         </button>
       </form>
     </div>
@@ -475,7 +587,7 @@ function toggleStatus(el) {
   });
 }
 
-/* === Icon preview (ค่านิยม tab) === */
+/* === Icon preview === */
 function previewIcon(input, id) {
   var prev = document.getElementById('icon-preview-' + id);
   if (prev) prev.innerHTML = '<i class="bi ' + input.value + '"></i>';

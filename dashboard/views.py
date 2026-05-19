@@ -1379,13 +1379,15 @@ def api_calendar_event_detail(request, pk):
 def website_content_view(request):
     from pages.models import Service, SiteSetting, AboutStat, AboutValue
     from portfolio.models import CaseStudy
+    from blog.models import Article
     return render(request, "dashboard/website_content.html", {
-        "services":  Service.objects.all().order_by("display_order"),
-        "portfolio": CaseStudy.objects.all().order_by("display_order", "-published_at"),
-        "stats":     AboutStat.objects.all(),
-        "values":    AboutValue.objects.all(),
-        "site":      SiteSetting.get(),
-        "active_tab": request.GET.get("tab", "services"),
+        "services":   Service.objects.all().order_by("display_order"),
+        "portfolio":  CaseStudy.objects.all().order_by("display_order", "-published_at"),
+        "stats":      AboutStat.objects.all(),
+        "values":     AboutValue.objects.all(),
+        "site":       SiteSetting.get(),
+        "articles":   Article.objects.all().order_by("-created_at")[:20],
+        "active_tab": request.GET.get("tab", "home"),
     })
 
 
@@ -1409,6 +1411,17 @@ def website_portfolio_toggle(request, pk):
     cs.status = "draft" if cs.status == "published" else "published"
     cs.save()
     return JsonResponse({"status": cs.status})
+
+
+@staff_member_required
+@require_POST
+def website_article_toggle(request, pk):
+    from blog.models import Article
+    from django.shortcuts import get_object_or_404
+    art = get_object_or_404(Article, pk=pk)
+    art.status = "draft" if art.status == "published" else "published"
+    art.save()
+    return JsonResponse({"status": art.status})
 
 
 @staff_member_required
