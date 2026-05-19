@@ -413,9 +413,18 @@
   background: var(--dash-surface, var(--bs-body-bg));
 }
 [data-bs-theme="dark"] #editEventModal .modal-content,
-[data-bs-theme="dark"] #noteModal .modal-content { background: #111827; }
+[data-bs-theme="dark"] #noteModal .modal-content { background: var(--bs-body-bg); }
 
-.form-label-sm { font-size: .8rem; font-weight: 600; margin-bottom: .25rem; }
+/* ── Form label ตาม Design System (uppercase + letter-spacing) ── */
+.form-label-sm {
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--bs-secondary-color);
+  margin-bottom: .35rem;
+  display: block;
+}
 .fc-cat-user-event { outline: 1.5px dashed rgba(255,255,255,.5) !important; }
 .modal-desc-item { font-size: .85rem; padding: .2rem 0; color: var(--bs-secondary-color); border-bottom: 1px solid var(--bs-border-color); }
 .modal-desc-item:last-child { border: none; }
