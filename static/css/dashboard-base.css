@@ -425,6 +425,22 @@ body, #sidebar, #topbar, .stat-card { transition: background-color .25s, color .
 .ds-badge.cal-delivery     { background: rgba(45,212,191,.15);  color: #0d9488; border-color: rgba(45,212,191,.4); }
 .ds-badge.cal-personal     { background: rgba(148,163,184,.15); color: #64748b; border-color: rgba(148,163,184,.4); }
 
+/* ── Calendar Icon Colors — filter tab + event icons ──────
+   ใช้แทน inline style="color:..." ใน calendar.js
+   ─────────────────────────────────────────────────────── */
+.cal-icon-milestone    { color: #c9a96e; }
+.cal-icon-action       { color: #60a5fa; }
+.cal-icon-article      { color: #34d399; }
+.cal-icon-lead         { color: #10b981; }
+.cal-icon-recurring    { color: #a78bfa; }
+.cal-icon-content_plan { color: #fbbf24; }
+.cal-icon-backlog      { color: #f59e0b; }
+.cal-icon-general      { color: #94a3b8; }
+.cal-icon-priority     { color: #c9a96e; }
+.cal-icon-meeting      { color: #818cf8; }
+.cal-icon-delivery     { color: #2dd4bf; }
+.cal-icon-personal     { color: #94a3b8; }
+
 /* ── Danger Outline (.ds-btn-danger) ──────────────────── */
 .ds-btn-danger {
   display: inline-flex; align-items: center; gap: .4rem;

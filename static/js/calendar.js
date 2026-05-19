@@ -114,16 +114,15 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ถ้า category ไม่ match ใน CAT_CFG ใช้ milestone เป็น fallback */
   function getCfg(cat) { return CAT_CFG[cat] || { color: '#c9a96e', label: cat, icon: '•', bsIcon: 'bi-flag-fill', filterGroup: 'milestone' }; }
 
-  /* Inject สีไอคอนใน Filter Toolbar จาก CAT_CFG */
-  document.querySelectorAll('#legendBar .cal-filter-tab [data-cat]').forEach(function (icon) {
-    const cfg = getCfg(icon.dataset.cat);
-    if (cfg && cfg.color) icon.style.color = cfg.color;
+  /* Inject CSS class สีไอคอนใน Filter Toolbar — ใช้ cal-icon-* จาก dashboard-base.css */
+  document.querySelectorAll('#legendBar .filter-btn [data-cat]').forEach(function (icon) {
+    icon.classList.add('cal-icon-' + icon.dataset.cat);
   });
 
-  /* สร้าง HTML icon element — สีตาม category color (ไม่ใช่สีของ event bar) */
+  /* สร้าง HTML icon element — ใช้ cal-icon-* class แทน inline style */
   function iconHtml(cat) {
     const c = getCfg(cat);
-    return '<i class="bi ' + c.bsIcon + ' cal-ev-icon" style="color:' + c.color + ';opacity:1;filter:brightness(1.2);"></i>';
+    return '<i class="bi ' + c.bsIcon + ' cal-ev-icon cal-icon-' + cat + '"></i>';
   }
 
   /* ── [2] Phase Journey — highlight phase ปัจจุบัน ────────────────
