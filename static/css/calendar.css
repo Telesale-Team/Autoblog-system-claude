@@ -40,7 +40,7 @@
 .fc-col-header { background: #031633; }
 [data-bs-theme="dark"] .fc-col-header { background: #031633; }
 
-.fc .fc-col-header-cell-cushion { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: .45rem .5rem; color: var(--heading-dark-bg); }
+.fc .fc-col-header-cell-cushion { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: .45rem .5rem; color: var(--heading-dark-bg); text-decoration: none !important; }
 [data-bs-theme="dark"] .fc .fc-col-header-cell-cushion { color: var(--heading-dark-bg); }
 
 .fc .fc-daygrid-day-number { font-size: .82rem; font-weight: 500; color: var(--bs-body-color); }
