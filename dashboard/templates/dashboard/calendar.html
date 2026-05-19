@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+<!-- ===================================================================
+     WORK CALENDAR — Rebuilt with Design System
+     settings-hero + stat-card + scard + filter-btn + ds-badge + ds-btn
+     =================================================================== -->
 
 {% block title %}Work Calendar — Dashboard{% endblock %}
 
@@ -7,177 +11,188 @@
   <li class="breadcrumb-item active">Work Calendar</li>
 {% endblock %}
 
-<!-- === CSS === -->
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
 <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<!-- === ROW 1: Header Bar === -->
-<div class="cal-header-bar">
-
-  <div class="cal-header-title">
-    <h4 class="mb-0 page-title">Work Calendar</h4>
-    <p class="mb-0 cal-header-sub mt-1">ปฏิทินรวมแผนธุรกิจ 6 เดือน + งานประจำวัน</p>
+<!-- === Page Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-calendar3"></i></span>
+      Work Calendar
+    </h1>
+    <p class="settings-hero-sub">ปฏิทินรวมแผนธุรกิจ 6 เดือน + งานประจำวัน</p>
   </div>
-
-  <div class="cal-stat-row cal-stat-row--inline" id="cal-stat-row">
-    <div class="cal-stat-card cal-stat-card--total"
-         data-bs-toggle="tooltip" data-bs-placement="bottom"
-         title="งานทั้งหมดใน Roadmap — ใช้เป็นตัวหาร % Road to Revenue">
-      <div class="cal-stat-icon"><i class="bi bi-calendar3"></i></div>
-      <div class="cal-stat-body">
-        <div class="cal-stat-value">{{ cal_stats.total }}</div>
-        <div class="cal-stat-label">Total</div>
-      </div>
-    </div>
-    <div class="cal-stat-card cal-stat-card--done"
-         data-bs-toggle="tooltip" data-bs-placement="bottom"
-         title="งานที่ mark เสร็จแล้ว — คำนวณเป็น % ใน Road to Revenue">
-      <div class="cal-stat-icon"><i class="bi bi-check2-all"></i></div>
-      <div class="cal-stat-body">
-        <div class="cal-stat-value">{{ cal_stats.done }}</div>
-        <div class="cal-stat-label">Done</div>
-      </div>
-    </div>
-    <div class="cal-stat-card cal-stat-card--pending"
-         data-bs-toggle="tooltip" data-bs-placement="bottom"
-         title="งานที่ยังค้างอยู่ — ต้องทำให้เสร็จเพื่อถึง First Revenue">
-      <div class="cal-stat-icon"><i class="bi bi-hourglass-split"></i></div>
-      <div class="cal-stat-body">
-        <div class="cal-stat-value">{{ cal_stats.pending }}</div>
-        <div class="cal-stat-label">Pending</div>
-      </div>
-    </div>
-
-    <a href="/owner/docs/" class="cal-stat-card cal-stat-card--docs"
-       data-bs-toggle="tooltip" data-bs-placement="bottom"
-       title="คู่มือทีมงาน — เปิด Docs Viewer">
-      <div class="cal-stat-icon"><i class="bi bi-journal-bookmark-fill"></i></div>
-      <div class="cal-stat-body">
-        <div class="cal-stat-value">{{ docs_count }}</div>
-        <div class="cal-stat-label">คู่มือการทำงาน</div>
-      </div>
-    </a>
-  </div>
-
+  <a href="/owner/docs/" class="ds-btn-outline">
+    <i class="bi bi-journal-bookmark-fill me-1"></i>คู่มือ ({{ docs_count }})
+  </a>
 </div>
 
-<!-- === ROW 2: Filter Toolbar — จาก CATEGORY_CHOICES ใน DB === -->
-<div class="mb-3">
-  <div class="d-flex flex-wrap gap-2" id="legendBar">
-
-    <!-- ทั้งหมด (always first) -->
-    <button class="filter-btn active" data-filter="all"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="แสดงงานทุกประเภท">
-      <i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด
-      <span class="tab-count" data-count="{{ total_count }}">{{ total_count }}</span>
-    </button>
-
-    <!-- Loop จาก DB CATEGORY_CHOICES -->
-    {% for cat in category_filters %}
-    <button class="filter-btn" data-filter="{{ cat.value }}"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ cat.tooltip }}">
-      <i class="bi {{ cat.icon }} tab-icon" data-cat="{{ cat.value }}"></i>{{ cat.label }}
-      <span class="tab-count" data-count="{{ cat.count }}">{{ cat.count }}</span>
-    </button>
-    {% endfor %}
-
-    <!-- เสร็จแล้ว (always last) -->
-    {% with done_count=cal_stats.done %}
-    <button class="filter-btn tab-done" data-filter="done"
-            data-bs-toggle="tooltip" data-bs-placement="bottom" title="งานที่ mark เสร็จแล้วทั้งหมด">
-      <i class="bi bi-check2-all tab-icon"></i>เสร็จแล้ว
-      <span class="tab-count" data-count="{{ done_count }}">{{ done_count }}</span>
-    </button>
-    {% endwith %}
-
+<!-- === Stat Cards === -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="stat-label">Total</div>
+          <div class="stat-value" id="statTotal">{{ cal_stats.total }}</div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-calendar3"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card" style="--stat-color:#009a58;">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="stat-label">Done</div>
+          <div class="stat-value" style="color:#009a58;" id="statDone">{{ cal_stats.done }}</div>
+        </div>
+        <div class="stat-icon" style="background:rgba(0,154,88,.12);color:#009a58;">
+          <i class="bi bi-check2-all"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="stat-label">Pending</div>
+          <div class="stat-value" style="color:#d97706;" id="statPending">{{ cal_stats.pending }}</div>
+        </div>
+        <div class="stat-icon" style="background:rgba(217,119,6,.12);color:#d97706;">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="stat-label">% เสร็จ</div>
+          <div class="stat-value" id="statPct">0%</div>
+        </div>
+        <div class="stat-icon"><i class="bi bi-pie-chart-fill"></i></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- === 2-Column Layout: Calendar (left) + Notes (right) === -->
+<!-- === Filter Tabs === -->
+<div class="d-flex flex-wrap gap-2 mb-3" id="legendBar">
+
+  <button class="filter-btn active" data-filter="all">
+    <i class="bi bi-grid-3x3-gap tab-icon"></i>ทั้งหมด
+    <span class="tab-count" data-count="{{ total_count }}">{{ total_count }}</span>
+  </button>
+
+  {% for cat in category_filters %}
+  <button class="filter-btn" data-filter="{{ cat.value }}">
+    <i class="bi {{ cat.icon }} tab-icon" data-cat="{{ cat.value }}"></i>{{ cat.label }}
+    <span class="tab-count" data-count="{{ cat.count }}">{{ cat.count }}</span>
+  </button>
+  {% endfor %}
+
+  {% with done_count=cal_stats.done %}
+  <button class="filter-btn tab-done" data-filter="done">
+    <i class="bi bi-check2-all tab-icon"></i>เสร็จแล้ว
+    <span class="tab-count" data-count="{{ done_count }}">{{ done_count }}</span>
+  </button>
+  {% endwith %}
+
+</div>
+
+<!-- === Main Layout: Calendar + Notes === -->
 <div class="row g-3 align-items-start">
 
-<!-- === LEFT: Calendar === -->
-<div class="col-lg-10">
-<div id="calendar-wrap">
-
-  <!-- === Sub-header: Month/Year Picker === -->
-  <div id="cal-subheader">
-    <div class="cal-sub-picker">
-      <select id="calPickMonth" aria-label="เลือกเดือน">
-        <option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option>
-        <option value="2">มีนาคม</option><option value="3">เมษายน</option>
-        <option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option>
-        <option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option>
-        <option value="8">กันยายน</option><option value="9">ตุลาคม</option>
-        <option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
-      </select>
-      <select id="calPickYear" aria-label="เลือกปี"></select>
-      <button id="calPickGo" title="ไปยังเดือน/ปีที่เลือก">
-        <i class="bi bi-arrow-right-circle-fill"></i>
-      </button>
-    </div>
-  </div>
-
-  <div id="calendar"></div>
-</div>
-</div><!-- /col-lg-10 -->
-
-<!-- === RIGHT: Notes Panel === -->
-<div class="col-lg-2">
-  <div class="notes-panel">
-
-    <!-- Notes Header -->
-    <div class="notes-panel-header">
-      <div class="d-flex align-items-center gap-2">
-        <i class="bi bi-sticky-fill" style="color:var(--brand-gold);"></i>
-        <span class="fw-semibold" style="color:#f1f5f9;">บันทึก</span>
-        <span class="notes-count-badge" id="notesCount">0</span>
-      </div>
-      <button class="btn-add-note" id="btnAddNote" title="เพิ่ม Note">
-        <i class="bi bi-plus-lg"></i>
-      </button>
-    </div>
-
-    <!-- Notes List -->
-    <div class="notes-list" id="notesList">
-      {% for note in notes %}
-      <div class="note-card note-color-{{ note.color }}" data-id="{{ note.pk }}"
-           data-title="{{ note.title }}"
-           data-content="{{ note.content }}"
-           data-color="{{ note.color }}"
-           data-pinned="{{ note.pinned|yesno:'true,false' }}"
-           data-date="{{ note.updated_at|date:'d M Y H:i' }}">
-        <div class="note-card-head">
-          <span class="note-title">{{ note.title }}</span>
-          <div class="note-actions">
-            {% if note.pinned %}<i class="bi bi-pin-angle-fill note-pin-icon"></i>{% endif %}
-            <button class="note-btn note-btn-edit" data-id="{{ note.pk }}" title="แก้ไข"><i class="bi bi-pencil"></i></button>
-            <button class="note-btn note-btn-del" data-id="{{ note.pk }}" title="ลบ"><i class="bi bi-trash"></i></button>
+  <!-- Calendar -->
+  <div class="col-lg-10">
+    <div class="scard">
+      <div class="scard-body" style="padding:.75rem;">
+        <!-- Month/Year Picker -->
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="cal-sub-picker">
+            <select id="calPickMonth" aria-label="เลือกเดือน">
+              <option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option>
+              <option value="2">มีนาคม</option><option value="3">เมษายน</option>
+              <option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option>
+              <option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option>
+              <option value="8">กันยายน</option><option value="9">ตุลาคม</option>
+              <option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
+            </select>
+            <select id="calPickYear" aria-label="เลือกปี"></select>
+            <button id="calPickGo" title="ไปยังเดือน/ปีที่เลือก">
+              <i class="bi bi-arrow-right-circle-fill"></i>
+            </button>
           </div>
         </div>
-        {% if note.content %}
-        <div class="note-preview">{{ note.content|truncatechars:60 }}</div>
-        {% endif %}
-        <div class="note-footer">{{ note.updated_at|date:"d M Y H:i" }}</div>
+        <div id="calendar"></div>
       </div>
-      {% empty %}
-      <div class="notes-empty" id="notesEmpty">
-        <i class="bi bi-journal-text"></i>
-        <div class="notes-empty-title">ยังไม่มี Notes</div>
-        <div class="notes-empty-sub">กด + เพื่อเพิ่ม note แรก</div>
-      </div>
-      {% endfor %}
     </div>
-
   </div>
-</div><!-- /col-lg-4 -->
 
-</div><!-- /row -->
+  <!-- Notes -->
+  <div class="col-lg-2">
+    <div class="scard">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-2">
+          <div class="scard-header-icon" style="width:28px;height:28px;font-size:.8rem;">
+            <i class="bi bi-sticky-fill"></i>
+          </div>
+          <span style="font-weight:700;font-size:.88rem;">บันทึก</span>
+          <span class="ds-badge draft" id="notesCount" style="min-width:auto;padding:.1rem .5rem;">0</span>
+        </div>
+        <button class="ds-btn" id="btnAddNote" style="padding:.3rem .6rem;font-size:.78rem;" title="เพิ่ม Note">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+      <div class="scard-body" style="padding:.5rem;">
+        <div id="notesList">
+          {% for note in notes %}
+          <div class="note-card note-color-{{ note.color }}" data-id="{{ note.pk }}"
+               data-title="{{ note.title }}"
+               data-content="{{ note.content }}"
+               data-color="{{ note.color }}"
+               data-pinned="{{ note.pinned|yesno:'true,false' }}"
+               data-date="{{ note.updated_at|date:'d M Y H:i' }}">
+            <div class="note-card-head">
+              <span class="note-title">{{ note.title }}</span>
+              <div class="note-actions">
+                {% if note.pinned %}<i class="bi bi-pin-angle-fill note-pin-icon"></i>{% endif %}
+                <button class="note-btn note-btn-edit" data-id="{{ note.pk }}"><i class="bi bi-pencil"></i></button>
+                <button class="note-btn note-btn-del"  data-id="{{ note.pk }}"><i class="bi bi-trash"></i></button>
+              </div>
+            </div>
+            {% if note.content %}
+            <div class="note-preview">{{ note.content|truncatechars:60 }}</div>
+            {% endif %}
+            <div class="note-footer">{{ note.updated_at|date:"d M Y H:i" }}</div>
+          </div>
+          {% empty %}
+          <div class="notes-empty" id="notesEmpty">
+            <i class="bi bi-journal-text"></i>
+            <div class="notes-empty-title">ยังไม่มี Notes</div>
+            <div class="notes-empty-sub">กด + เพื่อเพิ่ม</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- === Modal: Note Detail (คลิก card เพื่อดูรายละเอียด) === -->
+</div>
+
+<!-- ══════════════════════════
+     MODALS
+══════════════════════════ -->
+
+<!-- Note Detail Modal -->
 <div class="modal fade" id="noteDetailModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content note-detail-modal" id="noteDetailContent">
@@ -185,30 +200,28 @@
         <div class="d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center gap-2">
             <span class="note-detail-pin d-none" id="noteDetailPin"><i class="bi bi-pin-angle-fill"></i></span>
-            <h6 class="note-detail-title mb-0" id="noteDetailTitle">—</h6>
+            <h6 class="fw-bold mb-0" style="font-size:.97rem;" id="noteDetailTitle">—</h6>
           </div>
           <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
         </div>
       </div>
       <div class="modal-body note-detail-body" id="noteDetailBody">—</div>
-      <div class="modal-footer note-detail-footer border-0 pt-0 d-flex justify-content-between">
-        <span class="note-detail-date" id="noteDetailDate"></span>
-        <div class="d-flex gap-2">
-          <button class="btn btn-sm btn-outline-secondary" id="noteDetailEditBtn">
-            <i class="bi bi-pencil me-1"></i>แก้ไข
-          </button>
-        </div>
+      <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+        <span class="note-detail-date text-muted small" id="noteDetailDate"></span>
+        <button class="btn btn-sm btn-outline-secondary" id="noteDetailEditBtn">
+          <i class="bi bi-pencil me-1"></i>แก้ไข
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- === Modal: Add / Edit Note === -->
+<!-- Note Add/Edit Modal -->
 <div class="modal fade" id="noteModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-0 pb-1">
-        <h6 class="modal-title fw-bold mb-0" style="font-size:.97rem;" id="noteModalTitle">เพิ่ม Note</h6>
+        <h6 class="fw-bold mb-0" style="font-size:.97rem;" id="noteModalTitle">เพิ่ม Note</h6>
         <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -246,18 +259,17 @@
   </div>
 </div>
 
-<!-- === Modal Detail: Todo-style popup เมื่อคลิก event ===
-     มี 2 state: #modalBody (แสดงรายละเอียด) และ #deleteConfirm (ยืนยันลบ) -->
+<!-- Event Detail Modal (Todo style) -->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered todo-modal-dialog">
     <div class="modal-content todo-modal-content">
-      <button type="button" class="todo-modal-close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <button type="button" class="todo-modal-close btn-close" data-bs-dismiss="modal"></button>
       <div class="modal-body p-0">
 
-        <!-- === State A: แสดงรายละเอียดงาน === -->
+        <!-- State A: รายละเอียด -->
         <div id="modalBody">
           <div class="todo-task-row">
-            <button class="todo-checkbox" id="btnMarkDone" type="button" aria-label="Mark as done">
+            <button class="todo-checkbox" id="btnMarkDone" type="button">
               <i class="bi bi-check todo-check-icon"></i>
             </button>
             <div class="todo-task-main">
@@ -267,7 +279,6 @@
           </div>
           <div class="todo-meta-row">
             <span class="todo-date-chip"><i class="bi bi-calendar3"></i><span id="modalDate"></span></span>
-            <!-- ผู้ทำงาน — ซ่อนถ้าไม่มีข้อมูล -->
             <span class="todo-assigned-chip d-none" id="modalAssigned">
               <i class="bi bi-person-fill"></i><span id="modalAssignedName"></span>
             </span>
@@ -284,7 +295,6 @@
               <button class="todo-icon-btn" id="btnEditEvent" type="button" title="แก้ไข"><i class="bi bi-pencil"></i></button>
               <button class="todo-icon-btn todo-icon-btn--danger" id="btnDeleteEvent" type="button" title="ลบ"><i class="bi bi-trash"></i></button>
             </div>
-            <!-- === Toggle Done === -->
             <div class="todo-toggle-wrap">
               <span class="todo-toggle-label" id="toggleDoneLabel">ยังไม่เสร็จ</span>
               <div class="form-check form-switch mb-0">
@@ -294,7 +304,7 @@
           </div>
         </div>
 
-        <!-- === State B: ยืนยันลบ === -->
+        <!-- State B: ยืนยันลบ -->
         <div id="deleteConfirm" class="d-none todo-delete-confirm">
           <div class="todo-delete-icon"><i class="bi bi-trash3-fill"></i></div>
           <p class="todo-delete-label">ลบงานนี้ใช่ไหม?</p>
@@ -309,13 +319,13 @@
   </div>
 </div>
 
-<!-- === Modal Edit: Form เพิ่ม/แก้ไขงาน (ใช้ทั้ง Add และ Edit) === -->
+<!-- Event Add/Edit Modal -->
 <div class="modal fade" id="editEventModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-0 pb-1">
-        <h6 class="modal-title fw-bold mb-0" style="font-size:.97rem;" id="editModalHeading">เพิ่มงาน</h6>
-        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h6 class="fw-bold mb-0" style="font-size:.97rem;" id="editModalHeading">เพิ่มงาน</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="editEventId">
@@ -329,7 +339,6 @@
         </div>
         <div class="mb-3">
           <label class="form-label-sm">ประเภท</label>
-          <!-- === category_choices มาจาก CalendarEvent.CATEGORY_CHOICES ใน views.py === -->
           <select class="form-select form-select-sm" id="editCategory">
             {% for value, label in category_choices %}
             <option value="{{ value }}">{{ label }}</option>
@@ -337,7 +346,7 @@
           </select>
         </div>
         <div class="mb-3">
-          <label class="form-label-sm">รายละเอียด (ไม่บังคับ)</label>
+          <label class="form-label-sm">รายละเอียด <span class="text-muted">(ไม่บังคับ)</span></label>
           <textarea class="form-control form-control-sm" id="editDesc" rows="2" placeholder="รายละเอียดเพิ่มเติม..."></textarea>
         </div>
         <div id="editError" class="text-danger small d-none">กรุณากรอกชื่องานและวันที่</div>
@@ -352,14 +361,14 @@
   </div>
 </div>
 
-<!-- === Modal: Day Events — แสดงงานทั้งหมดของวันที่เลือก === -->
+<!-- Day Events Modal -->
 <div class="modal fade" id="dayEventsModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content day-events-modal">
       <div class="modal-header day-events-header">
         <div>
           <div class="day-events-date" id="dayEventsDate"></div>
-          <h6 class="day-events-title mb-0" id="dayEventsTitle">งานทั้งหมด</h6>
+          <h6 class="fw-bold day-events-title mb-0" id="dayEventsTitle">งานทั้งหมด</h6>
         </div>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
@@ -368,23 +377,31 @@
   </div>
 </div>
 
-<!-- === Toast: Notification popup (.ok = navy, .err = red) === -->
+<!-- Toast -->
 <div id="calToast" class="cal-toast"></div>
 
 {% endblock %}
 
-<!-- === JS: inject Django data เป็น window globals → calendar.js === -->
 {% block extra_js %}
 <script>
   window.CALENDAR_CSRF    = '{{ csrf_token }}';
   window.CALENDAR_API_URL = '{% url "dashboard:api_events" %}';
   window.CALENDAR_EVENTS  = {{ events_json|safe }};
   window.NOTES_API_URL    = '{% url "dashboard:api_notes" %}';
-  /* ตัวเลขจาก DB — ใช้ใน Road to Revenue แทน sysEvents.length */
   window.CAL_TOTAL = {{ cal_stats.total }};
   window.CAL_DONE  = {{ cal_stats.done }};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script src="{% static 'js/calendar.js' %}"></script>
 <script src="{% static 'js/notes.js' %}"></script>
+<script>
+/* Update % stat card */
+(function() {
+  var total = {{ cal_stats.total }};
+  var done  = {{ cal_stats.done }};
+  var pct   = total > 0 ? Math.round(done / total * 100) : 0;
+  var el    = document.getElementById('statPct');
+  if (el) el.textContent = pct + '%';
+})();
+</script>
 {% endblock %}
