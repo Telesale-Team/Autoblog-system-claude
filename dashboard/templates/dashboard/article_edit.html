@@ -210,19 +210,26 @@
       </div>
 
       <!-- Title -->
-      <div class="mb-4">
-        <label for="id_title" style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);display:block;margin-bottom:.35rem;">
-          หัวข้อบทความ <span class="text-danger">*</span>
-        </label>
-        <input type="text" name="title" id="id_title"
-               class="input-title"
-               value="{{ form.title.value|default_if_none:'' }}"
-               placeholder="พิมพ์หัวข้อบทความที่นี่..."
-               required
-               oninput="autoSlug(this.value)">
-        {% if form.title.errors %}
-        <div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>
-        {% endif %}
+      <div class="scard mb-3">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-2">
+            <div class="scard-header-icon" style="width:28px;height:28px;font-size:.8rem;"><i class="bi bi-pencil-fill"></i></div>
+            <label for="id_title" style="font-weight:700;font-size:.88rem;margin:0;">
+              หัวข้อบทความ <span class="text-danger">*</span>
+            </label>
+          </div>
+        </div>
+        <div class="scard-body">
+          <input type="text" name="title" id="id_title"
+                 class="input-title"
+                 value="{{ form.title.value|default_if_none:'' }}"
+                 placeholder="พิมพ์หัวข้อบทความที่นี่..."
+                 required
+                 oninput="autoSlug(this.value)">
+          {% if form.title.errors %}
+          <div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>
+          {% endif %}
+        </div>
       </div>
 
       <!-- Content Editor -->
