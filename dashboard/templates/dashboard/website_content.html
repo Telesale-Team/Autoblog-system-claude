@@ -410,18 +410,53 @@
 </div>
 
 <!-- ══════════════════════════════════
-     TAB: About (สถิติ + ค่านิยม)
+     TAB: About
+     ลำดับตรงกับ about.html:
+     1. Hero  2. Hero Stats  3. Mission  4. Checkpoints  5. Expertise  6. Values  7. CTA
 ══════════════════════════════════ -->
 <div class="wc-pane {% if active_tab == 'about' %}active{% endif %}" id="pane-about">
 
-  <!-- สถิติ -->
+  <!-- 1. Hero Section -->
+  <div class="scard mb-4">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-rocket-takeoff-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Hero Section</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Title + Lead text ด้านบนสุดของหน้า</div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <form method="post" action="{% url 'dashboard:website_aboutpage_save' %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-5">
+            <label class="form-label">Hero Title</label>
+            <input type="text" name="hero_title" value="{{ about_page.hero_title }}" class="form-control">
+          </div>
+          <div class="col-md-7">
+            <label class="form-label">Hero Lead</label>
+            <textarea name="hero_lead" class="form-control" rows="2">{{ about_page.hero_lead }}</textarea>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-wc-primary">
+              <i class="bi bi-check-lg"></i> บันทึก Hero
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Hero Stats -->
   <div class="scard mb-4">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
         <div class="scard-header-icon"><i class="bi bi-bar-chart-fill"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">สถิติ About</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ตัวเลขและคำอธิบายใน Hero section</div>
+          <div style="font-weight:700;font-size:.97rem">Hero Stats</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">4 ตัวเลขสถิติใน Hero section</div>
         </div>
       </div>
     </div>
@@ -440,20 +475,20 @@
           {% endfor %}
         </div>
         <button type="submit" class="btn-wc-primary">
-          <i class="bi bi-check-lg"></i> บันทึกสถิติ
+          <i class="bi bi-check-lg"></i> บันทึก Stats
         </button>
       </form>
     </div>
   </div>
 
-  <!-- Hero + Mission + CTA -->
+  <!-- 3. Mission Section -->
   <div class="scard mb-4">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
-        <div class="scard-header-icon"><i class="bi bi-file-text-fill"></i></div>
+        <div class="scard-header-icon"><i class="bi bi-bullseye"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">เนื้อหาหน้า About</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Hero, Mission และ CTA section</div>
+          <div style="font-weight:700;font-size:.97rem">Mission Section</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Title + Body text ด้านซ้ายของ Mission</div>
         </div>
       </div>
     </div>
@@ -461,20 +496,6 @@
       <form method="post" action="{% url 'dashboard:website_aboutpage_save' %}">
         {% csrf_token %}
         <div class="row g-3">
-          <div class="col-12">
-            <p class="mb-1" style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--app-primary);">Hero Section</p>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Hero Title</label>
-            <input type="text" name="hero_title" value="{{ about_page.hero_title }}" class="form-control">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Hero Lead (ข้อความใต้ title)</label>
-            <textarea name="hero_lead" class="form-control" rows="2">{{ about_page.hero_lead }}</textarea>
-          </div>
-          <div class="col-12 mt-2">
-            <p class="mb-1" style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--app-primary);">Mission Section</p>
-          </div>
           <div class="col-md-4">
             <label class="form-label">Mission Title</label>
             <input type="text" name="mission_title" value="{{ about_page.mission_title }}" class="form-control">
@@ -483,24 +504,9 @@
             <label class="form-label">Mission Body</label>
             <textarea name="mission_body" class="form-control" rows="3">{{ about_page.mission_body }}</textarea>
           </div>
-          <div class="col-12 mt-2">
-            <p class="mb-1" style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--app-primary);">CTA Section</p>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">CTA Title</label>
-            <input type="text" name="cta_title" value="{{ about_page.cta_title }}" class="form-control">
-          </div>
-          <div class="col-md-5">
-            <label class="form-label">CTA Subtitle</label>
-            <textarea name="cta_subtitle" class="form-control" rows="2">{{ about_page.cta_subtitle }}</textarea>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Button Text</label>
-            <input type="text" name="cta_button_text" value="{{ about_page.cta_button_text }}" class="form-control">
-          </div>
           <div class="col-12">
             <button type="submit" class="btn-wc-primary">
-              <i class="bi bi-check-lg"></i> บันทึกเนื้อหา About
+              <i class="bi bi-check-lg"></i> บันทึก Mission
             </button>
           </div>
         </div>
@@ -508,14 +514,14 @@
     </div>
   </div>
 
-  <!-- Mission Checkpoints -->
+  <!-- 4. Mission Checkpoints -->
   <div class="scard mb-4">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
         <div class="scard-header-icon"><i class="bi bi-check-circle-fill"></i></div>
         <div>
           <div style="font-weight:700;font-size:.97rem">Mission Checkpoints</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">จุดเด่น 4 ข้อใน Mission section</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">4 จุดเด่น ด้านขวาของ Mission</div>
         </div>
       </div>
     </div>
@@ -535,9 +541,7 @@
             <input type="text" name="title" value="{{ cp.title }}" class="form-control mb-2">
             <label class="field-label">คำอธิบาย</label>
             <input type="text" name="description" value="{{ cp.description }}" class="form-control mb-3">
-            <button type="submit" class="btn-wc-primary w-100">
-              <i class="bi bi-check-lg"></i> บันทึก
-            </button>
+            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
           </div>
         </form>
         {% endfor %}
@@ -545,13 +549,13 @@
     </div>
   </div>
 
-  <!-- Expertise Cards -->
+  <!-- 5. Expertise Section -->
   <div class="scard mb-4">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
         <div class="scard-header-icon"><i class="bi bi-stars"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">ความเชี่ยวชาญ</div>
+          <div style="font-weight:700;font-size:.97rem">Expertise Section</div>
           <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">4 ด้านที่เราเชี่ยวชาญ + Tags</div>
         </div>
       </div>
@@ -568,16 +572,13 @@
             <label class="field-label">Bootstrap Icon</label>
             <input type="text" name="icon" value="{{ exp.icon }}" class="form-control mb-2"
                    oninput="document.getElementById('exp-preview-{{ exp.pk }}').innerHTML='<i class=\'bi \'+this.value+\'\'></i>'">
-            <label class="field-label">ชื่อความเชี่ยวชาญ</label>
+            <label class="field-label">ชื่อ</label>
             <input type="text" name="title" value="{{ exp.title }}" class="form-control mb-2">
             <label class="field-label">รายละเอียด</label>
             <textarea name="description" class="form-control mb-2" rows="2">{{ exp.description }}</textarea>
             <label class="field-label">Tags <small class="text-muted">(คั่นด้วยจุลภาค)</small></label>
-            <input type="text" name="tags" value="{{ exp.tags }}" class="form-control mb-3"
-                   placeholder="เช่น Line OA, Facebook, WhatsApp">
-            <button type="submit" class="btn-wc-primary w-100">
-              <i class="bi bi-check-lg"></i> บันทึก
-            </button>
+            <input type="text" name="tags" value="{{ exp.tags }}" class="form-control mb-3">
+            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
           </div>
         </form>
         {% endfor %}
@@ -585,14 +586,14 @@
     </div>
   </div>
 
-  <!-- ค่านิยม -->
-  <div class="scard">
+  <!-- 6. Values Section -->
+  <div class="scard mb-4">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
         <div class="scard-header-icon"><i class="bi bi-award-fill"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">ค่านิยม About</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">แก้ไขแต่ละค่านิยม แล้วกด บันทึก ทีละใบ</div>
+          <div style="font-weight:700;font-size:.97rem">Values Section</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">3 ค่านิยมหลักการทำงาน</div>
         </div>
       </div>
     </div>
@@ -607,20 +608,54 @@
             </div>
             <label class="field-label">Bootstrap Icon</label>
             <input type="text" name="icon" value="{{ val.icon }}" class="form-control mb-2"
-                   placeholder="เช่น bi-bar-chart-line-fill"
                    oninput="previewIcon(this, '{{ val.pk }}')">
             <label class="field-label">หัวข้อ</label>
             <input type="text" name="title" value="{{ val.title }}" class="form-control mb-2">
             <label class="field-label">รายละเอียด</label>
             <textarea name="description" class="form-control mb-3" rows="3">{{ val.description }}</textarea>
-            <button type="submit" class="btn-wc-primary w-100">
-              <i class="bi bi-check-lg"></i> บันทึก
-            </button>
+            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
           </div>
         </form>
         {% empty %}<p class="text-muted">ยังไม่มีค่านิยม</p>
         {% endfor %}
       </div>
+    </div>
+  </div>
+
+  <!-- 7. CTA Section -->
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-megaphone-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">CTA Section</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ส่วนล่างสุด — ชวนให้ติดต่อ</div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <form method="post" action="{% url 'dashboard:website_aboutpage_save' %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">CTA Title</label>
+            <input type="text" name="cta_title" value="{{ about_page.cta_title }}" class="form-control">
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">CTA Subtitle</label>
+            <textarea name="cta_subtitle" class="form-control" rows="2">{{ about_page.cta_subtitle }}</textarea>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Button Text</label>
+            <input type="text" name="cta_button_text" value="{{ about_page.cta_button_text }}" class="form-control">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-wc-primary">
+              <i class="bi bi-check-lg"></i> บันทึก CTA
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 
