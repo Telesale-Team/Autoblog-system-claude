@@ -53,7 +53,8 @@
   .input-title::placeholder { color: var(--bs-secondary-color); font-weight: 400; }
 
   /* === CKEditor === */
-  .ck-editor { width: 100% !important; max-width: 100% !important; }
+  .ck-editor { width: 100% !important; max-width: 100% !important; overflow: visible !important; }
+  .ck-editor__top { overflow: visible !important; }
   .ck-editor__editable_inline {
     min-height: 320px;
     max-width: 100% !important;
@@ -65,10 +66,12 @@
   }
   .ck.ck-toolbar {
     flex-wrap: wrap !important;
+    overflow: visible !important;
     background: var(--bs-tertiary-bg, rgba(0,0,0,.03)) !important;
     border-color: var(--bs-border-color) !important;
     border-radius: .5rem .5rem 0 0 !important;
   }
+  .ck.ck-toolbar__items { flex-wrap: wrap !important; }
   .ck.ck-button { color: var(--bs-body-color) !important; }
   .ck.ck-button:hover { background: rgba(201,169,110,.1) !important; }
 
@@ -229,8 +232,8 @@
       </div>
 
       <!-- Content Editor -->
-      <div class="scard">
-        <div class="scard-body" style="padding:.75rem;">
+      <div class="scard" style="overflow:visible;">
+        <div class="scard-body" style="padding:.75rem;overflow:visible;">
           {{ form.content }}
         </div>
       </div>
