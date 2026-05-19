@@ -180,7 +180,33 @@
     ══════════════════════════ -->
     <div>
 
-      <!-- Title input (standalone — ไม่ใส่ใน scard เพื่อให้ดูกว้าง) -->
+      <!-- SEO (อยู่เหนือหัวข้อ) -->
+      <div class="scard mb-3">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-2">
+            <div class="scard-header-icon" style="width:28px;height:28px;font-size:.8rem;"><i class="bi bi-search"></i></div>
+            <span style="font-weight:700;font-size:.88rem;">SEO</span>
+          </div>
+        </div>
+        <div class="scard-body" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;align-items:start;">
+          <div>
+            <label class="form-label">Meta Title <span class="char-count" id="metaTitleCount">0/60</span></label>
+            <input type="text" name="meta_title" id="id_meta_title"
+                   class="form-control form-control-sm"
+                   value="{{ form.meta_title.value|default_if_none:'' }}"
+                   placeholder="ไม่กรอก = ใช้หัวข้อบทความ" maxlength="70">
+          </div>
+          <div>
+            <label class="form-label">Meta Description <span class="char-count" id="metaDescCount">0/155</span></label>
+            <input type="text" name="meta_description" id="id_meta_description"
+                   class="form-control form-control-sm"
+                   value="{{ form.meta_description.value|default_if_none:'' }}"
+                   placeholder="ไม่กรอก = ใช้สรุปย่อ" maxlength="160">
+          </div>
+        </div>
+      </div>
+
+      <!-- Title input -->
       <div class="mb-3">
         <input type="text" name="title" id="id_title"
                class="input-title"
@@ -319,34 +345,15 @@
         </div>
       </div>
 
-      <!-- 6. SEO -->
+      <!-- Featured (ย้ายมาอยู่ใน sidebar แทน SEO) -->
       <div class="scard">
         <div class="scard-header">
           <div class="d-flex align-items-center gap-2">
-            <div class="scard-header-icon" style="width:32px;height:32px;font-size:.9rem;">
-              <i class="bi bi-search"></i>
-            </div>
-            <span style="font-weight:700;font-size:.9rem;">SEO</span>
+            <div class="scard-header-icon" style="width:32px;height:32px;font-size:.9rem;"><i class="bi bi-star-fill"></i></div>
+            <span style="font-weight:700;font-size:.9rem;">Featured</span>
           </div>
         </div>
-        <div class="scard-body" style="display:flex;flex-direction:column;gap:.75rem;">
-          <div>
-            <label class="form-label">
-              Meta Title <span class="char-count" id="metaTitleCount">0/60</span>
-            </label>
-            <input type="text" name="meta_title" id="id_meta_title"
-                   class="form-control form-control-sm"
-                   value="{{ form.meta_title.value|default_if_none:'' }}"
-                   placeholder="ไม่กรอก = ใช้หัวข้อบทความ" maxlength="70">
-          </div>
-          <div>
-            <label class="form-label">
-              Meta Description <span class="char-count" id="metaDescCount">0/155</span>
-            </label>
-            <textarea name="meta_description" id="id_meta_description"
-                      class="form-control form-control-sm" rows="2" maxlength="160"
-                      placeholder="ไม่กรอก = ใช้สรุปย่อ">{{ form.meta_description.value|default_if_none:'' }}</textarea>
-          </div>
+        <div class="scard-body">
           <div class="form-check">
             <input type="checkbox" name="is_featured" id="id_is_featured"
                    class="form-check-input"
