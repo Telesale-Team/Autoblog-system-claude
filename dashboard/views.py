@@ -1074,7 +1074,7 @@ def calendar_view(request):
     total_count = CalendarEvent.objects.filter(is_system=True).count() + article_count + lead_count
 
     # สร้าง category_filters จาก CATEGORY_CHOICES + article + lead
-    _extra_cats = [("article", "บทความ"), ("lead", "Leads")]
+    _extra_cats = []  # article อยู่ใน CATEGORY_CHOICES แล้ว
     category_filters = [
         {
             "value":   value,
