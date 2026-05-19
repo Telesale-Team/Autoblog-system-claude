@@ -79,10 +79,21 @@
     color: var(--bs-secondary-color); margin-bottom: .35rem;
   }
   .scard .form-control, .scard .form-select {
-    font-size: .85rem; border-color: var(--bs-border-color); background: transparent;
+    font-size: .85rem;
+    border-color: var(--bs-border-color);
+    background: rgba(0,0,0,.15);
+    color: var(--bs-body-color);
   }
   .scard .form-control:focus, .scard .form-select:focus {
-    border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+    background: rgba(0,0,0,.22);
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+    color: var(--bs-body-color);
+  }
+  /* dropdown option */
+  .scard .form-select option {
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
   }
 
   /* === Tags pills === */
