@@ -46,6 +46,7 @@
   .char-count { font-size: .72rem; color: var(--bs-secondary-color); float: right; }
   .char-count.warn { color: #e63757; }
 
+  .btn-lg-submit { padding:.55rem 1.25rem !important; font-size:.9rem !important; }
   .status-pill {
     display: inline-flex; align-items: center; gap: .4rem;
     padding: .3rem .8rem; border-radius: 999px; font-size: .75rem; font-weight: 700;
@@ -74,7 +75,7 @@
     <p class="settings-hero-sub">
       {% if is_create %}กรอกข้อมูล Case Study แล้วกด บันทึก
       {% else %}แก้ไข Case Study
-      <span class="status-pill {{ cs.status }} ms-2">
+      <span class="ds-badge {{ cs.status }} ms-2">
         <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
         {{ cs.get_status_display }}
       </span>{% endif %}
@@ -96,8 +97,52 @@
 
 <div class="row g-4">
 
-  <!-- === RIGHT: Portfolio Nav + Search === -->
-  <div class="col-lg-3 order-lg-2">
+  <!-- === RIGHT: Display Card + Portfolio Nav === -->
+  <div class="col-lg-3 order-lg-2" style="display:flex;flex-direction:column;gap:1rem;">
+
+    <!-- การแสดงผล — เหมือน เผยแพร่ ใน article edit -->
+    <div class="scard" style="position:sticky;top:70px;">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-2">
+          <div class="scard-header-icon" style="width:32px;height:32px;font-size:.9rem;"><i class="bi bi-toggles"></i></div>
+          <span style="font-weight:700;font-size:.9rem;">การแสดงผล</span>
+        </div>
+        <span class="ds-badge {{ cs.status|default:'draft' }}" id="statusPill">
+          <span class="ds-dot"></span>
+          <span id="statusLabel">{{ cs.get_status_display|default:"Draft" }}</span>
+        </span>
+      </div>
+      <div class="scard-body" style="display:flex;flex-direction:column;gap:.6rem;">
+        <input type="hidden" name="status" id="id_portfolio_status" value="{{ cs.status|default:'draft' }}">
+        <button type="submit" class="ds-btn" onclick="setPortfolioStatus('published')">
+          <i class="bi bi-arrow-up-circle me-1"></i>
+          {% if not is_create and cs.status == 'published' %}อัปเดต{% else %}เผยแพร่{% endif %}
+        </button>
+        <button type="submit" class="ds-btn-outline" onclick="setPortfolioStatus('draft')">
+          <i class="bi bi-floppy me-1"></i>บันทึก Draft
+        </button>
+        <hr style="margin:.25rem 0;">
+        <div>
+          <label class="form-label">ลำดับ</label>
+          <input type="number" name="display_order" value="{{ cs.display_order }}"
+                 class="form-control form-control-sm" min="0">
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="is_featured" id="isFeatured"
+                 {% if cs.is_featured %}checked{% endif %}>
+          <label class="form-check-label" for="isFeatured" style="font-size:.85rem;">
+            Featured (โชว์หน้าแรก)
+          </label>
+        </div>
+        {% if not is_create and cs.published_at %}
+        <div style="font-size:.75rem;color:var(--bs-secondary-color);">
+          <i class="bi bi-calendar3 me-1"></i>Published: {{ cs.published_at|date:"d M Y" }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Portfolio List -->
     <div class="scard" style="position:sticky;top:70px;">
       <div class="scard-header">
         <div style="font-weight:700;font-size:.9rem;">Portfolio ทั้งหมด</div>
@@ -327,60 +372,13 @@
         </div>
       </div>
 
-      <!-- 6. การแสดงผล -->
-      <div class="scard mb-4">
-        <div class="scard-header">
-          <div class="d-flex align-items-center gap-3">
-            <div class="scard-header-icon"><i class="bi bi-toggles"></i></div>
-            <div>
-              <div style="font-weight:700;font-size:.97rem">การแสดงผล</div>
-              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Status, ลำดับ, Featured</div>
-            </div>
-          </div>
-        </div>
-        <div class="scard-body">
-          <div class="row g-3 align-items-center">
-            <div class="col-md-3">
-              <label class="form-label">Status</label>
-              <select name="status" class="form-select">
-                <option value="published" {% if cs.status == "published" %}selected{% endif %}>Published</option>
-                <option value="draft"     {% if cs.status == "draft" %}selected{% endif %}>Draft</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">ลำดับ</label>
-              <input type="number" name="display_order" value="{{ cs.display_order }}"
-                     class="form-control" min="0">
-            </div>
-            <div class="col-md-3 pt-4">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="is_featured" id="isFeatured"
-                       {% if cs.is_featured %}checked{% endif %}>
-                <label class="form-check-label" for="isFeatured" style="font-size:.88rem;">
-                  Featured (โชว์หน้าแรก)
-                </label>
-              </div>
-            </div>
-            {% if not is_create and cs.published_at %}
-            <div class="col-md-3">
-              <label class="form-label">Published</label>
-              <div style="font-size:.85rem;color:var(--bs-secondary-color);">{{ cs.published_at|date:"d M Y" }}</div>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
       <!-- Submit -->
       <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-lg"
-                style="background:var(--app-primary);color:#fff;font-weight:700;border:none;">
+        <button type="submit" class="ds-btn btn-lg-submit">
           <i class="bi bi-check-lg me-1"></i>
           {% if is_create %}สร้าง Case Study{% else %}บันทึกการเปลี่ยนแปลง{% endif %}
         </button>
-        <a href="{% url 'dashboard:website_content' %}?tab=portfolio" class="btn btn-lg btn-outline-secondary">
-          ยกเลิก
-        </a>
+        <a href="{% url 'dashboard:website_content' %}?tab=portfolio" class="ds-btn-outline btn-lg-submit">ยกเลิก</a>
       </div>
 
     </form>
@@ -391,6 +389,18 @@
 
 {% block extra_js %}
 <script>
+/* ── Portfolio status ── */
+window.setPortfolioStatus = function(val) {
+  var msg = val === 'published' ? 'เผยแพร่ Portfolio นี้ใช่ไหม?' : 'บันทึกเป็น Draft ใช่ไหม?';
+  if (!confirm(msg)) return false;
+  document.getElementById('id_portfolio_status').value = val;
+  var label = document.getElementById('statusLabel');
+  var pill  = document.getElementById('statusPill');
+  if (label) label.textContent = val === 'published' ? 'Published' : 'Draft';
+  if (pill)  pill.className = 'ds-badge ' + val;
+  document.querySelector('form').submit();
+};
+
 /* ── Portfolio search filter ── */
 var psInput = document.getElementById('portfolioSearch');
 if (psInput) {
