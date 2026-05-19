@@ -773,18 +773,26 @@ document.addEventListener('DOMContentLoaded', function () {
       body:    JSON.stringify({ is_completed: newDone }),
     }).then(function (r) { if (!r.ok) throw new Error(); })
       .then(function () {
-        /* อัพเดท local sysEvents ทันที — ไม่ต้อง full page reload */
-        const idx = sysEvents.findIndex(function (e) {
-          return String(e.id) === String(patchId);
-        });
+        /* อัพเดท local sysEvents */
+        const idx = sysEvents.findIndex(function (e) { return String(e.id) === String(patchId); });
         if (idx !== -1) {
           sysEvents[idx].extendedProps = Object.assign({}, sysEvents[idx].extendedProps, { isCompleted: newDone });
           sysEvents[idx].color      = newDone ? DONE_COLOR : PENDING_COLOR;
           sysEvents[idx].classNames = [newDone ? 'fc-event-completed' : 'fc-event-pending'];
         }
+        /* อัพเดท FullCalendar event object โดยตรง — ไม่ต้อง refetch */
+        var tryIds = [String(patchId), 'db_' + patchId];
+        tryIds.forEach(function(eid) {
+          var calEvt = cal.getEventById(eid);
+          if (calEvt) {
+            calEvt.setProp('color', newDone ? DONE_COLOR : PENDING_COLOR);
+            calEvt.setProp('classNames', [newDone ? 'fc-event-completed' : 'fc-event-pending']);
+            calEvt.setExtendedProp('isCompleted', newDone);
+          }
+        });
         updateRevenueProgress(newDone ? 1 : -1);
         showToast(newDone ? 'งานเสร็จแล้ว!' : 'ยกเลิกสถานะเสร็จแล้ว');
-        setTimeout(function () { detailModal && detailModal.hide(); cal.refetchEvents(); }, 350);
+        setTimeout(function () { detailModal && detailModal.hide(); }, 300);
       })
       .catch(function () { showToast('บันทึกไม่สำเร็จ', true); });
   });
