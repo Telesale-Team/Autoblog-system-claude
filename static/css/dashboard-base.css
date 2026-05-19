@@ -357,6 +357,23 @@ body, #sidebar, #topbar, .stat-card { transition: background-color .25s, color .
 .ds-btn-outline:hover { background: rgba(201,169,110,.1); color: var(--app-primary); }
 .ds-btn-outline.w-100 { width: 100%; justify-content: center; }
 
+/* ── Calendar Category Badges — extend ds-badge ──────────
+   ใช้แทน .event-cat-badge + inline style ใน calendar.js
+   แก้สีที่นี่ที่เดียว มีผลทุกที่ใน Calendar
+   ─────────────────────────────────────────────────────── */
+.ds-badge.cal-milestone    { background: rgba(201,169,110,.15); color: #b8924f; border-color: rgba(201,169,110,.4); }
+.ds-badge.cal-action       { background: rgba(96,165,250,.15);  color: #2563eb; border-color: rgba(96,165,250,.4); }
+.ds-badge.cal-article      { background: rgba(52,211,153,.15);  color: #059669; border-color: rgba(52,211,153,.4); }
+.ds-badge.cal-lead         { background: rgba(16,185,129,.15);  color: #047857; border-color: rgba(16,185,129,.4); }
+.ds-badge.cal-recurring    { background: rgba(167,139,250,.15); color: #7c3aed; border-color: rgba(167,139,250,.4); }
+.ds-badge.cal-content_plan { background: rgba(251,191,36,.15);  color: #d97706; border-color: rgba(251,191,36,.4); }
+.ds-badge.cal-backlog      { background: rgba(245,158,11,.15);  color: #b45309; border-color: rgba(245,158,11,.4); }
+.ds-badge.cal-general      { background: rgba(148,163,184,.15); color: #64748b; border-color: rgba(148,163,184,.4); }
+.ds-badge.cal-priority     { background: rgba(201,169,110,.15); color: #b8924f; border-color: rgba(201,169,110,.4); }
+.ds-badge.cal-meeting      { background: rgba(129,140,248,.15); color: #4f46e5; border-color: rgba(129,140,248,.4); }
+.ds-badge.cal-delivery     { background: rgba(45,212,191,.15);  color: #0d9488; border-color: rgba(45,212,191,.4); }
+.ds-badge.cal-personal     { background: rgba(148,163,184,.15); color: #64748b; border-color: rgba(148,163,184,.4); }
+
 /* ── Danger Outline (.ds-btn-danger) ──────────────────── */
 .ds-btn-danger {
   display: inline-flex; align-items: center; gap: .4rem;

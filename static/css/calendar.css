@@ -302,7 +302,7 @@
 .btn-add-event { font-size: .8rem; padding: .3rem .75rem; }
 
 /* ── Event category badge (modal) ──────────────────────────────────── */
-.event-cat-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .7rem; font-weight: 600; padding: .2rem .55rem; border-radius: 20px; border: 1px solid; white-space: nowrap; }
+/* .event-cat-badge → ใช้ .ds-badge.cal-{category} จาก dashboard-base.css แทน */
 
 /* ── Todo-style Event Detail Modal ─────────────────────────────────── */
 .todo-modal-dialog { max-width: 420px; }

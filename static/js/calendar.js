@@ -522,10 +522,11 @@ document.addEventListener('DOMContentLoaded', function () {
       sysEvtId: isSystem ? (event.id || null) : null, /* id ใน DB สำหรับ system events */
     });
 
-    /* category badge HTML */
-    const c = getCfg(props.category || 'milestone');
+    /* category badge — ใช้ ds-badge.cal-{category} จาก dashboard-base.css */
+    const catKey = props.category || 'milestone';
+    const c = getCfg(catKey);
     document.getElementById('modalCatBadge').innerHTML =
-      '<span class="event-cat-badge" style="color:' + c.color + ';border-color:' + c.color + '40;background:' + c.color + '18">' + c.icon + ' ' + c.label + '</span>';
+      '<span class="ds-badge cal-' + catKey + '"><i class="bi ' + c.bsIcon + '" style="font-size:.7rem;"></i> ' + c.label + '</span>';
 
     /* title + done state */
     const titleEl = document.getElementById('modalTitle');
