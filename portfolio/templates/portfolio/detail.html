@@ -665,43 +665,7 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     9. Related Case Studies
-════════════════════════════════════════ -->
-{% if related %}
-<section class="py-5 bg-body-secondary">
-  <div class="site-container">
-    <div class="text-center mb-4">
-      <span class="badge-outline mb-2 d-inline-block">ผลงานที่เกี่ยวข้อง</span>
-      <h2 class="fw-bold mt-2" style="font-size:1.4rem;">ดูเคสอื่นที่น่าสนใจ</h2>
-    </div>
-    <div class="row g-4">
-      {% for cs in related %}
-      <div class="col-md-6 col-lg-4">
-        <div class="related-card h-100">
-          <a href="{{ cs.get_absolute_url }}" class="stretched-link text-decoration-none"></a>
-          <div
-            class="related-thumb"
-            {% if cs.display_cover %}style="background-image:url('{{ cs.display_cover }}');"{% endif %}
-          >
-            {% if not cs.display_cover %}
-            <div class="related-thumb-fallback">📂</div>
-            {% endif %}
-          </div>
-          <div class="p-3">
-            <span class="badge-outline">{{ cs.get_industry_display }}</span>
-            <h3 class="fs-6 fw-bold text-body mt-2 mb-1">{{ cs.project_title }}</h3>
-            {% if cs.roi_metric %}
-            <small class="text-gold fw-semibold">{{ cs.roi_metric }}</small>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
+{# Related Case Studies — แสดงเป็น Swiper slider ใน content section แล้ว #}
 
 <!-- ══════════════════════════════════════
      10. CTA Final
