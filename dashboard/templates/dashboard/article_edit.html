@@ -362,10 +362,16 @@
             </div>
             <span style="font-weight:700;font-size:.9rem;">Tags</span>
           </div>
-          <button type="button" class="ds-btn" style="padding:.25rem .6rem;font-size:.75rem;"
-                  data-bs-toggle="modal" data-bs-target="#addTagModal" title="เพิ่ม Tag ใหม่">
-            <i class="bi bi-plus-lg"></i>
-          </button>
+          <div class="d-flex gap-1">
+            <button type="button" class="ds-btn" style="padding:.25rem .6rem;font-size:.75rem;"
+                    data-bs-toggle="modal" data-bs-target="#addTagModal" title="เพิ่ม Tag">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+            <button type="button" class="ds-btn-outline" style="padding:.25rem .6rem;font-size:.75rem;"
+                    data-bs-toggle="modal" data-bs-target="#manageTagModal" title="จัดการ Tags">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+          </div>
         </div>
         <div class="scard-body">
           <div class="tag-pill-list" id="tagPillList">
@@ -505,6 +511,41 @@
   </div>
 </div>
 
+<!-- === Modal: จัดการ Tags === -->
+<div class="modal fade" id="manageTagModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <h6 class="fw-bold mb-0" style="font-size:.97rem;">จัดการ Tags</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="max-height:400px;overflow-y:auto;">
+        <div id="tagManageList">
+          {% for tag in form.tags.field.queryset %}
+          <div class="d-flex align-items-center justify-content-between py-2 border-bottom" id="tag-row-{{ tag.pk }}">
+            <div class="d-flex align-items-center gap-2">
+              <span class="ds-badge draft" style="min-width:auto;padding:.1rem .5rem;font-size:.72rem;">#</span>
+              <span style="font-size:.88rem;font-weight:600;">{{ tag.name }}</span>
+            </div>
+            <button type="button" class="btn-tag-delete ds-btn-danger"
+                    style="padding:.2rem .55rem;font-size:.72rem;"
+                    data-id="{{ tag.pk }}" data-name="{{ tag.name }}">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+          {% empty %}
+          <p class="text-muted text-center py-3">ยังไม่มี Tags</p>
+          {% endfor %}
+        </div>
+        <div id="tagManageError" class="text-danger small mt-2 d-none"></div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ปิด</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div id="saveToast" class="toast save-toast align-items-center text-white border-0">
   <div class="d-flex">
@@ -636,6 +677,33 @@
       var opt = sel.querySelector('option[value="' + id + '"]');
       if (opt) opt.remove();
       showToast('ลบ "' + data.name + '" แล้ว');
+    })
+    .catch(function() { errEl.textContent = 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); });
+  });
+
+  /* ── Delete Tag ── */
+  document.getElementById('manageTagModal').addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-tag-delete');
+    if (!btn) return;
+    var id   = btn.dataset.id;
+    var name = btn.dataset.name;
+    if (!confirm('ลบ Tag "' + name + '" ใช่ไหม?')) return;
+    var errEl = document.getElementById('tagManageError');
+    errEl.classList.add('d-none');
+    fetch('/owner/blog/tag/' + id + '/delete/', {
+      method: 'POST',
+      headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.ok) { errEl.textContent = data.error || 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); return; }
+      // ลบ row ใน modal
+      var row = document.getElementById('tag-row-' + id);
+      if (row) row.remove();
+      // ลบ pill ใน tag list
+      var pill = document.querySelector('.tag-pill input[value="' + id + '"]');
+      if (pill) pill.closest('.tag-pill').remove();
+      showToast('ลบ Tag "' + data.name + '" แล้ว');
     })
     .catch(function() { errEl.textContent = 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); });
   });

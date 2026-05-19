@@ -1428,6 +1428,18 @@ def blog_category_add(request):
 
 
 @staff_member_required
+def blog_tag_delete(request, pk):
+    if request.method == "POST":
+        from blog.models import Tag
+        from django.shortcuts import get_object_or_404
+        tag = get_object_or_404(Tag, pk=pk)
+        name = tag.name
+        tag.delete()
+        return JsonResponse({"ok": True, "name": name})
+    return JsonResponse({"ok": False}, status=405)
+
+
+@staff_member_required
 def blog_category_delete(request, pk):
     if request.method == "POST":
         from blog.models import Category
