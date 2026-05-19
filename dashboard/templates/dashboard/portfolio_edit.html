@@ -383,11 +383,25 @@
             <label style="cursor:pointer;display:block;">
               <i class="bi bi-cloud-upload" style="font-size:1.5rem;color:var(--app-primary);display:block;margin-bottom:.35rem;"></i>
               <span style="font-size:.85rem;font-weight:600;color:var(--app-primary);">เลือกรูปภาพ</span>
-              <span class="text-muted" style="font-size:.78rem;display:block;">JPG, PNG, WebP — ไม่จำกัดจำนวน</span>
+              <span class="text-muted" style="font-size:.78rem;display:block;">JPG, PNG, WebP — เลือกได้หลายรูปพร้อมกัน</span>
               <input type="file" id="galleryUpload" accept="image/*" multiple style="display:none;">
             </label>
             <input type="text" id="galleryCaption" class="form-control form-control-sm mt-2"
                    placeholder="Caption (ไม่บังคับ)" style="max-width:300px;margin:auto;">
+          </div>
+
+          <!-- คำแนะนำ -->
+          <div style="font-size:.72rem;color:var(--bs-secondary-color);line-height:1.8;margin-top:.75rem;padding:.6rem .9rem;background:rgba(201,169,110,.06);border-radius:.375rem;border:1px solid rgba(201,169,110,.15);">
+            <i class="bi bi-info-circle-fill me-1" style="color:var(--app-primary);"></i>
+            <strong>ขนาดแนะนำ:</strong> 1200 × 800 px ขึ้นไป (ratio 3:2)<br>
+            <strong>ขนาดไฟล์:</strong> ไม่เกิน <strong>2 MB</strong> ต่อรูป — เกินจะช้าในการโหลดหน้าเว็บ<br>
+            <span style="opacity:.75;">• ประเภทที่รองรับ: JPG, PNG, WebP<br>
+            • WebP ขนาดเล็กกว่า JPG ~30% แนะนำให้ใช้ WebP ถ้าทำได้</span>
+          </div>
+
+          <div id="fileSizeWarning" class="alert alert-warning small mt-2 d-none py-2">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+            <span id="fileSizeWarningText"></span>
           </div>
 
           <div id="uploadProgress" class="mt-2 d-none">
@@ -472,6 +486,22 @@
   uploadInput.addEventListener('change', function() {
     var files = Array.from(this.files);
     if (!files.length) return;
+
+    /* ตรวจขนาดไฟล์ */
+    var MAX_MB = 2;
+    var tooBig = files.filter(function(f) { return f.size > MAX_MB * 1024 * 1024; });
+    var warnEl = document.getElementById('fileSizeWarning');
+    var warnTxt = document.getElementById('fileSizeWarningText');
+    if (tooBig.length) {
+      var names = tooBig.map(function(f) {
+        return f.name + ' (' + (f.size / 1024 / 1024).toFixed(1) + ' MB)';
+      }).join(', ');
+      warnTxt.textContent = 'ไฟล์ต่อไปนี้ใหญ่เกิน ' + MAX_MB + ' MB — อาจโหลดช้า: ' + names;
+      warnEl.classList.remove('d-none');
+    } else {
+      warnEl.classList.add('d-none');
+    }
+
     var caption = captionInput ? captionInput.value.trim() : '';
     progressEl.classList.remove('d-none');
     statusEl.textContent = 'กำลังอัพโหลด ' + files.length + ' รูป...';
