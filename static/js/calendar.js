@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     },
 
-    dateClick:  function (info) { openEditModal(null, info.dateStr); },  /* คลิกวันว่าง → เปิด add form */
+    /* dateClick ปิด — เพิ่มงานผ่านปุ่ม + เท่านั้น */
     eventClick: function (info) { openDetailModal(info.event); },         /* คลิก event → เปิด detail modal */
 
     /* Drag & Drop: เฉพาะ user events (isSystem=false) → PATCH start date */
