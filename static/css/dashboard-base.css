@@ -365,7 +365,7 @@ body, #sidebar, #topbar, .stat-card { transition: background-color .25s, color .
   align-items: center;
   gap: .3rem;
   padding: .3rem .75rem;
-  border-radius: 999px;
+  border-radius: .375rem;
   border: 1px solid var(--bs-border-color);
   background: transparent;
   color: var(--bs-secondary-color);
