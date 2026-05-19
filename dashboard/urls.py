@@ -62,6 +62,7 @@ urlpatterns = [
     path("design-system/",    views.design_system_view, name="design_system"),
     # Website Content Manager
     path("website-content/",                         views.website_content_view,    name="website_content"),
+    path("website-content/service/new/",               views.website_service_create,  name="website_service_create"),
     path("website-content/service/<int:pk>/",          views.website_service_edit,    name="website_service_edit"),
     path("website-content/service/<int:pk>/toggle/",  views.website_service_toggle,  name="website_service_toggle"),
     path("website-content/article/<int:pk>/toggle/",  views.website_article_toggle,  name="website_article_toggle"),

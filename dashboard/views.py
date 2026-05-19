@@ -1396,6 +1396,49 @@ def website_content_view(request):
 
 
 @staff_member_required
+def website_service_create(request):
+    from pages.models import Service
+    if request.method == "POST":
+        name  = request.POST.get("name", "บริการใหม่").strip() or "บริการใหม่"
+        # สร้าง slug จากชื่อ
+        import re
+        slug = re.sub(r"[^\w\s-]", "", name.lower())
+        slug = re.sub(r"\s+", "-", slug).strip("-")
+        # ป้องกัน slug ซ้ำ
+        base_slug, i = slug, 1
+        while Service.objects.filter(slug=slug).exists():
+            slug = f"{base_slug}-{i}"; i += 1
+        svc = Service.objects.create(
+            name=name, slug=slug,
+            tagline=request.POST.get("tagline", "").strip(),
+            description=request.POST.get("description", "").strip(),
+            icon=request.POST.get("icon", "bi-stars").strip(),
+            cover_image_url=request.POST.get("cover_image_url", "").strip(),
+            price_start=int(request.POST.get("price_start", 0) or 0),
+            price_label=request.POST.get("price_label", "เริ่มต้น").strip(),
+            features=request.POST.get("features", "").strip(),
+            display_order=int(request.POST.get("display_order", 99) or 99),
+            is_featured="is_featured" in request.POST,
+            status=request.POST.get("status", "draft"),
+        )
+        messages.success(request, f'สร้าง "{svc.name}" แล้ว')
+        return redirect("dashboard:website_service_edit", pk=svc.pk)
+    # GET — แสดงฟอร์มเปล่า
+    from pages.models import Service
+    blank = Service(
+        name="", slug="", tagline="", description="",
+        icon="bi-stars", cover_image_url="",
+        price_start=0, price_label="เริ่มต้น",
+        features="", display_order=99, status="draft",
+    )
+    return render(request, "dashboard/service_edit.html", {
+        "svc": blank,
+        "is_create": True,
+        "all_services": Service.objects.all().order_by("display_order"),
+    })
+
+
+@staff_member_required
 def website_service_edit(request, pk):
     from pages.models import Service
     from django.shortcuts import get_object_or_404

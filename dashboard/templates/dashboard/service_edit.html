@@ -5,13 +5,13 @@
      Design: settings-hero + scard (Owner Dashboard Standard)
      =================================================================== -->
 
-{% block title %}แก้ไข: {{ svc.name }} — Dashboard{% endblock %}
+{% block title %}{% if is_create %}เพิ่มบริการใหม่{% else %}แก้ไข: {{ svc.name }}{% endif %} — Dashboard{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item">
     <a href="{% url 'dashboard:website_content' %}?tab=services">จัดการเนื้อหาเว็บ</a>
   </li>
-  <li class="breadcrumb-item active">{{ svc.name }}</li>
+  <li class="breadcrumb-item active">{% if is_create %}เพิ่มบริการใหม่{% else %}{{ svc.name }}{% endif %}</li>
 {% endblock %}
 
 {% block extra_css %}
@@ -82,21 +82,23 @@
 <div class="settings-hero">
   <div>
     <h1 class="settings-hero-title">
-      <span class="hero-icon"><i class="bi {{ svc.icon }}"></i></span>
-      {{ svc.name }}
+      <span class="hero-icon"><i class="bi {% if is_create %}bi-plus-lg{% else %}{{ svc.icon }}{% endif %}"></i></span>
+      {% if is_create %}เพิ่มบริการใหม่{% else %}{{ svc.name }}{% endif %}
     </h1>
     <p class="settings-hero-sub">
-      แก้ไขข้อมูลบริการ
+      {% if is_create %}กรอกข้อมูลบริการ แล้วกด บันทึก{% else %}แก้ไขข้อมูลบริการ
       <span class="status-pill {{ svc.status }} ms-2">
         <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
         {{ svc.get_status_display }}
-      </span>
+      </span>{% endif %}
     </p>
   </div>
   <div class="d-flex gap-2">
+    {% if not is_create and svc.slug %}
     <a href="/services/{{ svc.slug }}/" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
       <i class="bi bi-eye me-1"></i>ดูหน้าจริง
     </a>
+    {% endif %}
     <a href="{% url 'dashboard:website_content' %}?tab=services" class="btn btn-sm btn-outline-secondary">
       <i class="bi bi-arrow-left me-1"></i>กลับ
     </a>
@@ -116,7 +118,7 @@
 
   <!-- === LEFT: Form Sections === -->
   <div class="col-lg-9">
-    <form method="post" action="{% url 'dashboard:website_service_edit' svc.pk %}">
+    <form method="post" action="{% if is_create %}{% url 'dashboard:website_service_create' %}{% else %}{% url 'dashboard:website_service_edit' svc.pk %}{% endif %}">
       {% csrf_token %}
 
       <!-- 1. ข้อมูลหลัก -->
@@ -302,7 +304,8 @@
       <!-- Submit -->
       <div class="d-flex gap-2">
         <button type="submit" class="btn btn-lg" style="background:var(--app-primary);color:#fff;font-weight:700;border:none;">
-          <i class="bi bi-check-lg me-1"></i> บันทึกการเปลี่ยนแปลง
+          <i class="bi bi-check-lg me-1"></i>
+          {% if is_create %}สร้างบริการ{% else %}บันทึกการเปลี่ยนแปลง{% endif %}
         </button>
         <a href="{% url 'dashboard:website_content' %}?tab=services" class="btn btn-lg btn-outline-secondary">
           ยกเลิก
