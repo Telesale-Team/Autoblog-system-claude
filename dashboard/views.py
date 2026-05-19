@@ -1407,6 +1407,27 @@ def website_content_view(request):
 
 
 @staff_member_required
+def blog_category_add(request):
+    """Quick-add category via AJAX — ใช้จากหน้า article edit"""
+    if request.method == "POST":
+        import json
+        from blog.models import Category
+        from django.utils.text import slugify
+        data = json.loads(request.body)
+        name  = data.get("name", "").strip()
+        color = data.get("color", "secondary")
+        if not name:
+            return JsonResponse({"ok": False, "error": "กรุณาใส่ชื่อหมวดหมู่"}, status=400)
+        slug = slugify(name)[:120] or f"cat-{name[:20]}"
+        i = 1
+        while Category.objects.filter(slug=slug).exists():
+            slug = f"{slugify(name)[:110]}-{i}"; i += 1
+        cat = Category.objects.create(name=name, slug=slug, color=color)
+        return JsonResponse({"ok": True, "id": cat.pk, "name": cat.name})
+    return JsonResponse({"ok": False}, status=405)
+
+
+@staff_member_required
 def website_service_create(request):
     from pages.models import Service
     if request.method == "POST":
