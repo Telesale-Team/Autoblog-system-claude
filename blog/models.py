@@ -113,10 +113,34 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify_th(self.title)[:220]
+            self.slug = self._generate_unique_slug()
         if self.status == "published" and not self.published_at:
             self.published_at = timezone.now()
         super().save(*args, **kwargs)
+
+    def _generate_unique_slug(self):
+        """
+        Auto-generate slug:
+        1. ลอง python-slugify (transliterate บางภาษา)
+        2. ลอง Django slugify (ASCII เท่านั้น)
+        3. Fallback: article-{uuid8} ถ้าชื่อเป็นภาษาไทยล้วน
+        ตรวจ uniqueness และเพิ่ม suffix -N ถ้าซ้ำ
+        """
+        from django.utils.text import slugify as django_slugify
+        import uuid
+
+        base = slugify_th(self.title)[:180]          # python-slugify
+        if not base:
+            base = django_slugify(self.title)[:180]  # Django slugify
+        if not base:
+            base = f"article-{uuid.uuid4().hex[:8]}" # Thai-only fallback
+
+        slug = base
+        i = 1
+        while Article.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+            slug = f"{base[:170]}-{i}"
+            i += 1
+        return slug
 
     def get_absolute_url(self):
         return reverse("blog:detail", kwargs={"slug": self.slug})
