@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import ContactLead, Service, SiteSetting, ContactTopic, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
+from .models import (ContactLead, Service, SiteSetting, ContactTopic,
+                     AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise,
+                     HomePage, HomePain, HomeProcess, HomeTestimonial, HomeFAQ)
 
 
 @admin.register(Service)
@@ -60,6 +62,48 @@ class ContactTopicAdmin(admin.ModelAdmin):
         obj, _ = SiteSetting.objects.get_or_create(pk=1)
         from django.shortcuts import redirect
         return redirect(f"/admin/pages/sitesetting/{obj.pk}/change/")
+
+
+@admin.register(HomePage)
+class HomePageAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ("Hero", {"fields": ("hero_title", "hero_subtitle", "hero_cta_text", "hero_cta2_text")}),
+        ("Pain Section", {"fields": ("pain_title", "pain_subtitle")}),
+        ("Process Section", {"fields": ("process_title", "process_subtitle")}),
+        ("Testimonials Section", {"fields": ("testi_title",)}),
+        ("FAQ Section", {"fields": ("faq_title",)}),
+        ("CTA Section", {"fields": ("cta_title", "cta_subtitle", "cta_button")}),
+    )
+    def has_add_permission(self, request): return not HomePage.objects.exists()
+    def has_delete_permission(self, request, obj=None): return False
+    def changelist_view(self, request, extra_context=None):
+        obj, _ = HomePage.objects.get_or_create(pk=1)
+        from django.shortcuts import redirect
+        return redirect(f"/admin/pages/homepage/{obj.pk}/change/")
+
+
+@admin.register(HomePain)
+class HomePainAdmin(admin.ModelAdmin):
+    list_display = ("title", "icon", "order")
+    list_editable = ("order",)
+
+
+@admin.register(HomeProcess)
+class HomeProcessAdmin(admin.ModelAdmin):
+    list_display = ("step_num", "title", "order")
+    list_editable = ("order",)
+
+
+@admin.register(HomeTestimonial)
+class HomeTestimonialAdmin(admin.ModelAdmin):
+    list_display = ("author", "role", "order")
+    list_editable = ("order",)
+
+
+@admin.register(HomeFAQ)
+class HomeFAQAdmin(admin.ModelAdmin):
+    list_display = ("question", "order")
+    list_editable = ("order",)
 
 
 @admin.register(AboutPage)

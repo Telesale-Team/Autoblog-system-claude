@@ -250,3 +250,100 @@ class ContactLead(models.Model):
             self.consent_given_at = timezone.now()
             self.deletable_after = timezone.now() + timedelta(days=730)  # 24 months
         super().save(*args, **kwargs)
+
+
+# ── Home Page ────────────────────────────────────────────────────────────────
+
+class HomePage(models.Model):
+    """Singleton — ข้อความหลักในหน้าแรก"""
+    # Hero
+    hero_title     = models.CharField("Hero Title", max_length=200, default="ระบบ AI สำหรับธุรกิจ SME ไทย")
+    hero_subtitle  = models.TextField("Hero Subtitle", default="เพิ่มรายได้ ลดต้นทุน ทำงานอัตโนมัติ")
+    hero_cta_text  = models.CharField("Hero CTA Button", max_length=60, default="ปรึกษาฟรี")
+    hero_cta2_text = models.CharField("Hero CTA 2 Button", max_length=60, default="ดูผลงาน", blank=True)
+    # Pain section
+    pain_title    = models.CharField("Pain Section Title", max_length=200, default="ปัญหาที่ SME ไทยเจอบ่อย")
+    pain_subtitle = models.TextField("Pain Section Subtitle", blank=True)
+    # Process section
+    process_title    = models.CharField("Process Section Title", max_length=200, default="เราทำงานอย่างไร")
+    process_subtitle = models.TextField("Process Section Subtitle", blank=True)
+    # Testimonial section
+    testi_title = models.CharField("Testimonial Section Title", max_length=200, default="ลูกค้าพูดถึงเรา")
+    # FAQ section
+    faq_title = models.CharField("FAQ Section Title", max_length=200, default="คำถามที่พบบ่อย")
+    # CTA section
+    cta_title      = models.CharField("CTA Title", max_length=200, default="พร้อมเริ่มต้นแล้วหรือยัง?")
+    cta_subtitle   = models.TextField("CTA Subtitle", default="ปรึกษาฟรี ไม่มีข้อผูกมัด")
+    cta_button     = models.CharField("CTA Button Text", max_length=60, default="ปรึกษาฟรีเลย")
+
+    class Meta:
+        verbose_name = "เนื้อหาหน้าแรก (Home)"
+        verbose_name_plural = "เนื้อหาหน้าแรก (Home)"
+
+    def __str__(self): return "เนื้อหาหน้าแรก"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class HomePain(models.Model):
+    icon        = models.CharField("Bootstrap Icon", max_length=60, default="bi-exclamation-circle")
+    title       = models.CharField("หัวข้อ", max_length=120)
+    description = models.TextField("รายละเอียด")
+    order       = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Pain Point (Home)"
+        verbose_name_plural = "Pain Points (Home)"
+
+    def __str__(self): return self.title
+
+
+class HomeProcess(models.Model):
+    step_num    = models.CharField("เลข Step", max_length=10, default="01")
+    title       = models.CharField("หัวข้อ", max_length=120)
+    description = models.TextField("รายละเอียด")
+    icon        = models.CharField("Bootstrap Icon", max_length=60, default="bi-check-circle", blank=True)
+    order       = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Process Step (Home)"
+        verbose_name_plural = "Process Steps (Home)"
+
+    def __str__(self): return f"{self.step_num} {self.title}"
+
+
+class HomeTestimonial(models.Model):
+    quote      = models.TextField("คำพูด")
+    author     = models.CharField("ชื่อ", max_length=100)
+    role       = models.CharField("ตำแหน่ง/บริษัท", max_length=150, blank=True)
+    avatar_url = models.URLField("Avatar URL", blank=True)
+    order      = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Testimonial (Home)"
+        verbose_name_plural = "Testimonials (Home)"
+
+    def __str__(self): return f"{self.author}: {self.quote[:40]}"
+
+
+class HomeFAQ(models.Model):
+    question = models.CharField("คำถาม", max_length=300)
+    answer   = models.TextField("คำตอบ")
+    order    = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "FAQ (Home)"
+        verbose_name_plural = "FAQs (Home)"
+
+    def __str__(self): return self.question[:60]

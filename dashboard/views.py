@@ -1378,7 +1378,9 @@ def api_calendar_event_detail(request, pk):
 
 @staff_member_required
 def website_content_view(request):
-    from pages.models import Service, SiteSetting, ContactTopic, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
+    from pages.models import (Service, SiteSetting, ContactTopic,
+                              AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise,
+                              HomePage, HomePain, HomeProcess, HomeTestimonial, HomeFAQ)
     from portfolio.models import CaseStudy
     from blog.models import Article
     from marketing.models import ContentBacklog
@@ -1387,6 +1389,11 @@ def website_content_view(request):
         "services":     Service.objects.all().order_by("display_order"),
         "portfolio":    CaseStudy.objects.all().order_by("display_order", "-published_at"),
         "about_page":   AboutPage.get(),
+        "home_page":    HomePage.get(),
+        "home_pains":   HomePain.objects.all(),
+        "home_process": HomeProcess.objects.all(),
+        "home_testis":  HomeTestimonial.objects.all(),
+        "home_faqs":    HomeFAQ.objects.all(),
         "stats":        AboutStat.objects.all(),
         "values":       AboutValue.objects.all(),
         "checkpoints":  AboutCheckpoint.objects.all(),
@@ -1627,6 +1634,79 @@ def website_article_toggle(request, pk):
     art.status = "draft" if art.status == "published" else "published"
     art.save()
     return JsonResponse({"status": art.status})
+
+
+@staff_member_required
+@require_POST
+def website_homepage_save(request):
+    from pages.models import HomePage
+    obj = HomePage.get()
+    for f in ["hero_title","hero_subtitle","hero_cta_text","hero_cta2_text",
+              "pain_title","pain_subtitle","process_title","process_subtitle",
+              "testi_title","faq_title","cta_title","cta_subtitle","cta_button"]:
+        val = request.POST.get(f, "").strip()
+        if val:
+            setattr(obj, f, val)
+    obj.save()
+    messages.success(request, "บันทึกเนื้อหาหน้าแรกแล้ว")
+    return redirect("/owner/website-content/?tab=home")
+
+
+@staff_member_required
+@require_POST
+def website_homepain_save(request, pk):
+    from pages.models import HomePain
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(HomePain, pk=pk)
+    obj.icon        = request.POST.get("icon", obj.icon).strip()
+    obj.title       = request.POST.get("title", obj.title).strip()
+    obj.description = request.POST.get("description", obj.description).strip()
+    obj.save()
+    messages.success(request, f'บันทึก "{obj.title}" แล้ว')
+    return redirect("/owner/website-content/?tab=home")
+
+
+@staff_member_required
+@require_POST
+def website_homeprocess_save(request, pk):
+    from pages.models import HomeProcess
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(HomeProcess, pk=pk)
+    obj.step_num    = request.POST.get("step_num", obj.step_num).strip()
+    obj.title       = request.POST.get("title", obj.title).strip()
+    obj.description = request.POST.get("description", obj.description).strip()
+    obj.icon        = request.POST.get("icon", obj.icon).strip()
+    obj.save()
+    messages.success(request, f'บันทึก Step {obj.step_num} แล้ว')
+    return redirect("/owner/website-content/?tab=home")
+
+
+@staff_member_required
+@require_POST
+def website_hometesti_save(request, pk):
+    from pages.models import HomeTestimonial
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(HomeTestimonial, pk=pk)
+    obj.quote      = request.POST.get("quote", obj.quote).strip()
+    obj.author     = request.POST.get("author", obj.author).strip()
+    obj.role       = request.POST.get("role", obj.role).strip()
+    obj.avatar_url = request.POST.get("avatar_url", obj.avatar_url).strip()
+    obj.save()
+    messages.success(request, f'บันทึก "{obj.author}" แล้ว')
+    return redirect("/owner/website-content/?tab=home")
+
+
+@staff_member_required
+@require_POST
+def website_homefaq_save(request, pk):
+    from pages.models import HomeFAQ
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(HomeFAQ, pk=pk)
+    obj.question = request.POST.get("question", obj.question).strip()
+    obj.answer   = request.POST.get("answer", obj.answer).strip()
+    obj.save()
+    messages.success(request, "บันทึก FAQ แล้ว")
+    return redirect("/owner/website-content/?tab=home")
 
 
 @staff_member_required
