@@ -638,7 +638,8 @@ document.addEventListener('DOMContentLoaded', function () {
     new bootstrap.Modal(document.getElementById('editEventModal')).show();
   }
 
-  document.getElementById('btnAddEvent').addEventListener('click', function () { openEditModal(null, null); });
+  var btnAddEvent = document.getElementById('btnAddEvent');
+  if (btnAddEvent) btnAddEvent.addEventListener('click', function () { openEditModal(null, null); });
 
   document.getElementById('btnSaveEvent').addEventListener('click', function () {
     const title = document.getElementById('editTitle').value.trim();
@@ -743,7 +744,9 @@ document.addEventListener('DOMContentLoaded', function () {
         '</button></td>';
 
       /* แทรกหลัง event ตัวสุดท้ายที่ show */
-      group.events[LIST_MAX - 1].insertAdjacentElement('afterend', toggleRow);
+      var anchor = group.events[LIST_MAX - 1];
+      if (!anchor) return;
+      anchor.insertAdjacentElement('afterend', toggleRow);
 
       toggleRow.querySelector('button').addEventListener('click', function () {
         var expanded = this.dataset.expanded === 'true';
