@@ -1,0 +1,11 @@
+{# ===================== FOOTER ===================== #}
+<footer class="px-4 py-3 border-top mt-auto">
+  <div class="d-flex justify-content-between align-items-center">
+    <small class="text-muted">
+      &copy; {% now "Y" %} {{ user_settings.company_name|default:"Analytics Co." }}
+      — {{ user_settings.company_policy|default:"All rights reserved." }}
+    </small>
+    <small class="text-muted">v{{ app_version|default:"1.0.0" }}</small>
+  </div>
+</footer>
+{# ===================== END FOOTER ===================== #}
