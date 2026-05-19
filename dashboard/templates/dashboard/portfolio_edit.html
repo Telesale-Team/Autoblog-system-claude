@@ -96,7 +96,46 @@
 
 <div class="row g-4">
 
-  <!-- === LEFT: Form Sections === -->
+  <!-- === LEFT: Portfolio Nav + Search === -->
+  <div class="col-lg-3">
+    <div class="scard" style="position:sticky;top:70px;">
+      <div class="scard-header">
+        <div style="font-weight:700;font-size:.9rem;">Portfolio ทั้งหมด</div>
+        <a href="{% url 'dashboard:website_portfolio_create' %}" class="ds-btn" style="padding:.25rem .6rem;font-size:.75rem;">
+          <i class="bi bi-plus-lg"></i>
+        </a>
+      </div>
+      <div style="padding:.5rem .75rem;border-bottom:1px solid var(--bs-border-color);">
+        <div class="position-relative">
+          <i class="bi bi-search" style="position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--bs-secondary-color);font-size:.8rem;pointer-events:none;"></i>
+          <input type="text" id="portfolioSearch" class="form-control form-control-sm"
+                 placeholder="ค้นหา..." autocomplete="off"
+                 style="padding-left:1.8rem;font-size:.82rem;">
+        </div>
+      </div>
+      <div style="padding:.5rem;max-height:60vh;overflow-y:auto;">
+        <div class="cs-nav" id="portfolioNavList">
+          {% for item in all_portfolio %}
+          <a href="{% url 'dashboard:website_portfolio_edit' item.pk %}"
+             class="cs-nav-item {% if item.pk == cs.pk %}active{% endif %}"
+             data-title="{{ item.project_title|lower }}">
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.83rem;">
+              {{ item.project_title }}
+            </span>
+            <span class="cs-industry">{{ item.get_industry_display|truncatechars:8 }}</span>
+            {% if item.status == 'draft' %}
+            <span class="badge" style="background:rgba(100,116,139,.15);color:#64748b;font-size:.65rem;">Draft</span>
+            {% endif %}
+          </a>
+          {% empty %}
+          <p class="text-muted text-center py-3" style="font-size:.82rem;">ยังไม่มี Portfolio</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- === RIGHT: Form Sections === -->
   <div class="col-lg-9">
     <form method="post"
           action="{% if is_create %}{% url 'dashboard:website_portfolio_create' %}{% else %}{% url 'dashboard:website_portfolio_edit' cs.pk %}{% endif %}">
@@ -347,36 +386,22 @@
     </form>
   </div>
 
-  <!-- === RIGHT: Portfolio Nav === -->
-  <div class="col-lg-3">
-    <div class="scard" style="position:sticky;top:70px;">
-      <div class="scard-header">
-        <div style="font-weight:700;font-size:.9rem;">Portfolio ทั้งหมด</div>
-      </div>
-      <div class="scard-body" style="padding:.75rem;">
-        <div class="cs-nav">
-          {% for item in all_portfolio %}
-          <a href="{% url 'dashboard:website_portfolio_edit' item.pk %}"
-             class="cs-nav-item {% if item.pk == cs.pk %}active{% endif %}">
-            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.83rem;">
-              {{ item.project_title }}
-            </span>
-            <span class="cs-industry">{{ item.get_industry_display|truncatechars:8 }}</span>
-            {% if item.status == 'draft' %}
-            <span class="badge" style="background:rgba(100,116,139,.15);color:#64748b;font-size:.65rem;">Draft</span>
-            {% endif %}
-          </a>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
+/* ── Portfolio search filter ── */
+var psInput = document.getElementById('portfolioSearch');
+if (psInput) {
+  psInput.addEventListener('input', function() {
+    var q = this.value.trim().toLowerCase();
+    document.querySelectorAll('#portfolioNavList .cs-nav-item').forEach(function(el) {
+      el.style.display = !q || (el.dataset.title || '').includes(q) ? '' : 'none';
+    });
+  });
+}
+
 function countChars(el, counterId, max) {
   var len = el.value.length;
   var el2 = document.getElementById(counterId);
