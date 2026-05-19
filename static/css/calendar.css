@@ -182,6 +182,22 @@
 .fc-theme-standard .fc-scrollgrid { border-color: var(--bs-border-color) !important; }
 .fc .fc-today-button { text-transform: capitalize; }
 
+/* ── More link — Collapse button ── */
+.fc .fc-daygrid-more-link { text-decoration: none !important; }
+.fc-more-link-btn {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  color: var(--app-primary);
+  background: rgba(201,169,110,.1);
+  border: 1px solid rgba(201,169,110,.3);
+  border-radius: .25rem;
+  padding: .1rem .4rem;
+  cursor: pointer;
+  transition: background .15s;
+}
+.fc-more-link-btn:hover { background: rgba(201,169,110,.2); }
+
 /* ── [phase-bar] Phase Journey Timeline ─────────────────────────────── */
 
 /* wrapper */

@@ -166,7 +166,35 @@ document.addEventListener('DOMContentLoaded', function () {
       return (a.start || 0) - (b.start || 0);        /* เรียงตามเวลา */
     },
 
-    dayMaxEvents:  true,
+    dayMaxEvents:  4,
+    moreLinkContent: function(arg) {
+      return { html: '<span class="fc-more-link-btn">+ ' + arg.num + ' เพิ่มเติม ▼</span>' };
+    },
+    moreLinkClick: function(arg) {
+      /* Toggle แสดง/ซ่อน events ที่ hidden ใน cell นี้ */
+      var cell = arg.el.closest('.fc-daygrid-day');
+      if (!cell) return 'stop';
+      var expanded = cell.dataset.expanded === '1';
+      var hidden   = cell.querySelectorAll('.fc-daygrid-event-harness[style*="display: none"], .fc-daygrid-event-harness.fc-limited');
+
+      if (expanded) {
+        /* ย่อ */
+        cell.querySelectorAll('.fc-daygrid-event-harness-abs, .fc-extra').forEach(function(el) {
+          el.style.display = 'none';
+        });
+        cell.dataset.expanded = '0';
+        arg.el.innerHTML = '<span class="fc-more-link-btn">+ ' + arg.num + ' เพิ่มเติม ▼</span>';
+      } else {
+        /* ขยาย */
+        cell.querySelectorAll('.fc-daygrid-event-harness').forEach(function(el) {
+          el.style.removeProperty('display');
+          el.style.visibility = 'visible';
+        });
+        cell.dataset.expanded = '1';
+        arg.el.innerHTML = '<span class="fc-more-link-btn">▲ ย่อ</span>';
+      }
+      return 'stop';
+    },
 
     eventSources: [
 
