@@ -206,16 +206,26 @@
         </div>
       </div>
 
-      <!-- Title input -->
+      <!-- Title + Slug -->
       <div class="mb-3">
         <input type="text" name="title" id="id_title"
                class="input-title"
                value="{{ form.title.value|default_if_none:'' }}"
                placeholder="หัวข้อบทความ..."
-               required>
+               required
+               oninput="autoSlug(this.value)">
         {% if form.title.errors %}
         <div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>
         {% endif %}
+      </div>
+      <div class="mb-3 d-flex align-items-center gap-2">
+        <span style="font-size:.78rem;color:var(--bs-secondary-color);white-space:nowrap;">/blog/</span>
+        <input type="text" name="slug" id="id_slug"
+               class="form-control form-control-sm"
+               value="{{ form.slug.value|default_if_none:'' }}"
+               placeholder="auto-generate ถ้าว่าง"
+               style="font-family:monospace;font-size:.82rem;">
+        <span style="font-size:.78rem;color:var(--bs-secondary-color);white-space:nowrap;">/</span>
       </div>
 
       <!-- Content Editor -->
@@ -383,6 +393,25 @@
 {{ form.media.js }}
 <script>
 (function() {
+  /* ── Auto-slug (เฉพาะบทความใหม่ที่ยังไม่มี slug) ── */
+  var slugField = document.getElementById('id_slug');
+  var isNew = {{ is_new|yesno:'true,false' }};
+  window.autoSlug = function(title) {
+    if (!isNew || !slugField) return;
+    if (slugField.dataset.userEdited) return; // ถ้า user แก้เองแล้ว ไม่ override
+    var s = title.toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+    slugField.value = s;
+  };
+  if (slugField) {
+    slugField.addEventListener('input', function() {
+      this.dataset.userEdited = '1';
+    });
+  }
+
   /* ── Status helper ── */
   window.setStatus = function(val) {
     document.getElementById('id_status').value = val;

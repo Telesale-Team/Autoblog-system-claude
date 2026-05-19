@@ -19,7 +19,7 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = [
-            "title", "category", "tags",
+            "title", "slug", "category", "tags",
             "excerpt", "content",
             "cover_image_url",
             "meta_title", "meta_description",
@@ -27,6 +27,7 @@ class ArticleForm(forms.ModelForm):
         ]
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "ชื่อบทความ"}),
+            "slug": forms.TextInput(attrs={"class": "form-control form-control-sm", "placeholder": "auto-generate ถ้าว่าง"}),
             "category": forms.Select(attrs={"class": "form-select form-select-sm"}),
             "excerpt": forms.Textarea(attrs={"class": "form-control form-control-sm", "rows": 3, "placeholder": "สรุปย่อ (~160 chars)"}),
             "cover_image_url": forms.URLInput(attrs={"class": "form-control form-control-sm", "placeholder": "https://..."}),
