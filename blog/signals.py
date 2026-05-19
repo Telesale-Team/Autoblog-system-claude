@@ -18,7 +18,7 @@ def sync_article_to_calendar(sender, instance, **kwargs):
 
     if event_date:
         status_label = {"published": "เผยแพร่แล้ว", "waiting": "รอเขียน", "draft": "Draft"}.get(instance.status, instance.status)
-        obj, created = CalendarEvent.objects.get_or_create(
+        CalendarEvent.objects.update_or_create(
             category="article",
             title=instance.title,
             is_system=True,
@@ -26,14 +26,8 @@ def sync_article_to_calendar(sender, instance, **kwargs):
                 "start_datetime": event_date,
                 "end_datetime":   None,
                 "all_day":        True,
-                "is_completed":   False,
+                "is_completed":   instance.status == "published",
                 "description":    f"{status_label}: {instance.title}",
                 "created_by":     None,
             },
         )
-        if not created:
-            # อัปเดตเฉพาะ fields ที่ไม่ใช่ is_completed
-            # (ไม่แตะ is_completed — ให้ user toggle เองในปฏิทิน)
-            obj.start_datetime = event_date
-            obj.description    = f"{status_label}: {instance.title}"
-            obj.save(update_fields=["start_datetime", "description"])
