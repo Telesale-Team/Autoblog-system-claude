@@ -307,13 +307,11 @@
         <div class="scard-body" style="display:flex;flex-direction:column;gap:.6rem;">
           <input type="hidden" name="status" id="id_status"
                  value="{{ article.status|default:'draft' }}">
-          <button type="submit" class="ds-btn"
-                  onclick="setStatus('published')">
+          <button type="button" class="ds-btn" onclick="setStatus('published')">
             <i class="bi bi-arrow-up-circle me-1"></i>
             {% if article and article.status == 'published' %}อัปเดตบทความ{% else %}เผยแพร่{% endif %}
           </button>
-          <button type="submit" class="ds-btn-outline"
-                  onclick="setStatus('draft')">
+          <button type="button" class="ds-btn-outline" onclick="setStatus('draft')">
             <i class="bi bi-floppy me-1"></i>บันทึก Draft
           </button>
         </div>
@@ -577,13 +575,19 @@
     });
   }
 
-  /* ── Status helper ── */
+  /* ── Status helper + confirm ── */
   window.setStatus = function(val) {
+    var msg = val === 'published'
+      ? 'เผยแพร่บทความนี้ให้สาธารณะเห็นได้ใช่ไหม?'
+      : 'บันทึกเป็น Draft (ยังไม่เผยแพร่) ใช่ไหม?';
+    if (!confirm(msg)) return false;
     document.getElementById('id_status').value = val;
     var label = document.getElementById('statusLabel');
     var pill  = document.getElementById('statusPill');
     if (label) label.textContent = val === 'published' ? 'Published' : 'Draft';
-    if (pill)  { pill.className = 'ds-badge ' + val; pill.querySelector('.ds-dot') && (pill.querySelector('.ds-dot').style.background = 'currentColor'); }
+    if (pill)  { pill.className = 'ds-badge ' + val; }
+    document.getElementById('articleForm').submit();
+    return true;
   };
 
   /* ── Char counters ── */
