@@ -419,13 +419,20 @@
                     style="min-width:auto;padding:.1rem .45rem;font-size:.65rem;">
                 {{ item.get_status_display }}
               </span>
-              <form method="post" action="{% url 'dashboard:website_backlog_to_blog' item.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="ds-btn" style="padding:.2rem .55rem;font-size:.68rem;"
-                        title="ส่งเขียนบทความ">
-                  <i class="bi bi-pencil-square me-1"></i>ส่งเขียน
+              <div class="d-flex gap-1">
+                <button type="button" class="ds-btn-outline btn-edit-backlog"
+                        style="padding:.2rem .45rem;font-size:.68rem;"
+                        data-id="{{ item.pk }}" title="แก้ไข">
+                  <i class="bi bi-pencil"></i>
                 </button>
-              </form>
+                <form method="post" action="{% url 'dashboard:website_backlog_to_blog' item.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="ds-btn" style="padding:.2rem .55rem;font-size:.68rem;"
+                          title="ส่งเขียนบทความ">
+                    <i class="bi bi-send me-1"></i>ส่งเขียน
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
           {% empty %}
@@ -1025,6 +1032,45 @@
   </div>
 </div>
 
+<!-- === Modal: แก้ไข Content Backlog === -->
+<div class="modal fade" id="editBacklogModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <h6 class="fw-bold mb-0" style="font-size:.97rem;">แก้ไข Content Backlog</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editBacklogId">
+        <div class="mb-3">
+          <label class="form-label">หัวข้อบทความ <span class="text-danger">*</span></label>
+          <input type="text" id="editBacklogTopic" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">หมวดหมู่ <span class="text-muted">(ไม่บังคับ)</span></label>
+          <select id="editBacklogCategory" class="form-select">
+            <option value="">— ยังไม่ระบุ —</option>
+            {% for cat in blog_categories %}
+            <option value="{{ cat.pk }}">{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Notes <span class="text-muted">(ไม่บังคับ)</span></label>
+          <textarea id="editBacklogNotes" class="form-control form-control-sm" rows="2"></textarea>
+        </div>
+        <div id="editBacklogError" class="text-danger small d-none"></div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="ds-btn" id="btnUpdateBacklog">
+          <i class="bi bi-check2 me-1"></i>บันทึก
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- === Modal: เพิ่ม Content Backlog === -->
 <div class="modal fade" id="addBacklogModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -1102,6 +1148,62 @@ function previewIcon(input, id) {
   var prev = document.getElementById('icon-preview-' + id);
   if (prev) prev.innerHTML = '<i class="bi ' + input.value + '"></i>';
 }
+
+/* === Edit Backlog === */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.btn-edit-backlog');
+  if (!btn) return;
+  var id = btn.dataset.id;
+  var csrf = document.cookie.match(/csrftoken=([^;]+)/);
+  fetch('/owner/website-content/backlog/' + id + '/edit/', {
+    headers: { 'X-CSRFToken': csrf ? csrf[1] : '' }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    document.getElementById('editBacklogId').value = data.id;
+    document.getElementById('editBacklogTopic').value = data.topic;
+    document.getElementById('editBacklogCategory').value = data.category_id || '';
+    document.getElementById('editBacklogNotes').value = data.notes || '';
+    document.getElementById('editBacklogError').classList.add('d-none');
+    new bootstrap.Modal(document.getElementById('editBacklogModal')).show();
+  });
+});
+
+document.getElementById('btnUpdateBacklog').addEventListener('click', function() {
+  var id    = document.getElementById('editBacklogId').value;
+  var topic = document.getElementById('editBacklogTopic').value.trim();
+  var errEl = document.getElementById('editBacklogError');
+  errEl.classList.add('d-none');
+  if (!topic) { errEl.textContent = 'กรุณาใส่หัวข้อ'; errEl.classList.remove('d-none'); return; }
+
+  var btn = this; btn.disabled = true;
+  var csrf = document.cookie.match(/csrftoken=([^;]+)/);
+  fetch('/owner/website-content/backlog/' + id + '/edit/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf ? csrf[1] : '' },
+    body: JSON.stringify({
+      topic: topic,
+      notes: document.getElementById('editBacklogNotes').value.trim(),
+      category_id: document.getElementById('editBacklogCategory').value || null,
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.ok) { errEl.textContent = data.error || 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); return; }
+    /* อัปเดต text ใน card */
+    var editBtn = document.querySelector('.btn-edit-backlog[data-id="' + id + '"]');
+    if (editBtn) {
+      var card = editBtn.closest('div[style*="border-radius"]');
+      if (card) {
+        var titleEl = card.querySelector('span[style*="color:#f1f5f9"]');
+        if (titleEl) titleEl.textContent = data.topic.substring(0, 50);
+      }
+    }
+    bootstrap.Modal.getInstance(document.getElementById('editBacklogModal')).hide();
+  })
+  .catch(function() { errEl.textContent = 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); })
+  .finally(function() { btn.disabled = false; });
+});
 
 /* === Add Backlog === */
 document.getElementById('btnSaveBacklog').addEventListener('click', function() {

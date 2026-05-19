@@ -1680,6 +1680,33 @@ def website_portfolio_toggle(request, pk):
 
 
 @staff_member_required
+def website_backlog_edit(request, pk):
+    from marketing.models import ContentBacklog
+    from django.shortcuts import get_object_or_404
+    item = get_object_or_404(ContentBacklog, pk=pk)
+    if request.method == "GET":
+        return JsonResponse({
+            "ok": True, "id": item.pk,
+            "topic": item.topic, "keyword": item.keyword or "",
+            "priority": item.priority, "notes": item.notes or "",
+            "category_id": item.category_id or "",
+        })
+    import json
+    data = json.loads(request.body)
+    item.topic   = data.get("topic", item.topic).strip() or item.topic
+    item.keyword = data.get("keyword", "").strip()
+    item.notes   = data.get("notes", "").strip()
+    cat_id = data.get("category_id")
+    if cat_id:
+        from blog.models import Category as BlogCategory
+        item.category = BlogCategory.objects.filter(pk=cat_id).first()
+    else:
+        item.category = None
+    item.save()
+    return JsonResponse({"ok": True, "topic": item.topic})
+
+
+@staff_member_required
 @require_POST
 def website_backlog_add(request):
     """เพิ่ม Content Backlog item ใหม่"""
