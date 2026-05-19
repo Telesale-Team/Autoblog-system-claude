@@ -1380,6 +1380,8 @@ def website_content_view(request):
     from pages.models import Service, SiteSetting, ContactTopic, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     from portfolio.models import CaseStudy
     from blog.models import Article
+    from marketing.models import ContentBacklog
+    backlog_qs = ContentBacklog.objects.exclude(status="done").order_by("num")[:30]
     return render(request, "dashboard/website_content.html", {
         "services":     Service.objects.all().order_by("display_order"),
         "portfolio":    CaseStudy.objects.all().order_by("display_order", "-published_at"),
@@ -1391,6 +1393,7 @@ def website_content_view(request):
         "site":         SiteSetting.get(),
         "topics":       ContactTopic.objects.all(),
         "articles":     Article.objects.all().order_by("-created_at")[:20],
+        "backlog_items": backlog_qs,
         "active_tab":   request.GET.get("tab", "home"),
     })
 
