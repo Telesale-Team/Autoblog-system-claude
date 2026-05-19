@@ -453,31 +453,20 @@
 
 /* ── [list-view] FullCalendar List View — Premium Day Header ─────────── */
 
-/* Day header — subtle navy gradient (ไม่ใช้ solid เพราะดูหนักเกิน) */
+/* Day header — Navy solid ตาม Theme */
 .fc .fc-list-day-cushion {
-  background: linear-gradient(
-    90deg,
-    rgba(26,39,68,.72) 0%,
-    rgba(26,39,68,.42) 60%,
-    rgba(26,39,68,.18) 100%
-  ) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border-top: 1px solid rgba(201,169,110,.28) !important;
-  border-bottom: 1px solid rgba(201,169,110,.1) !important;
+  background: #1a2744 !important;
+  border-top: none !important;
+  border-bottom: 1px solid rgba(201,169,110,.2) !important;
   padding: .55rem .9rem !important;
 }
 
-/* Light mode — ลด Navy ให้อ่านได้บน bg ขาว */
-[data-bs-theme="light"] .fc .fc-list-day-cushion {
-  background: linear-gradient(
-    90deg,
-    rgba(26,39,68,.08) 0%,
-    rgba(26,39,68,.03) 60%,
-    transparent 100%
-  ) !important;
-  border-top-color: rgba(26,39,68,.18) !important;
-  border-bottom-color: rgba(26,39,68,.08) !important;
+/* Event rows — ไม่มี background */
+.fc .fc-list-event td {
+  background: transparent !important;
+}
+.fc .fc-list-event:hover td {
+  background: rgba(201,169,110,.06) !important;
 }
 
 /* วันที่ + ชื่อเดือน */
