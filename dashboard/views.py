@@ -1377,12 +1377,13 @@ def api_calendar_event_detail(request, pk):
 
 @staff_member_required
 def website_content_view(request):
-    from pages.models import Service, SiteSetting, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
+    from pages.models import Service, SiteSetting, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     from portfolio.models import CaseStudy
     from blog.models import Article
     return render(request, "dashboard/website_content.html", {
         "services":     Service.objects.all().order_by("display_order"),
         "portfolio":    CaseStudy.objects.all().order_by("display_order", "-published_at"),
+        "about_page":   AboutPage.get(),
         "stats":        AboutStat.objects.all(),
         "values":       AboutValue.objects.all(),
         "checkpoints":  AboutCheckpoint.objects.all(),
@@ -1424,6 +1425,23 @@ def website_article_toggle(request, pk):
     art.status = "draft" if art.status == "published" else "published"
     art.save()
     return JsonResponse({"status": art.status})
+
+
+@staff_member_required
+@require_POST
+def website_aboutpage_save(request):
+    from pages.models import AboutPage
+    obj = AboutPage.get()
+    obj.hero_title      = request.POST.get("hero_title", obj.hero_title).strip()
+    obj.hero_lead       = request.POST.get("hero_lead", obj.hero_lead).strip()
+    obj.mission_title   = request.POST.get("mission_title", obj.mission_title).strip()
+    obj.mission_body    = request.POST.get("mission_body", obj.mission_body).strip()
+    obj.cta_title       = request.POST.get("cta_title", obj.cta_title).strip()
+    obj.cta_subtitle    = request.POST.get("cta_subtitle", obj.cta_subtitle).strip()
+    obj.cta_button_text = request.POST.get("cta_button_text", obj.cta_button_text).strip()
+    obj.save()
+    messages.success(request, "บันทึกเนื้อหาหน้า About แล้ว")
+    return redirect("/owner/website-content/?tab=about")
 
 
 @staff_member_required

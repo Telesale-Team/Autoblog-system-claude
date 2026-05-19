@@ -446,6 +446,68 @@
     </div>
   </div>
 
+  <!-- Hero + Mission + CTA -->
+  <div class="scard mb-4">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-file-text-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">เนื้อหาหน้า About</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Hero, Mission และ CTA section</div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <form method="post" action="{% url 'dashboard:website_aboutpage_save' %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-12">
+            <p class="mb-1" style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--app-primary);">Hero Section</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Hero Title</label>
+            <input type="text" name="hero_title" value="{{ about_page.hero_title }}" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Hero Lead (ข้อความใต้ title)</label>
+            <textarea name="hero_lead" class="form-control" rows="2">{{ about_page.hero_lead }}</textarea>
+          </div>
+          <div class="col-12 mt-2">
+            <p class="mb-1" style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--app-primary);">Mission Section</p>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Mission Title</label>
+            <input type="text" name="mission_title" value="{{ about_page.mission_title }}" class="form-control">
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Mission Body</label>
+            <textarea name="mission_body" class="form-control" rows="3">{{ about_page.mission_body }}</textarea>
+          </div>
+          <div class="col-12 mt-2">
+            <p class="mb-1" style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--app-primary);">CTA Section</p>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">CTA Title</label>
+            <input type="text" name="cta_title" value="{{ about_page.cta_title }}" class="form-control">
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">CTA Subtitle</label>
+            <textarea name="cta_subtitle" class="form-control" rows="2">{{ about_page.cta_subtitle }}</textarea>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Button Text</label>
+            <input type="text" name="cta_button_text" value="{{ about_page.cta_button_text }}" class="form-control">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-wc-primary">
+              <i class="bi bi-check-lg"></i> บันทึกเนื้อหา About
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Mission Checkpoints -->
   <div class="scard mb-4">
     <div class="scard-header">

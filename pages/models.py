@@ -57,6 +57,41 @@ class AboutValue(models.Model):
         return self.title
 
 
+class AboutPage(models.Model):
+    # Hero
+    hero_title      = models.CharField("Hero Title", max_length=200,
+                                        default="เราเปลี่ยนธุรกิจ SME ไทย ด้วย AI ที่ใช้งานได้จริง")
+    hero_lead       = models.TextField("Hero Lead (ข้อความใต้ title)",
+                                        default="ไม่ใช่แค่เครื่องมือ — แต่คือพาร์ทเนอร์ที่เข้าใจธุรกิจของคุณ ออกแบบระบบ AI ที่วัดผลได้ ลดต้นทุนได้จริง เริ่มได้เร็ว")
+    # Mission
+    mission_title   = models.CharField("Mission Title", max_length=200,
+                                        default="ทำไมต้อง AIBiz Thailand?")
+    mission_body    = models.TextField("Mission Body (ย่อหน้า)",
+                                        default="SME ไทยส่วนใหญ่ยังขาดความรู้และทรัพยากรในการนำ AI มาใช้งานจริง เราจึงเป็นสะพานเชื่อมระหว่างเทคโนโลยี AI และธุรกิจของคุณ โดยเราไม่ได้แค่ขายโซลูชัน แต่ทำความเข้าใจ Process จริงของธุรกิจคุณก่อน แล้วออกแบบ AI ที่ตอบโจทย์จริงๆ วัดผลได้จริงๆ")
+    # CTA
+    cta_title       = models.CharField("CTA Title", max_length=200,
+                                        default="พร้อมเปลี่ยนธุรกิจของคุณด้วย AI หรือยัง?")
+    cta_subtitle    = models.TextField("CTA Subtitle",
+                                        default="ปรึกษาฟรี ไม่มีข้อผูกมัด เราจะช่วยวิเคราะห์ว่า AI จะช่วยธุรกิจของคุณได้อย่างไร และควรเริ่มจากตรงไหนก่อน")
+    cta_button_text = models.CharField("CTA Button Text", max_length=60, default="ปรึกษาฟรีเลย")
+
+    class Meta:
+        verbose_name = "เนื้อหาหน้า About"
+        verbose_name_plural = "เนื้อหาหน้า About"
+
+    def __str__(self):
+        return "เนื้อหาหน้า About"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
 class AboutCheckpoint(models.Model):
     icon        = models.CharField("Bootstrap Icon", max_length=60, default="bi-check-circle",
                                    help_text="เช่น bi-graph-up-arrow, bi-people-fill")

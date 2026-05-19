@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ContactLead, Service, SiteSetting, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
+from .models import ContactLead, Service, SiteSetting, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
 
 
 @admin.register(Service)
@@ -46,6 +46,23 @@ class SiteSettingAdmin(admin.ModelAdmin):
         obj, _ = SiteSetting.objects.get_or_create(pk=1)
         from django.shortcuts import redirect
         return redirect(f"/admin/pages/sitesetting/{obj.pk}/change/")
+
+
+@admin.register(AboutPage)
+class AboutPageAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ("Hero Section", {"fields": ("hero_title", "hero_lead")}),
+        ("Mission Section", {"fields": ("mission_title", "mission_body")}),
+        ("CTA Section", {"fields": ("cta_title", "cta_subtitle", "cta_button_text")}),
+    )
+    def has_add_permission(self, request):
+        return not AboutPage.objects.exists()
+    def has_delete_permission(self, request, obj=None):
+        return False
+    def changelist_view(self, request, extra_context=None):
+        obj, _ = AboutPage.objects.get_or_create(pk=1)
+        from django.shortcuts import redirect
+        return redirect(f"/admin/pages/aboutpage/{obj.pk}/change/")
 
 
 @admin.register(AboutStat)

@@ -342,14 +342,8 @@
 
         <div class="col-lg-7">
           <span class="about-hero__eyebrow">เกี่ยวกับ AIBiz Thailand</span>
-          <h1 class="about-hero__title">
-            เราเปลี่ยนธุรกิจ SME ไทย<br>
-            ด้วย <span>AI ที่ใช้งานได้จริง</span>
-          </h1>
-          <p class="about-hero__lead mb-0">
-            ไม่ใช่แค่เครื่องมือ — แต่คือพาร์ทเนอร์ที่เข้าใจธุรกิจของคุณ
-            ออกแบบระบบ AI ที่วัดผลได้ ลดต้นทุนได้จริง เริ่มได้เร็ว
-          </p>
+          <h1 class="about-hero__title">{{ about.hero_title }}</h1>
+          <p class="about-hero__lead mb-0">{{ about.hero_lead }}</p>
         </div>
 
         <div class="col-lg-5">
@@ -394,13 +388,10 @@
             <span class="section-line"></span>Mission ของเรา
           </span>
           <h2 class="fw-bold text-white mb-3" style="font-size:clamp(1.6rem,3.5vw,2.4rem)">
-            ทำไมต้อง <span class="text-gold">AIBiz Thailand?</span>
+            {{ about.mission_title }}
           </h2>
           <p style="color:rgba(255,255,255,.65); line-height:1.8;" class="mb-4">
-            SME ไทยส่วนใหญ่ยังขาดความรู้และทรัพยากรในการนำ AI มาใช้งานจริง
-            เราจึงเป็นสะพานเชื่อมระหว่างเทคโนโลยี AI และธุรกิจของคุณ
-            โดยเราไม่ได้แค่ขายโซลูชัน แต่ทำความเข้าใจ Process จริงของธุรกิจคุณก่อน
-            แล้วออกแบบ AI ที่ตอบโจทย์จริงๆ วัดผลได้จริงๆ
+            {{ about.mission_body }}
           </p>
 
           <div class="d-flex flex-column gap-3">
@@ -531,15 +522,12 @@
           <span class="section-eyebrow mb-3 d-block">
             <span class="section-line"></span>เริ่มต้นวันนี้
           </span>
-          <h2 class="mb-3">พร้อมเปลี่ยนธุรกิจของคุณ<br>ด้วย AI หรือยัง?</h2>
-          <p class="mb-5">
-            ปรึกษาฟรี ไม่มีข้อผูกมัด เราจะช่วยวิเคราะห์ว่า AI
-            จะช่วยธุรกิจของคุณได้อย่างไร และควรเริ่มจากตรงไหนก่อน
-          </p>
+          <h2 class="mb-3">{{ about.cta_title }}</h2>
+          <p class="mb-5">{{ about.cta_subtitle }}</p>
           <div class="d-flex flex-wrap gap-3 justify-content-center">
             <a href="{% url 'pages:contact' %}" class="btn-gold">
               <i class="bi bi-chat-text-fill"></i>
-              ปรึกษาฟรีเลย
+              {{ about.cta_button_text }}
             </a>
             <a href="{% url 'pages:services' %}" class="btn-outline-gold">
               <i class="bi bi-grid-3x3-gap-fill"></i>
