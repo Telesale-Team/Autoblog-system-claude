@@ -451,16 +451,91 @@
 
 /* ── [filter-tabs] → ใช้ .filter-btn จาก dashboard-base.css แทน ──── */
 
-/* ── List view — day header background = Navy ───────────────────────── */
-.fc-list-day-cushion,
+/* ── [list-view] FullCalendar List View — Premium Day Header ─────────── */
+
+/* Day header — subtle navy gradient (ไม่ใช้ solid เพราะดูหนักเกิน) */
 .fc .fc-list-day-cushion {
-  background: #1a2744 !important;
-  color: var(--app-primary, #c9a96e) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(26,39,68,.72) 0%,
+    rgba(26,39,68,.42) 60%,
+    rgba(26,39,68,.18) 100%
+  ) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-top: 1px solid rgba(201,169,110,.28) !important;
+  border-bottom: 1px solid rgba(201,169,110,.1) !important;
+  padding: .55rem .9rem !important;
 }
-.fc-list-day-text,
-.fc-list-day-side-text {
-  color: var(--app-primary, #c9a96e) !important;
+
+/* Light mode — ลด Navy ให้อ่านได้บน bg ขาว */
+[data-bs-theme="light"] .fc .fc-list-day-cushion {
+  background: linear-gradient(
+    90deg,
+    rgba(26,39,68,.08) 0%,
+    rgba(26,39,68,.03) 60%,
+    transparent 100%
+  ) !important;
+  border-top-color: rgba(26,39,68,.18) !important;
+  border-bottom-color: rgba(26,39,68,.08) !important;
+}
+
+/* วันที่ + ชื่อเดือน */
+.fc .fc-list-day-text {
+  font-size: .8rem;
   font-weight: 700;
+  color: var(--app-primary, #c9a96e) !important;
+  letter-spacing: .02em;
+  text-decoration: none !important;
+}
+.fc .fc-list-day-text:hover { color: var(--app-secondary, #b8924f) !important; }
+
+/* วันในสัปดาห์ — ลำดับชั้นรอง */
+.fc .fc-list-day-side-text {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(201,169,110,.6) !important;
+  text-decoration: none !important;
+}
+[data-bs-theme="light"] .fc .fc-list-day-side-text {
+  color: rgba(26,39,68,.45) !important;
+}
+
+/* ตาราง list */
+.fc .fc-list-table { border-collapse: separate !important; border-spacing: 0 !important; }
+.fc .fc-list-table td,
+.fc .fc-list-table th { border-color: rgba(201,169,110,.08) !important; }
+
+/* Event row */
+.fc .fc-list-event td { padding: .5rem .9rem !important; background: transparent !important; transition: background .12s; }
+.fc .fc-list-event:hover td { background: rgba(201,169,110,.055) !important; }
+
+/* Event time */
+.fc .fc-list-event-time {
+  font-size: .72rem; font-weight: 600;
+  color: var(--bs-secondary-color) !important;
+  white-space: nowrap; width: 4.5rem; padding-right: .5rem !important;
+}
+
+/* Event dot */
+.fc .fc-list-event-dot { border-width: 5px !important; }
+
+/* Event title */
+.fc .fc-list-event-title a {
+  font-size: .85rem; font-weight: 500;
+  color: var(--bs-body-color) !important;
+  text-decoration: none !important; transition: color .12s;
+}
+.fc .fc-list-event:hover .fc-list-event-title a { color: var(--app-primary, #c9a96e) !important; }
+
+/* Empty state */
+.fc .fc-list-empty { background: transparent !important; }
+.fc .fc-list-empty-cushion {
+  font-size: .85rem;
+  color: var(--bs-secondary-color) !important;
+  font-style: normal !important; /* Sarabun no-italic */
 }
 
 /* wrapper row: filter tabs (flex:1) + toggle recurring button (right) */
