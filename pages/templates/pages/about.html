@@ -404,34 +404,15 @@
           </p>
 
           <div class="d-flex flex-column gap-3">
+            {% for cp in checkpoints %}
             <div class="checkpoint-item">
-              <div class="checkpoint-icon"><i class="bi bi-graph-up-arrow"></i></div>
+              <div class="checkpoint-icon"><i class="bi {{ cp.icon }}"></i></div>
               <div class="checkpoint-text">
-                <strong>ประสบการณ์จริงมากกว่า 3 ปี</strong>
-                <small>ผ่านงาน AI Automation หลากหลายอุตสาหกรรมในไทย</small>
+                <strong>{{ cp.title }}</strong>
+                <small>{{ cp.description }}</small>
               </div>
             </div>
-            <div class="checkpoint-item">
-              <div class="checkpoint-icon"><i class="bi bi-people-fill"></i></div>
-              <div class="checkpoint-text">
-                <strong>ลูกค้า SME ที่ใช้ระบบจริงมากกว่า 20 ราย</strong>
-                <small>ตั้งแต่ร้านอาหาร ไปจนถึงบริษัทผลิตชิ้นส่วนอุตสาหกรรม</small>
-              </div>
-            </div>
-            <div class="checkpoint-item">
-              <div class="checkpoint-icon"><i class="bi bi-currency-dollar"></i></div>
-              <div class="checkpoint-text">
-                <strong>ลดต้นทุน Manual Operation เฉลี่ย 60-80%</strong>
-                <small>วัดเป็นตัวเลขได้จริง ไม่ใช่แค่ประมาณการ</small>
-              </div>
-            </div>
-            <div class="checkpoint-item">
-              <div class="checkpoint-icon"><i class="bi bi-headset"></i></div>
-              <div class="checkpoint-text">
-                <strong>Support ภาษาไทย ตอบกลับภายใน 24 ชั่วโมง</strong>
-                <small>ทีม Support พร้อมดูแลหลัง Go-Live ทุกโปรเจกต์</small>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
 
@@ -459,75 +440,24 @@
       </div>
 
       <div class="row g-4">
-
-        <!-- Card 1 -->
+        {% for exp in expertise %}
         <div class="col-sm-6 col-xl-3">
           <div class="expertise-card">
             <div class="expertise-icon-wrap">
-              <i class="bi bi-chat-dots-fill"></i>
+              <i class="bi {{ exp.icon }}"></i>
             </div>
-            <h5>AI Chatbot</h5>
-            <p>ระบบ Chatbot อัจฉริยะสำหรับ Line, Facebook, Website และ Internal Tools ที่เข้าใจภาษาไทยและตอบได้เป็นธรรมชาติ</p>
+            <h5>{{ exp.title }}</h5>
+            <p>{{ exp.description }}</p>
+            {% if exp.tags %}
             <div>
-              <span class="expertise-tag">Line OA</span>
-              <span class="expertise-tag">Facebook</span>
-              <span class="expertise-tag">WhatsApp</span>
-              <span class="expertise-tag">Web Widget</span>
+              {% for tag in exp.tag_list %}
+              <span class="expertise-tag">{{ tag }}</span>
+              {% endfor %}
             </div>
+            {% endif %}
           </div>
         </div>
-
-        <!-- Card 2 -->
-        <div class="col-sm-6 col-xl-3">
-          <div class="expertise-card">
-            <div class="expertise-icon-wrap">
-              <i class="bi bi-cpu-fill"></i>
-            </div>
-            <h5>Custom AI Agent</h5>
-            <p>สร้าง AI Agent เฉพาะทางด้วย RAG, Fine-tuning และ Multi-agent Systems ที่เรียนรู้จาก Knowledge Base ของธุรกิจคุณ</p>
-            <div>
-              <span class="expertise-tag">RAG</span>
-              <span class="expertise-tag">Fine-tuning</span>
-              <span class="expertise-tag">Multi-agent</span>
-              <span class="expertise-tag">Knowledge Base</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="col-sm-6 col-xl-3">
-          <div class="expertise-card">
-            <div class="expertise-icon-wrap">
-              <i class="bi bi-gear-wide-connected"></i>
-            </div>
-            <h5>Workflow Automation</h5>
-            <p>เชื่อมต่อระบบต่างๆ ด้วย n8n, Zapier และ API Integration รวมถึงเชื่อมกับ ERP/CRM ที่ใช้งานอยู่แล้ว</p>
-            <div>
-              <span class="expertise-tag">n8n</span>
-              <span class="expertise-tag">Zapier</span>
-              <span class="expertise-tag">API</span>
-              <span class="expertise-tag">ERP/CRM</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="col-sm-6 col-xl-3">
-          <div class="expertise-card">
-            <div class="expertise-icon-wrap">
-              <i class="bi bi-hdd-network-fill"></i>
-            </div>
-            <h5>AI + Hardware</h5>
-            <p>ผสานซอฟต์แวร์ AI เข้ากับฮาร์ดแวร์จริง ด้วย Computer Vision, IoT Sensors และ Edge AI สำหรับโรงงานและคลังสินค้า</p>
-            <div>
-              <span class="expertise-tag">Computer Vision</span>
-              <span class="expertise-tag">IoT</span>
-              <span class="expertise-tag">Edge AI</span>
-              <span class="expertise-tag">Raspberry Pi</span>
-            </div>
-          </div>
-        </div>
-
+        {% endfor %}
       </div>
     </div>
   </section>

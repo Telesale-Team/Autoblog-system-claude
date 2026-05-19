@@ -35,10 +35,12 @@ def home(request):
 
 
 def about(request):
-    from .models import AboutStat, AboutValue
+    from .models import AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     return render(request, "pages/about.html", {
-        "stats":  AboutStat.objects.all(),
-        "values": AboutValue.objects.all(),
+        "stats":       AboutStat.objects.all(),
+        "values":      AboutValue.objects.all(),
+        "checkpoints": AboutCheckpoint.objects.all(),
+        "expertise":   AboutExpertise.objects.all(),
     })
 
 

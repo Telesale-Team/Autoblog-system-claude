@@ -446,6 +446,83 @@
     </div>
   </div>
 
+  <!-- Mission Checkpoints -->
+  <div class="scard mb-4">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Mission Checkpoints</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">จุดเด่น 4 ข้อใน Mission section</div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <div class="value-edit-grid">
+        {% for cp in checkpoints %}
+        <form method="post" action="{% url 'dashboard:website_checkpoint_save' cp.pk %}">
+          {% csrf_token %}
+          <div class="value-edit-card">
+            <div class="value-icon-preview" id="cp-preview-{{ cp.pk }}">
+              <i class="bi {{ cp.icon }}"></i>
+            </div>
+            <label class="field-label">Bootstrap Icon</label>
+            <input type="text" name="icon" value="{{ cp.icon }}" class="form-control mb-2"
+                   oninput="document.getElementById('cp-preview-{{ cp.pk }}').innerHTML='<i class=\'bi \'+this.value+\'\'></i>'">
+            <label class="field-label">หัวข้อ</label>
+            <input type="text" name="title" value="{{ cp.title }}" class="form-control mb-2">
+            <label class="field-label">คำอธิบาย</label>
+            <input type="text" name="description" value="{{ cp.description }}" class="form-control mb-3">
+            <button type="submit" class="btn-wc-primary w-100">
+              <i class="bi bi-check-lg"></i> บันทึก
+            </button>
+          </div>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Expertise Cards -->
+  <div class="scard mb-4">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-stars"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">ความเชี่ยวชาญ</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">4 ด้านที่เราเชี่ยวชาญ + Tags</div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <div class="value-edit-grid">
+        {% for exp in expertise %}
+        <form method="post" action="{% url 'dashboard:website_expertise_save' exp.pk %}">
+          {% csrf_token %}
+          <div class="value-edit-card">
+            <div class="value-icon-preview" id="exp-preview-{{ exp.pk }}">
+              <i class="bi {{ exp.icon }}"></i>
+            </div>
+            <label class="field-label">Bootstrap Icon</label>
+            <input type="text" name="icon" value="{{ exp.icon }}" class="form-control mb-2"
+                   oninput="document.getElementById('exp-preview-{{ exp.pk }}').innerHTML='<i class=\'bi \'+this.value+\'\'></i>'">
+            <label class="field-label">ชื่อความเชี่ยวชาญ</label>
+            <input type="text" name="title" value="{{ exp.title }}" class="form-control mb-2">
+            <label class="field-label">รายละเอียด</label>
+            <textarea name="description" class="form-control mb-2" rows="2">{{ exp.description }}</textarea>
+            <label class="field-label">Tags <small class="text-muted">(คั่นด้วยจุลภาค)</small></label>
+            <input type="text" name="tags" value="{{ exp.tags }}" class="form-control mb-3"
+                   placeholder="เช่น Line OA, Facebook, WhatsApp">
+            <button type="submit" class="btn-wc-primary w-100">
+              <i class="bi bi-check-lg"></i> บันทึก
+            </button>
+          </div>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
   <!-- ค่านิยม -->
   <div class="scard">
     <div class="scard-header">

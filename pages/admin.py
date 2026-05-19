@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ContactLead, Service, SiteSetting, AboutStat, AboutValue
+from .models import ContactLead, Service, SiteSetting, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
 
 
 @admin.register(Service)
@@ -56,6 +56,18 @@ class AboutStatAdmin(admin.ModelAdmin):
 
 @admin.register(AboutValue)
 class AboutValueAdmin(admin.ModelAdmin):
+    list_display = ("title", "icon", "order")
+    list_editable = ("order",)
+
+
+@admin.register(AboutCheckpoint)
+class AboutCheckpointAdmin(admin.ModelAdmin):
+    list_display = ("title", "icon", "order")
+    list_editable = ("order",)
+
+
+@admin.register(AboutExpertise)
+class AboutExpertiseAdmin(admin.ModelAdmin):
     list_display = ("title", "icon", "order")
     list_editable = ("order",)
 

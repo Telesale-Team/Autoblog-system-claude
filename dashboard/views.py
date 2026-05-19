@@ -1377,17 +1377,19 @@ def api_calendar_event_detail(request, pk):
 
 @staff_member_required
 def website_content_view(request):
-    from pages.models import Service, SiteSetting, AboutStat, AboutValue
+    from pages.models import Service, SiteSetting, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     from portfolio.models import CaseStudy
     from blog.models import Article
     return render(request, "dashboard/website_content.html", {
-        "services":   Service.objects.all().order_by("display_order"),
-        "portfolio":  CaseStudy.objects.all().order_by("display_order", "-published_at"),
-        "stats":      AboutStat.objects.all(),
-        "values":     AboutValue.objects.all(),
-        "site":       SiteSetting.get(),
-        "articles":   Article.objects.all().order_by("-created_at")[:20],
-        "active_tab": request.GET.get("tab", "home"),
+        "services":     Service.objects.all().order_by("display_order"),
+        "portfolio":    CaseStudy.objects.all().order_by("display_order", "-published_at"),
+        "stats":        AboutStat.objects.all(),
+        "values":       AboutValue.objects.all(),
+        "checkpoints":  AboutCheckpoint.objects.all(),
+        "expertise":    AboutExpertise.objects.all(),
+        "site":         SiteSetting.get(),
+        "articles":     Article.objects.all().order_by("-created_at")[:20],
+        "active_tab":   request.GET.get("tab", "home"),
     })
 
 
@@ -1422,6 +1424,35 @@ def website_article_toggle(request, pk):
     art.status = "draft" if art.status == "published" else "published"
     art.save()
     return JsonResponse({"status": art.status})
+
+
+@staff_member_required
+@require_POST
+def website_checkpoint_save(request, pk):
+    from pages.models import AboutCheckpoint
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(AboutCheckpoint, pk=pk)
+    obj.icon        = request.POST.get("icon", obj.icon).strip()
+    obj.title       = request.POST.get("title", obj.title).strip()
+    obj.description = request.POST.get("description", obj.description).strip()
+    obj.save()
+    messages.success(request, f'บันทึก "{obj.title}" แล้ว')
+    return redirect("/owner/website-content/?tab=about")
+
+
+@staff_member_required
+@require_POST
+def website_expertise_save(request, pk):
+    from pages.models import AboutExpertise
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(AboutExpertise, pk=pk)
+    obj.icon        = request.POST.get("icon", obj.icon).strip()
+    obj.title       = request.POST.get("title", obj.title).strip()
+    obj.description = request.POST.get("description", obj.description).strip()
+    obj.tags        = request.POST.get("tags", obj.tags).strip()
+    obj.save()
+    messages.success(request, f'บันทึก "{obj.title}" แล้ว')
+    return redirect("/owner/website-content/?tab=about")
 
 
 @staff_member_required

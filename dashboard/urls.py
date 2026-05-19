@@ -65,7 +65,9 @@ urlpatterns = [
     path("website-content/service/<int:pk>/toggle/",  views.website_service_toggle,  name="website_service_toggle"),
     path("website-content/article/<int:pk>/toggle/",  views.website_article_toggle,  name="website_article_toggle"),
     path("website-content/portfolio/<int:pk>/toggle/",views.website_portfolio_toggle,name="website_portfolio_toggle"),
-    path("website-content/stats/save/",              views.website_stats_save,      name="website_stats_save"),
+    path("website-content/stats/save/",               views.website_stats_save,       name="website_stats_save"),
+    path("website-content/checkpoint/<int:pk>/save/", views.website_checkpoint_save,  name="website_checkpoint_save"),
+    path("website-content/expertise/<int:pk>/save/",  views.website_expertise_save,   name="website_expertise_save"),
     path("website-content/value/<int:pk>/save/",     views.website_value_save,      name="website_value_save"),
     path("website-content/contact/save/",            views.website_contact_save,    name="website_contact_save"),
 ]

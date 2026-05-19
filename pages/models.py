@@ -57,6 +57,43 @@ class AboutValue(models.Model):
         return self.title
 
 
+class AboutCheckpoint(models.Model):
+    icon        = models.CharField("Bootstrap Icon", max_length=60, default="bi-check-circle",
+                                   help_text="เช่น bi-graph-up-arrow, bi-people-fill")
+    title       = models.CharField("หัวข้อ", max_length=120)
+    description = models.CharField("คำอธิบายย่อ", max_length=200)
+    order       = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Mission Checkpoint (About)"
+        verbose_name_plural = "Mission Checkpoints (About)"
+
+    def __str__(self):
+        return self.title
+
+
+class AboutExpertise(models.Model):
+    icon        = models.CharField("Bootstrap Icon", max_length=60, default="bi-stars",
+                                   help_text="เช่น bi-chat-dots-fill, bi-cpu-fill")
+    title       = models.CharField("ชื่อความเชี่ยวชาญ", max_length=100)
+    description = models.TextField("รายละเอียด")
+    tags        = models.CharField("Tags (คั่นด้วยจุลภาค)", max_length=200, blank=True,
+                                   help_text="เช่น Line OA, Facebook, WhatsApp")
+    order       = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "ความเชี่ยวชาญ (About)"
+        verbose_name_plural = "ความเชี่ยวชาญ (About)"
+
+    def __str__(self):
+        return self.title
+
+    def tag_list(self):
+        return [t.strip() for t in self.tags.split(",") if t.strip()]
+
+
 class Service(models.Model):
     name = models.CharField("ชื่อบริการ", max_length=100)
     slug = models.SlugField(max_length=120, unique=True)
