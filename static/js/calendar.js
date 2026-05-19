@@ -693,12 +693,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   /* ── [10] Filter Tabs ─────────────────────────────────────────────
-     กดที่ .cal-filter-tab → เปลี่ยน activeFilter → cal.refetchEvents()
+     กดที่ .filter-btn → เปลี่ยน activeFilter → cal.refetchEvents()
      FullCalendar จะเรียก eventSources ทั้งสองใหม่อีกครั้ง               */
   document.getElementById('legendBar').addEventListener('click', function (e) {
-    const item = e.target.closest('.cal-filter-tab');
+    const item = e.target.closest('.filter-btn');
     if (!item) return;
-    document.querySelectorAll('.cal-filter-tab').forEach(function (el) { el.classList.remove('active'); });
+    document.querySelectorAll('#legendBar .filter-btn').forEach(function (el) { el.classList.remove('active'); });
     item.classList.add('active');
     activeFilter = item.dataset.filter;
     cal.refetchEvents();
