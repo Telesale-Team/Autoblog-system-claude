@@ -588,35 +588,41 @@ document.addEventListener('DOMContentLoaded', function () {
   var DAY_MAX = 4;
   function applyDayCollapse() {
     if (currentViewType !== 'dayGridMonth') return;
-    /* ลบปุ่มเก่าออกก่อน */
-    document.querySelectorAll('#calendar .fc-day-collapse-btn').forEach(function(el) { el.remove(); });
 
     document.querySelectorAll('#calendar .fc-daygrid-day').forEach(function(cell) {
       var events = cell.querySelectorAll('.fc-daygrid-event-harness');
-      if (events.length <= DAY_MAX) {
-        /* reset เผื่อ expand แล้วมา collapse ใหม่ */
-        events.forEach(function(e) { e.style.display = ''; });
-        cell.dataset.dayExpanded = '';
-        return;
-      }
-      var extra = events.length - DAY_MAX;
-      /* ซ่อน events เกิน DAY_MAX */
-      events.forEach(function(e, i) { e.style.display = i >= DAY_MAX ? 'none' : ''; });
+      if (events.length <= DAY_MAX) return;
 
-      /* สร้างปุ่ม collapse */
-      var btn = document.createElement('div');
-      btn.className = 'fc-day-collapse-btn';
-      btn.innerHTML = '+ ' + extra + ' เพิ่มเติม ▼';
-      btn.style.cssText = 'font-size:.68rem;font-weight:700;color:var(--app-primary);background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:.25rem;padding:.1rem .4rem;cursor:pointer;margin:.1rem .25rem;display:inline-block;';
-      cell.querySelector('.fc-daygrid-day-events').appendChild(btn);
+      var extra    = events.length - DAY_MAX;
+      var expanded = cell.dataset.dayExpanded === '1';
 
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var expanded = cell.dataset.dayExpanded === '1';
-        events.forEach(function(ev, i) { ev.style.display = (expanded && i >= DAY_MAX) ? 'none' : ''; });
-        cell.dataset.dayExpanded = expanded ? '' : '1';
-        btn.innerHTML = expanded ? ('+ ' + extra + ' เพิ่มเติม ▼') : '▲ ย่อ';
+      /* apply ซ่อน/แสดงตาม state ปัจจุบัน */
+      events.forEach(function(e, i) {
+        e.style.display = (!expanded && i >= DAY_MAX) ? 'none' : '';
       });
+
+      /* ถ้ายังไม่มีปุ่ม ให้สร้างใหม่ */
+      if (!cell.querySelector('.fc-day-collapse-btn')) {
+        var btn = document.createElement('div');
+        btn.className = 'fc-day-collapse-btn';
+        btn.innerHTML = expanded ? '▲ ย่อ' : '+ ' + extra + ' เพิ่มเติม ▼';
+        btn.style.cssText = 'font-size:.68rem;font-weight:700;color:var(--app-primary);background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:.25rem;padding:.1rem .4rem;cursor:pointer;margin:.1rem .25rem;display:inline-block;';
+        cell.querySelector('.fc-daygrid-day-events').appendChild(btn);
+
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isExpanded = cell.dataset.dayExpanded === '1';
+          events.forEach(function(ev, i) {
+            ev.style.display = (isExpanded && i >= DAY_MAX) ? 'none' : '';
+          });
+          cell.dataset.dayExpanded = isExpanded ? '' : '1';
+          btn.innerHTML = isExpanded ? ('+ ' + extra + ' เพิ่มเติม ▼') : '▲ ย่อ';
+        });
+      } else {
+        /* อัปเดตข้อความปุ่มให้ตรงกับ state */
+        var existBtn = cell.querySelector('.fc-day-collapse-btn');
+        existBtn.innerHTML = expanded ? '▲ ย่อ' : '+ ' + extra + ' เพิ่มเติม ▼';
+      }
     });
   }
 
