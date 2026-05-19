@@ -166,8 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return (a.start || 0) - (b.start || 0);        /* เรียงตามเวลา */
     },
 
-    dayMaxEvents:  5,
-    moreLinkText:  function (n) { return '+ อีก ' + n + ' งาน'; },
+    dayMaxEvents:  true,
 
     eventSources: [
 
