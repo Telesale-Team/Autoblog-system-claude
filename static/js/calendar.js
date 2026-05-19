@@ -666,15 +666,33 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   /* ── [10] Filter Tabs ─────────────────────────────────────────────
-     กดที่ .filter-btn → เปลี่ยน activeFilter → cal.refetchEvents()
-     FullCalendar จะเรียก eventSources ทั้งสองใหม่อีกครั้ง               */
+     ใช้ event.setProp('display') แทน refetchEvents()
+     เพราะ refetchEvents กับ function-based source ใน FC6 มีปัญหา cache */
+  function applyFilter() {
+    cal.getEvents().forEach(function (event) {
+      const props       = event.extendedProps || {};
+      const isCompleted = !!props.isCompleted;
+      const cat         = props.category || 'general';
+
+      var show;
+      if (activeFilter === 'all') {
+        show = true;
+      } else if (activeFilter === 'done') {
+        show = isCompleted;
+      } else {
+        show = cat === activeFilter;
+      }
+      event.setProp('display', show ? 'auto' : 'none');
+    });
+  }
+
   document.getElementById('legendBar').addEventListener('click', function (e) {
     const item = e.target.closest('.filter-btn');
     if (!item) return;
     document.querySelectorAll('#legendBar .filter-btn').forEach(function (el) { el.classList.remove('active'); });
     item.classList.add('active');
     activeFilter = item.dataset.filter;
-    cal.refetchEvents();
+    applyFilter();
   });
 
 

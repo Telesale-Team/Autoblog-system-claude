@@ -153,8 +153,8 @@
           <i class="bi bi-plus-lg"></i>
         </button>
       </div>
-      <div class="scard-body" style="padding:.5rem;">
-        <div id="notesList">
+      <div class="scard-body" style="padding:0;">
+        <div class="notes-list" id="notesList">
           {% for note in notes %}
           <div class="note-card note-color-{{ note.color }}" data-id="{{ note.pk }}"
                data-title="{{ note.title }}"
