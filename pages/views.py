@@ -35,7 +35,11 @@ def home(request):
 
 
 def about(request):
-    return render(request, "pages/about.html")
+    from .models import AboutStat, AboutValue
+    return render(request, "pages/about.html", {
+        "stats":  AboutStat.objects.all(),
+        "values": AboutValue.objects.all(),
+    })
 
 
 def services(request):
@@ -84,6 +88,8 @@ def service_detail(request, slug):
 
 
 def contact(request):
+    from .models import SiteSetting
+    site = SiteSetting.get()
     if request.method == "POST":
         data = request.POST.copy()
         if not data.get("email") or data["email"] == "no-email@aibizth.ai":
@@ -112,4 +118,4 @@ def contact(request):
             return redirect("pages:contact")
     else:
         form = ContactForm()
-    return render(request, "pages/contact.html", {"form": form})
+    return render(request, "pages/contact.html", {"form": form, "site": site})

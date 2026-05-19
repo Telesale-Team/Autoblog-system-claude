@@ -4,6 +4,59 @@ from django.utils import timezone
 from datetime import timedelta
 
 
+class SiteSetting(models.Model):
+    contact_email  = models.EmailField("อีเมลติดต่อ", default="dphoompat.pjs@gmail.com")
+    line_id        = models.CharField("LINE ID", max_length=100, default="@aibizthailand")
+    phone          = models.CharField("เบอร์โทร", max_length=30, blank=True)
+    business_hours = models.CharField("เวลาทำการ", max_length=100, default="จ–ศ 09:00–18:00")
+
+    class Meta:
+        verbose_name = "ตั้งค่าเว็บไซต์"
+        verbose_name_plural = "ตั้งค่าเว็บไซต์"
+
+    def __str__(self):
+        return "ตั้งค่าเว็บไซต์"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class AboutStat(models.Model):
+    number = models.CharField("ตัวเลข", max_length=20, help_text="เช่น 20+, 3 ปี+")
+    label  = models.CharField("คำอธิบาย", max_length=60, help_text="เช่น ลูกค้า SME ที่ใช้จริง")
+    order  = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "สถิติ (About)"
+        verbose_name_plural = "สถิติ (About)"
+
+    def __str__(self):
+        return f"{self.number} {self.label}"
+
+
+class AboutValue(models.Model):
+    icon        = models.CharField("Bootstrap Icon", max_length=60, default="bi-check-circle",
+                                   help_text="เช่น bi-bar-chart-line-fill, bi-building-check")
+    title       = models.CharField("หัวข้อ", max_length=100)
+    description = models.TextField("รายละเอียด")
+    order       = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "ค่านิยม (About)"
+        verbose_name_plural = "ค่านิยม (About)"
+
+    def __str__(self):
+        return self.title
+
+
 class Service(models.Model):
     name = models.CharField("ชื่อบริการ", max_length=100)
     slug = models.SlugField(max_length=120, unique=True)

@@ -310,18 +310,18 @@
     <div class="hc-channels">
 
       <!-- LINE -->
-      <a href="https://line.me/ti/p/~@aibizthailand" target="_blank" rel="noopener" class="hc-channel">
+      <a href="https://line.me/ti/p/~{{ site.line_id }}" target="_blank" rel="noopener" class="hc-channel">
         <div class="hc-channel-icon" style="background:#06C755;">
           <i class="bi bi-line" style="color:#fff;"></i>
         </div>
         <span class="hc-channel-name">LINE Official</span>
         <span class="hc-channel-desc">แชทตอบเร็วที่สุด<br>รับคำตอบภายใน 30 นาที</span>
         <span class="hc-channel-action">เปิด LINE →</span>
-        <span class="hc-channel-hours"><i class="bi bi-clock me-1"></i>จ–ศ 09:00–18:00</span>
+        <span class="hc-channel-hours"><i class="bi bi-clock me-1"></i>{{ site.business_hours }}</span>
       </a>
 
       <!-- Email -->
-      <a href="mailto:dphoompat.pjs@gmail.com" class="hc-channel">
+      <a href="mailto:{{ site.contact_email }}" class="hc-channel">
         <div class="hc-channel-icon" style="background:rgba(201,169,110,.12);">
           <i class="bi bi-envelope-fill" style="color:var(--brand-gold);"></i>
         </div>
@@ -373,8 +373,7 @@
         <i class="bi bi-clock-fill"></i>
         <div>
           <div class="hc-info-label">เวลาทำการ</div>
-          <div>จันทร์–ศุกร์ 09:00–18:00 น.</div>
-          <div style="font-size:.75rem;color:var(--brand-muted);">เสาร์–อาทิตย์ ตามนัดหมาย</div>
+          <div>{{ site.business_hours }}</div>
         </div>
       </div>
       <div class="hc-info-row">
@@ -388,7 +387,7 @@
         <i class="bi bi-envelope-fill"></i>
         <div>
           <div class="hc-info-label">อีเมล</div>
-          <a href="mailto:dphoompat.pjs@gmail.com" style="color:var(--brand-gold);font-size:.82rem;text-decoration:none;">dphoompat.pjs@gmail.com</a>
+          <a href="mailto:{{ site.contact_email }}" style="color:var(--brand-gold);font-size:.82rem;text-decoration:none;">{{ site.contact_email }}</a>
         </div>
       </div>
       <div class="hc-info-row">

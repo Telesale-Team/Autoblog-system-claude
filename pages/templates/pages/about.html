@@ -354,30 +354,14 @@
 
         <div class="col-lg-5">
           <div class="row g-3">
+            {% for stat in stats %}
             <div class="col-6">
               <div class="about-hero__stat">
-                <span class="about-hero__stat-number">20+</span>
-                <span class="about-hero__stat-label">ลูกค้า SME ที่ใช้จริง</span>
+                <span class="about-hero__stat-number">{{ stat.number }}</span>
+                <span class="about-hero__stat-label">{{ stat.label }}</span>
               </div>
             </div>
-            <div class="col-6">
-              <div class="about-hero__stat">
-                <span class="about-hero__stat-number">3 ปี+</span>
-                <span class="about-hero__stat-label">ประสบการณ์ด้าน AI</span>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="about-hero__stat">
-                <span class="about-hero__stat-number">60-80%</span>
-                <span class="about-hero__stat-label">ลด Manual Operation</span>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="about-hero__stat">
-                <span class="about-hero__stat-number">24 ชม.</span>
-                <span class="about-hero__stat-label">ตอบกลับภายใน</span>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
 
@@ -569,46 +553,17 @@
 
       <div class="row g-4 justify-content-center">
 
+        {% for value in values %}
         <div class="col-md-6 col-lg-4">
           <div class="value-card">
             <div class="value-icon-circle">
-              <i class="bi bi-bar-chart-line-fill"></i>
+              <i class="bi {{ value.icon }}"></i>
             </div>
-            <h5>วัดผลได้จริง</h5>
-            <p>
-              ทุกโปรเจกต์มี KPI ชัดเจนตั้งแต่วันแรก
-              และเรารายงานผลลัพธ์เป็นตัวเลขที่จับต้องได้
-              ไม่ใช่แค่ความพึงพอใจส่วนตัว
-            </p>
+            <h5>{{ value.title }}</h5>
+            <p>{{ value.description }}</p>
           </div>
         </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="value-card">
-            <div class="value-icon-circle">
-              <i class="bi bi-building-check"></i>
-            </div>
-            <h5>เข้าใจธุรกิจก่อน</h5>
-            <p>
-              ไม่ขาย Solution สำเร็จรูป แต่ใช้เวลา Discovery
-              ทำความเข้าใจ Process จริงของคุณก่อน
-              แล้วค่อยออกแบบระบบที่ตอบโจทย์จริงๆ
-            </p>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="value-card">
-            <div class="value-icon-circle">
-              <i class="bi bi-rocket-takeoff-fill"></i>
-            </div>
-            <h5>เริ่มได้เร็ว</h5>
-            <p>
-              ส่ง MVP ใน 2-4 สัปดาห์ ให้คุณทดลองใช้งานจริงก่อน
-              แล้วค่อยปรับและ Scale ใหญ่ตามผลลัพธ์ที่วัดได้
-            </p>
-          </div>
-        </div>
+        {% endfor %}
 
       </div>
     </div>
