@@ -1012,8 +1012,9 @@ def calendar_view(request):
 
     # ── 6. Calendar stats สำหรับ Stat Cards ─────────────────────────────────
     _sys = CalendarEvent.objects.filter(is_system=True)
+    _sys_total = _sys.count()
     cal_stats = {
-        "total":   _sys.count(),
+        "total":   _sys_total,
         "done":    _sys.filter(is_completed=True).count(),
         "pending": _sys.filter(is_completed=False).count(),
         "by_cat": {
@@ -1064,14 +1065,11 @@ def calendar_view(request):
                                         .values("category")
                                         .annotate(c=DbCount("id"))
     }
-    # รวม published articles และ leads ใน count ด้วย
-    article_count = Article.objects.filter(status="published").count()
-    lead_count    = ContactLead.objects.count()
-    cat_counts["article"] = article_count
-    cat_counts["lead"]    = lead_count
+    # article อยู่ใน CalendarEvent แล้ว (sync จาก signal) — ไม่บวกซ้ำ
+    cat_counts["article"] = _sys.filter(category="article").count()
 
-    # Total count รวม articles + leads ด้วย
-    total_count = CalendarEvent.objects.filter(is_system=True).count() + article_count + lead_count
+    # total_count = เดียวกับ cal_stats.total
+    total_count = _sys_total
 
     # สร้าง category_filters จาก CATEGORY_CHOICES + article + lead
     _extra_cats = []  # article อยู่ใน CATEGORY_CHOICES แล้ว
