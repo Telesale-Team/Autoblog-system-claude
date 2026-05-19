@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+{% load static humanize %}
+<!-- ===================================================================
+     PORTFOLIO EDIT / CREATE — แก้ไข Case Study
+     Design: settings-hero + scard (Owner Dashboard Standard)
+     =================================================================== -->
+
+{% block title %}{% if is_create %}เพิ่ม Case Study ใหม่{% else %}แก้ไข: {{ cs.project_title }}{% endif %} — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'dashboard:website_content' %}?tab=portfolio">จัดการเนื้อหาเว็บ</a>
+  </li>
+  <li class="breadcrumb-item active">{% if is_create %}เพิ่ม Case Study ใหม่{% else %}{{ cs.project_title }}{% endif %}</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<style>
+  .cs-nav { display: flex; flex-direction: column; gap: .25rem; }
+  .cs-nav-item {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .5rem .75rem; border-radius: .4rem;
+    text-decoration: none; font-size: .85rem;
+    color: var(--bs-secondary-color);
+    transition: background .15s, color .15s;
+  }
+  .cs-nav-item:hover { background: rgba(201,169,110,.08); color: var(--app-primary); }
+  .cs-nav-item.active { background: rgba(201,169,110,.14); color: var(--app-primary); font-weight: 600; }
+  .cs-nav-item .cs-industry {
+    font-size: .7rem; color: var(--bs-secondary-color);
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  .form-label {
+    font-size: .78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--bs-secondary-color); margin-bottom: .35rem;
+  }
+  .form-control, .form-select {
+    border-color: var(--bs-border-color); background: transparent; font-size: .88rem;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+  }
+  .char-count { font-size: .72rem; color: var(--bs-secondary-color); float: right; }
+  .char-count.warn { color: #e63757; }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .3rem .8rem; border-radius: 999px; font-size: .75rem; font-weight: 700;
+  }
+  .status-pill.published { background: rgba(0,210,122,.12); color: #009a58; }
+  .status-pill.draft     { background: rgba(100,116,139,.12); color: #64748b; }
+
+  .roi-preview {
+    background: rgba(201,169,110,.08); border: 1px solid rgba(201,169,110,.2);
+    border-radius: .5rem; padding: .75rem 1rem;
+    font-size: 1.1rem; font-weight: 800; color: var(--app-primary);
+    min-height: 48px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Page Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi {% if is_create %}bi-plus-lg{% else %}bi-briefcase-fill{% endif %}"></i></span>
+      {% if is_create %}เพิ่ม Case Study ใหม่{% else %}{{ cs.project_title }}{% endif %}
+    </h1>
+    <p class="settings-hero-sub">
+      {% if is_create %}กรอกข้อมูล Case Study แล้วกด บันทึก
+      {% else %}แก้ไข Case Study
+      <span class="status-pill {{ cs.status }} ms-2">
+        <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
+        {{ cs.get_status_display }}
+      </span>{% endif %}
+    </p>
+  </div>
+  <div class="d-flex gap-2">
+    {% if not is_create %}
+    <a href="{{ cs.get_absolute_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-eye me-1"></i>ดูหน้าจริง
+    </a>
+    {% endif %}
+    <a href="{% url 'dashboard:website_content' %}?tab=portfolio" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-arrow-left me-1"></i>กลับ
+    </a>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissible fade show mb-3">
+    <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+{% endif %}
+
+<div class="row g-4">
+
+  <!-- === LEFT: Form Sections === -->
+  <div class="col-lg-9">
+    <form method="post"
+          action="{% if is_create %}{% url 'dashboard:website_portfolio_create' %}{% else %}{% url 'dashboard:website_portfolio_edit' cs.pk %}{% endif %}">
+      {% csrf_token %}
+
+      <!-- 1. ข้อมูลโปรเจกต์ -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-info-circle-fill"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">ข้อมูลโปรเจกต์</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ชื่อ, ลูกค้า, อุตสาหกรรม</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label class="form-label">ชื่อโปรเจกต์</label>
+              <input type="text" name="project_title" value="{{ cs.project_title }}"
+                     class="form-control" required placeholder="เช่น ระบบ AI Chatbot สำหรับคลินิก">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">Slug (URL)</label>
+              <input type="text" name="slug" value="{{ cs.slug }}"
+                     class="form-control" placeholder="ai-chatbot-clinic">
+              {% if not is_create %}
+              <small class="text-muted">/portfolio/{{ cs.slug }}/</small>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">ชื่อลูกค้า <small class="text-muted text-lowercase">(เว้นว่างได้ถ้าปิดลับ)</small></label>
+              <input type="text" name="client_name" value="{{ cs.client_name }}"
+                     class="form-control" placeholder="ร้านอาหาร X หรือ นาม สกุล">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">อุตสาหกรรม</label>
+              <select name="industry" class="form-select">
+                {% for val, label in industry_choices %}
+                <option value="{{ val }}" {% if cs.industry == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. เนื้อหา Case Study -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-file-text-fill"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">เนื้อหา Case Study</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ปัญหา → วิธีแก้ → ผลลัพธ์</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">ปัญหาเดิม (Problem)</label>
+              <textarea name="problem" class="form-control" rows="3"
+                        placeholder="อธิบายปัญหาที่ลูกค้าเผชิญอยู่ก่อนมาหาเรา">{{ cs.problem }}</textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label">วิธีแก้ (Solution)</label>
+              <textarea name="solution" class="form-control" rows="5"
+                        placeholder="อธิบายวิธีการแก้ปัญหา เทคโนโลยีที่ใช้ และ process">{{ cs.solution }}</textarea>
+              <small class="text-muted">รองรับ HTML พื้นฐาน เช่น &lt;b&gt;, &lt;ul&gt;, &lt;li&gt;</small>
+            </div>
+            <div class="col-12">
+              <label class="form-label">ผลลัพธ์ (Result)</label>
+              <textarea name="result" class="form-control" rows="3"
+                        placeholder="ผลลัพธ์ที่วัดได้จริง เช่น ลดเวลา X% เพิ่มยอดขาย Y บาท">{{ cs.result }}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ROI & Testimonial -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">ROI & Testimonial</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ตัวเลขเด่น + คำพูดลูกค้า</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <label class="form-label">ROI เด่น</label>
+              <input type="text" name="roi_metric" value="{{ cs.roi_metric }}"
+                     class="form-control" placeholder="ลด workload 70%"
+                     oninput="document.getElementById('roiPreview').textContent=this.value||'-'">
+            </div>
+            <div class="col-md-4 d-flex flex-column justify-content-end">
+              <label class="form-label">Preview</label>
+              <div class="roi-preview" id="roiPreview">{{ cs.roi_metric|default:"-" }}</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Testimonial</label>
+              <textarea name="testimonial" class="form-control" rows="2"
+                        placeholder="คำพูดของลูกค้า (ใส่ " " ครอบหรือไม่ก็ได้)">{{ cs.testimonial }}</textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">ผู้พูด</label>
+              <input type="text" name="testimonial_by" value="{{ cs.testimonial_by }}"
+                     class="form-control" placeholder="ชื่อ + ตำแหน่ง เช่น คุณสมศรี เจ้าของร้าน X">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Technical & รูปภาพ -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-cpu-fill"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">Technical & รูปภาพ</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Tech stack, ระยะเวลา, Cover image</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Tech Stack <small class="text-muted text-lowercase">(คั่นด้วยจุลภาค)</small></label>
+              <input type="text" name="tech_stack" value="{{ cs.tech_stack }}"
+                     class="form-control" placeholder="LINE Messaging API, Claude, Django, MySQL">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">ระยะเวลา</label>
+              <input type="text" name="duration" value="{{ cs.duration }}"
+                     class="form-control" placeholder="2 สัปดาห์">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Cover Image URL</label>
+              <input type="url" name="cover_image_url" value="{{ cs.cover_image_url }}"
+                     class="form-control" placeholder="https://images.unsplash.com/..."
+                     oninput="updateCoverPreview(this.value)">
+              <div id="coverPreview" style="margin-top:.5rem;{% if not cs.cover_image_url %}display:none;{% endif %}">
+                <img id="coverImg" src="{{ cs.display_cover }}" alt="cover"
+                     style="width:100%;max-height:120px;object-fit:cover;border-radius:.375rem;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. SEO -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-search"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">SEO</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Meta title + Meta description</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">
+                Meta Title
+                <span class="char-count" id="metaTitleCount">{{ cs.meta_title|length }}/70</span>
+              </label>
+              <input type="text" name="meta_title" value="{{ cs.meta_title }}"
+                     class="form-control" maxlength="70"
+                     placeholder="ไม่กรอก = ใช้ชื่อโปรเจกต์"
+                     oninput="countChars(this,'metaTitleCount',70)">
+            </div>
+            <div class="col-12">
+              <label class="form-label">
+                Meta Description
+                <span class="char-count" id="metaDescCount">{{ cs.meta_description|length }}/160</span>
+              </label>
+              <textarea name="meta_description" class="form-control" rows="2" maxlength="160"
+                        placeholder="ไม่กรอก = ใช้ Problem ย่อ"
+                        oninput="countChars(this,'metaDescCount',160)">{{ cs.meta_description }}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. การแสดงผล -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-toggles"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">การแสดงผล</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Status, ลำดับ, Featured</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-select">
+                <option value="published" {% if cs.status == "published" %}selected{% endif %}>Published</option>
+                <option value="draft"     {% if cs.status == "draft" %}selected{% endif %}>Draft</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">ลำดับ</label>
+              <input type="number" name="display_order" value="{{ cs.display_order }}"
+                     class="form-control" min="0">
+            </div>
+            <div class="col-md-3 pt-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="is_featured" id="isFeatured"
+                       {% if cs.is_featured %}checked{% endif %}>
+                <label class="form-check-label" for="isFeatured" style="font-size:.88rem;">
+                  Featured (โชว์หน้าแรก)
+                </label>
+              </div>
+            </div>
+            {% if not is_create and cs.published_at %}
+            <div class="col-md-3">
+              <label class="form-label">Published</label>
+              <div style="font-size:.85rem;color:var(--bs-secondary-color);">{{ cs.published_at|date:"d M Y" }}</div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-lg"
+                style="background:var(--app-primary);color:#fff;font-weight:700;border:none;">
+          <i class="bi bi-check-lg me-1"></i>
+          {% if is_create %}สร้าง Case Study{% else %}บันทึกการเปลี่ยนแปลง{% endif %}
+        </button>
+        <a href="{% url 'dashboard:website_content' %}?tab=portfolio" class="btn btn-lg btn-outline-secondary">
+          ยกเลิก
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- === RIGHT: Portfolio Nav === -->
+  <div class="col-lg-3">
+    <div class="scard" style="position:sticky;top:70px;">
+      <div class="scard-header">
+        <div style="font-weight:700;font-size:.9rem;">Portfolio ทั้งหมด</div>
+      </div>
+      <div class="scard-body" style="padding:.75rem;">
+        <div class="cs-nav">
+          {% for item in all_portfolio %}
+          <a href="{% url 'dashboard:website_portfolio_edit' item.pk %}"
+             class="cs-nav-item {% if item.pk == cs.pk %}active{% endif %}">
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.83rem;">
+              {{ item.project_title }}
+            </span>
+            <span class="cs-industry">{{ item.get_industry_display|truncatechars:8 }}</span>
+            {% if item.status == 'draft' %}
+            <span class="badge" style="background:rgba(100,116,139,.15);color:#64748b;font-size:.65rem;">Draft</span>
+            {% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function countChars(el, counterId, max) {
+  var len = el.value.length;
+  var el2 = document.getElementById(counterId);
+  el2.textContent = len + '/' + max;
+  el2.className = 'char-count' + (len > max * 0.9 ? ' warn' : '');
+}
+
+function updateCoverPreview(url) {
+  var preview = document.getElementById('coverPreview');
+  var img = document.getElementById('coverImg');
+  if (url) { img.src = url; preview.style.display = ''; }
+  else { preview.style.display = 'none'; }
+}
+</script>
+{% endblock %}

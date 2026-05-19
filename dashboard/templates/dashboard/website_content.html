@@ -309,8 +309,8 @@
           </div>
         </div>
       </div>
-      <a href="/admin/portfolio/casestudy/add/" target="_blank" class="btn-wc-primary">
-        <i class="bi bi-plus-lg"></i> เพิ่ม Case Study
+      <a href="{% url 'dashboard:website_portfolio_create' %}" class="btn-wc-primary">
+        <i class="bi bi-plus-lg"></i> เพิ่ม Case Study ใหม่
       </a>
     </div>
     <div class="scard-body" style="padding:0;">
@@ -325,7 +325,7 @@
         </thead>
         <tbody>
           {% for cs in portfolio %}
-          <tr style="cursor:pointer;" onclick="window.open('/admin/portfolio/casestudy/{{ cs.pk }}/change/', '_blank')">
+          <tr style="cursor:pointer;" onclick="window.location='{% url 'dashboard:website_portfolio_edit' cs.pk %}'">`
             <td><strong>{{ cs.project_title }}</strong></td>
             <td>
               <span class="badge bg-secondary" style="font-size:.72rem;">{{ cs.get_industry_display }}</span>

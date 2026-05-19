@@ -1477,6 +1477,86 @@ def website_service_toggle(request, pk):
 
 
 @staff_member_required
+def website_portfolio_create(request):
+    from portfolio.models import CaseStudy
+    from portfolio.models import slugify_th
+    if request.method == "POST":
+        title = request.POST.get("project_title", "Case Study ใหม่").strip() or "Case Study ใหม่"
+        slug  = slugify_th(title)[:220]
+        base_slug, i = slug, 1
+        while CaseStudy.objects.filter(slug=slug).exists():
+            slug = f"{base_slug}-{i}"; i += 1
+        cs = CaseStudy.objects.create(
+            project_title  = title,
+            slug           = slug,
+            client_name    = request.POST.get("client_name", "").strip(),
+            industry       = request.POST.get("industry", "other"),
+            cover_image_url= request.POST.get("cover_image_url", "").strip(),
+            problem        = request.POST.get("problem", "").strip(),
+            solution       = request.POST.get("solution", "").strip(),
+            result         = request.POST.get("result", "").strip(),
+            roi_metric     = request.POST.get("roi_metric", "").strip(),
+            testimonial    = request.POST.get("testimonial", "").strip(),
+            testimonial_by = request.POST.get("testimonial_by", "").strip(),
+            tech_stack     = request.POST.get("tech_stack", "").strip(),
+            duration       = request.POST.get("duration", "").strip(),
+            meta_title     = request.POST.get("meta_title", "").strip(),
+            meta_description=request.POST.get("meta_description", "").strip(),
+            display_order  = int(request.POST.get("display_order", 99) or 99),
+            is_featured    = "is_featured" in request.POST,
+            status         = request.POST.get("status", "draft"),
+        )
+        messages.success(request, f'สร้าง "{cs.project_title}" แล้ว')
+        return redirect("dashboard:website_portfolio_edit", pk=cs.pk)
+    blank = CaseStudy(
+        project_title="", slug="", client_name="", industry="other",
+        cover_image_url="", problem="", solution="", result="",
+        roi_metric="", testimonial="", testimonial_by="",
+        tech_stack="", duration="", meta_title="", meta_description="",
+        display_order=99, status="draft",
+    )
+    return render(request, "dashboard/portfolio_edit.html", {
+        "cs": blank, "is_create": True,
+        "industry_choices": CaseStudy.INDUSTRY_CHOICES,
+        "all_portfolio": CaseStudy.objects.all().order_by("display_order", "-published_at"),
+    })
+
+
+@staff_member_required
+def website_portfolio_edit(request, pk):
+    from portfolio.models import CaseStudy
+    from django.shortcuts import get_object_or_404
+    cs = get_object_or_404(CaseStudy, pk=pk)
+    if request.method == "POST":
+        cs.project_title   = request.POST.get("project_title", cs.project_title).strip()
+        cs.slug            = request.POST.get("slug", cs.slug).strip()
+        cs.client_name     = request.POST.get("client_name", cs.client_name).strip()
+        cs.industry        = request.POST.get("industry", cs.industry)
+        cs.cover_image_url = request.POST.get("cover_image_url", cs.cover_image_url).strip()
+        cs.problem         = request.POST.get("problem", cs.problem).strip()
+        cs.solution        = request.POST.get("solution", cs.solution).strip()
+        cs.result          = request.POST.get("result", cs.result).strip()
+        cs.roi_metric      = request.POST.get("roi_metric", cs.roi_metric).strip()
+        cs.testimonial     = request.POST.get("testimonial", cs.testimonial).strip()
+        cs.testimonial_by  = request.POST.get("testimonial_by", cs.testimonial_by).strip()
+        cs.tech_stack      = request.POST.get("tech_stack", cs.tech_stack).strip()
+        cs.duration        = request.POST.get("duration", cs.duration).strip()
+        cs.meta_title      = request.POST.get("meta_title", cs.meta_title).strip()
+        cs.meta_description= request.POST.get("meta_description", cs.meta_description).strip()
+        cs.display_order   = int(request.POST.get("display_order", cs.display_order) or 0)
+        cs.is_featured     = "is_featured" in request.POST
+        cs.status          = request.POST.get("status", cs.status)
+        cs.save()
+        messages.success(request, f'บันทึก "{cs.project_title}" แล้ว')
+        return redirect("dashboard:website_portfolio_edit", pk=cs.pk)
+    return render(request, "dashboard/portfolio_edit.html", {
+        "cs": cs, "is_create": False,
+        "industry_choices": CaseStudy.INDUSTRY_CHOICES,
+        "all_portfolio": CaseStudy.objects.all().order_by("display_order", "-published_at"),
+    })
+
+
+@staff_member_required
 @require_POST
 def website_portfolio_toggle(request, pk):
     from portfolio.models import CaseStudy
