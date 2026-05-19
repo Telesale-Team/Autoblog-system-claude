@@ -480,6 +480,7 @@ def article_edit(request, pk=None):
         "article": article,
         "is_new": article is None,
         "categories": Category.objects.order_by("display_order", "name"),
+        "all_articles": Article.objects.order_by("-created_at")[:50],
     })
 
 

@@ -98,7 +98,7 @@
 <div class="row g-4">
 
   <!-- === RIGHT: Display Card + Portfolio Nav === -->
-  <div class="col-lg-2 order-lg-2" style="display:flex;flex-direction:column;gap:1rem;">
+  <div class="col-lg-3 order-lg-2" style="display:flex;flex-direction:column;gap:1rem;">
 
     <!-- การแสดงผล — เหมือน เผยแพร่ ใน article edit -->
     <div class="scard" style="position:sticky;top:70px;">
@@ -181,7 +181,7 @@
   </div>
 
   <!-- === LEFT: Form Sections === -->
-  <div class="col-lg-10 order-lg-1">
+  <div class="col-lg-9 order-lg-1">
     <form method="post"
           action="{% if is_create %}{% url 'dashboard:website_portfolio_create' %}{% else %}{% url 'dashboard:website_portfolio_edit' cs.pk %}{% endif %}">
       {% csrf_token %}
