@@ -396,6 +396,13 @@
             <span class="nav-label">Work Calendar</span>
           </a>
         </li>
+        <li class="nav-item" data-label="บริการ portfolio about contact เนื้อหา เว็บไซต์ services">
+          <a href="{% url 'dashboard:website_content' %}"
+             class="nav-link {% if request.resolver_match.url_name == 'website_content' %}active{% endif %}">
+            <i class="bi bi-globe2"></i>
+            <span class="nav-label">จัดการเนื้อหาเว็บ</span>
+          </a>
+        </li>
 
         {# ── Marketing ── #}
         <li class="nav-section-label" data-section>Marketing</li>
@@ -405,16 +412,6 @@
              class="nav-link {% if request.resolver_match.url_name == 'keywords' %}active{% endif %}">
             <i class="bi bi-search"></i>
             <span class="nav-label">Keywords</span>
-          </a>
-        </li>
-        <li class="nav-item" data-label="บทความ blog article backlog เขียน">
-          <a href="{% url 'dashboard:blog' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}">
-            <i class="bi bi-pencil-square"></i>
-            <span class="nav-label">บทความ</span>
-            {% if draft_articles > 0 %}
-              <span class="badge rounded-pill sidebar-badge-draft ms-auto">{{ draft_articles }}</span>
-            {% endif %}
           </a>
         </li>
         <li class="nav-item" data-label="campaigns แคมเปญ การตลาด">
@@ -566,17 +563,6 @@
             <i class="bi bi-globe"></i>
             <span class="nav-label">ดูเว็บไซต์</span>
             <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
-          </a>
-        </li>
-
-        {# ── เนื้อหาเว็บไซต์ ── #}
-        <li class="nav-section-label" data-section>เนื้อหาเว็บไซต์</li>
-
-        <li class="nav-item" data-label="บริการ portfolio about contact เนื้อหา เว็บไซต์ services">
-          <a href="{% url 'dashboard:website_content' %}"
-             class="nav-link {% if request.resolver_match.url_name == 'website_content' %}active{% endif %}">
-            <i class="bi bi-globe2"></i>
-            <span class="nav-label">จัดการเนื้อหาเว็บ</span>
           </a>
         </li>
 
