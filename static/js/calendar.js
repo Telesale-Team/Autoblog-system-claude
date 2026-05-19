@@ -73,21 +73,15 @@ document.addEventListener('DOMContentLoaded', function () {
   /* bsIcon = Bootstrap Icon class ที่ตรงกับ Stat Cards
      icon   = emoji fallback (ใช้ใน category badge ของ modal)            */
   const CAT_CFG = {
-    milestone:    { color: '#c9a96e', label: 'แผน (Roadmap)',  icon: '🎯', bsIcon: 'bi-flag-fill',              filterGroup: 'milestone'                    },
-    action:       { color: '#60a5fa', label: 'งานต้องทำ',      icon: '⚡', bsIcon: 'bi-lightning-charge-fill',  filterGroup: 'action'                       },
-    article:      { color: '#34d399', label: 'Actual',          icon: '📝', bsIcon: 'bi-newspaper',               filterGroup: 'actual'                       },
-    lead:         { color: '#10b981', label: 'Actual',          icon: '👤', bsIcon: 'bi-person-check-fill',       filterGroup: 'actual'                       },
-    recurring:    { color: '#a78bfa', label: 'Recurring',       icon: '🔄', bsIcon: 'bi-arrow-repeat',            filterGroup: 'recurring'                    },
-    content_plan: { color: '#fbbf24', label: 'Content',         icon: '📄', bsIcon: 'bi-file-text-fill',          filterGroup: 'content'                      },
-    backlog:      { color: '#f59e0b', label: 'Content',         icon: '🗓️', bsIcon: 'bi-calendar2-week',          filterGroup: 'content'                      },
-    general:      { color: '#94a3b8', label: 'งานของฉัน',      icon: '📌', bsIcon: 'bi-pin-fill',                filterGroup: 'user-event', userOwned: true   },
-    priority:     { color: '#c9a96e', label: 'งานสำคัญ',       icon: '🔥', bsIcon: 'bi-exclamation-circle-fill', filterGroup: 'user-event', userOwned: true   },
-    meeting:      { color: '#818cf8', label: 'ประชุม',          icon: '👥', bsIcon: 'bi-people-fill',             filterGroup: 'user-event', userOwned: true   },
-    delivery:     { color: '#2dd4bf', label: 'ส่งมอบงาน',      icon: '📦', bsIcon: 'bi-box-seam',                filterGroup: 'user-event', userOwned: true   },
-    personal:     { color: '#94a3b8', label: 'ส่วนตัว',         icon: '🙋', bsIcon: 'bi-person-heart',            filterGroup: 'user-event', userOwned: true   },
+    general:  { color: '#94a3b8', label: 'ทั่วไป',       icon: '📌', bsIcon: 'bi-pin-fill',               filterGroup: 'general',  userOwned: true },
+    action:   { color: '#60a5fa', label: 'งานต้องทำ',    icon: '⚡', bsIcon: 'bi-lightning-charge-fill',  filterGroup: 'action',   userOwned: true },
+    delivery: { color: '#2dd4bf', label: 'ส่งมอบงาน',   icon: '📦', bsIcon: 'bi-box-seam',               filterGroup: 'delivery', userOwned: true },
+    personal: { color: '#818cf8', label: 'ส่วนตัว',      icon: '🙋', bsIcon: 'bi-person-heart',           filterGroup: 'personal', userOwned: true },
+    plan:     { color: '#c9a96e', label: 'แผน',          icon: '🎯', bsIcon: 'bi-flag-fill',              filterGroup: 'plan'                      },
+    article:  { color: '#34d399', label: 'บทความ',       icon: '📝', bsIcon: 'bi-newspaper',              filterGroup: 'article'                   },
   };
-  /* ถ้า category ไม่ match ใน CAT_CFG ใช้ milestone เป็น fallback */
-  function getCfg(cat) { return CAT_CFG[cat] || { color: '#c9a96e', label: cat, icon: '•', bsIcon: 'bi-flag-fill', filterGroup: 'milestone' }; }
+  /* ถ้า category ไม่ match ใช้ general เป็น fallback */
+  function getCfg(cat) { return CAT_CFG[cat] || CAT_CFG['general']; }
 
   /* Inject CSS class สีไอคอนใน Filter Toolbar — ใช้ cal-icon-* จาก dashboard-base.css */
   document.querySelectorAll('#legendBar .filter-btn [data-cat]').forEach(function (icon) {
