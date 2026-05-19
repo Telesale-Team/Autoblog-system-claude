@@ -183,33 +183,7 @@
     ══════════════════════════ -->
     <div>
 
-      <!-- SEO (อยู่เหนือหัวข้อ) -->
-      <div class="scard mb-3">
-        <div class="scard-header">
-          <div class="d-flex align-items-center gap-2">
-            <div class="scard-header-icon" style="width:28px;height:28px;font-size:.8rem;"><i class="bi bi-search"></i></div>
-            <span style="font-weight:700;font-size:.88rem;">SEO</span>
-          </div>
-        </div>
-        <div class="scard-body" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;align-items:start;">
-          <div>
-            <label class="form-label">Meta Title <span class="char-count" id="metaTitleCount">0/60</span></label>
-            <input type="text" name="meta_title" id="id_meta_title"
-                   class="form-control form-control-sm"
-                   value="{{ form.meta_title.value|default_if_none:'' }}"
-                   placeholder="ไม่กรอก = ใช้หัวข้อบทความ" maxlength="70">
-          </div>
-          <div>
-            <label class="form-label">Meta Description <span class="char-count" id="metaDescCount">0/155</span></label>
-            <input type="text" name="meta_description" id="id_meta_description"
-                   class="form-control form-control-sm"
-                   value="{{ form.meta_description.value|default_if_none:'' }}"
-                   placeholder="ไม่กรอก = ใช้สรุปย่อ" maxlength="160">
-          </div>
-        </div>
-      </div>
-
-      <!-- Title -->
+      <!-- 1. Title -->
       <div class="scard mb-3">
         <div class="scard-header">
           <div class="d-flex align-items-center gap-2">
@@ -232,61 +206,49 @@
         </div>
       </div>
 
-      <!-- Content Editor -->
-      <div class="scard" style="overflow:visible;">
+      <!-- 2. Slug -->
+      <div class="mb-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
+        <div class="d-flex align-items-center justify-content-between mb-1">
+          <label style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);margin:0;">Slug — URL ของบทความ</label>
+          <span style="font-size:.72rem;color:var(--bs-secondary-color);">ว่างไว้ = auto-generate</span>
+        </div>
+        <div class="d-flex align-items-center gap-1 mb-1">
+          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;white-space:nowrap;flex-shrink:0;">blog.kooky-shop.com/blog/</span>
+          <input type="text" name="slug" id="id_slug" class="form-control form-control-sm"
+                 value="{{ form.slug.value|default_if_none:'' }}" placeholder="my-article-slug"
+                 style="font-family:monospace;font-size:.82rem;min-width:0;">
+          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;flex-shrink:0;">/</span>
+        </div>
+        <div style="font-size:.72rem;color:var(--bs-secondary-color);">
+          <i class="bi bi-info-circle me-1"></i>รองรับเฉพาะ a-z, 0-9, และ - (ขีดกลาง)
+        </div>
+      </div>
+
+      <!-- 3. Content Editor -->
+      <div class="scard mb-3" style="overflow:visible;">
         <div class="scard-body" style="padding:.75rem;overflow:visible;">
           {{ form.content }}
         </div>
       </div>
 
-      <!-- Slug — อยู่ใต้ editor -->
-      <div class="mt-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
+      <!-- 4. สรุปย่อ -->
+      <div class="mb-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
         <div class="d-flex align-items-center justify-content-between mb-1">
-          <label style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);margin:0;">
-            Slug — URL ของบทความ
-          </label>
-          <span style="font-size:.72rem;color:var(--bs-secondary-color);">ว่างไว้ = ระบบ auto-generate อัตโนมัติ</span>
-        </div>
-        <div class="d-flex align-items-center gap-1 mb-1">
-          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;white-space:nowrap;flex-shrink:0;">blog.kooky-shop.com/blog/</span>
-          <input type="text" name="slug" id="id_slug"
-                 class="form-control form-control-sm"
-                 value="{{ form.slug.value|default_if_none:'' }}"
-                 placeholder="my-article-slug"
-                 style="font-family:monospace;font-size:.82rem;min-width:0;">
-          <span style="font-size:.78rem;color:var(--bs-secondary-color);font-family:monospace;flex-shrink:0;">/</span>
-        </div>
-        <div style="font-size:.72rem;color:var(--bs-secondary-color);">
-          <i class="bi bi-info-circle me-1"></i>ใช้เป็น URL สำหรับ SEO — รองรับเฉพาะ a-z, 0-9, และ - (ขีดกลาง)
-        </div>
-      </div>
-
-      <!-- สรุปย่อ -->
-      <div class="mt-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
-        <div class="d-flex align-items-center justify-content-between mb-1">
-          <label for="id_excerpt" style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);margin:0;">
-            สรุปย่อ (Excerpt)
-          </label>
+          <label for="id_excerpt" style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);margin:0;">สรุปย่อ (Excerpt)</label>
           <span class="char-count" id="excerptCount" style="float:none;">0 / 160</span>
         </div>
         <textarea name="excerpt" id="id_excerpt" class="form-control form-control-sm mb-2"
-                  rows="3" maxlength="300"
-                  placeholder="เขียนสรุปย่อของบทความ...">{{ form.excerpt.value|default_if_none:'' }}</textarea>
+                  rows="3" maxlength="300" placeholder="เขียนสรุปย่อของบทความ...">{{ form.excerpt.value|default_if_none:'' }}</textarea>
         <div style="font-size:.72rem;color:var(--bs-secondary-color);line-height:1.6;">
           <i class="bi bi-info-circle me-1"></i>
-          <strong>แนะนำ 120–160 ตัวอักษร</strong> — จะปรากฏเป็น description ใต้ชื่อบทความในผลการค้นหา Google
-          และเป็น preview ใน Facebook / LINE เมื่อแชร์ลิงก์<br>
+          <strong>แนะนำ 120–160 ตัวอักษร</strong> — ปรากฏใต้ชื่อบทความใน Google และ preview บน Facebook/LINE<br>
           <span style="opacity:.7;">ถ้าว่าง — ระบบใช้ Meta Description แทน หรือดึงจากเนื้อหาอัตโนมัติ</span>
         </div>
       </div>
 
-      <!-- รูปปก -->
-      <div class="mt-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
-        <div class="mb-1">
-          <label style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);">
-            รูปปก (Cover Image)
-          </label>
-        </div>
+      <!-- 5. รูปปก -->
+      <div class="mb-3 p-3" style="background:rgba(0,0,0,.06);border-radius:.5rem;border:1px solid var(--bs-border-color);">
+        <label style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);display:block;margin-bottom:.5rem;">รูปปก (Cover Image)</label>
         <input type="url" name="cover_image_url" id="id_cover_image_url"
                class="form-control form-control-sm mb-2"
                value="{{ form.cover_image_url.value|default_if_none:'' }}"
@@ -294,12 +256,30 @@
         <img id="coverPreview" class="cover-preview" src="" alt="preview">
         <div style="font-size:.72rem;color:var(--bs-secondary-color);line-height:1.6;margin-top:.5rem;">
           <i class="bi bi-info-circle me-1"></i>
-          <strong>ขนาดแนะนำ: 1200 × 630 px</strong> (ratio 1.91:1) — เหมาะกับการแสดงผลบนเว็บและ Social Media<br>
-          <span style="opacity:.7;">
-            • Blog card: แสดงแบบ 16:9 ตัดด้านบน-ล่าง<br>
-            • OG Image (Facebook/LINE): ต้องการ 1200×630 px พอดี<br>
-            • ใส่เฉพาะ URL รูปภาพ (Unsplash, CDN) — ไม่รองรับการอัพโหลดไฟล์โดยตรง
-          </span>
+          <strong>ขนาดแนะนำ: 1200 × 630 px</strong> (ratio 1.91:1)<br>
+          <span style="opacity:.7;">• Blog card: 16:9 • OG Image Facebook/LINE: 1200×630 px<br>• URL เท่านั้น — ไม่รองรับอัพโหลดไฟล์โดยตรง</span>
+        </div>
+      </div>
+
+      <!-- 6. SEO -->
+      <div class="scard">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-2">
+            <div class="scard-header-icon" style="width:28px;height:28px;font-size:.8rem;"><i class="bi bi-search"></i></div>
+            <span style="font-weight:700;font-size:.88rem;">SEO</span>
+          </div>
+        </div>
+        <div class="scard-body" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;align-items:start;">
+          <div>
+            <label class="form-label">Meta Title <span class="char-count" id="metaTitleCount">0/60</span></label>
+            <input type="text" name="meta_title" id="id_meta_title" class="form-control form-control-sm"
+                   value="{{ form.meta_title.value|default_if_none:'' }}" placeholder="ไม่กรอก = ใช้หัวข้อบทความ" maxlength="70">
+          </div>
+          <div>
+            <label class="form-label">Meta Description <span class="char-count" id="metaDescCount">0/155</span></label>
+            <input type="text" name="meta_description" id="id_meta_description" class="form-control form-control-sm"
+                   value="{{ form.meta_description.value|default_if_none:'' }}" placeholder="ไม่กรอก = ใช้สรุปย่อ" maxlength="160">
+          </div>
         </div>
       </div>
 
