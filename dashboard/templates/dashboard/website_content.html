@@ -56,17 +56,7 @@
   .wc-table tr:hover td { background: rgba(201,169,110,.08) !important; }
   .wc-table .badge { font-size: .72rem; font-weight: 600; }
 
-  /* === Status badge toggle === */
-  .status-badge {
-    display: inline-flex; align-items: center; gap: .35rem;
-    padding: .25rem .7rem; border-radius: 999px; font-size: .72rem;
-    font-weight: 700; cursor: pointer; border: 1px solid transparent;
-    transition: all .18s; user-select: none;
-  }
-  .status-badge.published { background: rgba(16,185,129,.1); color: #059669; border-color: rgba(16,185,129,.25); }
-  .status-badge.draft     { background: rgba(100,116,139,.1); color: #64748b; border-color: rgba(100,116,139,.2); }
-  .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-  .status-badge:hover { opacity: .75; transform: scale(.97); }
+  {# === Status badge + Buttons → ใช้ .ds-badge / .ds-btn / .ds-btn-outline จาก dashboard-base.css === #}
 
   /* === Stat cards === */
   .stat-edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
@@ -117,22 +107,6 @@
   .home-info-card .hi-value { font-size: 1.8rem; font-weight: 800; color: var(--app-primary); }
   .home-info-card .hi-label { font-size: .78rem; color: var(--bs-secondary-color); margin-top: .25rem; }
 
-  /* === Buttons === */
-  .btn-wc-primary {
-    display: inline-flex; align-items: center; gap: .4rem;
-    padding: .5rem 1.1rem; border-radius: .4rem; border: none;
-    background: var(--app-primary); color: #fff; font-weight: 700;
-    font-size: .85rem; cursor: pointer; transition: opacity .18s;
-  }
-  .btn-wc-primary:hover { opacity: .85; }
-  .btn-wc-outline {
-    display: inline-flex; align-items: center; gap: .4rem;
-    padding: .5rem 1.1rem; border-radius: .4rem;
-    border: 1.5px solid var(--app-primary); background: transparent;
-    color: var(--app-primary); font-weight: 700; font-size: .85rem;
-    cursor: pointer; transition: background .15s; text-decoration: none;
-  }
-  .btn-wc-outline:hover { background: rgba(201,169,110,.08); color: var(--app-primary); }
 </style>
 {% endblock %}
 
@@ -147,7 +121,7 @@
     </h1>
     <p class="settings-hero-sub">จัดการเนื้อหาทุกหน้าให้ตรงกับเมนูของเว็บ</p>
   </div>
-  <a href="/" target="_blank" rel="noopener" class="btn-wc-outline">
+  <a href="/" target="_blank" rel="noopener" class="ds-btn-outline">
     <i class="bi bi-box-arrow-up-right"></i> ดูเว็บจริง
   </a>
 </div>
@@ -201,7 +175,7 @@
           </div>
         </div>
       </div>
-      <a href="/" target="_blank" rel="noopener" class="btn-wc-outline">
+      <a href="/" target="_blank" rel="noopener" class="ds-btn-outline">
         <i class="bi bi-eye"></i> ดูหน้าแรก
       </a>
     </div>
@@ -244,7 +218,7 @@
           </div>
         </div>
       </div>
-      <a href="{% url 'dashboard:article_new' %}" class="btn-wc-primary">
+      <a href="{% url 'dashboard:article_new' %}" class="ds-btn">
         <i class="bi bi-plus-lg"></i> เขียนบทความ
       </a>
     </div>
@@ -276,10 +250,10 @@
               {% endif %}
             </td>
             <td>
-              <span class="status-badge {{ art.status }}"
+              <span class="ds-badge clickable {{ art.status }}"
                     data-url="{% url 'dashboard:website_article_toggle' art.pk %}"
                     onclick="event.stopPropagation(); toggleStatus(this)">
-                <span class="dot"></span>
+                <span class="ds-dot"></span>
                 <span class="status-text">{% if art.status == 'published' %}Published{% else %}Draft{% endif %}</span>
               </span>
             </td>
@@ -309,7 +283,7 @@
           </div>
         </div>
       </div>
-      <a href="{% url 'dashboard:website_portfolio_create' %}" class="btn-wc-primary">
+      <a href="{% url 'dashboard:website_portfolio_create' %}" class="ds-btn">
         <i class="bi bi-plus-lg"></i> เพิ่ม Case Study ใหม่
       </a>
     </div>
@@ -330,10 +304,10 @@
             <td><span class="badge bg-secondary">{{ cs.get_industry_display }}</span></td>
             <td class="fw-semibold" style="color:var(--app-primary);">{{ cs.roi_metric|default:"—" }}</td>
             <td>
-              <span class="status-badge {{ cs.status }}"
+              <span class="ds-badge clickable {{ cs.status }}"
                     data-url="{% url 'dashboard:website_portfolio_toggle' cs.pk %}"
                     onclick="event.stopPropagation(); toggleStatus(this)">
-                <span class="dot"></span>
+                <span class="ds-dot"></span>
                 <span class="status-text">{% if cs.status == 'published' %}Published{% else %}Draft{% endif %}</span>
               </span>
             </td>
@@ -362,7 +336,7 @@
           </div>
         </div>
       </div>
-      <a href="{% url 'dashboard:website_service_create' %}" class="btn-wc-primary">
+      <a href="{% url 'dashboard:website_service_create' %}" class="ds-btn">
         <i class="bi bi-plus-lg"></i> เพิ่มบริการใหม่
       </a>
     </div>
@@ -390,10 +364,10 @@
             <td>฿{{ svc.price_start|intcomma }} <span class="text-muted">{{ svc.price_label }}</span></td>
             <td class="text-muted">{{ svc.display_order }}</td>
             <td>
-              <span class="status-badge {{ svc.status }}"
+              <span class="ds-badge clickable {{ svc.status }}"
                     data-url="{% url 'dashboard:website_service_toggle' svc.pk %}"
                     onclick="event.stopPropagation(); toggleStatus(this)">
-                <span class="dot"></span>
+                <span class="ds-dot"></span>
                 <span class="status-text">{% if svc.status == 'published' %}Published{% else %}Draft{% endif %}</span>
               </span>
             </td>
@@ -438,7 +412,7 @@
             <textarea name="hero_lead" class="form-control" rows="2">{{ about_page.hero_lead }}</textarea>
           </div>
           <div class="col-12">
-            <button type="submit" class="btn-wc-primary">
+            <button type="submit" class="ds-btn">
               <i class="bi bi-check-lg"></i> บันทึก Hero
             </button>
           </div>
@@ -472,7 +446,7 @@
           {% empty %}<p class="text-muted">ยังไม่มีสถิติ</p>
           {% endfor %}
         </div>
-        <button type="submit" class="btn-wc-primary">
+        <button type="submit" class="ds-btn">
           <i class="bi bi-check-lg"></i> บันทึก Stats
         </button>
       </form>
@@ -503,7 +477,7 @@
             <textarea name="mission_body" class="form-control" rows="3">{{ about_page.mission_body }}</textarea>
           </div>
           <div class="col-12">
-            <button type="submit" class="btn-wc-primary">
+            <button type="submit" class="ds-btn">
               <i class="bi bi-check-lg"></i> บันทึก Mission
             </button>
           </div>
@@ -539,7 +513,7 @@
             <input type="text" name="title" value="{{ cp.title }}" class="form-control mb-2">
             <label class="field-label">คำอธิบาย</label>
             <input type="text" name="description" value="{{ cp.description }}" class="form-control mb-3">
-            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
+            <button type="submit" class="ds-btn w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
           </div>
         </form>
         {% endfor %}
@@ -576,7 +550,7 @@
             <textarea name="description" class="form-control mb-2" rows="2">{{ exp.description }}</textarea>
             <label class="field-label">Tags <small class="text-muted">(คั่นด้วยจุลภาค)</small></label>
             <input type="text" name="tags" value="{{ exp.tags }}" class="form-control mb-3">
-            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
+            <button type="submit" class="ds-btn w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
           </div>
         </form>
         {% endfor %}
@@ -611,7 +585,7 @@
             <input type="text" name="title" value="{{ val.title }}" class="form-control mb-2">
             <label class="field-label">รายละเอียด</label>
             <textarea name="description" class="form-control mb-3" rows="3">{{ val.description }}</textarea>
-            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
+            <button type="submit" class="ds-btn w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
           </div>
         </form>
         {% empty %}<p class="text-muted">ยังไม่มีค่านิยม</p>
@@ -648,7 +622,7 @@
             <input type="text" name="cta_button_text" value="{{ about_page.cta_button_text }}" class="form-control">
           </div>
           <div class="col-12">
-            <button type="submit" class="btn-wc-primary">
+            <button type="submit" class="ds-btn">
               <i class="bi bi-check-lg"></i> บันทึก CTA
             </button>
           </div>
@@ -690,7 +664,7 @@
             <input type="text" name="contact_hero_subtitle" value="{{ site.contact_hero_subtitle }}" class="form-control">
           </div>
           <div class="col-12">
-            <button type="submit" class="btn-wc-primary"><i class="bi bi-check-lg"></i> บันทึก Hero</button>
+            <button type="submit" class="ds-btn"><i class="bi bi-check-lg"></i> บันทึก Hero</button>
           </div>
         </div>
       </form>
@@ -724,7 +698,7 @@
             <input type="text" name="name" value="{{ topic.name }}" class="form-control mb-2">
             <label class="field-label">URL</label>
             <input type="text" name="url" value="{{ topic.url }}" class="form-control mb-3" placeholder="/services/ai-chatbot/ หรือ #contact-form">
-            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
+            <button type="submit" class="ds-btn w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
           </div>
         </form>
         {% endfor %}
@@ -772,7 +746,7 @@
             <input type="text" name="form_desc" value="{{ site.form_desc }}" class="form-control">
           </div>
           <div class="col-12">
-            <button type="submit" class="btn-wc-primary"><i class="bi bi-check-lg"></i> บันทึก Channels</button>
+            <button type="submit" class="ds-btn"><i class="bi bi-check-lg"></i> บันทึก Channels</button>
           </div>
         </div>
       </form>
@@ -807,7 +781,7 @@
             <input type="text" name="guarantee" value="{{ site.guarantee }}" class="form-control">
           </div>
           <div class="col-12">
-            <button type="submit" class="btn-wc-primary"><i class="bi bi-check-lg"></i> บันทึก Sidebar</button>
+            <button type="submit" class="ds-btn"><i class="bi bi-check-lg"></i> บันทึก Sidebar</button>
           </div>
         </div>
       </form>
@@ -842,7 +816,7 @@ function toggleStatus(el) {
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    el.className = 'status-badge ' + data.status;
+    el.className = 'ds-badge clickable ' + data.status;
     el.querySelector('.status-text').textContent = data.status === 'published' ? 'Published' : 'Draft';
   });
 }

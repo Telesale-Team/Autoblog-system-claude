@@ -269,3 +269,99 @@ body, #sidebar, #topbar, .stat-card { transition: background-color .25s, color .
   #sidebar, #topbar, .no-print { display: none !important; }
   #main-content { margin-left: 0 !important; }
 }
+
+/* ============================================================
+   DESIGN SYSTEM — Standard Components (single source of truth)
+   ใช้ class เหล่านี้ทุกหน้าใน /owner/ แทน class ที่กระจัดกระจาย
+   ============================================================ */
+
+/* ── Status Badge (.ds-badge) ──────────────────────────
+   ใช้แทน: .status-badge, .status-pill, .status-pill-sm,
+           .art-status-badge, .db-status-pill
+   ─────────────────────────────────────────────────────── */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .25rem .7rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  user-select: none;
+}
+.ds-badge .ds-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+/* States */
+.ds-badge.published { background: rgba(0,210,122,.12); color: #009a58; border-color: rgba(0,210,122,.25); }
+.ds-badge.draft     { background: rgba(100,116,139,.12); color: #64748b; border-color: rgba(100,116,139,.2); }
+.ds-badge.new       { background: rgba(44,123,229,.12); color: #1a5cbf; border-color: rgba(44,123,229,.25); }
+.ds-badge.active    { background: rgba(0,210,122,.12); color: #009a58; border-color: rgba(0,210,122,.25); }
+.ds-badge.warning   { background: rgba(245,128,62,.12); color: #c4631d; border-color: rgba(245,128,62,.25); }
+.ds-badge.danger    { background: rgba(230,55,87,.12); color: #c01236; border-color: rgba(230,55,87,.25); }
+/* Clickable toggle variant */
+.ds-badge.clickable { cursor: pointer; transition: opacity .15s, transform .15s; }
+.ds-badge.clickable:hover { opacity: .75; transform: scale(.97); }
+
+/* ── Primary Button (.ds-btn) ──────────────────────────
+   ใช้แทน: .btn-wc-primary, .btn-publish, .btn-app-filled,
+           .btn-gold, .btn-app-gradient
+   ─────────────────────────────────────────────────────── */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .5rem 1.1rem;
+  border-radius: .375rem;
+  border: none;
+  background: var(--app-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: .88rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity .15s;
+  white-space: nowrap;
+}
+.ds-btn:hover { opacity: .85; color: #fff; }
+.ds-btn:disabled { opacity: .5; cursor: not-allowed; }
+.ds-btn.w-100 { width: 100%; justify-content: center; }
+
+/* ── Outline Button (.ds-btn-outline) ─────────────────
+   ใช้แทน: .btn-wc-outline, .btn-save-draft, .btn-draft,
+           .btn-outline-gold, .btn-app-outline
+   ─────────────────────────────────────────────────────── */
+.ds-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .5rem 1.1rem;
+  border-radius: .375rem;
+  border: 1.5px solid var(--app-primary);
+  background: transparent;
+  color: var(--app-primary);
+  font-weight: 600;
+  font-size: .88rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.ds-btn-outline:hover { background: rgba(201,169,110,.1); color: var(--app-primary); }
+.ds-btn-outline.w-100 { width: 100%; justify-content: center; }
+
+/* ── Danger Outline (.ds-btn-danger) ──────────────────── */
+.ds-btn-danger {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .5rem 1.1rem; border-radius: .375rem;
+  border: 1.5px solid rgba(230,55,87,.4);
+  background: rgba(230,55,87,.08); color: #c01236;
+  font-weight: 600; font-size: .88rem;
+  cursor: pointer; text-decoration: none; transition: background .15s;
+}
+.ds-btn-danger:hover { background: rgba(230,55,87,.15); color: #c01236; }
