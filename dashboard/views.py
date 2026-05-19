@@ -1396,6 +1396,33 @@ def website_content_view(request):
 
 
 @staff_member_required
+def website_service_edit(request, pk):
+    from pages.models import Service
+    from django.shortcuts import get_object_or_404
+    svc = get_object_or_404(Service, pk=pk)
+    if request.method == "POST":
+        svc.name            = request.POST.get("name", svc.name).strip()
+        svc.slug            = request.POST.get("slug", svc.slug).strip()
+        svc.tagline         = request.POST.get("tagline", svc.tagline).strip()
+        svc.description     = request.POST.get("description", svc.description).strip()
+        svc.icon            = request.POST.get("icon", svc.icon).strip()
+        svc.cover_image_url = request.POST.get("cover_image_url", svc.cover_image_url).strip()
+        svc.price_start     = int(request.POST.get("price_start", svc.price_start) or 0)
+        svc.price_label     = request.POST.get("price_label", svc.price_label).strip()
+        svc.features        = request.POST.get("features", svc.features).strip()
+        svc.display_order   = int(request.POST.get("display_order", svc.display_order) or 0)
+        svc.is_featured     = "is_featured" in request.POST
+        svc.status          = request.POST.get("status", svc.status)
+        svc.save()
+        messages.success(request, f'บันทึก "{svc.name}" แล้ว')
+        return redirect("dashboard:website_service_edit", pk=svc.pk)
+    return render(request, "dashboard/service_edit.html", {
+        "svc": svc,
+        "all_services": Service.objects.all().order_by("display_order"),
+    })
+
+
+@staff_member_required
 @require_POST
 def website_service_toggle(request, pk):
     from pages.models import Service

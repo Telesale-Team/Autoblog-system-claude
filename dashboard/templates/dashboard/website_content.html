@@ -365,7 +365,7 @@
         </div>
       </div>
       <a href="/admin/pages/service/add/" target="_blank" class="btn-wc-primary">
-        <i class="bi bi-plus-lg"></i> เพิ่มบริการ
+        <i class="bi bi-plus-lg"></i> เพิ่มบริการใหม่
       </a>
     </div>
     <div class="scard-body" style="padding:0;">
@@ -381,7 +381,7 @@
         </thead>
         <tbody>
           {% for svc in services %}
-          <tr style="cursor:pointer;" onclick="window.open('/admin/pages/service/{{ svc.pk }}/change/', '_blank')">
+          <tr style="cursor:pointer;" onclick="window.location='{% url 'dashboard:website_service_edit' svc.pk %}'">
             <td>
               <div class="d-flex align-items-center gap-2">
                 <i class="bi {{ svc.icon }}" style="color:var(--app-primary);font-size:1.1rem;width:20px;text-align:center;"></i>

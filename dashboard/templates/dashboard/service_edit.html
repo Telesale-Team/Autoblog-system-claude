@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+{% load static humanize %}
+<!-- ===================================================================
+     SERVICE EDIT — แก้ไขบริการ
+     Design: settings-hero + scard (Owner Dashboard Standard)
+     =================================================================== -->
+
+{% block title %}แก้ไข: {{ svc.name }} — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'dashboard:website_content' %}?tab=services">จัดการเนื้อหาเว็บ</a>
+  </li>
+  <li class="breadcrumb-item active">{{ svc.name }}</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<style>
+  .svc-nav { display: flex; flex-direction: column; gap: .25rem; }
+  .svc-nav-item {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .5rem .75rem; border-radius: .4rem;
+    text-decoration: none; font-size: .85rem;
+    color: var(--bs-secondary-color);
+    transition: background .15s, color .15s;
+  }
+  .svc-nav-item:hover { background: rgba(201,169,110,.08); color: var(--app-primary); }
+  .svc-nav-item.active {
+    background: rgba(201,169,110,.14);
+    color: var(--app-primary);
+    font-weight: 600;
+  }
+  .svc-nav-item i { width: 18px; text-align: center; flex-shrink: 0; }
+
+  .form-label {
+    font-size: .78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--bs-secondary-color); margin-bottom: .35rem;
+  }
+  .form-control, .form-select {
+    border-color: var(--bs-border-color);
+    background: transparent; font-size: .88rem;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+  }
+  .icon-preview {
+    width: 48px; height: 48px; border-radius: .5rem;
+    background: rgba(201,169,110,.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; color: var(--app-primary);
+    border: 1px solid rgba(201,169,110,.2);
+  }
+  .feature-row {
+    display: flex; gap: .5rem; align-items: center; margin-bottom: .5rem;
+  }
+  .feature-row input { flex: 1; }
+  .btn-add-feature {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .4rem .9rem; border-radius: .375rem;
+    border: 1.5px dashed var(--bs-border-color);
+    background: transparent; color: var(--bs-secondary-color);
+    font-size: .82rem; cursor: pointer; transition: border-color .15s, color .15s;
+    margin-top: .25rem;
+  }
+  .btn-add-feature:hover { border-color: var(--app-primary); color: var(--app-primary); }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .3rem .8rem; border-radius: 999px;
+    font-size: .75rem; font-weight: 700;
+  }
+  .status-pill.published { background: rgba(0,210,122,.12); color: #009a58; }
+  .status-pill.draft     { background: rgba(100,116,139,.12); color: #64748b; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Page Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi {{ svc.icon }}"></i></span>
+      {{ svc.name }}
+    </h1>
+    <p class="settings-hero-sub">
+      แก้ไขข้อมูลบริการ
+      <span class="status-pill {{ svc.status }} ms-2">
+        <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
+        {{ svc.get_status_display }}
+      </span>
+    </p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="/services/{{ svc.slug }}/" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-eye me-1"></i>ดูหน้าจริง
+    </a>
+    <a href="{% url 'dashboard:website_content' %}?tab=services" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-arrow-left me-1"></i>กลับ
+    </a>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissible fade show mb-3">
+    <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+{% endif %}
+
+<div class="row g-4">
+
+  <!-- === LEFT: Form Sections === -->
+  <div class="col-lg-9">
+    <form method="post" action="{% url 'dashboard:website_service_edit' svc.pk %}">
+      {% csrf_token %}
+
+      <!-- 1. ข้อมูลหลัก -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-info-circle-fill"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">ข้อมูลหลัก</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ชื่อ, Slug, Tagline</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label class="form-label">ชื่อบริการ</label>
+              <input type="text" name="name" value="{{ svc.name }}" class="form-control" required
+                     oninput="updateSlug(this.value)">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">Slug (URL)</label>
+              <input type="text" name="slug" value="{{ svc.slug }}" id="slugInput"
+                     class="form-control" placeholder="ai-chatbot">
+              <small class="text-muted">/services/<span id="slugPreview">{{ svc.slug }}</span>/</small>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Tagline</label>
+              <input type="text" name="tagline" value="{{ svc.tagline }}" class="form-control"
+                     placeholder="ประโยคสั้นอธิบายบริการ (ไม่เกิน 160 ตัวอักษร)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. รายละเอียด -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-file-text-fill"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">รายละเอียด</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Description + Features</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="4"
+                        placeholder="อธิบายบริการโดยละเอียด">{{ svc.description }}</textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Features <small class="text-muted text-lowercase">(แต่ละบรรทัด = 1 feature)</small></label>
+              <div id="featuresContainer">
+                {% for feat in svc.get_feature_list %}
+                <div class="feature-row">
+                  <i class="bi bi-check-circle-fill" style="color:var(--app-primary);flex-shrink:0;"></i>
+                  <input type="text" class="form-control feature-input" value="{{ feat }}" placeholder="Feature item">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="removeFeature(this)">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+                {% endfor %}
+              </div>
+              <button type="button" class="btn-add-feature" onclick="addFeature()">
+                <i class="bi bi-plus-lg"></i> เพิ่ม Feature
+              </button>
+              <input type="hidden" name="features" id="featuresHidden" value="{{ svc.features }}">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. รูปภาพ & ไอคอน -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-image-fill"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">รูปภาพ & ไอคอน</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Cover image URL + Bootstrap Icon</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3 align-items-start">
+            <div class="col-md-2 text-center">
+              <label class="form-label">Preview</label>
+              <div class="icon-preview mx-auto" id="iconPreviewBox">
+                <i class="bi {{ svc.icon }}" id="iconPreviewIcon"></i>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Bootstrap Icon Class</label>
+              <input type="text" name="icon" value="{{ svc.icon }}" class="form-control"
+                     placeholder="bi-robot"
+                     oninput="document.getElementById('iconPreviewIcon').className='bi '+this.value">
+              <small class="text-muted">เช่น bi-robot, bi-gear, bi-cpu-fill</small>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Cover Image URL</label>
+              <input type="url" name="cover_image_url" value="{{ svc.cover_image_url }}"
+                     class="form-control" placeholder="https://images.unsplash.com/...">
+              {% if svc.cover_image_url %}
+              <img src="{{ svc.cover_image_url }}" alt="cover"
+                   style="margin-top:.5rem;width:100%;height:80px;object-fit:cover;border-radius:.375rem;">
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ราคา -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-currency-exchange"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">ราคา</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ราคาเริ่มต้น + Label</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">ราคาเริ่มต้น (บาท)</label>
+              <div class="input-group">
+                <span class="input-group-text" style="background:transparent;">฿</span>
+                <input type="number" name="price_start" value="{{ svc.price_start }}"
+                       class="form-control" min="0">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Price Label</label>
+              <input type="text" name="price_label" value="{{ svc.price_label }}"
+                     class="form-control" placeholder="เริ่มต้น / ต่อเดือน / ต่อโปรเจกต์">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. การแสดงผล -->
+      <div class="scard mb-4">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="scard-header-icon"><i class="bi bi-toggles"></i></div>
+            <div>
+              <div style="font-weight:700;font-size:.97rem">การแสดงผล</div>
+              <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Status, ลำดับ, Featured</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select name="status" class="form-select">
+                <option value="published" {% if svc.status == "published" %}selected{% endif %}>Published</option>
+                <option value="draft"     {% if svc.status == "draft" %}selected{% endif %}>Draft</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">ลำดับ</label>
+              <input type="number" name="display_order" value="{{ svc.display_order }}"
+                     class="form-control" min="0">
+            </div>
+            <div class="col-md-3 pt-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="is_featured" id="isFeatured"
+                       {% if svc.is_featured %}checked{% endif %}>
+                <label class="form-check-label" for="isFeatured" style="font-size:.88rem;">
+                  แสดงเป็น Featured
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-lg" style="background:var(--app-primary);color:#fff;font-weight:700;border:none;">
+          <i class="bi bi-check-lg me-1"></i> บันทึกการเปลี่ยนแปลง
+        </button>
+        <a href="{% url 'dashboard:website_content' %}?tab=services" class="btn btn-lg btn-outline-secondary">
+          ยกเลิก
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- === RIGHT: Service List Nav === -->
+  <div class="col-lg-3">
+    <div class="scard" style="position:sticky;top:70px;">
+      <div class="scard-header">
+        <div style="font-weight:700;font-size:.9rem;">บริการทั้งหมด</div>
+      </div>
+      <div class="scard-body" style="padding:.75rem;">
+        <div class="svc-nav">
+          {% for s in all_services %}
+          <a href="{% url 'dashboard:website_service_edit' s.pk %}"
+             class="svc-nav-item {% if s.pk == svc.pk %}active{% endif %}">
+            <i class="bi {{ s.icon }}"></i>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ s.name }}</span>
+            {% if s.status == 'draft' %}
+            <span class="badge" style="background:rgba(100,116,139,.15);color:#64748b;font-size:.65rem;">Draft</span>
+            {% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ── Slug auto-generate ── */
+function updateSlug(name) {
+  var slug = name.toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim();
+  document.getElementById('slugInput').value = slug;
+  document.getElementById('slugPreview').textContent = slug;
+}
+
+/* ── Features management ── */
+function syncFeatures() {
+  var inputs = document.querySelectorAll('.feature-input');
+  var lines = [];
+  inputs.forEach(function(inp) {
+    var val = inp.value.trim();
+    if (val) lines.push(val);
+  });
+  document.getElementById('featuresHidden').value = lines.join('\n');
+}
+
+function addFeature() {
+  var container = document.getElementById('featuresContainer');
+  var div = document.createElement('div');
+  div.className = 'feature-row';
+  div.innerHTML = '<i class="bi bi-check-circle-fill" style="color:var(--app-primary);flex-shrink:0;"></i>'
+    + '<input type="text" class="form-control feature-input" placeholder="Feature item" oninput="syncFeatures()">'
+    + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick="removeFeature(this)"><i class="bi bi-x"></i></button>';
+  container.appendChild(div);
+  div.querySelector('input').focus();
+}
+
+function removeFeature(btn) {
+  btn.closest('.feature-row').remove();
+  syncFeatures();
+}
+
+document.querySelectorAll('.feature-input').forEach(function(inp) {
+  inp.addEventListener('input', syncFeatures);
+});
+
+document.querySelector('form').addEventListener('submit', syncFeatures);
+</script>
+{% endblock %}
