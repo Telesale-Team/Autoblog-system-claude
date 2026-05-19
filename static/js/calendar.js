@@ -612,7 +612,18 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
           var isExpanded = cell.dataset.dayExpanded === '1';
+          /* ปิดช่องอื่นทั้งหมดก่อน */
+          document.querySelectorAll('#calendar .fc-daygrid-day[data-day-expanded="1"]').forEach(function(other) {
+            if (other === cell) return;
+            other.dataset.dayExpanded = '';
+            var otherBtn = other.querySelector('.fc-day-collapse-btn');
+            if (otherBtn) {
+              var otherExtra = parseInt(otherBtn.dataset.extra || '0');
+              otherBtn.innerHTML = '+ ' + otherExtra + ' เพิ่มเติม ▼';
+            }
+          });
           cell.dataset.dayExpanded = isExpanded ? '' : '1';
+          btn.dataset.extra = extra;
           btn.innerHTML = isExpanded ? ('+ ' + extra + ' เพิ่มเติม ▼') : '▲ ย่อ';
         });
       }
