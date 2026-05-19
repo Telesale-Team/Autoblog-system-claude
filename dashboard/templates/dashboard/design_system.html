@@ -121,8 +121,8 @@
     <div class="d-flex align-items-center gap-3">
       <div class="scard-header-icon"><i class="bi bi-hand-index-fill"></i></div>
       <div>
-        <div style="font-weight:700;font-size:.97rem">Buttons — 5 ประเภท</div>
-        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ใช้ class จาก <code>dashboard-base.css</code> เสมอ</div>
+        <div style="font-weight:700;font-size:.97rem">Buttons — 5 แบบ Standard + 3 Legacy</div>
+        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Standard ใช้ <code>dashboard-base.css</code> | Legacy รอ migrate เมื่อ redesign หน้านั้น</div>
       </div>
     </div>
   </div>
@@ -199,9 +199,37 @@
       </div>
     </div>
 
+    <hr>
+
+    <!-- Legacy buttons -->
+    <p class="ds-section-title mb-3">Legacy Buttons — รอ Migrate (3 แบบ)</p>
+    <div class="row g-4 mb-3">
+      <div class="col-md-4">
+        <div style="margin-bottom:.5rem;">
+          <button class="btn btn-sm btn-app-filled btn-app">btn-app-filled</button>
+        </div>
+        <div class="btn-label">btn-app-filled btn-app <span class="ds-badge warning" style="min-width:auto;padding:.1rem .5rem;font-size:.65rem;">2x</span></div>
+        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.25rem;">leads_list, pipeline<br>→ migrate เป็น <code>.ds-btn</code></div>
+      </div>
+      <div class="col-md-4">
+        <div style="margin-bottom:.5rem;">
+          <button class="btn btn-sm btn-gold">btn-gold</button>
+        </div>
+        <div class="btn-label">btn-gold <span class="ds-badge warning" style="min-width:auto;padding:.1rem .5rem;font-size:.65rem;">2x</span></div>
+        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.25rem;">blog_list<br>→ migrate เป็น <code>.ds-btn</code></div>
+      </div>
+      <div class="col-md-4">
+        <div style="margin-bottom:.5rem;">
+          <button class="btn btn-primary btn-sm">btn-primary</button>
+        </div>
+        <div class="btn-label">btn btn-primary btn-sm <span class="ds-badge warning" style="min-width:auto;padding:.1rem .5rem;font-size:.65rem;">2x</span></div>
+        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.25rem;">leads_list, pipeline<br>→ migrate เป็น <code>.ds-btn</code></div>
+      </div>
+    </div>
+
     <div class="alert alert-warning small mb-0">
       <i class="bi bi-exclamation-triangle me-1"></i>
-      <strong>Migration note:</strong> <code>btn-app-filled</code>, <code>btn-gold</code>, <code>btn-app-outline</code> ยังมีอยู่ใน leads_list/pipeline/blog_list — ให้ migrate เป็น <code>ds-btn</code> เมื่อ redesign หน้านั้น
+      <strong>Migration note:</strong> Legacy buttons ยังทำงานได้ปกติ — migrate เป็น <code>.ds-btn</code> เมื่อ redesign หน้า leads_list, pipeline, blog_list
     </div>
   </div>
 </div>
