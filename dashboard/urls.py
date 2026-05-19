@@ -64,6 +64,7 @@ urlpatterns = [
     path("website-content/",                         views.website_content_view,    name="website_content"),
     path("blog/category/add/",                          views.blog_category_add,       name="blog_category_add"),
     path("blog/tag/add/",                               views.blog_tag_add,             name="blog_tag_add"),
+    path("blog/category/<int:pk>/delete/",             views.blog_category_delete,     name="blog_category_delete"),
     path("website-content/service/new/",               views.website_service_create,  name="website_service_create"),
     path("website-content/service/<int:pk>/",          views.website_service_edit,    name="website_service_edit"),
     path("website-content/service/<int:pk>/toggle/",  views.website_service_toggle,  name="website_service_toggle"),

@@ -330,10 +330,16 @@
             </div>
             <span style="font-weight:700;font-size:.9rem;">หมวดหมู่</span>
           </div>
-          <button type="button" class="ds-btn" style="padding:.25rem .6rem;font-size:.75rem;"
-                  data-bs-toggle="modal" data-bs-target="#addCatModal" title="เพิ่มหมวดหมู่ใหม่">
-            <i class="bi bi-plus-lg"></i>
-          </button>
+          <div class="d-flex gap-1">
+            <button type="button" class="ds-btn" style="padding:.25rem .6rem;font-size:.75rem;"
+                    data-bs-toggle="modal" data-bs-target="#addCatModal" title="เพิ่มหมวดหมู่">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+            <button type="button" class="ds-btn-outline" style="padding:.25rem .6rem;font-size:.75rem;"
+                    data-bs-toggle="modal" data-bs-target="#manageCatModal" title="จัดการหมวดหมู่">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+          </div>
         </div>
         <div class="scard-body">
           <select name="category" id="id_category" class="form-select form-select-sm" required>
@@ -431,6 +437,43 @@
         <button type="button" class="ds-btn" id="btnSaveCat">
           <i class="bi bi-check2 me-1"></i>เพิ่มหมวดหมู่
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === Modal: จัดการหมวดหมู่ (แก้ไข/ลบ) === -->
+<div class="modal fade" id="manageCatModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <h6 class="fw-bold mb-0" style="font-size:.97rem;">จัดการหมวดหมู่</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="max-height:400px;overflow-y:auto;">
+        <div id="catManageList">
+          {% for cat in categories %}
+          <div class="d-flex align-items-center justify-content-between py-2 border-bottom" id="cat-row-{{ cat.pk }}">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-{{ cat.color }}">{{ cat.color }}</span>
+              <span style="font-size:.88rem;font-weight:600;">{{ cat.name }}</span>
+              <span class="text-muted" style="font-size:.75rem;">({{ cat.articles.count }} บทความ)</span>
+            </div>
+            <button type="button" class="btn-wc-delete ds-btn-danger"
+                    style="padding:.2rem .55rem;font-size:.72rem;"
+                    data-id="{{ cat.pk }}" data-name="{{ cat.name }}"
+                    {% if cat.articles.count > 0 %}disabled title="มีบทความอยู่ ไม่สามารถลบได้"{% endif %}>
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+          {% empty %}
+          <p class="text-muted text-center py-3">ยังไม่มีหมวดหมู่</p>
+          {% endfor %}
+        </div>
+        <div id="catManageError" class="text-danger small mt-2 d-none"></div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ปิด</button>
       </div>
     </div>
   </div>
@@ -567,6 +610,34 @@
   document.getElementById('addCatModal').addEventListener('hidden.bs.modal', function() {
     document.getElementById('newCatName').value = '';
     document.getElementById('addCatError').classList.add('d-none');
+  });
+
+  /* ── Delete Category ── */
+  document.getElementById('manageCatModal').addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-wc-delete');
+    if (!btn || btn.disabled) return;
+    var id   = btn.dataset.id;
+    var name = btn.dataset.name;
+    if (!confirm('ลบหมวดหมู่ "' + name + '" ใช่ไหม?')) return;
+    var errEl = document.getElementById('catManageError');
+    errEl.classList.add('d-none');
+    fetch('/owner/blog/category/' + id + '/delete/', {
+      method: 'POST',
+      headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.ok) { errEl.textContent = data.error; errEl.classList.remove('d-none'); return; }
+      // ลบ row ใน modal
+      var row = document.getElementById('cat-row-' + id);
+      if (row) row.remove();
+      // ลบ option ใน dropdown
+      var sel = document.getElementById('id_category');
+      var opt = sel.querySelector('option[value="' + id + '"]');
+      if (opt) opt.remove();
+      showToast('ลบ "' + data.name + '" แล้ว');
+    })
+    .catch(function() { errEl.textContent = 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); });
   });
 
   /* ── Add Tag ── */

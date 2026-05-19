@@ -1428,6 +1428,20 @@ def blog_category_add(request):
 
 
 @staff_member_required
+def blog_category_delete(request, pk):
+    if request.method == "POST":
+        from blog.models import Category
+        from django.shortcuts import get_object_or_404
+        cat = get_object_or_404(Category, pk=pk)
+        if cat.articles.exists():
+            return JsonResponse({"ok": False, "error": f'มีบทความอยู่ใน "{cat.name}" ไม่สามารถลบได้'}, status=400)
+        name = cat.name
+        cat.delete()
+        return JsonResponse({"ok": True, "name": name})
+    return JsonResponse({"ok": False}, status=405)
+
+
+@staff_member_required
 def blog_tag_add(request):
     if request.method == "POST":
         import json
