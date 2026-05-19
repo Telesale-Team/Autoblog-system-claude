@@ -166,35 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return (a.start || 0) - (b.start || 0);        /* เรียงตามเวลา */
     },
 
-    dayMaxEvents:  4,
-    moreLinkContent: function(arg) {
-      return { html: '<span class="fc-more-link-btn">+ ' + arg.num + ' เพิ่มเติม ▼</span>' };
-    },
-    moreLinkClick: function(arg) {
-      /* Toggle แสดง/ซ่อน events ที่ hidden ใน cell นี้ */
-      var cell = arg.el.closest('.fc-daygrid-day');
-      if (!cell) return 'stop';
-      var expanded = cell.dataset.expanded === '1';
-      var hidden   = cell.querySelectorAll('.fc-daygrid-event-harness[style*="display: none"], .fc-daygrid-event-harness.fc-limited');
-
-      if (expanded) {
-        /* ย่อ */
-        cell.querySelectorAll('.fc-daygrid-event-harness-abs, .fc-extra').forEach(function(el) {
-          el.style.display = 'none';
-        });
-        cell.dataset.expanded = '0';
-        arg.el.innerHTML = '<span class="fc-more-link-btn">+ ' + arg.num + ' เพิ่มเติม ▼</span>';
-      } else {
-        /* ขยาย */
-        cell.querySelectorAll('.fc-daygrid-event-harness').forEach(function(el) {
-          el.style.removeProperty('display');
-          el.style.visibility = 'visible';
-        });
-        cell.dataset.expanded = '1';
-        arg.el.innerHTML = '<span class="fc-more-link-btn">▲ ย่อ</span>';
-      }
-      return 'stop';
-    },
+    dayMaxEvents:  false,
 
     eventSources: [
 
@@ -353,6 +325,8 @@ document.addEventListener('DOMContentLoaded', function () {
       currentViewType = info.view.type;
       if (info.view.type === 'listMonth') {
         setTimeout(reformatListView, 50);
+      } else if (info.view.type === 'dayGridMonth') {
+        setTimeout(applyDayCollapse, 80);
       }
     },
 
@@ -610,6 +584,42 @@ document.addEventListener('DOMContentLoaded', function () {
       .finally(function () { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check2 me-1"></i>บันทึก'; });
   });
 
+  /* ── [9.5] Month View — collapse day cells ที่มี events > 4 ─────────── */
+  var DAY_MAX = 4;
+  function applyDayCollapse() {
+    if (currentViewType !== 'dayGridMonth') return;
+    /* ลบปุ่มเก่าออกก่อน */
+    document.querySelectorAll('#calendar .fc-day-collapse-btn').forEach(function(el) { el.remove(); });
+
+    document.querySelectorAll('#calendar .fc-daygrid-day').forEach(function(cell) {
+      var events = cell.querySelectorAll('.fc-daygrid-event-harness');
+      if (events.length <= DAY_MAX) {
+        /* reset เผื่อ expand แล้วมา collapse ใหม่ */
+        events.forEach(function(e) { e.style.display = ''; });
+        cell.dataset.dayExpanded = '';
+        return;
+      }
+      var extra = events.length - DAY_MAX;
+      /* ซ่อน events เกิน DAY_MAX */
+      events.forEach(function(e, i) { e.style.display = i >= DAY_MAX ? 'none' : ''; });
+
+      /* สร้างปุ่ม collapse */
+      var btn = document.createElement('div');
+      btn.className = 'fc-day-collapse-btn';
+      btn.innerHTML = '+ ' + extra + ' เพิ่มเติม ▼';
+      btn.style.cssText = 'font-size:.68rem;font-weight:700;color:var(--app-primary);background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);border-radius:.25rem;padding:.1rem .4rem;cursor:pointer;margin:.1rem .25rem;display:inline-block;';
+      cell.querySelector('.fc-daygrid-day-events').appendChild(btn);
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var expanded = cell.dataset.dayExpanded === '1';
+        events.forEach(function(ev, i) { ev.style.display = (expanded && i >= DAY_MAX) ? 'none' : ''; });
+        cell.dataset.dayExpanded = expanded ? '' : '1';
+        btn.innerHTML = expanded ? ('+ ' + extra + ' เพิ่มเติม ▼') : '▲ ย่อ';
+      });
+    });
+  }
+
   /* ── [10] List View — reformat day headers + collapse > 6 events ──── */
   function reformatListView() {
     reformatListHeaders();
@@ -729,6 +739,7 @@ document.addEventListener('DOMContentLoaded', function () {
     activeFilter = item.dataset.filter;
     applyFilter();
     if (currentViewType === 'listMonth') setTimeout(reformatListView, 50);
+    if (currentViewType === 'dayGridMonth') setTimeout(applyDayCollapse, 80);
   });
 
 
