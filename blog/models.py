@@ -65,7 +65,11 @@ class Tag(models.Model):
 
 
 class Article(models.Model):
-    STATUS_CHOICES = [("draft", "Draft"), ("published", "Published")]
+    STATUS_CHOICES = [
+        ("waiting",   "รอเขียน"),
+        ("draft",     "Draft"),
+        ("published", "Published"),
+    ]
 
     title = models.CharField("หัวข้อ", max_length=200)
     slug = models.SlugField(max_length=220, unique=True, blank=True, allow_unicode=False)
@@ -85,6 +89,11 @@ class Article(models.Model):
     og_image = models.ImageField("OG image", upload_to="blog/og/%Y/%m/", blank=True, null=True)
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="draft")
+    backlog_ref = models.ForeignKey(
+        "marketing.ContentBacklog", null=True, blank=True,
+        on_delete=models.SET_NULL, related_name="articles",
+        verbose_name="มาจาก Backlog"
+    )
     is_featured = models.BooleanField("โชว์หน้าแรก", default=False)
     views_count = models.PositiveIntegerField(default=0)
 

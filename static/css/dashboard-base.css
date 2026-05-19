@@ -304,6 +304,7 @@ body, #sidebar, #topbar, .stat-card { transition: background-color .25s, color .
 .ds-badge.draft     { background: rgba(100,116,139,.12); color: #64748b; border-color: rgba(100,116,139,.2); }
 .ds-badge.new       { background: rgba(44,123,229,.12); color: #1a5cbf; border-color: rgba(44,123,229,.25); }
 .ds-badge.active    { background: rgba(0,210,122,.12); color: #009a58; border-color: rgba(0,210,122,.25); }
+.ds-badge.waiting   { background: rgba(129,140,248,.12); color: #4f46e5; border-color: rgba(129,140,248,.25); }
 .ds-badge.warning   { background: rgba(245,128,62,.12); color: #c4631d; border-color: rgba(245,128,62,.25); }
 .ds-badge.danger    { background: rgba(230,55,87,.12); color: #c01236; border-color: rgba(230,55,87,.25); }
 /* Clickable toggle variant */

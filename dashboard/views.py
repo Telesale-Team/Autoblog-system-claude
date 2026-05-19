@@ -1572,6 +1572,53 @@ def website_portfolio_toggle(request, pk):
 
 @staff_member_required
 @require_POST
+def website_backlog_to_blog(request, pk):
+    """ส่ง Backlog item เข้า Blog list ด้วย status=waiting"""
+    from marketing.models import ContentBacklog
+    from blog.models import Article, Category
+    from django.shortcuts import get_object_or_404
+    import re
+
+    item = get_object_or_404(ContentBacklog, pk=pk)
+
+    # ตรวจว่ามี Article ที่ link กับ backlog นี้แล้วหรือยัง
+    if Article.objects.filter(backlog_ref=item).exists():
+        messages.warning(request, f'"{item.topic[:40]}" อยู่ใน Blog list แล้ว')
+        return redirect("/owner/website-content/?tab=blog")
+
+    # สร้าง slug จาก topic
+    slug_base = re.sub(r"[^\w\s-]", "", item.topic.lower())
+    slug_base = re.sub(r"\s+", "-", slug_base.strip())[:200]
+    slug = slug_base
+    i = 1
+    while Article.objects.filter(slug=slug).exists():
+        slug = f"{slug_base}-{i}"; i += 1
+
+    # ใช้ category แรกที่มี หรือสร้าง default
+    cat = Category.objects.first()
+    if not cat:
+        cat = Category.objects.create(name="ทั่วไป", slug="general")
+
+    article = Article.objects.create(
+        title       = item.topic,
+        slug        = slug,
+        author      = request.user,
+        category    = cat,
+        status      = "waiting",
+        backlog_ref = item,
+        excerpt     = f"Target keyword: {item.keyword}" if item.keyword else "",
+        content     = "",
+    )
+    # อัปเดต backlog status เป็น in_progress
+    item.status = "in_progress"
+    item.save()
+
+    messages.success(request, f'เพิ่ม "{article.title[:40]}" เข้า Blog list แล้ว (รอเขียน)')
+    return redirect("/owner/website-content/?tab=blog")
+
+
+@staff_member_required
+@require_POST
 def website_article_toggle(request, pk):
     from blog.models import Article
     from django.shortcuts import get_object_or_404
