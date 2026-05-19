@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ContactLead, Service, SiteSetting, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
+from .models import ContactLead, Service, SiteSetting, ContactTopic, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
 
 
 @admin.register(Service)
@@ -31,9 +31,23 @@ class SiteSettingAdmin(admin.ModelAdmin):
     fieldsets = (
         ("ข้อมูลติดต่อ", {
             "fields": ("contact_email", "line_id", "phone", "business_hours"),
-            "description": "ข้อมูลเหล่านี้จะแสดงในหน้าติดต่อเรา",
+        }),
+        ("Contact Page — Hero", {
+            "fields": ("contact_hero_title", "contact_hero_subtitle"),
+        }),
+        ("Contact Page — Channels", {
+            "fields": ("line_desc", "email_desc", "form_desc"),
+        }),
+        ("Contact Page — Sidebar", {
+            "fields": ("response_time", "guarantee"),
         }),
     )
+
+
+@admin.register(ContactTopic)
+class ContactTopicAdmin(admin.ModelAdmin):
+    list_display = ("name", "icon", "url", "order")
+    list_editable = ("order",)
 
     def has_add_permission(self, request):
         return not SiteSetting.objects.exists()

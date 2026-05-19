@@ -252,8 +252,8 @@
 
 <!-- === HERO — Search Bar === -->
 <div class="hc-hero">
-  <h1>เราช่วยอะไรคุณได้บ้าง?</h1>
-  <p>ค้นหาคำตอบ หรือเลือกหัวข้อที่ต้องการด้านล่าง</p>
+  <h1>{{ site.contact_hero_title }}</h1>
+  <p>{{ site.contact_hero_subtitle }}</p>
   <div class="hc-search-wrap">
     <i class="bi bi-search hc-search-icon"></i>
     <input type="text" class="hc-search-input"
@@ -269,38 +269,12 @@
   <div class="hc-section">
     <p class="hc-section-title">หัวข้อที่พบบ่อย</p>
     <div class="hc-topics">
-      <a href="{% url 'pages:service_detail' 'ai-chatbot' %}" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-robot"></i></div>
-        <span class="hc-topic-name">AI Chatbot คืออะไร?</span>
+      {% for topic in topics %}
+      <a href="{{ topic.url }}" class="hc-topic-card">
+        <div class="hc-topic-icon"><i class="bi {{ topic.icon }}"></i></div>
+        <span class="hc-topic-name">{{ topic.name }}</span>
       </a>
-      <a href="{% url 'pages:service_detail' 'ai-workflow-automation' %}" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-diagram-3"></i></div>
-        <span class="hc-topic-name">ระบบ Automation ทำงานยังไง?</span>
-      </a>
-      <a href="{% url 'pages:services' %}" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-currency-dollar"></i></div>
-        <span class="hc-topic-name">ราคาและแพ็กเกจ</span>
-      </a>
-      <a href="{% url 'pages:service_detail' 'custom-ai-agent' %}" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-cpu"></i></div>
-        <span class="hc-topic-name">Custom AI Agent คืออะไร?</span>
-      </a>
-      <a href="{% url 'portfolio:list' %}" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-briefcase"></i></div>
-        <span class="hc-topic-name">ดูผลงานที่ผ่านมา</span>
-      </a>
-      <a href="{% url 'blog:list' %}" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-newspaper"></i></div>
-        <span class="hc-topic-name">บทความและ How-to</span>
-      </a>
-      <a href="#contact-form" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-clock-history"></i></div>
-        <span class="hc-topic-name">ใช้เวลานานแค่ไหน?</span>
-      </a>
-      <a href="#contact-form" class="hc-topic-card">
-        <div class="hc-topic-icon"><i class="bi bi-shield-check"></i></div>
-        <span class="hc-topic-name">ข้อมูลปลอดภัยไหม?</span>
-      </a>
+      {% endfor %}
     </div>
   </div>
 
@@ -315,7 +289,7 @@
           <i class="bi bi-line" style="color:#fff;"></i>
         </div>
         <span class="hc-channel-name">LINE Official</span>
-        <span class="hc-channel-desc">แชทตอบเร็วที่สุด<br>รับคำตอบภายใน 30 นาที</span>
+        <span class="hc-channel-desc">{{ site.line_desc }}</span>
         <span class="hc-channel-action">เปิด LINE →</span>
         <span class="hc-channel-hours"><i class="bi bi-clock me-1"></i>{{ site.business_hours }}</span>
       </a>
@@ -326,7 +300,7 @@
           <i class="bi bi-envelope-fill" style="color:var(--brand-gold);"></i>
         </div>
         <span class="hc-channel-name">อีเมล</span>
-        <span class="hc-channel-desc">สอบถามรายละเอียด<br>ตอบกลับภายใน 24 ชั่วโมง</span>
+        <span class="hc-channel-desc">{{ site.email_desc }}</span>
         <span class="hc-channel-action">ส่งอีเมล →</span>
         <span class="hc-channel-hours"><i class="bi bi-clock me-1"></i>ทุกวัน</span>
       </a>
@@ -337,7 +311,7 @@
           <i class="bi bi-pencil-square" style="color:var(--brand-gold);"></i>
         </div>
         <span class="hc-channel-name">กรอกฟอร์ม</span>
-        <span class="hc-channel-desc">แจ้งความต้องการละเอียด<br>ทีมงานจะโทรกลับหาคุณ</span>
+        <span class="hc-channel-desc">{{ site.form_desc }}</span>
         <span class="hc-channel-action">กรอกฟอร์มด้านล่าง ↓</span>
         <span class="hc-channel-hours"><i class="bi bi-clock me-1"></i>ตลอด 24 ชม.</span>
       </a>
@@ -380,7 +354,7 @@
         <i class="bi bi-lightning-charge-fill"></i>
         <div>
           <div class="hc-info-label">เวลาตอบกลับ</div>
-          <div>ภายใน 24 ชั่วโมง (วันทำการ)</div>
+          <div>{{ site.response_time }}</div>
         </div>
       </div>
       <div class="hc-info-row">
@@ -394,7 +368,7 @@
         <i class="bi bi-shield-check-fill"></i>
         <div>
           <div class="hc-info-label">การรับประกัน</div>
-          <div>ปรึกษาฟรี ไม่มีข้อผูกมัด</div>
+          <div>{{ site.guarantee }}</div>
         </div>
       </div>
       <div class="hc-info-row">

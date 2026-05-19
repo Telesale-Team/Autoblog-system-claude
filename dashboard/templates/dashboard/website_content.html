@@ -663,46 +663,155 @@
 
 <!-- ══════════════════════════════════
      TAB: Contact
+     ลำดับตรงกับ contact.html:
+     1. Hero  2. Quick Topics  3. Channels  4. Sidebar Info
 ══════════════════════════════════ -->
 <div class="wc-pane {% if active_tab == 'contact' %}active{% endif %}" id="pane-contact">
-  <div class="scard">
+
+  <!-- 1. Hero Section -->
+  <div class="scard mb-4">
     <div class="scard-header">
       <div class="d-flex align-items-center gap-3">
-        <div class="scard-header-icon"><i class="bi bi-envelope-fill"></i></div>
+        <div class="scard-header-icon"><i class="bi bi-search-heart-fill"></i></div>
         <div>
-          <div style="font-weight:700;font-size:.97rem">Contact</div>
-          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">ข้อมูลที่แสดงในหน้า /contact/</div>
+          <div style="font-weight:700;font-size:.97rem">Hero Section</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">Title + Subtitle ด้านบนหน้า Contact</div>
         </div>
       </div>
     </div>
     <div class="scard-body">
-      <form method="post" action="{% url 'dashboard:website_contact_save' %}" class="contact-form-grid">
+      <form method="post" action="{% url 'dashboard:website_contact_save' %}">
         {% csrf_token %}
-        <div class="mb-3">
-          <label class="form-label">อีเมลติดต่อ</label>
-          <input type="email" name="contact_email" value="{{ site.contact_email }}" class="form-control">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">LINE ID</label>
-          <div class="input-group">
-            <span class="input-group-text" style="background:transparent;border-color:var(--bs-border-color);">
-              <i class="bi bi-line" style="color:#06C755;"></i>
-            </span>
-            <input type="text" name="line_id" value="{{ site.line_id }}" class="form-control" placeholder="@aibizthailand">
+        <div class="row g-3">
+          <div class="col-md-5">
+            <label class="form-label">Hero Title</label>
+            <input type="text" name="contact_hero_title" value="{{ site.contact_hero_title }}" class="form-control">
+          </div>
+          <div class="col-md-7">
+            <label class="form-label">Hero Subtitle</label>
+            <input type="text" name="contact_hero_subtitle" value="{{ site.contact_hero_subtitle }}" class="form-control">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-wc-primary"><i class="bi bi-check-lg"></i> บันทึก Hero</button>
           </div>
         </div>
-        <div class="mb-3">
-          <label class="form-label">เบอร์โทร <span class="text-muted">(ไม่บังคับ)</span></label>
-          <input type="text" name="phone" value="{{ site.phone }}" class="form-control">
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Quick Topics -->
+  <div class="scard mb-4">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-grid-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Quick Topics</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">{{ topics|length }} หัวข้อที่พบบ่อย</div>
         </div>
-        <div class="mb-4">
-          <label class="form-label">เวลาทำการ</label>
-          <input type="text" name="business_hours" value="{{ site.business_hours }}" class="form-control">
-          <small class="text-muted">แสดงใน LINE channel และ info sidebar</small>
+      </div>
+    </div>
+    <div class="scard-body">
+      <div class="value-edit-grid">
+        {% for topic in topics %}
+        <form method="post" action="{% url 'dashboard:website_topic_save' topic.pk %}">
+          {% csrf_token %}
+          <div class="value-edit-card">
+            <div class="value-icon-preview" id="topic-preview-{{ topic.pk }}">
+              <i class="bi {{ topic.icon }}"></i>
+            </div>
+            <label class="field-label">Bootstrap Icon</label>
+            <input type="text" name="icon" value="{{ topic.icon }}" class="form-control mb-2"
+                   oninput="document.getElementById('topic-preview-{{ topic.pk }}').innerHTML='<i class=\'bi \'+this.value+\'\'></i>'">
+            <label class="field-label">ชื่อหัวข้อ</label>
+            <input type="text" name="name" value="{{ topic.name }}" class="form-control mb-2">
+            <label class="field-label">URL</label>
+            <input type="text" name="url" value="{{ topic.url }}" class="form-control mb-3" placeholder="/services/ai-chatbot/ หรือ #contact-form">
+            <button type="submit" class="btn-wc-primary w-100"><i class="bi bi-check-lg"></i> บันทึก</button>
+          </div>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Contact Channels -->
+  <div class="scard mb-4">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-chat-dots-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Contact Channels</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">LINE, Email, Form — ข้อมูลและ descriptions</div>
         </div>
-        <button type="submit" class="btn-wc-primary">
-          <i class="bi bi-check-lg"></i> บันทึก
-        </button>
+      </div>
+    </div>
+    <div class="scard-body">
+      <form method="post" action="{% url 'dashboard:website_contact_save' %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label"><i class="bi bi-line me-1" style="color:#06C755;"></i> LINE ID</label>
+            <input type="text" name="line_id" value="{{ site.line_id }}" class="form-control">
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">LINE Description</label>
+            <input type="text" name="line_desc" value="{{ site.line_desc }}" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label"><i class="bi bi-envelope-fill me-1" style="color:var(--app-primary);"></i> อีเมล</label>
+            <input type="email" name="contact_email" value="{{ site.contact_email }}" class="form-control">
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Email Description</label>
+            <input type="text" name="email_desc" value="{{ site.email_desc }}" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label"><i class="bi bi-pencil-square me-1" style="color:var(--app-primary);"></i> เบอร์โทร</label>
+            <input type="text" name="phone" value="{{ site.phone }}" class="form-control">
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Form Description</label>
+            <input type="text" name="form_desc" value="{{ site.form_desc }}" class="form-control">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-wc-primary"><i class="bi bi-check-lg"></i> บันทึก Channels</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Sidebar Info -->
+  <div class="scard">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="scard-header-icon"><i class="bi bi-info-circle-fill"></i></div>
+        <div>
+          <div style="font-weight:700;font-size:.97rem">Sidebar Info</div>
+          <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">เวลาทำการ, เวลาตอบกลับ, การรับประกัน</div>
+        </div>
+      </div>
+    </div>
+    <div class="scard-body">
+      <form method="post" action="{% url 'dashboard:website_contact_save' %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">เวลาทำการ</label>
+            <input type="text" name="business_hours" value="{{ site.business_hours }}" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">เวลาตอบกลับ</label>
+            <input type="text" name="response_time" value="{{ site.response_time }}" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">การรับประกัน</label>
+            <input type="text" name="guarantee" value="{{ site.guarantee }}" class="form-control">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-wc-primary"><i class="bi bi-check-lg"></i> บันทึก Sidebar</button>
+          </div>
+        </div>
       </form>
     </div>
   </div>

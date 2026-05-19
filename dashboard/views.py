@@ -1377,7 +1377,7 @@ def api_calendar_event_detail(request, pk):
 
 @staff_member_required
 def website_content_view(request):
-    from pages.models import Service, SiteSetting, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
+    from pages.models import Service, SiteSetting, ContactTopic, AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     from portfolio.models import CaseStudy
     from blog.models import Article
     return render(request, "dashboard/website_content.html", {
@@ -1389,6 +1389,7 @@ def website_content_view(request):
         "checkpoints":  AboutCheckpoint.objects.all(),
         "expertise":    AboutExpertise.objects.all(),
         "site":         SiteSetting.get(),
+        "topics":       ContactTopic.objects.all(),
         "articles":     Article.objects.all().order_by("-created_at")[:20],
         "active_tab":   request.GET.get("tab", "home"),
     })
@@ -1502,13 +1503,33 @@ def website_value_save(request, pk):
 
 @staff_member_required
 @require_POST
+def website_topic_save(request, pk):
+    from pages.models import ContactTopic
+    from django.shortcuts import get_object_or_404
+    obj = get_object_or_404(ContactTopic, pk=pk)
+    obj.icon  = request.POST.get("icon", obj.icon).strip()
+    obj.name  = request.POST.get("name", obj.name).strip()
+    obj.url   = request.POST.get("url", obj.url).strip()
+    obj.save()
+    messages.success(request, f'บันทึก "{obj.name}" แล้ว')
+    return redirect("/owner/website-content/?tab=contact")
+
+
+@staff_member_required
+@require_POST
 def website_contact_save(request):
     from pages.models import SiteSetting
     site = SiteSetting.get()
-    site.contact_email  = request.POST.get("contact_email", site.contact_email).strip()
-    site.line_id        = request.POST.get("line_id", site.line_id).strip()
-    site.phone          = request.POST.get("phone", site.phone).strip()
-    site.business_hours = request.POST.get("business_hours", site.business_hours).strip()
+    fields = [
+        "contact_email", "line_id", "phone", "business_hours",
+        "contact_hero_title", "contact_hero_subtitle",
+        "line_desc", "email_desc", "form_desc",
+        "response_time", "guarantee",
+    ]
+    for f in fields:
+        val = request.POST.get(f, "").strip()
+        if val:
+            setattr(site, f, val)
     site.save()
-    messages.success(request, "บันทึกข้อมูลติดต่อแล้ว")
+    messages.success(request, "บันทึกข้อมูล Contact แล้ว")
     return redirect("/owner/website-content/?tab=contact")

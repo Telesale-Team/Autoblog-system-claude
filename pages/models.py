@@ -10,6 +10,24 @@ class SiteSetting(models.Model):
     phone          = models.CharField("เบอร์โทร", max_length=30, blank=True)
     business_hours = models.CharField("เวลาทำการ", max_length=100, default="จ–ศ 09:00–18:00")
 
+    # Contact Page — Hero
+    contact_hero_title    = models.CharField("Contact Hero Title", max_length=200,
+                                              default="เราช่วยอะไรคุณได้บ้าง?")
+    contact_hero_subtitle = models.CharField("Contact Hero Subtitle", max_length=200,
+                                              default="ค้นหาคำตอบ หรือเลือกหัวข้อที่ต้องการด้านล่าง")
+    # Contact Page — Channels
+    line_desc    = models.CharField("LINE description", max_length=100,
+                                     default="แชทตอบเร็วที่สุด — รับคำตอบภายใน 30 นาที")
+    email_desc   = models.CharField("Email description", max_length=100,
+                                     default="สอบถามรายละเอียด — ตอบกลับภายใน 24 ชั่วโมง")
+    form_desc    = models.CharField("Form description", max_length=100,
+                                     default="แจ้งความต้องการละเอียด — ทีมงานจะโทรกลับหาคุณ")
+    # Contact Page — Sidebar
+    response_time = models.CharField("เวลาตอบกลับ", max_length=100,
+                                      default="ภายใน 24 ชั่วโมง (วันทำการ)")
+    guarantee     = models.CharField("การรับประกัน", max_length=100,
+                                      default="ปรึกษาฟรี ไม่มีข้อผูกมัด")
+
     class Meta:
         verbose_name = "ตั้งค่าเว็บไซต์"
         verbose_name_plural = "ตั้งค่าเว็บไซต์"
@@ -55,6 +73,23 @@ class AboutValue(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ContactTopic(models.Model):
+    icon  = models.CharField("Bootstrap Icon", max_length=60, default="bi-question-circle",
+                              help_text="เช่น bi-robot, bi-cpu, bi-shield-check")
+    name  = models.CharField("ชื่อหัวข้อ", max_length=100)
+    url   = models.CharField("URL หรือ anchor", max_length=200,
+                              help_text="เช่น /services/ai-chatbot/ หรือ #contact-form")
+    order = models.IntegerField("ลำดับ", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Quick Topic (Contact)"
+        verbose_name_plural = "Quick Topics (Contact)"
+
+    def __str__(self):
+        return self.name
 
 
 class AboutPage(models.Model):

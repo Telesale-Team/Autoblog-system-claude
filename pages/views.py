@@ -91,8 +91,9 @@ def service_detail(request, slug):
 
 
 def contact(request):
-    from .models import SiteSetting
-    site = SiteSetting.get()
+    from .models import SiteSetting, ContactTopic
+    site   = SiteSetting.get()
+    topics = ContactTopic.objects.all()
     if request.method == "POST":
         data = request.POST.copy()
         if not data.get("email") or data["email"] == "no-email@aibizth.ai":
@@ -121,4 +122,4 @@ def contact(request):
             return redirect("pages:contact")
     else:
         form = ContactForm()
-    return render(request, "pages/contact.html", {"form": form, "site": site})
+    return render(request, "pages/contact.html", {"form": form, "site": site, "topics": topics})
