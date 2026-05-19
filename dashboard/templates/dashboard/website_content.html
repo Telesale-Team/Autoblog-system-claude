@@ -51,7 +51,9 @@
     vertical-align: middle; font-size: .88rem;
   }
   .wc-table tr:last-child td { border-bottom: none; }
-  .wc-table tr:hover td { background: rgba(201,169,110,.04); }
+  .wc-table tbody tr:nth-child(even) td { background: rgba(0,0,0,.02); }
+  [data-bs-theme="dark"] .wc-table tbody tr:nth-child(even) td { background: rgba(255,255,255,.03); }
+  .wc-table tr:hover td { background: rgba(201,169,110,.08) !important; }
   .wc-table .badge { font-size: .72rem; font-weight: 600; }
 
   /* === Status badge toggle === */
