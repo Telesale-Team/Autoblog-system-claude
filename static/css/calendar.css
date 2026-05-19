@@ -492,10 +492,10 @@
   color: rgba(26,39,68,.45) !important;
 }
 
-/* ตาราง list */
-.fc .fc-list-table { border-collapse: separate !important; border-spacing: 0 !important; }
+/* ตาราง list — ลบเส้นขอบทั้งหมด */
+.fc .fc-list-table { border-collapse: collapse !important; border: none !important; }
 .fc .fc-list-table td,
-.fc .fc-list-table th { border-color: rgba(201,169,110,.08) !important; }
+.fc .fc-list-table th { border: none !important; }
 
 /* Event row */
 .fc .fc-list-event td { padding: .5rem .9rem !important; background: transparent !important; transition: background .12s; }
