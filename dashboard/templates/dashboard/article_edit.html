@@ -305,10 +305,8 @@
           </span>
         </div>
         <div class="scard-body" style="display:flex;flex-direction:column;gap:.6rem;">
-          <select name="status" id="id_status" class="form-select form-select-sm">
-            <option value="draft"     {% if article.status != 'published' %}selected{% endif %}>Draft</option>
-            <option value="published" {% if article.status == 'published' %}selected{% endif %}>Published</option>
-          </select>
+          <input type="hidden" name="status" id="id_status"
+                 value="{{ article.status|default:'draft' }}">
           <button type="submit" class="ds-btn"
                   onclick="setStatus('published')">
             <i class="bi bi-arrow-up-circle me-1"></i>
