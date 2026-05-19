@@ -389,9 +389,15 @@
             <span style="font-weight:700;font-size:.88rem;color:#f1f5f9;">Content Backlog</span>
             <span class="ds-badge draft" style="min-width:auto;padding:.1rem .5rem;">{{ backlog_items|length }}</span>
           </div>
-          <a href="{% url 'dashboard:backlog' %}" class="ds-btn" style="padding:.3rem .6rem;font-size:.75rem;">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </a>
+          <div class="d-flex gap-1">
+            <button type="button" class="ds-btn" style="padding:.25rem .55rem;font-size:.75rem;"
+                    data-bs-toggle="modal" data-bs-target="#addBacklogModal" title="เพิ่ม Backlog">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+            <a href="{% url 'dashboard:backlog' %}" class="ds-btn-outline" style="padding:.25rem .55rem;font-size:.75rem;" title="ดู Backlog ทั้งหมด">
+              <i class="bi bi-arrow-up-right-square"></i>
+            </a>
+          </div>
         </div>
         <div style="padding:.5rem;max-height:600px;overflow-y:auto;">
           {% for item in backlog_items %}
@@ -1019,6 +1025,45 @@
   </div>
 </div>
 
+<!-- === Modal: เพิ่ม Content Backlog === -->
+<div class="modal fade" id="addBacklogModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-1">
+        <h6 class="fw-bold mb-0" style="font-size:.97rem;">เพิ่ม Content Backlog</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">หัวข้อบทความ <span class="text-danger">*</span></label>
+          <input type="text" id="backlogTopic" class="form-control"
+                 placeholder="เช่น วิธีใช้ AI ลดต้นทุนธุรกิจ SME">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Target Keyword <span class="text-muted">(ไม่บังคับ)</span></label>
+          <input type="text" id="backlogKeyword" class="form-control"
+                 placeholder="เช่น AI ธุรกิจ SME">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Priority</label>
+          <select id="backlogPriority" class="form-select">
+            <option value="P1">P1 — High</option>
+            <option value="P2" selected>P2 — Medium</option>
+            <option value="P3">P3 — Low</option>
+          </select>
+        </div>
+        <div id="addBacklogError" class="text-danger small d-none"></div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-link btn-sm text-muted" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="ds-btn" id="btnSaveBacklog">
+          <i class="bi bi-check2 me-1"></i>เพิ่ม Backlog
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -1056,5 +1101,57 @@ function previewIcon(input, id) {
   var prev = document.getElementById('icon-preview-' + id);
   if (prev) prev.innerHTML = '<i class="bi ' + input.value + '"></i>';
 }
+
+/* === Add Backlog === */
+document.getElementById('btnSaveBacklog').addEventListener('click', function() {
+  var topic    = document.getElementById('backlogTopic').value.trim();
+  var keyword  = document.getElementById('backlogKeyword').value.trim();
+  var priority = document.getElementById('backlogPriority').value;
+  var errEl    = document.getElementById('addBacklogError');
+  errEl.classList.add('d-none');
+  if (!topic) { errEl.textContent = 'กรุณาใส่หัวข้อ'; errEl.classList.remove('d-none'); return; }
+
+  var btn = this; btn.disabled = true;
+  var csrf = document.cookie.match(/csrftoken=([^;]+)/);
+  fetch('{% url "dashboard:website_backlog_add" %}', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf ? csrf[1] : '' },
+    body: JSON.stringify({ topic: topic, keyword: keyword, priority: priority })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.ok) { errEl.textContent = data.error; errEl.classList.remove('d-none'); return; }
+    /* เพิ่ม item ใหม่เข้า Backlog panel ทันที */
+    var panel = document.querySelector('#pane-blog .col-lg-3 [style*="overflow-y"]');
+    if (panel) {
+      var priorityClass = data.priority === 'P1' ? 'danger' : data.priority === 'P2' ? 'warning' : 'draft';
+      var html = '<div style="padding:.75rem .9rem;border-radius:.5rem;margin-bottom:.4rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);">'
+        + '<div class="d-flex align-items-start justify-content-between gap-2 mb-1">'
+        + '<span style="font-size:.82rem;font-weight:600;color:#f1f5f9;line-height:1.4;flex:1;">' + data.topic.substring(0, 50) + '</span>'
+        + '<span class="ds-badge ' + priorityClass + '" style="min-width:auto;padding:.1rem .45rem;font-size:.65rem;flex-shrink:0;">' + data.priority + '</span>'
+        + '</div>'
+        + (data.keyword ? '<div style="font-size:.72rem;color:rgba(201,169,110,.7);margin-bottom:.4rem;"><i class="bi bi-search me-1" style="font-size:.65rem;"></i>' + data.keyword + '</div>' : '')
+        + '<div class="d-flex align-items-center justify-content-between gap-1">'
+        + '<span class="ds-badge draft" style="min-width:auto;padding:.1rem .45rem;font-size:.65rem;">' + data.status_display + '</span>'
+        + '</div></div>';
+      panel.insertAdjacentHTML('afterbegin', html);
+      /* อัปเดต badge count */
+      var badge = document.querySelector('#pane-blog .col-lg-3 .ds-badge.draft');
+      if (badge && !isNaN(parseInt(badge.textContent))) {
+        badge.textContent = parseInt(badge.textContent) + 1;
+      }
+    }
+    bootstrap.Modal.getInstance(document.getElementById('addBacklogModal')).hide();
+    document.getElementById('backlogTopic').value = '';
+    document.getElementById('backlogKeyword').value = '';
+    document.getElementById('backlogPriority').value = 'P2';
+  })
+  .catch(function() { errEl.textContent = 'เกิดข้อผิดพลาด'; errEl.classList.remove('d-none'); })
+  .finally(function() { btn.disabled = false; });
+});
+document.getElementById('addBacklogModal').addEventListener('hidden.bs.modal', function() {
+  document.getElementById('backlogTopic').value = '';
+  document.getElementById('addBacklogError').classList.add('d-none');
+});
 </script>
 {% endblock %}

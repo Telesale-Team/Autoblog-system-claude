@@ -72,6 +72,7 @@ urlpatterns = [
     path("website-content/service/<int:pk>/",          views.website_service_edit,    name="website_service_edit"),
     path("website-content/service/<int:pk>/toggle/",  views.website_service_toggle,  name="website_service_toggle"),
     path("website-content/article/<int:pk>/toggle/",    views.website_article_toggle,   name="website_article_toggle"),
+    path("website-content/backlog/add/",               views.website_backlog_add,       name="website_backlog_add"),
     path("website-content/backlog/<int:pk>/to-blog/",  views.website_backlog_to_blog,  name="website_backlog_to_blog"),
     path("website-content/portfolio/new/",             views.website_portfolio_create, name="website_portfolio_create"),
     path("website-content/portfolio/<int:pk>/",        views.website_portfolio_edit,   name="website_portfolio_edit"),

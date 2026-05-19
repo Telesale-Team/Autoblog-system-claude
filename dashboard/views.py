@@ -1680,6 +1680,31 @@ def website_portfolio_toggle(request, pk):
 
 @staff_member_required
 @require_POST
+def website_backlog_add(request):
+    """เพิ่ม Content Backlog item ใหม่"""
+    from marketing.models import ContentBacklog
+    import json
+    data    = json.loads(request.body)
+    topic   = data.get("topic", "").strip()
+    keyword = data.get("keyword", "").strip()
+    priority= data.get("priority", "P2")
+    if not topic:
+        return JsonResponse({"ok": False, "error": "กรุณาใส่หัวข้อ"}, status=400)
+    num = (ContentBacklog.objects.order_by("-num").values_list("num", flat=True).first() or 0) + 1
+    item = ContentBacklog.objects.create(
+        num=num, topic=topic, keyword=keyword,
+        priority=priority, status="pending",
+    )
+    return JsonResponse({
+        "ok": True, "id": item.pk,
+        "topic": item.topic, "keyword": item.keyword,
+        "priority": item.priority, "status": item.status,
+        "status_display": item.get_status_display(),
+    })
+
+
+@staff_member_required
+@require_POST
 def website_backlog_to_blog(request, pk):
     """ส่ง Backlog item เข้า Blog list ด้วย status=waiting"""
     from marketing.models import ContentBacklog
