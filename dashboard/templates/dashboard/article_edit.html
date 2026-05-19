@@ -211,10 +211,13 @@
 
       <!-- Title -->
       <div class="mb-4">
+        <label for="id_title" style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--bs-secondary-color);display:block;margin-bottom:.35rem;">
+          หัวข้อบทความ <span class="text-danger">*</span>
+        </label>
         <input type="text" name="title" id="id_title"
                class="input-title"
                value="{{ form.title.value|default_if_none:'' }}"
-               placeholder="หัวข้อบทความ..."
+               placeholder="พิมพ์หัวข้อบทความที่นี่..."
                required
                oninput="autoSlug(this.value)">
         {% if form.title.errors %}
