@@ -1400,6 +1400,7 @@ def website_content_view(request):
         "site":         SiteSetting.get(),
         "topics":       ContactTopic.objects.all(),
         "articles":     Article.objects.all().order_by("-created_at")[:20],
+        "blog_categories": Category.objects.order_by("display_order", "name"),
         "backlog_items": backlog_qs,
         "active_tab":   request.GET.get("tab", "home"),
     })
@@ -1688,14 +1689,19 @@ def website_backlog_add(request):
     topic    = data.get("topic", "").strip()
     keyword  = data.get("keyword", "").strip()
     priority = data.get("priority", "P2")
-    notes    = data.get("notes", "").strip()
+    notes       = data.get("notes", "").strip()
+    category_id = data.get("category_id")
     if not topic:
         return JsonResponse({"ok": False, "error": "กรุณาใส่หัวข้อ"}, status=400)
+    from blog.models import Category as BlogCategory
+    cat = None
+    if category_id:
+        cat = BlogCategory.objects.filter(pk=category_id).first()
     num = (ContentBacklog.objects.order_by("-num").values_list("num", flat=True).first() or 0) + 1
     item = ContentBacklog.objects.create(
         num=num, topic=topic, keyword=keyword,
         priority=priority, status="pending",
-        notes=notes,
+        notes=notes, category=cat,
         added_by=request.user.get_full_name() or request.user.username,
     )
     return JsonResponse({
@@ -1703,6 +1709,7 @@ def website_backlog_add(request):
         "topic": item.topic, "keyword": item.keyword,
         "priority": item.priority, "status": item.status,
         "status_display": item.get_status_display(),
+        "category": item.category.name if item.category else "",
     })
 
 
@@ -1730,8 +1737,8 @@ def website_backlog_to_blog(request, pk):
     while Article.objects.filter(slug=slug).exists():
         slug = f"{slug_base}-{i}"; i += 1
 
-    # ใช้ category แรกที่มี หรือสร้าง default
-    cat = Category.objects.first()
+    # ใช้ category จาก backlog หรือ fallback category แรก
+    cat = item.category or Category.objects.first()
     if not cat:
         cat = Category.objects.create(name="ทั่วไป", slug="general")
 

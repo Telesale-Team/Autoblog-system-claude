@@ -73,6 +73,11 @@ class ContentBacklog(models.Model):
     priority = models.CharField("Priority", max_length=2, choices=Priority.choices, default=Priority.HIGH)
     status   = models.CharField("Status", max_length=15, choices=Status.choices, default=Status.PENDING)
     notes    = models.TextField("Notes", blank=True)
+    category = models.ForeignKey(
+        "blog.Category", null=True, blank=True,
+        on_delete=models.SET_NULL, related_name="backlog_items",
+        verbose_name="หมวดหมู่บทความ"
+    )
     owner    = models.CharField("Owner", max_length=100, blank=True, default="All")
     added_by = models.CharField("เพิ่มโดย", max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

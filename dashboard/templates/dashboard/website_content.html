@@ -1039,6 +1039,15 @@
           <input type="text" id="backlogTopic" class="form-control"
                  placeholder="เช่น วิธีใช้ AI ลดต้นทุนธุรกิจ SME">
         </div>
+        <div class="mb-3">
+          <label class="form-label">หมวดหมู่บทความ <span class="text-muted">(ไม่บังคับ)</span></label>
+          <select id="backlogCategory" class="form-select">
+            <option value="">— ยังไม่ระบุ —</option>
+            {% for cat in blog_categories %}
+            <option value="{{ cat.pk }}">{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
         <div class="mb-2">
           <label class="form-label">Notes <span class="text-muted">(ไม่บังคับ)</span></label>
           <textarea id="backlogNotes" class="form-control form-control-sm" rows="2"
@@ -1108,7 +1117,7 @@ document.getElementById('btnSaveBacklog').addEventListener('click', function() {
   fetch('{% url "dashboard:website_backlog_add" %}', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf ? csrf[1] : '' },
-    body: JSON.stringify({ topic: topic, keyword: keyword, priority: priority, notes: document.getElementById('backlogNotes').value.trim() })
+    body: JSON.stringify({ topic: topic, keyword: keyword, priority: priority, notes: document.getElementById('backlogNotes').value.trim(), category_id: document.getElementById('backlogCategory').value || null })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
@@ -1145,6 +1154,7 @@ document.getElementById('btnSaveBacklog').addEventListener('click', function() {
 document.getElementById('addBacklogModal').addEventListener('hidden.bs.modal', function() {
   document.getElementById('backlogTopic').value = '';
   document.getElementById('backlogNotes').value = '';
+  document.getElementById('backlogCategory').value = '';
   document.getElementById('addBacklogError').classList.add('d-none');
 });
 </script>
