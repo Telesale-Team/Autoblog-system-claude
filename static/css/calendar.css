@@ -449,7 +449,7 @@
 .fc-event-completed .evt-countdown { display: none; }
 .fc-event-pending { border-left: 3px solid #10b981 !important; }
 
-/* ── [filter-tabs] ──────────────────────────────────────────────────── */
+/* ── [filter-tabs] → ใช้ .filter-btn จาก dashboard-base.css แทน ──── */
 
 /* wrapper row: filter tabs (flex:1) + toggle recurring button (right) */
 .cal-toolbar-row {
@@ -463,14 +463,10 @@
   .cal-toolbar-row { flex-wrap: wrap; }
 }
 
-.cal-filter-tabs { display: flex; flex-wrap: wrap; gap: .3rem .4rem; margin-bottom: 0; padding: .6rem .75rem; background: var(--bs-tertiary-bg,rgba(0,0,0,.03)); border: 1px solid var(--bs-border-color); border-radius: .5rem; }
-.cal-filter-tab { display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .7rem; border-radius: 20px; border: 1px solid var(--bs-border-color); cursor: pointer; font-size: .77rem; font-weight: 500; white-space: nowrap; background: transparent; color: var(--bs-body-color); transition: all .15s; user-select: none; line-height: 1.4; }
-.cal-filter-tab:hover { border-color: var(--app-primary); color: var(--app-primary); }
-.cal-filter-tab.active { background: var(--brand-navy,#1a2744); border-color: var(--brand-navy,#1a2744); color: var(--app-primary,#c9a96e); font-weight: 600; }
-[data-bs-theme="dark"] .cal-filter-tab.active { background: rgba(26,39,68,.8); }
-.cal-filter-tab .tab-icon { font-size: .82rem; line-height: 1; }
-.cal-filter-tab.tab-done.active { background: #475569; border-color: #475569; color: #fff; }
-.cal-filter-tab.tab-done:not(.active):hover { border-color: #64748b; color: #64748b; }
+/* .cal-filter-tab/.cal-filter-tabs → ย้ายไป .filter-btn ใน dashboard-base.css */
+/* "Done" tab special state */
+.filter-btn.tab-done.active { background: #475569; border-color: #475569; color: #fff; }
+.filter-btn.tab-done:not(.active):hover { border-color: #64748b; color: #64748b; }
 
 /* ── [hot-events] — pulse glow สำหรับงานที่จะมาใน 3 วัน ───────────── */
 @keyframes pulse-glow {
@@ -556,8 +552,6 @@
   .phase-step:nth-child(3) .phase-connector--right { display: flex; }
   .phase-node { width: 36px; height: 36px; }
   .phase-node-icon { font-size: .82rem; }
-  .cal-filter-tabs { gap: .25rem; padding: .5rem; }
-  .cal-filter-tab { font-size: .72rem; padding: .25rem .55rem; }
   .fc .fc-toolbar { flex-wrap: wrap; gap: .5rem; }
   .fc .fc-toolbar-title { font-size: .9rem; }
   .fc .fc-button { font-size: .72rem !important; padding: .25rem .5rem !important; }
@@ -867,7 +861,7 @@
   flex-shrink: 0;
   transition: background .15s, color .15s;
 }
-.cal-filter-tab.active .tab-count {
+.filter-btn.active .tab-count {
   background: rgba(255,255,255,.18);
   color: #fff;
   border-color: rgba(255,255,255,.25);

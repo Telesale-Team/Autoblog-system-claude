@@ -357,6 +357,57 @@ body, #sidebar, #topbar, .stat-card { transition: background-color .25s, color .
 .ds-btn-outline:hover { background: rgba(201,169,110,.1); color: var(--app-primary); }
 .ds-btn-outline.w-100 { width: 100%; justify-content: center; }
 
+/* ── Filter Tabs (.filter-btn) ────────────────────────────
+   ใช้แทน .cal-filter-tab และ filter-btn ที่กระจายใน templates
+   ─────────────────────────────────────────────────────── */
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .75rem;
+  border-radius: 999px;
+  border: 1px solid var(--bs-border-color);
+  background: transparent;
+  color: var(--bs-secondary-color);
+  font-size: .78rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all .15s;
+  text-decoration: none;
+  user-select: none;
+}
+.filter-btn:hover {
+  border-color: var(--app-primary);
+  color: var(--app-primary);
+  background: rgba(201,169,110,.06);
+}
+.filter-btn.active {
+  background: var(--sidebar-bg, #1a2744);
+  border-color: var(--sidebar-bg, #1a2744);
+  color: var(--app-primary, #c9a96e);
+  font-weight: 600;
+}
+[data-bs-theme="dark"] .filter-btn.active {
+  background: rgba(26,39,68,.85);
+}
+/* Count badge inside filter-btn */
+.filter-btn .tab-count {
+  font-size: .65rem;
+  font-weight: 700;
+  background: rgba(201,169,110,.15);
+  color: var(--app-primary);
+  border-radius: 999px;
+  padding: .05rem .4rem;
+  min-width: 18px;
+  text-align: center;
+}
+.filter-btn.active .tab-count {
+  background: rgba(201,169,110,.25);
+}
+/* Icon inside filter-btn */
+.filter-btn .tab-icon { font-size: .82rem; line-height: 1; }
+
 /* ── Calendar Category Badges — extend ds-badge ──────────
    ใช้แทน .event-cat-badge + inline style ใน calendar.js
    แก้สีที่นี่ที่เดียว มีผลทุกที่ใน Calendar
