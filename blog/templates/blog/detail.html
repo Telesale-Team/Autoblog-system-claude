@@ -213,6 +213,21 @@
       border-color: rgba(201, 169, 110, 0.4);
     }
     
+    /* ข้อความหลัง hr (CTA ในบทความ) */
+    .yw-article-body hr {
+      margin: 2rem 0 1.5rem;
+      border-color: rgba(201, 169, 110, 0.2);
+    }
+    .yw-article-body hr ~ p,
+    .yw-article-body hr ~ p strong {
+      text-align: center;
+    }
+
+    /* Tags */
+    .yw-tags {
+      justify-content: center;
+    }
+
     /* CTA below article */
     .yw-cta {
       margin-top: 2rem;
@@ -220,17 +235,19 @@
       background: rgba(201, 169, 110, 0.06);
       border: 1px solid rgba(201, 169, 110, 0.2);
       border-radius: 12px;
-      text-align: center;
+      text-align: center !important;
     }
     .yw-cta h3 {
       font-size: 1.1rem;
       font-weight: 800;
       margin-bottom: 0.5rem;
+      text-align: center;
     }
     .yw-cta p {
       font-size: 0.88rem;
       color: var(--brand-muted);
       margin-bottom: 1rem;
+      text-align: center;
     }
     
     /* === RIGHT SIDEBAR — Recommended === */
