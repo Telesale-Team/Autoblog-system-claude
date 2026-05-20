@@ -23,6 +23,11 @@ class CalendarEvent(models.Model):
     color          = models.CharField("สี", max_length=7, blank=True)
     is_system      = models.BooleanField("event ระบบ", default=False)
     is_completed   = models.BooleanField("เสร็จแล้ว", default=False)
+    article        = models.ForeignKey(
+        "blog.Article", null=True, blank=True,
+        on_delete=models.SET_NULL, related_name="calendar_events",
+        verbose_name="บทความ"
+    )
     assigned_to    = models.CharField("ผู้ทำงาน", max_length=100, blank=True, default="")
     created_by     = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     created_at     = models.DateTimeField(auto_now_add=True)
