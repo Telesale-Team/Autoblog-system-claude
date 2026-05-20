@@ -190,6 +190,26 @@
       font-size: 0.88rem;
     }
     
+    /* Numbered & Bullet Lists */
+    .yw-article-body ol,
+    .yw-article-body ul {
+      padding-left: 1.5rem;
+      margin: 0.75rem 0 1rem;
+    }
+    .yw-article-body ol { list-style: decimal; }
+    .yw-article-body ul { list-style: disc; }
+    .yw-article-body li {
+      padding: 0.25rem 0;
+      line-height: 1.75;
+    }
+    .yw-article-body ol li::marker {
+      color: var(--brand-gold);
+      font-weight: 700;
+    }
+    .yw-article-body ul li::marker {
+      color: var(--brand-gold);
+    }
+
     /* Tags */
     .yw-tags {
       display: flex;
