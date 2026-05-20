@@ -1,8 +1,8 @@
-# AI Automation Business — 18-Agent System
+# AI Automation Business — 24-Agent System
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.5 | **Updated:** 2026-05-20
+**Version:** 2.6 | **Updated:** 2026-05-20
 
 ---
 
@@ -57,6 +57,12 @@
 | 16 | Facebook Group Writer | `.claude/agents/16_facebook_group_writer.md` | เขียน Facebook Group post แบบ community ไม่ขายตรง |
 | 17 | Instagram Caption Writer | `.claude/agents/17_instagram_caption_writer.md` | เขียน Instagram caption + hashtags 20-30 tags |
 | 18 | LINE Broadcast Writer | `.claude/agents/18_line_broadcast_writer.md` | เขียนข้อความ LINE Broadcast สั้น กระชับ มี CTA |
+| 19 | Healthcare Content Writer | `.claude/agents/19_healthcare_content_writer.md` | บทความสำหรับคลินิก/โรงพยาบาล tone professional |
+| 20 | E-commerce Content Writer | `.claude/agents/20_ecommerce_content_writer.md` | บทความสำหรับร้านค้าออนไลน์ tone casual FOMO |
+| 21 | Hospitality Content Writer | `.claude/agents/21_hospitality_content_writer.md` | บทความสำหรับโรงแรม/รีสอร์ท tone aspirational |
+| 22 | Beauty & Wellness Writer | `.claude/agents/22_beauty_wellness_writer.md` | บทความสำหรับร้านนวด/สปา tone warm relatable |
+| 23 | HR & Education Writer | `.claude/agents/23_hr_education_writer.md` | บทความสำหรับ HR/โรงเรียน tone data-driven |
+| 24 | Creator & Coach Writer | `.claude/agents/24_creator_coach_writer.md` | บทความสำหรับโค้ช/อาจารย์ออนไลน์ tone inspirational |
 
 ## Skills (ใน `.claude/skills/`)
 
