@@ -46,9 +46,17 @@ INTERNAL_DOCS = [
         "slug": "product-strategy",
         "filename": "product_strategy.html",
         "title": "Product Strategy",
-        "description": "วิเคราะห์ตลาด, คู่แข่ง, 5 Products, customer segments, channels, pricing, roadmap",
+        "description": "เราขายอะไรและทำไมตลาดต้องการ — วิเคราะห์ตลาด, คู่แข่ง, ช่องว่าง, 8 Products พร้อมราคา",
         "audience": "owner",
         "bi_icon": "bi-rocket-takeoff-fill",
+    },
+    {
+        "slug": "gtm-strategy",
+        "filename": "gtm_strategy.html",
+        "title": "Go-to-Market Strategy",
+        "description": "จะขายให้ใคร และขายยังไง — กลุ่มลูกค้า 9 กลุ่ม, ช่องทางเข้าถึง, ปัจจัยตัดสินใจ, Roadmap 6 เดือน",
+        "audience": "owner",
+        "bi_icon": "bi-bullseye",
     },
     {
         "slug": "action-plan",

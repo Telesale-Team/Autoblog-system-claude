@@ -433,6 +433,54 @@
         </div>
       {% endif %}
 
+      <!-- === Share Bar === -->
+      <div class="yw-share" style="margin-top:1.5rem;padding:1rem 1.25rem;background:rgba(255,255,255,.03);border:1px solid var(--bs-border-color);border-radius:10px;">
+        <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--brand-muted);margin-bottom:0.75rem;">แชร์บทความนี้</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+
+          {# Facebook #}
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+             target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:0.82rem;font-weight:600;text-decoration:none;background:#1877f220;border:1px solid #1877f240;color:#60a5fa;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+
+          {# Facebook Group — เปิด Facebook พร้อม URL ให้เลือก Group เอง #}
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+             target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:0.82rem;font-weight:600;text-decoration:none;background:#1877f215;border:1px solid #1877f230;color:#93c5fd;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            Facebook Group
+          </a>
+
+          {# Instagram — mobile: native share sheet | desktop: copy + open IG #}
+          <button onclick="shareToInstagram(this)"
+             data-url="{{ request.build_absolute_uri }}"
+             data-title="{{ article.title|escapejs }}"
+             style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:0.82rem;font-weight:600;background:linear-gradient(135deg,#833ab420,#fd150920,#fcb04520);border:1px solid #c13584forty;border:1px solid rgba(193,53,132,.35);color:#f472b6;cursor:pointer;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <span>Instagram</span>
+          </button>
+
+          {# LINE #}
+          <a href="https://social-plugins.line.me/lineit/share?url={{ request.build_absolute_uri|urlencode }}"
+             target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:0.82rem;font-weight:600;text-decoration:none;background:#00b90020;border:1px solid #00b90040;color:#4ade80;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+            LINE
+          </a>
+
+          {# Copy Link #}
+          <button onclick="copyArticleLink(this)"
+             style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:0.82rem;font-weight:600;background:rgba(255,255,255,.06);border:1px solid var(--bs-border-color);color:var(--brand-muted);cursor:pointer;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <span>คัดลอก Link</span>
+          </button>
+        </div>
+      </div>
+      <!-- === End Share Bar === -->
+
       <!-- CTA -->
       <div class="yw-cta">
         <h3>สนใจให้ AI ทำงานในธุรกิจคุณ?</h3>
@@ -531,4 +579,48 @@
 
 {% block extra_js %}
   <script src="{% static 'js/blog-code-copy.js' %}" defer></script>
+  <script>
+  function shareToInstagram(btn) {
+    var url   = btn.dataset.url;
+    var title = btn.dataset.title;
+    var span  = btn.querySelector('span');
+
+    // Mobile: ใช้ native share sheet (รวม Instagram)
+    if (navigator.share) {
+      navigator.share({ title: title, url: url })
+        .catch(function() {});
+      return;
+    }
+
+    // Desktop: copy URL แล้วเปิด Instagram
+    navigator.clipboard.writeText(url).then(function() {
+      span.textContent = 'คัดลอก URL แล้ว!';
+      btn.style.borderColor = 'rgba(193,53,132,.8)';
+      setTimeout(function() {
+        window.open('https://www.instagram.com/', '_blank');
+      }, 600);
+      setTimeout(function() {
+        span.textContent = 'Instagram';
+        btn.style.borderColor = '';
+      }, 2500);
+    }).catch(function() {
+      // fallback: เปิด Instagram เลย
+      window.open('https://www.instagram.com/', '_blank');
+    });
+  }
+
+  function copyArticleLink(btn) {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+      var span = btn.querySelector('span');
+      span.textContent = 'คัดลอกแล้ว ✓';
+      btn.style.color = '#4ade80';
+      btn.style.borderColor = '#00b90040';
+      setTimeout(function() {
+        span.textContent = 'คัดลอก Link';
+        btn.style.color = '';
+        btn.style.borderColor = '';
+      }, 2000);
+    });
+  }
+  </script>
 {% endblock %}

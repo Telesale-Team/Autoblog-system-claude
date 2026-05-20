@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go-to-Market Strategy — AIBiz Thailand</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:    #0f1b35;
+      --navy-2:  #1a2744;
+      --navy-3:  #1e3056;
+      --gold:    #c9a96e;
+      --gold-d:  #a07840;
+      --green:   #10b981;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --purple:  #8b5cf6;
+      --orange:  #f59e0b;
+      --teal:    #14b8a6;
+      --pink:    #ec4899;
+      --text:    #e2e8f0;
+      --muted:   #94a3b8;
+      --border:  rgba(255,255,255,.1);
+      --card-bg: #1e2d4a;
+      /* legacy aliases */
+      --dark:    #0f1b35;
+      --card:    #1e2d4a;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Sarabun','Segoe UI',sans-serif; background: var(--navy); color: var(--text); line-height: 1.75; font-size: 15px; }
+
+    /* ── Cover ── */
+    .cover { background: linear-gradient(135deg,var(--navy-2) 0%,var(--navy-3) 100%); border-bottom: 2px solid var(--gold); padding: 3rem 3rem 2.5rem; text-align: center; }
+    .cover__tag { display:inline-flex;align-items:center;gap:.4rem;background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.3);color:var(--gold);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .75rem;border-radius:20px;margin-bottom:1rem; }
+    .cover__title { font-size:2rem;font-weight:800;color:#fff;line-height:1.2;margin-bottom:.5rem; }
+    .cover__title span { color:var(--gold); }
+    .cover__sub { font-size:.95rem;color:var(--muted);margin-bottom:1.5rem;max-width:760px;margin-left:auto;margin-right:auto; }
+    .cover__meta { display:flex;flex-wrap:wrap;gap:1.5rem;font-size:.82rem;color:var(--muted);justify-content:center; }
+    .cover__meta strong { color:var(--text); }
+    .cover__meta a { color:var(--gold);text-decoration:none; }
+    .cover__meta a:hover { text-decoration:underline; }
+
+    /* ── Stats bar ── */
+    .stats-bar { display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--border);border-bottom:1px solid var(--border); }
+    .stat-box { background:var(--navy-2);padding:1rem 1.25rem;text-align:center; }
+    .stat-box__num { font-size:1.6rem;font-weight:800;color:var(--gold);line-height:1; }
+    .stat-box__label { font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem; }
+
+    /* ── Container ── */
+    .container { max-width:1100px;margin:0 auto;padding:2.5rem 2rem; }
+
+    /* ── TOC ── */
+    .toc { background:var(--card-bg);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;padding:1.5rem;margin-bottom:3rem; }
+    .toc__title { font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:1rem; }
+    .toc__grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.35rem; }
+    .toc__link { display:flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;font-size:.85rem;padding:.2rem .4rem;border-radius:4px;transition:color .12s,background .12s; }
+    .toc__link:hover { color:var(--gold);background:rgba(201,169,110,.08); }
+    .toc__link .num { font-size:.68rem;color:var(--gold-d);font-weight:700;min-width:20px; }
+
+    /* ── Typography helpers ── */
+    .section-label { font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.5rem; }
+    .section-title { font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:800;color:#f9fafb;line-height:1.25;margin-bottom:.5rem; }
+    .section-sub { color:var(--muted);font-size:.9rem;max-width:640px;margin-bottom:2rem; }
+
+    /* ── Callout ── */
+    .callout { border-radius:8px;padding:14px 18px;margin:16px 0;font-size:.87rem;display:flex;gap:12px;align-items:flex-start; }
+    .callout-blue   { background:rgba(59,130,246,.1);border-left:4px solid var(--blue); }
+    .callout-green  { background:rgba(16,185,129,.1);border-left:4px solid var(--green); }
+    .callout-warn   { background:rgba(245,158,11,.1);border-left:4px solid var(--orange); }
+    .callout-purple { background:rgba(139,92,246,.1);border-left:4px solid var(--purple); }
+    .callout .icon { flex-shrink:0;font-size:1.1rem; }
+    .callout .text { color:#cbd5e1;line-height:1.6; }
+
+    /* ── Footer ── */
+    .doc-footer { margin-top:4rem;padding:1.5rem;border-top:1px solid var(--border);text-align:center;font-size:.78rem;color:var(--muted); }
+    .doc-footer a { color:var(--muted);text-decoration:none; }
+    .doc-footer a:hover { color:var(--gold); }
+
+
+    /* ── Segments ── */
+    .segment-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px; }
+    .seg-card { background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:20px; }
+    .seg-icon { font-size:1.8rem;margin-bottom:8px; }
+    .seg-title { font-weight:700;color:#f1f5f9;font-size:.92rem;margin-bottom:4px; }
+    .seg-size { font-size:.75rem;color:var(--blue);margin-bottom:8px; }
+    .seg-pain { font-size:.82rem;color:var(--muted);margin-bottom:10px; }
+    .seg-product { font-size:.78rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--muted); }
+
+    /* ── Channels ── */
+    .channel-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px; }
+    .ch-card { background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:22px; }
+    .ch-header { display:flex;align-items:center;gap:10px;margin-bottom:12px; }
+    .ch-icon { font-size:1.6rem; }
+    .ch-name { font-weight:700;color:#f1f5f9;font-size:.9rem; }
+    .ch-type { font-size:.72rem;color:var(--muted); }
+    .ch-action { font-size:.83rem;color:var(--muted);margin-bottom:10px; }
+    .ch-kpi { background:rgba(255,255,255,.04);border-radius:6px;padding:8px 12px;font-size:.78rem;color:#60a5fa; }
+
+    /* ── Decision ── */
+    .decision-grid { display:grid;grid-template-columns:1fr 1fr;gap:20px; }
+    .dec-card { background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:22px; }
+    .dec-card h3 { color:#f1f5f9;font-size:.95rem;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px; }
+    .dec-item { display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem; }
+    .dec-item:last-child { border:none; }
+    .dec-label { color:var(--muted);min-width:110px;flex-shrink:0;font-size:.8rem; }
+    .dec-value { color:#cbd5e1; }
+
+    /* ── Roadmap ── */
+    .roadmap-row { display:flex;gap:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px; }
+    .roadmap-phase { flex:1;padding:20px;border-right:1px solid var(--border); }
+    .roadmap-phase:last-child { border:none; }
+    .rp-label { font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px; }
+    .rp-title { font-weight:700;color:#f1f5f9;font-size:.9rem;margin-bottom:8px; }
+    .rp-items { font-size:.8rem;color:var(--muted);list-style:none; }
+    .rp-items li { padding:2px 0; }
+    .rp-items li::before { content:"• "; }
+
+    @media (max-width:768px) { .decision-grid { grid-template-columns:1fr; } .roadmap-row { flex-direction:column; } }
+
+  </style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover__tag">🎯 Go-to-Market Strategy · AIBiz Thailand · May 2026</div>
+  <h1 class="cover__title">จะขายให้ใคร — <span>และขายยังไง</span></h1>
+  <p class="cover__sub">เอกสารนี้ตอบคำถาม "จะขายให้ใคร และขายยังไง" — ครอบคลุมกลุ่มลูกค้า, ที่อยู่ของลูกค้า, ช่องทางเข้าถึง, ปัจจัยตัดสินใจ และ Roadmap 6 เดือน</p>
+  <div class="cover__meta">
+    <span><strong>จัดทำโดย:</strong> Chief of Staff + Marketing Specialist</span>
+    <span><strong>วันที่:</strong> พฤษภาคม 2569</span>
+    <span><strong>กลุ่มลูกค้า:</strong> 9 กลุ่ม</span>
+    <span>Product & ราคา: <a href="/owner/docs/product-strategy/" target="_top">← Product Strategy</a></span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-box"><div class="stat-box__num">9</div><div class="stat-box__label">กลุ่มลูกค้า</div></div>
+  <div class="stat-box"><div class="stat-box__num">8</div><div class="stat-box__label">ช่องทาง</div></div>
+  <div class="stat-box"><div class="stat-box__num">7</div><div class="stat-box__label">Platforms</div></div>
+  <div class="stat-box"><div class="stat-box__num">6</div><div class="stat-box__label">เดือน Roadmap</div></div>
+  <div class="stat-box"><div class="stat-box__num">฿50K</div><div class="stat-box__label">MRR เป้าหมาย</div></div>
+</div>
+
+<div class="container">
+  <div class="toc">
+    <div class="toc__title">📑 สารบัญ</div>
+    <div class="toc__grid">
+      <a class="toc__link" href="#customers"><span class="num">01</span> กลุ่มลูกค้า 9 กลุ่ม</a>
+      <a class="toc__link" href="#media"><span class="num">02</span> จะหาลูกค้าจากที่ไหน</a>
+      <a class="toc__link" href="#channels"><span class="num">03</span> ช่องทางเข้าถึง</a>
+      <a class="toc__link" href="#decisions"><span class="num">04</span> ปัจจัยตัดสินใจ</a>
+      <a class="toc__link" href="#roadmap"><span class="num">05</span> Roadmap 6 เดือน</a>
+      <a class="toc__link" href="#sources"><span class="num">06</span> แหล่ง Content แยกกลุ่ม</a>
+      <a class="toc__link" href="/owner/docs/product-strategy/" target="_top"><span class="num">←</span> Product Strategy</a>
+    </div>
+  </div>
+
+<!-- ═══════════════ CUSTOMER SEGMENTS ═══════════════ -->
+<section id="customers" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--purple);">กลุ่มลูกค้า</div>
+    <h2 class="section-title">ลูกค้ากลุ่มไหนบ้าง ใครควรขายก่อน</h2>
+    <p class="section-sub">เรียงตาม willingness to pay และ ease of close</p>
+
+    <div class="segment-grid">
+      <div class="seg-card" style="border-color:#16a34a40;">
+        <div class="seg-icon">🏥</div>
+        <div class="seg-title">คลินิก / โรงพยาบาลเอกชน</div>
+        <div class="seg-size" style="color:var(--green);">⭐⭐⭐⭐⭐ ยอมจ่ายสูงสุด</div>
+        <p class="seg-pain">Pain: PDPA + ตอบ LINE ไม่ทัน + นัดหมายยุ่งยาก<br>Budget: 80K-150K บาท</p>
+        <div class="seg-product">สินค้า: Private AI Clinic (#2)</div>
+      </div>
+      <div class="seg-card" style="border-color:#7c3aed40;">
+        <div class="seg-icon">🛍️</div>
+        <div class="seg-title">ร้านค้าออนไลน์ขนาดกลาง</div>
+        <div class="seg-size" style="color:var(--purple);">⭐⭐⭐⭐ volume ใหญ่</div>
+        <p class="seg-pain">Pain: ตอบ LINE ไม่ทัน order หาย มีทีม CS 2-5 คน<br>Budget: 20K-40K บาท</p>
+        <div class="seg-product">สินค้า: LINE AI Pro (#1) + Workflow Bot (#4)</div>
+      </div>
+      <div class="seg-card" style="border-color:#d9770640;">
+        <div class="seg-icon">🏨</div>
+        <div class="seg-title">โรงแรม / รีสอร์ท</div>
+        <div class="seg-size" style="color:var(--orange);">⭐⭐⭐⭐ multi-channel need</div>
+        <p class="seg-pain">Pain: ลูกค้าถามหลาย channel ภาษาหลาย staff น้อย<br>Budget: 50K-100K บาท</p>
+        <div class="seg-product">สินค้า: Omni AI Agent (#3)</div>
+      </div>
+      <div class="seg-card" style="border-color:#3b82f640;">
+        <div class="seg-icon">⚖️</div>
+        <div class="seg-title">สำนักงานกฎหมาย / บัญชี</div>
+        <div class="seg-size" style="color:var(--blue);">⭐⭐⭐⭐ premium segment</div>
+        <p class="seg-pain">Pain: data ต้องลับมาก PDPA strict ทีมงานเยอะ<br>Budget: 80K-120K บาท</p>
+        <div class="seg-product">สินค้า: Private AI (#2) + Team AI (#5)</div>
+      </div>
+      <div class="seg-card" style="border-color:#ec489940;">
+        <div class="seg-icon">🏭</div>
+        <div class="seg-title">โรงงาน / โลจิสติกส์ขนาดกลาง</div>
+        <div class="seg-size" style="color:var(--pink);">⭐⭐⭐ ตลาดว่าง</div>
+        <p class="seg-pain">Pain: order ซับซ้อน alert ล่าช้า report manual ทุกวัน<br>Budget: 60K-150K บาท</p>
+        <div class="seg-product">สินค้า: AI Workflow Bot (#4) + Omni AI (#3)</div>
+      </div>
+      <div class="seg-card" style="border-color:#374151;">
+        <div class="seg-icon">🏢</div>
+        <div class="seg-title">SME ทั่วไป 10-50 พนักงาน</div>
+        <div class="seg-size" style="color:var(--muted);">⭐⭐⭐ volume ที่ใหญ่ที่สุด</div>
+        <p class="seg-pain">Pain: ทีมงาน manual เยอะ ไม่มีเวลา ต้องการ AI แต่ไม่รู้จะเริ่มยังไง<br>Budget: 20K-50K บาท</p>
+        <div class="seg-product">สินค้า: LINE AI Pro (#1) + Team AI (#5)</div>
+      </div>
+      <div class="seg-card" style="border-color:#0891b240;">
+        <div class="seg-icon">💆</div>
+        <div class="seg-title">ร้านนวด / สปา / คลินิกความงาม</div>
+        <div class="seg-size" style="color:#67e8f9;">⭐⭐⭐⭐ market ใหญ่ทั่วประเทศ</div>
+        <p class="seg-pain">Pain: รับจองทางโทรศัพท์ ลืมนัด no-show ตาราง therapist ชน<br>Budget: 25K-40K บาท</p>
+        <div class="seg-product">สินค้า: Booking System (#6)</div>
+      </div>
+      <div class="seg-card" style="border-color:#0d948840;">
+        <div class="seg-icon">🏫</div>
+        <div class="seg-title">โรงเรียน / สถาบันกวดวิชา / HR องค์กร</div>
+        <div class="seg-size" style="color:#2dd4bf;">⭐⭐⭐⭐ ต้องการทุกปี</div>
+        <p class="seg-pain">Pain: ตรวจข้อสอบมือ เสียเวลา ไม่มีรายงานรายบุคคล<br>Budget: 35K-60K บาท</p>
+        <div class="seg-product">สินค้า: ระบบข้อสอบ (#7)</div>
+      </div>
+      <div class="seg-card" style="border-color:#7c3aed40;">
+        <div class="seg-icon">🎓</div>
+        <div class="seg-title">โค้ช / อาจารย์ / สถาบัน Online</div>
+        <div class="seg-size" style="color:#a78bfa;">⭐⭐⭐⭐ เติบโตเร็วมาก</div>
+        <p class="seg-pain">Pain: ขาย course ผ่านแพลตฟอร์มใหญ่ เสีย commission สูง ไม่ได้แบรนด์ตัวเอง<br>Budget: 45K-70K บาท</p>
+        <div class="seg-product">สินค้า: LMS คอร์สออนไลน์ (#8)</div>
+      </div>
+    </div>
+
+    <div class="callout callout-blue" style="margin-top:24px;">
+      <span class="icon">🎯</span>
+      <div class="text">
+        <strong>แนะนำให้เริ่มที่:</strong> คลินิก + ร้านค้าออนไลน์ขนาดกลาง เป็น primary target ก่อนครับ
+        คลินิก = deal ใหญ่ referral แรง, ร้านค้าออนไลน์ = volume สูง case study ง่าย
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WHERE TO FIND THEM ═══════════════ -->
+<section id="media" style="padding:60px 24px; background:#06090f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--pink);">พฤติกรรมการเสพสื่อ</div>
+    <h2 class="section-title">จะหาลูกค้าได้จากที่ไหน</h2>
+    <p class="section-sub">แต่ละกลุ่มใช้เวลาว่างกับสื่อที่ต่างกัน — เข้าหาเขาในที่ที่เขาอยู่แล้ว</p>
+
+    <div style="display:grid; gap:12px; margin-bottom:32px;">
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; display:grid; grid-template-columns:220px 1fr 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">กลุ่มลูกค้า</div>
+          <div style="font-weight:700; color:#f1f5f9; font-size:0.92rem;">🏥 คลินิก / แพทย์</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">ยอมจ่ายสูงสุด</div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Platform หลัก</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="background:#00b90020; border:1px solid #00b90040; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#4ade80;">LINE Group</span>
+            <span style="background:#ff000015; border:1px solid #ff000030; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f87171;">YouTube</span>
+            <span style="background:#1877f215; border:1px solid #1877f230; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#60a5fa;">Facebook Group</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Content ที่ดึงดูด</div>
+          <div style="font-size:0.83rem; color:#94a3b8;">Case study คลินิก, PDPA update, เทคนิคบริหาร, Podcast ระหว่างเดินทาง</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; display:grid; grid-template-columns:220px 1fr 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">กลุ่มลูกค้า</div>
+          <div style="font-weight:700; color:#f1f5f9; font-size:0.92rem;">🛍️ ร้านค้าออนไลน์</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">Volume ใหญ่</div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Platform หลัก</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="background:#1877f215; border:1px solid #1877f230; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#60a5fa;">Facebook</span>
+            <span style="background:#00000020; border:1px solid #ffffff20; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#e2e8f0;">TikTok</span>
+            <span style="background:#ff000015; border:1px solid #ff000030; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f87171;">YouTube</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Content ที่ดึงดูด</div>
+          <div style="font-size:0.83rem; color:#94a3b8;">เทรนด์ขายของ, เคล็ดลับเพิ่มยอด, รีวิวเครื่องมือ, before/after ยอดขาย</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; display:grid; grid-template-columns:220px 1fr 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">กลุ่มลูกค้า</div>
+          <div style="font-weight:700; color:#f1f5f9; font-size:0.92rem;">🏨 โรงแรม / รีสอร์ท</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">Multi-channel</div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Platform หลัก</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="background:#1877f215; border:1px solid #1877f230; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#60a5fa;">Facebook</span>
+            <span style="background:#ff000015; border:1px solid #ff000030; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f87171;">YouTube</span>
+            <span style="background:#e1306c15; border:1px solid #e1306c30; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f472b6;">Instagram</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Content ที่ดึงดูด</div>
+          <div style="font-size:0.83rem; color:#94a3b8;">เทรนด์การท่องเที่ยว, เคล็ดลับบริการลูกค้า, hotel tech, การจัดการ OTA</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; display:grid; grid-template-columns:220px 1fr 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">กลุ่มลูกค้า</div>
+          <div style="font-weight:700; color:#f1f5f9; font-size:0.92rem;">⚖️ กฎหมาย / บัญชี</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">Premium segment</div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Platform หลัก</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="background:#0066b215; border:1px solid #0066b230; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#93c5fd;">LinkedIn</span>
+            <span style="background:#ff000015; border:1px solid #ff000030; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f87171;">YouTube</span>
+            <span style="background:#00000020; border:1px solid #ffffff20; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#e2e8f0;">Podcast</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Content ที่ดึงดูด</div>
+          <div style="font-size:0.83rem; color:#94a3b8;">กฎหมายใหม่, PDPA update, เทคโนโลยีกฎหมาย, ประสิทธิภาพองค์กร</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; display:grid; grid-template-columns:220px 1fr 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">กลุ่มลูกค้า</div>
+          <div style="font-weight:700; color:#f1f5f9; font-size:0.92rem;">💆 ร้านนวด / สปา</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">Market ใหญ่ทั่วประเทศ</div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Platform หลัก</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="background:#00000020; border:1px solid #ffffff20; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#e2e8f0;">TikTok</span>
+            <span style="background:#1877f215; border:1px solid #1877f230; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#60a5fa;">Facebook</span>
+            <span style="background:#e1306c15; border:1px solid #e1306c30; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f472b6;">Instagram</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Content ที่ดึงดูด</div>
+          <div style="font-size:0.83rem; color:#94a3b8;">เทรนด์ความงาม, เทคนิค treatment, ไอเดียตกแต่งร้าน, เคล็ดลับเพิ่มลูกค้าประจำ</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; display:grid; grid-template-columns:220px 1fr 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">กลุ่มลูกค้า</div>
+          <div style="font-weight:700; color:#f1f5f9; font-size:0.92rem;">🏫 โรงเรียน / HR</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">ต้องการทุกปี</div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Platform หลัก</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="background:#00b90020; border:1px solid #00b90040; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#4ade80;">LINE Group</span>
+            <span style="background:#1877f215; border:1px solid #1877f230; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#60a5fa;">Facebook Group</span>
+            <span style="background:#ff000015; border:1px solid #ff000030; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f87171;">YouTube</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Content ที่ดึงดูด</div>
+          <div style="font-size:0.83rem; color:#94a3b8;">เทคนิคการสอน, EdTech, การพัฒนาบุคลากร, HR tools, กฎหมายแรงงาน</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; display:grid; grid-template-columns:220px 1fr 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">กลุ่มลูกค้า</div>
+          <div style="font-weight:700; color:#f1f5f9; font-size:0.92rem;">🎓 โค้ช / อาจารย์ Online</div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">เติบโตเร็วมาก</div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Platform หลัก</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="background:#ff000015; border:1px solid #ff000030; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#f87171;">YouTube</span>
+            <span style="background:#00000020; border:1px solid #ffffff20; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#e2e8f0;">TikTok</span>
+            <span style="background:#00000020; border:1px solid #ffffff20; border-radius:6px; padding:3px 10px; font-size:0.75rem; color:#e2e8f0;">Podcast</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Content ที่ดึงดูด</div>
+          <div style="font-size:0.83rem; color:#94a3b8;">Marketing ส่วนตัว, creator economy, เครื่องมือสร้างรายได้ online, passive income</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PLATFORM PRIORITY SUMMARY -->
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px;">
+      <div style="font-size:0.72rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:16px;">สรุป Priority Platform</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px;">
+        <div style="background:#00b90015; border:1px solid #00b90030; border-radius:10px; padding:14px;">
+          <div style="font-weight:700; color:#4ade80; margin-bottom:4px;">LINE Group</div>
+          <div style="font-size:0.78rem; color:#6b7280;">คลินิก, ครู, SME — ชุมชนปิด ความไว้วางใจสูง</div>
+          <div style="margin-top:8px; font-size:0.72rem; background:#00b90020; border-radius:4px; padding:3px 8px; display:inline-block; color:#4ade80;">🔴 Must</div>
+        </div>
+        <div style="background:#1877f215; border:1px solid #1877f230; border-radius:10px; padding:14px;">
+          <div style="font-weight:700; color:#60a5fa; margin-bottom:4px;">Facebook</div>
+          <div style="font-size:0.78rem; color:#6b7280;">ครอบคลุมทุกกลุ่ม — กลุ่มธุรกิจไทยยังแอคทีฟมาก</div>
+          <div style="margin-top:8px; font-size:0.72rem; background:#1877f220; border-radius:4px; padding:3px 8px; display:inline-block; color:#60a5fa;">🔴 Must</div>
+        </div>
+        <div style="background:#ff000010; border:1px solid #ff000025; border-radius:10px; padding:14px;">
+          <div style="font-weight:700; color:#f87171; margin-bottom:4px;">YouTube</div>
+          <div style="font-size:0.78rem; color:#6b7280;">Demo วิดีโอ 60-90 วิ ทำให้เห็นของจริงทำงาน = conversion สูง</div>
+          <div style="margin-top:8px; font-size:0.72rem; background:#ff000015; border-radius:4px; padding:3px 8px; display:inline-block; color:#f87171;">🔴 Must</div>
+        </div>
+        <div style="background:#ffffff08; border:1px solid #ffffff15; border-radius:10px; padding:14px;">
+          <div style="font-weight:700; color:#e2e8f0; margin-bottom:4px;">TikTok</div>
+          <div style="font-size:0.78rem; color:#6b7280;">ร้านนวด, โค้ช, ร้านค้าออนไลน์ — organic reach ยังดีอยู่</div>
+          <div style="margin-top:8px; font-size:0.72rem; background:#ffffff10; border-radius:4px; padding:3px 8px; display:inline-block; color:#94a3b8;">🟡 Growing</div>
+        </div>
+        <div style="background:#ffffff08; border:1px solid #ffffff15; border-radius:10px; padding:14px;">
+          <div style="font-weight:700; color:#e2e8f0; margin-bottom:4px;">Podcast</div>
+          <div style="font-size:0.78rem; color:#6b7280;">SME ผู้บริหาร, โค้ช — ฟังระหว่างขับรถ/ออกกำลังกาย</div>
+          <div style="margin-top:8px; font-size:0.72rem; background:#ffffff10; border-radius:4px; padding:3px 8px; display:inline-block; color:#94a3b8;">🟡 Growing</div>
+        </div>
+        <div style="background:#e1306c10; border:1px solid #e1306c25; border-radius:10px; padding:14px;">
+          <div style="font-weight:700; color:#f472b6; margin-bottom:4px;">Instagram</div>
+          <div style="font-size:0.78rem; color:#6b7280;">ร้านนวด, สปา, โรงแรม — visual-heavy business เท่านั้น</div>
+          <div style="margin-top:8px; font-size:0.72rem; background:#e1306c15; border-radius:4px; padding:3px 8px; display:inline-block; color:#f472b6;">🟢 Niche</div>
+        </div>
+        <div style="background:#0066b215; border:1px solid #0066b230; border-radius:10px; padding:14px;">
+          <div style="font-weight:700; color:#93c5fd; margin-bottom:4px;">LinkedIn</div>
+          <div style="font-size:0.78rem; color:#6b7280;">กฎหมาย, บัญชี, HR องค์กร — B2B decision maker</div>
+          <div style="margin-top:8px; font-size:0.72rem; background:#0066b220; border-radius:4px; padding:3px 8px; display:inline-block; color:#93c5fd;">🟢 Niche</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn" style="margin-top:20px;">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>Key Insight:</strong> คนกลุ่มนี้ไม่ค่อยอ่านบทความยาว — แต่ <strong>ดูวิดีโอสั้น + ฟัง Podcast ระหว่างทำกิจวัตร</strong>
+        Content ที่ได้ผลที่สุดคือ "เห็นของจริงทำงาน" ใน 60-90 วินาที ไม่ใช่ตัวหนังสือยาวๆ
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CHANNELS ═══════════════ -->
+<section id="channels" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--green);">ช่องทางเข้าถึงลูกค้า</div>
+    <h2 class="section-title">เข้าถึงลูกค้าได้อย่างไร (เน้น Online)</h2>
+    <p class="section-sub">เรียงตาม ROI และ speed to first lead</p>
+
+    <div class="channel-grid">
+      <div class="ch-card" style="border-color:#0066b240;">
+        <div class="ch-header"><span class="ch-icon">💼</span><div><div class="ch-name">LinkedIn</div><div class="ch-type">B2B · Organic · ดีที่สุดสำหรับเรา</div></div></div>
+        <p class="ch-action">โพสต์ case study, before/after, ROI จริง เน้น pain point ที่ธุรกิจเจอ ไม่ขายตรง แต่ build authority ว่าเราเข้าใจปัญหา B2B ไทยจริงๆ</p>
+        <div class="ch-kpi">🎯 Content: 3x/สัปดาห์ · DM outreach: 30-50 ราย/สัปดาห์</div>
+      </div>
+      <div class="ch-card" style="border-color:#00b90040;">
+        <div class="ch-header"><span class="ch-icon">💚</span><div><div class="ch-name">LINE Official Account</div><div class="ch-type">Lead Capture · Thai-specific</div></div></div>
+        <p class="ch-action">ใช้ LINE OA ของเราเองเป็น demo ที่มีชีวิต ลูกค้าทักมา ก็จะได้เห็น AI ตอบเป็นตัวอย่างทันที Lead magnet: "ทดลอง AI ตอบ LINE ฟรี 7 วัน"</p>
+        <div class="ch-kpi">🎯 LINE OA เป็น demo + lead capture ในตัวเดียว</div>
+      </div>
+      <div class="ch-card" style="border-color:#1877f240;">
+        <div class="ch-header"><span class="ch-icon">📘</span><div><div class="ch-name">Facebook Group</div><div class="ch-type">Community · Organic Reach</div></div></div>
+        <p class="ch-action">กลุ่ม "เจ้าของธุรกิจไทย", "ร้านค้าออนไลน์", "คลินิกไทย", "SME ไทย", "ร้านนวด", "โค้ชไทย" Share insight ไม่ขายตรง ตอบคำถาม build authority ใน niche</p>
+        <div class="ch-kpi">🎯 เน้นกลุ่มที่ตรง niche ทั้ง 9 segment</div>
+      </div>
+      <div class="ch-card" style="border-color:#ff000040;">
+        <div class="ch-header"><span class="ch-icon">▶️</span><div><div class="ch-name">YouTube / TikTok</div><div class="ch-type">Demo Video · Social Proof</div></div></div>
+        <p class="ch-action">วิดีโอสั้น "Demo AI ตอบ LINE แทนพนักงาน", "ระบบจองร้านนวด", "ข้อสอบออนไลน์ทำยังไง" ให้เห็นของจริงทำงาน</p>
+        <div class="ch-kpi">🎯 Demo video 60-90 วินาที = conversion สูงสุด</div>
+      </div>
+      <div class="ch-card" style="border-color:#ea580c40;">
+        <div class="ch-header"><span class="ch-icon">🔍</span><div><div class="ch-name">Google Ads (Search)</div><div class="ch-type">Paid · High Intent</div></div></div>
+        <p class="ch-action">Keywords: "AI chatbot LINE", "ระบบจองนวดออนไลน์", "ข้อสอบออนไลน์สำหรับองค์กร", "AI สำหรับคลินิก" — ลูกค้าที่ search พร้อมซื้อแล้ว</p>
+        <div class="ch-kpi">🎯 Budget: 5,000-15,000 บาท/เดือน · เริ่มเมื่อมี case study</div>
+      </div>
+      <div class="ch-card" style="border-color:#8b5cf640;">
+        <div class="ch-header"><span class="ch-icon">✉️</span><div><div class="ch-name">Cold Email + LinkedIn DM</div><div class="ch-type">Outbound · Targeted</div></div></div>
+        <p class="ch-action">สร้าง prospect list ตาม industry ส่ง personalized message โชว์ pain + proof + offer ชัดเจน เน้น 9 segment ที่กำหนดไว้</p>
+        <div class="ch-kpi">🎯 Target 50 prospects/สัปดาห์ · conversion ~5-10%</div>
+      </div>
+      <div class="ch-card" style="border-color:#06b6d440;">
+        <div class="ch-header"><span class="ch-icon">📝</span><div><div class="ch-name">Blog / SEO Content</div><div class="ch-type">Long-term · Organic</div></div></div>
+        <p class="ch-action">บทความ "AI chatbot LINE ราคาเท่าไหร่", "ระบบจองออนไลน์ร้านนวด", "LMS คืออะไร", "PDPA กับ AI chatbot" — SEO ติดแน่แล้วได้ lead ฟรีตลอด</p>
+        <div class="ch-kpi">🎯 10 บทความ/เดือน · ผลใน 3-6 เดือน</div>
+      </div>
+      <div class="ch-card" style="border-color:#374151;">
+        <div class="ch-header"><span class="ch-icon">🤝</span><div><div class="ch-name">Partner / Referral</div><div class="ch-type">Leverage · ไม่ต้องหาเอง</div></div></div>
+        <p class="ch-action">Partner กับ LINE Agency, Web Agency, IT company, สมาคมธุรกิจนวด, สมาคมโรงเรียน ที่มีฐานลูกค้า SME อยู่แล้ว ให้ commission 10-15%</p>
+        <div class="ch-kpi">🎯 หา Partner 5-10 ราย · ต่อราย = pipeline ใหม่ทันที</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ DECISION FACTORS ═══════════════ -->
+<section id="decisions" style="padding:60px 24px; background:#06090f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--pink);">ปัจจัยสำคัญ</div>
+    <h2 class="section-title">สิ่งที่ต้องพิจารณาก่อนตัดสินใจ</h2>
+
+    <div class="decision-grid">
+      <div class="dec-card">
+        <h3>⚠️ ความเสี่ยงที่ต้องจัดการ</h3>
+        <div class="dec-item"><span class="dec-label">LLM API cost</span><span class="dec-value">ถ้า volume สูงมาก ค่า Claude อาจสูง แนะนำ cap + alert ให้ลูกค้า</span></div>
+        <div class="dec-item"><span class="dec-label">LINE API change</span><span class="dec-value">LINE เปลี่ยน policy ได้ ต้องมี fallback channel (Telegram/WebChat)</span></div>
+        <div class="dec-item"><span class="dec-label">VPS ล่ม</span><span class="dec-value">ต้องมี monitoring + auto-restart + SLA ชัดเจนในสัญญา</span></div>
+        <div class="dec-item"><span class="dec-label">AI ตอบผิด</span><span class="dec-value">ต้องมี human escalation + guardrail + disclaimer ในทุก deployment</span></div>
+        <div class="dec-item"><span class="dec-label">คู่แข่ง copy</span><span class="dec-value">Oho.chat อาจเพิ่ม Gen AI ได้ — ต้องสร้าง switching cost (integration ลึก)</span></div>
+      </div>
+      <div class="dec-card">
+        <h3>💡 ปัจจัยที่ทำให้ชนะ</h3>
+        <div class="dec-item"><span class="dec-label">Speed to value</span><span class="dec-value">Deliver ใน 2 สัปดาห์ ลูกค้าเห็นผลเร็ว = referral ง่าย</span></div>
+        <div class="dec-item"><span class="dec-label">PDPA fear</span><span class="dec-value">กฎหมายบังคับใช้จริงแล้ว ลูกค้า healthcare/legal พร้อมจ่ายมาก</span></div>
+        <div class="dec-item"><span class="dec-label">Case study</span><span class="dec-value">1 case study ดี ๆ = lead ใหม่ 5-10 ราย ต้องทำให้ได้เร็ว</span></div>
+        <div class="dec-item"><span class="dec-label">Demo ง่าย</span><span class="dec-value">ให้ลูกค้าทดลองคุยกับ AI สาธิตตั้งแต่ครั้งแรกที่คุย</span></div>
+        <div class="dec-item"><span class="dec-label">Niche deep</span><span class="dec-value">เลือก 2 niche (คลินิก + ร้านค้า) ทำให้เชี่ยวชาญจริง ดีกว่ากว้างเกินไป</span></div>
+      </div>
+      <div class="dec-card">
+        <h3>📊 KPI ที่ต้องติดตาม</h3>
+        <div class="dec-item"><span class="dec-label">MRR</span><span class="dec-value">เป้า 30K บาท/เดือน ภายใน 6 เดือน (10 ลูกค้า × 3K avg)</span></div>
+        <div class="dec-item"><span class="dec-label">CAC</span><span class="dec-value">ต้องต่ำกว่า 1 retainer/เดือน = LTV/CAC &gt; 24x</span></div>
+        <div class="dec-item"><span class="dec-label">Churn rate</span><span class="dec-value">เป้า &lt;5%/ปี — ต้องมี QBR ทุก 3 เดือน</span></div>
+        <div class="dec-item"><span class="dec-label">Referral rate</span><span class="dec-value">เป้า 30% ของลูกค้าใหม่มาจาก referral ใน 6 เดือน</span></div>
+        <div class="dec-item"><span class="dec-label">Avg deal size</span><span class="dec-value">เป้า 40,000+ บาท setup ภายใน Q3 (upsell + bundle)</span></div>
+      </div>
+      <div class="dec-card">
+        <h3>🚀 Quick Wins ที่ทำได้เลยตอนนี้</h3>
+        <div class="dec-item"><span class="dec-label">สัปดาห์ 1</span><span class="dec-value">สร้าง LINE OA ของเราเองให้ AI ตอบเป็น demo live</span></div>
+        <div class="dec-item"><span class="dec-label">สัปดาห์ 2</span><span class="dec-value">โพสต์ LinkedIn "AI ตอบ LINE แทนพนักงาน" + demo video 60 วินาที</span></div>
+        <div class="dec-item"><span class="dec-label">สัปดาห์ 3</span><span class="dec-value">DM 50 คลินิก + 50 ร้านค้าออนไลน์ใน Facebook/LINE</span></div>
+        <div class="dec-item"><span class="dec-label">เดือน 1</span><span class="dec-value">ปิดดีลแรก → ทำ case study ทันที → ใช้ pitch ดีลต่อไป</span></div>
+        <div class="dec-item"><span class="dec-label">เดือน 2-3</span><span class="dec-value">หา Partner 3-5 รายที่มีฐาน SME อยู่แล้ว</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ROADMAP ═══════════════ -->
+<section id="roadmap" style="padding:60px 24px;">
+  <div class="container">
+    <div class="section-label" style="color:var(--blue);">Roadmap</div>
+    <h2 class="section-title">เส้นทาง 6 เดือนแรก</h2>
+
+    <div class="roadmap-row">
+      <div class="roadmap-phase">
+        <div class="rp-label" style="color:var(--blue);">เดือน 1-2</div>
+        <div class="rp-title">Foundation</div>
+        <ul class="rp-items">
+          <li>Launch LINE AI Pro (#1)</li>
+          <li>สร้าง demo live บน LINE OA</li>
+          <li>LinkedIn + TikTok content</li>
+          <li>ปิด 2-3 ดีลแรก</li>
+          <li>ทำ case study แรก</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase">
+        <div class="rp-label" style="color:var(--green);">เดือน 3-4</div>
+        <div class="rp-title">Expand</div>
+        <ul class="rp-items">
+          <li>Launch Private AI Clinic (#2)</li>
+          <li>เข้า niche คลินิก + ร้านนวด</li>
+          <li>Launch Omni AI (#3) + Booking (#6)</li>
+          <li>หา Partner 3 ราย</li>
+          <li>MRR เป้า 20K บาท</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase">
+        <div class="rp-label" style="color:var(--purple);">เดือน 5-6</div>
+        <div class="rp-title">Scale</div>
+        <ul class="rp-items">
+          <li>Launch Workflow Bot (#4) + Team AI (#5)</li>
+          <li>Launch ระบบข้อสอบ (#7) + LMS (#8)</li>
+          <li>Google Ads เริ่มเล็กน้อย</li>
+          <li>SEO content 20+ บทความ</li>
+          <li>MRR เป้า 50K บาท</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-green" style="margin-top:20px;">
+      <span class="icon">🏆</span>
+      <div class="text">
+        <strong>เป้าหมาย 6 เดือน:</strong>
+        MRR 50,000+ บาท · ลูกค้า 15+ ราย · Case studies 5 อุตสาหกรรม · Partner network 5 ราย ·
+        ถ้าทำได้ตามนี้ = พร้อม activate Data Analyst + Customer Success agent ในระบบ
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ CONTENT SOURCES ═══════════════ -->
+<section id="sources" style="padding:60px 24px; background:#06090f;">
+  <div class="container">
+    <div class="section-label" style="color:var(--teal);">แหล่ง Content</div>
+    <h2 class="section-title">หา Content Idea จากที่ไหน</h2>
+    <p class="section-sub">แต่ละกลุ่มลูกค้าสนใจ content คนละแบบ — ยูโรและทีมเขียนต้องรู้แหล่งข้อมูลก่อนเขียนทุกชิ้น</p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:24px;">
+
+      <div style="background:var(--card-bg);border:1px solid #16a34a40;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🏥</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">คลินิก / โรงพยาบาลเอกชน</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">PDPC.go.th</strong> — ข่าวบังคับใช้ PDPA<br>
+          • <strong style="color:#e2e8f0;">Hfocus.org</strong> — ข่าวสุขภาพ / คลินิก<br>
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "คลินิกไทย"</strong> — pain point จริง<br>
+          • <strong style="color:#e2e8f0;">สมาคมคลินิกไทย</strong> — ข่าววงการ<br>
+          • <strong style="color:#e2e8f0;">LINE Group แพทย์</strong> — เรื่องที่คุยกันจริง
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid #7c3aed40;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🛍️</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">ร้านค้าออนไลน์</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "ขายของออนไลน์"</strong> — pain point จริง<br>
+          • <strong style="color:#e2e8f0;">Priceza Blog</strong> — เทรนด์ e-commerce<br>
+          • <strong style="color:#e2e8f0;">LINE Shopping News</strong> — อัปเดต platform<br>
+          • <strong style="color:#e2e8f0;">Marketplace Thailand</strong> — ข่าวตลาดออนไลน์<br>
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "Shopee/Lazada seller"</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid #d9770640;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🏨</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">โรงแรม / รีสอร์ท</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">TAT (การท่องเที่ยวแห่งประเทศไทย)</strong><br>
+          • <strong style="color:#e2e8f0;">Agoda Industry Blog</strong><br>
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "Hospitality Thailand"</strong><br>
+          • <strong style="color:#e2e8f0;">Hotel News Thailand</strong><br>
+          • <strong style="color:#e2e8f0;">TripAdvisor Insights</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid #3b82f640;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">⚖️</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">กฎหมาย / บัญชี</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">สภาทนายความแห่งประเทศไทย</strong><br>
+          • <strong style="color:#e2e8f0;">ICAP Thailand (บัญชี)</strong><br>
+          • <strong style="color:#e2e8f0;">PDPC.go.th</strong> — PDPA สำหรับ legal<br>
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "ทนาย/นักบัญชีไทย"</strong><br>
+          • <strong style="color:#e2e8f0;">กรมสรรพากร / BOI</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid #0891b240;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">💆</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">ร้านนวด / สปา / คลินิกความงาม</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "ร้านนวดไทย"</strong><br>
+          • <strong style="color:#e2e8f0;">Thai Spa Association</strong><br>
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "เจ้าของร้านนวด"</strong><br>
+          • <strong style="color:#e2e8f0;">Beauty Business Thailand</strong><br>
+          • <strong style="color:#e2e8f0;">Wongnai for Business</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid #0d948840;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🏫</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">โรงเรียน / สถาบัน / HR</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "HR Thailand"</strong><br>
+          • <strong style="color:#e2e8f0;">SHRM Thailand</strong> — HR professionals<br>
+          • <strong style="color:#e2e8f0;">กระทรวงศึกษาธิการ</strong><br>
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "ครูไทย"</strong><br>
+          • <strong style="color:#e2e8f0;">EdTech Thailand</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid #7c3aed40;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">🎓</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">โค้ช / อาจารย์ / Online Creator</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "Online Course Thailand"</strong><br>
+          • <strong style="color:#e2e8f0;">Creator Economy Thailand</strong><br>
+          • <strong style="color:#e2e8f0;">กลุ่ม FB "โค้ชไทย"</strong><br>
+          • <strong style="color:#e2e8f0;">Teachable / Thinkific Blog</strong><br>
+          • <strong style="color:#e2e8f0;">YouTube Creator Academy</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid var(--gold)40;border-radius:12px;padding:20px;">
+        <div style="font-size:1.4rem;margin-bottom:8px;">📰</div>
+        <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;">AI News (ทุกกลุ่ม)</div>
+        <div style="font-size:0.8rem;color:var(--muted);line-height:1.8;">
+          • <strong style="color:#e2e8f0;">anthropic.com/news</strong> — Claude updates<br>
+          • <strong style="color:#e2e8f0;">openai.com/news</strong> — GPT/ChatGPT<br>
+          • <strong style="color:#e2e8f0;">deepmind.google</strong> — Gemini<br>
+          • <strong style="color:#e2e8f0;">ai.meta.com/blog</strong> — Meta AI<br>
+          • <strong style="color:#e2e8f0;">x.ai/news</strong> — Grok/xAI<br>
+          • <strong style="color:#e2e8f0;">mistral.ai/news</strong> — Mistral
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>วิธีใช้:</strong> ยูโร (AI News Scout) ดึงข่าวจากแหล่ง AI News ทุกสัปดาห์
+        ส่วน Content Writer ใช้แหล่งแยกตามกลุ่มเป้าหมายเพื่อหา pain point และ insight ก่อนเขียนทุกบทความ
+      </div>
+    </div>
+  </div>
+</section>
+
+  <div class="doc-footer">
+    <p>🎯 Go-to-Market Strategy — AIBiz Thailand · May 2026 · จัดทำโดย Chief of Staff</p>
+    <p style="margin-top:.4rem"><a href="/owner/docs/product-strategy/" target="_top">← Product Strategy</a> · <a href="/owner/docs/" target="_top">Docs Hub</a></p>
+  </div>
+</div><!-- end .container -->
+</body>
+</html>

@@ -1,8 +1,8 @@
-# AI Automation Business — 14-Agent System
+# AI Automation Business — 18-Agent System
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.4 | **Updated:** 2026-05-17
+**Version:** 2.5 | **Updated:** 2026-05-20
 
 ---
 
@@ -12,7 +12,7 @@
 
 1. อ่าน `memory/MEMORY.md` ทุกบรรทัด
 2. อ่าน memory file ที่เกี่ยวข้องกับงานที่จะทำ
-3. รัน `check_calendar.py` ดูงานค้างจาก DB ก่อนรับงาน
+3. ดูงานค้างจาก Calendar API: `GET http://localhost:8000/owner/api/events/` และ Notes: `GET http://localhost:8000/owner/api/notes/`
 4. ค่อยตอบหรือรับงาน
 
 **ห้าม assume ว่าจำได้** — ต้อง verify จาก memory files จริงๆ ทุกครั้ง
@@ -53,6 +53,10 @@
 | 12 | Content Writer (TH) | `.claude/agents/12_content_writer_th.md` | เขียนบทความไทยคุณภาพสูงสำหรับ SEO + lead |
 | 13 | Frontend Designer | `.claude/agents/13_frontend_designer.md` | Design System, UI/UX, Color Palette, Component Library |
 | 14 | AI News Scout | `.claude/agents/14_ai_news_scout.md` | ล่าข่าว AI จากค่ายใหญ่ + ส่ง brief ให้ Content Writer TH |
+| 15 | Facebook Post Writer | `.claude/agents/15_facebook_post_writer.md` | เขียน Facebook Page post ภาษาไทย สำหรับบทความ/ข่าว |
+| 16 | Facebook Group Writer | `.claude/agents/16_facebook_group_writer.md` | เขียน Facebook Group post แบบ community ไม่ขายตรง |
+| 17 | Instagram Caption Writer | `.claude/agents/17_instagram_caption_writer.md` | เขียน Instagram caption + hashtags 20-30 tags |
+| 18 | LINE Broadcast Writer | `.claude/agents/18_line_broadcast_writer.md` | เขียนข้อความ LINE Broadcast สั้น กระชับ มี CTA |
 
 ## Skills (ใน `.claude/skills/`)
 
