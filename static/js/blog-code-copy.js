@@ -1,5 +1,5 @@
 (function () {
-  const blocks = document.querySelectorAll(".article-body pre");
+  const blocks = document.querySelectorAll(".yw-article-body pre, .article-body pre");
   if (!blocks.length) return;
 
   blocks.forEach((pre) => {

@@ -160,6 +160,7 @@ CKEDITOR_5_CONFIGS = {
             "insertTable", "horizontalLine", "|",
             "fontSize", "fontFamily", "fontColor", "fontBackgroundColor", "|",
             "alignment", "|",
+            "codeBlock", "|",
             "sourceEditing", "removeFormat", "|",
             "undo", "redo",
         ],
@@ -168,6 +169,49 @@ CKEDITOR_5_CONFIGS = {
         },
         "table": {
             "contentToolbar": ["tableColumn", "tableRow", "mergeTableCells"],
+        },
+        "fontColor": {
+            "colors": [
+                # ── AIBiz Brand ──────────────────────────
+                {"color": "#c9a96e", "label": "Gold (เน้นสำคัญ)"},
+                {"color": "#f59e0b", "label": "Amber (ตัวเลข)"},
+                {"color": "#4ade80", "label": "Green (ผลดี/ประโยชน์)"},
+                {"color": "#f87171", "label": "Red (เตือน/ความเสี่ยง)"},
+                {"color": "#60a5fa", "label": "Blue (ข้อมูล/link)"},
+                {"color": "#a78bfa", "label": "Purple (quote)"},
+                # ── Standard ─────────────────────────────
+                {"color": "#ffffff", "label": "White"},
+                {"color": "#e2e8f0", "label": "Light Gray"},
+                {"color": "#94a3b8", "label": "Muted"},
+                {"color": "#0f1b35", "label": "Navy (เข้ม)"},
+                {"color": "#000000", "label": "Black"},
+            ],
+            "columns": 6,
+            "documentColors": 6,
+        },
+        "codeBlock": {
+            "languages": [
+                {"language": "plaintext",   "label": "Plain text"},
+                {"language": "bash",        "label": "Bash / Command Line"},
+                {"language": "python",      "label": "Python"},
+                {"language": "javascript",  "label": "JavaScript"},
+                {"language": "html",        "label": "HTML"},
+                {"language": "css",         "label": "CSS"},
+                {"language": "json",        "label": "JSON"},
+                {"language": "sql",         "label": "SQL"},
+                {"language": "prompt",      "label": "AI Prompt"},
+            ],
+        },
+        "fontBackgroundColor": {
+            "colors": [
+                {"color": "rgba(201,169,110,0.15)", "label": "Gold bg"},
+                {"color": "rgba(74,222,128,0.15)",  "label": "Green bg"},
+                {"color": "rgba(248,113,113,0.15)", "label": "Red bg"},
+                {"color": "rgba(96,165,250,0.15)",  "label": "Blue bg"},
+                {"color": "rgba(167,139,250,0.15)", "label": "Purple bg"},
+                {"color": "rgba(255,255,255,0.08)", "label": "White bg"},
+            ],
+            "columns": 6,
         },
     },
 }
