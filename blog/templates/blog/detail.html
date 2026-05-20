@@ -366,41 +366,6 @@
         width: 140px;
       }
     }
-    /* === Category Tabs === */
-    .cat-tabs {
-      display: flex;
-      gap: 0.35rem;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding: 0.75rem 0 0.75rem;
-      margin-bottom: 1.25rem;
-      border-bottom: 1px solid var(--bs-border-color);
-      scrollbar-width: none;
-    }
-    .cat-tabs::-webkit-scrollbar { display: none; }
-    .cat-tab {
-      display: inline-block;
-      padding: 5px 16px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-      color: var(--brand-muted);
-      background: rgba(255,255,255,.05);
-      border: 1px solid transparent;
-      transition: all .15s;
-    }
-    .cat-tab:hover {
-      color: var(--brand-gold);
-      background: rgba(201,169,110,.1);
-      border-color: rgba(201,169,110,.25);
-    }
-    .cat-tab.active {
-      color: var(--brand-dark);
-      background: var(--brand-gold);
-      border-color: var(--brand-gold);
-    }
   </style>
 {% endblock %}
 
@@ -410,20 +375,6 @@
        MAIN CONTENT — Article
        ===================================================  -->
     <main class="yw-main">
-      <!-- === Category Tabs === -->
-      <nav class="cat-tabs" aria-label="หมวดหมู่">
-        <a href="{% url 'blog:list' %}"
-           class="cat-tab {% if not article.category %}active{% endif %}">
-          บทความ
-        </a>
-        {% for cat in categories %}
-          <a href="{% url 'blog:category' cat.slug %}"
-             class="cat-tab {% if article.category.slug == cat.slug %}active{% endif %}">
-            {{ cat.name }}
-          </a>
-        {% endfor %}
-      </nav>
-
       <!-- Breadcrumb -->
       <nav class="d-flex align-items-center gap-1 flex-wrap mb-3" style="font-size:.78rem;color:var(--brand-muted);" aria-label="breadcrumb">
         <a href="{% url 'blog:list' %}" style="color:var(--brand-muted);text-decoration:none;">บทความ</a>
