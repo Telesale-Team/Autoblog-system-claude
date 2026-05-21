@@ -39,7 +39,7 @@
         <a href="{% url 'dashboard:calendar' %}"
            class="nav-link {% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">
           <i class="bi bi-calendar3"></i>
-          <span class="nav-label">Work Calendar</span>
+          <span class="nav-label">ตารางทำงาน</span>
         </a>
       </li>
       <li class="nav-item" data-label="บริการ portfolio about contact เนื้อหา เว็บไซต์ services">
@@ -47,6 +47,20 @@
            class="nav-link {% if request.resolver_match.url_name == 'website_content' %}active{% endif %}">
           <i class="bi bi-globe2"></i>
           <span class="nav-label">จัดการเนื้อหาเว็บ</span>
+        </a>
+      </li>
+      <li class="nav-item" data-label="content backlog ข่าว ai news รายงาน รอเขียน">
+        <a href="{% url 'dashboard:backlog' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'backlog' %}active{% endif %}">
+          <i class="bi bi-newspaper"></i>
+          <span class="nav-label">รายงานข่าวจาก AI</span>
+        </a>
+      </li>
+      <li class="nav-item" data-label="docs คู่มือ เอกสาร manual การทำงาน">
+        <a href="{% url 'dashboard:docs_index' %}"
+           class="nav-link {% if 'docs' in request.resolver_match.url_name %}active{% endif %}">
+          <i class="bi bi-journal-bookmark-fill"></i>
+          <span class="nav-label">คู่มือการทำงาน</span>
         </a>
       </li>
 
@@ -178,37 +192,6 @@
         </a>
       </li>
 
-      {# ── เอกสาร ── #}
-      <li class="nav-section-label" data-section>เอกสาร</li>
-
-      <li class="nav-item" data-label="docs คู่มือ เอกสาร manual การทำงาน">
-        <a href="{% url 'dashboard:docs_index' %}"
-           class="nav-link {% if 'docs' in request.resolver_match.url_name %}active{% endif %}">
-          <i class="bi bi-journal-bookmark-fill"></i>
-          <span class="nav-label">คู่มือการทำงาน</span>
-        </a>
-      </li>
-      <li class="nav-item" data-label="team ai agents ทีม bot">
-        <a href="{% url 'dashboard:team' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'team' %}active{% endif %}">
-          <i class="bi bi-people-fill"></i>
-          <span class="nav-label">ทีม AI Agents</span>
-        </a>
-      </li>
-      <li class="nav-item" data-label="portfolio project โปรเจกต์ ผลงาน">
-        <a href="{% url 'dashboard:projects' %}"
-           class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}">
-          <i class="bi bi-briefcase"></i>
-          <span class="nav-label">Portfolio</span>
-        </a>
-      </li>
-      <li class="nav-item" data-label="website เว็บไซต์ public">
-        <a href="/" class="nav-link" target="_blank" rel="noopener">
-          <i class="bi bi-globe"></i>
-          <span class="nav-label">ดูเว็บไซต์</span>
-          <i class="bi bi-box-arrow-up-right ms-auto" style="font-size:.65rem;opacity:.5;width:auto"></i>
-        </a>
-      </li>
 
       {# ── ระบบ ── #}
       <li class="nav-section-label" data-section>ระบบ</li>

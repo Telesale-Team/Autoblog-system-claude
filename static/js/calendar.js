@@ -764,7 +764,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const sysId   = activeEventProps && activeEventProps.sysEvtId;
     const patchId = activeDbId || sysId;
-    if (!patchId) return;
+    /* ตรวจ patchId เป็นตัวเลขจริง — auto-generated id จาก FullCalendar (fc-dom-X) ต้องถูกกัน */
+    if (!patchId || !/^\d+$/.test(String(patchId))) {
+      this.checked = !newDone;
+      label.textContent = !newDone ? 'เสร็จแล้ว ✓' : 'ยังไม่เสร็จ';
+      label.style.color = !newDone ? 'var(--brand-green,#10b981)' : 'var(--brand-muted,#94a3b8)';
+      titleEl.classList.toggle('is-done', !newDone);
+      showToast('งานนี้อัพเดทอัตโนมัติจากระบบ', true);
+      return;
+    }
     const patchUrl = API + patchId + '/';
 
     fetch(patchUrl, {
@@ -815,9 +823,10 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    /* System event */
-    if (activeEventProps && activeEventProps.isSystem && activeEventProps.sysEvtId) {
-      fetch(API + activeEventProps.sysEvtId + '/', {
+    /* System event — ตรวจ sysEvtId เป็นตัวเลขก่อน */
+    const sysEvtId = activeEventProps && activeEventProps.sysEvtId;
+    if (activeEventProps && activeEventProps.isSystem && sysEvtId && /^\d+$/.test(String(sysEvtId))) {
+      fetch(API + sysEvtId + '/', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
         body: JSON.stringify({ is_completed: true }),
