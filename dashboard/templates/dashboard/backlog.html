@@ -32,13 +32,213 @@
   .bl-topic { color:#f1f5f9; font-weight:600; font-size:.9rem; }
   .bl-num { color:var(--brand-muted); font-size:.8rem; font-variant-numeric:tabular-nums; }
 
-  /* Filter buttons */
-  .filter-btn { font-size:.78rem; padding:.28rem .75rem; border-radius:999px; }
-  .filter-btn.active { background:var(--app-primary) !important; border-color:var(--app-primary) !important; color:#fff !important; }
+  /* Status badge — clickable */
+  .bl-status-badge { cursor:pointer; transition:opacity .15s; user-select:none; }
+  .bl-status-badge:hover { opacity:.75; }
+
+  /* Divider ระหว่าง group */
+  .filter-group-divider { width:1px; height:20px; background:var(--bs-border-color); flex-shrink:0; align-self:center; margin:0 .25rem; }
+  .filter-group-label { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--bs-secondary-color); opacity:.6; align-self:center; white-space:nowrap; }
+  /* Status count colors */
+  .filter-btn.status-pending    .tab-count { background:rgba(148,163,184,.12); color:#64748b; }
+  .filter-btn.status-inprogress .tab-count { background:rgba(44,123,229,.12);  color:#1a5cbf; }
+  .filter-btn.status-review     .tab-count { background:rgba(201,169,110,.15); color:var(--app-primary); }
+  .filter-btn.status-done       .tab-count { background:rgba(0,210,122,.12);   color:#009a58; }
 
   /* CMD copy box */
   .cmd-box { background:var(--dash-surface); border:1px solid var(--dash-border); border-radius:.4rem; font-family:monospace; font-size:.82rem; padding:.35rem .7rem; color:var(--brand-gold); cursor:pointer; user-select:all; transition:border-color .15s; }
   .cmd-box:hover { border-color:var(--brand-gold); }
+
+  /* === Backlog Detail Modal — Premium redesign === */
+
+  /* Modal card shell — shadow instead of border (Design System rule #1) */
+  .bl-modal-card {
+    border: none;
+    border-radius: .75rem;
+    overflow: hidden;
+    background: var(--bs-body-bg);
+    box-shadow: 0 24px 48px rgba(0,0,0,.18), 0 8px 24px rgba(0,0,0,.12);
+  }
+
+  /* Header */
+  .bl-modal-header {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    background: rgba(201,169,110,.03);
+    gap: 1rem;
+  }
+  .bl-modal-title {
+    font-size: .97rem;
+    line-height: 1.35;
+    color: var(--bs-body-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  /* Icon buttons in header */
+  .bl-icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: .375rem;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--app-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+  }
+  .bl-icon-btn:hover {
+    background: rgba(201,169,110,.12);
+    border-color: rgba(201,169,110,.3);
+    color: var(--app-primary);
+  }
+  .bl-icon-btn--close {
+    color: var(--bs-secondary-color);
+  }
+  .bl-icon-btn--close:hover {
+    background: rgba(230,55,87,.1);
+    border-color: rgba(230,55,87,.25);
+    color: #c01236;
+  }
+
+  /* Body — consistent padding, no Bootstrap modal-body stacking */
+  .bl-modal-body {
+    padding: 1.5rem;
+  }
+
+  /* Topic display block */
+  .bl-view-topic-block {
+    margin-bottom: 0;
+  }
+  .bl-view-topic {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--bs-body-color);
+    line-height: 1.5;
+    margin-top: .25rem;
+  }
+
+  /* Thin section divider */
+  .bl-section-divider {
+    height: 1px;
+    background: var(--bs-border-color);
+    margin: 1.25rem 0;
+    opacity: .6;
+  }
+
+  /* Info grid — 3-column read-only rows */
+  .bl-info-grid {
+    margin: 0;
+  }
+  .bl-info-cell {
+    padding: .5rem 0;
+  }
+  .bl-info-cell--mid {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--bs-border-color);
+  }
+  @media (max-width: 767.98px) {
+    .bl-info-cell--mid {
+      padding-left: 0;
+      border-left: none;
+    }
+  }
+  .bl-info-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .25rem;
+  }
+  .bl-info-icon {
+    font-size: .85rem;
+    color: var(--app-primary);
+    opacity: .7;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+  }
+  .bl-info-val {
+    font-size: .88rem;
+    color: var(--bs-body-color);
+  }
+  .bl-info-val--mono {
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: .82rem;
+    background: rgba(201,169,110,.08);
+    border-radius: .25rem;
+    padding: .1em .45em;
+    color: var(--app-primary);
+  }
+  .bl-info-val--muted {
+    color: var(--bs-secondary-color);
+  }
+
+  /* Note block */
+  .bl-note-block {
+    background: rgba(201,169,110,.05);
+    border: 1px solid rgba(201,169,110,.18);
+    border-left: 3px solid var(--app-primary);
+    border-radius: 0 .5rem .5rem 0;
+    padding: .85rem 1.1rem;
+  }
+  .bl-note-text {
+    font-size: .88rem;
+    color: var(--bs-secondary-color);
+    line-height: 1.65;
+    margin-top: .35rem;
+    white-space: pre-line;
+  }
+
+  /* Error banner in edit mode */
+  .bl-error-banner {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    background: rgba(230,55,87,.08);
+    border: 1px solid rgba(230,55,87,.25);
+    border-left: 3px solid var(--color-danger, #E63757);
+    border-radius: 0 .375rem .375rem 0;
+    padding: .6rem 1rem;
+    font-size: .85rem;
+    color: var(--color-danger-text, #c01236);
+    margin-bottom: 1rem;
+    animation: bl-slide-in .2s ease;
+  }
+  [data-bs-theme="dark"] .bl-error-banner { color: #fca5a5; }
+  @keyframes bl-slide-in {
+    from { transform: translateY(-4px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Footer */
+  .bl-modal-footer {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--bs-border-color);
+    background: rgba(201,169,110,.02);
+  }
+
+  /* "ปิด" text link */
+  .bl-btn-close-text {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: .88rem;
+    color: var(--bs-secondary-color);
+    cursor: pointer;
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .bl-btn-close-text:hover { color: var(--bs-body-color); }
 </style>
 {% endblock %}
 
@@ -48,16 +248,9 @@
 <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
   <div>
     <h4 class="mb-0 page-title">Content Backlog</h4>
-    <p class="mb-0 text-muted small">Queue บทความทั้งหมด — จัดการผ่าน หนูดี หรือแก้ไฟล์ BACKLOG.md โดยตรง</p>
+    <p class="mb-0 text-muted small">Queue บทความทั้งหมด — AI News Scout เพิ่มข่าวอัตโนมัติ, อนุมัติเขียนได้จากที่นี่</p>
   </div>
-  <div class="d-flex gap-2 align-items-center">
-    {% if counts.pending %}
-      <span class="badge rounded-pill bg-secondary">{{ counts.pending }} pending</span>
-    {% endif %}
-    {% if counts.review %}
-      <span class="badge rounded-pill bg-warning text-dark">{{ counts.review }} review</span>
-    {% endif %}
-  </div>
+  <div></div>
 </div>
 
 {# ── Quick Commands ───────────────────────────────────────────────────────── #}
@@ -72,32 +265,57 @@
   </div>
 </div>
 
-{# ── Stats ────────────────────────────────────────────────────────────────── #}
-<div class="d-flex flex-wrap gap-3 mb-3">
-  <div class="text-center px-3 py-2 border rounded" style="border-radius:.5rem !important">
-    <div class="fw-bold fs-5 text-gold">{{ total }}</div>
-    <div class="text-muted" style="font-size:.72rem">รวมทั้งหมด</div>
-  </div>
-  {% for status, cnt in counts.items %}
-  <div class="text-center px-3 py-2 border rounded" style="border-radius:.5rem !important">
-    <div class="fw-bold fs-5">{{ cnt }}</div>
-    <div class="status-pill s-{{ status }}">{{ status }}</div>
-  </div>
-  {% endfor %}
-</div>
+{# ── Filter Bar: Status + Category (Design System .filter-btn) ───────────── #}
+<div class="d-flex flex-column gap-2 mb-4">
 
-{# ── Filter ───────────────────────────────────────────────────────────────── #}
-<div class="d-flex flex-wrap gap-2 mb-3">
-  <a href="{% url 'dashboard:backlog' %}"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter %}active{% endif %}">ทั้งหมด</a>
-  <a href="{% url 'dashboard:backlog' %}?status=pending"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'pending' %}active{% endif %}">Pending</a>
-  <a href="{% url 'dashboard:backlog' %}?status=in-progress"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'in-progress' %}active{% endif %}">In Progress</a>
-  <a href="{% url 'dashboard:backlog' %}?status=review"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'review' %}active{% endif %}">Review</a>
-  <a href="{% url 'dashboard:backlog' %}?status=done"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if status_filter == 'done' %}active{% endif %}">Done</a>
+  {# Row 1: สถานะ #}
+  <div class="d-flex flex-wrap align-items-center gap-2">
+    <span class="filter-group-label">สถานะ</span>
+    <a href="{% url 'dashboard:backlog' %}"
+       class="filter-btn {% if not status_filter and not category_filter %}active{% endif %}">
+      <i class="bi bi-layers tab-icon"></i>ทั้งหมด
+      <span class="tab-count">{{ total }}</span>
+    </a>
+    <a href="?status=pending{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+       class="filter-btn status-pending {% if status_filter == 'pending' %}active{% endif %}">
+      <i class="bi bi-clock tab-icon"></i>Pending
+      <span class="tab-count">{{ counts.pending|default:0 }}</span>
+    </a>
+    <a href="?status=in-progress{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+       class="filter-btn status-inprogress {% if status_filter == 'in-progress' %}active{% endif %}">
+      <i class="bi bi-arrow-repeat tab-icon"></i>In Progress
+      <span class="tab-count">{{ counts.in_progress|default:0 }}</span>
+    </a>
+    <a href="?status=review{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+       class="filter-btn status-review {% if status_filter == 'review' %}active{% endif %}">
+      <i class="bi bi-eye tab-icon"></i>Review
+      <span class="tab-count">{{ counts.review|default:0 }}</span>
+    </a>
+    <a href="?status=done{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+       class="filter-btn status-done {% if status_filter == 'done' %}active{% endif %}">
+      <i class="bi bi-check-circle tab-icon"></i>Done
+      <span class="tab-count">{{ counts.done|default:0 }}</span>
+    </a>
+  </div>
+
+  {# Row 2: หมวดหมู่ #}
+  {% if cat_counts %}
+  <div class="d-flex flex-wrap align-items-center gap-2">
+    <span class="filter-group-label">หมวดหมู่</span>
+    {% for cat_name, cnt in cat_counts %}
+    {% if category_filter == cat_name %}
+    <a href="{% url 'dashboard:backlog' %}{% if status_filter %}?status={{ status_filter }}{% endif %}"
+       class="filter-btn active">
+    {% else %}
+    <a href="?category={{ cat_name|urlencode }}{% if status_filter %}&status={{ status_filter }}{% endif %}"
+       class="filter-btn">
+    {% endif %}
+      {{ cat_name }}<span class="tab-count">{{ cnt }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
 </div>
 
 {# ── Backlog Table ─────────────────────────────────────────────────────────── #}
@@ -109,9 +327,11 @@
         <thead>
           <tr>
             <th class="ps-3" style="width:36px">#</th>
-            <th style="width:90px">Status</th>
+            <th style="width:110px">Status</th>
             <th style="width:80px">Priority</th>
             <th>Topic</th>
+            <th style="width:150px">หมวดหมู่ข่าว</th>
+            <th style="width:130px">นักเขียน</th>
             <th>Target Keyword</th>
             <th>Notes</th>
             <th class="pe-3" style="width:90px">Added</th>
@@ -119,15 +339,51 @@
         </thead>
         <tbody>
           {% for item in items %}
-          <tr>
+          <!-- === Backlog row — คลิกเปิด Modal === -->
+          <tr style="cursor:pointer;"
+              onclick="openBacklogModal({{ item.id }}, '{{ item.article_edit_url }}', '{{ item.article_status }}')"
+              data-approve-url="{% url 'dashboard:backlog_approve' item.id %}">
             <td class="ps-3 bl-num">{{ item.num }}</td>
-            <td><span class="s-{{ item.status }}">{{ item.status }}</span></td>
+            <td>
+              <span class="s-{{ item.status }} bl-status-badge"
+                    data-url="{% url 'dashboard:backlog_toggle_status' item.id %}"
+                    onclick="event.stopPropagation(); toggleBacklogStatus(this)">
+                {{ item.status }}
+              </span>
+            </td>
             <td>
               {% if item.priority == 'P1' %}<span class="bl-p1">P1</span>
               {% elif item.priority == 'P2' %}<span class="bl-p2">P2</span>
               {% else %}<span class="bl-p3">{{ item.priority }}</span>{% endif %}
             </td>
-            <td><div class="bl-topic" style="max-width:300px">{{ item.topic }}</div></td>
+            <td>
+              <div class="bl-topic" style="max-width:340px">{{ item.topic }}</div>
+              {% if item.article_status %}
+              <div style="font-size:.72rem;color:var(--brand-muted);margin-top:.2rem;">
+                <i class="bi bi-file-earmark-text me-1"></i>
+                {% if item.article_status == 'published' %}เผยแพร่แล้ว
+                {% elif item.article_status == 'draft' %}Draft — รอ publish
+                {% elif item.article_status == 'waiting' %}รอ Content Writer
+                {% endif %}
+              </div>
+              {% endif %}
+            </td>
+            <td>
+              {% if item.category_name %}
+                <span class="badge rounded-pill" style="font-size:.7rem;background:rgba(201,169,110,.12);color:var(--brand-gold);border:1px solid rgba(201,169,110,.3);">
+                  {{ item.category_name }}
+                </span>
+              {% else %}
+                <span class="bl-num" style="font-size:.75rem;opacity:.4">—</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if item.writer_name %}
+                <span style="font-size:.8rem;color:#e2e8f0;">{{ item.writer_name }}</span>
+              {% else %}
+                <span class="bl-num" style="font-size:.75rem;opacity:.4">—</span>
+              {% endif %}
+            </td>
             <td><span class="bl-num" style="font-size:.82rem">{{ item.keyword }}</span></td>
             <td><span class="bl-num" style="max-width:200px;display:block;font-size:.78rem">{{ item.notes|truncatechars:60 }}</span></td>
             <td class="pe-3 bl-num" style="font-size:.78rem">{{ item.added }}</td>
@@ -143,10 +399,238 @@
         {% if status_filter %}ไม่มี item สถานะ "{{ status_filter }}"{% else %}Backlog ว่างอยู่{% endif %}
       </div>
       <div class="empty-sub">
-        {% if status_filter %}ลองเลือก filter อื่น หรือดูทั้งหมด{% else %}แก้ไฟล์ content_backlog/BACKLOG.md แล้ว sync ใหม่{% endif %}
+        {% if status_filter %}ลองเลือก filter อื่น หรือดูทั้งหมด{% else %}รัน AI News Scout เพื่อดึงข่าวใหม่เข้า Backlog{% endif %}
       </div>
     </div>
     {% endif %}
+  </div>
+</div>
+
+<!-- === Modal: Backlog Detail (View + Edit mode) === -->
+<div class="modal fade" id="backlogDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bl-modal-card">
+
+      <!-- === Header === -->
+      <div class="bl-modal-header">
+        <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+          <div class="scard-header-icon flex-shrink-0">
+            <i class="bi bi-newspaper" id="modalHeaderIcon"></i>
+          </div>
+          <div class="min-w-0 flex-grow-1">
+            <h5 class="mb-0 fw-bold text-truncate bl-modal-title" id="backlogDetailModalLabel">—</h5>
+            <div id="modalBadgeRow" class="d-flex align-items-center gap-2 mt-1 flex-wrap"></div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-1 flex-shrink-0 ms-3">
+          <button type="button" class="bl-icon-btn bl-icon-btn--close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- === VIEW MODE === -->
+      <div id="modeView" class="bl-modal-body">
+        <input type="hidden" id="modalBacklogId">
+        <input type="hidden" id="modalArticleUrl">
+
+        <!-- หัวข้อบทความ -->
+        <div class="bl-view-topic-block">
+          <span class="field-label">หัวข้อบทความ</span>
+          <div id="viewTopic" class="bl-view-topic"></div>
+        </div>
+
+        <!-- Section divider -->
+        <div class="bl-section-divider"></div>
+
+        <!-- 3 column: หมวดหมู่ / นักเขียน / keyword -->
+        <div class="row g-0 bl-info-grid">
+          <div class="col-md-4 bl-info-cell">
+            <span class="field-label">หมวดหมู่</span>
+            <div class="bl-info-row">
+              <i class="bi bi-folder2 bl-info-icon"></i>
+              <span id="viewCategory" class="bl-info-val">—</span>
+            </div>
+          </div>
+          <div class="col-md-4 bl-info-cell bl-info-cell--mid">
+            <span class="field-label">นักเขียน</span>
+            <div class="bl-info-row">
+              <i class="bi bi-person bl-info-icon"></i>
+              <span id="viewWriter" class="bl-info-val">—</span>
+            </div>
+          </div>
+          <div class="col-md-4 bl-info-cell">
+            <span class="field-label">Target Keyword</span>
+            <div class="bl-info-row">
+              <i class="bi bi-search bl-info-icon"></i>
+              <span id="viewKeyword" class="bl-info-val bl-info-val--mono">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section divider -->
+        <div class="bl-section-divider"></div>
+
+        <!-- 3 column: AI ส่งงาน / Priority / เพิ่มเมื่อ -->
+        <div class="row g-0 bl-info-grid">
+          <div class="col-md-4 bl-info-cell">
+            <span class="field-label">AI ส่งงาน</span>
+            <div class="bl-info-row">
+              <i class="bi bi-robot bl-info-icon"></i>
+              <span id="viewAgent" class="bl-info-val bl-info-val--muted">—</span>
+            </div>
+          </div>
+          <div class="col-md-4 bl-info-cell bl-info-cell--mid">
+            <span class="field-label">Priority</span>
+            <div class="bl-info-row">
+              <i class="bi bi-flag bl-info-icon"></i>
+              <span id="viewPriority" class="bl-info-val bl-info-val--muted">—</span>
+            </div>
+          </div>
+          <div class="col-md-4 bl-info-cell">
+            <span class="field-label">เพิ่มเมื่อ</span>
+            <div class="bl-info-row">
+              <i class="bi bi-calendar3 bl-info-icon"></i>
+              <span id="viewAdded" class="bl-info-val bl-info-val--muted">—</span>
+            </div>
+          </div>
+          <div class="col-md-4 bl-info-cell" id="viewCalDateRow">
+            <span class="field-label">วันกำหนดเขียน</span>
+            <div class="bl-info-row">
+              <i class="bi bi-calendar-check bl-info-icon"></i>
+              <span id="viewCalDate" class="bl-info-val" style="color:var(--app-primary)">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Note (conditional) -->
+        <div id="viewNotesRow" class="d-none">
+          <div class="bl-section-divider"></div>
+          <div class="bl-note-block">
+            <span class="field-label d-flex align-items-center gap-2">
+              <i class="bi bi-sticky" style="color:var(--app-primary);font-size:.9rem;"></i>
+              Note
+            </span>
+            <div id="viewNotes" class="bl-note-text"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- === EDIT MODE (ซ่อนไว้) === -->
+      <div id="modeEdit" class="bl-modal-body d-none">
+
+        <!-- Error banner -->
+        <div id="modalError" class="bl-error-banner d-none">
+          <i class="bi bi-exclamation-circle-fill flex-shrink-0"></i>
+          <span id="modalErrorText"></span>
+        </div>
+
+        <!-- หัวข้อ -->
+        <div class="mb-3">
+          <label for="modalTopic" class="field-label">หัวข้อบทความ <span style="color:var(--color-danger-text,#c01236)">*</span></label>
+          <input type="text" id="modalTopic" class="form-control premium-input" placeholder="ใส่หัวข้อบทความ...">
+        </div>
+
+        <!-- row 1: หมวดหมู่ + keyword -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label for="modalCategory" class="field-label">หมวดหมู่บทความ</label>
+            <select id="modalCategory" class="form-select premium-input">
+              <option value="">— เลือกหมวดหมู่ —</option>
+              {% for cat in blog_categories %}
+              <option value="{{ cat.pk }}">{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="modalKeyword" class="field-label">Target Keyword</label>
+            <input type="text" id="modalKeyword" class="form-control premium-input" placeholder="keyword หลัก...">
+          </div>
+        </div>
+
+        <!-- row 2: AI ส่งงาน + นักเขียน -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label for="modalAssignedAgent" class="field-label">AI ส่งงาน</label>
+            <select id="modalAssignedAgent" class="form-select premium-input">
+              <option value="">— ยังไม่ระบุ —</option>
+              <option value="content-writer-th">Content Writer TH (ทั่วไป)</option>
+              <option value="healthcare-writer">Healthcare Writer (คลินิก/โรงพยาบาล)</option>
+              <option value="ecommerce-writer">E-commerce Writer (ร้านค้าออนไลน์)</option>
+              <option value="hospitality-writer">Hospitality Writer (โรงแรม/รีสอร์ท)</option>
+              <option value="beauty-wellness-writer">Beauty & Wellness Writer (สปา/นวด)</option>
+              <option value="hr-education-writer">HR & Education Writer (HR/โรงเรียน)</option>
+              <option value="creator-coach-writer">Creator & Coach Writer (โค้ช/ครีเอเตอร์)</option>
+              <option value="ai-news-scout">AI News Scout (ข่าว AI)</option>
+              <option value="marketing-specialist">Marketing Specialist</option>
+              <option value="seo-specialist">SEO Specialist</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="modalWriter" class="field-label">นักเขียน</label>
+            <select id="modalWriter" class="form-select premium-input">
+              <option value="">— ยังไม่ระบุ —</option>
+              <option value="2">dphoompat</option>
+              <option value="3">กนกวดี รักษสุข</option>
+              <option value="4">วริญญา พาณิชยกุล</option>
+              <option value="5">ปิยดา วิไลรัตน์</option>
+              <option value="6">มินตรา อรุณวงศ์</option>
+              <option value="7">ณัฐวุฒิ พัฒนกิจ</option>
+              <option value="8">ธีรพงษ์ สร้างสรรค์</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- วันกำหนดเขียน (แสดงเฉพาะเมื่อส่งไปแล้ว) -->
+        <div class="mb-3" id="editCalDateRow">
+          <label for="modalCalDate" class="field-label">
+            <i class="bi bi-calendar-check me-1" style="color:var(--app-primary)"></i>วันกำหนดเขียน
+          </label>
+          <input type="date" id="modalCalDate" class="form-control premium-input">
+        </div>
+
+        <!-- Note -->
+        <div class="mb-0">
+          <label for="modalNotes" class="field-label">Note</label>
+          <textarea id="modalNotes" class="form-control premium-input" rows="3" placeholder="บันทึกเพิ่มเติม..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- === Footer === -->
+      <div class="bl-modal-footer">
+        <button type="button" class="bl-btn-close-text me-auto"
+                data-bs-dismiss="modal">ปิด</button>
+
+        <!-- แก้ไข / บันทึก -->
+        <button type="button" id="btnToggleEdit" class="ds-btn-outline">
+          <i class="bi bi-pencil-square"></i>แก้ไข
+        </button>
+        <button type="button" id="btnSaveBacklog" class="ds-btn-outline d-none">
+          <i class="bi bi-floppy"></i>บันทึก
+        </button>
+
+        <!-- ส่งเขียนข่าว: step 1 — เลือกวัน -->
+        <button type="button" id="btnApproveBacklog" class="ds-btn d-none"
+                onclick="showDatePicker()">
+          <i class="bi bi-send-check"></i>ส่งเขียนข่าว
+        </button>
+
+        <!-- step 2 — date picker + ยืนยัน (ซ่อนไว้ก่อน) -->
+        <div id="approveDateRow" class="d-none d-flex align-items-center gap-2">
+          <input type="date" id="approveDate" class="form-control premium-input"
+                 style="width:160px;font-size:.85rem;padding:.35rem .7rem">
+          <button type="button" id="btnConfirmApprove" class="ds-btn" onclick="confirmApprove()">
+            <i class="bi bi-check-lg"></i>ยืนยัน
+          </button>
+          <button type="button" class="ds-btn-outline" onclick="hideDatePicker()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -154,14 +638,216 @@
 
 {% block extra_js %}
 <script>
+var _csrf = (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || '';
+
+/* === Auto-fill: Agent → Writer + Category === */
+var AGENT_MAP = {
+  'content-writer-th':      { writer: '2', category: '1'  },
+  'healthcare-writer':      { writer: '3', category: '7'  },
+  'ecommerce-writer':       { writer: '4', category: '8'  },
+  'hospitality-writer':     { writer: '5', category: '9'  },
+  'beauty-wellness-writer': { writer: '6', category: '10' },
+  'hr-education-writer':    { writer: '7', category: '11' },
+  'creator-coach-writer':   { writer: '8', category: '12' },
+  'ai-news-scout':          { writer: '2', category: '2'  },
+  'marketing-specialist':   { writer: '2', category: '2'  },
+  'seo-specialist':         { writer: '2', category: '1'  },
+};
+document.addEventListener('change', function(e) {
+  if (e.target.id !== 'modalAssignedAgent') return;
+  var map = AGENT_MAP[e.target.value];
+  if (!map) return;
+  document.getElementById('modalWriter').value   = map.writer;
+  document.getElementById('modalCategory').value = map.category;
+});
+
+/* === CMD copy === */
 document.querySelectorAll('.cmd-box').forEach(function (el) {
   el.addEventListener('click', function () {
     navigator.clipboard.writeText(el.textContent.trim()).then(function () {
-      const orig = el.textContent;
+      var orig = el.textContent;
       el.textContent = 'Copied!';
-      setTimeout(() => el.textContent = orig, 1500);
+      setTimeout(function () { el.textContent = orig; }, 1500);
     });
   });
+});
+
+/* === Status badge toggle (AJAX — stopPropagation ป้องกัน modal) === */
+function toggleBacklogStatus(badge) {
+  fetch(badge.dataset.url, {
+    method: 'POST',
+    headers: { 'X-CSRFToken': _csrf, 'Content-Type': 'application/json' }
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    badge.className = 's-' + data.css_status + ' bl-status-badge';
+    badge.textContent = data.label;
+  });
+}
+
+/* === เปิด Backlog Modal (View mode) === */
+function openBacklogModal(pk, articleUrl, articleStatus) {
+  fetch('/owner/website-content/backlog/' + pk + '/edit/', {
+    headers: { 'X-CSRFToken': _csrf }
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    document.getElementById('modalBacklogId').value  = pk;
+    document.getElementById('modalArticleUrl').value = articleUrl || '';
+
+    /* ── View mode: populate summary ── */
+    document.getElementById('backlogDetailModalLabel').textContent = 'รายละเอียด Backlog';
+    document.getElementById('viewTopic').textContent    = data.topic || '—';
+    document.getElementById('viewCategory').textContent = data.category_name || '—';
+    document.getElementById('viewWriter').textContent   = data.writer_name || '—';
+    document.getElementById('viewKeyword').textContent  = data.keyword || '—';
+    document.getElementById('viewAgent').textContent    = data.assigned_agent || '—';
+    document.getElementById('viewPriority').textContent = data.priority || '—';
+    document.getElementById('viewAdded').textContent    = data.added || '—';
+    // วันกำหนดเขียน
+    var calDateRow = document.getElementById('viewCalDateRow');
+    var editCalRow = document.getElementById('editCalDateRow');
+    if (data.calendar_date) {
+      document.getElementById('viewCalDate').textContent = data.calendar_date_display || data.calendar_date;
+      document.getElementById('modalCalDate').value = data.calendar_date;
+      calDateRow.classList.remove('d-none');
+      editCalRow.classList.remove('d-none');
+    } else {
+      calDateRow.classList.add('d-none');
+      editCalRow.classList.add('d-none');
+    }
+    var notesEl = document.getElementById('viewNotes');
+    if (data.notes) {
+      notesEl.textContent = data.notes;
+      document.getElementById('viewNotesRow').classList.remove('d-none');
+    } else {
+      document.getElementById('viewNotesRow').classList.add('d-none');
+    }
+
+    /* Badge row: status — use ds-badge system */
+    var statusDsBadge = { pending:'draft', in_progress:'new', review:'waiting', done:'published' };
+    var statusLabel   = { pending:'Pending', in_progress:'In Progress', review:'Review', done:'Done' };
+    var badgeRow = document.getElementById('modalBadgeRow');
+    badgeRow.innerHTML = data.status
+      ? '<span class="ds-badge ' + (statusDsBadge[data.status] || 'draft') + '"><span class="ds-dot"></span>' + (statusLabel[data.status] || data.status) + '</span>'
+      : '';
+
+    /* ── Edit mode: populate form ── */
+    document.getElementById('modalTopic').value         = data.topic || '';
+    document.getElementById('modalKeyword').value       = data.keyword || '';
+    document.getElementById('modalCategory').value      = data.category_id || '';
+    document.getElementById('modalNotes').value         = data.notes || '';
+    document.getElementById('modalAssignedAgent').value = data.assigned_agent || '';
+    document.getElementById('modalWriter').value        = data.writer_id ? String(data.writer_id) : '';
+
+    /* ── Buttons ── */
+    var btnApprove = document.getElementById('btnApproveBacklog');
+    if (articleUrl) {
+      btnApprove.classList.add('d-none');
+    } else {
+      btnApprove.classList.remove('d-none');
+    }
+
+    /* เริ่มที่ View mode */
+    setModalMode('view');
+    new bootstrap.Modal(document.getElementById('backlogDetailModal')).show();
+  });
+}
+
+/* === Toggle View / Edit mode === */
+function setModalMode(mode) {
+  var isEdit = mode === 'edit';
+  document.getElementById('modeView').classList.toggle('d-none', isEdit);
+  document.getElementById('modeEdit').classList.toggle('d-none', !isEdit);
+  document.getElementById('btnToggleEdit').classList.toggle('d-none', isEdit);
+  document.getElementById('btnSaveBacklog').classList.toggle('d-none', !isEdit);
+  document.getElementById('modalHeaderIcon').className = isEdit ? 'bi bi-pencil-square' : 'bi bi-newspaper';
+  document.getElementById('backlogDetailModalLabel').textContent = isEdit ? 'แก้ไข Backlog' : 'รายละเอียด Backlog';
+  /* active state: gold when view, muted when already in edit */
+  var editBtn = document.getElementById('btnToggleEdit');
+  editBtn.style.color = isEdit ? 'var(--bs-secondary-color)' : 'var(--app-primary)';
+}
+document.getElementById('btnToggleEdit').addEventListener('click', function () {
+  var isCurrentlyEdit = !document.getElementById('modeEdit').classList.contains('d-none');
+  setModalMode(isCurrentlyEdit ? 'view' : 'edit');
+});
+
+/* === บันทึกข้อมูล === */
+document.getElementById('btnSaveBacklog').addEventListener('click', function () {
+  var pk    = document.getElementById('modalBacklogId').value;
+  var topic = document.getElementById('modalTopic').value.trim();
+  var errEl    = document.getElementById('modalError');
+  var errText  = document.getElementById('modalErrorText');
+  function showErr(msg) { errText.textContent = msg; errEl.classList.remove('d-none'); }
+  function hideErr()    { errEl.classList.add('d-none'); }
+  hideErr();
+  if (!topic) { showErr('กรุณาใส่หัวข้อ'); return; }
+
+  var btn = this; btn.disabled = true;
+  fetch('/owner/website-content/backlog/' + pk + '/edit/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': _csrf },
+    body: JSON.stringify({
+      topic:          topic,
+      keyword:        document.getElementById('modalKeyword').value.trim(),
+      notes:          document.getElementById('modalNotes').value.trim(),
+      category_id:    document.getElementById('modalCategory').value || null,
+      assigned_agent: document.getElementById('modalAssignedAgent').value || '',
+      writer_id:      document.getElementById('modalWriter').value || null,
+      calendar_date:  document.getElementById('modalCalDate').value || '',
+    })
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    if (!data.ok) { showErr(data.error || 'เกิดข้อผิดพลาด'); return; }
+    bootstrap.Modal.getInstance(document.getElementById('backlogDetailModal')).hide();
+    window.location.reload();
+  })
+  .catch(function () { showErr('เกิดข้อผิดพลาด'); })
+  .finally(function () { btn.disabled = false; });
+});
+
+/* === Date picker step === */
+function showDatePicker() {
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('approveDate').value = today;
+  document.getElementById('btnApproveBacklog').classList.add('d-none');
+  document.getElementById('approveDateRow').classList.remove('d-none');
+  document.getElementById('approveDate').focus();
+}
+function hideDatePicker() {
+  document.getElementById('approveDateRow').classList.add('d-none');
+  document.getElementById('btnApproveBacklog').classList.remove('d-none');
+}
+
+/* === ยืนยันส่งเขียนข่าว พร้อมวันที่ === */
+function confirmApprove() {
+  var pk   = document.getElementById('modalBacklogId').value;
+  var date = document.getElementById('approveDate').value;
+  if (!date) { document.getElementById('approveDate').focus(); return; }
+
+  var btn = document.getElementById('btnConfirmApprove');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="bi bi-hourglass-split"></i>กำลังสร้าง...';
+
+  fetch('/owner/backlog/' + pk + '/approve/', {
+    method: 'POST',
+    headers: { 'X-CSRFToken': _csrf, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ due_date: date })
+  })
+  .then(function (r) {
+    bootstrap.Modal.getInstance(document.getElementById('backlogDetailModal')).hide();
+    window.location.reload();
+  })
+  .catch(function () {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-check-lg"></i>ยืนยัน';
+  });
+}
+
+/* reset date picker เมื่อปิด modal */
+document.getElementById('backlogDetailModal').addEventListener('hidden.bs.modal', function () {
+  hideDatePicker();
 });
 </script>
 {% endblock %}

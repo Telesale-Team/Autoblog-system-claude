@@ -8,9 +8,11 @@
 {% block title %}
   {{ article.meta_title|default:article.title }}
 {% endblock %}
+
 {% block meta_description %}
   {{ article.display_meta_description }}
 {% endblock %}
+
 {% block og_image %}
   {% if article.display_og_image %}
     <meta property="og:image" content="{{ article.display_og_image }}" />

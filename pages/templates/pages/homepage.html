@@ -1,843 +1,392 @@
 {% extends "base_public.html" %}
+{% load static %}
 
-{% block title %}AIBiz Thailand — ระบบ AI ที่ SME ไทยใช้ได้จริง วันนี้{% endblock %}
-{% block meta_description %}ผู้เชี่ยวชาญ AI Automation สำหรับ SME ไทย 5-50 คน ลดงาน Manual 80% เพิ่ม Lead 3 เท่า ใน 30 วัน ปรึกษาฟรี ไม่มีข้อผูกมัด{% endblock %}
+{% block title %}Noodee BootBiz — AI Assistant สำหรับธุรกิจ SME ไทย{% endblock %}
+{% block meta_description %}หนูดี AI Business Assistant ช่วย SME ไทย ลดงาน Manual 80% ตอบลูกค้า 24/7 ไม่ต้องจ้างคนเพิ่ม ทดลองฟรี 14 วัน{% endblock %}
 
-<!-- === Schema Markup: Organization + FAQ (SEO/AEO/GEO) === -->
 {% block extra_head %}
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "name": "AIBiz Thailand",
-  "description": "ผู้เชี่ยวชาญ AI Automation สำหรับ SME ไทย 5-50 คน บริการ AI Chatbot, Lead Generation, Workflow Automation และ Custom AI Agent",
-  "areaServed": { "@type": "Country", "name": "Thailand" },
-  "knowsAbout": ["AI Chatbot", "AI Automation", "Lead Generation", "Workflow Automation", "Custom AI Agent", "AI Integration"],
-  "serviceType": "AI Automation Specialist",
-  "priceRange": "฿฿",
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "บริการ AI สำหรับธุรกิจไทย",
-    "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Chatbot สำหรับธุรกิจ", "description": "ตอบลูกค้า 24/7 บน LINE, Facebook และเว็บไซต์" }, "price": "15000", "priceCurrency": "THB" },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Lead Generation", "description": "หา qualify lead และ nurture อัตโนมัติตั้งแต่ดึงดูดจนถึงส่งให้ทีมขาย" }, "price": "25000", "priceCurrency": "THB" },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Workflow Automation", "description": "เชื่อมระบบทุกอย่างในธุรกิจด้วย AI ลดขั้นตอน Manual" }, "price": "20000", "priceCurrency": "THB" },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom AI Agent", "description": "AI Agent สั่งทำพิเศษตามธุรกิจ ทำงานซับซ้อนได้อัตโนมัติ" }, "price": "50000", "priceCurrency": "THB" },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI + Hardware Integration", "description": "เชื่อม AI เข้ากับฮาร์ดแวร์จริง กล้อง CCTV อัจฉริยะ IoT Sensor" }, "price": "80000", "priceCurrency": "THB" }
-    ]
-  }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    { "@type": "Question", "name": "AI Chatbot เริ่มต้นราคาเท่าไหร่?", "acceptedAnswer": { "@type": "Answer", "text": "AI Chatbot สำหรับธุรกิจเริ่มต้นที่ 15,000 บาท ครอบคลุมการติดตั้งบน LINE Official Account, Facebook Messenger และเว็บไซต์ พร้อม training ข้อมูลสินค้าและบริการของคุณโดยเฉพาะ ไม่ใช่คำตอบสำเร็จรูป" } },
-    { "@type": "Question", "name": "ต้องมีความรู้ด้าน IT เพื่อใช้ AI ไหม?", "acceptedAnswer": { "@type": "Answer", "text": "ไม่จำเป็นเลย ทีมเรารับผิดชอบทุกขั้นตอนตั้งแต่การออกแบบ ติดตั้ง จนถึง training พนักงานของคุณให้ใช้งานได้ทันที คุณแค่รู้ว่าต้องการผลลัพธ์อะไร" } },
-    { "@type": "Question", "name": "ใช้เวลานานแค่ไหนในการติดตั้ง?", "acceptedAnswer": { "@type": "Answer", "text": "AI Chatbot พื้นฐานพร้อมใช้ใน 2 สัปดาห์ ระบบ Workflow Automation 3-4 สัปดาห์ Custom AI Agent 4-6 สัปดาห์ ขึ้นอยู่กับความซับซ้อนของธุรกิจ" } },
-    { "@type": "Question", "name": "รองรับ LINE Official Account ได้ไหม?", "acceptedAnswer": { "@type": "Answer", "text": "รองรับครบทุก channel ที่ SME ไทยใช้ ได้แก่ LINE Official Account, LINE LIFF, Facebook Messenger, Instagram DM และ Web Chat บนเว็บไซต์" } },
-    { "@type": "Question", "name": "SME ที่มีพนักงานน้อยกว่า 10 คน เหมาะกับบริการนี้ไหม?", "acceptedAnswer": { "@type": "Answer", "text": "เหมาะมากที่สุด ธุรกิจที่มีพนักงาน 5-50 คนได้ประโยชน์สูงสุดจาก AI เพราะช่วยให้ทีมเล็กทำงานได้เทียบเท่าทีมใหญ่โดยไม่ต้องจ้างคนเพิ่ม" } },
-    { "@type": "Question", "name": "ถ้าระบบมีปัญหา ติดต่อและรับการ Support ได้อย่างไร?", "acceptedAnswer": { "@type": "Answer", "text": "มีทีม Support ผ่าน LINE Official Account ตลอด รับประกัน Response ภายใน 4 ชั่วโมงสำหรับปัญหาด่วน พร้อม Maintenance ประจำทุกเดือนและรายงานผลรายไตรมาส" } },
-    { "@type": "Question", "name": "มีการรับประกันผลลัพธ์ไหม?", "acceptedAnswer": { "@type": "Answer", "text": "มีรับประกัน 30 วัน ถ้าผลลัพธ์ไม่เป็นไปตามที่ตกลงกัน เราคืนเงินเต็มจำนวน และยังมีรายงานผลรายเดือนที่วัดผลได้ชัดเจน" } },
-    { "@type": "Question", "name": "AI ของ AIBiz Thailand ต่างจากที่อื่นอย่างไร?", "acceptedAnswer": { "@type": "Answer", "text": "เราออกแบบมาสำหรับ SME ไทยโดยเฉพาะ เข้าใจบริบทธุรกิจไทย ภาษาไทย และพฤติกรรมลูกค้าไทย ทุกระบบ custom ตามธุรกิจของคุณ ไม่ใช่สำเร็จรูป มีทีม Support ภาษาไทยตลอด" } }
-  ]
-}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"AIBiz Thailand","description":"AI Business Assistant สำหรับ SME ไทย 5-50 คน","areaServed":{"@type":"Country","name":"Thailand"},"serviceType":"AI Automation Specialist","priceRange":"฿฿"}
 </script>
 {% endblock %}
 
-<!-- === Homepage CSS === -->
 {% block extra_css %}
 <style>
-/* ── Tokens ─────────────────────────────────────── */
+/* ══ Design System tokens (อ้างอิง main.css) ═══════ */
 :root {
-  --hp-glass-bg:     rgba(255,255,255,0.06);
-  --hp-glass-border: rgba(201,169,110,0.25);
-  --hp-pad:          7rem 0;
-  --hp-pad-sm:       5rem 0;
+  --nd-navy:   var(--brand-navy);
+  --nd-dark:   var(--brand-dark);
+  --nd-gold:   var(--brand-gold);
+  --nd-gold2:  #e8c97a;
+  --nd-muted:  rgba(255,255,255,.5);
+  --nd-border: rgba(201,169,110,.2);
+  --nd-pad:    6rem 0;
+  --nd-pad-sm: 4rem 0;
 }
 
-/* ── Shared: Eyebrow / Heading / Sub ─────────────── */
-.hp-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--brand-gold);
-  margin-bottom: 1rem;
+/* ══ Typography ══════════════════════════════════ */
+.nd-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .16em;
+  color: var(--nd-gold); margin-bottom: 1.1rem;
 }
-.hp-eyebrow::before {
-  content: '';
-  display: inline-block;
-  width: 20px; height: 2px;
-  background: var(--brand-gold);
-  border-radius: 2px;
+.nd-eyebrow::before {
+  content: ''; width: 20px; height: 2px;
+  background: var(--nd-gold); border-radius: 2px; display: inline-block;
 }
-.hp-section-heading {
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  font-weight: 900;
-  color: var(--heading-dark-bg);
-  line-height: 1.15;
-  margin-bottom: 0.75rem;
+.nd-h2 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 900; color: #f1f5f9; line-height: 1.2; margin-bottom: .75rem;
 }
-.hp-section-sub {
-  font-size: 1.05rem;
-  color: rgba(255,255,255,0.55);
-  max-width: 560px;
-  line-height: 1.8;
-}
+.nd-sub { font-size: 1.05rem; color: var(--nd-muted); line-height: 1.9; max-width: 560px; }
 
-/* ── Buttons ─────────────────────────────────────── */
-.hp-btn-primary {
-  background: linear-gradient(135deg, var(--brand-gold), #e8c97a);
-  color: var(--brand-dark);
-  border: none;
-  padding: 0.95rem 2.25rem;
-  font-size: 1rem;
-  font-weight: 700;
-  font-family: 'Prompt', sans-serif;
-  border-radius: 50px;
-  box-shadow: 0 8px 28px rgba(201,169,110,0.35);
-  transition: all 0.25s ease;
-  text-decoration: none;
-  display: inline-block;
+/* ══ Buttons ══════════════════════════════════════ */
+.nd-btn {
+  background: linear-gradient(135deg, var(--nd-gold), var(--nd-gold2));
+  color: #0f172a; border: none;
+  padding: .9rem 2.2rem; font-size: 1rem; font-weight: 700;
+  border-radius: 50px; box-shadow: 0 8px 28px rgba(201,169,110,.3);
+  transition: all .25s; text-decoration: none; display: inline-block; font-style: normal;
 }
-.hp-btn-primary:hover {
-  box-shadow: 0 14px 44px rgba(201,169,110,0.5);
-  transform: translateY(-3px);
-  color: var(--brand-dark);
+.nd-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 44px rgba(201,169,110,.45); color: #0f172a; }
+.nd-btn-outline {
+  background: transparent; color: rgba(255,255,255,.75);
+  border: 1.5px solid rgba(255,255,255,.22);
+  padding: .9rem 2rem; font-size: .95rem; font-weight: 600;
+  border-radius: 50px; transition: all .25s; text-decoration: none; display: inline-block;
 }
-.hp-btn-primary--sm { font-size: 0.9rem; padding: 0.75rem 1.75rem; }
-.hp-btn-outline {
-  background: transparent;
-  color: rgba(255,255,255,0.75);
-  border: 1px solid rgba(255,255,255,0.22);
-  padding: 0.95rem 2rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  font-family: 'Prompt', sans-serif;
-  border-radius: 50px;
-  transition: all 0.25s ease;
-  text-decoration: none;
-  display: inline-block;
+.nd-btn-outline:hover { border-color: var(--nd-gold); color: var(--nd-gold); background: rgba(201,169,110,.07); }
+.nd-btn-line {
+  background: #06C755; color: #fff; padding: .9rem 2rem; font-size: .95rem;
+  font-weight: 700; border-radius: 50px; text-decoration: none; display: inline-block; transition: opacity .2s;
 }
-.hp-btn-outline:hover {
-  border-color: rgba(201,169,110,0.6);
-  color: var(--brand-gold);
-  background: rgba(201,169,110,0.07);
-  transform: translateY(-2px);
-}
+.nd-btn-line:hover { opacity: .85; color: #fff; }
 
-/* ══════════════════════════════════════════════
-   1. HERO
-══════════════════════════════════════════════ */
-.hp-hero {
-  position: relative;
-  min-height: 92vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background: var(--brand-dark);
+/* ══ Noodee image ═════════════════════════════════ */
+.nd-img { max-width: 100%; height: auto; filter: drop-shadow(0 12px 32px rgba(0,0,0,.4)); }
+.nd-img-hero { max-width: 520px; }
+.nd-img-md   { max-width: 300px; }
+.nd-img-sm   { max-width: 220px; }
+
+/* ══ Speech Bubble + Typewriter ══════════════════ */
+.nd-bubble {
+  display: inline-block;
+  background: rgba(26,39,68,.9);
+  border: 1.5px solid var(--nd-gold);
+  border-radius: 16px 16px 16px 4px;
+  padding: .8rem 1.2rem;
+  font-size: .9rem; font-weight: 500; font-style: normal; color: #f1f5f9;
+  line-height: 1.55; min-height: 46px;
 }
-.hp-hero-grid-overlay {
-  position: absolute; inset: 0;
+.nd-bubble-right { border-radius: 16px 16px 4px 16px; }
+.nd-cursor {
+  display: inline-block; color: var(--nd-gold); font-weight: 300;
+  animation: nd-blink .75s step-end infinite; margin-left: 1px;
+}
+@keyframes nd-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ══ Section bg ═══════════════════════════════════ */
+.nd-bg-navy     { background: var(--nd-navy); }
+.nd-bg-dark     { background: var(--nd-dark); }
+.nd-bg-gradient { background: linear-gradient(135deg, var(--nd-navy) 0%, #111d3a 100%); }
+.nd-divider     { border-top: 1px solid var(--nd-border); }
+
+/* ══ Grid overlay (Hero) ═════════════════════════ */
+.nd-grid-overlay {
+  position: absolute; inset: 0; pointer-events: none;
   background-image:
-    linear-gradient(rgba(201,169,110,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201,169,110,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(201,169,110,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,169,110,.04) 1px, transparent 1px);
   background-size: 52px 52px;
+}
+.nd-glow-gold {
+  position: absolute; top: -80px; right: -80px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,110,.09), transparent 65%);
   pointer-events: none;
 }
-.hp-hero-glow {
-  position: absolute;
-  width: 800px; height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(26,39,68,0.95) 0%, transparent 65%);
-  top: 50%; left: -20%;
-  transform: translateY(-50%);
-  pointer-events: none;
+.nd-scroll-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--nd-gold); animation: nd-bounce .8s ease-in-out infinite alternate;
 }
-.hp-hero-glow-gold {
-  position: absolute;
-  width: 600px; height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,169,110,0.09) 0%, transparent 70%);
-  top: 20%; right: 2%;
-  pointer-events: none;
-}
-.hp-hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 8rem 0 5rem;
-}
-.hp-hero h1 {
-  font-size: clamp(2.6rem, 5.5vw, 4.4rem);
-  font-weight: 900;
-  line-height: 1.08;
-  color: var(--heading-dark-bg);
-  margin-bottom: 1.5rem;
-}
-.hp-gold-text {
-  background: linear-gradient(135deg, var(--brand-gold), #e8c97a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hp-hero-lead {
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.72);
-  max-width: 480px;
-  line-height: 1.9;
-  margin-bottom: 2.25rem;
-}
-.hp-trust-strip {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  margin-top: 1.75rem;
-}
-.hp-trust-item {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.42);
-  display: flex; align-items: center; gap: 6px;
-}
-.hp-trust-item i { color: var(--brand-gold); opacity: 0.8; }
-.hp-hero-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-.hp-stat-box {
-  background: var(--hp-glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--hp-glass-border);
-  border-radius: 18px;
-  padding: 1.75rem 1.25rem;
-  text-align: center;
-  transition: border-color 0.25s, transform 0.25s;
-}
-.hp-stat-box:hover { border-color: var(--brand-gold); transform: translateY(-5px); }
-.hp-stat-num {
-  font-family: 'Prompt', sans-serif;
-  font-size: 2.6rem;
-  font-weight: 900;
-  color: var(--brand-gold);
-  line-height: 1;
-  display: block;
-  margin-bottom: 6px;
-}
-.hp-stat-label {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.5);
-  font-weight: 400;
-  line-height: 1.5;
-}
-@media (max-width: 991.98px) {
-  .hp-hero { min-height: auto; }
-  .hp-hero-content { padding: 5.5rem 0 3.5rem; }
-  .hp-hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
-  .hp-hero-stats { margin-top: 2.5rem; }
-}
+@keyframes nd-bounce { from{transform:translateY(0)} to{transform:translateY(-8px)} }
 
-/* ══════════════════════════════════════════════
-   2. INDUSTRIES STRIP
-══════════════════════════════════════════════ */
-.hp-industries {
-  background: #040810;
-  border-top: 1px solid rgba(201,169,110,0.12);
-  border-bottom: 1px solid rgba(201,169,110,0.08);
-  padding: 1.6rem 0;
+/* ══ Pain cards ═══════════════════════════════════ */
+.nd-pain-card {
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+  border-left: 3px solid var(--nd-gold); border-radius: 12px; padding: 1.5rem;
+  transition: border-color .2s, background .2s; height: 100%;
 }
-.hp-industries-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: rgba(255,255,255,0.28);
-  white-space: nowrap;
-}
-.hp-industry-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.45);
-  padding: 0 1.5rem;
-  border-left: 1px solid rgba(255,255,255,0.07);
-  transition: color 0.2s;
-}
-.hp-industry-item:hover { color: var(--brand-gold); }
-.hp-industry-item i { color: var(--brand-gold); opacity: 0.6; font-size: 1rem; }
+.nd-pain-card:hover { background: rgba(201,169,110,.05); border-left-color: var(--nd-gold2); }
+.nd-pain-card i { font-size: 1.4rem; color: var(--nd-gold); margin-bottom: .5rem; display: block; }
+.nd-pain-card h6 { font-size: .95rem; font-weight: 700; color: #f1f5f9; margin-bottom: .3rem; }
+.nd-pain-card p { font-size: .84rem; color: var(--nd-muted); margin: 0; line-height: 1.65; }
 
-/* ══════════════════════════════════════════════
-   3. PAIN POINTS
-══════════════════════════════════════════════ */
-.hp-pain-section {
-  background: #080d18;
-  padding: var(--hp-pad);
-  position: relative;
+/* ══ Steps ════════════════════════════════════════ */
+.nd-step {
+  background: rgba(255,255,255,.04); border: 1px solid var(--nd-border);
+  border-radius: 16px; padding: 2rem 1.5rem; text-align: center;
+  transition: transform .2s, border-color .2s; height: 100%;
 }
-.hp-pain-section::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-}
-.hp-pain-card {
-  background: linear-gradient(160deg, #0d1420 0%, #10172b 100%);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 18px;
-  padding: 2.25rem 2rem;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-}
-.hp-pain-card:hover { transform: translateY(-7px); box-shadow: 0 20px 52px rgba(0,0,0,0.45); }
-.hp-pain-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 4px; border-radius: 18px 18px 0 0;
-}
-.hp-pain-card.red::before   { background: linear-gradient(90deg, #ef4444, #dc2626); }
-.hp-pain-card.amber::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
-.hp-pain-card.blue::before  { background: linear-gradient(90deg, #3b82f6, #2563eb); }
-.hp-pain-card.red:hover   { border-color: rgba(239,68,68,0.28); }
-.hp-pain-card.amber:hover { border-color: rgba(245,158,11,0.28); }
-.hp-pain-card.blue:hover  { border-color: rgba(59,130,246,0.28); }
-.hp-pain-icon {
-  width: 54px; height: 54px;
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem;
-}
-.hp-pain-icon.red   { background: rgba(239,68,68,0.12);  color: #f87171; }
-.hp-pain-icon.amber { background: rgba(245,158,11,0.12); color: #fbbf24; }
-.hp-pain-icon.blue  { background: rgba(59,130,246,0.12); color: #60a5fa; }
-.hp-pain-card h3 {
-  font-size: 1.1rem; font-weight: 700;
-  color: var(--heading-dark-bg);
-  margin-bottom: 0.85rem;
-  line-height: 1.35;
-}
-.hp-pain-card p {
-  font-size: 0.92rem; color: #5d728a;
-  line-height: 1.8; margin-bottom: 0;
-}
-.hp-pain-card p strong { color: #94a3b8; }
-
-/* ══════════════════════════════════════════════
-   4. SERVICES
-══════════════════════════════════════════════ */
-.hp-services-section { padding: var(--hp-pad); background: var(--brand-dark); }
-.hp-svc-featured {
-  background: linear-gradient(135deg, rgba(201,169,110,0.1) 0%, rgba(201,169,110,0.04) 100%);
-  border: 1px solid rgba(201,169,110,0.3);
-  border-radius: 22px;
-  padding: 2.75rem;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-}
-.hp-svc-featured:hover {
-  border-color: var(--brand-gold);
-  transform: translateY(-5px);
-  box-shadow: 0 20px 60px rgba(201,169,110,0.15);
-}
-.hp-svc-featured::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-}
-.hp-svc-card {
-  background: linear-gradient(160deg, #111827 0%, #0f172a 100%);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 16px;
-  padding: 1.75rem;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-}
-.hp-svc-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 44px rgba(0,0,0,0.4);
-  border-color: rgba(201,169,110,0.35);
-}
-.hp-svc-icon {
-  width: 56px; height: 56px;
-  border-radius: 16px;
-  background: rgba(201,169,110,0.1);
-  border: 1px solid rgba(201,169,110,0.2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; margin-bottom: 1.25rem;
-  color: var(--brand-gold);
-  transition: background 0.25s, transform 0.25s;
-}
-.hp-svc-card:hover .hp-svc-icon,
-.hp-svc-featured:hover .hp-svc-icon {
-  background: rgba(201,169,110,0.2);
-  transform: scale(1.1);
-}
-.hp-svc-featured h3 {
-  font-size: 1.4rem; font-weight: 900;
-  color: var(--heading-dark-bg);
-  margin-bottom: 0.6rem;
-  line-height: 1.3;
-}
-.hp-svc-card h4 {
-  font-size: 1.05rem; font-weight: 700;
-  color: var(--heading-dark-bg);
-  margin-bottom: 0.5rem;
-}
-.hp-svc-featured p, .hp-svc-card p {
-  font-size: 0.9rem; color: #64748b;
-  line-height: 1.8; margin-bottom: 1rem;
-}
-.hp-svc-badge {
-  display: inline-block;
-  font-size: 0.68rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--brand-gold);
-  border: 1px solid rgba(201,169,110,0.4);
-  padding: 3px 12px; border-radius: 20px;
-  margin-bottom: 0.85rem;
-}
-.hp-svc-price {
-  font-family: 'Prompt', sans-serif;
-  font-size: 1.6rem; font-weight: 900;
-  color: var(--brand-gold); line-height: 1;
-  margin: 1rem 0 0.25rem;
-}
-.hp-svc-price-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
-.hp-svc-cta-card {
-  background: linear-gradient(160deg, rgba(201,169,110,0.06) 0%, rgba(201,169,110,0.02) 100%);
-  border: 1px dashed rgba(201,169,110,0.3);
-  border-radius: 16px;
-  padding: 2rem;
-  height: 100%;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center;
-}
-
-/* ══════════════════════════════════════════════
-   5. CASE STUDIES
-══════════════════════════════════════════════ */
-.hp-results-section {
-  position: relative;
-  background: #060811;
-  padding: var(--hp-pad);
-  overflow: hidden;
-}
-.hp-results-section::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-}
-.hp-results-bg-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(201,169,110,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201,169,110,0.04) 1px, transparent 1px);
-  background-size: 52px 52px;
-  pointer-events: none;
-}
-.hp-case-card {
-  background: linear-gradient(160deg, #0f1624 0%, #0b1120 100%);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 20px;
-  padding: 2.5rem;
-  height: 100%;
-  position: relative;
-  display: flex; flex-direction: column;
-  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-}
-.hp-case-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 28px 70px rgba(0,0,0,0.5);
-  border-color: rgba(201,169,110,0.3);
-}
-.hp-case-industry {
-  font-size: 0.7rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.13em;
-  color: var(--brand-gold); margin-bottom: 1rem;
-  display: block;
-}
-.hp-case-card h4 {
-  font-size: 1.15rem; font-weight: 800;
-  color: var(--heading-dark-bg);
-  margin-bottom: 0.75rem; line-height: 1.35;
-}
-.hp-case-context {
-  font-size: 0.9rem; color: #64748b;
-  line-height: 1.8; margin-bottom: 1.75rem;
-}
-.hp-result-row {
-  display: flex; gap: 1.5rem; flex-wrap: wrap;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  padding-top: 1.5rem; margin-top: auto;
-}
-.hp-result-num {
-  font-family: 'Prompt', sans-serif;
-  font-size: 2rem; font-weight: 900;
-  color: var(--brand-gold); line-height: 1;
-  display: block; margin-bottom: 4px;
-}
-.hp-result-desc {
-  font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.45;
-}
-.hp-stat-bar {
-  background: rgba(201,169,110,0.06);
-  border: 1px solid rgba(201,169,110,0.18);
-  border-radius: 18px;
-  padding: 2rem;
-  margin-top: 4rem;
-  position: relative; z-index: 1;
-}
-.hp-stat-bar-num {
-  font-family: 'Prompt', sans-serif;
-  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--brand-gold), #e8c97a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1; display: block; margin-bottom: 6px;
-}
-.hp-stat-bar-label { font-size: 0.88rem; color: rgba(255,255,255,0.48); font-weight: 400; }
-.hp-stat-divider {
-  width: 1px; min-height: 60px;
-  background: linear-gradient(to bottom, transparent, rgba(201,169,110,0.3), transparent);
-  align-self: stretch;
-}
-
-/* ══════════════════════════════════════════════
-   6. PROCESS
-══════════════════════════════════════════════ */
-.hp-process-section {
-  padding: var(--hp-pad);
-  background: #080d18;
-  position: relative;
-}
-.hp-process-section::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-}
-.hp-process-step { text-align: center; position: relative; padding: 0 1.25rem; }
-.hp-process-num {
-  width: 76px; height: 76px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(201,169,110,0.15), rgba(201,169,110,0.04));
-  border: 2px solid rgba(201,169,110,0.35);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1.5rem;
-  font-family: 'Prompt', sans-serif;
-  font-size: 1.6rem; font-weight: 900;
-  color: var(--brand-gold);
-  position: relative;
-  transition: background 0.25s, border-color 0.25s, transform 0.25s;
-}
-.hp-process-step:hover .hp-process-num {
-  background: linear-gradient(135deg, rgba(201,169,110,0.3), rgba(201,169,110,0.1));
-  border-color: var(--brand-gold); transform: scale(1.1);
-}
-.hp-process-connector {
-  position: absolute;
-  top: 38px;
-  left: calc(50% + 42px); right: calc(-50% + 42px);
-  height: 2px;
-  background: linear-gradient(90deg, rgba(201,169,110,0.4), rgba(201,169,110,0.08));
-}
-.hp-process-step h4 {
-  font-size: 1.05rem; font-weight: 700;
-  color: var(--heading-dark-bg); margin-bottom: 0.65rem;
-}
-.hp-process-step p {
-  font-size: 0.88rem; color: #5d728a;
-  line-height: 1.8; margin-bottom: 0;
-}
-.hp-process-icon {
-  display: block; font-size: 1.2rem;
-  margin-bottom: 8px; color: var(--brand-gold); opacity: 0.7;
-}
-@media (max-width: 991.98px) { .hp-process-connector { display: none; } }
-
-/* ══════════════════════════════════════════════
-   7. TESTIMONIALS
-══════════════════════════════════════════════ */
-.hp-testi-section { padding: var(--hp-pad); background: var(--brand-dark); }
-.hp-testi-card {
-  background: linear-gradient(160deg, #111827 0%, #0f172a 100%);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 20px;
-  padding: 2.25rem;
-  height: 100%;
-  position: relative;
-  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-}
-.hp-testi-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 52px rgba(0,0,0,0.4);
-  border-color: rgba(201,169,110,0.3);
-}
-.hp-testi-card::before {
-  content: '\201C';
-  font-family: 'Prompt', sans-serif;
-  position: absolute; top: 1.5rem; right: 2rem;
-  font-size: 5rem; font-weight: 900;
-  color: var(--brand-gold); opacity: 0.1;
-  line-height: 1;
-}
-.hp-testi-stars { color: var(--brand-gold); font-size: 0.85rem; margin-bottom: 1rem; }
-.hp-testi-quote {
-  font-size: 0.95rem; color: rgba(255,255,255,0.7);
-  line-height: 1.85; margin-bottom: 1.75rem;
-  font-style: normal;
-}
-.hp-testi-author { display: flex; align-items: center; gap: 1rem; }
-.hp-testi-avatar {
+.nd-step:hover { transform: translateY(-4px); border-color: rgba(201,169,110,.4); }
+.nd-step-num {
   width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(201,169,110,0.12);
-  border: 1px solid rgba(201,169,110,0.25);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--brand-gold); font-size: 1.1rem;
-  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--nd-gold), var(--nd-gold2));
+  color: #0f172a; font-weight: 900; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;
 }
-.hp-testi-name {
-  font-size: 0.9rem; font-weight: 700;
-  color: var(--heading-dark-bg); line-height: 1.3;
+.nd-step h6 { font-size: .95rem; font-weight: 700; color: #f1f5f9; margin-bottom: .4rem; }
+.nd-step p { font-size: .83rem; color: var(--nd-muted); margin: 0; line-height: 1.65; }
+
+/* ══ Segment cards ════════════════════════════════ */
+.nd-seg-card {
+  width: 100%; background: rgba(255,255,255,.04);
+  border: 1.5px solid var(--nd-border); border-radius: 16px;
+  padding: 1.25rem .75rem; text-align: center;
+  cursor: pointer; transition: all .2s;
+  color: var(--nd-muted);
 }
-.hp-testi-company { font-size: 0.78rem; color: rgba(255,255,255,0.38); }
-.hp-testi-industry {
-  margin-left: auto;
-  font-size: 0.68rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--brand-gold); opacity: 0.7;
-  white-space: nowrap;
+.nd-seg-card:hover { border-color: rgba(201,169,110,.4); color: var(--nd-gold); background: rgba(201,169,110,.06); }
+.nd-seg-card.active {
+  border-color: var(--nd-gold); background: rgba(201,169,110,.1);
+  color: var(--nd-gold);
+}
+.nd-seg-icon { font-size: 1.75rem; display: block; margin-bottom: .5rem; }
+.nd-seg-name { font-size: .88rem; font-weight: 700; margin-bottom: .2rem; }
+.nd-seg-hint { font-size: .72rem; opacity: .7; }
+
+.nd-seg-panel {
+  background: rgba(255,255,255,.03); border: 1px solid var(--nd-border);
+  border-radius: 20px; padding: 2.5rem;
+}
+.nd-seg-title {
+  font-size: 1.5rem; font-weight: 800; color: #f1f5f9; margin: .75rem 0 1rem;
+}
+.nd-seg-list { list-style: none; padding: 0; margin-bottom: 1.5rem; }
+.nd-seg-list li {
+  color: rgba(255,255,255,.8); padding: .4rem 0;
+  display: flex; align-items: center; gap: .6rem; font-size: .95rem;
+}
+.nd-seg-list li i { color: #4ade80; font-size: .85rem; flex-shrink: 0; }
+
+/* ══ ROI badge ════════════════════════════════════ */
+.nd-roi-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.22);
+  color: #86efac; border-radius: 50px; padding: .3rem .9rem;
+  font-size: .8rem; font-weight: 700; margin-bottom: .75rem;
 }
 
-/* ══════════════════════════════════════════════
-   8. FAQ
-══════════════════════════════════════════════ */
-.hp-faq-section { padding: var(--hp-pad); background: #080d18; }
-.hp-faq-accordion .accordion-item {
-  background: linear-gradient(160deg, #0d1420 0%, #10172b 100%);
-  border: 1px solid rgba(255,255,255,0.07) !important;
-  border-radius: 14px !important;
-  margin-bottom: 0.75rem;
-  overflow: hidden;
+/* ══ Stat boxes ═══════════════════════════════════ */
+.nd-stat-box {
+  text-align: center; padding: 1.75rem 1.5rem;
+  background: rgba(255,255,255,.04); border: 1px solid var(--nd-border); border-radius: 16px;
 }
-.hp-faq-accordion .accordion-button {
-  background: transparent;
-  color: var(--heading-dark-bg);
-  font-family: 'Prompt', sans-serif;
-  font-size: 1rem; font-weight: 600;
-  padding: 1.5rem 1.75rem;
-  border-radius: 14px !important;
-  box-shadow: none !important;
+.nd-stat-box .nd-stat-num {
+  font-size: 2.6rem; font-weight: 900; color: var(--nd-gold);
+  line-height: 1; margin-bottom: .35rem; display: block;
 }
-.hp-faq-accordion .accordion-button::after {
-  filter: invert(75%) sepia(30%) saturate(600%) hue-rotate(5deg);
+.nd-stat-box .nd-stat-label { font-size: .82rem; color: var(--nd-muted); }
+
+/* ══ Package cards ════════════════════════════════ */
+.nd-pkg {
+  background: rgba(255,255,255,.04); border: 1.5px solid var(--nd-border);
+  border-radius: 20px; padding: 2.25rem 1.75rem;
+  height: 100%; display: flex; flex-direction: column; transition: transform .2s, border-color .2s;
 }
-.hp-faq-accordion .accordion-button:not(.collapsed) {
-  color: var(--brand-gold);
-  background: rgba(201,169,110,0.06);
+.nd-pkg:hover { transform: translateY(-6px); border-color: rgba(201,169,110,.4); }
+.nd-pkg.featured {
+  border-color: var(--nd-gold); position: relative;
+  background: linear-gradient(160deg, rgba(201,169,110,.09), rgba(201,169,110,.02));
 }
-.hp-faq-accordion .accordion-body {
-  color: rgba(255,255,255,0.6);
-  font-size: 0.93rem;
-  line-height: 1.85;
-  padding: 0 1.75rem 1.75rem;
+.nd-pkg-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--nd-gold); color: #0f172a;
+  font-size: .7rem; font-weight: 800; letter-spacing: .08em;
+  padding: .3rem 1.1rem; border-radius: 50px; white-space: nowrap;
+}
+.nd-pkg-price { font-size: 2rem; font-weight: 900; color: var(--nd-gold); line-height: 1; margin: 1rem 0 .25rem; }
+.nd-pkg-list { list-style: none; padding: 0; margin: 1.25rem 0; flex: 1; }
+.nd-pkg-list li {
+  font-size: .88rem; color: rgba(255,255,255,.75);
+  padding: .35rem 0; display: flex; align-items: flex-start; gap: .5rem;
+}
+.nd-pkg-list li i { color: var(--nd-gold); font-size: .85rem; flex-shrink: 0; margin-top: .15rem; }
+
+/* ══ Testimonial ══════════════════════════════════ */
+.nd-testi {
+  background: rgba(255,255,255,.04); border: 1px solid var(--nd-border);
+  border-left: 3px solid var(--nd-gold); border-radius: 16px; padding: 1.75rem; height: 100%;
+}
+.nd-testi blockquote { font-size: .95rem; color: rgba(255,255,255,.8); line-height: 1.75; margin: 0 0 1rem; font-style: normal; }
+.nd-testi cite { font-size: .82rem; color: var(--nd-gold); font-style: normal; font-weight: 600; }
+
+/* ══ Hero layout (bottom-right character) ════════ */
+.nd-hero-section {
+  position: relative; min-height: 92vh; overflow: hidden;
+  background: var(--nd-navy);
+  display: flex; align-items: center;
+}
+.nd-hero-content {
+  position: relative; z-index: 2;
+  padding-top: 5rem; padding-bottom: 5rem;
+}
+.nd-hero-h1 {
+  font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+  font-weight: 900; color: #f1f5f9; line-height: 1.4;
+  margin-bottom: 1.5rem; letter-spacing: .02em;
+}
+.nd-hero-lead {
+  font-size: 1.05rem; color: var(--nd-muted);
+  line-height: 1.95; margin-bottom: 2.25rem;
+}
+.nd-trust-item {
+  font-size: .8rem; color: var(--nd-muted);
+  display: flex; align-items: center; gap: .35rem;
+}
+.nd-trust-item i { color: var(--nd-gold); }
+
+/* หนูดี absolute bottom-right */
+.nd-hero-noodee-wrap {
+  position: absolute; right: 0; bottom: 0;
+  width: 48%; max-width: 680px;
+  z-index: 1; pointer-events: none;
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: flex-end;
+}
+.nd-hero-noodee-img {
+  width: 100%; height: auto;
+  display: block;
+  filter: drop-shadow(-20px 0 60px rgba(201,169,110,.15));
+}
+.nd-hero-bubble {
+  position: relative; z-index: 3;
+  margin-left: 2rem; margin-bottom: -1rem;
+  pointer-events: auto; min-width: 230px;
+}
+.nd-scroll-wrap { margin-top: 3rem; }
+
+/* ══ Tablet (≤ 991px) ════════════════════════════ */
+@media (max-width: 991.98px) {
+  /* hero — stack: text บน, หนูดี ล่าง */
+  .nd-hero-section {
+    min-height: auto;
+    flex-direction: column;
+    padding-bottom: 0;
+  }
+  .nd-hero-content {
+    padding-top: 5rem;
+    padding-bottom: 1.5rem;
+    width: 100%;
+    text-align: center;
+  }
+  .nd-hero-content .col-lg-6 { width: 100%; }
+  .nd-hero-content .d-flex { justify-content: center; }
+  /* หนูดี เปลี่ยนจาก absolute → relative, อยู่ล่างสุด */
+  .nd-hero-noodee-wrap {
+    position: relative;
+    width: 55%; max-width: 320px;
+    margin: 0 auto;
+    flex-direction: column;
+    align-items: center;
+  }
+  .nd-hero-bubble {
+    margin-left: 0; margin-bottom: .75rem;
+    text-align: center;
+  }
+  .nd-scroll-wrap { display: none; }
+  /* other sections */
+  .nd-img-md { max-width: 200px; margin: 0 auto; display: block; }
 }
 
-/* ══════════════════════════════════════════════
-   9. CTA
-══════════════════════════════════════════════ */
-.hp-cta-section {
-  background: linear-gradient(135deg, #0c1530 0%, var(--brand-navy) 50%, #0e1e3b 100%);
-  padding: 7rem 0;
-  position: relative; overflow: hidden;
-}
-.hp-cta-section::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.09) 0%, transparent 70%);
-}
-.hp-cta-glow {
-  position: absolute;
-  width: 700px; height: 700px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,169,110,0.14) 0%, transparent 70%);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-.hp-cta-section h2 {
-  font-size: clamp(2.1rem, 4.5vw, 3.3rem);
-  font-weight: 900; color: var(--heading-dark-bg);
-  line-height: 1.2; position: relative; z-index: 1;
-}
-.hp-cta-section h2 span {
-  background: linear-gradient(135deg, var(--brand-gold), #e8c97a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hp-cta-lead {
-  font-size: 1.05rem; color: rgba(255,255,255,0.62);
-  max-width: 520px; margin: 0 auto 2.5rem;
-  position: relative; z-index: 1;
-}
-.hp-cta-badges {
-  display: flex; align-items: center; justify-content: center;
-  gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
-  position: relative; z-index: 1;
-}
-.hp-cta-badge {
-  font-size: 0.82rem; color: rgba(255,255,255,0.42);
-  display: flex; align-items: center; gap: 6px;
-}
-.hp-cta-badge i { color: var(--brand-gold); opacity: 0.75; }
-
-/* ══════════════════════════════════════════════
-   10. BLOG FEED
-══════════════════════════════════════════════ */
-.hp-blog-section { padding: var(--hp-pad); background: var(--brand-dark); }
-
-/* Category nav */
-.hp-cat-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-.hp-cat-chip {
-  font-size: 0.78rem; font-weight: 600;
-  color: rgba(255,255,255,0.55);
-  border: 1px solid rgba(255,255,255,0.12);
-  padding: 5px 16px; border-radius: 20px;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-.hp-cat-chip:hover, .hp-cat-chip.active {
-  color: var(--brand-gold);
-  border-color: rgba(201,169,110,0.5);
-  background: rgba(201,169,110,0.07);
-}
-
-/* Article cards */
-.hp-article-card {
-  background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 16px;
-  overflow: hidden; height: 100%;
-  transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
-}
-.hp-article-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.25);
-  border-color: var(--brand-gold);
-}
-.hp-article-thumb {
-  width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
-}
-.hp-article-thumb-placeholder {
-  width: 100%; aspect-ratio: 16/9;
-  background: var(--brand-card);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--brand-muted); font-size: 2.5rem;
-}
-.hp-article-body { padding: 1.5rem; }
-.hp-article-body h3, .hp-article-body h5 {
-  font-weight: 700; line-height: 1.45;
-}
-.hp-article-body h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
-.hp-article-body h5 { font-size: 0.97rem; margin-bottom: 0.35rem; }
-.hp-article-body h3 a, .hp-article-body h5 a {
-  color: var(--bs-body-color); text-decoration: none;
-}
-.hp-article-body h3 a:hover, .hp-article-body h5 a:hover { color: var(--brand-gold); }
-.hp-article-meta { font-size: 0.78rem; color: var(--brand-muted); }
-.hp-cat-badge {
-  display: inline-block;
-  font-size: 0.68rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--brand-gold);
-  border: 1px solid rgba(201,169,110,0.35);
-  padding: 2px 10px; border-radius: 20px;
-  margin-bottom: 0.6rem;
+/* ══ Mobile (≤ 575px) ════════════════════════════ */
+@media (max-width: 575.98px) {
+  :root { --nd-pad: 4rem 0; --nd-pad-sm: 3rem 0; }
+  .nd-hero-h1 { font-size: 2.2rem; letter-spacing: .01em; }
+  .nd-hero-lead { font-size: .97rem; }
+  .nd-hero-noodee-wrap { width: 70%; max-width: 240px; }
+  .nd-hero-content { padding-top: 4.5rem; }
+  /* ปุ่ม stack เต็มกว้าง */
+  .nd-hero-content .nd-btn,
+  .nd-hero-content .nd-btn-outline { width: 100%; text-align: center; }
 }
 </style>
 {% endblock %}
 
-
 {% block content %}
 
 <!-- ══════════════════════════════════════════════
-     1. HERO — Positioning + CTA + Stats
+     1. HERO
 ══════════════════════════════════════════════ -->
-<section class="hp-hero" aria-label="ผู้เชี่ยวชาญ AI Automation สำหรับ SME ไทย">
-  <div class="hp-hero-grid-overlay"></div>
-  <div class="hp-hero-glow"></div>
-  <div class="hp-hero-glow-gold"></div>
+<section class="nd-hero-section" aria-label="Hero">
+  <div class="nd-grid-overlay"></div>
+  <div class="nd-glow-gold"></div>
 
-  <div class="container hp-hero-content">
+  <!-- หนูดี — absolute bottom-right, เต็มความสูง section -->
+  <div class="nd-hero-noodee-wrap">
+    <div class="nd-bubble nd-bubble-right nd-hero-bubble">
+      <span id="tw-hero"></span><span class="nd-cursor">|</span>
+    </div>
+    <img src="{% static 'img/noodee/homepage/noodee_hero.png' %}"
+         alt="หนูดีโบกมือทักทาย"
+         class="nd-hero-noodee-img">
+  </div>
+
+  <!-- Text — ซ้าย vertically centered -->
+  <div class="container nd-hero-content">
+    <div class="row">
+      <div class="col-lg-6 col-xl-5">
+        <div class="nd-eyebrow"><i class="bi bi-stars me-1"></i>Noodee BootBiz — AI Business Assistant</div>
+        <h1 class="nd-hero-h1">
+          ให้<span style="color:var(--nd-gold);">หนูดี</span>ดูแลธุรกิจ<br>
+          แทนคุณได้เลย
+        </h1>
+        <p class="nd-hero-lead">
+          หนูดีทำงาน 24/7 ตอบลูกค้า จัดตารางนัด ติดตาม Lead<br>
+          ไม่มีวันหยุด ไม่มีโอที ไม่ลาป่วย
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <a href="/contact/" class="nd-btn"><i class="bi bi-chat-dots-fill me-2"></i>ทักหนูดีเลย!</a>
+          <a href="/services/" class="nd-btn-outline">ดูบริการทั้งหมด</a>
+        </div>
+        <div class="d-flex flex-wrap gap-3">
+          <span class="nd-trust-item"><i class="bi bi-shield-check"></i>ทดลองฟรี 14 วัน</span>
+          <span class="nd-trust-item"><i class="bi bi-arrow-counterclockwise"></i>คืนเงิน 30 วัน</span>
+          <span class="nd-trust-item"><i class="bi bi-headset"></i>Support ภาษาไทย</span>
+        </div>
+      </div>
+    </div>
+    <div class="nd-scroll-wrap"><span class="nd-scroll-dot"></span></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     2. PAIN POINTS
+══════════════════════════════════════════════ -->
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad);" aria-label="Pain Points">
+  <div class="container">
     <div class="row align-items-center g-5">
 
-      <!-- Copy -->
-      <div class="col-lg-6">
-        <div class="hp-eyebrow">AI Automation สำหรับ SME ไทย 5–50 คน</div>
-        <h1>
-          ระบบ AI ที่<br>
-          <span class="hp-gold-text">SME ไทยใช้ได้จริง</span><br>
-          วันนี้
-        </h1>
-        <p class="hp-hero-lead">
-          ลดงาน Manual 80% เพิ่ม Lead ที่ปิดได้จริง และขยายธุรกิจโดยไม่ต้องจ้างคนเพิ่ม<br>
-          เห็นผลภายใน 30 วัน หรือคืนเงิน
-        </p>
-        <div class="d-flex flex-wrap gap-3">
-          <a href="{% url 'pages:contact' %}" class="hp-btn-primary">
-            <i class="bi bi-chat-dots me-2"></i>ปรึกษาฟรี 45 นาที
-          </a>
-          <a href="{% url 'pages:services' %}" class="hp-btn-outline">
-            ดูบริการทั้งหมด <i class="bi bi-arrow-right ms-1"></i>
-          </a>
+      <div class="col-lg-4 text-center">
+        <div class="nd-bubble mb-4" style="text-align:left;display:inline-block;min-width:230px;">
+          <span id="tw-pain"></span><span class="nd-cursor">|</span>
         </div>
-        <div class="hp-trust-strip">
-          <div class="hp-trust-item"><i class="bi bi-shield-check"></i> ไม่มีข้อผูกมัด</div>
-          <div class="hp-trust-item"><i class="bi bi-clock"></i> Response ใน 24 ชม.</div>
-          <div class="hp-trust-item"><i class="bi bi-award"></i> รับประกันผล 30 วัน</div>
-        </div>
+        <img src="{% static 'img/noodee/homepage/noodee_pain.png' %}" alt="หนูดีเป็นห่วง" class="nd-img nd-img-md">
       </div>
 
-      <!-- Stats -->
-      <div class="col-lg-6">
-        <div class="hp-hero-stats">
-          <div class="hp-stat-box">
-            <span class="hp-stat-num">80%</span>
-            <div class="hp-stat-label">ลดเวลางาน<br>Manual เฉลี่ย</div>
-          </div>
-          <div class="hp-stat-box">
-            <span class="hp-stat-num">3x</span>
-            <div class="hp-stat-label">ROI เฉลี่ย<br>ใน 6 เดือน</div>
-          </div>
-          <div class="hp-stat-box">
-            <span class="hp-stat-num">30</span>
-            <div class="hp-stat-label">วัน เห็นผล<br>ครั้งแรก</div>
-          </div>
-          <div class="hp-stat-box">
-            <span class="hp-stat-num">24/7</span>
-            <div class="hp-stat-label">AI ทำงาน<br>ไม่หยุด</div>
-          </div>
+      <div class="col-lg-8">
+        <div class="nd-eyebrow">ปัญหาที่พบบ่อย</div>
+        <h2 class="nd-h2">คุณเจอปัญหาเหล่านี้ไหม?</h2>
+        <p class="nd-sub mb-4">SME ไทยส่วนใหญ่สูญเสียเวลาและรายได้กับปัญหาเดิมซ้ำๆ ทุกวัน</p>
+        <div class="row g-3">
+          <div class="col-sm-6"><div class="nd-pain-card"><i class="bi bi-chat-x-fill"></i><h6>ตอบแชทไม่ทัน</h6><p>ลูกค้าถามนอกเวลาทำงาน ไม่มีคนตอบ เสียโอกาสขายทุกคืน</p></div></div>
+          <div class="col-sm-6"><div class="nd-pain-card"><i class="bi bi-calendar-x-fill"></i><h6>นัดหมายผิดพลาด</h6><p>จัดตารางซ้อน ลืม confirm ลูกค้า สูญเสียความน่าเชื่อถือ</p></div></div>
+          <div class="col-sm-6"><div class="nd-pain-card"><i class="bi bi-arrow-repeat"></i><h6>งานซ้ำซากกินเวลา</h6><p>Copy-paste ข้อมูล ส่ง email เดิมๆ ทำรายงาน manual ทุกวัน</p></div></div>
+          <div class="col-sm-6"><div class="nd-pain-card"><i class="bi bi-person-x-fill"></i><h6>ติดตาม Lead ไม่ไหว</h6><p>ลูกค้าสนใจแต่ไม่มีใคร follow up ทัน ปล่อยให้หลุดไปหาคู่แข่ง</p></div></div>
+          <div class="col-sm-6"><div class="nd-pain-card"><i class="bi bi-graph-down"></i><h6>รายงานช้า ข้อมูลกระจาย</h6><p>ยอดขาย สต็อก การเงิน อยู่คนละที่ รวบรวมทีก็หมดวันแล้ว</p></div></div>
+          <div class="col-sm-6"><div class="nd-pain-card"><i class="bi bi-people-fill"></i><h6>คนไม่พอ งานไม่หมด</h6><p>จ้างคนเพิ่มก็แพง ทำเองก็ไม่ไหว ธุรกิจขยายไม่ได้</p></div></div>
         </div>
       </div>
 
@@ -847,713 +396,492 @@
 
 
 <!-- ══════════════════════════════════════════════
-     2. INDUSTRIES STRIP — trust + เชี่ยวชาญ
+     3. HOW IT WORKS
 ══════════════════════════════════════════════ -->
-<div class="hp-industries">
+<section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);" aria-label="วิธีทำงาน">
   <div class="container">
-    <div class="d-flex align-items-center gap-0 overflow-auto" style="scrollbar-width:none;">
-      <span class="hp-industries-label me-4 flex-shrink-0">ธุรกิจที่เราช่วย</span>
-      <div class="hp-industry-item flex-shrink-0">
-        <i class="bi bi-bag-heart"></i> E-Commerce
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-8">
+        <div class="nd-eyebrow">วิธีทำงาน</div>
+        <h2 class="nd-h2">หนูดีทำงานอย่างไร?</h2>
+        <p class="nd-sub mb-4">ตั้งค่าครั้งเดียว หนูดีทำงานแทนคุณทุกวัน ไม่ต้องดูแลรายวัน</p>
+        <div class="row g-3">
+          <div class="col-sm-6 col-xl-3">
+            <div class="nd-step"><div class="nd-step-num">1</div><h6>บอกหนูดี</h6><p>เล่าให้หนูดีฟังว่าธุรกิจคุณทำอะไร มีลูกค้าแบบไหน</p></div>
+          </div>
+          <div class="col-sm-6 col-xl-3">
+            <div class="nd-step"><div class="nd-step-num">2</div><h6>ออกแบบระบบ</h6><p>วาง workflow เฉพาะธุรกิจคุณ ไม่ใช่ template สำเร็จรูป</p></div>
+          </div>
+          <div class="col-sm-6 col-xl-3">
+            <div class="nd-step"><div class="nd-step-num">3</div><h6>ติดตั้งใน 2 สัปดาห์</h6><p>ไม่ต้องรู้ IT ทีมจัดการทั้งหมด พร้อม training พนักงาน</p></div>
+          </div>
+          <div class="col-sm-6 col-xl-3">
+            <div class="nd-step"><div class="nd-step-num">4</div><h6>หนูดีเริ่มทำงาน</h6><p>ทำงาน 24/7 รายงานผลทุกเดือน Support ภาษาไทยตลอด</p></div>
+          </div>
+        </div>
       </div>
-      <div class="hp-industry-item flex-shrink-0">
-        <i class="bi bi-cup-hot"></i> ร้านอาหาร & บริการ
+
+      <div class="col-lg-4 text-center">
+        <img src="{% static 'img/noodee/homepage/noodee_laptop.png' %}" alt="หนูดีทำงานหน้า laptop" class="nd-img nd-img-md mb-3">
+        <div class="nd-bubble nd-bubble-right" style="display:inline-block;text-align:left;min-width:230px;">
+          <span id="tw-how"></span><span class="nd-cursor">|</span>
+        </div>
       </div>
-      <div class="hp-industry-item flex-shrink-0">
-        <i class="bi bi-gear"></i> การผลิต & โรงงาน
-      </div>
-      <div class="hp-industry-item flex-shrink-0">
-        <i class="bi bi-heart-pulse"></i> Healthcare & คลินิก
-      </div>
-      <div class="hp-industry-item flex-shrink-0">
-        <i class="bi bi-briefcase"></i> B2B & SaaS
-      </div>
+
     </div>
   </div>
-</div>
+</section>
 
 
 <!-- ══════════════════════════════════════════════
-     3. PAIN POINTS — ปัญหาที่ SME เผชิญ
+     4. USE CASES BY SEGMENT
 ══════════════════════════════════════════════ -->
-<section class="hp-pain-section" aria-labelledby="pain-heading">
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad);" aria-label="Use Cases">
   <div class="container">
+
+    <!-- Header -->
     <div class="text-center mb-5">
-      <div class="hp-eyebrow justify-content-center">ปัญหาที่ SME ไทยกำลังเผชิญ</div>
-      <h2 id="pain-heading" class="hp-section-heading">
-        คุณกำลังแพ้คู่แข่ง<br>โดยไม่รู้ตัว
-      </h2>
-      <p class="hp-section-sub mx-auto mt-3">
-        ธุรกิจที่ไม่ปรับตัวเรื่อง AI วันนี้ จะมีต้นทุนสูงกว่าคู่แข่งถึง 3 เท่าในอีก 2 ปีข้างหน้า
-      </p>
+      <div class="nd-eyebrow">เหมาะกับทุกธุรกิจ</div>
+      <h2 class="nd-h2">ธุรกิจคุณอยู่ประเภทไหน?</h2>
+      <p class="nd-sub mx-auto">คลิกเลือกประเภทธุรกิจของคุณ เพื่อดูว่าหนูดีช่วยได้อย่างไร</p>
     </div>
 
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="hp-pain-card red">
-          <div class="hp-pain-icon red"><i class="bi bi-clock-history"></i></div>
-          <h3>เสียเวลางาน Repeat ทุกวัน</h3>
-          <p>
-            พนักงานใช้เวลา <strong>4–6 ชั่วโมงต่อวัน</strong> กับงานตอบ LINE
-            ส่งรายงาน และคีย์ข้อมูล — งานที่ AI ทำแทนได้ทั้งหมด
-          </p>
-        </div>
+    <!-- Segment cards 3×2 -->
+    <div class="row g-3 mb-4" id="seg-cards">
+      <div class="col-6 col-md-4 col-lg-2">
+        <button class="nd-seg-card active" data-target="seg-clinic" onclick="ndSwitchSeg(this)">
+          <i class="bi bi-hospital nd-seg-icon"></i>
+          <div class="nd-seg-name">คลินิก</div>
+          <div class="nd-seg-hint">ลด no-show 35%</div>
+        </button>
       </div>
-      <div class="col-md-4">
-        <div class="hp-pain-card amber">
-          <div class="hp-pain-icon amber"><i class="bi bi-funnel"></i></div>
-          <h3>Lead หลุดมือ ปิดดีลไม่ทัน</h3>
-          <p>
-            <strong>68% ของ Lead</strong> ไม่ได้รับการติดตามภายใน 1 ชั่วโมงแรก
-            นั่นคือรายได้ที่คุณสูญเสียให้คู่แข่งทุกวัน
-          </p>
-        </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <button class="nd-seg-card" data-target="seg-ecom" onclick="ndSwitchSeg(this)">
+          <i class="bi bi-shop nd-seg-icon"></i>
+          <div class="nd-seg-name">ร้านออนไลน์</div>
+          <div class="nd-seg-hint">ยอดขาย +40%</div>
+        </button>
       </div>
-      <div class="col-md-4">
-        <div class="hp-pain-card blue">
-          <div class="hp-pain-icon blue"><i class="bi bi-graph-down-arrow"></i></div>
-          <h3>ขยายธุรกิจ แต่ต้นทุนพุ่ง</h3>
-          <p>
-            ยอดขายโตขึ้น แต่ต้องจ้างคนเพิ่มทุกครั้ง
-            <strong>วงจรนี้จะจบ</strong> เมื่อ AI รับภาระงานซ้ำซ้อนแทนคุณ
-          </p>
-        </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <button class="nd-seg-card" data-target="seg-hotel" onclick="ndSwitchSeg(this)">
+          <i class="bi bi-building nd-seg-icon"></i>
+          <div class="nd-seg-name">โรงแรม</div>
+          <div class="nd-seg-hint">รายได้ +25%</div>
+        </button>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <button class="nd-seg-card" data-target="seg-spa" onclick="ndSwitchSeg(this)">
+          <i class="bi bi-flower1 nd-seg-icon"></i>
+          <div class="nd-seg-name">สปา/นวด</div>
+          <div class="nd-seg-hint">ลด no-show 30%</div>
+        </button>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <button class="nd-seg-card" data-target="seg-hr" onclick="ndSwitchSeg(this)">
+          <i class="bi bi-people nd-seg-icon"></i>
+          <div class="nd-seg-name">HR/โรงเรียน</div>
+          <div class="nd-seg-hint">เวลา -70%</div>
+        </button>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <button class="nd-seg-card" data-target="seg-coach" onclick="ndSwitchSeg(this)">
+          <i class="bi bi-lightbulb nd-seg-icon"></i>
+          <div class="nd-seg-name">โค้ช</div>
+          <div class="nd-seg-hint">ลูกค้า +3 เท่า</div>
+        </button>
       </div>
     </div>
+
+    <!-- Detail panel -->
+    <div class="nd-seg-panel">
+      <div class="row align-items-center g-4">
+
+        <!-- Left: content -->
+        <div class="col-lg-8">
+
+          <div id="seg-clinic" class="nd-seg-content">
+            <div class="nd-roi-badge"><i class="bi bi-clock"></i>ประหยัดเวลา 3 ชม./วัน</div>
+            <h3 class="nd-seg-title">AI ช่วยคลินิกและโรงพยาบาล</h3>
+            <ul class="nd-seg-list">
+              <li><i class="bi bi-check-circle-fill"></i>รับนัดหมายอัตโนมัติ ลด no-show 35%</li>
+              <li><i class="bi bi-check-circle-fill"></i>แจ้งเตือน reminder ก่อนวันนัด</li>
+              <li><i class="bi bi-check-circle-fill"></i>ตอบคำถาม PDPA และข้อมูลยาอัตโนมัติ</li>
+              <li><i class="bi bi-check-circle-fill"></i>สรุปรายงานผู้ป่วยรายวัน</li>
+            </ul>
+            <a href="/contact/" class="nd-btn" style="font-size:.9rem;padding:.7rem 1.75rem;">ปรึกษาฟรี สำหรับคลินิก</a>
+          </div>
+
+          <div id="seg-ecom" class="nd-seg-content d-none">
+            <div class="nd-roi-badge"><i class="bi bi-graph-up-arrow"></i>เพิ่มยอดขาย 40%</div>
+            <h3 class="nd-seg-title">AI ช่วยร้านค้าออนไลน์</h3>
+            <ul class="nd-seg-list">
+              <li><i class="bi bi-check-circle-fill"></i>ตอบ LINE/Shopee/Lazada อัตโนมัติ 24/7</li>
+              <li><i class="bi bi-check-circle-fill"></i>แนะนำสินค้าตามความสนใจลูกค้า</li>
+              <li><i class="bi bi-check-circle-fill"></i>แจ้งสถานะออเดอร์อัตโนมัติ</li>
+              <li><i class="bi bi-check-circle-fill"></i>รวมยอดและสต็อกทุก platform</li>
+            </ul>
+            <a href="/contact/" class="nd-btn" style="font-size:.9rem;padding:.7rem 1.75rem;">ปรึกษาฟรี สำหรับร้านออนไลน์</a>
+          </div>
+
+          <div id="seg-hotel" class="nd-seg-content d-none">
+            <div class="nd-roi-badge"><i class="bi bi-currency-dollar"></i>เพิ่มรายได้ต่อห้อง 25%</div>
+            <h3 class="nd-seg-title">AI ช่วยโรงแรมและรีสอร์ท</h3>
+            <ul class="nd-seg-list">
+              <li><i class="bi bi-check-circle-fill"></i>ปรับราคาห้องอัตโนมัติตาม demand</li>
+              <li><i class="bi bi-check-circle-fill"></i>Chatbot ตอบ inquiry และรับจอง</li>
+              <li><i class="bi bi-check-circle-fill"></i>ส่ง upsell ก่อน check-in อัตโนมัติ</li>
+              <li><i class="bi bi-check-circle-fill"></i>รวม OTA ทุกช่องทางในที่เดียว</li>
+            </ul>
+            <a href="/contact/" class="nd-btn" style="font-size:.9rem;padding:.7rem 1.75rem;">ปรึกษาฟรี สำหรับโรงแรม</a>
+          </div>
+
+          <div id="seg-spa" class="nd-seg-content d-none">
+            <div class="nd-roi-badge"><i class="bi bi-telephone-x"></i>ลด no-show 30%</div>
+            <h3 class="nd-seg-title">AI ช่วยร้านนวดและสปา</h3>
+            <ul class="nd-seg-list">
+              <li><i class="bi bi-check-circle-fill"></i>รับจองออนไลน์อัตโนมัติ 24 ชม.</li>
+              <li><i class="bi bi-check-circle-fill"></i>แจ้งเตือน reminder ก่อนนัด 1 วัน</li>
+              <li><i class="bi bi-check-circle-fill"></i>ระบบสมาชิกและสะสมแต้มอัตโนมัติ</li>
+              <li><i class="bi bi-check-circle-fill"></i>ส่ง promotion ตามประวัติลูกค้า</li>
+            </ul>
+            <a href="/contact/" class="nd-btn" style="font-size:.9rem;padding:.7rem 1.75rem;">ปรึกษาฟรี สำหรับสปา</a>
+          </div>
+
+          <div id="seg-hr" class="nd-seg-content d-none">
+            <div class="nd-roi-badge"><i class="bi bi-clock-history"></i>ลดเวลาคัดเรซูเม่ 70%</div>
+            <h3 class="nd-seg-title">AI ช่วย HR และสถาบันการศึกษา</h3>
+            <ul class="nd-seg-list">
+              <li><i class="bi bi-check-circle-fill"></i>คัดกรอง resume อัตโนมัติ</li>
+              <li><i class="bi bi-check-circle-fill"></i>Chatbot ตอบคำถามนักเรียน/ผู้สมัคร</li>
+              <li><i class="bi bi-check-circle-fill"></i>แจ้งเตือนกำหนดส่งงาน/เอกสาร</li>
+              <li><i class="bi bi-check-circle-fill"></i>รายงาน attendance และผลการเรียน</li>
+            </ul>
+            <a href="/contact/" class="nd-btn" style="font-size:.9rem;padding:.7rem 1.75rem;">ปรึกษาฟรี สำหรับ HR</a>
+          </div>
+
+          <div id="seg-coach" class="nd-seg-content d-none">
+            <div class="nd-roi-badge"><i class="bi bi-person-check"></i>ดูแลลูกค้าเพิ่มขึ้น 3 เท่า</div>
+            <h3 class="nd-seg-title">AI ช่วยโค้ชและครีเอเตอร์</h3>
+            <ul class="nd-seg-list">
+              <li><i class="bi bi-check-circle-fill"></i>ตอบคำถามนักเรียนอัตโนมัติ</li>
+              <li><i class="bi bi-check-circle-fill"></i>ส่ง content เรียนรู้ตามระดับ</li>
+              <li><i class="bi bi-check-circle-fill"></i>ระบบ onboarding ลูกค้าใหม่อัตโนมัติ</li>
+              <li><i class="bi bi-check-circle-fill"></i>ติดตาม engagement และ completion rate</li>
+            </ul>
+            <a href="/contact/" class="nd-btn" style="font-size:.9rem;padding:.7rem 1.75rem;">ปรึกษาฟรี สำหรับโค้ช</a>
+          </div>
+
+        </div>
+
+        <!-- Right: หนูดี + bubble -->
+        <div class="col-lg-4 text-center">
+          <div class="nd-bubble nd-bubble-right mb-3" style="display:inline-block;text-align:left;min-width:220px;">
+            <span id="tw-seg"></span><span class="nd-cursor">|</span>
+          </div>
+          <img src="{% static 'img/noodee/homepage/noodee_present.png' %}" alt="หนูดีแนะนำ" class="nd-img nd-img-md">
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </section>
 
 
 <!-- ══════════════════════════════════════════════
-     4. SERVICES — Layout: Featured + Grid
+     5. ROI TEASER
 ══════════════════════════════════════════════ -->
-<section class="hp-services-section" aria-labelledby="svc-heading">
+<section class="nd-bg-gradient nd-divider" style="padding:var(--nd-pad);" aria-label="ROI">
   <div class="container">
-    <div class="text-center mb-5">
-      <div class="hp-eyebrow justify-content-center">โซลูชันของเรา</div>
-      <h2 id="svc-heading" class="hp-section-heading">
-        บริการ AI ครบวงจร<br>สำหรับธุรกิจไทย
-      </h2>
-      <p class="hp-section-sub mx-auto mt-3">
-        ทุกบริการออกแบบสำหรับ SME ไทยโดยเฉพาะ ติดตั้งเร็ว ใช้งานได้จริง และวัดผลได้ชัดเจน
-      </p>
-    </div>
+    <div class="row align-items-center g-5">
 
-    <!-- Row 1: Featured (Chatbot) + 2 cards -->
-    <div class="row g-4 mb-4">
-      <div class="col-lg-5">
-        <div class="hp-svc-featured h-100">
-          <div class="hp-svc-icon mb-2"><i class="bi bi-chat-dots"></i></div>
-          <span class="hp-svc-badge">Most Popular</span>
-          <h3>AI Chatbot<br>สำหรับธุรกิจ</h3>
-          <p>
-            ตอบลูกค้า 24/7 บน LINE, Facebook และเว็บไซต์
-            เรียนรู้สินค้าของคุณโดยเฉพาะ ไม่ใช่คำตอบสำเร็จรูป
-            ลด CS Workload ได้ทันทีตั้งแต่สัปดาห์แรก
-          </p>
-          <div class="hp-svc-price">฿15,000</div>
-          <div class="hp-svc-price-label mb-3">เริ่มต้น / ติดตั้งพร้อมใช้ใน 2 สัปดาห์</div>
-          <a href="{% url 'pages:services' %}" class="hp-btn-primary hp-btn-primary--sm">
-            ดูรายละเอียด <i class="bi bi-arrow-right ms-1"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="col-lg-7">
-        <div class="row g-4 h-100">
-          <div class="col-sm-6">
-            <div class="hp-svc-card h-100">
-              <div class="hp-svc-icon"><i class="bi bi-graph-up-arrow"></i></div>
-              <span class="hp-svc-badge">High ROI</span>
-              <h4>AI Lead Generation</h4>
-              <p>หา qualify lead และ nurture อัตโนมัติ ตั้งแต่ดึงดูดจนถึงส่งให้ทีมขาย พร้อม Lead Score</p>
-              <a href="{% url 'pages:services' %}" class="small fw-semibold text-decoration-none" style="color:var(--brand-gold);">
-                เริ่มต้น ฿25,000 <i class="bi bi-arrow-right ms-1"></i>
-              </a>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="hp-svc-card h-100">
-              <div class="hp-svc-icon"><i class="bi bi-diagram-3"></i></div>
-              <h4>AI Workflow Automation</h4>
-              <p>เชื่อมระบบทุกอย่างในธุรกิจด้วย AI ลดขั้นตอน Manual ตั้งแต่ HR, Inventory ถึง Finance</p>
-              <a href="{% url 'pages:services' %}" class="small fw-semibold text-decoration-none" style="color:var(--brand-gold);">
-                เริ่มต้น ฿20,000 <i class="bi bi-arrow-right ms-1"></i>
-              </a>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="hp-svc-card h-100">
-              <div class="hp-svc-icon"><i class="bi bi-cpu"></i></div>
-              <h4>Custom AI Agent</h4>
-              <p>AI Agent สั่งทำพิเศษ ทำงานซับซ้อนอัตโนมัติ วิเคราะห์ข้อมูล ตัดสินใจแทนคน</p>
-              <a href="{% url 'pages:services' %}" class="small fw-semibold text-decoration-none" style="color:var(--brand-gold);">
-                เริ่มต้น ฿50,000 <i class="bi bi-arrow-right ms-1"></i>
-              </a>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="hp-svc-card h-100">
-              <div class="hp-svc-icon"><i class="bi bi-hdd-network"></i></div>
-              <h4>AI + Hardware Integration</h4>
-              <p>เชื่อม AI กับฮาร์ดแวร์จริง CCTV อัจฉริยะ IoT Sensor ระบบ POS และคลังสินค้า</p>
-              <a href="{% url 'pages:services' %}" class="small fw-semibold text-decoration-none" style="color:var(--brand-gold);">
-                เริ่มต้น ฿80,000 <i class="bi bi-arrow-right ms-1"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CTA card full-width -->
-    <div class="hp-svc-cta-card">
-      <div class="row align-items-center g-3">
-        <div class="col-md-8 text-md-start text-center">
-          <h4 class="mb-1" style="color:var(--heading-dark-bg);">ไม่แน่ใจว่าธุรกิจคุณเหมาะกับ AI แบบไหน?</h4>
-          <p class="mb-0 small" style="color:rgba(255,255,255,0.45);">ปรึกษาฟรี 45 นาที ทีมเราวิเคราะห์ธุรกิจและแนะนำ AI ที่คุ้มค่าที่สุดสำหรับคุณ</p>
-        </div>
-        <div class="col-md-4 text-md-end text-center">
-          <a href="{% url 'pages:contact' %}" class="hp-btn-primary">
-            <i class="bi bi-calendar-check me-2"></i>นัดปรึกษาฟรี
-          </a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     5. CASE STUDIES — ผลลัพธ์จริง
-══════════════════════════════════════════════ -->
-<section class="hp-results-section" aria-labelledby="results-heading">
-  <div class="hp-results-bg-grid"></div>
-  <div class="container position-relative" style="z-index:1;">
-
-    <div class="text-center mb-5">
-      <div class="hp-eyebrow justify-content-center">กรณีศึกษา</div>
-      <h2 id="results-heading" class="hp-section-heading">
-        ผลลัพธ์จริงจากธุรกิจจริง
-      </h2>
-      <p class="hp-section-sub mx-auto mt-3">
-        ทุกตัวเลขมาจากโปรเจกต์จริงที่วัดได้ ไม่ใช่ตัวเลขสวยงามจากการคาดเดา
-      </p>
-    </div>
-
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="hp-case-card">
-          <span class="hp-case-industry">E-Commerce — ร้านค้าออนไลน์</span>
-          <h4>AI Chatbot ลด Load ทีม CS 80%</h4>
-          <p class="hp-case-context">
-            ร้านค้าออนไลน์มีคำถามซ้ำ 200+ รายการต่อวัน ทีม CS ตอบไม่ทัน
-            หลังติดตั้ง AI Chatbot เพียง 2 สัปดาห์
-          </p>
-          <div class="hp-result-row">
-            <div class="hp-result-item">
-              <span class="hp-result-num">80%</span>
-              <div class="hp-result-desc">คำถามตอบ<br>อัตโนมัติ</div>
-            </div>
-            <div class="hp-result-item">
-              <span class="hp-result-num">+40%</span>
-              <div class="hp-result-desc">ยอดขาย<br>เดือนแรก</div>
-            </div>
-            <div class="hp-result-item">
-              <span class="hp-result-num">14</span>
-              <div class="hp-result-desc">วัน ติดตั้ง<br>เสร็จ</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="hp-case-card">
-          <span class="hp-case-industry">B2B SaaS — บริษัทซอฟต์แวร์</span>
-          <h4>AI Lead Gen เพิ่มอัตราปิดดีล 65%</h4>
-          <p class="hp-case-context">
-            ทีมขายตาม Lead ช้า บางรายรอ 2–3 วัน หลัง AI Response ทุก Lead ใน 5 นาที
-          </p>
-          <div class="hp-result-row">
-            <div class="hp-result-item">
-              <span class="hp-result-num">+65%</span>
-              <div class="hp-result-desc">อัตราปิดดีล<br>เพิ่มขึ้น</div>
-            </div>
-            <div class="hp-result-item">
-              <span class="hp-result-num">5 นาที</span>
-              <div class="hp-result-desc">Response<br>ทุก Lead</div>
-            </div>
-            <div class="hp-result-item">
-              <span class="hp-result-num">3x</span>
-              <div class="hp-result-desc">ROI ใน<br>6 เดือน</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="hp-case-card">
-          <span class="hp-case-industry">Manufacturing — โรงงาน SME</span>
-          <h4>Workflow AI ลดเวลา Ops 6 ชม./วัน</h4>
-          <p class="hp-case-context">
-            รายงานการผลิตทำมือทุกวัน เชื่อม Sensor + AI วิเคราะห์และส่งรายงานอัตโนมัติ
-          </p>
-          <div class="hp-result-row">
-            <div class="hp-result-item">
-              <span class="hp-result-num">6 ชม.</span>
-              <div class="hp-result-desc">ลดงาน<br>Manual/วัน</div>
-            </div>
-            <div class="hp-result-item">
-              <span class="hp-result-num">99%</span>
-              <div class="hp-result-desc">ความแม่นยำ<br>รายงาน</div>
-            </div>
-            <div class="hp-result-item">
-              <span class="hp-result-num">30</span>
-              <div class="hp-result-desc">วัน เห็นผล<br>ครั้งแรก</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stats bar -->
-    <div class="hp-stat-bar">
-      <div class="row justify-content-center align-items-center g-0">
-        <div class="col-6 col-md-3 text-center py-3">
-          <span class="hp-stat-bar-num">20+</span>
-          <div class="hp-stat-bar-label">ลูกค้าที่ไว้วางใจ</div>
-        </div>
-        <div class="d-none d-md-flex col-md-auto"><div class="hp-stat-divider mx-3"></div></div>
-        <div class="col-6 col-md-3 text-center py-3">
-          <span class="hp-stat-bar-num">4.9<span style="font-size:1.5rem;">&#9733;</span></span>
-          <div class="hp-stat-bar-label">คะแนนเฉลี่ยจากลูกค้า</div>
-        </div>
-        <div class="d-none d-md-flex col-md-auto"><div class="hp-stat-divider mx-3"></div></div>
-        <div class="col-6 col-md-3 text-center py-3">
-          <span class="hp-stat-bar-num">92%</span>
-          <div class="hp-stat-bar-label">อัตราต่อสัญญา</div>
-        </div>
-        <div class="d-none d-md-flex col-md-auto"><div class="hp-stat-divider mx-3"></div></div>
-        <div class="col-6 col-md-3 text-center py-3">
-          <span class="hp-stat-bar-num">5</span>
-          <div class="hp-stat-bar-label">อุตสาหกรรมที่เราเชี่ยวชาญ</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center mt-4">
-      <a href="{% url 'portfolio:list' %}" class="hp-btn-outline" style="position:relative;z-index:1;">
-        ดูผลงานทั้งหมด <i class="bi bi-arrow-right ms-1"></i>
-      </a>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     6. HOW IT WORKS — 3 ขั้นตอน
-══════════════════════════════════════════════ -->
-<section class="hp-process-section" aria-labelledby="process-heading">
-  <div class="container">
-    <div class="text-center mb-5">
-      <div class="hp-eyebrow justify-content-center">วิธีการทำงาน</div>
-      <h2 id="process-heading" class="hp-section-heading">
-        เริ่มใช้ AI ใน 3 ขั้นตอนง่ายๆ
-      </h2>
-      <p class="hp-section-sub mx-auto mt-3">
-        ไม่ต้องมีความรู้ด้าน IT ทีมเราดูแลทุกอย่างตั้งแต่ต้นจนจบ
-      </p>
-    </div>
-
-    <div class="row g-4 justify-content-center">
-      <div class="col-sm-6 col-md-4">
-        <div class="hp-process-step">
-          <div class="hp-process-num">
-            01
-            <div class="hp-process-connector d-none d-md-block"></div>
-          </div>
-          <span class="hp-process-icon"><i class="bi bi-chat-square-quote"></i></span>
-          <h4>ปรึกษาฟรี 45 นาที</h4>
-          <p>เล่าปัญหาธุรกิจให้ฟัง ทีมเราวิเคราะห์ว่า AI จะช่วยได้อย่างไรและคุ้มแค่ไหน</p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="hp-process-step">
-          <div class="hp-process-num">
-            02
-            <div class="hp-process-connector d-none d-md-block"></div>
-          </div>
-          <span class="hp-process-icon"><i class="bi bi-code-square"></i></span>
-          <h4>พัฒนาและติดตั้ง</h4>
-          <p>สร้างและติดตั้งระบบ AI ภายใน 2–4 สัปดาห์ พร้อม Training ทีมงานให้ใช้งานได้ทันที</p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="hp-process-step">
-          <div class="hp-process-num">03</div>
-          <span class="hp-process-icon"><i class="bi bi-graph-up-arrow"></i></span>
-          <h4>เห็นผลและวัดได้</h4>
-          <p>วัดผลชัดเจนใน 30 วัน พร้อม Support ต่อเนื่องและปรับปรุงระบบตามผลลัพธ์จริง</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     7. TESTIMONIALS — เสียงจากลูกค้า
-══════════════════════════════════════════════ -->
-<section class="hp-testi-section" aria-labelledby="testi-heading">
-  <div class="container">
-    <div class="text-center mb-5">
-      <div class="hp-eyebrow justify-content-center">เสียงจากลูกค้า</div>
-      <h2 id="testi-heading" class="hp-section-heading">
-        ลูกค้าพูดถึงเราอย่างไร
-      </h2>
-    </div>
-
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="hp-testi-card">
-          <div class="hp-testi-stars">
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-          </div>
-          <blockquote class="hp-testi-quote">
-            "จากที่เคยตอบลูกค้าเองทั้งวัน ตอนนี้ AI จัดการแทน 80% ของคำถาม
-            ทีม CS เราโฟกัสได้กับเคสที่ซับซ้อนจริงๆ และยอดขายก็เพิ่มขึ้นด้วย"
-          </blockquote>
-          <div class="hp-testi-author">
-            <div class="hp-testi-avatar"><i class="bi bi-person"></i></div>
-            <div>
-              <div class="hp-testi-name">คุณสมใจ ร.</div>
-              <div class="hp-testi-company">เจ้าของร้านค้าออนไลน์</div>
-            </div>
-            <span class="hp-testi-industry">E-Commerce</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="hp-testi-card">
-          <div class="hp-testi-stars">
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-          </div>
-          <blockquote class="hp-testi-quote">
-            "Lead ที่ได้ก่อนหน้านี้หลุดมือเยอะมาก เพราะทีมตามไม่ทัน
-            ตอนนี้ AI ตอบภายใน 5 นาที ยอดปิดดีลเพิ่มขึ้นเกือบ 60% ภายในไตรมาสเดียว"
-          </blockquote>
-          <div class="hp-testi-author">
-            <div class="hp-testi-avatar"><i class="bi bi-person"></i></div>
-            <div>
-              <div class="hp-testi-name">คุณนิรัน ก.</div>
-              <div class="hp-testi-company">ผู้จัดการฝ่ายขาย</div>
-            </div>
-            <span class="hp-testi-industry">B2B</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="hp-testi-card">
-          <div class="hp-testi-stars">
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-          </div>
-          <blockquote class="hp-testi-quote">
-            "ลูกค้าถามเรื่อง Promotion เยอะมาก AI ตอบแทนได้ถูกต้องทุกครั้ง
-            และยังนัดหมายให้ได้อีก ทีมเราไม่ต้องรับโทรศัพท์ซ้ำๆ แล้ว"
-          </blockquote>
-          <div class="hp-testi-author">
-            <div class="hp-testi-avatar"><i class="bi bi-person"></i></div>
-            <div>
-              <div class="hp-testi-name">คุณพิมพา ส.</div>
-              <div class="hp-testi-company">เจ้าของคลินิกความงาม</div>
-            </div>
-            <span class="hp-testi-industry">Healthcare</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     8. FAQ — คำถามที่พบบ่อย (AEO/GEO)
-══════════════════════════════════════════════ -->
-<section class="hp-faq-section" aria-labelledby="faq-heading">
-  <div class="container">
-    <div class="row g-5 align-items-start">
-
-      <div class="col-lg-4">
-        <div class="sticky-top" style="top:2rem;">
-          <div class="hp-eyebrow">FAQ</div>
-          <h2 id="faq-heading" class="hp-section-heading">
-            คำถาม<br>ที่พบบ่อย
-          </h2>
-          <p class="hp-section-sub mt-3">
-            มีคำถามอื่น? ทีมเราพร้อมตอบตรงๆ ฟรี ไม่มีข้อผูกมัด
-          </p>
-          <div class="mt-4">
-            <a href="{% url 'pages:contact' %}" class="hp-btn-primary hp-btn-primary--sm">
-              <i class="bi bi-chat-dots me-2"></i>ถามตรงๆ ฟรี
-            </a>
-          </div>
+      <div class="col-lg-4 text-center">
+        <img src="{% static 'img/noodee/homepage/noodee_confident.png' %}" alt="หนูดีมั่นใจ" class="nd-img nd-img-md mb-3">
+        <div class="nd-bubble nd-bubble-right" style="display:inline-block;text-align:left;min-width:230px;">
+          <span id="tw-roi"></span><span class="nd-cursor">|</span>
         </div>
       </div>
 
       <div class="col-lg-8">
-        <div class="accordion hp-faq-accordion" id="faqAccordion">
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                AI Chatbot เริ่มต้นราคาเท่าไหร่?
-              </button>
-            </h3>
-            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                AI Chatbot สำหรับธุรกิจเริ่มต้นที่ <strong>15,000 บาท</strong> ครอบคลุมการติดตั้งบน LINE Official Account, Facebook Messenger และเว็บไซต์ พร้อม Training ข้อมูลสินค้าและบริการของคุณโดยเฉพาะ ไม่ใช่คำตอบสำเร็จรูป
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                ต้องมีความรู้ด้าน IT เพื่อใช้ AI ไหม?
-              </button>
-            </h3>
-            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                ไม่จำเป็นเลย ทีมเรารับผิดชอบทุกขั้นตอนตั้งแต่การออกแบบ ติดตั้ง จนถึง Training พนักงานของคุณให้ใช้งานได้ทันที คุณแค่รู้ว่าต้องการผลลัพธ์อะไร
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                ใช้เวลานานแค่ไหนในการติดตั้ง?
-              </button>
-            </h3>
-            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                AI Chatbot พื้นฐานพร้อมใช้ใน <strong>2 สัปดาห์</strong> ระบบ Workflow Automation 3–4 สัปดาห์ Custom AI Agent 4–6 สัปดาห์ ขึ้นอยู่กับความซับซ้อนของธุรกิจ
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-                รองรับ LINE Official Account ได้ไหม?
-              </button>
-            </h3>
-            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                รองรับครบทุก Channel ที่ SME ไทยใช้ ได้แก่ LINE Official Account, LINE LIFF, Facebook Messenger, Instagram DM และ Web Chat บนเว็บไซต์
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
-                SME ที่มีพนักงานน้อยกว่า 10 คน เหมาะกับบริการนี้ไหม?
-              </button>
-            </h3>
-            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                เหมาะมากที่สุด ธุรกิจที่มีพนักงาน 5–50 คนได้ประโยชน์สูงสุดจาก AI เพราะช่วยให้ทีมเล็กทำงานได้เทียบเท่าทีมใหญ่โดยไม่ต้องจ้างคนเพิ่ม
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
-                มีการรับประกันผลลัพธ์ไหม?
-              </button>
-            </h3>
-            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                มี <strong>รับประกัน 30 วัน</strong> ถ้าผลลัพธ์ไม่เป็นไปตามที่ตกลงกัน เราคืนเงินเต็มจำนวน และยังมีรายงานผลรายเดือนที่วัดผลได้ชัดเจน
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
-                ถ้าระบบมีปัญหา ติดต่อได้อย่างไร?
-              </button>
-            </h3>
-            <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                มีทีม Support ผ่าน LINE ตลอด รับประกัน Response ภายใน <strong>4 ชั่วโมง</strong> สำหรับปัญหาด่วน พร้อม Maintenance ประจำทุกเดือนและ Quarterly Review
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h3 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
-                AI ของ AIBiz Thailand ต่างจากที่อื่นอย่างไร?
-              </button>
-            </h3>
-            <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-              <div class="accordion-body">
-                เราออกแบบมาสำหรับ SME ไทยโดยเฉพาะ เข้าใจบริบทธุรกิจไทย ภาษาไทย และพฤติกรรมลูกค้าไทย ทุกระบบ Custom ตามธุรกิจของคุณ ไม่ใช่สำเร็จรูป มีทีม Support ภาษาไทยตลอด
-              </div>
-            </div>
-          </div>
-
+        <div class="nd-eyebrow">ผลลัพธ์จริง</div>
+        <h2 class="nd-h2">ธุรกิจคุณประหยัดได้เท่าไหร่?</h2>
+        <p class="nd-sub mb-4">ตัวเลขเฉลี่ยจากลูกค้าจริงที่ใช้หนูดีดูแลธุรกิจ</p>
+        <div class="row g-3">
+          <div class="col-sm-4"><div class="nd-stat-box"><span class="nd-stat-num">80%</span><div class="nd-stat-label">ลดงาน Manual</div></div></div>
+          <div class="col-sm-4"><div class="nd-stat-box"><span class="nd-stat-num">3x</span><div class="nd-stat-label">เพิ่ม Lead ที่ปิดได้</div></div></div>
+          <div class="col-sm-4"><div class="nd-stat-box"><span class="nd-stat-num">30วัน</span><div class="nd-stat-label">เห็นผลลัพธ์จริง</div></div></div>
+          <div class="col-sm-6"><div class="nd-stat-box"><span class="nd-stat-num">฿15K+</span><div class="nd-stat-label">ประหยัดค่าแรง/เดือน</div></div></div>
+          <div class="col-sm-6"><div class="nd-stat-box"><span class="nd-stat-num">24/7</span><div class="nd-stat-label">ทำงานไม่หยุด</div></div></div>
+        </div>
+        <div class="mt-4">
+          <a href="/contact/" class="nd-btn"><i class="bi bi-calculator me-2"></i>คำนวณ ROI ของธุรกิจคุณ →</a>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
 
 <!-- ══════════════════════════════════════════════
-     9. CTA — Lead Capture
+     6. PACKAGES
 ══════════════════════════════════════════════ -->
-<section class="hp-cta-section" aria-label="ปรึกษาฟรี 45 นาที">
-  <div class="hp-cta-glow"></div>
-  <div class="container text-center position-relative" style="z-index:1;">
-    <div class="hp-eyebrow justify-content-center mb-4">พร้อมเริ่มต้นแล้วหรือยัง?</div>
-    <h2>
-      ปล่อยให้ AI ทำงานแทนคุณ<br>
-      <span>คุณโฟกัสที่การเติบโต</span>
-    </h2>
-    <p class="hp-cta-lead mx-auto">
-      ปรึกษาฟรี 45 นาที ไม่มีค่าใช้จ่าย ไม่มีข้อผูกมัด
-      ทีมเราจะวิเคราะห์ธุรกิจของคุณและบอกว่า AI จะช่วยได้อย่างไร
-    </p>
-    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-4">
-      <a href="{% url 'pages:contact' %}" class="hp-btn-primary">
-        <i class="bi bi-calendar-check me-2"></i>นัดปรึกษาฟรีเดี๋ยวนี้
-      </a>
-      <a href="tel:+66800000000" class="hp-btn-outline">
-        <i class="bi bi-telephone me-2"></i>โทรหาเรา
-      </a>
-    </div>
-    <div class="hp-cta-badges">
-      <div class="hp-cta-badge"><i class="bi bi-shield-check"></i> ปรึกษาฟรี ไม่มีข้อผูกมัด</div>
-      <div class="hp-cta-badge"><i class="bi bi-clock"></i> Response ภายใน 24 ชั่วโมง</div>
-      <div class="hp-cta-badge"><i class="bi bi-award"></i> รับประกันผลลัพธ์ 30 วัน</div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     10. BLOG FEED — ความรู้ AI + Category Nav
-══════════════════════════════════════════════ -->
-<section class="hp-blog-section" aria-labelledby="blog-heading">
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad);" aria-label="Packages">
   <div class="container">
 
-    <!-- Section header -->
-    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
-      <div>
-        <div class="hp-eyebrow">บทความล่าสุด</div>
-        <h2 id="blog-heading" class="hp-section-heading mb-0">
-          ความรู้ AI สำหรับ<br>ธุรกิจไทย
-        </h2>
+    <div class="row align-items-end mb-5 g-4">
+      <div class="col-lg-8">
+        <div class="nd-eyebrow">แพ็กเกจและราคา</div>
+        <h2 class="nd-h2">เลือกแพ็กเกจที่เหมาะกับคุณ</h2>
+        <p class="nd-sub">ไม่ต้องลงทุนหลักแสน เริ่มต้นได้วันนี้ ปรับเปลี่ยนได้ตลอด</p>
       </div>
-      <a href="{% url 'blog:list' %}" class="hp-btn-outline d-none d-md-inline-block" style="white-space:nowrap;">
-        บทความทั้งหมด <i class="bi bi-arrow-right ms-1"></i>
-      </a>
+      <div class="col-lg-4 text-lg-end text-center">
+        <div class="nd-bubble nd-bubble-right mb-2" style="display:inline-block;text-align:left;min-width:230px;">
+          <span id="tw-pkg"></span><span class="nd-cursor">|</span>
+        </div>
+        <div><img src="{% static 'img/noodee/homepage/noodee_menu.png' %}" alt="หนูดีชูเมนู" class="nd-img nd-img-sm"></div>
+      </div>
     </div>
 
-    <!-- Category quick nav — แสดงเมื่อมีหมวดหมู่ -->
-    {% if categories %}
-    <nav aria-label="หมวดหมู่บทความ" class="mb-4">
-      <div class="hp-cat-nav">
-        <a href="{% url 'blog:list' %}" class="hp-cat-chip active">ทั้งหมด</a>
-        {% for cat in categories|slice:":8" %}
-        <a href="{{ cat.get_absolute_url }}" class="hp-cat-chip">{{ cat.name }}</a>
-        {% endfor %}
-      </div>
-    </nav>
-    {% endif %}
-
-    {% if featured_articles %}
     <div class="row g-4">
-
-      <!-- Featured article — ใหญ่ -->
-      {% with featured_articles.0 as hero %}
-      <div class="col-md-6">
-        <article class="hp-article-card h-100 d-flex flex-column">
-          {% if hero.display_cover %}
-          <img src="{{ hero.display_cover }}" alt="{{ hero.title }}" class="hp-article-thumb" loading="lazy">
-          {% else %}
-          <div class="hp-article-thumb-placeholder">
-            <i class="bi bi-newspaper"></i>
-          </div>
-          {% endif %}
-          <div class="hp-article-body d-flex flex-column flex-grow-1">
-            {% if hero.category %}
-            <span class="hp-cat-badge">{{ hero.category.name }}</span>
-            {% endif %}
-            <h3 class="mb-2">
-              <a href="{{ hero.get_absolute_url }}">{{ hero.title }}</a>
-            </h3>
-            <p class="small text-body-secondary mb-3 flex-grow-1">{{ hero.excerpt }}</p>
-            <div class="d-flex align-items-center justify-content-between mt-auto">
-              <a href="{{ hero.get_absolute_url }}" class="fw-semibold small text-decoration-none" style="color:var(--brand-gold);">
-                อ่านต่อ <i class="bi bi-arrow-right ms-1"></i>
-              </a>
-              <small class="hp-article-meta">{{ hero.published_at|date:"d M Y" }}</small>
-            </div>
-          </div>
-        </article>
-      </div>
-      {% endwith %}
-
-      <!-- 3 smaller articles -->
-      <div class="col-md-6">
-        <div class="d-flex flex-column gap-3 h-100">
-          {% for article in featured_articles|slice:"1:4" %}
-          <article class="hp-article-card flex-grow-1">
-            <div class="hp-article-body">
-              {% if article.category %}
-              <span class="hp-cat-badge">{{ article.category.name }}</span>
-              {% endif %}
-              <h5 class="mb-1">
-                <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-              </h5>
-              <div class="hp-article-meta">
-                {{ article.published_at|date:"d M Y" }}
-                {% if article.reading_time %}&middot; {{ article.reading_time }} นาที{% endif %}
-              </div>
-            </div>
-          </article>
-          {% endfor %}
+      <div class="col-lg-4">
+        <div class="nd-pkg">
+          <div><div class="nd-eyebrow" style="font-size:.65rem;">Starter</div><h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">ปักหมุดตลาด</h4><p style="font-size:.85rem;color:var(--nd-muted);">เหมาะกับธุรกิจที่เพิ่งเริ่ม</p></div>
+          <div class="nd-pkg-price">฿15,000<span style="font-size:1rem;font-weight:400;">/เดือน</span></div>
+          <ul class="nd-pkg-list">
+            <li><i class="bi bi-check-lg"></i>AI Chatbot 1 channel</li>
+            <li><i class="bi bi-check-lg"></i>ตอบ FAQ อัตโนมัติ</li>
+            <li><i class="bi bi-check-lg"></i>รับจอง/นัดหมายอัตโนมัติ</li>
+            <li><i class="bi bi-check-lg"></i>รายงานรายเดือน</li>
+            <li><i class="bi bi-check-lg"></i>Support ภาษาไทย 9-21น.</li>
+          </ul>
+          <a href="/contact/" class="nd-btn-outline" style="text-align:center;">เริ่มต้นที่นี่</a>
         </div>
       </div>
-
-    </div>
-    {% else %}
-    <div class="text-center py-5">
-      <i class="bi bi-newspaper text-body-secondary" style="font-size:3rem;opacity:.25;"></i>
-      <p class="text-body-secondary mt-3 mb-0">บทความกำลังจะมา</p>
-    </div>
-    {% endif %}
-
-    <div class="text-center mt-4 d-md-none">
-      <a href="{% url 'blog:list' %}" class="hp-btn-outline">
-        บทความทั้งหมด <i class="bi bi-arrow-right ms-1"></i>
-      </a>
+      <div class="col-lg-4">
+        <div class="nd-pkg featured">
+          <div class="nd-pkg-badge">แนะนำ ⭐</div>
+          <div><div class="nd-eyebrow" style="font-size:.65rem;">Growth</div><h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">เติบโตต่อเนื่อง</h4><p style="font-size:.85rem;color:var(--nd-muted);">SME ที่อยากขยายไม่จ้างคนเพิ่ม</p></div>
+          <div class="nd-pkg-price">฿35,000<span style="font-size:1rem;font-weight:400;">/เดือน</span></div>
+          <ul class="nd-pkg-list">
+            <li><i class="bi bi-check-lg"></i>ทุกอย่างใน Starter</li>
+            <li><i class="bi bi-check-lg"></i>AI Chatbot 3 channels + CRM</li>
+            <li><i class="bi bi-check-lg"></i>Lead Generation + Follow-up</li>
+            <li><i class="bi bi-check-lg"></i>Workflow Automation 5 processes</li>
+            <li><i class="bi bi-check-lg"></i>Dashboard real-time</li>
+            <li><i class="bi bi-check-lg"></i>Support 24/7</li>
+          </ul>
+          <a href="/contact/" class="nd-btn" style="text-align:center;">เลือกแพ็กเกจนี้</a>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="nd-pkg">
+          <div><div class="nd-eyebrow" style="font-size:.65rem;">Enterprise</div><h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">สร้างระบบของตัวเอง</h4><p style="font-size:.85rem;color:var(--nd-muted);">Custom AI Agent เฉพาะธุรกิจคุณ</p></div>
+          <div class="nd-pkg-price" style="font-size:1.6rem;">Custom</div>
+          <ul class="nd-pkg-list">
+            <li><i class="bi bi-check-lg"></i>ทุกอย่างใน Growth</li>
+            <li><i class="bi bi-check-lg"></i>Custom AI Agent สั่งทำพิเศษ</li>
+            <li><i class="bi bi-check-lg"></i>AI + Hardware Integration</li>
+            <li><i class="bi bi-check-lg"></i>API ไม่จำกัด</li>
+            <li><i class="bi bi-check-lg"></i>Dedicated Account Manager</li>
+          </ul>
+          <a href="/contact/" class="nd-btn-outline" style="text-align:center;">ขอใบเสนอราคา</a>
+        </div>
+      </div>
     </div>
 
   </div>
 </section>
 
+
+<!-- ══════════════════════════════════════════════
+     7. TRUST SIGNALS
+══════════════════════════════════════════════ -->
+<section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);" aria-label="Trust">
+  <div class="container">
+    <div class="row align-items-center g-5 mb-5">
+
+      <div class="col-lg-4 text-center">
+        <img src="{% static 'img/noodee/homepage/noodee_trust.png' %}" alt="หนูดีน่าเชื่อถือ" class="nd-img nd-img-md mb-3">
+        <div class="nd-bubble" style="display:inline-block;text-align:left;min-width:230px;">
+          <span id="tw-trust"></span><span class="nd-cursor">|</span>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="nd-eyebrow">ทำไมถึงเชื่อหนูดี?</div>
+        <h2 class="nd-h2">ธุรกิจไทยเลือกหนูดีเพราะ...</h2>
+        <div class="row g-3 mb-4">
+          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">50+</div><div style="font-size:.8rem;color:var(--nd-muted);">ธุรกิจที่ดูแล</div></div>
+          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">98%</div><div style="font-size:.8rem;color:var(--nd-muted);">ความพึงพอใจ</div></div>
+          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">4.9★</div><div style="font-size:.8rem;color:var(--nd-muted);">คะแนนเฉลี่ย</div></div>
+        </div>
+        <div class="row g-3">
+          <div class="col-sm-6"><div class="nd-testi"><blockquote>"ก่อนใช้หนูดี ต้องจ้าง 2 คนตอบแชท ตอนนี้ 1 คนก็พอ แถมยอดขายเพิ่มด้วย"</blockquote><cite>คุณณัฐพร — เจ้าของคลินิกความงาม กรุงเทพฯ</cite></div></div>
+          <div class="col-sm-6"><div class="nd-testi"><blockquote>"ระบบจองอัตโนมัติช่วยได้มาก ลูกค้าต่างชาติจองได้ตลอด 24 ชม. รายได้เพิ่ม 30%"</blockquote><cite>คุณปิยะ — เจ้าของรีสอร์ท เชียงใหม่</cite></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     8. CTA FINAL
+══════════════════════════════════════════════ -->
+<section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);text-align:center;position:relative;overflow:hidden;" aria-label="CTA">
+  <div style="position:absolute;bottom:-120px;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.08),transparent 65%);pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <img src="{% static 'img/noodee/homepage/noodee_run.png' %}" alt="หนูดีวิ่งออกมา" class="nd-img" style="max-width:280px;margin-bottom:1.5rem;">
+    <h2 class="nd-h2 mx-auto" style="max-width:620px;">พร้อมให้หนูดีช่วยธุรกิจคุณแล้วหรือยัง?</h2>
+    <div class="nd-bubble nd-bubble-center mx-auto mb-4" style="min-width:250px;">
+      <span id="tw-cta"></span><span class="nd-cursor">|</span>
+    </div>
+    <div class="d-flex flex-wrap gap-3 justify-content-center mb-3">
+      <a href="/contact/" class="nd-btn" style="font-size:1.1rem;padding:1rem 2.75rem;"><i class="bi bi-chat-dots-fill me-2"></i>ทักหนูดีเลย!</a>
+      <a href="https://line.me/ti/p/~@aibiz" class="nd-btn-line" target="_blank" rel="noopener"><i class="bi bi-line me-2"></i>ติดต่อผ่าน LINE</a>
+    </div>
+    <p style="font-size:.82rem;color:var(--nd-muted);"><i class="bi bi-clock me-1"></i>ตอบกลับภายใน 30 นาที &nbsp;·&nbsp; <i class="bi bi-calendar-check me-1"></i>ทุกวัน 9:00–21:00</p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     Latest Articles
+══════════════════════════════════════════════ -->
+{% if recent_articles %}
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad-sm);" aria-label="บทความล่าสุด">
+  <div class="container">
+    <div class="text-center mb-4">
+      <div class="nd-eyebrow">บทความล่าสุด</div>
+      <h2 class="nd-h2">อ่านเพิ่มเติมจากหนูดี</h2>
+    </div>
+    <div class="row g-4">
+      {% for art in recent_articles|slice:":3" %}
+      <div class="col-md-4">
+        <a href="{{ art.get_absolute_url }}" class="text-decoration-none">
+          <div class="nd-pain-card h-100">
+            {% if art.display_cover %}<img src="{{ art.display_cover }}" alt="{{ art.title }}" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:.85rem;">{% endif %}
+            <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--nd-gold);">{{ art.category }}</span>
+            <h6 style="font-size:.95rem;margin-top:.4rem;color:#f1f5f9;">{{ art.title|truncatechars:60 }}</h6>
+            <p style="font-size:.82rem;margin:0;color:var(--nd-muted);">{{ art.excerpt|truncatechars:80 }}</p>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="/blog/" class="nd-btn-outline">อ่านบทความทั้งหมด →</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+/* ════════════════════════════════════════════════
+   Noodee Typewriter — ทุก section
+════════════════════════════════════════════════ */
+function ndTypewriter(id, phrases, delay) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var pIdx = 0, cIdx = 0, del = false;
+  var tType = 58, tDel = 26, pEnd = 1900, pStart = 380;
+
+  function tick() {
+    var cur = phrases[pIdx];
+    if (!del) {
+      el.textContent = cur.slice(0, cIdx + 1);
+      cIdx++;
+      if (cIdx === cur.length) { del = true; setTimeout(tick, pEnd); return; }
+      setTimeout(tick, tType);
+    } else {
+      el.textContent = cur.slice(0, cIdx - 1);
+      cIdx--;
+      if (cIdx === 0) { del = false; pIdx = (pIdx + 1) % phrases.length; setTimeout(tick, pStart); return; }
+      setTimeout(tick, tDel);
+    }
+  }
+  setTimeout(tick, delay || 600);
+}
+
+/* ── Section 1: Hero ────────────────────────── */
+ndTypewriter('tw-hero', [
+  'ตอบแชทลูกค้าแทนคุณ 24 ชม.',
+  'จัดตารางนัดอัตโนมัติได้เลย',
+  'ติดตาม Lead ไม่ให้หลุดสักราย',
+  'ลดงาน Manual ลง 80% ครับ',
+  'ทำงานแทนคุณ ไม่มีวันหยุด',
+], 800);
+
+/* ── Section 2: Pain ────────────────────────── */
+ndTypewriter('tw-pain', [
+  'เจอแบบนี้บ่อยไหมครับ?',
+  'หนูดีเข้าใจดีครับ มันหนักจริงๆ',
+  'ไม่ต้องแบกรับคนเดียวอีกแล้วครับ',
+  'บอกหนูดีได้เลย จะช่วยแก้ให้ครับ',
+], 1200);
+
+/* ── Section 3: How It Works ────────────────── */
+ndTypewriter('tw-how', [
+  'ตั้งค่าครั้งเดียว ทำงานทุกวันครับ',
+  'ติดตั้งเสร็จใน 2 สัปดาห์เลย',
+  'หนูดีเรียนรู้ธุรกิจคุณได้เร็วมากครับ',
+  'ไม่ต้องรู้ IT เลยสักนิดครับ',
+], 1000);
+
+/* ── Segment card switcher ──────────────────── */
+function ndSwitchSeg(card) {
+  document.querySelectorAll('.nd-seg-card').forEach(function(c) { c.classList.remove('active'); });
+  document.querySelectorAll('.nd-seg-content').forEach(function(p) { p.classList.add('d-none'); });
+  card.classList.add('active');
+  var t = document.getElementById(card.dataset.target);
+  if (t) t.classList.remove('d-none');
+}
+
+/* ── Section 4: Use Cases ───────────────────── */
+ndTypewriter('tw-seg', [
+  'บอกหนูดีได้เลยว่าทำธุรกิจอะไรครับ',
+  'หนูดีช่วยได้ทุก segment ครับ',
+  'เลือก tab ดูตัวอย่างได้เลยนะครับ',
+  'ธุรกิจคุณ หนูดีมีคำตอบครับ',
+], 900);
+
+/* ── Section 5: ROI ─────────────────────────── */
+ndTypewriter('tw-roi', [
+  'คำนวณดูก่อนได้เลยนะครับ',
+  'ROI ใน 30 วัน วัดผลได้จริง',
+  'ประหยัดได้มากกว่าที่คิดครับ',
+  'ลูกค้าหนูดีบอกว่าคุ้มมากครับ',
+], 1100);
+
+/* ── Section 6: Packages ────────────────────── */
+ndTypewriter('tw-pkg', [
+  'ไม่ต้องลงทุนหลักแสนครับ',
+  'Growth เป็นตัวที่หนูดีแนะนำครับ',
+  'เริ่มได้วันนี้เลย ปรับได้ตลอดครับ',
+  'ถ้าไม่พอใจ คืนเงินครับ ไม่มีปัญหา',
+], 1000);
+
+/* ── Section 7: Trust ───────────────────────── */
+ndTypewriter('tw-trust', [
+  'หนูดีดูแลธุรกิจไทยมาแล้ว 50+ ราย',
+  'ความพึงพอใจ 98% วัดจากจริงครับ',
+  'ลูกค้าต่อสัญญากับหนูดีทุกรายครับ',
+  'หนูดีไม่ทิ้งลูกค้าแน่นอนครับ',
+], 1200);
+
+/* ── Section 8: CTA ─────────────────────────── */
+ndTypewriter('tw-cta', [
+  'ทักมาได้เลยครับ หนูดีรออยู่!',
+  'ทดลองฟรี 14 วัน ไม่มีผูกมัดครับ',
+  'ตอบกลับภายใน 30 นาที ทุกวัน',
+  'พร้อมเริ่มได้วันนี้เลยครับ!',
+], 1500);
+</script>
 {% endblock %}

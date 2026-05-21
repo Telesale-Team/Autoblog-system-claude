@@ -708,37 +708,36 @@ def analytics_view(request):
 
 # ── Content Backlog ──────────────────────────────────────────────────────────
 
-def _parse_backlog():
-    backlog_path = Path(settings.BASE_DIR) / "content_backlog" / "BACKLOG.md"
-    if not backlog_path.exists():
-        return []
-    text = backlog_path.read_text(encoding="utf-8")
-
-    # Find the Queue table — between "## 📝 Queue" and "## " next section
-    queue_match = re.search(r"## [^\n]*Queue[^\n]*\n(.*?)(?=\n## |\Z)", text, re.DOTALL)
-    if not queue_match:
-        return []
-
-    items = []
-    for line in queue_match.group(1).splitlines():
-        line = line.strip()
-        if not line.startswith("|") or re.match(r"^\|[-| ]+\|$", line):
-            continue
-        cells = [c.strip() for c in line.strip("|").split("|")]
-        if len(cells) < 8 or cells[0] == "#":
-            continue
-        num, status_raw, priority, topic, keyword, notes, added, owner = (cells + [""] * 8)[:8]
-        status = re.sub(r"`", "", status_raw).strip()
-        items.append({
-            "num":      num.strip(),
-            "status":   status,
-            "priority": priority.strip(),
-            "topic":    topic.strip(),
-            "keyword":  keyword.strip(),
-            "notes":    notes.strip(),
-            "added":    added.strip(),
+def _backlog_qs_to_dicts(qs):
+    """แปลง ContentBacklog queryset เป็น list of dict ที่ template คาดหวัง"""
+    from django.urls import reverse
+    result = []
+    for item in qs:
+        css_status = item.status.replace("_", "-")
+        # หา article ที่ link กับ backlog นี้
+        article = item.articles.order_by("-created_at").first()
+        article_edit_url = reverse("dashboard:article_edit", args=[article.pk]) if article else ""
+        article_status   = article.status if article else ""
+        result.append({
+            "id":               item.pk,
+            "num":              item.num or item.pk,
+            "status":           css_status,
+            "priority":         item.priority,
+            "topic":            item.topic,
+            "keyword":          item.keyword,
+            "notes":            item.notes,
+            "added":            item.created_at.strftime("%d %b %y") if item.created_at else "",
+            "owner":            item.owner,
+            "assigned_agent":   item.assigned_agent or "",
+            "get_assigned_agent_display": item.get_assigned_agent_display() if item.assigned_agent else "",
+            "category_name":    item.category.name if item.category else "",
+            "writer_id":        item.writer_id or "",
+            "writer_name":      item.writer.get_full_name() or item.writer.username if item.writer else "",
+            "calendar_event_id": item.calendar_event_id,
+            "article_edit_url": article_edit_url,
+            "article_status":   article_status,
         })
-    return items
+    return result
 
 
 @staff_member_required
@@ -931,21 +930,140 @@ def team_view(request):
 
 @staff_member_required
 def backlog_view(request):
-    items = _parse_backlog()
-    status_filter = request.GET.get("status", "")
-    if status_filter:
-        items = [i for i in items if i["status"] == status_filter]
+    from marketing.models import ContentBacklog
+    from blog.models import Category as BlogCategory
+    status_filter   = request.GET.get("status", "")
+    category_filter = request.GET.get("category", "")
 
+    qs = ContentBacklog.objects.all().order_by("num", "-created_at")
+    if status_filter:
+        qs = qs.filter(status=status_filter.replace("-", "_"))
+    if category_filter:
+        qs = qs.filter(category__name=category_filter)
+
+    items = _backlog_qs_to_dicts(qs)
+
+    all_items = ContentBacklog.objects.all()
     counts = {}
-    for item in _parse_backlog():
-        counts[item["status"]] = counts.get(item["status"], 0) + 1
+    for item in all_items:
+        counts[item.status.replace("_", "-")] = counts.get(item.status.replace("_", "-"), 0) + 1
+
+    # category stats
+    from django.db.models import Count
+    cat_counts_qs = (
+        ContentBacklog.objects
+        .exclude(status="done")
+        .values("category__name")
+        .annotate(cnt=Count("id"))
+        .order_by("-cnt")
+    )
+    cat_counts = [(r["category__name"] or "ยังไม่ระบุ", r["cnt"]) for r in cat_counts_qs]
 
     return render(request, "dashboard/backlog.html", {
-        "items": items,
-        "status_filter": status_filter,
-        "counts": counts,
-        "total": sum(counts.values()),
+        "items":           items,
+        "status_filter":   status_filter,
+        "category_filter": category_filter,
+        "counts":          counts,
+        "total":           all_items.count(),
+        "cat_counts":      cat_counts,
+        "blog_categories": BlogCategory.objects.order_by("display_order", "name"),
     })
+
+
+@staff_member_required
+@require_POST
+def backlog_toggle_status(request, pk):
+    """AJAX — วนสถานะ backlog: pending → in_progress → review → done → pending"""
+    from marketing.models import ContentBacklog
+    from django.shortcuts import get_object_or_404
+    import json
+    item = get_object_or_404(ContentBacklog, pk=pk)
+    cycle = ["pending", "in_progress", "review", "done"]
+    try:
+        next_status = cycle[(cycle.index(item.status) + 1) % len(cycle)]
+    except ValueError:
+        next_status = "pending"
+    item.status = next_status
+    item.save(update_fields=["status"])
+    css_status = next_status.replace("_", "-")
+    labels = {"pending": "Pending", "in_progress": "In Progress", "review": "Review", "done": "Done"}
+    return JsonResponse({"ok": True, "status": next_status, "css_status": css_status, "label": labels[next_status]})
+
+
+@staff_member_required
+@require_POST
+def backlog_approve(request, pk):
+    """อนุมัติเขียนบทความ: pending/review → in_progress + สร้าง Article(waiting)"""
+    from marketing.models import ContentBacklog
+    from blog.models import Article, Category
+    from django.shortcuts import get_object_or_404
+    from django.utils.text import slugify
+
+    import json as _json
+    from datetime import date as _date
+
+    item = get_object_or_404(ContentBacklog, pk=pk)
+
+    if Article.objects.filter(backlog_ref=item).exists():
+        return JsonResponse({"ok": False, "error": "มีบทความอยู่แล้ว"}, status=400)
+
+    # รับ due_date จาก body
+    due_date = None
+    try:
+        body = _json.loads(request.body)
+        due_date_str = body.get("due_date", "")
+        if due_date_str:
+            due_date = _date.fromisoformat(due_date_str)
+    except Exception:
+        pass
+
+    slug_base = slugify(item.topic)[:180] or f"backlog-{item.pk}"
+    slug = slug_base
+    i = 1
+    while Article.objects.filter(slug=slug).exists():
+        slug = f"{slug_base}-{i}"; i += 1
+
+    cat = item.category or Category.objects.order_by("display_order").first()
+    if not cat:
+        return JsonResponse({"ok": False, "error": "ยังไม่มี Category"}, status=400)
+
+    # writer จาก backlog ถ้ามี ไม่งั้นใช้ request.user
+    author = item.writer if item.writer else request.user
+
+    article = Article.objects.create(
+        title=item.topic,
+        slug=slug,
+        author=author,
+        category=cat,
+        status="waiting",
+        backlog_ref=item,
+        excerpt=f"Target keyword: {item.keyword}" if item.keyword else "",
+        content="",
+    )
+    item.status = "in_progress"
+    item.save(update_fields=["status"])
+
+    # สร้าง CalendarEvent ถ้ามี due_date
+    if due_date:
+        from dashboard.models import CalendarEvent
+        from datetime import datetime as _dt
+        from django.utils.timezone import make_aware
+        start_dt = make_aware(_dt.combine(due_date, _dt.min.time()))
+        cal_event = CalendarEvent.objects.create(
+            title=f"เขียนข่าว: {item.topic[:60]}",
+            start_datetime=start_dt,
+            end_datetime=start_dt,
+            all_day=True,
+            category="article",
+            description=f"Keyword: {item.keyword}" if item.keyword else "",
+            article=article,
+            assigned_to=author.get_full_name() or author.username,
+            created_by=request.user,
+        )
+        item.calendar_event = cal_event
+        item.save(update_fields=["calendar_event"])
+
+    return JsonResponse({"ok": True, "article_id": article.pk})
 
 
 # ── Calendar ─────────────────────────────────────────────────────────────────
@@ -1001,22 +1119,8 @@ def calendar_view(request):
             "assigned_to":  evt["assigned_to"],
         })
 
-    # ── 5. Content Backlog scheduled items ───────────────────────────────────
-    backlog_items = _parse_backlog()
-    pending_items = [i for i in backlog_items if i["status"] in ("pending", "review")]
-    # Schedule pending items 1 per week starting next Monday
-    next_monday = now.date() + timedelta(days=(7 - now.weekday()) % 7 or 7)
-    for idx, item in enumerate(pending_items):
-        sched_date = next_monday + timedelta(weeks=idx)
-        status_icon = "👁️" if item["status"] == "review" else "🗓️"
-        events.append({
-            "title": f"{status_icon} {item['topic'][:38]}",
-            "start": sched_date.isoformat(),
-            "color":        PENDING_COLOR,
-            "is_completed": False,
-            "category": "backlog",
-            "description": f"[{item['status']}] {item['keyword']}",
-        })
+    # ── 5. Content Backlog — events อยู่ใน CalendarEvent DB แล้ว (category=article)
+    #    ไม่ต้อง populate เพิ่ม เพราะ scrape-ai-news skill สร้าง CalendarEvent ตอน add backlog
 
     # ── 6. Calendar stats สำหรับ Stat Cards ─────────────────────────────────
     _sys = CalendarEvent.objects.filter(is_system=True)
@@ -1698,12 +1802,40 @@ def website_backlog_edit(request, pk):
             "topic": item.topic, "keyword": item.keyword or "",
             "priority": item.priority, "notes": item.notes or "",
             "category_id": item.category_id or "",
+            "category_name": item.category.name if item.category else "",
+            "status": item.status,
+            "assigned_agent": item.assigned_agent or "",
+            "writer_id": item.writer_id or "",
+            "writer_name": (item.writer.get_full_name() or item.writer.username) if item.writer else "",
+            "added": item.created_at.strftime("%d %b %Y") if item.created_at else "",
+            "calendar_date": timezone.localtime(item.calendar_event.start_datetime).strftime("%Y-%m-%d") if item.calendar_event else "",
+            "calendar_date_display": timezone.localtime(item.calendar_event.start_datetime).strftime("%d %b %Y") if item.calendar_event else "",
         })
     import json
     data = json.loads(request.body)
-    item.topic   = data.get("topic", item.topic).strip() or item.topic
-    item.keyword = data.get("keyword", "").strip()
-    item.notes   = data.get("notes", "").strip()
+    item.topic          = data.get("topic", item.topic).strip() or item.topic
+    item.keyword        = data.get("keyword", "").strip()
+    item.notes          = data.get("notes", "").strip()
+    item.assigned_agent = data.get("assigned_agent", item.assigned_agent or "")
+    # แก้วันใน CalendarEvent
+    calendar_date_str = data.get("calendar_date", "")
+    if calendar_date_str and item.calendar_event:
+        from datetime import date as _d, datetime as _dt
+        try:
+            from django.utils.timezone import make_aware as _make_aware
+            new_date = _d.fromisoformat(calendar_date_str)
+            new_dt   = _make_aware(_dt.combine(new_date, _dt.min.time()))
+            item.calendar_event.start_datetime = new_dt
+            item.calendar_event.end_datetime   = new_dt
+            item.calendar_event.save(update_fields=["start_datetime", "end_datetime"])
+        except ValueError:
+            pass
+    writer_id = data.get("writer_id")
+    if writer_id:
+        from django.contrib.auth.models import User as AuthUser
+        item.writer = AuthUser.objects.filter(pk=writer_id).first()
+    elif "writer_id" in data:
+        item.writer = None
     cat_id = data.get("category_id")
     if cat_id:
         from blog.models import Category as BlogCategory
@@ -1732,11 +1864,18 @@ def website_backlog_add(request):
     cat = None
     if category_id:
         cat = BlogCategory.objects.filter(pk=category_id).first()
+    # auto-detect agent จาก category (ถ้าไม่ได้ส่งมา)
+    assigned_agent = data.get("assigned_agent", "")
+    if not assigned_agent:
+        detected_cat_id = cat.pk if cat else ContentBacklog.detect_category_id(topic)
+        agent_by_cat = {v: k for k, v in ContentBacklog.AGENT_CATEGORY_MAP.items()}
+        assigned_agent = agent_by_cat.get(detected_cat_id, "content-writer-th")
     num = (ContentBacklog.objects.order_by("-num").values_list("num", flat=True).first() or 0) + 1
     item = ContentBacklog.objects.create(
         num=num, topic=topic, keyword=keyword,
         priority=priority, status="pending",
         notes=notes, category=cat,
+        assigned_agent=assigned_agent,
         added_by=request.user.get_full_name() or request.user.username,
     )
     return JsonResponse({
