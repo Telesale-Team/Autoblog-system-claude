@@ -1,8 +1,8 @@
-# AI Automation Business — 24-Agent System
+# AI Automation Business — 25-Agent System
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.6 | **Updated:** 2026-05-20
+**Version:** 2.7 | **Updated:** 2026-05-30
 
 ---
 
@@ -63,6 +63,7 @@
 | 22 | Beauty & Wellness Writer | `.claude/agents/22_beauty_wellness_writer.md` | บทความสำหรับร้านนวด/สปา tone warm relatable |
 | 23 | HR & Education Writer | `.claude/agents/23_hr_education_writer.md` | บทความสำหรับ HR/โรงเรียน tone data-driven |
 | 24 | Creator & Coach Writer | `.claude/agents/24_creator_coach_writer.md` | บทความสำหรับโค้ช/อาจารย์ออนไลน์ tone inspirational |
+| 25 | Graphic Designer | `.claude/agents/25_graphic_designer.md` | Technical diagram, infographic, banner, cover image, presentation deck |
 
 ## Skills (ใน `.claude/skills/`)
 
@@ -95,6 +96,7 @@ Activate AI Toolsmith - [คำถาม]
 Activate QA Agent - [คำถาม]
 Activate Frontend Designer - [คำถาม]
 Activate AI News Scout - [คำถาม]
+Activate Graphic Designer - [คำถาม]
 ```
 
 ### Alias สั้น:
@@ -124,6 +126,7 @@ Activate AI News Scout - [คำถาม]
 | `content-writer-th` | Content Writer (TH) |
 | `frontend-designer` | Frontend Designer |
 | `ai-news-scout` | AI News Scout |
+| `graphic-designer` | Graphic Designer |
 
 ### Auto-routing ผ่าน Chief of Staff:
 ```
@@ -150,6 +153,7 @@ Chief of Staff จะเลือก agent ที่เหมาะสมให�
 | Keyword research / on-page SEO | SEO Specialist | Content Writer, Data Analyst |
 | เขียนบทความภาษาไทย | Content Writer (TH) | SEO, AI Toolsmith, QA |
 | ข่าว AI / AI News Pipeline | AI News Scout | Content Writer TH, QA, Data Analyst |
+| Diagram / Infographic / Banner / Graphic | Graphic Designer | Content Writer TH, Marketing Specialist, Frontend Designer, QA |
 
 ---
 
