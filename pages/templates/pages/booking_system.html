@@ -1,0 +1,1096 @@
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block title %}ระบบจองคิวออนไลน์ QueueFlow — ลูกค้าจองเอง 24 ชม. ไม่มีค่าคอมมิชชั่น | Noodee BootBiz{% endblock %}
+{% block meta_description %}QueueFlow ระบบจองคิวออนไลน์สำหรับร้านนวด สปา คลินิก ร้านเสริมสวย ลูกค้าจองเองได้ 24 ชั่วโมง กันจองซ้อนอัตโนมัติ แจ้งเตือนก่อนนัด ไม่เสียค่าคอมมิชชั่นต่อการจอง ลองเล่น demo จริงได้เลย{% endblock %}
+
+{% block og_image %}
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ระบบจองคิวออนไลน์ QueueFlow — ลูกค้าจองเอง 24 ชม. ไม่มีค่าคอมมิชชั่น" />
+<meta property="og:description" content="เลิกตอบแชทจองคิวถึงเที่ยงคืน ให้ลูกค้าจองเองได้ใน 1 นาที กันจองซ้อนอัตโนมัติ แจ้งเตือนก่อนนัด ข้อมูลลูกค้าเป็นของร้านคุณ 100%" />
+<meta property="og:url" content="https://noodee-bootbiz.com/services/booking-system/" />
+{# og:image รอ Graphic Designer ทำภาพ 1200x630 แล้ววางที่ path นี้ #}
+<meta property="og:image" content="https://noodee-bootbiz.com/static/img/og/booking-system-og.webp" />
+{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","name":"QueueFlow — ระบบจองคิวออนไลน์","description":"ระบบจองคิวออนไลน์ของร้านคุณเอง ลูกค้าจองได้ 24 ชั่วโมง กันจองซ้อนอัตโนมัติ แจ้งเตือนก่อนนัด ไม่มีค่าคอมมิชชั่นต่อการจอง","provider":{"@type":"Organization","name":"Noodee BootBiz"},"areaServed":{"@type":"Country","name":"Thailand"},"serviceType":"Online Booking System","offers":[{"@type":"Offer","name":"Starter","price":"9900","priceCurrency":"THB"},{"@type":"Offer","name":"Pro","price":"19900","priceCurrency":"THB"},{"@type":"Offer","name":"Multi-Branch","price":"39900","priceCurrency":"THB"}]}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ══ Design System tokens (อ้างอิง main.css) ═══════ */
+:root {
+  --nd-navy:   var(--brand-navy);
+  --nd-dark:   var(--brand-dark);
+  --nd-gold:   var(--brand-gold);
+  --nd-gold2:  #e8c97a;
+  --nd-muted:  rgba(255,255,255,.5);
+  --nd-border: rgba(201,169,110,.2);
+  --nd-pad:    6rem 0;
+  --nd-pad-sm: 4rem 0;
+}
+
+/* ══ Typography (pattern เดียวกับ homepage) ═══════ */
+.nd-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .16em;
+  color: var(--nd-gold); margin-bottom: 1.1rem;
+}
+.nd-eyebrow::before {
+  content: ''; width: 20px; height: 2px;
+  background: var(--nd-gold); border-radius: 2px; display: inline-block;
+}
+.nd-h2 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 900; color: #f1f5f9; line-height: 1.25; margin-bottom: .75rem;
+}
+.nd-sub { font-size: 1.05rem; color: var(--nd-muted); line-height: 1.9; max-width: 620px; }
+
+/* ══ Buttons ══════════════════════════════════════ */
+.nd-btn {
+  background: linear-gradient(135deg, var(--nd-gold), var(--nd-gold2));
+  color: #0f172a; border: none;
+  padding: .9rem 2.2rem; font-size: 1rem; font-weight: 700;
+  border-radius: 50px; box-shadow: 0 8px 28px rgba(201,169,110,.3);
+  transition: all .25s; text-decoration: none; display: inline-block; font-style: normal;
+}
+.nd-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 44px rgba(201,169,110,.45); color: #0f172a; }
+.nd-btn-outline {
+  background: transparent; color: rgba(255,255,255,.75);
+  border: 1.5px solid rgba(255,255,255,.22);
+  padding: .9rem 2rem; font-size: .95rem; font-weight: 600;
+  border-radius: 50px; transition: all .25s; text-decoration: none; display: inline-block;
+}
+.nd-btn-outline:hover { border-color: var(--nd-gold); color: var(--nd-gold); background: rgba(201,169,110,.07); }
+.nd-btn-line {
+  background: #06C755; color: #fff; padding: .9rem 2rem; font-size: .95rem;
+  font-weight: 700; border-radius: 50px; text-decoration: none; display: inline-block; transition: opacity .2s;
+}
+.nd-btn-line:hover { opacity: .85; color: #fff; }
+
+/* ══ Section bg ═══════════════════════════════════ */
+.nd-bg-navy     { background: var(--nd-navy); }
+.nd-bg-dark     { background: var(--nd-dark); }
+.nd-bg-gradient { background: linear-gradient(135deg, var(--nd-navy) 0%, #111d3a 100%); }
+.nd-divider     { border-top: 1px solid var(--nd-border); }
+
+/* ══ Grid overlay + glow (Hero) ══════════════════ */
+.nd-grid-overlay {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(201,169,110,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,169,110,.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+.nd-glow-gold {
+  position: absolute; top: -80px; right: -80px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,110,.09), transparent 65%);
+  pointer-events: none;
+}
+
+/* ══ Hero (2 คอลัมน์: text ซ้าย + device ขวา) ═════ */
+.qf-hero {
+  position: relative; overflow: hidden;
+  background: var(--nd-navy);
+  padding: 7rem 0 5rem;
+}
+.qf-hero-h1 {
+  font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+  font-weight: 900; color: #f1f5f9; line-height: 1.4;
+  margin-bottom: 1.25rem; letter-spacing: .01em;
+}
+.qf-hero-lead { font-size: 1.02rem; color: var(--nd-muted); line-height: 1.95; margin-bottom: 2rem; }
+.qf-micro { font-size: .8rem; color: var(--nd-muted); }
+.qf-micro i { color: var(--nd-gold); }
+
+/* ══ nd-device — browser frame mockup ═════════════
+   (body เป็น CSS skeleton placeholder — Graphic Designer
+   จะเอา screenshot จริงมาแทนที่ .nd-device-body ทีหลัง) */
+.nd-device {
+  background: #0b1222;
+  border: 1px solid var(--nd-border);
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,.45);
+}
+.nd-device-bar {
+  display: flex; align-items: center; gap: .75rem;
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  padding: .6rem .9rem;
+}
+.nd-device-dots { display: flex; gap: 5px; flex-shrink: 0; }
+.nd-device-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.14); display: inline-block; }
+.nd-device-dots span:first-child { background: rgba(201,169,110,.55); }
+.nd-device-url {
+  flex: 1; min-width: 0;
+  background: rgba(255,255,255,.06); border-radius: 50px;
+  font-size: .74rem; color: rgba(255,255,255,.65);
+  padding: .28rem .95rem;
+  display: flex; align-items: center; gap: .45rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nd-device-url i { color: #4ade80; font-size: .7rem; flex-shrink: 0; }
+.nd-device-body {
+  position: relative; aspect-ratio: 16 / 10;
+  background: linear-gradient(160deg, #101a33, #0b1222);
+  padding: 1.4rem;
+  display: flex; flex-direction: column; gap: .9rem;
+}
+/* screenshot จริง 1280x800 (16:10) จากเว็บ demo — แทน skeleton */
+.nd-device-body.has-shot { padding: 0; }
+.nd-device-body.has-shot img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
+}
+/* skeleton ชิ้นส่วน — จำลองหน้า booking */
+.nd-skel { background: rgba(255,255,255,.07); border-radius: 6px; }
+.nd-skel-gold { background: rgba(201,169,110,.4); border-radius: 6px; }
+.nd-skel-card {
+  flex: 1; background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08); border-radius: 10px;
+  padding: .8rem; display: flex; flex-direction: column; gap: .55rem;
+}
+.nd-skel-card.pick { border-color: rgba(201,169,110,.5); background: rgba(201,169,110,.07); }
+.nd-skel-chips { display: flex; gap: .5rem; flex-wrap: wrap; }
+.nd-skel-chips span {
+  width: 58px; height: 22px; border-radius: 50px;
+  background: rgba(255,255,255,.07); display: inline-block;
+}
+.nd-skel-chips span.pick { background: rgba(201,169,110,.45); }
+.nd-device-cta-overlay {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
+  background: rgba(11,18,34,.55); backdrop-filter: blur(2px);
+}
+
+/* ══ Proof bar ════════════════════════════════════ */
+.nd-proof {
+  background: linear-gradient(90deg, rgba(201,169,110,.13), rgba(201,169,110,.03));
+  border-top: 1px solid var(--nd-border);
+  border-bottom: 1px solid var(--nd-border);
+  padding: 2rem 0;
+}
+.nd-proof-title { font-size: 1.05rem; font-weight: 800; color: #f1f5f9; margin-bottom: .35rem; }
+.nd-proof-text { font-size: .9rem; color: var(--nd-muted); line-height: 1.8; margin: 0; }
+.nd-proof-icon {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(201,169,110,.12); border: 1px solid var(--nd-border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--nd-gold); font-size: 1.4rem;
+}
+
+/* ══ Pain cards (reuse pattern homepage) ═════════ */
+.nd-pain-card {
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+  border-left: 3px solid var(--nd-gold); border-radius: 12px; padding: 1.5rem;
+  transition: border-color .2s, background .2s; height: 100%;
+}
+.nd-pain-card:hover { background: rgba(201,169,110,.05); border-left-color: var(--nd-gold2); }
+.nd-pain-card i { font-size: 1.4rem; color: var(--nd-gold); margin-bottom: .5rem; display: block; }
+.nd-pain-card h6 { font-size: .98rem; font-weight: 700; color: #f1f5f9; margin-bottom: .35rem; }
+.nd-pain-card p { font-size: .86rem; color: var(--nd-muted); margin: 0; line-height: 1.7; }
+
+/* ══ nd-flow-timeline — 6 ขั้น เส้น gold เชื่อม ═══
+   desktop: แนวนอน 6 ช่อง / mobile: แนวตั้งเส้นซ้าย */
+.nd-flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; position: relative; }
+.nd-flow::before {
+  content: ''; position: absolute; top: 22px;
+  left: calc(100% / 12); right: calc(100% / 12); height: 2px;
+  background: linear-gradient(90deg, rgba(201,169,110,.15), var(--nd-gold) 50%, rgba(201,169,110,.15));
+}
+.nd-flow-item { position: relative; text-align: center; }
+.nd-flow-num {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--nd-gold), var(--nd-gold2));
+  color: #0f172a; font-weight: 900; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1rem; position: relative; z-index: 1;
+  box-shadow: 0 0 0 6px var(--nd-dark);
+}
+.nd-flow-item h6 { font-size: .92rem; font-weight: 700; color: #f1f5f9; margin-bottom: .4rem; }
+.nd-flow-item p { font-size: .8rem; color: var(--nd-muted); line-height: 1.65; margin: 0; }
+
+/* ══ nd-feature-row — 3 กลุ่ม สลับซ้าย-ขวา ═══════ */
+.nd-feature-row { padding: 2.75rem 0; }
+.nd-feature-row + .nd-feature-row { border-top: 1px solid rgba(255,255,255,.06); }
+.nd-feature-visual {
+  background: linear-gradient(160deg, rgba(201,169,110,.1), rgba(201,169,110,.02));
+  border: 1px solid var(--nd-border); border-radius: 20px;
+  min-height: 220px; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .75rem;
+  padding: 2rem; text-align: center;
+}
+.nd-feature-visual i { font-size: 3rem; color: var(--nd-gold); }
+.nd-feature-visual .nd-feature-visual-label {
+  font-size: .78rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--nd-gold);
+}
+.nd-feature-item { display: flex; gap: .9rem; padding: .8rem 0; }
+.nd-feature-item i { color: var(--nd-gold); font-size: 1.25rem; flex-shrink: 0; margin-top: .1rem; }
+.nd-feature-item h6 { font-size: .95rem; font-weight: 700; color: #f1f5f9; margin-bottom: .25rem; }
+.nd-feature-item p { font-size: .86rem; color: var(--nd-muted); line-height: 1.7; margin: 0; }
+
+/* ══ Segment cards (static — ไม่ใช่ tab) ═════════ */
+.nd-seg-card {
+  width: 100%; height: 100%; background: rgba(255,255,255,.04);
+  border: 1.5px solid var(--nd-border); border-radius: 16px;
+  padding: 1.5rem 1.1rem; text-align: center;
+  transition: all .2s; color: var(--nd-muted);
+}
+.nd-seg-card:hover { border-color: rgba(201,169,110,.45); background: rgba(201,169,110,.06); transform: translateY(-4px); }
+.nd-seg-icon { font-size: 1.9rem; display: block; margin-bottom: .6rem; color: var(--nd-gold); }
+.nd-seg-name { font-size: .95rem; font-weight: 700; color: #f1f5f9; margin-bottom: .4rem; }
+.nd-seg-hint { font-size: .8rem; line-height: 1.65; }
+
+/* ══ Launch offer strip ══════════════════════════ */
+.nd-offer {
+  border: 1.5px dashed rgba(201,169,110,.55);
+  background: rgba(201,169,110,.07); border-radius: 14px;
+  padding: 1rem 1.5rem;
+  display: flex; align-items: center; justify-content: center; gap: .75rem;
+  text-align: center; flex-wrap: wrap;
+}
+.nd-offer i { color: var(--nd-gold); font-size: 1.2rem; }
+.nd-offer strong { color: var(--nd-gold); font-weight: 800; }
+.nd-offer span { color: rgba(255,255,255,.85); font-size: .95rem; }
+
+/* ══ Package cards (reuse pattern homepage) ══════ */
+.nd-pkg {
+  background: rgba(255,255,255,.04); border: 1.5px solid var(--nd-border);
+  border-radius: 20px; padding: 2.25rem 1.75rem;
+  height: 100%; display: flex; flex-direction: column; transition: transform .2s, border-color .2s;
+}
+.nd-pkg:hover { transform: translateY(-6px); border-color: rgba(201,169,110,.4); }
+.nd-pkg.featured {
+  border-color: var(--nd-gold); position: relative;
+  background: linear-gradient(160deg, rgba(201,169,110,.09), rgba(201,169,110,.02));
+}
+.nd-pkg-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--nd-gold); color: #0f172a;
+  font-size: .7rem; font-weight: 800; letter-spacing: .08em;
+  padding: .3rem 1.1rem; border-radius: 50px; white-space: nowrap;
+}
+.nd-pkg-price { font-size: 1.9rem; font-weight: 900; color: var(--nd-gold); line-height: 1.15; margin: 1rem 0 .15rem; }
+.nd-pkg-monthly { font-size: .9rem; color: rgba(255,255,255,.75); margin-bottom: .25rem; }
+.nd-pkg-note { font-size: .78rem; color: var(--nd-muted); }
+.nd-pkg-list { list-style: none; padding: 0; margin: 1.25rem 0; flex: 1; }
+.nd-pkg-list li {
+  font-size: .88rem; color: rgba(255,255,255,.75);
+  padding: .35rem 0; display: flex; align-items: flex-start; gap: .5rem;
+}
+.nd-pkg-list li i { color: var(--nd-gold); font-size: .85rem; flex-shrink: 0; margin-top: .15rem; }
+
+/* ══ nd-faq — Bootstrap accordion restyle dark ═══ */
+.nd-faq .accordion-item {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--nd-border);
+  border-radius: 12px !important;
+  margin-bottom: .85rem; overflow: hidden;
+}
+.nd-faq .accordion-button {
+  background: transparent; color: #f1f5f9;
+  font-weight: 700; font-size: .98rem; font-style: normal;
+  padding: 1.1rem 1.25rem; box-shadow: none;
+}
+.nd-faq .accordion-button:not(.collapsed) {
+  background: rgba(201,169,110,.06); color: var(--nd-gold);
+}
+.nd-faq .accordion-button:focus { box-shadow: 0 0 0 2px rgba(201,169,110,.25); }
+.nd-faq .accordion-button::after,
+.nd-faq .accordion-button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23c9a96e'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+}
+.nd-faq .accordion-body {
+  color: rgba(255,255,255,.68); font-size: .92rem; line-height: 1.9;
+  padding: .1rem 1.25rem 1.25rem;
+}
+
+/* ══ Lead form ════════════════════════════════════ */
+.nd-form {
+  background: rgba(255,255,255,.04); border: 1px solid var(--nd-border);
+  border-radius: 20px; padding: 2.25rem;
+}
+.nd-form label { font-size: .82rem; font-weight: 700; color: rgba(255,255,255,.78); margin-bottom: .35rem; }
+.nd-form .form-control, .nd-form .form-select {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+  color: #f1f5f9; border-radius: 10px; padding: .65rem .95rem; font-size: .92rem;
+}
+.nd-form .form-control::placeholder { color: rgba(255,255,255,.35); }
+.nd-form .form-control:focus, .nd-form .form-select:focus {
+  background: rgba(255,255,255,.08); color: #f1f5f9;
+  border-color: var(--nd-gold); box-shadow: 0 0 0 3px rgba(201,169,110,.18);
+}
+.nd-form .form-select option { background: var(--nd-navy); color: #f1f5f9; }
+.nd-form-hint {
+  display: none; margin-top: .9rem;
+  background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.3);
+  color: #86efac; border-radius: 10px;
+  padding: .65rem 1rem; font-size: .85rem;
+}
+
+/* ══ Noodee + bubble (CTA ปิดท้าย) ═══════════════ */
+.nd-img { max-width: 100%; height: auto; filter: drop-shadow(0 12px 32px rgba(0,0,0,.4)); }
+.nd-bubble {
+  display: inline-block;
+  background: rgba(26,39,68,.9);
+  border: 1.5px solid var(--nd-gold);
+  border-radius: 16px 16px 16px 4px;
+  padding: .8rem 1.2rem;
+  font-size: .9rem; font-weight: 500; font-style: normal; color: #f1f5f9;
+  line-height: 1.55; min-height: 46px;
+}
+.nd-cursor {
+  display: inline-block; color: var(--nd-gold); font-weight: 300;
+  animation: nd-blink .75s step-end infinite; margin-left: 1px;
+}
+@keyframes nd-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ══ Tablet (≤ 991px) ════════════════════════════ */
+@media (max-width: 991.98px) {
+  .qf-hero { padding: 5.5rem 0 3.5rem; text-align: center; }
+  .qf-hero .d-flex { justify-content: center; }
+  .qf-hero .nd-device { max-width: 560px; margin: 2.5rem auto 0; }
+  /* flow → แนวตั้ง เส้นซ้าย */
+  .nd-flow { grid-template-columns: 1fr; gap: 0; }
+  .nd-flow::before {
+    top: 0; bottom: 0; left: 21px; right: auto;
+    width: 2px; height: auto;
+    background: linear-gradient(180deg, rgba(201,169,110,.15), var(--nd-gold) 50%, rgba(201,169,110,.15));
+  }
+  .nd-flow-item { display: flex; text-align: left; gap: 1rem; padding-bottom: 1.75rem; }
+  .nd-flow-item:last-child { padding-bottom: 0; }
+  .nd-flow-num { margin: 0; flex-shrink: 0; }
+  .nd-feature-visual { min-height: 160px; margin-bottom: 1.25rem; }
+}
+
+/* ══ Mobile (≤ 575px) ════════════════════════════ */
+@media (max-width: 575.98px) {
+  :root { --nd-pad: 4rem 0; --nd-pad-sm: 3rem 0; }
+  .qf-hero-h1 { font-size: 1.85rem; }
+  .qf-hero .nd-btn, .qf-hero .nd-btn-outline { width: 100%; text-align: center; }
+  .nd-form { padding: 1.5rem; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════
+     1. HERO — headline + device mockup
+══════════════════════════════════════════════ -->
+<section class="qf-hero" aria-label="Hero">
+  <div class="nd-grid-overlay"></div>
+  <div class="nd-glow-gold"></div>
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-6">
+        <div class="nd-eyebrow"><i class="bi bi-calendar2-check me-1"></i>QueueFlow — ระบบจองคิวออนไลน์</div>
+        <h1 class="qf-hero-h1">
+          เลิกตอบแชทจองคิวถึงเที่ยงคืน<br>
+          ให้ลูกค้า<span style="color:var(--nd-gold);">จองเองได้ใน 1 นาที</span>
+        </h1>
+        <p class="qf-hero-lead">
+          QueueFlow คือระบบจองคิวออนไลน์ของร้านคุณเอง ลูกค้ากดจองได้เอง 24 ชั่วโมง
+          ระบบกันคิวชนให้อัตโนมัติ แจ้งเตือนก่อนถึงนัดให้เสร็จสรรพ —
+          ไม่เสียค่าคอมมิชชั่นต่อการจองแม้แต่บาทเดียว และข้อมูลลูกค้าเป็นของร้านคุณ 100%
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-3">
+          <a href="https://booking.noodee-bootbiz.com/book/" target="_blank" rel="noopener" class="nd-btn">
+            <i class="bi bi-cursor-fill me-2"></i>ลองจองใน demo จริง
+          </a>
+          <a href="https://line.me/ti/p/~@aibiz" target="_blank" rel="noopener" class="nd-btn-outline">
+            <i class="bi bi-chat-dots me-2"></i>ทัก LINE ถามก่อนได้
+          </a>
+        </div>
+        <p class="qf-micro mb-0">
+          <i class="bi bi-info-circle me-1"></i>ไม่ต้องสมัคร กดเล่นได้เลย —
+          demo คือระบบตัวจริงที่ร้านนวดใช้งานอยู่ ลองกดจองดูเหมือนเป็นลูกค้าได้เลย
+        </p>
+      </div>
+
+      <div class="col-lg-6">
+        <!-- === Device mockup: screenshot จริงจากเว็บ demo (หน้าแรกร้านนอร์เวย์) === -->
+        <div class="nd-device">
+          <div class="nd-device-bar">
+            <div class="nd-device-dots"><span></span><span></span><span></span></div>
+            <div class="nd-device-url"><i class="bi bi-lock-fill"></i>booking.noodee-bootbiz.com</div>
+          </div>
+          <div class="nd-device-body has-shot" aria-hidden="true">
+            <img src="{% static 'img/queueflow-demo-home.webp' %}" alt="" loading="eager" width="1280" height="800">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     2. PROOF BAR — Oslo / นอร์เวย์
+══════════════════════════════════════════════ -->
+<section class="nd-bg-navy" aria-label="Proof">
+  <div class="nd-proof">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <div class="d-flex align-items-start gap-3">
+            <div class="nd-proof-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div>
+              <div class="nd-proof-title">ไม่ใช่ระบบทดลอง — นี่คือระบบที่ร้านจริงใช้รับลูกค้าอยู่ทุกวัน</div>
+              <p class="nd-proof-text">
+                QueueFlow รันอยู่บนร้านนวดไทย/สปาที่ประเทศนอร์เวย์ รับจองจากลูกค้าจริงอยู่ตอนนี้
+                รองรับทั้งลูกค้าไทยและต่างชาติ (เว็บมี 3 ภาษา: ไทย / อังกฤษ / นอร์เวย์)
+                อยากรู้ว่าหน้าตาเป็นยังไง ลองจองเองได้ที่ booking.noodee-bootbiz.com
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 text-lg-end text-center">
+          <a href="https://booking.noodee-bootbiz.com/book/" target="_blank" rel="noopener" class="nd-btn-outline">
+            <i class="bi bi-box-arrow-up-right me-2"></i>ดู demo ระบบจริง
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     3. PAIN — 4 การ์ด
+══════════════════════════════════════════════ -->
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad);" aria-label="Pain Points">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="nd-eyebrow justify-content-center">ปัญหาที่เจ้าของร้านเจอทุกวัน</div>
+      <h2 class="nd-h2">อาการเหล่านี้ คุ้นๆ ไหมครับ?</h2>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6 col-xl-3">
+        <div class="nd-pain-card">
+          <i class="bi bi-chat-x-fill"></i>
+          <h6>แชทจองล้น ตอบไม่ทัน</h6>
+          <p>ลูกค้าทักมาจองตอนคุณกำลังนวดมืออยู่ กว่าจะได้ตอบก็ผ่านไปครึ่งวัน บางคนรอไม่ไหว หายไปจองร้านอื่นแทน</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="nd-pain-card">
+          <i class="bi bi-calendar-x-fill"></i>
+          <h6>จองซ้อน ลืมคิว</h6>
+          <p>จดคิวในสมุดบ้าง ในแชทบ้าง พอยุ่งๆ ก็รับซ้อนกัน ลูกค้ามาถึงร้านพร้อมกันสองคน หมอนวดมีคนเดียว — เสียทั้งเงิน เสียทั้งหน้า</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="nd-pain-card">
+          <i class="bi bi-person-x-fill"></i>
+          <h6>ลูกค้า no-show (จองแล้วไม่มา)</h6>
+          <p>จองไว้เมื่อสามวันก่อน วันจริงลืมสนิท คิวว่างเปล่าทั้งชั่วโมงที่ควรจะได้เงิน แถมลูกค้าคนอื่นที่อยากได้คิวนั้นก็ถูกปฏิเสธไปแล้ว</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="nd-pain-card">
+          <i class="bi bi-arrow-repeat"></i>
+          <h6>ลูกค้าเก่าหาย ไม่กลับมา</h6>
+          <p>ลูกค้ามาครั้งเดียวแล้วเงียบ เพราะไม่มีเหตุผลให้กลับมา ไม่มีแต้ม ไม่มีสิทธิพิเศษ ไม่มีอะไรผูกใจ — ทั้งที่หาลูกค้าใหม่แพงกว่ารักษาลูกค้าเก่าเสมอ</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     4. FLOW — จอง 6 ขั้น (nd-flow-timeline)
+══════════════════════════════════════════════ -->
+<section class="nd-bg-dark" style="padding:var(--nd-pad);padding-top:0;" aria-label="ขั้นตอนการจอง">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="nd-eyebrow justify-content-center">ฝั่งลูกค้าเห็นอะไร</div>
+      <h2 class="nd-h2">ลูกค้าจองเองได้ใน 1 นาที</h2>
+      <p class="nd-sub mx-auto">6 ขั้นตอน ง่ายเหมือนสั่งของออนไลน์</p>
+    </div>
+    <div class="nd-flow">
+      <div class="nd-flow-item">
+        <div class="nd-flow-num">1</div>
+        <div><h6>เลือกบริการ</h6><p>นวดไทย นวดน้ำมัน ทำเล็บ อะไรก็ตามที่ร้านคุณมี พร้อมราคาและเวลาชัดเจน</p></div>
+      </div>
+      <div class="nd-flow-item">
+        <div class="nd-flow-num">2</div>
+        <div><h6>เลือกหมอนวด/ช่าง</h6><p>ลูกค้าเลือกคนที่ถูกใจได้ หรือให้ระบบจัดให้ก็ได้</p></div>
+      </div>
+      <div class="nd-flow-item">
+        <div class="nd-flow-num">3</div>
+        <div><h6>เลือกวันเวลา</h6><p>เห็นคิวว่างจริงแบบสดๆ คิวไหนเต็มจะกดไม่ได้ ไม่มีทางจองชน</p></div>
+      </div>
+      <div class="nd-flow-item">
+        <div class="nd-flow-num">4</div>
+        <div><h6>กรอกข้อมูลติดต่อ</h6><p>ชื่อกับเบอร์ หรือกดผ่าน LINE ทีเดียวจบ ไม่ต้องจำรหัสผ่าน</p></div>
+      </div>
+      <div class="nd-flow-item">
+        <div class="nd-flow-num">5</div>
+        <div><h6>ยืนยันการจอง</h6><p>เห็นสรุปทุกอย่างก่อนกด เปลี่ยนใจแก้ได้</p></div>
+      </div>
+      <div class="nd-flow-item">
+        <div class="nd-flow-num">6</div>
+        <div><h6>เสร็จ รับการยืนยันทันที</h6><p>ระบบส่งข้อความยืนยันให้ทั้งลูกค้าและร้าน ไม่ต้องนั่งพิมพ์ตอบเอง</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     5. FEATURES — 3 กลุ่ม สลับซ้าย-ขวา (nd-feature-row)
+══════════════════════════════════════════════ -->
+<section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);" aria-label="Features">
+  <div class="container">
+    <div class="text-center mb-4">
+      <div class="nd-eyebrow justify-content-center">ความสามารถของระบบ</div>
+      <h2 class="nd-h2">ระบบเดียว จบทั้งฝั่งลูกค้าและฝั่งร้าน</h2>
+    </div>
+
+    <!-- === กลุ่ม 1: ลูกค้าจองง่าย (visual ซ้าย / text ขวา) === -->
+    <div class="nd-feature-row">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-5">
+          <div class="nd-feature-visual">
+            <i class="bi bi-phone"></i>
+            <div class="nd-feature-visual-label">กลุ่ม 1</div>
+            <h3 style="font-size:1.4rem;font-weight:800;color:#f1f5f9;margin:0;">ลูกค้าจองง่าย</h3>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="nd-feature-item">
+            <i class="bi bi-clock-history"></i>
+            <div><h6>จองได้ 24 ชั่วโมง</h6><p>ตีสองลูกค้านอนไม่หลับอยากจองนวดพรุ่งนี้ ก็จองได้เลย ไม่ต้องรอร้านเปิด</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-line"></i>
+            <div><h6>LINE Login</h6><p>กดปุ่มเดียวเข้าระบบผ่าน LINE ที่ลูกค้าใช้อยู่แล้วทุกวัน ไม่ต้องสมัครสมาชิก ไม่ต้องจำรหัสผ่าน</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-bell-fill"></i>
+            <div><h6>แจ้งเตือน 3 ช่องทาง</h6><p>ยืนยันการจองทันทีผ่าน LINE / Email / SMS แล้วเตือนซ้ำก่อนถึงนัด 24 ชั่วโมง และอีกครั้งก่อน 1 ชั่วโมง — ลูกค้าลืมยากขึ้นเยอะ</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-translate"></i>
+            <div><h6>เว็บ 3 ภาษา</h6><p>ไทย อังกฤษ นอร์เวย์ ลูกค้าต่างชาติจองเองได้ ไม่ต้องเปิด Google Translate คุยกัน</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === กลุ่ม 2: ร้านจัดการง่าย (text ซ้าย / visual ขวา) === -->
+    <div class="nd-feature-row">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-5 order-lg-2">
+          <div class="nd-feature-visual">
+            <i class="bi bi-speedometer2"></i>
+            <div class="nd-feature-visual-label">กลุ่ม 2</div>
+            <h3 style="font-size:1.4rem;font-weight:800;color:#f1f5f9;margin:0;">ร้านจัดการง่าย</h3>
+          </div>
+        </div>
+        <div class="col-lg-7 order-lg-1">
+          <div class="nd-feature-item">
+            <i class="bi bi-shield-lock-fill"></i>
+            <div><h6>กันจองซ้อนอัตโนมัติ</h6><p>ระบบล็อกคิวที่ระดับฐานข้อมูล (พูดง่ายๆ คือ คิวเดียวกันไม่มีทางถูกจองพร้อมกันสองคน ต่อให้กดพร้อมกันเป๊ะก็ตาม)</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-door-open-fill"></i>
+            <div><h6>คิว walk-in แยกต่างหาก</h6><p>ลูกค้าเดินเข้าร้านหน้างานมีคิวของตัวเอง ไม่ไปตีกับคิวที่จองล่วงหน้าไว้</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <div><h6>Dashboard แยก 4 บทบาท</h6><p>เจ้าของ แอดมิน พนักงาน ลูกค้า เห็นเฉพาะส่วนของตัวเอง (Dashboard คือหน้าจอสรุปงาน เปิดดูผ่านมือถือหรือคอมก็ได้)</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-person-badge-fill"></i>
+            <div><h6>พนักงานดูแลตัวเองได้ในระบบ</h6><p>เช็คอินลูกค้า ปิดงาน บันทึกลูกค้าไม่มา ดูตารางงานตัวเอง แม้แต่ยื่นใบลาก็ทำในระบบ ไม่ต้องไล่ถามในกลุ่ม LINE</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-envelope-check-fill"></i>
+            <div><h6>รายงานรายได้ส่งถึงมือทุกวัน</h6><p>สรุปยอดส่งเข้า email เจ้าของอัตโนมัติทุกวัน นั่งชายหาดก็รู้ว่าวันนี้ร้านทำเงินเท่าไหร่</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === กลุ่ม 3: ลูกค้ากลับมาซ้ำ (visual ซ้าย / text ขวา) === -->
+    <div class="nd-feature-row">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-5">
+          <div class="nd-feature-visual">
+            <i class="bi bi-award"></i>
+            <div class="nd-feature-visual-label">กลุ่ม 3</div>
+            <h3 style="font-size:1.4rem;font-weight:800;color:#f1f5f9;margin:0;">ลูกค้ากลับมาซ้ำ</h3>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="nd-feature-item">
+            <i class="bi bi-trophy-fill"></i>
+            <div><h6>สะสมแต้ม 4 ระดับ</h6><p>Bronze / Silver (ลด 5%) / Gold (ลด 10%) / Platinum (ลด 15%) ยิ่งมาบ่อยยิ่งได้ส่วนลด ระบบคำนวณให้เอง</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-gift-fill"></i>
+            <div><h6>โบนัสวันเกิด + แลกแต้มเป็นส่วนลด</h6><p>เหตุผลดีๆ ให้ลูกค้ากลับมาหาคุณ แทนที่จะลองร้านใหม่</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-ticket-perforated-fill"></i>
+            <div><h6>บัตรคอร์ส/แพ็กเกจ</h6><p>ขายบัตร 5 ครั้ง 10 ครั้งในระบบได้เลย เก็บเงินก้อนล่วงหน้า ลูกค้าผูกกับร้านยาวๆ ระบบตัดครั้งให้อัตโนมัติ ไม่ต้องจดใส่กระดาษแล้วหาย</p></div>
+          </div>
+          <div class="nd-feature-item">
+            <i class="bi bi-star-fill"></i>
+            <div><h6>รีวิวดาว + โปรโมชั่น</h6><p>ลูกค้าให้คะแนนหลังใช้บริการ ร้านยิงโปรโมชั่นหาลูกค้าเก่าได้จากในระบบ</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     6. LIVE DEMO — device frame + ปุ่มเปิด demo
+══════════════════════════════════════════════ -->
+<section class="nd-bg-gradient nd-divider" style="padding:var(--nd-pad);" aria-label="Live Demo">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9 text-center">
+        <div class="nd-eyebrow justify-content-center">Live Demo</div>
+        <h2 class="nd-h2">ไม่ต้องเชื่อคำโฆษณา — ลองกดเองเลย</h2>
+        <p class="nd-sub mx-auto mb-2">
+          พูดมาทั้งหน้าอาจยังนึกภาพไม่ออก งั้นลองเป็นลูกค้าดูสักครั้งครับ
+          กดเข้าไปที่ <strong style="color:var(--nd-gold);">booking.noodee-bootbiz.com</strong>
+          แล้วลองจองคิวจริงๆ ตั้งแต่เลือกบริการจนถึงหน้ายืนยัน
+        </p>
+        <p class="nd-sub mx-auto mb-5">
+          นี่คือระบบตัวเดียวกับที่ร้านนวดในนอร์เวย์ใช้รับลูกค้าอยู่ทุกวัน ไม่ใช่ตัว demo ที่แต่งขึ้นมาโชว์
+        </p>
+
+        <!-- === Device frame ใหญ่ + overlay ปุ่มเปิด demo tab ใหม่ === -->
+        <div class="nd-device text-start" style="max-width:760px;margin:0 auto;">
+          <div class="nd-device-bar">
+            <div class="nd-device-dots"><span></span><span></span><span></span></div>
+            <div class="nd-device-url"><i class="bi bi-lock-fill"></i>booking.noodee-bootbiz.com/book/</div>
+          </div>
+          <div class="nd-device-body has-shot">
+            <img src="{% static 'img/queueflow-demo-book.webp' %}" alt="หน้าเลือกบริการของระบบจอง QueueFlow — เห็นขั้นตอนจองครบ 6 ขั้นด้านบน" loading="lazy" width="1280" height="800">
+            <div class="nd-device-cta-overlay">
+              <a href="https://booking.noodee-bootbiz.com/book/" target="_blank" rel="noopener" class="nd-btn" style="font-size:1.05rem;padding:1rem 2.5rem;">
+                <i class="bi bi-box-arrow-up-right me-2"></i>ลองจองใน demo จริง
+              </a>
+              <span style="font-size:.82rem;color:rgba(255,255,255,.7);">ใช้เวลาไม่ถึง 1 นาที</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     7. SEGMENTS — เหมาะกับธุรกิจไหน (5 การ์ด static)
+══════════════════════════════════════════════ -->
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad);" aria-label="เหมาะกับธุรกิจไหน">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="nd-eyebrow justify-content-center">เหมาะกับใคร</div>
+      <h2 class="nd-h2">ถ้าร้านคุณ "รับจองเป็นคิว" — ระบบนี้ทำงานให้คุณได้</h2>
+    </div>
+    <div class="row g-3 justify-content-center">
+      <div class="col-6 col-md-4 col-xl">
+        <div class="nd-seg-card">
+          <i class="bi bi-flower1 nd-seg-icon"></i>
+          <div class="nd-seg-name">ร้านนวด/สปา</div>
+          <div class="nd-seg-hint">ลูกค้าเลือกหมอนวดคนโปรด เลือกคอร์สนวด แล้วจองเองได้ทั้งกลางวันกลางคืน</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="nd-seg-card">
+          <i class="bi bi-heart-pulse nd-seg-icon"></i>
+          <div class="nd-seg-name">คลินิกความงาม</div>
+          <div class="nd-seg-hint">คิวทรีตเมนต์แน่นๆ ไม่มีชนกัน พร้อมเตือนลูกค้าก่อนถึงนัด ลดปัญหาเก้าอี้ว่าง</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="nd-seg-card">
+          <i class="bi bi-scissors nd-seg-icon"></i>
+          <div class="nd-seg-name">ร้านเสริมสวย/บาร์เบอร์</div>
+          <div class="nd-seg-hint">ลูกค้าจองช่างประจำได้ล่วงหน้า walk-in หน้าร้านก็มีคิวแยก ไม่วุ่น</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="nd-seg-card">
+          <i class="bi bi-stars nd-seg-icon"></i>
+          <div class="nd-seg-name">ร้านทำเล็บ/ต่อขนตา</div>
+          <div class="nd-seg-hint">งานละเอียดใช้เวลาต่อคิวนาน ยิ่งต้องกันจองซ้อนให้แม่นๆ</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-xl">
+        <div class="nd-seg-card">
+          <i class="bi bi-hospital nd-seg-icon"></i>
+          <div class="nd-seg-name">คลินิกกายภาพ/ทันตกรรมเล็กๆ</div>
+          <div class="nd-seg-hint">นัดต่อเนื่องหลายครั้ง ขายเป็นคอร์สได้ ระบบตามนัดให้ทุกครั้ง</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     8. PRICING — 3 tiers + launch offer
+══════════════════════════════════════════════ -->
+<section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);" aria-label="Pricing">
+  <div class="container">
+    <div class="text-center mb-4">
+      <div class="nd-eyebrow justify-content-center">ราคา</div>
+      <h2 class="nd-h2">ลงทุนครั้งเดียว ได้ระบบของร้านคุณเอง</h2>
+      <p class="nd-sub mx-auto">ไม่มีค่าคอมมิชชั่นต่อการจอง</p>
+    </div>
+
+    <!-- === Launch offer strip === -->
+    <div class="nd-offer mb-5">
+      <i class="bi bi-megaphone-fill"></i>
+      <span><strong>เปิดตัว 10 ร้านแรก</strong> — Pro และ Multi-Branch ลดค่าติดตั้ง 50% / Starter ลด 30%</span>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-lg-4">
+        <div class="nd-pkg">
+          <div>
+            <div class="nd-eyebrow" style="font-size:.65rem;">Starter</div>
+            <h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">สำหรับร้านเดี่ยว เริ่มจากศูนย์</h4>
+          </div>
+          <div class="nd-pkg-price">฿9,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ค่าติดตั้ง</span></div>
+          <div class="nd-pkg-monthly">รายเดือน ฿990</div>
+          <ul class="nd-pkg-list">
+            <li><i class="bi bi-check-lg"></i>เว็บจองคิวของร้านคุณเอง (จอง 6 ขั้นตอน + กันจองซ้อน)</li>
+            <li><i class="bi bi-check-lg"></i>แจ้งเตือนยืนยัน + เตือนก่อนนัด 24 ชม. และ 1 ชม.</li>
+            <li><i class="bi bi-check-lg"></i>LINE Login สำหรับลูกค้า</li>
+            <li><i class="bi bi-check-lg"></i>Dashboard เจ้าของ + พนักงาน</li>
+            <li><i class="bi bi-check-lg"></i>รายงานรายได้สรุปส่ง email ทุกวัน</li>
+          </ul>
+          <a href="https://line.me/ti/p/~@aibiz" target="_blank" rel="noopener" class="nd-btn-outline" style="text-align:center;">เริ่มต้นที่นี่</a>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="nd-pkg featured">
+          <div class="nd-pkg-badge">ยอดนิยม ⭐</div>
+          <div>
+            <div class="nd-eyebrow" style="font-size:.65rem;">Pro</div>
+            <h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">สำหรับร้านที่อยากให้ลูกค้ากลับมาซ้ำ</h4>
+          </div>
+          <div class="nd-pkg-price">฿19,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ค่าติดตั้ง</span></div>
+          <div class="nd-pkg-monthly">รายเดือน ฿1,990</div>
+          <ul class="nd-pkg-list">
+            <li><i class="bi bi-check-lg"></i>ทุกอย่างใน Starter</li>
+            <li><i class="bi bi-check-lg"></i>ระบบสะสมแต้ม 4 ระดับ + โบนัสวันเกิด + แลกแต้ม</li>
+            <li><i class="bi bi-check-lg"></i>บัตรคอร์ส/แพ็กเกจ ขายในระบบ</li>
+            <li><i class="bi bi-check-lg"></i>คิว walk-in หน้าร้าน แยกจากคิวจอง</li>
+            <li><i class="bi bi-check-lg"></i>รีวิวดาว + ระบบโปรโมชั่น</li>
+            <li><i class="bi bi-check-lg"></i>เว็บ 3 ภาษา รับลูกค้าต่างชาติ</li>
+          </ul>
+          <a href="https://line.me/ti/p/~@aibiz" target="_blank" rel="noopener" class="nd-btn" style="text-align:center;">เลือกแพ็กเกจนี้</a>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="nd-pkg">
+          <div>
+            <div class="nd-eyebrow" style="font-size:.65rem;">Multi-Branch</div>
+            <h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">สำหรับกิจการหลายสาขา</h4>
+          </div>
+          <div class="nd-pkg-price">฿39,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ค่าติดตั้ง</span></div>
+          <div class="nd-pkg-monthly">รายเดือน ฿3,990</div>
+          <div class="nd-pkg-note">เริ่มต้น 3 สาขา — สาขาถัดไป +฿990/เดือน</div>
+          <ul class="nd-pkg-list">
+            <li><i class="bi bi-check-lg"></i>ทุกอย่างใน Pro</li>
+            <li><i class="bi bi-check-lg"></i>รองรับหลายสาขาในระบบเดียว</li>
+            <li><i class="bi bi-check-lg"></i>Dashboard แยกครบ 4 บทบาท: เจ้าของ / แอดมิน / พนักงาน / ลูกค้า</li>
+            <li><i class="bi bi-check-lg"></i>ระบบพนักงานเต็มรูปแบบ: เช็คอิน ปิดงาน บันทึก no-show ตารางงาน ใบลา</li>
+            <li><i class="bi bi-check-lg"></i>Blog ในตัว ช่วยให้ลูกค้าหาร้านคุณเจอบน Google</li>
+          </ul>
+          <a href="https://line.me/ti/p/~@aibiz" target="_blank" rel="noopener" class="nd-btn-outline" style="text-align:center;">ขอใบเสนอราคา</a>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="text-center mt-4 mb-0" style="font-size:.85rem;color:var(--nd-muted);line-height:1.9;">
+      ทุก tier: ข้อมูลลูกค้าเป็นของร้านคุณ 100% ไม่มีค่าคอมมิชชั่นต่อการจอง ไม่จำกัดจำนวนการจองต่อเดือน<br>
+      ไม่แน่ใจว่า tier ไหนเหมาะ ทัก LINE มาคุยกันก่อนได้ ไม่มีค่าใช้จ่าย<br>
+      <span style="font-size:.78rem;">(ราคาไม่รวมภาษีมูลค่าเพิ่ม)</span>
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     9. FAQ — 7 ข้อ (nd-faq accordion)
+══════════════════════════════════════════════ -->
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad);" aria-label="FAQ">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="text-center mb-5">
+          <div class="nd-eyebrow justify-content-center">FAQ</div>
+          <h2 class="nd-h2">คำถามที่เจ้าของร้านถามบ่อย</h2>
+        </div>
+
+        <div class="accordion nd-faq" id="qfFaq">
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                มีแอปอย่าง Fresha ให้ใช้ฟรีอยู่แล้ว ทำไมต้องจ่ายเงินทำระบบเอง?
+              </button>
+            </h3>
+            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#qfFaq">
+              <div class="accordion-body">แอป marketplace (แอปตัวกลางที่รวมหลายร้านไว้ในที่เดียว) ส่วนใหญ่ "ฟรี" แค่ตอนเริ่ม — โดยทั่วไปจะเก็บค่าคอมมิชชั่นราว 20% ต่อลูกค้าใหม่ที่มาจากแพลตฟอร์ม แถมในหน้าแอปยังมีร้านคู่แข่งโชว์อยู่ข้างๆ ร้านคุณด้วย ส่วน QueueFlow คือระบบของร้านคุณเอง ไม่มีค่าคอมต่อการจอง ไม่มีคู่แข่งบนหน้าเว็บคุณ และข้อมูลลูกค้าทุกคนอยู่ในมือคุณ ไม่ใช่ในมือแพลตฟอร์ม</div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                ตอนนี้รับจองผ่าน LINE อยู่แล้ว ต่างกันตรงไหน?
+              </button>
+            </h3>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#qfFaq">
+              <div class="accordion-body">LINE ก็ยังใช้ต่อได้เลยครับ — ต่างกันตรงที่ตอนนี้ "คุณ" ต้องเป็นคนตอบทุกแชท เช็คคิวเอง จดเอง เตือนลูกค้าเอง แต่พอมี QueueFlow ลูกค้ากดจองเองจากลิงก์ที่คุณแปะไว้ใน LINE ได้เลย ระบบเช็คคิวว่าง กันจองซ้อน และส่งข้อความเตือนให้อัตโนมัติ คุณแค่เปิดดูว่าวันนี้มีคิวอะไรบ้าง</div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                พนักงานที่ร้านใช้คอมไม่เก่ง จะใช้เป็นไหม?
+              </button>
+            </h3>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#qfFaq">
+              <div class="accordion-body">ระบบออกแบบให้ใช้ผ่านมือถือได้เหมือนเล่นแอปทั่วไป งานของพนักงานมีแค่ กดเช็คอินตอนลูกค้ามาถึง กดปิดงานตอนเสร็จ และดูตารางงานตัวเอง — ถ้าใช้ LINE เป็น ก็ใช้ระบบนี้เป็นครับ ตอนติดตั้งเราสอนการใช้งานให้ทั้งร้าน</div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                ข้อมูลลูกค้าปลอดภัยไหม เรื่อง PDPA ต้องกังวลอะไรหรือเปล่า?
+              </button>
+            </h3>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#qfFaq">
+              <div class="accordion-body">PDPA คือกฎหมายคุ้มครองข้อมูลส่วนบุคคลของไทย ที่กำหนดว่าร้านต้องเก็บข้อมูลลูกค้าอย่างปลอดภัยและใช้ตามที่ขอไว้ — QueueFlow เก็บข้อมูลในระบบของร้านคุณโดยเฉพาะ ไม่เอาไปแชร์หรือขายต่อให้ใคร และเราช่วยตั้งค่าข้อความขอความยินยอมจากลูกค้าให้ตอนติดตั้ง</div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                ต้องผูกสัญญานานไหม?
+              </button>
+            </h3>
+            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#qfFaq">
+              <div class="accordion-body">ไม่ผูกสัญญารายปีครับ จ่ายเป็นรายเดือน ยกเลิกได้ทุกเมื่อ และถ้าใช้แล้วไม่พอใจภายใน 30 วันแรก เราคืนค่ารายเดือนเดือนแรกให้ — เราอยากให้คุณอยู่ต่อเพราะระบบช่วยร้านได้จริง ไม่ใช่เพราะสัญญาบังคับ</div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">
+                ร้านเล็ก มีพนักงานแค่ 2-3 คน จะคุ้มเหรอ?
+              </button>
+            </h3>
+            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#qfFaq">
+              <div class="accordion-body">ยิ่งร้านเล็กยิ่งเห็นผลชัดครับ เพราะคนที่นั่งตอบแชทจองคิวอยู่ตอนนี้ก็คือตัวคุณเอง — เวลาที่ได้คืนมาจากการไม่ต้องตอบแชท คือเวลาที่เอาไปรับลูกค้าเพิ่มหรือพักผ่อนได้จริง เริ่มจาก tier Starter ก่อนก็ได้ แล้วค่อยขยับเมื่อร้านโต</div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" aria-expanded="false" aria-controls="faq7">
+                ใช้เวลาติดตั้งกี่วัน ต้องเตรียมอะไรบ้าง?
+              </button>
+            </h3>
+            <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#qfFaq">
+              <div class="accordion-body">ฝั่งร้านเตรียมแค่ รายการบริการ+ราคา รายชื่อพนักงาน และเวลาเปิด-ปิด ที่เหลือเราจัดการให้ทั้งหมด ตั้งแต่ตั้งค่าระบบจนถึงสอนการใช้งาน ร้านเดี่ยวส่วนใหญ่ขึ้นระบบได้ภายใน 7 วัน — ทักมาคุยกันก่อน เราประเมินให้ได้เลยว่าร้านคุณใช้เวลาเท่าไหร่</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     10. CTA ปิดท้าย + Lead form
+══════════════════════════════════════════════ -->
+<section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);position:relative;overflow:hidden;" aria-label="CTA">
+  <div style="position:absolute;bottom:-120px;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.08),transparent 65%);pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-6 text-center text-lg-start">
+        <img src="{% static 'img/noodee/homepage/noodee_run.png' %}" alt="หนูดีวิ่งออกมาชวนลองระบบจองคิว" class="nd-img" style="max-width:240px;margin-bottom:1.25rem;">
+        <div class="mb-4">
+          <div class="nd-bubble" style="min-width:250px;text-align:left;">
+            <span id="tw-cta"></span><span class="nd-cursor">|</span>
+          </div>
+        </div>
+        <h2 class="nd-h2">คืนนี้อยากตอบแชทจองคิว<br>หรืออยากให้ระบบทำแทน?</h2>
+        <p class="nd-sub mb-4">
+          ลูกค้าคนถัดไปของคุณอาจกำลังอยากจองอยู่ตอนนี้ — ตอนที่ร้านปิดไปแล้ว
+          ให้ QueueFlow เปิดรับจองแทนคุณตลอด 24 ชั่วโมง
+          เริ่มจากลองเล่น demo หรือทักมาคุยกันก่อนก็ได้ ไม่มีค่าใช้จ่าย ไม่มีการตามตื๊อ
+        </p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+          <a href="https://booking.noodee-bootbiz.com/book/" target="_blank" rel="noopener" class="nd-btn">
+            <i class="bi bi-cursor-fill me-2"></i>ลองจองใน demo จริง
+          </a>
+          <a href="https://line.me/ti/p/~@aibiz" target="_blank" rel="noopener" class="nd-btn-line">
+            <i class="bi bi-line me-2"></i>ขอใบเสนอราคาผ่าน LINE
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <!-- === TODO: ต่อ backend lead capture (Lead model + POST view) ภายหลัง — ตอนนี้ copy ข้อความ + เปิด LINE OA แทน === -->
+        <div class="nd-form">
+          <h3 style="font-size:1.1rem;font-weight:800;color:#f1f5f9;margin-bottom:1.5rem;">
+            บอกเราหน่อยว่าร้านคุณเป็นแบบไหน — เราจะแนะนำ tier ที่เหมาะให้ฟรี
+          </h3>
+          <form id="qf-lead-form">
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label for="qf-name">ชื่อของคุณ</label>
+                <input type="text" class="form-control" id="qf-name" placeholder="เช่น คุณแอน" required>
+              </div>
+              <div class="col-sm-6">
+                <label for="qf-shop">ชื่อร้าน/กิจการ</label>
+                <input type="text" class="form-control" id="qf-shop" placeholder="เช่น บ้านนวดสบายดี" required>
+              </div>
+              <div class="col-sm-6">
+                <label for="qf-type">ร้านคุณทำอะไร</label>
+                <select class="form-select" id="qf-type" required>
+                  <option value="" selected disabled>เลือกประเภทธุรกิจ</option>
+                  <option>นวด/สปา</option>
+                  <option>คลินิกความงาม</option>
+                  <option>เสริมสวย/บาร์เบอร์</option>
+                  <option>ทำเล็บ/ขนตา</option>
+                  <option>อื่นๆ</option>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <label for="qf-branch">มีกี่สาขา</label>
+                <select class="form-select" id="qf-branch" required>
+                  <option value="" selected disabled>เลือกจำนวนสาขา</option>
+                  <option>1 สาขา</option>
+                  <option>2-3 สาขา</option>
+                  <option>4 สาขาขึ้นไป</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="qf-line">LINE ID สำหรับติดต่อกลับ</label>
+                <input type="text" class="form-control" id="qf-line" placeholder="เช่น @baannuad หรือเบอร์โทรก็ได้" required>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="nd-btn w-100" style="border-radius:12px;">
+                  ส่งข้อมูล — เราติดต่อกลับภายใน 1 วันทำการ
+                </button>
+                <div id="qf-form-hint" class="nd-form-hint">
+                  <i class="bi bi-check-circle-fill me-1"></i>คัดลอกข้อมูลของคุณแล้ว — วางในแชท LINE ที่เปิดขึ้นมาได้เลยครับ
+                </div>
+                <p class="mt-3 mb-0" style="font-size:.76rem;color:var(--nd-muted);text-align:center;">
+                  ข้อมูลของคุณใช้สำหรับติดต่อกลับเรื่องนี้เท่านั้น ไม่มีการส่งต่อให้ใคร
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+/* ════════════════════════════════════════════════
+   Noodee Typewriter — CTA ปิดท้าย (pattern homepage)
+════════════════════════════════════════════════ */
+function ndTypewriter(id, phrases, delay) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var pIdx = 0, cIdx = 0, del = false;
+  var tType = 58, tDel = 26, pEnd = 1900, pStart = 380;
+
+  function tick() {
+    var cur = phrases[pIdx];
+    if (!del) {
+      el.textContent = cur.slice(0, cIdx + 1);
+      cIdx++;
+      if (cIdx === cur.length) { del = true; setTimeout(tick, pEnd); return; }
+      setTimeout(tick, tType);
+    } else {
+      el.textContent = cur.slice(0, cIdx - 1);
+      cIdx--;
+      if (cIdx === 0) { del = false; pIdx = (pIdx + 1) % phrases.length; setTimeout(tick, pStart); return; }
+      setTimeout(tick, tDel);
+    }
+  }
+  setTimeout(tick, delay || 600);
+}
+
+ndTypewriter('tw-cta', [
+  'ให้ลูกค้าจองเองได้เลยครับ!',
+  'คืนนี้ไม่ต้องตอบแชทแล้วนะครับ',
+  'ลองเล่น demo ก่อนได้เลยครับ',
+  'ทัก LINE มาคุยกันก่อนก็ได้ครับ',
+], 1000);
+
+/* ════════════════════════════════════════════════
+   Lead form — ยังไม่ต่อ backend
+   ตอนนี้: รวมข้อความ → copy clipboard → เปิด LINE OA
+   TODO: เปลี่ยนเป็น POST ไป Lead capture endpoint ภายหลัง
+════════════════════════════════════════════════ */
+document.getElementById('qf-lead-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var msg = 'สนใจ QueueFlow ระบบจองคิวออนไลน์ครับ/ค่ะ\n'
+    + 'ชื่อ: ' + document.getElementById('qf-name').value + '\n'
+    + 'ร้าน: ' + document.getElementById('qf-shop').value + '\n'
+    + 'ประเภทธุรกิจ: ' + document.getElementById('qf-type').value + '\n'
+    + 'จำนวนสาขา: ' + document.getElementById('qf-branch').value + '\n'
+    + 'LINE ID: ' + document.getElementById('qf-line').value;
+
+  function openLine() {
+    window.open('https://line.me/ti/p/~@aibiz', '_blank', 'noopener');
+  }
+  var hint = document.getElementById('qf-form-hint');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(msg).then(function () {
+      if (hint) hint.style.display = 'block';
+      openLine();
+    }, openLine);
+  } else {
+    openLine();
+  }
+});
+</script>
+{% endblock %}

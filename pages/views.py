@@ -34,6 +34,11 @@ def home(request):
     })
 
 
+def booking_system(request):
+    """Sale page: QueueFlow — ระบบจองคิวออนไลน์ (static sale page, ยังไม่ต่อ lead backend)"""
+    return render(request, "pages/booking_system.html")
+
+
 def about(request):
     from .models import AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     return render(request, "pages/about.html", {
