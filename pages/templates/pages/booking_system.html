@@ -151,6 +151,12 @@
   text-align: center; margin: .7rem 0 0;
 }
 .qf-shot-caption::before { content: "\2191\00a0"; color: var(--nd-gold); }
+/* gallery หลังบ้าน 2x2 */
+.qf-gallery-item h6 {
+  font-size: .95rem; font-weight: 700; color: #f1f5f9; margin: .9rem 0 .25rem;
+}
+.qf-gallery-item h6 i { color: var(--nd-gold); margin-right: .45rem; }
+.qf-gallery-item p { font-size: .84rem; color: var(--nd-muted); margin: 0; line-height: 1.7; }
 /* skeleton ชิ้นส่วน — จำลองหน้า booking */
 .nd-skel { background: rgba(255,255,255,.07); border-radius: 6px; }
 .nd-skel-gold { background: rgba(201,169,110,.4); border-radius: 6px; }
@@ -715,6 +721,82 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     6.5 BACKEND GALLERY — ส่องหลังบ้านจริง 4 หน้า
+══════════════════════════════════════════════ -->
+<section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);" aria-label="หลังบ้านของระบบ">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="nd-eyebrow justify-content-center">หลังบ้านของจริง</div>
+      <h2 class="nd-h2">ไม่ได้มีแค่หน้าจอง — หลังบ้านทำงานแทนคุณทั้งร้าน</h2>
+      <p class="nd-sub mx-auto">ทุกภาพด้านล่างคือหน้าจอจริงจากระบบ (ภาษาไทย) ไม่ใช่ภาพตกแต่ง</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="qf-gallery-item">
+          <div class="nd-device">
+            <div class="nd-device-bar">
+              <div class="nd-device-dots"><span></span><span></span><span></span></div>
+              <div class="nd-device-url"><i class="bi bi-lock-fill"></i>…/dashboard/owner/bookings/</div>
+            </div>
+            <div class="nd-device-body has-shot">
+              <img src="{% static 'img/queueflow-shot-bookings.webp' %}" alt="หน้าจัดการการจองทั้งหมด — ยอดเดือนนี้ ค่าเฉลี่ยต่อบิล อัตราลูกค้ามาตามนัด และสถานะทุกคิว" loading="lazy" width="1280" height="800">
+            </div>
+          </div>
+          <h6><i class="bi bi-calendar2-check-fill"></i>การจองทั้งหมดในหน้าเดียว</h6>
+          <p>ยอดเดือนนี้ ค่าเฉลี่ยต่อบิล อัตราลูกค้ามาตามนัด (show rate) พร้อม filter สถานะทุกคิว</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="qf-gallery-item">
+          <div class="nd-device">
+            <div class="nd-device-bar">
+              <div class="nd-device-dots"><span></span><span></span><span></span></div>
+              <div class="nd-device-url"><i class="bi bi-lock-fill"></i>…/dashboard/owner/revenue/</div>
+            </div>
+            <div class="nd-device-body has-shot">
+              <img src="{% static 'img/queueflow-shot-revenue.webp' %}" alt="รายงานรายรับ — กราฟรายวัน รายสัปดาห์ รายเดือน พร้อมปุ่ม Export Excel" loading="lazy" width="1280" height="800">
+            </div>
+          </div>
+          <h6><i class="bi bi-graph-up-arrow"></i>รายงานรายรับ + Export Excel</h6>
+          <p>ดูรายวัน/รายสัปดาห์/รายเดือน เทียบการเติบโต แล้วกดออกไฟล์ Excel ส่งบัญชีได้เลย</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="qf-gallery-item">
+          <div class="nd-device">
+            <div class="nd-device-bar">
+              <div class="nd-device-dots"><span></span><span></span><span></span></div>
+              <div class="nd-device-url"><i class="bi bi-lock-fill"></i>…/dashboard/owner/staff/</div>
+            </div>
+            <div class="nd-device-body has-shot">
+              <img src="{% static 'img/queueflow-shot-staff.webp' %}" alt="หน้าจัดการพนักงาน — เรตติ้งลูกค้า คอมมิชชั่น และตารางว่างของพนักงานแต่ละคน" loading="lazy" width="1280" height="800">
+            </div>
+          </div>
+          <h6><i class="bi bi-people-fill"></i>จัดการพนักงานทั้งทีม</h6>
+          <p>เรตติ้งจากลูกค้าจริง คอมมิชชั่นสะสม ใครว่าง/ไม่ว่าง เห็นหมดโดยไม่ต้องถามในกลุ่ม LINE</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="qf-gallery-item">
+          <div class="nd-device">
+            <div class="nd-device-bar">
+              <div class="nd-device-dots"><span></span><span></span><span></span></div>
+              <div class="nd-device-url"><i class="bi bi-lock-fill"></i>…/dashboard/admin/customers/retention/</div>
+            </div>
+            <div class="nd-device-body has-shot">
+              <img src="{% static 'img/queueflow-shot-vip.webp' %}" alt="หน้าลูกค้า VIP และลูกค้าที่หายไป — ระบบติดตามลูกค้าประจำและแจ้งเตือนลูกค้าที่ไม่กลับมาเกิน 60 วัน" loading="lazy" width="1280" height="800">
+            </div>
+          </div>
+          <h6><i class="bi bi-gem"></i>ลูกค้า VIP &amp; ลูกค้าที่กำลังหาย</h6>
+          <p>ระบบชี้เองว่าใครคือลูกค้าประจำตัวจริง และใครหายไปเกิน 60 วัน — ตามกลับมาก่อนเสียให้ร้านอื่น</p>
+        </div>
       </div>
     </div>
   </div>

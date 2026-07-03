@@ -1,8 +1,8 @@
-# AI Automation Business — 25-Agent System
+# AI Automation Business — 26-Agent System
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.7 | **Updated:** 2026-05-30
+**Version:** 2.8 | **Updated:** 2026-07-03
 
 ---
 
@@ -64,6 +64,7 @@
 | 23 | HR & Education Writer | `.claude/agents/23_hr_education_writer.md` | บทความสำหรับ HR/โรงเรียน tone data-driven |
 | 24 | Creator & Coach Writer | `.claude/agents/24_creator_coach_writer.md` | บทความสำหรับโค้ช/อาจารย์ออนไลน์ tone inspirational |
 | 25 | Graphic Designer | `.claude/agents/25_graphic_designer.md` | Technical diagram, infographic, banner, cover image, presentation deck |
+| 26 | Market Research Analyst | `.claude/agents/26_market_research_analyst.md` | วิจัยตลาดซอฟต์แวร์ไทย: คู่แข่ง, pricing benchmark, market sizing, gap analysis — ข้อมูลจริงมีแหล่งอ้างอิงเท่านั้น |
 
 ## Skills (ใน `.claude/skills/`)
 
@@ -75,6 +76,12 @@
 | `scrape-ai-news` | ดึงข่าว AI ล่าสุดจากค่ายใหญ่ + return brief JSON พร้อม summary ไทย (ใช้ใน Workflow F) |
 | `seo-keyword-research-th` | วิจัย keyword ภาษาไทย ก่อนเขียนทุกบทความ |
 | `django-blog-publisher` | โพสบทความเข้า Django blog app พร้อม SEO meta |
+| `auto-diagram-generator` | Generate diagram Pillow ทุก H2 section อัตโนมัติ + image_brief.md พร้อม SEO filename |
+| `flux-cover-image` | Generate cover image FLUX + หนูดี + Pillow text overlay → WebP พร้อม alt text |
+| `diagram-to-blog` | Upload diagram เข้า Django media + inject `<img>` tag เข้าบทความ draft |
+| `social-banner-template` | สร้าง banner 3 platform (Facebook/Instagram/LINE) พร้อมกันใน 10 นาที |
+| `visual-qa-checklist` | ตรวจ visual 15 ข้อ — brand, SEO, technical, content ก่อน deliver ทุกชิ้น |
+| `screenshot-tutorial-generator` | ถ่ายหน้าจอ browser จริงทีละ step ด้วย Playwright + annotate ด้วย Pillow สำหรับบทความ how-to |
 
 ---
 
@@ -97,6 +104,7 @@ Activate QA Agent - [คำถาม]
 Activate Frontend Designer - [คำถาม]
 Activate AI News Scout - [คำถาม]
 Activate Graphic Designer - [คำถาม]
+Activate Market Research - [คำถาม]
 ```
 
 ### Alias สั้น:
@@ -127,6 +135,7 @@ Activate Graphic Designer - [คำถาม]
 | `frontend-designer` | Frontend Designer |
 | `ai-news-scout` | AI News Scout |
 | `graphic-designer` | Graphic Designer |
+| `market-research-analyst` | Market Research Analyst |
 
 ### Auto-routing ผ่าน Chief of Staff:
 ```
@@ -154,6 +163,7 @@ Chief of Staff จะเลือก agent ที่เหมาะสมให�
 | เขียนบทความภาษาไทย | Content Writer (TH) | SEO, AI Toolsmith, QA |
 | ข่าว AI / AI News Pipeline | AI News Scout | Content Writer TH, QA, Data Analyst |
 | Diagram / Infographic / Banner / Graphic | Graphic Designer | Content Writer TH, Marketing Specialist, Frontend Designer, QA |
+| วิจัยตลาด / คู่แข่ง / ราคา benchmark | Market Research Analyst | Marketing Specialist, Hustler, Money Manager, Data Analyst |
 
 ---
 
