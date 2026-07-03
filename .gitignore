@@ -24,7 +24,10 @@ staticfiles/
 Thumbs.db
 
 # Excluded folders/files
-.claude/
+# ปิดทุกอย่างใน .claude ยกเว้น agents/ กับ skills/ (ใช้ .claude/* ไม่ใช่ .claude/ เพื่อให้ negation ทำงาน)
+.claude/*
+!.claude/agents/
+!.claude/skills/
 !.github/**
 agent_expansion_v2.md
 
