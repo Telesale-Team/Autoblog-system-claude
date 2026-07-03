@@ -146,6 +146,11 @@
 .nd-device-body.has-shot img {
   width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
 }
+.qf-shot-caption {
+  font-size: .78rem; color: var(--nd-muted);
+  text-align: center; margin: .7rem 0 0;
+}
+.qf-shot-caption::before { content: "\2191\00a0"; color: var(--nd-gold); }
 /* skeleton ชิ้นส่วน — จำลองหน้า booking */
 .nd-skel { background: rgba(255,255,255,.07); border-radius: 6px; }
 .nd-skel-gold { background: rgba(201,169,110,.4); border-radius: 6px; }
@@ -560,11 +565,17 @@
     <div class="nd-feature-row">
       <div class="row align-items-center g-4">
         <div class="col-lg-5">
-          <div class="nd-feature-visual">
-            <i class="bi bi-phone"></i>
-            <div class="nd-feature-visual-label">กลุ่ม 1</div>
-            <h3 style="font-size:1.4rem;font-weight:800;color:#f1f5f9;margin:0;">ลูกค้าจองง่าย</h3>
+          <!-- === Screenshot จริง: หน้าจองฝั่งลูกค้า === -->
+          <div class="nd-device">
+            <div class="nd-device-bar">
+              <div class="nd-device-dots"><span></span><span></span><span></span></div>
+              <div class="nd-device-url"><i class="bi bi-lock-fill"></i>booking.noodee-bootbiz.com/book/</div>
+            </div>
+            <div class="nd-device-body has-shot">
+              <img src="{% static 'img/queueflow-shot-booking.webp' %}" alt="หน้าจองของลูกค้า — เลือกบริการพร้อมราคาและขั้นตอนจอง 6 ขั้น" loading="lazy" width="1280" height="800">
+            </div>
           </div>
+          <p class="qf-shot-caption">หน้าจองจริงที่ลูกค้าเห็น — เลือกบริการ เห็นราคาชัด จบใน 6 ขั้น</p>
         </div>
         <div class="col-lg-7">
           <div class="nd-feature-item">
@@ -591,11 +602,17 @@
     <div class="nd-feature-row">
       <div class="row align-items-center g-4">
         <div class="col-lg-5 order-lg-2">
-          <div class="nd-feature-visual">
-            <i class="bi bi-speedometer2"></i>
-            <div class="nd-feature-visual-label">กลุ่ม 2</div>
-            <h3 style="font-size:1.4rem;font-weight:800;color:#f1f5f9;margin:0;">ร้านจัดการง่าย</h3>
+          <!-- === Screenshot จริง: Dashboard เจ้าของ (ภาษาไทย) === -->
+          <div class="nd-device">
+            <div class="nd-device-bar">
+              <div class="nd-device-dots"><span></span><span></span><span></span></div>
+              <div class="nd-device-url"><i class="bi bi-lock-fill"></i>booking.noodee-bootbiz.com/dashboard/</div>
+            </div>
+            <div class="nd-device-body has-shot">
+              <img src="{% static 'img/queueflow-shot-owner.webp' %}" alt="Dashboard เจ้าของร้านภาษาไทย — ภาพรวมธุรกิจ แนวโน้มรายได้ รีวิว และจำนวนลูกค้า" loading="lazy" width="1280" height="800">
+            </div>
           </div>
+          <p class="qf-shot-caption">Dashboard เจ้าของ (ภาษาไทย) — เห็นรายได้ รีวิว ลูกค้า ครบในหน้าเดียว</p>
         </div>
         <div class="col-lg-7 order-lg-1">
           <div class="nd-feature-item">
@@ -626,11 +643,17 @@
     <div class="nd-feature-row">
       <div class="row align-items-center g-4">
         <div class="col-lg-5">
-          <div class="nd-feature-visual">
-            <i class="bi bi-award"></i>
-            <div class="nd-feature-visual-label">กลุ่ม 3</div>
-            <h3 style="font-size:1.4rem;font-weight:800;color:#f1f5f9;margin:0;">ลูกค้ากลับมาซ้ำ</h3>
+          <!-- === Screenshot จริง: หน้าแต้มสะสมฝั่งลูกค้า === -->
+          <div class="nd-device">
+            <div class="nd-device-bar">
+              <div class="nd-device-dots"><span></span><span></span><span></span></div>
+              <div class="nd-device-url"><i class="bi bi-lock-fill"></i>booking.noodee-bootbiz.com/dashboard/</div>
+            </div>
+            <div class="nd-device-body has-shot">
+              <img src="{% static 'img/queueflow-shot-points.webp' %}" alt="หน้าสมาชิกของลูกค้า — บัตรสมาชิก Bronze พร้อมแถบสะสมแต้มและระบบของรางวัล" loading="lazy" width="1200" height="750">
+            </div>
           </div>
+          <p class="qf-shot-caption">หน้าสมาชิกที่ลูกค้าเห็น — ระดับสมาชิก แต้มสะสม และสิทธิพิเศษ</p>
         </div>
         <div class="col-lg-7">
           <div class="nd-feature-item">
