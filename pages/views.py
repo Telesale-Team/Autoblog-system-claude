@@ -39,6 +39,12 @@ def booking_system(request):
     return render(request, "pages/booking_system.html")
 
 
+def booking_system_v2(request):
+    """Sale page V2 (A/B variant): มุม 'ownership / ไม่หักค่าคอม' + 3 เสาหลัก ตาม brief 26-salepage.
+    โครงเนื้อหาต่างจาก V1 (ยังไม่ต่อ lead backend เหมือนเดิม)"""
+    return render(request, "pages/booking_system_v2.html")
+
+
 def about(request):
     from .models import AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     return render(request, "pages/about.html", {
