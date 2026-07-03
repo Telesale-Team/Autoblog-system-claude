@@ -157,6 +157,33 @@
 }
 .qf-gallery-item h6 i { color: var(--nd-gold); margin-right: .45rem; }
 .qf-gallery-item p { font-size: .84rem; color: var(--nd-muted); margin: 0; line-height: 1.7; }
+/* USP chips ใต้ปุ่ม hero */
+.qf-usp-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.qf-usp-chips span {
+  font-size: .76rem; color: var(--nd-gold);
+  border: 1px solid rgba(201,169,110,.45); border-radius: 50px;
+  padding: .3rem .85rem; white-space: nowrap;
+}
+.qf-usp-chips span i { margin-right: .35rem; }
+/* ตารางเทียบ 3 ทางเลือก */
+.qf-compare-wrap { overflow-x: auto; }
+.qf-compare {
+  width: 100%; min-width: 720px; border-collapse: separate; border-spacing: 0;
+  font-size: .86rem; color: var(--nd-muted);
+}
+.qf-compare th, .qf-compare td {
+  padding: .85rem 1rem; border-bottom: 1px solid rgba(255,255,255,.07);
+  vertical-align: top; text-align: left; line-height: 1.6;
+}
+.qf-compare thead th { color: #f1f5f9; font-weight: 700; font-size: .9rem; border-bottom: 2px solid rgba(201,169,110,.4); }
+.qf-compare td:first-child { color: #e2e8f0; font-weight: 600; width: 20%; }
+.qf-compare .qf-col-us {
+  background: rgba(201,169,110,.08); color: #f1f5f9;
+  border-left: 1px solid rgba(201,169,110,.35); border-right: 1px solid rgba(201,169,110,.35);
+}
+.qf-compare thead .qf-col-us { color: var(--nd-gold); }
+.qf-compare .qf-col-us i.bi-check-circle-fill { color: var(--nd-gold); margin-right: .4rem; }
+.qf-compare-note { font-size: .72rem; color: var(--nd-muted); margin-top: .9rem; }
 /* skeleton ชิ้นส่วน — จำลองหน้า booking */
 .nd-skel { background: rgba(255,255,255,.07); border-radius: 6px; }
 .nd-skel-gold { background: rgba(201,169,110,.4); border-radius: 6px; }
@@ -423,6 +450,12 @@
           <i class="bi bi-info-circle me-1"></i>ไม่ต้องสมัคร กดเล่นได้เลย —
           demo คือระบบตัวจริงที่ร้านนวดใช้งานอยู่ ลองกดจองดูเหมือนเป็นลูกค้าได้เลย
         </p>
+        <!-- === USP chips: จุดเด่นที่ยืนยันจาก market research 3 ก.ค. 69 === -->
+        <div class="qf-usp-chips">
+          <span><i class="bi bi-cash-coin"></i>จ่ายเท่าเดิมทุกเดือน ไม่มีค่าคอม</span>
+          <span><i class="bi bi-shield-lock"></i>ข้อมูลลูกค้าเป็นของร้าน 100%</span>
+          <span><i class="bi bi-line"></i>LINE Login + สะสมแต้มในตัว</span>
+        </div>
       </div>
 
       <div class="col-lg-6">
@@ -854,6 +887,83 @@
 
 
 <!-- ══════════════════════════════════════════════
+     7.5 COMPARISON — 3 ทางเลือกของร้าน (generic ไม่พาดพิงแบรนด์)
+══════════════════════════════════════════════ -->
+<section class="nd-bg-dark nd-divider" style="padding:var(--nd-pad);" aria-label="เปรียบเทียบทางเลือก">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="nd-eyebrow justify-content-center">เทียบกันชัดๆ</div>
+      <h2 class="nd-h2">ร้านบริการในไทยส่วนใหญ่ ยังรับจองด้วยแชทกับสมุดจด</h2>
+      <p class="nd-sub mx-auto">
+        สถานประกอบการนวด/สปาขึ้นทะเบียนในไทยมีถึง 17,897 แห่ง<span style="color:var(--nd-gold);">*</span>
+        — ก่อนเลือกทางไหน ลองเทียบสามทางเลือกที่ร้านส่วนใหญ่เจอ
+      </p>
+    </div>
+    <div class="qf-compare-wrap">
+      <table class="qf-compare">
+        <thead>
+          <tr>
+            <th></th>
+            <th>จดสมุด + ตอบแชทเอง</th>
+            <th>แอปตัวกลาง (marketplace)</th>
+            <th class="qf-col-us">QueueFlow — ระบบของร้านเอง</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ค่าใช้จ่าย</td>
+            <td>ฟรี — แต่จ่ายด้วยเวลาตอบแชททั้งวัน</td>
+            <td>ค่าสมาชิก + ค่าคอมมิชชั่นราว 20% ต่อลูกค้าใหม่<span style="color:var(--nd-gold);">*</span></td>
+            <td class="qf-col-us"><i class="bi bi-check-circle-fill"></i>จ่ายเท่าเดิมทุกเดือน ไม่มีค่าคอมต่อการจอง</td>
+          </tr>
+          <tr>
+            <td>ข้อมูลลูกค้า</td>
+            <td>กระจัดกระจายในแชทและสมุด</td>
+            <td>อยู่บนแพลตฟอร์มของเขา</td>
+            <td class="qf-col-us"><i class="bi bi-check-circle-fill"></i>เป็นของร้านคุณ 100% export ได้ตลอด</td>
+          </tr>
+          <tr>
+            <td>จองซ้อน / หลุดคิว</td>
+            <td>เกิดประจำเมื่อร้านยุ่ง</td>
+            <td>ป้องกันได้</td>
+            <td class="qf-col-us"><i class="bi bi-check-circle-fill"></i>กันอัตโนมัติระดับฐานข้อมูล — กดพร้อมกันก็ไม่ชน</td>
+          </tr>
+          <tr>
+            <td>เตือนลูกค้าก่อนนัด</td>
+            <td>ต้องนั่งพิมพ์เตือนเอง</td>
+            <td>มีในบางเจ้า</td>
+            <td class="qf-col-us"><i class="bi bi-check-circle-fill"></i>อัตโนมัติ LINE / Email / SMS ก่อนนัด 24 ชม. และ 1 ชม.</td>
+          </tr>
+          <tr>
+            <td>สะสมแต้ม + บัตรคอร์ส</td>
+            <td>การ์ดกระดาษ หายบ่อย</td>
+            <td>แต้มผูกกับแพลตฟอร์ม ไม่ใช่ร้าน</td>
+            <td class="qf-col-us"><i class="bi bi-check-circle-fill"></i>Loyalty 4 ระดับ + บัตรคอร์สในระบบร้านเอง</td>
+          </tr>
+          <tr>
+            <td>คู่แข่งบนหน้าจอง</td>
+            <td>ไม่มี</td>
+            <td>ร้านคู่แข่งโชว์ข้างๆ พร้อมดีลลดราคา</td>
+            <td class="qf-col-us"><i class="bi bi-check-circle-fill"></i>ไม่มี — เว็บแบรนด์ร้านคุณล้วนๆ</td>
+          </tr>
+          <tr>
+            <td>ความชัดเจนของราคา</td>
+            <td>—</td>
+            <td>ระบบจองไทยหลายเจ้าต้องขอใบเสนอราคา</td>
+            <td class="qf-col-us"><i class="bi bi-check-circle-fill"></i>ราคาเปิดชัดอยู่ถัดลงไปบนหน้านี้</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="qf-compare-note">
+      * จำนวนสถานประกอบการเพื่อสุขภาพขึ้นทะเบียน (ร้านนวด 16,609 / สปา 1,092) อ้างอิงกรมสนับสนุนบริการสุขภาพ ต.ค. 2567
+      | ค่าคอมมิชชั่นลูกค้าใหม่ของมาร์เก็ตเพลสรายใหญ่ราว 20% — ข้อมูลสาธารณะ ณ ก.ค. 2569
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
      8. PRICING — 3 tiers + launch offer
 ══════════════════════════════════════════════ -->
 <section class="nd-bg-navy nd-divider" style="padding:var(--nd-pad);" aria-label="Pricing">
@@ -878,7 +988,7 @@
             <div class="nd-eyebrow" style="font-size:.65rem;">Starter</div>
             <h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">สำหรับร้านเดี่ยว เริ่มจากศูนย์</h4>
           </div>
-          <div class="nd-pkg-price">฿9,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ค่าติดตั้ง</span></div>
+          <div class="nd-pkg-price">฿9,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ติดตั้ง + วางระบบ + สอนใช้งาน (ครั้งเดียว)</span></div>
           <div class="nd-pkg-monthly">รายเดือน ฿990</div>
           <ul class="nd-pkg-list">
             <li><i class="bi bi-check-lg"></i>เว็บจองคิวของร้านคุณเอง (จอง 6 ขั้นตอน + กันจองซ้อน)</li>
@@ -898,7 +1008,7 @@
             <div class="nd-eyebrow" style="font-size:.65rem;">Pro</div>
             <h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">สำหรับร้านที่อยากให้ลูกค้ากลับมาซ้ำ</h4>
           </div>
-          <div class="nd-pkg-price">฿19,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ค่าติดตั้ง</span></div>
+          <div class="nd-pkg-price">฿19,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ติดตั้ง + วางระบบ + สอนใช้งาน (ครั้งเดียว)</span></div>
           <div class="nd-pkg-monthly">รายเดือน ฿1,990</div>
           <ul class="nd-pkg-list">
             <li><i class="bi bi-check-lg"></i>ทุกอย่างใน Starter</li>
@@ -918,7 +1028,7 @@
             <div class="nd-eyebrow" style="font-size:.65rem;">Multi-Branch</div>
             <h4 style="font-size:1.25rem;font-weight:800;color:#f1f5f9;">สำหรับกิจการหลายสาขา</h4>
           </div>
-          <div class="nd-pkg-price">฿39,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ค่าติดตั้ง</span></div>
+          <div class="nd-pkg-price">฿39,900 <span style="font-size:.85rem;font-weight:400;color:var(--nd-muted);">ติดตั้ง + วางระบบ + สอนใช้งาน (ครั้งเดียว)</span></div>
           <div class="nd-pkg-monthly">รายเดือน ฿3,990</div>
           <div class="nd-pkg-note">เริ่มต้น 3 สาขา — สาขาถัดไป +฿990/เดือน</div>
           <ul class="nd-pkg-list">
@@ -936,7 +1046,8 @@
 
     <p class="text-center mt-4 mb-0" style="font-size:.85rem;color:var(--nd-muted);line-height:1.9;">
       ทุก tier: ข้อมูลลูกค้าเป็นของร้านคุณ 100% ไม่มีค่าคอมมิชชั่นต่อการจอง ไม่จำกัดจำนวนการจองต่อเดือน<br>
-      ไม่แน่ใจว่า tier ไหนเหมาะ ทัก LINE มาคุยกันก่อนได้ ไม่มีค่าใช้จ่าย<br>
+      ค่าติดตั้งจ่ายครั้งเดียว — รวมวางระบบ ใส่รายการบริการ/พนักงานให้ และสอนใช้งานทั้งร้านจนเป็น<br>
+      ราคาเปิดชัดเจน ไม่ต้องขอใบเสนอราคา — ไม่แน่ใจว่า tier ไหนเหมาะ ทัก LINE มาคุยกันก่อนได้ ไม่มีค่าใช้จ่าย<br>
       <span style="font-size:.78rem;">(ราคาไม่รวมภาษีมูลค่าเพิ่ม)</span>
     </p>
   </div>
