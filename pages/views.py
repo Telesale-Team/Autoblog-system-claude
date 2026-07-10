@@ -45,6 +45,19 @@ def booking_system_v2(request):
     return render(request, "pages/booking_system_v2.html")
 
 
+def booking_system_v3(request):
+    """Sale page V3: ราคา 3 tier (Starter ฿790 / Pro ฿1,590 / Business ฿2,990) + design ชุด
+    brass/warm neutral theme-aware (standalone full page, ยังไม่ต่อ lead backend เหมือน V1/V2)"""
+    return render(request, "pages/booking_system_v3.html")
+
+
+def booking_system_v4(request):
+    """Sale page V4: เนื้อหาเดียวกับ V3 (9 section + 3 tier) แต่ดีไซน์ใหม่ 'Clean Minimal'
+    — พื้นขาว sans grotesk เลขนำ section เส้นบางแทนเงา accent เขียว emerald theme-aware
+    (standalone full page, lead form เป็น demo ยังไม่ต่อ backend เหมือน V1–V3)"""
+    return render(request, "pages/booking_system_v4.html")
+
+
 def about(request):
     from .models import AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise
     return render(request, "pages/about.html", {

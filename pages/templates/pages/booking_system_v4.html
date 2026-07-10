@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ระบบจองคิวออนไลน์แบรนด์ร้านคุณเอง — ไม่หักค่าคอม | Booking Platform</title>
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --ground:#FAFAF8;
+    --surface:#FFFFFF;
+    --ink:#131313;
+    --ink-2:#565553;
+    --ink-3:#8C8A86;
+    --line:#ECEAE4;
+    --line-2:#DCD9D1;
+    --accent:#0E7C56;
+    --accent-deep:#0A5E41;
+    --accent-soft:#E6F3EC;
+    --crit:#B33A2B;
+    --crit-soft:#FBECE9;
+    --radius:9px;
+    --radius-lg:16px;
+    --font:"Helvetica Neue",Arial,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif;
+    --font-num:"SF Mono","Cascadia Mono","Segoe UI Mono",Consolas,ui-monospace,monospace;
+    --maxw:1120px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0C0C0D;--ground:#131315;--surface:#151517;
+      --ink:#F1F0ED;--ink-2:#A7A5A0;--ink-3:#6C6A66;
+      --line:#242426;--line-2:#333336;
+      --accent:#3DBE8E;--accent-deep:#5AD0A3;--accent-soft:#122820;
+      --crit:#E4826F;--crit-soft:#2A1613;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#FFFFFF;--ground:#FAFAF8;--surface:#FFFFFF;
+    --ink:#131313;--ink-2:#565553;--ink-3:#8C8A86;
+    --line:#ECEAE4;--line-2:#DCD9D1;
+    --accent:#0E7C56;--accent-deep:#0A5E41;--accent-soft:#E6F3EC;
+    --crit:#B33A2B;--crit-soft:#FBECE9;
+  }
+  :root[data-theme="dark"]{
+    --bg:#0C0C0D;--ground:#131315;--surface:#151517;
+    --ink:#F1F0ED;--ink-2:#A7A5A0;--ink-3:#6C6A66;
+    --line:#242426;--line-2:#333336;
+    --accent:#3DBE8E;--accent-deep:#5AD0A3;--accent-soft:#122820;
+    --crit:#E4826F;--crit-soft:#2A1613;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+    line-height:1.62;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:#fff;}
+  img{max-width:100%}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,44px);}
+  section{position:relative;}
+  .sec-pad{padding:clamp(60px,10vw,128px) 0;}
+  .sec-alt{background:var(--ground);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+
+  h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.022em;line-height:1.1;color:var(--ink);text-wrap:balance;}
+  p{margin:0;}
+
+  /* section header: number + eyebrow */
+  .shead{margin-bottom:clamp(30px,5vw,56px);max-width:62ch;}
+  .snum{display:inline-flex;align-items:baseline;gap:12px;font-family:var(--font-num);font-size:13px;
+    letter-spacing:.02em;color:var(--ink-3);margin:0 0 20px;}
+  .snum b{color:var(--accent);font-weight:600;}
+  .snum::after{content:"";display:inline-block;width:40px;height:1px;background:var(--line-2);transform:translateY(-4px);margin-left:4px;}
+  .sec-title{font-size:clamp(26px,4vw,42px);line-height:1.08;max-width:20ch;}
+  .sec-lead{color:var(--ink-2);font-size:clamp(15.5px,1.7vw,18px);margin-top:18px;max-width:58ch;line-height:1.6;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);
+    font-size:15px;font-weight:600;border-radius:var(--radius);padding:13px 24px;cursor:pointer;
+    border:1px solid transparent;white-space:nowrap;transition:transform .16s,background .16s,color .16s,border-color .16s;}
+  .btn:active{transform:translateY(1px);}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .btn-primary{background:var(--ink);color:var(--bg);}
+  .btn-primary:hover{background:var(--accent);color:#fff;}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2);}
+  .btn-ghost:hover{border-color:var(--ink);}
+  .btn-lg{font-size:16px;padding:16px 30px;}
+
+  /* ── TOP BAR ── */
+  .topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.02em;}
+  .brand .mark{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0;
+    background:var(--ink);color:var(--bg);font-size:14px;font-weight:700;}
+  .brand .dot{color:var(--accent);}
+  .top-actions{display:flex;align-items:center;gap:8px;}
+  .top-cta{display:none;}
+  @media(min-width:760px){.top-cta{display:inline-flex;}}
+  .theme-btn{width:38px;height:38px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);
+    color:var(--ink-2);cursor:pointer;font-size:15px;display:grid;place-items:center;transition:.15s;}
+  .theme-btn:hover{border-color:var(--ink);color:var(--ink);}
+  .theme-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  /* ── HERO ── */
+  .hero{padding:clamp(48px,8vw,92px) 0 clamp(40px,6vw,64px);}
+  .hero .wrap{display:grid;grid-template-columns:1fr;gap:clamp(40px,6vw,64px);align-items:center;}
+  @media(min-width:940px){.hero .wrap{grid-template-columns:1.05fr .95fr;}}
+  .hero-badge{display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-2);
+    border:1px solid var(--line-2);border-radius:999px;padding:7px 15px;margin-bottom:26px;}
+  .pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);position:relative;flex-shrink:0;}
+  .pulse::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--accent);opacity:.5;animation:pl 2.4s ease-out infinite;}
+  @keyframes pl{0%{transform:scale(.7);opacity:.6}100%{transform:scale(1.8);opacity:0}}
+  .hero-title{font-size:clamp(32px,5.6vw,58px);line-height:1.04;letter-spacing:-.03em;}
+  .hero-title .hl{color:var(--accent);}
+  .hero-sub{color:var(--ink-2);font-size:clamp(16px,1.9vw,19px);margin-top:24px;max-width:46ch;line-height:1.6;}
+  .hero-sub b{color:var(--ink);font-weight:700;}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;}
+  .hero-trust{display:flex;flex-wrap:wrap;gap:18px;margin-top:26px;font-size:13.5px;color:var(--ink-2);}
+  .hero-trust span{display:inline-flex;align-items:center;gap:7px;}
+  .ck{color:var(--accent);font-weight:700;}
+
+  /* browser mock */
+  .mock{position:relative;}
+  .browser{border:1px solid var(--line-2);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);
+    box-shadow:0 1px 0 var(--line),0 24px 50px -30px rgba(0,0,0,.28);}
+  .bchrome{display:flex;align-items:center;gap:7px;padding:11px 15px;border-bottom:1px solid var(--line);background:var(--ground);}
+  .bdot{width:10px;height:10px;border-radius:50%;background:var(--line-2);}
+  .burl{margin-left:12px;font-size:12px;color:var(--ink-3);font-family:var(--font-num);}
+  .burl b{color:var(--ink-2);}
+  .bbody{padding:20px;}
+  .shop-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px;}
+  .shop-logo{width:40px;height:40px;border-radius:9px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;}
+  .shop-name{font-weight:700;font-size:15px;display:flex;flex-direction:column;line-height:1.3;}
+  .shop-name small{font-weight:400;font-size:11px;color:var(--ink-3);margin-top:2px;}
+  .mock-label{font-size:12px;font-weight:600;color:var(--ink-3);margin:14px 0 8px;letter-spacing:.01em;}
+  .svc-row{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border:1px solid var(--line);
+    border-radius:8px;margin-bottom:8px;font-size:14px;}
+  .svc-row.sel{border-color:var(--accent);background:var(--accent-soft);}
+  .svc-row .pr{font-family:var(--font-num);font-weight:600;color:var(--ink);}
+  .slot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .slot{text-align:center;padding:9px 0;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:var(--font-num);color:var(--ink-2);}
+  .slot.off{opacity:.4;text-decoration:line-through;}
+  .slot.pick{border-color:var(--accent);background:var(--accent);color:#fff;font-weight:600;}
+  .mock-confirm{margin-top:16px;text-align:center;background:var(--ink);color:var(--bg);border-radius:8px;padding:12px;font-weight:600;font-size:14px;}
+  .mock-note{margin-top:14px;text-align:center;font-size:13px;color:var(--ink-2);}
+  .mock-note b{color:var(--accent);font-family:var(--font-num);}
+
+  /* ── STRIP ── */
+  .logostrip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ground);}
+  .logostrip .wrap{display:flex;flex-wrap:wrap;gap:10px 22px;padding:20px clamp(20px,5vw,44px);justify-content:center;}
+  .chip{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-2);}
+  .chip .ic{color:var(--accent);font-size:14px;}
+
+  /* ── PAIN ── */
+  .pain-grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;}
+  @media(min-width:760px){.pain-grid{grid-template-columns:repeat(3,1fr);}}
+  .pain{background:var(--surface);padding:clamp(24px,3vw,34px);}
+  .pico{font-size:24px;margin-bottom:16px;}
+  .pain h3{font-size:18px;margin-bottom:10px;}
+  .pain p{color:var(--ink-2);font-size:14.5px;}
+  .qt{display:block;margin-top:16px;font-size:13.5px;color:var(--ink-3);font-style:italic;border-left:2px solid var(--line-2);padding-left:12px;}
+
+  /* ── FEATURES ── */
+  .feat-grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;margin-top:8px;}
+  @media(min-width:600px){.feat-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(min-width:960px){.feat-grid{grid-template-columns:repeat(4,1fr);}}
+  .feat{background:var(--surface);padding:clamp(22px,2.6vw,30px);}
+  .fic{width:38px;height:38px;border-radius:9px;border:1px solid var(--line-2);display:grid;place-items:center;
+    color:var(--accent);font-size:17px;margin-bottom:16px;}
+  .feat h3{font-size:15.5px;margin-bottom:8px;}
+  .feat p{color:var(--ink-2);font-size:13.5px;line-height:1.55;}
+
+  /* ── STEPS ── */
+  .steps{display:grid;grid-template-columns:1fr;gap:clamp(20px,3vw,28px);counter-reset:st;}
+  @media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr);}}
+  .step{border-top:2px solid var(--ink);padding-top:22px;}
+  .step .num{font-family:var(--font-num);font-size:14px;color:var(--accent);font-weight:600;margin-bottom:14px;}
+  .step h3{font-size:20px;margin-bottom:10px;}
+  .step p{color:var(--ink-2);font-size:14.5px;}
+
+  /* ── DASHBOARD SPLIT ── */
+  .split{display:grid;grid-template-columns:1fr;gap:clamp(36px,5vw,60px);align-items:center;}
+  @media(min-width:900px){.split{grid-template-columns:1fr 1fr;}}
+  .split-list{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:16px;}
+  .split-list li{display:flex;gap:12px;font-size:15px;color:var(--ink-2);line-height:1.55;}
+  .split-list b{color:var(--ink);font-weight:700;}
+  .dash{border:1px solid var(--line-2);border-radius:var(--radius-lg);padding:24px;background:var(--surface);
+    box-shadow:0 24px 50px -34px rgba(0,0,0,.28);}
+  .dash-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;}
+  .dash-lab{font-size:12.5px;color:var(--ink-3);margin-bottom:6px;}
+  .dash-big{font-size:30px;font-weight:700;font-family:var(--font-num);letter-spacing:-.02em;}
+  .dash-pill{font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:6px 12px;white-space:nowrap;}
+  .chart{display:flex;align-items:flex-end;gap:10px;height:130px;padding-top:8px;}
+  .bar{flex:1;background:var(--line-2);border-radius:5px 5px 0 0;transition:height .3s;}
+  .bar:last-child{background:var(--accent);}
+  .chart-x{display:flex;gap:10px;margin-top:8px;}
+  .chart-x span{flex:1;text-align:center;font-size:11px;color:var(--ink-3);}
+  .dash-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line);}
+  .dash-mini .m{text-align:center;}
+  .dash-mini .mv{font-size:19px;font-weight:700;font-family:var(--font-num);}
+  .dash-mini .ml{font-size:11.5px;color:var(--ink-3);margin-top:3px;}
+
+  /* ── LOYALTY ── */
+  .loy-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:8px;}
+  @media(min-width:820px){.loy-grid{grid-template-columns:repeat(3,1fr);}}
+  .loy{border:1px solid var(--line);border-radius:var(--radius-lg);padding:clamp(24px,3vw,30px);background:var(--surface);}
+  .loy .tag{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);
+    border-radius:999px;padding:5px 12px;margin-bottom:16px;}
+  .loy h3{font-size:18px;margin-bottom:10px;}
+  .loy p{color:var(--ink-2);font-size:14px;}
+  .demo{margin-top:20px;padding-top:18px;border-top:1px dashed var(--line-2);}
+  .pts{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;}
+  .pts .pv{font-size:24px;font-weight:700;font-family:var(--font-num);color:var(--accent);}
+  .pts .pl{font-size:12.5px;color:var(--ink-3);}
+  .progress{height:7px;background:var(--line);border-radius:999px;overflow:hidden;}
+  .progress i{display:block;height:100%;width:83%;background:var(--accent);border-radius:999px;}
+  .tier-labels{font-size:12px;color:var(--ink-3);}
+  .pkg-chip{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:9px 12px;
+    border:1px solid var(--line);border-radius:8px;margin-bottom:8px;}
+  .pkg-chip .rem{color:var(--accent);font-weight:600;font-family:var(--font-num);font-size:12px;}
+  .promo-tag{display:inline-block;font-size:13.5px;font-weight:600;color:var(--ink);border:1px dashed var(--accent);
+    border-radius:8px;padding:9px 14px;background:var(--accent-soft);}
+
+  /* ── WEDGE FACE-OFF ── */
+  .faceoff{display:grid;grid-template-columns:1fr;gap:18px;margin-top:8px;}
+  @media(min-width:820px){.faceoff{grid-template-columns:1fr 1fr;}}
+  .fo{border:1px solid var(--line-2);border-radius:var(--radius-lg);padding:clamp(24px,3vw,32px);background:var(--surface);}
+  .fo h3{font-size:18px;margin-bottom:4px;}
+  .fo-sub{font-size:13px;color:var(--ink-3);margin-bottom:18px;}
+  .fo ul{list-style:none;padding:0;margin:0;display:grid;gap:13px;}
+  .fo li{display:flex;gap:11px;font-size:14px;color:var(--ink-2);line-height:1.5;}
+  .fo li b{color:var(--ink);font-weight:700;}
+  .mk{flex-shrink:0;font-weight:700;}
+  .fo-bad{opacity:.92;}
+  .fo-bad .mk{color:var(--crit);}
+  .fo-bad h3{color:var(--ink-2);}
+  .fo-good{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+  .fo-good .mk{color:var(--accent);}
+  .wedge-punch{text-align:center;font-size:clamp(18px,2.4vw,24px);font-weight:700;margin-top:34px;letter-spacing:-.02em;}
+  .wedge-punch .hl{color:var(--accent);}
+
+  /* ── PRICING ── */
+  .price-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:8px;}
+  @media(min-width:840px){.price-grid{grid-template-columns:repeat(3,1fr);align-items:start;}}
+  .plan{position:relative;border:1px solid var(--line-2);border-radius:var(--radius-lg);padding:clamp(26px,3vw,34px);background:var(--surface);}
+  .plan.star{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink),0 20px 44px -30px rgba(0,0,0,.3);}
+  @media(min-width:840px){.plan.star{transform:translateY(-10px);}}
+  .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);
+    font-size:11.5px;font-weight:600;border-radius:999px;padding:5px 14px;white-space:nowrap;}
+  .pdot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-bottom:14px;}
+  .plan h3{font-size:20px;margin-bottom:6px;}
+  .plan .who{font-size:13px;color:var(--ink-3);min-height:38px;margin-bottom:14px;line-height:1.45;}
+  .price{display:flex;align-items:flex-start;gap:2px;margin-bottom:4px;}
+  .price .cur{font-size:20px;font-weight:600;margin-top:8px;}
+  .price .amt{font-size:42px;font-weight:700;font-family:var(--font-num);letter-spacing:-.03em;line-height:1;}
+  .price .per{font-size:14px;color:var(--ink-3);align-self:flex-end;margin-bottom:6px;margin-left:3px;}
+  .yr{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:20px;}
+  .plan ul{list-style:none;padding:0;margin:0 0 24px;display:grid;gap:11px;}
+  .plan li{display:flex;gap:10px;font-size:13.8px;color:var(--ink-2);line-height:1.45;}
+  .plan li b{color:var(--ink);font-weight:700;}
+  .plan-cta{width:100%;background:transparent;color:var(--ink);border:1px solid var(--line-2);}
+  .plan-cta:hover{border-color:var(--ink);background:var(--ink);color:var(--bg);}
+  .plan.star .plan-cta{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .plan.star .plan-cta:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .price-foot{display:flex;flex-wrap:wrap;gap:14px 24px;justify-content:center;align-items:center;margin-top:30px;font-size:13.5px;color:var(--ink-2);}
+  .price-foot span{display:inline-flex;align-items:center;gap:7px;}
+  .price-foot .setup{color:var(--ink-3);font-size:12.5px;}
+
+  /* ── SOCIAL PROOF ── */
+  .proof-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);
+    border-radius:var(--radius-lg);overflow:hidden;margin-bottom:34px;}
+  @media(min-width:720px){.proof-stats{grid-template-columns:repeat(4,1fr);}}
+  .pstat{background:var(--surface);padding:26px 18px;text-align:center;}
+  .pstat .pv{font-size:32px;font-weight:700;font-family:var(--font-num);color:var(--accent);letter-spacing:-.02em;}
+  .pstat .pl{font-size:12.5px;color:var(--ink-2);margin-top:6px;line-height:1.4;}
+  .quotes{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:760px){.quotes{grid-template-columns:1fr 1fr;}}
+  .quote{border:1px solid var(--line);border-radius:var(--radius-lg);padding:clamp(24px,3vw,30px);background:var(--surface);}
+  .stars{color:var(--accent);letter-spacing:2px;font-size:14px;margin-bottom:14px;}
+  .quote blockquote{margin:0;font-size:16px;line-height:1.6;color:var(--ink);font-weight:500;}
+  .quote .by{margin-top:16px;font-size:13px;color:var(--ink-3);}
+  .quote .by b{color:var(--ink-2);}
+  .proof-note{margin-top:20px;font-size:11.5px;color:var(--ink-3);text-align:center;}
+
+  /* ── OFFER + LEAD ── */
+  .offer-grid{display:grid;grid-template-columns:1fr;gap:clamp(32px,5vw,56px);align-items:start;}
+  @media(min-width:900px){.offer-grid{grid-template-columns:1fr 1fr;}}
+  .offer-copy h2{font-size:clamp(24px,3.4vw,36px);line-height:1.1;margin-top:18px;}
+  .offer-perks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:13px;}
+  .offer-perks li{display:flex;gap:11px;font-size:15px;color:var(--ink-2);}
+  .lead{border:1px solid var(--line-2);border-radius:var(--radius-lg);padding:clamp(24px,3vw,32px);background:var(--surface);
+    box-shadow:0 24px 50px -34px rgba(0,0,0,.26);}
+  .lead h3{font-size:20px;margin-bottom:6px;}
+  .lsub{font-size:13.5px;color:var(--ink-3);margin-bottom:20px;}
+  .fld{margin-bottom:15px;}
+  .fld label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;color:var(--ink-2);}
+  .req{color:var(--crit);}
+  .fld input,.fld select{width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:8px;
+    background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14.5px;transition:border-color .15s;}
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .lead .btn-primary{width:100%;margin-top:6px;}
+  .lead-fine{font-size:11.5px;color:var(--ink-3);margin-top:14px;line-height:1.5;}
+  .lead-fine b{color:var(--ink-2);}
+  .thanks{display:none;text-align:center;padding:20px 0;}
+  .thanks.show{display:block;}
+  .thanks .big{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;
+    font-size:26px;margin:0 auto 18px;}
+  .thanks h3{margin-bottom:10px;}
+  .thanks p{color:var(--ink-2);font-size:14.5px;}
+  .thanks .sum{margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:9px;font-size:13px;color:var(--ink-2);background:var(--ground);}
+
+  /* ── FINAL ── */
+  .final .box{border:1px solid var(--line-2);border-radius:var(--radius-lg);background:var(--ground);
+    padding:clamp(40px,6vw,72px) clamp(24px,4vw,48px);text-align:center;}
+  .final h2{font-size:clamp(26px,3.8vw,40px);line-height:1.1;max-width:20ch;margin:0 auto;}
+  .final p{color:var(--ink-2);font-size:16px;margin:20px auto 0;max-width:52ch;}
+  .final .fine{font-size:13px;color:var(--ink-3);margin-top:22px;}
+
+  /* ── FOOTER ── */
+  .foot{border-top:1px solid var(--line);padding:40px 0;text-align:center;}
+  .foot .wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .foot-tag{font-size:13px;color:var(--ink-3);max-width:52ch;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══ -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand"><span class="mark">จ</span> จองดี<span class="dot">.</span></div>
+    <div class="top-actions">
+      <a href="#pricing" class="btn btn-ghost top-cta" style="padding:9px 18px;font-size:14px">ดูแพ็กเกจ &amp; ราคา</a>
+      <a href="#lead" class="btn btn-primary top-cta" style="padding:9px 18px;font-size:14px">ทดลองใช้ฟรี</a>
+      <button class="theme-btn" id="themeToggle" type="button" aria-label="สลับโหมดสว่าง/มืด" title="สลับโหมด">◐</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="hero-badge"><span class="pulse"></span> ระบบจองครบวงจร สำหรับสปา · นวด · เสริมสวย · คลินิก</span>
+      <h1 class="hero-title">เลิกจดคิวในสมุด เลิกวุ่นกับแชท ให้ลูกค้า<span class="hl">จองเองผ่านเว็บของร้านคุณ</span> 24 ชม.</h1>
+      <p class="hero-sub">เว็บจองแบรนด์ร้านคุณเอง 100% พร้อมหลังบ้านครบ — คิว, พนักงาน, สะสมแต้ม, แพ็กเกจ, รายได้ ในระบบเดียว <b>ไม่หักค่าคอมต่อคิวสักบาท</b></p>
+      <div class="hero-cta">
+        <a href="#lead" class="btn btn-primary btn-lg">ทดลองใช้ฟรี 14 วัน</a>
+        <a href="#lead" class="btn btn-ghost btn-lg">ขอดูเดโมระบบ</a>
+      </div>
+      <div class="hero-trust">
+        <span><span class="ck">✓</span> ไม่ต้องใส่บัตรเครดิต</span>
+        <span><span class="ck">✓</span> ติดตั้งให้พร้อมใช้</span>
+        <span><span class="ck">✓</span> ยกเลิกได้ทุกเมื่อ</span>
+      </div>
+    </div>
+
+    <div class="mock">
+      <div class="browser" role="img" aria-label="ตัวอย่างหน้าจองบนเว็บแบรนด์ของร้านเอง: เลือกบริการ เลือกเวลา และยืนยัน">
+        <div class="bchrome">
+          <span class="bdot"></span><span class="bdot"></span><span class="bdot"></span>
+          <span class="burl">🔒 <b>ร้านคุณเอง</b>.com/booking</span>
+        </div>
+        <div class="bbody">
+          <div class="shop-head">
+            <div class="shop-logo">S</div>
+            <div class="shop-name">Serenity Spa &amp; Massage<small>โลโก้และแบรนด์ของร้านคุณ · ไม่มีตราแพลตฟอร์ม</small></div>
+          </div>
+          <div class="mock-label">1 · เลือกบริการ</div>
+          <div class="svc-row sel"><span>นวดน้ำมันอโรมา · 60 นาที</span><span class="pr">฿690</span></div>
+          <div class="svc-row"><span>นวดไทยประยุกต์ · 90 นาที</span><span class="pr">฿850</span></div>
+          <div class="mock-label">2 · เลือกเวลาที่ว่างจริง</div>
+          <div class="slot-grid">
+            <div class="slot off">10:00</div>
+            <div class="slot">11:30</div>
+            <div class="slot pick">13:00</div>
+            <div class="slot">14:30</div>
+          </div>
+          <div class="mock-confirm">3 · ยืนยันการจอง →</div>
+        </div>
+      </div>
+      <div class="mock-note"><b>0%</b> ค่าคอมต่อคิว · แบรนด์ร้านคุณ 100%</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STRIP ══ -->
+<div class="logostrip">
+  <div class="wrap">
+    <span class="chip"><span class="ic">◷</span> จองออนไลน์ 24 ชม.</span>
+    <span class="chip"><span class="ic">✦</span> สะสมแต้ม &amp; สมาชิก</span>
+    <span class="chip"><span class="ic">▦</span> แพ็กเกจซื้อล่วงหน้า</span>
+    <span class="chip"><span class="ic">◈</span> แดชบอร์ดรายได้</span>
+    <span class="chip"><span class="ic">⌂</span> หลายสาขา · 3 ภาษา</span>
+    <span class="chip"><span class="ic">✉</span> แจ้งเตือน LINE / SMS / อีเมล</span>
+  </div>
+</div>
+
+<!-- ══ 01 · PAIN ══ -->
+<section class="sec-pad">
+  <div class="wrap">
+    <div class="shead">
+      <div class="snum"><b>01</b> ปัญหาที่เจ้าของร้านเจอทุกวัน</div>
+      <h2 class="sec-title">ร้านดี บริการดี แต่ระบบจองยังทำให้เสียลูกค้าอยู่ทุกวัน</h2>
+    </div>
+    <div class="pain-grid">
+      <div class="pain">
+        <div class="pico">🗓️</div>
+        <h3>คิวชนกัน จองซ้อน</h3>
+        <p>จดคิวในสมุด/แชท พอคนจองพร้อมกันหลายทางก็ชนกัน ลูกค้ามาถึงแล้วไม่มีคิว เสียหน้า เสียลูกค้าประจำ</p>
+        <span class="qt">“นึกว่าว่าง ที่แท้เต็มไปแล้ว”</span>
+      </div>
+      <div class="pain">
+        <div class="pico">💬</div>
+        <h3>ตอบแชทไม่ทัน ตกดึกก็ยังตอบ</h3>
+        <p>ลูกค้าทักมาถามคิว-ราคา-โปรฯ ทั้งวัน กว่าจะตอบลูกค้าไปหาร้านอื่นแล้ว คนเดียวรับไม่ไหว จ้างแอดมินก็เพิ่มต้นทุน</p>
+        <span class="qt">“ตอบช้าไปนิดเดียว ลูกค้าหายเลย”</span>
+      </div>
+      <div class="pain">
+        <div class="pico">✂️</div>
+        <h3>โดนแพลตฟอร์มหักหัวคิว</h3>
+        <p>ลง marketplace แล้วโดนหักค่าคอมทุกคิว ร้านเป็นแค่ชื่อในลิสต์ ลูกค้าจำแบรนด์ร้านไม่ได้ ยิ่งขายดียิ่งจ่ายเยอะ</p>
+        <span class="qt">“ทำงานให้เขา ไม่ใช่ให้ร้านเรา”</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 02 · FEATURES ══ -->
+<section class="sec-alt sec-pad" id="features">
+  <div class="wrap">
+    <div class="shead">
+      <div class="snum"><b>02</b> ทางออกครบในระบบเดียว</div>
+      <h2 class="sec-title">ทุกอย่างที่ร้านบริการต้องใช้ รวมไว้ในที่เดียว</h2>
+      <p class="sec-lead">ไม่ต้องต่อหลายแอป ไม่ต้องจ่ายหลายเจ้า — จองหน้าบ้านถึงบริหารหลังบ้าน จบในระบบเดียว</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat"><div class="fic">◷</div><h3>จองออนไลน์ 24 ชม.</h3><p>ลูกค้าเลือกบริการ พนักงาน และเวลาว่างจริงเองได้ทันที ไม่ต้องรอแอดมิน</p></div>
+      <div class="feat"><div class="fic">✦</div><h3>สะสมแต้ม &amp; สมาชิก</h3><p>แต้มอัตโนมัติทุกครั้งที่ใช้บริการ ไต่ระดับ Bronze–Platinum ดึงลูกค้ากลับมาซ้ำ</p></div>
+      <div class="feat"><div class="fic">▦</div><h3>แพ็กเกจซื้อล่วงหน้า</h3><p>ขายคอร์ส/แพ็กเกจ เก็บเงินก่อน ลูกค้าทยอยมาใช้ ช่วยกระแสเงินสดร้าน</p></div>
+      <div class="feat"><div class="fic">%</div><h3>โปรโมชั่น &amp; ส่วนลด</h3><p>สร้างโค้ดส่วนลด ตั้งเงื่อนไขได้ครบ วัด ROI แต่ละแคมเปญได้จริง</p></div>
+      <div class="feat"><div class="fic">◈</div><h3>แดชบอร์ดรายได้</h3><p>เห็นรายได้วันนี้/เดือนนี้ กราฟย้อนหลัง อันดับพนักงานขายดี แบบเรียลไทม์</p></div>
+      <div class="feat"><div class="fic">◱</div><h3>จัดการพนักงาน &amp; กะ</h3><p>ตารางกะ วันลา คอมมิชชั่น ระบบกันคิวชนอัตโนมัติจากตารางจริง</p></div>
+      <div class="feat"><div class="fic">✉</div><h3>แจ้งเตือนกันลืมนัด</h3><p>เตือนล่วงหน้าทาง LINE / SMS / อีเมล ลดอัตราลูกค้าไม่มาตามนัด (no-show)</p></div>
+      <div class="feat"><div class="fic">⌂</div><h3>หลายสาขา · 3 ภาษา</h3><p>คุมหลายสาขาในบัญชีเดียว รองรับไทย/อังกฤษ/นอร์เวย์ เจาะลูกค้าต่างชาติ</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 03 · STEPS ══ -->
+<section class="sec-pad">
+  <div class="wrap">
+    <div class="shead">
+      <div class="snum"><b>03</b> ฝั่งลูกค้า — ง่ายจนไม่ต้องสอน</div>
+      <h2 class="sec-title">ลูกค้าจองเสร็จใน 3 ขั้นตอน ไม่ต้องโทร ไม่ต้องรอตอบแชท</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">ขั้นที่ 1</div>
+        <h3>เลือกบริการ</h3>
+        <p>เลือกบริการที่ต้องการ เห็นราคาและระยะเวลาชัดเจน จะเจาะจงพนักงานคนโปรด หรือ “คนไหนก็ได้ที่ว่าง” ก็ได้</p>
+      </div>
+      <div class="step">
+        <div class="num">ขั้นที่ 2</div>
+        <h3>เลือกเวลา</h3>
+        <p>ระบบโชว์เฉพาะช่องเวลาที่ว่างจริงจากตารางกะพนักงาน ช่องที่เต็มจองไม่ได้ ไม่มีทางจองซ้อน</p>
+      </div>
+      <div class="step">
+        <div class="num">ขั้นที่ 3</div>
+        <h3>ยืนยัน</h3>
+        <p>กดยืนยันจบ รับอีเมล/LINE ยืนยันทันที พร้อมแจ้งเตือนก่อนถึงนัด — ร้านก็ได้แจ้งเตือนคิวใหม่ทันทีเช่นกัน</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 04 · DASHBOARD ══ -->
+<section class="sec-alt sec-pad">
+  <div class="wrap">
+    <div class="split">
+      <div class="split-copy">
+        <div class="snum"><b>04</b> ฝั่งเจ้าของร้าน — คุมร้านจากมือถือ</div>
+        <h2 class="sec-title">เปิดมือถือ ก็รู้ทันทีว่าวันนี้ร้านทำเงินไปเท่าไหร่</h2>
+        <p class="sec-lead">ไม่ต้องนั่งรวมยอดท้ายวันในเครื่องคิดเลข ทุกการจองเข้าระบบเป็นตัวเลขและกราฟให้อ่านง่ายทันที</p>
+        <ul class="split-list">
+          <li><span class="ck">✓</span><span><b>รายได้วันนี้ / เดือนนี้</b> เทียบเดือนก่อนเป็นเปอร์เซ็นต์ รู้ทันทีว่าโตหรือหด</span></li>
+          <li><span class="ck">✓</span><span><b>อันดับพนักงานขายดี</b> และกราฟสถานะการจอง เห็นภาพรวมร้านใน 5 วินาที</span></li>
+          <li><span class="ck">✓</span><span><b>Audit log ทุกการกระทำ</b> ใครแก้ ใครลบ ใครเปลี่ยนสถานะ ตรวจย้อนหลังได้ 100%</span></li>
+          <li><span class="ck">✓</span><span><b>แบ่งสิทธิ์ 4 ระดับ</b> เจ้าของ / แอดมิน / พนักงาน / ลูกค้า เห็นเฉพาะส่วนที่ควรเห็น</span></li>
+        </ul>
+      </div>
+      <div class="dash" aria-hidden="true">
+        <div class="dash-top">
+          <div>
+            <div class="dash-lab">รายได้เดือนนี้</div>
+            <div class="dash-big">฿248,900</div>
+          </div>
+          <span class="dash-pill">▲ 18% จากเดือนก่อน</span>
+        </div>
+        <div class="chart">
+          <div class="bar" style="height:44%"></div>
+          <div class="bar" style="height:58%"></div>
+          <div class="bar" style="height:39%"></div>
+          <div class="bar" style="height:71%"></div>
+          <div class="bar" style="height:63%"></div>
+          <div class="bar" style="height:85%"></div>
+          <div class="bar" style="height:96%"></div>
+        </div>
+        <div class="chart-x"><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span><span>อา</span></div>
+        <div class="dash-mini">
+          <div class="m"><div class="mv">42</div><div class="ml">คิววันนี้</div></div>
+          <div class="m"><div class="mv">฿5,930</div><div class="ml">เฉลี่ย/วัน</div></div>
+          <div class="m"><div class="mv">4.9★</div><div class="ml">คะแนนรีวิว</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 05 · LOYALTY ══ -->
+<section class="sec-pad">
+  <div class="wrap">
+    <div class="shead">
+      <div class="snum"><b>05</b> ทำให้ลูกค้ากลับมาซ้ำ = รายได้ที่คาดเดาได้</div>
+      <h2 class="sec-title">ลูกค้าใหม่หายาก ลูกค้าเก่ากลับมาซ้ำคือกำไรจริง</h2>
+      <p class="sec-lead">ระบบสร้างเหตุผลให้ลูกค้ากลับมา 3 ทาง โดยที่ร้านไม่ต้องมานั่งจดเองสักนิด</p>
+    </div>
+    <div class="loy-grid">
+      <div class="loy">
+        <div class="tag">สะสมแต้ม &amp; ระดับสมาชิก</div>
+        <h3>ยิ่งใช้บ่อย ยิ่งได้เยอะ</h3>
+        <p>ได้แต้มอัตโนมัติทุกครั้ง ไต่ระดับสมาชิกเอง ลูกค้ามีเหตุผลกลับมาใช้ครบก่อนหมดอายุ</p>
+        <div class="demo">
+          <div class="pts"><span class="pv">1,240</span><span class="pl">แต้ม · ระดับ Gold</span></div>
+          <div class="progress"><i></i></div>
+          <div class="tier-labels" style="margin-top:8px"><span>อีก 260 แต้ม ถึง Platinum</span></div>
+        </div>
+      </div>
+      <div class="loy">
+        <div class="tag">แพ็กเกจซื้อล่วงหน้า</div>
+        <h3>เก็บเงินก่อน ลูกค้าผูกกับร้าน</h3>
+        <p>ขายแพ็กเกจ 10 ครั้งในราคาพิเศษ ลูกค้าจ่ายก้อนเดียว แล้วทยอยมาใช้ — เงินเข้าร้านก่อน ลูกค้ากลับมาแน่</p>
+        <div class="demo">
+          <div class="pkg-chip"><span class="left">แพ็กนวด 10 ครั้ง</span><span class="rem">เหลือ 6 สิทธิ์</span></div>
+          <div class="pkg-chip"><span class="left">แพ็กหน้าใส 5 ครั้ง</span><span class="rem">เหลือ 3 สิทธิ์</span></div>
+        </div>
+      </div>
+      <div class="loy">
+        <div class="tag">โปรโมชั่น &amp; ส่วนลด</div>
+        <h3>กระตุ้นยอดช่วงเงียบ</h3>
+        <p>ตั้งโค้ดส่วนลดช่วงวันธรรมดา จำกัดจำนวนสิทธิ์และวันหมดอายุ ดันคิวช่วงร้านว่างให้เต็ม</p>
+        <div class="demo">
+          <span class="promo-tag">🎟 WEEKDAY20 · ลด 20%</span>
+          <div class="tier-labels" style="margin-top:12px"><span>ใช้ได้ จ.–พฤ. · เหลือ 34 สิทธิ์</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 06 · WEDGE FACE-OFF ══ -->
+<section class="sec-alt sec-pad">
+  <div class="wrap">
+    <div class="shead">
+      <div class="snum"><b>06</b> จุดต่างที่สำคัญที่สุด</div>
+      <h2 class="sec-title">เว็บของร้านคุณเอง ไม่ใช่ชื่อร้านหนึ่งในลิสต์ของคนอื่น</h2>
+      <p class="sec-lead">marketplace ทำให้ลูกค้าจำแพลตฟอร์มได้ ไม่ใช่จำร้านคุณ — และหักค่าคอมทุกครั้งที่คุณขายได้</p>
+    </div>
+    <div class="faceoff">
+      <div class="fo fo-bad">
+        <h3>Marketplace / แอปรวมร้าน</h3>
+        <p class="fo-sub">GoWabi, Fresha และแอปรวมร้านทั่วไป</p>
+        <ul>
+          <li><span class="mk">✕</span><span>หักค่าคอมทุกคิว ยิ่งขายดียิ่งจ่ายเยอะ</span></li>
+          <li><span class="mk">✕</span><span>ร้านเป็นแค่ 1 ชื่อในลิสต์ ข้าง ๆ คู่แข่งเพียบ</span></li>
+          <li><span class="mk">✕</span><span>ลูกค้าเป็นของแพลตฟอร์ม ไม่ใช่ของร้าน</span></li>
+          <li><span class="mk">✕</span><span>แต้ม/แพ็กเกจ/รีวิว ผูกกับแอป ย้ายไปไหนไม่ได้</span></li>
+        </ul>
+      </div>
+      <div class="fo fo-good">
+        <h3>จองดี — White-label</h3>
+        <p class="fo-sub">เว็บจองใต้แบรนด์และโดเมนของร้านคุณเอง</p>
+        <ul>
+          <li><span class="mk">✓</span><span><b>ไม่หักค่าคอมต่อคิว</b> — จ่ายค่าระบบรายเดือนคงที่ ขายได้เท่าไหร่ก็ของร้าน</span></li>
+          <li><span class="mk">✓</span><span><b>โลโก้ สี ธีม โดเมน</b> เป็นของร้าน 100% ไม่มีตราแพลตฟอร์มแปะทับ</span></li>
+          <li><span class="mk">✓</span><span><b>ข้อมูลลูกค้าเป็นของร้าน</b> รายชื่อ ประวัติ แต้ม อยู่กับคุณตลอด</span></li>
+          <li><span class="mk">✓</span><span><b>ตั้งอีเมลผู้ส่ง (SMTP) ของร้านเอง</b> ดูมืออาชีพ เหมือนมีทีมไอทีของตัวเอง</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="wedge-punch">ทุกคิวที่คุณขายได้ <span class="hl">เป็นของร้านคุณเต็ม ๆ</span> ไม่ต้องแบ่งใคร</p>
+  </div>
+</section>
+
+<!-- ══ 07 · PRICING ══ -->
+<section class="sec-pad" id="pricing">
+  <div class="wrap">
+    <div class="shead">
+      <div class="snum"><b>07</b> แพ็กเกจ &amp; ราคา</div>
+      <h2 class="sec-title">ราคาชัดเจน จ่ายคงที่รายเดือน — ไม่มีหักค่าคอมซ่อนเร้น</h2>
+      <p class="sec-lead">เลือกให้พอดีกับขนาดร้าน ขยับขึ้น-ลงได้ตลอด เริ่มทดลองฟรีก่อนตัดสินใจ</p>
+    </div>
+
+    <div class="price-grid">
+      <!-- Starter -->
+      <div class="plan">
+        <span class="pdot" style="background:var(--ink-3)"></span>
+        <h3>Starter</h3>
+        <p class="who">ร้านเล็ก 1 สาขา เพิ่งเริ่มระบบจองออนไลน์</p>
+        <div class="price"><span class="cur">฿</span><span class="amt">790</span><span class="per">/เดือน</span></div>
+        <div class="yr">จ่ายรายปี ประหยัด ~2 เดือน</div>
+        <ul>
+          <li><span class="ck">✓</span><span>จองออนไลน์ 24 ชม. + จัดการคิว</span></li>
+          <li><span class="ck">✓</span><span>หลังบ้านครบ: บริการ พนักงาน ลูกค้า</span></li>
+          <li><span class="ck">✓</span><span>แดชบอร์ดรายได้ &amp; รีวิว</span></li>
+          <li><span class="ck">✓</span><span>แจ้งเตือนทางอีเมล</span></li>
+          <li><span class="ck">✓</span><span>เว็บแบรนด์ร้านเอง · <b>ไม่หักค่าคอม</b></span></li>
+        </ul>
+        <a href="#lead" class="btn plan-cta">เริ่มทดลองฟรี</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan star">
+        <span class="ribbon">แนะนำ · คุ้มที่สุด</span>
+        <span class="pdot" style="background:var(--accent)"></span>
+        <h3>Pro</h3>
+        <p class="who">ร้านที่โตแล้ว อยากได้ลูกค้าประจำและระบบเต็ม</p>
+        <div class="price"><span class="cur">฿</span><span class="amt">1,590</span><span class="per">/เดือน</span></div>
+        <div class="yr">จ่ายรายปี ประหยัด ~2 เดือน</div>
+        <ul>
+          <li><span class="ck">✓</span><span><b>ทุกอย่างใน Starter</b> และเพิ่ม…</span></li>
+          <li><span class="ck">✓</span><span>สะสมแต้ม / แพ็กเกจ / โปรโมชั่น เต็มระบบ</span></li>
+          <li><span class="ck">✓</span><span>แบรนด์ + <b>SMTP อีเมลของร้านเอง</b></span></li>
+          <li><span class="ck">✓</span><span>แจ้งเตือน <b>LINE / SMS</b></span></li>
+          <li><span class="ck">✓</span><span>รองรับสูงสุด <b>3 สาขา</b></span></li>
+        </ul>
+        <a href="#lead" class="btn plan-cta">เริ่มทดลองฟรี</a>
+      </div>
+
+      <!-- Business -->
+      <div class="plan">
+        <span class="pdot" style="background:var(--ink)"></span>
+        <h3>Business</h3>
+        <p class="who">หลายสาขา หรือเชนร้าน ต้องการดูแลระดับพรีเมียม</p>
+        <div class="price"><span class="cur">฿</span><span class="amt">2,990</span><span class="per">/เดือน</span></div>
+        <div class="yr">จ่ายรายปี ประหยัด ~2 เดือน</div>
+        <ul>
+          <li><span class="ck">✓</span><span><b>ทุกอย่างใน Pro</b> และเพิ่ม…</span></li>
+          <li><span class="ck">✓</span><span><b>หลายสาขาไม่จำกัด</b> ในบัญชีเดียว</span></li>
+          <li><span class="ck">✓</span><span>โควตาแจ้งเตือน LINE/SMS สูง</span></li>
+          <li><span class="ck">✓</span><span>ดูแลระดับพรีเมียม · จัดลำดับความสำคัญ</span></li>
+          <li><span class="ck">✓</span><span>เหมาะกับทีมหลายคน หลายสิทธิ์</span></li>
+        </ul>
+        <a href="#lead" class="btn plan-cta">คุยกับทีมงาน</a>
+      </div>
+    </div>
+
+    <div class="price-foot">
+      <span><span class="ck">✓</span> ทดลองฟรี 14 วัน ไม่ต้องใส่บัตร</span>
+      <span><span class="ck">✓</span> จ่ายรายปีประหยัด ~2 เดือน</span>
+      <span class="setup">มีค่าติดตั้งครั้งแรก ฿2,500 (ตั้งค่าแบรนด์ + ขึ้นระบบให้พร้อมใช้)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 08 · SOCIAL PROOF ══ -->
+<section class="sec-alt sec-pad">
+  <div class="wrap">
+    <div class="shead">
+      <div class="snum"><b>08</b> ใช้งานจริง ไม่ใช่ตัวอย่างจำลอง</div>
+      <h2 class="sec-title">ระบบเดียวกันนี้ ให้บริการร้านจริงอยู่ทุกวัน</h2>
+    </div>
+    <div class="proof-stats">
+      <div class="pstat"><div class="pv">3</div><div class="pl">ร้านใช้งานจริงในนอร์เวย์</div></div>
+      <div class="pstat"><div class="pv">24/7</div><div class="pl">เปิดรับจองไม่มีวันหยุด</div></div>
+      <div class="pstat"><div class="pv">3</div><div class="pl">ภาษาในตัว (ไทย/อังกฤษ/นอร์เวย์)</div></div>
+      <div class="pstat"><div class="pv">0%</div><div class="pl">ค่าคอมต่อคิว</div></div>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <blockquote>“ตั้งแต่ให้ลูกค้าจองผ่านเว็บร้านเอง ไม่ต้องมานั่งตอบแชทถามคิวทั้งวันแล้ว ลูกค้าก็จองตอนดึกได้เอง”</blockquote>
+        <div class="by"><b>เจ้าของร้านสปา</b> · เมือง Bergen, นอร์เวย์</div>
+      </div>
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <blockquote>“ชอบที่แบรนด์เป็นของร้านเราเอง ลูกค้าจำเราได้ ไม่ใช่จำแอป แล้วก็ไม่โดนหักค่าคอมเหมือนที่เคยใช้”</blockquote>
+        <div class="by"><b>ผู้จัดการร้านนวด</b> · ลูกค้าที่ใช้งานระบบจริง</div>
+      </div>
+    </div>
+    <p class="proof-note">* คำรับรองข้างต้นเป็นตัวอย่างเชิงประกอบจากประเภทผู้ใช้งานจริง เพื่อสื่อรูปแบบการใช้งาน</p>
+  </div>
+</section>
+
+<!-- ══ 09 · OFFER + LEAD ══ -->
+<section class="sec-pad" id="lead">
+  <div class="wrap">
+    <div class="offer-grid">
+      <div class="offer-copy">
+        <div class="snum"><b>09</b> เริ่มต้นวันนี้</div>
+        <h2>ทดลองใช้ฟรี 14 วัน ให้เราตั้งค่าแบรนด์ร้านให้พร้อมใช้</h2>
+        <p class="sec-lead">ทิ้งเบอร์หรือ LINE ไว้ เดี๋ยวทีมงานติดต่อกลับ พาดูระบบจริง และช่วยขึ้นเว็บจองแบรนด์ร้านคุณให้เลย</p>
+        <ul class="offer-perks">
+          <li><span class="ck">✓</span> ทดลองฟรี 14 วัน ไม่ต้องใส่บัตรเครดิต</li>
+          <li><span class="ck">✓</span> พาชมเดโมระบบตัวจริง 1:1</li>
+          <li><span class="ck">✓</span> ทีมงานช่วยตั้งค่าแบรนด์ + ขึ้นระบบให้</li>
+          <li><span class="ck">✓</span> ไม่ผูกมัด ยกเลิกได้ทุกเมื่อ</li>
+        </ul>
+      </div>
+
+      <form class="lead" id="leadForm" novalidate>
+        <div id="formInner">
+          <h3>ให้เจ้าหน้าที่ติดต่อกลับ</h3>
+          <p class="lsub">กรอกสั้น ๆ 4 ช่อง เดี๋ยวเราติดต่อกลับโดยเร็วที่สุด</p>
+          <div class="fld">
+            <label for="f-name">ชื่อ <span class="req">*</span></label>
+            <input id="f-name" name="name" type="text" placeholder="ชื่อ-นามสกุล หรือชื่อร้าน" autocomplete="name" required>
+          </div>
+          <div class="fld">
+            <label for="f-phone">เบอร์โทร <span class="req">*</span></label>
+            <input id="f-phone" name="phone" type="tel" inputmode="tel" placeholder="08X-XXX-XXXX" autocomplete="tel" required>
+          </div>
+          <div class="fld">
+            <label for="f-line">LINE ID</label>
+            <input id="f-line" name="line" type="text" placeholder="@yourshop (ถ้ามี)" autocomplete="off">
+          </div>
+          <div class="fld">
+            <label for="f-plan">สนใจแพ็กเกจไหน</label>
+            <select id="f-plan" name="plan">
+              <option value="ยังไม่แน่ใจ / ขอคำแนะนำ">ยังไม่แน่ใจ — ขอให้แนะนำ</option>
+              <option value="Starter ฿790/เดือน">Starter — ฿790/เดือน</option>
+              <option value="Pro ฿1,590/เดือน">Pro — ฿1,590/เดือน (แนะนำ)</option>
+              <option value="Business ฿2,990/เดือน">Business — ฿2,990/เดือน</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">ให้เจ้าหน้าที่ติดต่อกลับ →</button>
+          <p class="lead-fine">กด “ติดต่อกลับ” แสดงว่าคุณยินยอมให้ทีมงานติดต่อกลับเรื่องบริการ <b>ไม่มีการเรียกเก็บเงิน</b> ในขั้นตอนนี้</p>
+        </div>
+        <div class="thanks" id="thanks" role="status" aria-live="polite">
+          <div class="big">✓</div>
+          <h3>ขอบคุณค่ะ! ได้รับข้อมูลแล้ว</h3>
+          <p>ทีมงานจะติดต่อกลับหาคุณ<b id="tName">คุณลูกค้า</b>โดยเร็วที่สุด เพื่อพาดูระบบและเริ่มทดลองใช้ฟรี</p>
+          <div class="sum" id="tSum"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══ -->
+<section class="sec-pad final">
+  <div class="wrap">
+    <div class="box">
+      <h2>ให้ร้านคุณมีเว็บจองเป็นของตัวเอง ตั้งแต่สัปดาห์นี้</h2>
+      <p>เลิกเสียลูกค้าเพราะตอบแชทไม่ทัน เลิกจ่ายค่าคอมให้แพลตฟอร์ม — เริ่มระบบจองแบรนด์ร้านคุณเองได้เลยวันนี้</p>
+      <div class="hero-cta" style="justify-content:center;margin-top:28px">
+        <a href="#lead" class="btn btn-primary btn-lg">ทดลองใช้ฟรี 14 วัน</a>
+        <a href="#lead" class="btn btn-ghost btn-lg">ขอดูเดโมระบบ</a>
+      </div>
+      <p class="fine">ไม่ต้องใส่บัตรเครดิต · ยกเลิกได้ทุกเมื่อ · ทีมงานช่วยตั้งค่าให้</p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="brand"><span class="mark">จ</span> จองดี<span class="dot">.</span></div>
+    <p class="foot-tag">ระบบจองคิว &amp; นัดหมายออนไลน์ครบวงจร สำหรับธุรกิจบริการ · แบรนด์ร้านคุณเอง 100% ไม่หักค่าคอม</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── Theme toggle (wins over media query both directions) ── */
+  var root = document.documentElement;
+  var tBtn = document.getElementById('themeToggle');
+  function currentIsDark(){
+    var attr = root.getAttribute('data-theme');
+    if(attr) return attr === 'dark';
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  tBtn.addEventListener('click', function(){
+    root.setAttribute('data-theme', currentIsDark() ? 'light' : 'dark');
+  });
+
+  /* ── Lead form: demo submit → thank-you ── */
+  var form = document.getElementById('leadForm');
+  var inner = document.getElementById('formInner');
+  var thanks = document.getElementById('thanks');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = (document.getElementById('f-name').value || '').trim();
+    var phone = (document.getElementById('f-phone').value || '').trim();
+    if(!name || !phone){
+      (!name ? document.getElementById('f-name') : document.getElementById('f-phone')).focus();
+      return;
+    }
+    var line = (document.getElementById('f-line').value || '').trim();
+    var plan = document.getElementById('f-plan').value;
+    document.getElementById('tName').textContent = ' คุณ' + name.split(' ')[0] + ' ';
+    var sum = '<b>สนใจ:</b> ' + plan + ' &nbsp;·&nbsp; <b>ติดต่อ:</b> ' + phone;
+    if(line){ sum += ' / LINE ' + line; }
+    document.getElementById('tSum').innerHTML = sum;
+    inner.style.display = 'none';
+    thanks.classList.add('show');
+    thanks.scrollIntoView({block:'nearest', behavior: (window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth')});
+  });
+})();
+</script>
+
+</body>
+</html>
