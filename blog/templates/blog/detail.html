@@ -50,7 +50,7 @@
     .yw-outer {
       display: flex;
       gap: 1.25rem;
-      padding: 0.75rem 1.25rem 3rem;
+      padding: 0 1.25rem 3rem;
       align-items: flex-start;
     }
     .yw-main { flex: 1; min-width: 0; }
@@ -63,6 +63,8 @@
       overflow: hidden;
       background: #000;
       margin-bottom: 1rem;
+      max-height: 520px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
     }
     .yw-player img {
       width: 100%;
@@ -84,7 +86,7 @@
     /* Title */
     .yw-title {
       font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-      font-weight: 900;
+      font-weight: 800;
       line-height: 1.3;
       color: var(--bs-body-color);
       margin-bottom: 0.75rem;
@@ -175,8 +177,17 @@
       font-weight: 800;
       margin-top: 2rem;
       margin-bottom: 0.75rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 2px solid rgba(201, 169, 110, 0.2);
+      padding: 0.4rem 0.75rem 0.4rem 1rem;
+      border-bottom: 2px solid rgba(201, 169, 110, 0.45);
+      border-left: 4px solid var(--brand-gold);
+      background: rgba(201, 169, 110, 0.03);
+      border-radius: 0 6px 0 0;
+      margin-left: -1rem;
+    }
+    .yw-article-body h2:not(:first-of-type) {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(201, 169, 110, 0.1);
     }
     .yw-article-body h3 {
       font-size: 1.1rem;
@@ -192,7 +203,7 @@
       background: rgba(201, 169, 110, 0.05);
       border-radius: 0 8px 8px 0;
       color: var(--brand-muted);
-      font-style: italic;
+      font-style: normal;
     }
     .yw-article-body img {
       max-width: 100%;
@@ -289,7 +300,7 @@
     
     /* === RIGHT SIDEBAR — Recommended === */
     .yw-sidebar {
-      width: 320px;
+      width: 360px;
       flex-shrink: 0;
       position: sticky;
       top: 70px;
@@ -321,7 +332,7 @@
       transition: background 0.15s;
     }
     .yw-rec-card:hover { background: rgba(201, 169, 110, 0.05); }
-    .yw-rec-thumb { width: 120px; flex-shrink: 0; position: relative; }
+    .yw-rec-thumb { width: 140px; flex-shrink: 0; position: relative; }
     .yw-rec-thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; display: block; }
     .yw-rec-thumb-ph {
       width: 100%; aspect-ratio: 16/9;
@@ -351,6 +362,92 @@
       .yw-outer { flex-direction: column; }
       .yw-sidebar { width: 100%; position: static; max-height: none; overflow: visible; }
     }
+
+    /* ===================================================================
+       DOCS MODE — สไตล์เอกสารอ่านเก็บไว้ (เปิดเมื่อ article.layout == 'docs')
+       ทุกคลาส scope ใต้ .docs-body เพื่อไม่ให้กระทบบทความปกติ
+       =================================================================== */
+    .docs-body h2 { scroll-margin-top: 84px; }
+
+    /* Analogy block — เปรียบเทียบให้เห็นภาพ */
+    .docs-body .analogy {
+      display: flex; gap: 1rem; align-items: flex-start;
+      background: linear-gradient(135deg, rgba(201,169,110,.08), rgba(201,169,110,.02));
+      border: 1px solid rgba(201,169,110,.25);
+      border-radius: 14px; padding: 1.1rem 1.25rem; margin: 1.4rem 0;
+    }
+    .docs-body .analogy .emoji { font-size: 1.7rem; line-height: 1; flex-shrink: 0; }
+    .docs-body .analogy p { margin: 0; color: #e7d9bd; }
+    .docs-body .analogy b { color: var(--brand-gold); }
+
+    /* Callouts — tip / warn / danger / note */
+    .docs-body .callout {
+      display: flex; gap: 0.85rem; align-items: flex-start;
+      border: 1px solid; border-radius: 12px; padding: 0.9rem 1.1rem; margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+    .docs-body .callout .ico { font-size: 1.1rem; flex-shrink: 0; line-height: 1.5; }
+    .docs-body .callout p { margin: 0; color: #d6deea; }
+    .docs-body .callout .ttl { font-weight: 700; display: block; margin-bottom: 2px; }
+    .docs-body .callout.c-tip    { background: rgba(201,169,110,.08); border-color: rgba(201,169,110,.3); }
+    .docs-body .callout.c-tip    .ttl { color: var(--brand-gold); }
+    .docs-body .callout.c-warn   { background: rgba(245,158,11,.07);  border-color: rgba(245,158,11,.3); }
+    .docs-body .callout.c-warn   .ttl { color: #f59e0b; }
+    .docs-body .callout.c-danger { background: rgba(239,68,68,.07);   border-color: rgba(239,68,68,.3); }
+    .docs-body .callout.c-danger .ttl { color: #fca5a5; }
+    .docs-body .callout.c-note   { background: rgba(59,130,246,.07);  border-color: rgba(59,130,246,.3); }
+    .docs-body .callout.c-note   .ttl { color: #93c5fd; }
+
+    /* Step blocks — สอนทีละขั้น */
+    .docs-body .step { display: flex; gap: 1.1rem; margin: 1.4rem 0; }
+    .docs-body .step__n {
+      flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(201,169,110,.12); border: 1px solid rgba(201,169,110,.4);
+      color: var(--brand-gold); font-weight: 800; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .docs-body .step__body { flex: 1; min-width: 0; }
+    .docs-body .step__body h3 { margin-top: 0.2rem; }
+
+    /* Figure / diagram */
+    .docs-body figure {
+      margin: 1.6rem 0; background: rgba(255,255,255,.02);
+      border: 1px solid var(--bs-border-color); border-radius: 16px; padding: 1.25rem;
+    }
+    .docs-body figure svg, .docs-body figure img { display: block; width: 100%; height: auto; border-radius: 8px; }
+    .docs-body figcaption { text-align: center; color: var(--brand-muted); font-size: 0.82rem; margin-top: 0.75rem; }
+
+    /* Checklist */
+    .docs-body .checklist {
+      background: rgba(255,255,255,.02); border: 1px solid var(--bs-border-color);
+      border-radius: 14px; padding: 1.25rem 1.5rem; margin: 1.4rem 0;
+    }
+    .docs-body .checklist ul { list-style: none; padding-left: 0; margin: 0; }
+    .docs-body .checklist li { position: relative; padding-left: 2rem; margin: 0.6rem 0; }
+    .docs-body .checklist li::before {
+      content: "✓"; position: absolute; left: 0; top: 0.15rem;
+      width: 20px; height: 20px; border-radius: 5px;
+      background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.4);
+      color: #10b981; font-size: 0.72rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Inline code & pre tweaks ใน docs */
+    .docs-body p code, .docs-body li code {
+      background: rgba(148,163,184,.12); border: 1px solid var(--bs-border-color);
+      border-radius: 6px; padding: 1px 7px; font-size: 0.85em; color: #e7d9bd;
+    }
+
+    /* ===== DOCS TOC (sidebar สารบัญอัตโนมัติ) ===== */
+    .yw-docs-toc { margin-bottom: 1.5rem; }
+    .yw-docs-toc nav a {
+      display: block; font-size: 0.85rem; color: var(--brand-muted);
+      text-decoration: none; padding: 0.4rem 0 0.4rem 0.85rem;
+      border-left: 2px solid var(--bs-border-color); transition: all 0.15s;
+    }
+    .yw-docs-toc nav a:hover,
+    .yw-docs-toc nav a.active { color: var(--brand-gold); border-left-color: var(--brand-gold); }
+    .yw-docs-toc nav a.lvl-3 { padding-left: 1.6rem; font-size: 0.8rem; }
   </style>
 {% endblock %}
 
@@ -388,6 +485,31 @@
             <i class="bi bi-file-text"></i>
           </div>
         {% endif %}
+      </div>
+
+
+      <!-- Category badge -->
+      {% if article.category %}
+        <a href="{% url 'blog:category' article.category.slug %}" class="yw-cat-badge"><i class="bi bi-tag"></i> {{ article.category.name }}</a>
+      {% endif %}
+
+      <!-- Title -->
+      <h1 class="yw-title">{{ article.title }}</h1>
+
+      <!-- Meta bar -->
+      <div class="yw-meta">
+        <div class="yw-author">
+          <div class="yw-author-avatar">{{ article.author.username|slice:':2'|upper }}</div>
+          <div>
+            <div class="yw-author-name">{{ article.author.get_full_name|default:article.author.username }}</div>
+            <div class="yw-author-sub">AIBiz Thailand</div>
+          </div>
+        </div>
+        <div class="yw-stats">
+          <span><i class="bi bi-eye"></i> {{ article.views_count }} views</span>
+          <span><i class="bi bi-clock"></i> {{ article.reading_time }} นาที</span>
+          <span><i class="bi bi-calendar3"></i> {{ article.published_at|date:'d M Y' }}</span>
+        </div>
       </div>
 
       <!-- === Share Bar === -->
@@ -431,32 +553,8 @@
       </div>
       <!-- === End Share Bar === -->
 
-      <!-- Category badge -->
-      {% if article.category %}
-        <a href="{% url 'blog:category' article.category.slug %}" class="yw-cat-badge"><i class="bi bi-tag"></i> {{ article.category.name }}</a>
-      {% endif %}
-
-      <!-- Title -->
-      <h1 class="yw-title">{{ article.title }}</h1>
-
-      <!-- Meta bar -->
-      <div class="yw-meta">
-        <div class="yw-author">
-          <div class="yw-author-avatar">{{ article.author.username|slice:':2'|upper }}</div>
-          <div>
-            <div class="yw-author-name">{{ article.author.get_full_name|default:article.author.username }}</div>
-            <div class="yw-author-sub">AIBiz Thailand</div>
-          </div>
-        </div>
-        <div class="yw-stats">
-          <span><i class="bi bi-eye"></i> {{ article.views_count }} views</span>
-          <span><i class="bi bi-clock"></i> {{ article.reading_time }} นาที</span>
-          <span><i class="bi bi-calendar3"></i> {{ article.published_at|date:'d M Y' }}</span>
-        </div>
-      </div>
-
       <!-- Article content -->
-      <div class="yw-article-body">{{ article.content|safe }}</div>
+      <div class="yw-article-body {% if article.layout == 'docs' %}docs-body{% endif %}">{{ article.content|safe }}</div>
 
       <!-- Tags -->
       {% if article.tags.all %}
@@ -467,17 +565,27 @@
         </div>
       {% endif %}
 
-      <!-- CTA -->
+      <!-- CTA — ซ่อนในโหมด docs (เอกสารอ่านเก็บไว้ ไม่ขายของ) -->
+      {% if article.layout != 'docs' %}
       <div class="yw-cta">
         <h3>สนใจให้ AI ทำงานในธุรกิจคุณ?</h3>
         <p>ปรึกษาฟรี ตอบกลับภายใน 24 ชั่วโมง</p>
-        <a href="{% url 'pages:contact' %}?source=blog" class="btn btn-sm px-4" style="background:var(--brand-gold);color:var(--brand-dark);font-weight:700;border-radius:50px;"><i class="bi bi-chat-dots me-1"></i> ปรึกษาฟรี</a>
+        <a href="{% url 'pages:contact' %}?source=blog" class="btn btn-sm btn-gold px-4" style="border-radius:50px;font-weight:700;"><i class="bi bi-chat-dots me-1"></i> ปรึกษาฟรี</a>
       </div>
+      {% endif %}
     </div>
     <!-- === END yw-main === -->
 
     <!-- === RIGHT SIDEBAR — Recommended / Related Articles === -->
     <aside class="yw-sidebar" aria-label="บทความที่เกี่ยวข้อง">
+
+      <!-- สารบัญอัตโนมัติ — แสดงเฉพาะโหมด docs (เติมด้วย JS จาก h2) -->
+      {% if article.layout == 'docs' %}
+        <div class="yw-docs-toc" id="docsToc" hidden>
+          <p class="yw-sidebar-title">ในหน้านี้</p>
+          <nav id="docsTocNav"></nav>
+        </div>
+      {% endif %}
 
       {% if related %}
         <p class="yw-sidebar-title">บทความที่เกี่ยวข้อง</p>
@@ -590,5 +698,39 @@
       }, 2000);
     });
   }
+
+  // === DOCS MODE: สร้างสารบัญอัตโนมัติจาก h2/h3 + scrollspy ===
+  (function () {
+    var body = document.querySelector('.docs-body');
+    var toc  = document.getElementById('docsToc');
+    if (!body || !toc) return;
+
+    var heads = body.querySelectorAll('h2, h3');
+    if (!heads.length) return;
+
+    var nav = document.getElementById('docsTocNav');
+    var links = [];
+    heads.forEach(function (h, i) {
+      if (!h.id) h.id = 'sec-' + (i + 1);
+      var a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent.trim();
+      if (h.tagName === 'H3') a.className = 'lvl-3';
+      nav.appendChild(a);
+      links.push(a);
+    });
+    toc.hidden = false;
+
+    // scrollspy — ไฮไลต์หัวข้อที่กำลังอ่าน
+    var spy = function () {
+      var pos = window.scrollY + 120, current = null;
+      heads.forEach(function (h, i) {
+        if (h.offsetTop <= pos) current = i;
+      });
+      links.forEach(function (a, i) { a.classList.toggle('active', i === current); });
+    };
+    window.addEventListener('scroll', spy, { passive: true });
+    spy();
+  })();
   </script>
 {% endblock %}

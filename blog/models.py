@@ -71,6 +71,11 @@ class Article(models.Model):
         ("published", "Published"),
     ]
 
+    LAYOUT_CHOICES = [
+        ("article", "บทความปกติ"),
+        ("docs",    "คู่มือ / Docs"),
+    ]
+
     title = models.CharField("หัวข้อ", max_length=200)
     slug = models.SlugField(max_length=220, unique=True, blank=True, allow_unicode=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="articles")
@@ -89,6 +94,10 @@ class Article(models.Model):
     og_image = models.ImageField("OG image", upload_to="blog/og/%Y/%m/", blank=True, null=True)
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="draft")
+    layout = models.CharField(
+        "รูปแบบหน้า", max_length=20, choices=LAYOUT_CHOICES, default="article",
+        help_text="'คู่มือ / Docs' = แสดงสารบัญอัตโนมัติ + สไตล์ docs (callout/step) + ซ่อน CTA ขายของ"
+    )
     backlog_ref = models.ForeignKey(
         "marketing.ContentBacklog", null=True, blank=True,
         on_delete=models.SET_NULL, related_name="articles",

@@ -31,7 +31,12 @@ class ArticleDetailView(DetailView):
     slug_url_kwarg = "slug"
 
     def get_queryset(self):
-        return Article.objects.filter(status="published").select_related("category", "author").prefetch_related("tags")
+        qs = Article.objects.select_related("category", "author").prefetch_related("tags")
+        # staff ดู draft ได้ (ใช้ preview ก่อน publish) — คนทั่วไปเห็นเฉพาะ published
+        user = self.request.user
+        if user.is_authenticated and user.is_staff:
+            return qs
+        return qs.filter(status="published")
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
