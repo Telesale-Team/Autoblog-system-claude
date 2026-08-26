@@ -1,0 +1,86 @@
+{% load humanize %}
+<!-- === Project Monitor — การ์ด deployment 1 ใบ === -->
+<a href="{% url 'operations:monitor_detail' d.pk %}" class="mon-card">
+
+  <!-- === หัวการ์ด: จุดสถานะ + ชื่อ + ลูกค้า + URL === -->
+  <div class="mon-card-head">
+    <span class="mon-dot {{ d.state }}"></span>
+    <div class="flex-grow-1">
+      <h4 class="mon-name">
+        {{ d.name }}
+        {% if d.is_critical %}<span class="mon-flag">ร้านจริง</span>{% endif %}
+        {% if d.environment != "production" %}<span class="mon-env">{{ d.get_environment_display|upper }}</span>{% endif %}
+      </h4>
+      <p class="mon-client">
+        {% if d.project.customer %}{{ d.project.customer.company_name }}{% else %}{{ d.project.project_name }}{% endif %}
+      </p>
+      <code class="mon-url">
+        {% if d.base_url %}{{ d.base_url }}{% elif d.project_path %}{{ d.project_path }}{% else %}ยังไม่ได้ผูก domain{% endif %}
+      </code>
+    </div>
+  </div>
+
+  <!-- === แถบ uptime === -->
+  <div class="mon-uptime">
+    {% with pct=d.uptime_pct %}
+      {% if pct is None %}
+        <span class="mon-uptime-pct text-secondary">ยังไม่มีข้อมูล</span>
+      {% elif pct >= 99 %}
+        <span class="mon-uptime-pct mon-up">{{ pct }}%</span>
+      {% elif pct >= 95 %}
+        <span class="mon-uptime-pct mon-warn">{{ pct }}%</span>
+      {% else %}
+        <span class="mon-uptime-pct mon-down">{{ pct }}%</span>
+      {% endif %}
+    {% endwith %}
+    <span class="timeline-bar flex-grow-1" style="height:16px">
+      {% for ok in d.recent_states %}<i class="{% if not ok %}d{% endif %}"></i>{% empty %}<i class="n"></i>{% endfor %}
+    </span>
+  </div>
+
+  <!-- === meta: version / deploy / ความเร็ว === -->
+  <div class="mon-meta">
+    {% with last=d.latest_check %}
+      {% if last %}
+        {% if last.version %}<span><i class="bi bi-git"></i> <code>{{ last.version }}</code></span>{% endif %}
+        {% if last.deployed_at %}<span><i class="bi bi-clock-history"></i> {{ last.deployed_at|naturaltime }}</span>{% endif %}
+        {% if last.is_up %}
+          <span><i class="bi bi-lightning-charge"></i> {{ last.response_ms }} ms</span>
+        {% else %}
+          <span class="mon-down fw-semibold">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            {% if last.status_code %}HTTP {{ last.status_code }}{% else %}ติดต่อไม่ได้{% endif %}
+            &middot; {{ last.checked_at|naturaltime }}
+          </span>
+        {% endif %}
+      {% else %}
+        <span><i class="bi bi-hourglass-split"></i> ยังไม่เคยตรวจ</span>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- === ตัวเลขธุรกิจ — วาดจาก JSON ที่ปลายทางส่งมา ไม่ hard-code === -->
+  {% with last=d.latest_check %}
+    {% if last and last.metrics %}
+      <div class="mon-metrics">
+        {% for m in last.metrics|slice:":3" %}
+          <div class="mon-metric">
+            <div class="mon-metric-val {% if m.alert %}alert{% endif %}">
+              {% if m.unit %}{{ m.unit }}{% endif %}{{ m.value }}
+            </div>
+            <div class="mon-metric-lbl">{{ m.label }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% elif d.monitor_path %}
+      <div class="mon-nometrics">
+        <i class="bi bi-plug"></i> ดึงตัวเลขไม่ได้ — ระบบไม่ตอบสนอง
+      </div>
+    {% else %}
+      <div class="mon-nometrics">
+        <i class="bi bi-dash-circle"></i> ยังไม่ติดตั้ง API ตัวเลขธุรกิจ — เห็นแค่ขึ้น/ล่ม
+      </div>
+    {% endif %}
+  {% endwith %}
+
+</a>

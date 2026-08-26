@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="th" data-bs-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup — Project Monitor (/owner/projects/)</title>
+
+<!-- === Vendor CSS — ชุดเดียวกับ base.html === -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* === Design Tokens — ยกมาจาก static/css/main.css === */
+:root{
+  --brand-navy:#1a2744; --brand-gold:#c9a96e; --brand-gold-d:#b8924f;
+  --brand-green:#10b981; --brand-dark:#0f172a; --brand-muted:#94a3b8; --brand-amber:#fbbf24;
+  --font-body:'Sarabun','Inter',system-ui,sans-serif;
+  --sidebar-width:260px; --header-height:60px;
+  --bs-link-color:var(--brand-gold); --bs-link-hover-color:var(--brand-gold-d);
+}
+body{font-family:var(--font-body);font-size:15px;}
+body,h1,h2,h3,h4,h5,h6{font-style:normal!important;}
+a{color:var(--brand-gold);text-decoration:none;}
+a:hover{color:var(--brand-gold-d);}
+
+/* === Shell — sidebar + topbar เลียนโครง base.html === */
+#sidebar{position:fixed;top:0;left:0;width:var(--sidebar-width);height:100vh;
+  background:var(--brand-navy);color:#e2e8f0;overflow-y:auto;z-index:1030;}
+.sidebar-brand{display:flex;align-items:center;gap:.6rem;padding:1.1rem 1.25rem;
+  color:#fff;font-weight:800;border-bottom:1px solid rgba(255,255,255,.08);}
+.sidebar-brand .brand-accent{color:var(--brand-gold);font-size:1.2rem;}
+.nav-section-label{padding:1rem 1.25rem .4rem;font-size:.68rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:rgba(226,232,240,.4);}
+#sidebar .nav-link{display:flex;align-items:center;gap:.7rem;padding:.55rem 1.25rem;
+  color:rgba(226,232,240,.75);font-size:.88rem;border-left:3px solid transparent;}
+#sidebar .nav-link:hover{color:#fff;background:rgba(255,255,255,.05);}
+#sidebar .nav-link.active{color:var(--brand-gold);background:rgba(201,169,110,.12);
+  border-left-color:var(--brand-gold);font-weight:600;}
+#sidebar .nav-link .badge-new{margin-left:auto;font-size:.6rem;background:var(--brand-gold);
+  color:var(--brand-dark);padding:.1rem .4rem;border-radius:999px;font-weight:800;}
+#main-content{margin-left:var(--sidebar-width);}
+#topbar{height:var(--header-height);border-bottom:1px solid var(--bs-border-color);
+  background:var(--bs-body-bg);position:sticky;top:0;z-index:1020;}
+.page-wrap{padding:1.75rem 2rem 4rem;}
+@media(max-width:991px){#sidebar{display:none}#main-content{margin-left:0}.page-wrap{padding:1.25rem}}
+
+/* === settings-hero + scard — ยกมาจาก static/css/settings.css === */
+.settings-hero{display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
+.settings-hero-title{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;margin:0;
+  display:flex;align-items:center;gap:.6rem;}
+.settings-hero-title .hero-icon{width:38px;height:38px;border-radius:.5rem;
+  background:linear-gradient(135deg,var(--brand-gold) 0%,var(--brand-gold-d) 100%);
+  display:flex;align-items:center;justify-content:center;color:var(--brand-dark);
+  font-size:1.1rem;flex-shrink:0;box-shadow:0 4px 12px rgba(201,169,110,.35);}
+.settings-hero-sub{font-size:.87rem;color:var(--bs-secondary-color);margin:.25rem 0 0;}
+.scard{border:1px solid var(--bs-border-color);border-radius:.75rem;
+  background:var(--bs-body-bg);overflow:hidden;}
+.scard-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--bs-border-color);
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  background:rgba(201,169,110,.03);}
+.scard-header-icon{width:40px;height:40px;border-radius:.5rem;background:rgba(201,169,110,.12);
+  display:flex;align-items:center;justify-content:center;color:var(--brand-gold);font-size:1.15rem;flex-shrink:0;}
+.scard-body{padding:1.5rem;}
+
+/* === View switcher === */
+.view-switch{display:inline-flex;border:1px solid var(--bs-border-color);border-radius:.5rem;overflow:hidden;}
+.view-switch button{border:0;background:transparent;padding:.35rem .85rem;font-size:.8rem;font-weight:600;
+  color:var(--bs-secondary-color);}
+.view-switch button.on{background:var(--brand-gold);color:var(--brand-dark);}
+
+/* === Summary strip === */
+.mon-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+  gap:1rem;margin-bottom:2rem;}
+.mon-stat{border:1px solid var(--bs-border-color);border-radius:.75rem;padding:1rem 1.15rem;
+  background:var(--bs-body-bg);}
+.mon-stat-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--bs-secondary-color);}
+.mon-stat-value{font-size:1.65rem;font-weight:800;line-height:1.2;margin-top:.25rem;}
+.mon-stat-value small{font-size:.8rem;font-weight:600;color:var(--bs-secondary-color);}
+
+/* ============================================================
+   === GROUPING — ชั้นที่ 1 กลุ่มใหญ่ / ชั้นที่ 2 บริการ ===
+   ============================================================ */
+.tier{margin-bottom:2.75rem;}
+.tier-head{display:flex;align-items:center;gap:.75rem;padding-bottom:.6rem;margin-bottom:1.25rem;
+  border-bottom:2px solid var(--brand-gold);}
+.tier-icon{width:34px;height:34px;border-radius:.5rem;display:flex;align-items:center;
+  justify-content:center;background:rgba(201,169,110,.14);color:var(--brand-gold);font-size:1rem;flex-shrink:0;}
+.tier-title{font-size:1.05rem;font-weight:800;margin:0;}
+.tier-sub{font-size:.76rem;color:var(--bs-secondary-color);margin:0;}
+.tier-stat{margin-left:auto;font-size:.8rem;color:var(--bs-secondary-color);text-align:right;}
+.tier-stat b{font-size:1.05rem;color:var(--bs-body-color);}
+.tier.muted .tier-head{border-bottom-color:var(--bs-border-color);}
+.tier.muted .tier-icon{background:rgba(148,163,184,.14);color:var(--brand-muted);}
+
+/* ── ชั้นที่ 2: แถวบริการ ── */
+.svc{margin-bottom:1.5rem;}
+.svc-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;flex-wrap:wrap;}
+.svc-name{font-weight:700;font-size:.95rem;margin:0;display:flex;align-items:center;gap:.45rem;}
+.svc-name .bi{color:var(--brand-gold);}
+.svc-price{font-size:.72rem;color:var(--bs-secondary-color);
+  border:1px solid var(--bs-border-color);border-radius:.3rem;padding:.05rem .4rem;}
+.svc-count{font-size:.75rem;color:var(--bs-secondary-color);margin-left:auto;}
+.svc-count b{color:var(--bs-body-color);}
+.svc-new{font-size:.6rem;font-weight:800;letter-spacing:.06em;padding:.1rem .4rem;border-radius:.3rem;
+  background:var(--brand-gold);color:var(--brand-dark);}
+.svc-draft{font-size:.6rem;font-weight:800;letter-spacing:.06em;padding:.1rem .4rem;border-radius:.3rem;
+  background:rgba(148,163,184,.15);color:#64748b;border:1px solid rgba(148,163,184,.3);}
+
+/* ── บริการที่ยังไม่มีลูกค้า — แถบเล็ก ── */
+.svc-empty{display:flex;align-items:center;gap:.6rem;padding:.65rem 1rem;border-radius:.5rem;
+  border:1px dashed var(--bs-border-color);font-size:.82rem;color:var(--bs-secondary-color);
+  margin-bottom:.6rem;}
+.svc-empty .bi{color:var(--brand-muted);}
+.svc-empty .price{margin-left:auto;font-size:.74rem;}
+
+/* === Project card === */
+.mon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.1rem;}
+.mon-card{border:1px solid var(--bs-border-color);border-radius:.75rem;background:var(--bs-body-bg);
+  overflow:hidden;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .2s;
+  display:flex;flex-direction:column;}
+.mon-card:hover{border-color:var(--brand-gold);box-shadow:0 8px 24px rgba(26,39,68,.10);transform:translateY(-2px);}
+.mon-card-head{padding:1rem 1.15rem .75rem;display:flex;align-items:flex-start;gap:.7rem;}
+.mon-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:.42rem;}
+.mon-dot.up{background:var(--brand-green);animation:dot-pulse 2s infinite;}
+.mon-dot.down{background:#ef4444;}
+.mon-dot.idle{background:#94a3b8;}
+@keyframes dot-pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.45)}50%{box-shadow:0 0 0 6px rgba(16,185,129,0)}}
+.mon-name{font-weight:700;font-size:.98rem;margin:0;line-height:1.3;}
+.mon-client{font-size:.76rem;color:var(--bs-secondary-color);margin:.1rem 0 0;}
+.mon-url{font-size:.73rem;font-family:ui-monospace,monospace;color:var(--bs-secondary-color);
+  display:block;margin-top:.35rem;word-break:break-all;}
+.mon-flag{font-size:.62rem;font-weight:800;letter-spacing:.06em;padding:.15rem .45rem;
+  border-radius:.3rem;background:rgba(239,68,68,.12);color:#dc2626;border:1px solid rgba(239,68,68,.25);white-space:nowrap;}
+.mon-env{font-size:.62rem;font-weight:800;letter-spacing:.06em;padding:.15rem .45rem;border-radius:.3rem;
+  background:rgba(100,116,139,.12);color:#64748b;border:1px solid rgba(100,116,139,.2);}
+.mon-uptime{padding:0 1.15rem .75rem;display:flex;align-items:center;gap:.6rem;}
+.mon-uptime-pct{font-size:.78rem;font-weight:700;white-space:nowrap;}
+.mon-spark{flex:1;height:24px;}
+.mon-meta{padding:.55rem 1.15rem;border-top:1px solid var(--bs-border-color);
+  display:flex;gap:.9rem;font-size:.73rem;color:var(--bs-secondary-color);flex-wrap:wrap;}
+.mon-meta code{font-family:ui-monospace,monospace;color:var(--brand-gold);background:rgba(201,169,110,.1);
+  padding:.05rem .35rem;border-radius:.25rem;}
+.mon-metrics{border-top:1px solid var(--bs-border-color);background:rgba(201,169,110,.035);
+  padding:.8rem 1.15rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:auto;}
+.mon-metric{text-align:center;}
+.mon-metric-val{font-size:1.02rem;font-weight:800;line-height:1.2;}
+.mon-metric-val.alert{color:#dc2626;}
+.mon-metric-lbl{font-size:.66rem;color:var(--bs-secondary-color);margin-top:.1rem;}
+.mon-nometrics{border-top:1px dashed var(--bs-border-color);padding:.8rem 1.15rem;margin-top:auto;
+  font-size:.73rem;color:var(--bs-secondary-color);display:flex;align-items:center;gap:.4rem;}
+
+/* === annotation — เฉพาะ mockup === */
+.mk-note{border-left:3px solid var(--brand-gold);background:rgba(201,169,110,.07);
+  padding:.85rem 1.1rem;border-radius:0 .5rem .5rem 0;font-size:.85rem;margin:2.5rem 0 1.25rem;}
+.mk-note b{color:var(--brand-gold-d);}
+.mk-banner{background:linear-gradient(135deg,var(--brand-navy),#24365c);color:#fff;
+  padding:.7rem 2rem;font-size:.82rem;font-weight:600;display:flex;align-items:center;gap:.6rem;}
+.mk-banner .bi{color:var(--brand-gold);}
+
+/* === detail preview === */
+.det-row{display:flex;justify-content:space-between;padding:.5rem 0;
+  border-bottom:1px solid var(--bs-border-color);font-size:.85rem;gap:1rem;}
+.det-row:last-child{border-bottom:0;}
+.det-row .k{color:var(--bs-secondary-color);}
+.det-row .v{font-weight:600;font-family:ui-monospace,monospace;font-size:.8rem;text-align:right;}
+.timeline-bar{display:flex;gap:2px;height:34px;align-items:stretch;}
+.timeline-bar i{flex:1;border-radius:2px;background:var(--brand-green);}
+.timeline-bar i.d{background:#ef4444;}
+.timeline-bar i.w{background:var(--brand-amber);}
+</style>
+</head>
+<body>
+
+<!-- === MOCKUP BANNER — ไม่ใช่ส่วนของหน้าจริง === -->
+<div class="mk-banner">
+  <i class="bi bi-eye-fill"></i>
+  MOCKUP v2 — หน้า /owner/projects/ (ยังไม่ได้สร้างจริง) · บริการ 8 ตัวดึงจาก MySQL peyo_agent จริง · โปรเจกต์เป็นตัวอย่างจากระบบที่ deploy อยู่
+</div>
+
+<!-- === SIDEBAR === -->
+<nav id="sidebar">
+  <a href="#" class="sidebar-brand">
+    <i class="bi bi-bar-chart-fill brand-accent"></i>
+    <span class="brand-name">Noodee BootBiz</span>
+  </a>
+  <div>
+    <div class="nav-section-label">หน้าหลัก</div>
+    <a href="#" class="nav-link"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+    <a href="#" class="nav-link"><i class="bi bi-calendar3"></i> ตารางทำงาน</a>
+    <a href="#" class="nav-link"><i class="bi bi-globe2"></i> จัดการเนื้อหาเว็บ</a>
+
+    <div class="nav-section-label">งานพัฒนา</div>
+    <a href="#" class="nav-link active">
+      <i class="bi bi-activity"></i> Project Monitor <span class="badge-new">ใหม่</span>
+    </a>
+    <a href="#" class="nav-link"><i class="bi bi-kanban"></i> AI Projects</a>
+    <a href="#" class="nav-link"><i class="bi bi-clipboard-check"></i> QA Log</a>
+
+    <div class="nav-section-label">ธุรกิจ</div>
+    <a href="#" class="nav-link"><i class="bi bi-person-lines-fill"></i> Leads</a>
+    <a href="#" class="nav-link"><i class="bi bi-diagram-3"></i> Pipeline</a>
+    <a href="#" class="nav-link"><i class="bi bi-cash-coin"></i> รายได้</a>
+  </div>
+</nav>
+
+<div id="main-content">
+
+  <!-- === TOPBAR === -->
+  <div id="topbar" class="d-flex align-items-center px-3 gap-3">
+    <nav aria-label="breadcrumb" class="d-none d-md-block">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="#">หน้าหลัก</a></li>
+        <li class="breadcrumb-item active">Project Monitor</li>
+      </ol>
+    </nav>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-outline-secondary" id="themeToggle" title="เปลี่ยน Theme">
+        <i class="bi bi-moon-stars"></i>
+      </button>
+      <span class="small text-secondary">dphoompat</span>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- === PAGE HERO === -->
+    <div class="settings-hero">
+      <div>
+        <h1 class="settings-hero-title">
+          <span class="hero-icon"><i class="bi bi-activity"></i></span>
+          Project Monitor
+        </h1>
+        <p class="settings-hero-sub">
+          ระบบที่เราส่งมอบให้ลูกค้าแล้ว — จัดกลุ่มตามบริการที่ขายบนเว็บ
+        </p>
+      </div>
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <div class="d-flex align-items-center gap-2">
+          <span class="small text-secondary">จัดกลุ่มตาม</span>
+          <div class="view-switch">
+            <button class="on">บริการ</button>
+            <button>ลูกค้า</button>
+            <button>สถานะ</button>
+          </div>
+        </div>
+        <button class="btn btn-sm" style="background:var(--brand-gold);color:var(--brand-dark);font-weight:700;">
+          <i class="bi bi-plus-lg"></i> เพิ่มโปรเจกต์
+        </button>
+      </div>
+    </div>
+
+    <!-- === SUMMARY STRIP === -->
+    <div class="mon-summary">
+      <div class="mon-stat">
+        <div class="mon-stat-label">บริการบนเว็บ</div>
+        <div class="mon-stat-value">9</div>
+      </div>
+      <div class="mon-stat">
+        <div class="mon-stat-label">โปรเจกต์ลูกค้า</div>
+        <div class="mon-stat-value">5</div>
+      </div>
+      <div class="mon-stat">
+        <div class="mon-stat-label">ออนไลน์</div>
+        <div class="mon-stat-value" style="color:var(--brand-green)">3</div>
+      </div>
+      <div class="mon-stat">
+        <div class="mon-stat-label">มีปัญหา</div>
+        <div class="mon-stat-value" style="color:#dc2626">1</div>
+      </div>
+      <div class="mon-stat">
+        <div class="mon-stat-label">Uptime 30 วัน</div>
+        <div class="mon-stat-value">99.4<small>%</small></div>
+      </div>
+      <div class="mon-stat">
+        <div class="mon-stat-label">MRR ค่าดูแล</div>
+        <div class="mon-stat-value">฿12,500</div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- === TIER 1 : ผลิตภัณฑ์ — deploy ซ้ำได้ มี instance ให้เฝ้า === -->
+    <!-- ============================================================ -->
+    <section class="tier">
+      <div class="tier-head">
+        <span class="tier-icon"><i class="bi bi-box-seam-fill"></i></span>
+        <div>
+          <h2 class="tier-title">ผลิตภัณฑ์ — deploy ซ้ำได้</h2>
+          <p class="tier-sub">ขายซ้ำได้เรื่อยๆ มีเครื่องรันจริง มีค่าดูแลรายเดือน</p>
+        </div>
+        <div class="tier-stat">
+          <b>4</b> บริการ · <b>5</b> โปรเจกต์ · MRR <b>฿12,500</b>
+        </div>
+      </div>
+
+      <!-- ── บริการ #6 ระบบ Booking ── -->
+      <div class="svc">
+        <div class="svc-head">
+          <h3 class="svc-name"><i class="bi bi-calendar-check-fill"></i> ระบบ Booking</h3>
+          <span class="svc-price">เริ่ม ฿25,000</span>
+          <span class="svc-count"><b>3</b> โปรเจกต์ · <b style="color:var(--brand-green)">2</b> ออนไลน์ · <b style="color:#dc2626">1</b> ล่ม</span>
+        </div>
+        <div class="mon-grid">
+
+          <div class="mon-card">
+            <div class="mon-card-head">
+              <span class="mon-dot up"></span>
+              <div class="flex-grow-1">
+                <h4 class="mon-name">QueueFlow <span class="mon-env">DEMO</span></h4>
+                <p class="mon-client">Noodee BootBiz — หน้า showcase</p>
+                <code class="mon-url">booking.noodee-bootbiz.com</code>
+              </div>
+            </div>
+            <div class="mon-uptime">
+              <span class="mon-uptime-pct" style="color:var(--brand-green)">99.9%</span>
+              <svg class="mon-spark" viewBox="0 0 120 26" preserveAspectRatio="none">
+                <polyline fill="none" stroke="#10b981" stroke-width="1.8"
+                  points="0,8 10,7 20,9 30,6 40,7 50,5 60,8 70,6 80,7 90,5 100,6 110,5 120,6"/>
+              </svg>
+            </div>
+            <div class="mon-meta">
+              <span><i class="bi bi-git"></i> <code>d365818</code></span>
+              <span><i class="bi bi-clock-history"></i> 2 วันก่อน</span>
+              <span><i class="bi bi-lightning-charge"></i> 240 ms</span>
+            </div>
+            <div class="mon-metrics">
+              <div class="mon-metric"><div class="mon-metric-val">12</div><div class="mon-metric-lbl">จองวันนี้</div></div>
+              <div class="mon-metric"><div class="mon-metric-val">฿4,500</div><div class="mon-metric-lbl">ยอดวันนี้</div></div>
+              <div class="mon-metric"><div class="mon-metric-val">86</div><div class="mon-metric-lbl">จองเดือนนี้</div></div>
+            </div>
+          </div>
+
+          <div class="mon-card">
+            <div class="mon-card-head">
+              <span class="mon-dot up"></span>
+              <div class="flex-grow-1">
+                <h4 class="mon-name">Massage Booking <span class="mon-flag">ร้านจริง</span></h4>
+                <p class="mon-client">ลูกค้า Bergen, นอร์เวย์ · ~50 ลูกค้าจริง</p>
+                <code class="mon-url">muskelterapeut-spa.com</code>
+              </div>
+            </div>
+            <div class="mon-uptime">
+              <span class="mon-uptime-pct" style="color:var(--brand-green)">100%</span>
+              <svg class="mon-spark" viewBox="0 0 120 26" preserveAspectRatio="none">
+                <polyline fill="none" stroke="#10b981" stroke-width="1.8"
+                  points="0,6 10,5 20,6 30,5 40,6 50,5 60,5 70,6 80,5 90,5 100,6 110,5 120,5"/>
+              </svg>
+            </div>
+            <div class="mon-meta">
+              <span><i class="bi bi-git"></i> <code>8f2a1c</code></span>
+              <span><i class="bi bi-clock-history"></i> 12 วันก่อน</span>
+              <span><i class="bi bi-lightning-charge"></i> 310 ms</span>
+            </div>
+            <div class="mon-metrics">
+              <div class="mon-metric"><div class="mon-metric-val">8</div><div class="mon-metric-lbl">จองวันนี้</div></div>
+              <div class="mon-metric"><div class="mon-metric-val">kr 2,100</div><div class="mon-metric-lbl">ยอดวันนี้</div></div>
+              <div class="mon-metric"><div class="mon-metric-val alert">2</div><div class="mon-metric-lbl">ไม่มา (7 วัน)</div></div>
+            </div>
+          </div>
+
+          <div class="mon-card">
+            <div class="mon-card-head">
+              <span class="mon-dot down"></span>
+              <div class="flex-grow-1">
+                <h4 class="mon-name">Kanjana Booking</h4>
+                <p class="mon-client">ลูกค้ากาญจนา</p>
+                <code class="mon-url">kanjana-booking · ยังไม่ผูก domain</code>
+              </div>
+            </div>
+            <div class="mon-uptime">
+              <span class="mon-uptime-pct" style="color:#dc2626">92.1%</span>
+              <svg class="mon-spark" viewBox="0 0 120 26" preserveAspectRatio="none">
+                <polyline fill="none" stroke="#10b981" stroke-width="1.8"
+                  points="0,6 10,5 20,6 30,5 40,7 50,6 60,5 70,6 80,20 90,22 100,21 110,22 120,22"/>
+              </svg>
+            </div>
+            <div class="mon-meta">
+              <span class="text-danger fw-semibold"><i class="bi bi-exclamation-triangle-fill"></i>
+                502 Bad Gateway · ล่มมา 3 ชม.</span>
+            </div>
+            <div class="mon-nometrics">
+              <i class="bi bi-plug"></i> ดึงตัวเลขไม่ได้ — ระบบไม่ตอบสนอง
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── บริการ #7 ระบบข้อสอบออนไลน์ ── -->
+      <div class="svc">
+        <div class="svc-head">
+          <h3 class="svc-name"><i class="bi bi-pencil-square"></i> ระบบข้อสอบออนไลน์</h3>
+          <span class="svc-price">เริ่ม ฿35,000</span>
+          <span class="svc-count"><b>1</b> โปรเจกต์ · <b style="color:var(--brand-green)">1</b> ออนไลน์</span>
+        </div>
+        <div class="mon-grid">
+          <div class="mon-card">
+            <div class="mon-card-head">
+              <span class="mon-dot up"></span>
+              <div class="flex-grow-1">
+                <h4 class="mon-name">ระบบข้อสอบ ครูวิทย์</h4>
+                <p class="mon-client">โรงเรียน — Telesale-Team/webschool</p>
+                <code class="mon-url">/home/dphoompat/exam-system</code>
+              </div>
+            </div>
+            <div class="mon-uptime">
+              <span class="mon-uptime-pct" style="color:var(--brand-amber)">98.2%</span>
+              <svg class="mon-spark" viewBox="0 0 120 26" preserveAspectRatio="none">
+                <polyline fill="none" stroke="#10b981" stroke-width="1.8"
+                  points="0,6 10,5 20,14 30,6 40,5 50,6 60,5 70,7 80,6 90,5 100,6 110,6 120,5"/>
+              </svg>
+            </div>
+            <div class="mon-meta">
+              <span><i class="bi bi-git"></i> <code>4519a59</code></span>
+              <span><i class="bi bi-clock-history"></i> 1 เดือนก่อน</span>
+              <span><i class="bi bi-lightning-charge"></i> 180 ms</span>
+            </div>
+            <div class="mon-nometrics">
+              <i class="bi bi-dash-circle"></i> ยังไม่ติดตั้ง <code>/api/monitor/</code> — เห็นแค่ขึ้น/ล่ม
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── บริการ #9 ระบบสต๊อก + POS (ใหม่) ── -->
+      <div class="svc">
+        <div class="svc-head">
+          <h3 class="svc-name"><i class="bi bi-box-seam"></i> ระบบสต๊อก + ขายหน้าร้าน (POS)</h3>
+          <span class="svc-new">บริการใหม่</span>
+          <span class="svc-draft">ยังเป็น Draft บนเว็บ</span>
+          <span class="svc-count"><b>1</b> โปรเจกต์ · กำลังพัฒนา</span>
+        </div>
+        <div class="mon-grid">
+          <div class="mon-card">
+            <div class="mon-card-head">
+              <span class="mon-dot idle"></span>
+              <div class="flex-grow-1">
+                <h4 class="mon-name">StockProject <span class="mon-env">DEV</span></h4>
+                <p class="mon-client">ยังไม่มีลูกค้า — พัฒนาเป็นผลิตภัณฑ์</p>
+                <code class="mon-url">ยังไม่ deploy — เครื่อง dev เท่านั้น</code>
+              </div>
+            </div>
+            <div class="mon-uptime">
+              <span class="mon-uptime-pct text-secondary">—</span>
+              <svg class="mon-spark" viewBox="0 0 120 26" preserveAspectRatio="none">
+                <line x1="0" y1="13" x2="120" y2="13" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="3 4"/>
+              </svg>
+            </div>
+            <div class="mon-meta">
+              <span><i class="bi bi-hammer"></i> Django 5.2.4 + SQLite · 4 apps</span>
+            </div>
+            <div class="mon-metrics" style="opacity:.45">
+              <div class="mon-metric"><div class="mon-metric-val">—</div><div class="mon-metric-lbl">บิลวันนี้</div></div>
+              <div class="mon-metric"><div class="mon-metric-val">—</div><div class="mon-metric-lbl">ยอดขาย</div></div>
+              <div class="mon-metric"><div class="mon-metric-val">—</div><div class="mon-metric-lbl">ของใกล้หมด</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── บริการที่ยังไม่มีลูกค้า ── -->
+      <div class="svc-empty">
+        <i class="bi bi-mortarboard"></i> ระบบคอร์สเรียนออนไลน์
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        <span class="price">เริ่ม ฿45,000</span>
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- === TIER 2 : งานรับทำ — ไม่มี instance ให้เฝ้า === -->
+    <!-- ============================================================ -->
+    <section class="tier muted">
+      <div class="tier-head">
+        <span class="tier-icon"><i class="bi bi-tools"></i></span>
+        <div>
+          <h2 class="tier-title">งานรับทำ — ทำจบเป็นชิ้น</h2>
+          <p class="tier-sub">ส่งมอบแล้วจบ ไม่มีเครื่องรันของเราให้เฝ้า — ดูแค่สถานะส่งมอบ</p>
+        </div>
+        <div class="tier-stat">
+          <b>5</b> บริการ · <b>0</b> โปรเจกต์
+        </div>
+      </div>
+
+      <div class="svc-empty">
+        <i class="bi bi-robot"></i> AI Chatbot สำหรับธุรกิจ
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        <span class="price">เริ่ม ฿15,000</span>
+      </div>
+      <div class="svc-empty">
+        <i class="bi bi-magnet"></i> AI Lead Generation
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        <span class="price">เริ่ม ฿20,000</span>
+      </div>
+      <div class="svc-empty">
+        <i class="bi bi-diagram-3"></i> AI Workflow Automation
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        <span class="price">เริ่ม ฿25,000</span>
+      </div>
+      <div class="svc-empty">
+        <i class="bi bi-cpu"></i> Custom AI Agent
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        <span class="price">เริ่ม ฿50,000</span>
+      </div>
+      <div class="svc-empty">
+        <i class="bi bi-motherboard"></i> AI + Hardware Integration
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        <span class="price">เริ่ม ฿80,000</span>
+      </div>
+
+      <div class="mk-note" style="margin-top:1.25rem">
+        <b>สิ่งที่หน้าจอนี้กำลังบอก</b> — บริการ AI 5 ตัวที่โปรโมทอยู่หน้าเว็บ ยังไม่มีโปรเจกต์ลูกค้าสักตัว
+        ขณะที่รายได้จริงมาจาก "ระบบ" ทั้งหมด นี่คือ insight ที่แบ่งกลุ่มแบบอื่นจะมองไม่เห็น
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- === TIER 3 : ระบบภายในของเราเอง === -->
+    <!-- ============================================================ -->
+    <section class="tier">
+      <div class="tier-head">
+        <span class="tier-icon"><i class="bi bi-house-gear-fill"></i></span>
+        <div>
+          <h2 class="tier-title">ระบบภายในของเรา</h2>
+          <p class="tier-sub">ไม่ใช่ของลูกค้า แต่ต้องรู้เวลาล่มเหมือนกัน</p>
+        </div>
+        <div class="tier-stat"><b>1</b> ระบบ · <b style="color:var(--brand-green)">ออนไลน์</b></div>
+      </div>
+      <div class="mon-grid">
+        <div class="mon-card">
+          <div class="mon-card-head">
+            <span class="mon-dot up"></span>
+            <div class="flex-grow-1">
+              <h4 class="mon-name">Noodee BootBiz</h4>
+              <p class="mon-client">peyo-agent — บล็อก + หลังบ้าน</p>
+              <code class="mon-url">blog.kooky-shop.com</code>
+            </div>
+          </div>
+          <div class="mon-uptime">
+            <span class="mon-uptime-pct" style="color:var(--brand-green)">99.7%</span>
+            <svg class="mon-spark" viewBox="0 0 120 26" preserveAspectRatio="none">
+              <polyline fill="none" stroke="#10b981" stroke-width="1.8"
+                points="0,5 10,6 20,5 30,6 40,5 50,9 60,6 70,5 80,6 90,5 100,5 110,6 120,5"/>
+            </svg>
+          </div>
+          <div class="mon-meta">
+            <span><i class="bi bi-git"></i> <code>d365818</code></span>
+            <span><i class="bi bi-clock-history"></i> auto-deploy วันนี้</span>
+            <span><i class="bi bi-lightning-charge"></i> 95 ms</span>
+          </div>
+          <div class="mon-metrics">
+            <div class="mon-metric"><div class="mon-metric-val">3</div><div class="mon-metric-lbl">Lead ใหม่</div></div>
+            <div class="mon-metric"><div class="mon-metric-val">248</div><div class="mon-metric-lbl">ผู้อ่านวันนี้</div></div>
+            <div class="mon-metric"><div class="mon-metric-val">42</div><div class="mon-metric-lbl">บทความ</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- === DETAIL PREVIEW === -->
+    <div class="mk-note">
+      <b>คลิกการ์ดไหนก็ได้ → เข้าหน้า detail</b> — ด้านล่างคือหน้าตาของ
+      <code>/owner/projects/&lt;id&gt;/</code> ตัวอย่างจาก QueueFlow
+    </div>
+
+    <div class="row g-3">
+      <div class="col-lg-5">
+        <div class="scard h-100">
+          <div class="scard-header">
+            <div class="d-flex align-items-center gap-2">
+              <span class="scard-header-icon"><i class="bi bi-server"></i></span>
+              <div>
+                <div class="fw-bold">ข้อมูล Deployment</div>
+                <div class="small text-secondary">ทะเบียนที่เคยอยู่ในไฟล์ memory</div>
+              </div>
+            </div>
+          </div>
+          <div class="scard-body py-2">
+            <div class="det-row"><span class="k">บริการ</span><span class="v">ระบบ Booking (#6)</span></div>
+            <div class="det-row"><span class="k">Server</span><span class="v">192.168.1.2</span></div>
+            <div class="det-row"><span class="k">Path</span><span class="v">/home/dphoompat/noodee-booking</span></div>
+            <div class="det-row"><span class="k">Service</span><span class="v">noodee-booking</span></div>
+            <div class="det-row"><span class="k">Domain</span><span class="v">booking.noodee-bootbiz.com</span></div>
+            <div class="det-row"><span class="k">Settings</span><span class="v">skin_settings_production</span></div>
+            <div class="det-row"><span class="k">Database</span><span class="v">noodee_booking (PG16)</span></div>
+            <div class="det-row"><span class="k">Deploy</span><span class="v">GitHub Actions runner</span></div>
+            <div class="det-row"><span class="k">ค่าดูแล/เดือน</span><span class="v">฿2,500</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="scard h-100">
+          <div class="scard-header">
+            <div class="d-flex align-items-center gap-2">
+              <span class="scard-header-icon"><i class="bi bi-graph-up"></i></span>
+              <div>
+                <div class="fw-bold">ประวัติสถานะ 30 วัน</div>
+                <div class="small text-secondary">แถบละ 1 วัน — เขียว=ปกติ เหลือง=ช้า แดง=ล่ม</div>
+              </div>
+            </div>
+            <span class="badge" style="background:rgba(16,185,129,.12);color:#059669;">99.9% uptime</span>
+          </div>
+          <div class="scard-body">
+            <div class="timeline-bar mb-3">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i class="w"></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="d"></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="d-flex justify-content-between small text-secondary mb-3">
+              <span>30 วันก่อน</span><span>วันนี้</span>
+            </div>
+            <div class="fw-bold small mb-2">ประวัติ Deploy ล่าสุด</div>
+            <div class="det-row"><span class="k"><code>d365818</code> blog docs layout</span><span class="v">18 ส.ค. 10:22</span></div>
+            <div class="det-row"><span class="k"><code>b315a5c</code> QueueFlow V3+V4</span><span class="v">12 ส.ค. 16:40</span></div>
+            <div class="det-row"><span class="k"><code>4519a59</code> QueueFlow V2</span><span class="v">08 ส.ค. 09:15</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mk-note">
+      <b>จุดสำคัญของดีไซน์นี้</b> — แถบตัวเลข 3 ช่องล่างการ์ด <u>ไม่ได้ hard-code</u>
+      แต่วาดจาก JSON ที่ระบบปลายทางส่งมาผ่าน <code>/api/monitor/</code>
+      ดังนั้น StockProject จะส่ง "บิลวันนี้ / ยอดขาย / ของใกล้หมด" มาแทน
+      แล้วโผล่บนหน้านี้เองโดยไม่ต้องแก้โค้ดฝั่ง noodee เลย
+    </div>
+
+  </div><!-- /page-wrap -->
+</div><!-- /main-content -->
+
+<script>
+// === Theme toggle — เหมือน base.html จริง ===
+document.getElementById('themeToggle').addEventListener('click', function () {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-bs-theme', next);
+  this.innerHTML = next === 'dark'
+    ? '<i class="bi bi-sun"></i>'
+    : '<i class="bi bi-moon-stars"></i>';
+});
+
+// === View switcher — mockup เท่านั้น ยังไม่ผูก logic จริง ===
+document.querySelectorAll('.view-switch button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.view-switch button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>

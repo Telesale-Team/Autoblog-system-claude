@@ -76,6 +76,11 @@ class Article(models.Model):
         ("docs",    "คู่มือ / Docs"),
     ]
 
+    CONTENT_FORMAT_CHOICES = [
+        ("html",     "HTML (เขียนใน CKEditor)"),
+        ("markdown", "Markdown (เขียนใน ช่องเนื้อหา Markdown)"),
+    ]
+
     title = models.CharField("หัวข้อ", max_length=200)
     slug = models.SlugField(max_length=220, unique=True, blank=True, allow_unicode=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="articles")
@@ -84,6 +89,21 @@ class Article(models.Model):
 
     excerpt = models.TextField("สรุปย่อ (~160 chars)", max_length=300, blank=True)
     content = CKEditor5Field("เนื้อหา", config_name="extends")
+
+    # --- Markdown source (ใช้เมื่อ content_format == "markdown") ---
+    # เขียนที่นี่ -> ระบบ render เป็น HTML ลง content ให้ตอนเซฟ
+    # template ไม่ต้องแก้อะไร เพราะยังอ่านจาก content เหมือนเดิม
+    content_format = models.CharField(
+        "รูปแบบการเขียน", max_length=20,
+        choices=CONTENT_FORMAT_CHOICES, default="html",
+        help_text="เลือก Markdown สำหรับบทเรียน/คู่มือ ที่ต้องใช้ callout, step, code block, SVG "
+                  "— CKEditor จะลบแท็กพวกนี้ทิ้ง",
+    )
+    content_md = models.TextField(
+        "เนื้อหา (Markdown)", blank=True,
+        help_text="ใช้เมื่อรูปแบบการเขียน = Markdown เท่านั้น "
+                  "ระบบจะแปลงเป็น HTML ลงช่อง 'เนื้อหา' ให้อัตโนมัติทุกครั้งที่เซฟ",
+    )
     cover_image = models.ImageField("รูปปก (อัพโหลด)", upload_to="blog/covers/%Y/%m/", blank=True, null=True)
     cover_image_url = models.URLField("รูปปก (URL ภายนอก)", max_length=500, blank=True,
         help_text="ใส่ URL รูปจาก Unsplash หรือ CDN ภายนอก — ใช้แทนการอัพโหลดไฟล์ ถ้ากรอกทั้งคู่จะใช้ URL นี้")
@@ -125,6 +145,10 @@ class Article(models.Model):
             self.slug = self._generate_unique_slug()
         if self.status == "published" and not self.published_at:
             self.published_at = timezone.now()
+        # Markdown เป็นต้นฉบับ -> render ลง content ทุกครั้งที่เซฟ
+        if self.content_format == "markdown" and self.content_md.strip():
+            from .markdown_renderer import render_docs_markdown
+            self.content = render_docs_markdown(self.content_md)
         super().save(*args, **kwargs)
 
     def _generate_unique_slug(self):

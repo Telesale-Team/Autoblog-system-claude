@@ -1,0 +1,15 @@
+[Unit]
+Description=Booking System Django + Gunicorn
+After=network.target
+
+[Service]
+User=dphoompat
+Group=dphoompat
+WorkingDirectory=/home/dphoompat/booking-system
+EnvironmentFile=/home/dphoompat/booking-system/.env
+ExecStart=/home/dphoompat/booking-system/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8002 --timeout 120 config.wsgi:application
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,357 @@
+/* === Project Monitor — /owner/projects/ === */
+/* ใช้คู่กับ settings.css (settings-hero + scard) */
+
+/* ============================================================
+   === TOKENS — ต้องนิยามเองในไฟล์นี้ ===
+   base.html ของ dashboard โหลดแค่ dashboard-base.css
+   ไม่ได้โหลด main.css ตัวแปร --brand-* จึงไม่มีอยู่จริงบนหน้า /owner/
+   ผูกกับ --app-primary ที่ base.html ฉีดมาให้ (ผู้ใช้เปลี่ยนสีแบรนด์ได้)
+   ============================================================ */
+:root {
+  --mon-gold:      var(--app-primary,   #c9a96e);
+  --mon-gold-d:    var(--app-secondary, #b8924f);
+  --mon-gold-ink:  #0f172a;
+
+  /* ผลลัพธ์สถานะ — ปรับตามธีมด้านล่าง */
+  --mon-ok:        #059669;
+  --mon-ok-bg:     rgba(16,185,129,.12);
+  --mon-warn:      #b45309;
+  --mon-danger:    #dc2626;
+  --mon-danger-bg: rgba(239,68,68,.10);
+  --mon-danger-bd: rgba(239,68,68,.28);
+
+  /* ตัวหนังสือจาง / ป้ายกลางๆ */
+  --mon-mute:      #64748b;
+  --mon-mute-bg:   rgba(148,163,184,.14);
+  --mon-mute-bd:   rgba(148,163,184,.30);
+
+  /* จุดสถานะ (เป็นบล็อกสี ไม่ใช่ตัวหนังสือ — ใช้สีสดได้ทั้ง 2 ธีม) */
+  --mon-dot-ok:    #10b981;
+  --mon-dot-down:  #ef4444;
+  --mon-dot-idle:  #94a3b8;
+
+  --mon-tint:      rgba(201,169,110,.035);
+  --mon-shadow:    rgba(26,39,68,.10);
+}
+
+/* ── โหมดมืด: ตัวหนังสือต้องสว่างขึ้น ไม่งั้นจมพื้นหลัง ── */
+[data-bs-theme="dark"] {
+  --mon-ok:        #34d399;
+  --mon-ok-bg:     rgba(16,185,129,.18);
+  --mon-warn:      #fbbf24;
+  --mon-danger:    #f87171;
+  --mon-danger-bg: rgba(248,113,113,.16);
+  --mon-danger-bd: rgba(248,113,113,.35);
+
+  --mon-mute:      #cbd5e1;
+  --mon-mute-bg:   rgba(148,163,184,.18);
+  --mon-mute-bd:   rgba(203,213,225,.28);
+
+  --mon-tint:      rgba(201,169,110,.07);
+  --mon-shadow:    rgba(0,0,0,.45);
+}
+
+/* ── สีสถานะที่ใช้ซ้ำใน template (แทน inline style) ── */
+.mon-up    { color: var(--mon-ok)     !important; }
+.mon-warn  { color: var(--mon-warn)   !important; }
+.mon-down  { color: var(--mon-danger) !important; }
+
+/* ── View switcher ── */
+.view-switch {
+  display: inline-flex;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .5rem;
+  overflow: hidden;
+}
+.view-switch button {
+  border: 0;
+  background: transparent;
+  padding: .35rem .85rem;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+}
+.view-switch button.on {
+  background: var(--mon-gold);
+  color: var(--mon-gold-ink);
+}
+.view-switch button:disabled { opacity: .55; }
+
+/* ── ปุ่มทอง ── */
+.btn-mon-gold {
+  background: var(--mon-gold);
+  color: var(--mon-gold-ink) !important;
+  font-weight: 700;
+  border: 0;
+}
+.btn-mon-gold:hover { background: var(--mon-gold-d); color: var(--mon-gold-ink) !important; }
+
+/* ── Summary strip ── */
+.mon-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.mon-stat {
+  border: 1px solid var(--bs-border-color);
+  border-radius: .75rem;
+  padding: 1rem 1.15rem;
+  background: var(--bs-body-bg);
+}
+.mon-stat-label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--bs-secondary-color);
+}
+.mon-stat-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: .25rem;
+  color: var(--bs-body-color);
+}
+.mon-stat-value small {
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+}
+
+/* ── ชั้นที่ 1: กลุ่มใหญ่ ── */
+.tier { margin-bottom: 2.75rem; }
+.tier-head {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding-bottom: .6rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid var(--mon-gold);
+}
+.tier-icon {
+  width: 34px; height: 34px;
+  border-radius: .5rem;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--mon-tint);
+  border: 1px solid var(--mon-gold);
+  color: var(--mon-gold);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.tier-title { font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--bs-body-color); }
+.tier-sub   { font-size: .76rem; color: var(--bs-secondary-color); margin: 0; }
+.tier-stat  { margin-left: auto; font-size: .8rem; color: var(--bs-secondary-color); text-align: right; }
+.tier-stat b { font-size: 1.05rem; color: var(--bs-body-color); }
+
+.tier.muted .tier-head { border-bottom-color: var(--bs-border-color); }
+.tier.muted .tier-icon {
+  background: var(--mon-mute-bg);
+  border-color: var(--mon-mute-bd);
+  color: var(--mon-mute);
+}
+
+/* ── ชั้นที่ 2: แถวบริการ ── */
+.svc { margin-bottom: 1.5rem; }
+.svc-head {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: .75rem;
+  flex-wrap: wrap;
+}
+.svc-name {
+  font-weight: 700;
+  font-size: .95rem;
+  margin: 0;
+  color: var(--bs-body-color);
+  display: flex; align-items: center; gap: .45rem;
+}
+.svc-name .bi { color: var(--mon-gold); }
+.svc-price {
+  font-size: .72rem;
+  color: var(--bs-secondary-color);
+  border: 1px solid var(--bs-border-color);
+  border-radius: .3rem;
+  padding: .05rem .4rem;
+}
+.svc-count { font-size: .75rem; color: var(--bs-secondary-color); margin-left: auto; }
+.svc-count b { color: var(--bs-body-color); }
+.svc-draft {
+  font-size: .6rem; font-weight: 800; letter-spacing: .06em;
+  padding: .1rem .4rem; border-radius: .3rem;
+  background: var(--mon-mute-bg);
+  color: var(--mon-mute);
+  border: 1px solid var(--mon-mute-bd);
+}
+
+/* ── บริการที่ยังไม่มีลูกค้า ── */
+.svc-empty {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .65rem 1rem;
+  border-radius: .5rem;
+  border: 1px dashed var(--bs-border-color);
+  font-size: .82rem;
+  color: var(--bs-secondary-color);
+  margin-bottom: .6rem;
+}
+.svc-empty .bi { color: var(--mon-dot-idle); }
+.svc-empty .price { margin-left: auto; font-size: .74rem; }
+
+/* ── การ์ดโปรเจกต์ ── */
+.mon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.1rem;
+}
+.mon-card {
+  border: 1px solid var(--bs-border-color);
+  border-radius: .75rem;
+  background: var(--bs-body-bg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+  display: flex;
+  flex-direction: column;
+  color: var(--bs-body-color);
+  text-decoration: none;
+}
+.mon-card:hover {
+  border-color: var(--mon-gold);
+  box-shadow: 0 8px 24px var(--mon-shadow);
+  transform: translateY(-2px);
+  color: var(--bs-body-color);
+}
+.mon-card-head {
+  padding: 1rem 1.15rem .75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+}
+.mon-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: .42rem;
+}
+.mon-dot.up   { background: var(--mon-dot-ok); animation: mon-dot-pulse 2s infinite; }
+.mon-dot.down { background: var(--mon-dot-down); }
+.mon-dot.idle { background: var(--mon-dot-idle); }
+@keyframes mon-dot-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.45); }
+  50%     { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+}
+.mon-name {
+  font-weight: 700; font-size: .98rem; margin: 0; line-height: 1.3;
+  color: var(--bs-body-color);
+  display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
+}
+.mon-client { font-size: .76rem; color: var(--bs-secondary-color); margin: .1rem 0 0; }
+.mon-url {
+  font-size: .73rem;
+  font-family: ui-monospace, monospace;
+  color: var(--bs-secondary-color);
+  display: block;
+  margin-top: .35rem;
+  word-break: break-all;
+}
+.mon-flag {
+  font-size: .62rem; font-weight: 800; letter-spacing: .06em;
+  padding: .15rem .45rem; border-radius: .3rem;
+  background: var(--mon-danger-bg);
+  color: var(--mon-danger);
+  border: 1px solid var(--mon-danger-bd);
+  white-space: nowrap;
+}
+.mon-env {
+  font-size: .62rem; font-weight: 800; letter-spacing: .06em;
+  padding: .15rem .45rem; border-radius: .3rem;
+  background: var(--mon-mute-bg);
+  color: var(--mon-mute);
+  border: 1px solid var(--mon-mute-bd);
+}
+.mon-uptime {
+  padding: 0 1.15rem .75rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.mon-uptime-pct { font-size: .78rem; font-weight: 700; white-space: nowrap; }
+.mon-meta {
+  padding: .55rem 1.15rem;
+  border-top: 1px solid var(--bs-border-color);
+  display: flex; gap: .9rem;
+  font-size: .73rem;
+  color: var(--bs-secondary-color);
+  flex-wrap: wrap;
+}
+.mon-meta code {
+  font-family: ui-monospace, monospace;
+  color: var(--mon-gold);
+  background: var(--mon-tint);
+  border: 1px solid var(--mon-mute-bd);
+  padding: .05rem .35rem;
+  border-radius: .25rem;
+}
+
+/* ── ตัวเลขธุรกิจจาก /api/monitor/ ── */
+.mon-metrics {
+  border-top: 1px solid var(--bs-border-color);
+  background: var(--mon-tint);
+  padding: .8rem 1.15rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5rem;
+  margin-top: auto;
+}
+.mon-metric { text-align: center; }
+.mon-metric-val {
+  font-size: 1.02rem; font-weight: 800; line-height: 1.2;
+  color: var(--bs-body-color);
+}
+.mon-metric-val.alert { color: var(--mon-danger); }
+.mon-metric-lbl { font-size: .66rem; color: var(--bs-secondary-color); margin-top: .1rem; }
+.mon-nometrics {
+  border-top: 1px dashed var(--bs-border-color);
+  padding: .8rem 1.15rem;
+  margin-top: auto;
+  font-size: .73rem;
+  color: var(--bs-secondary-color);
+  display: flex; align-items: center; gap: .4rem;
+}
+.mon-nometrics code {
+  color: var(--mon-gold);
+  background: var(--mon-tint);
+  padding: .05rem .3rem;
+  border-radius: .25rem;
+}
+
+/* ── หน้า detail ── */
+.mon-badge-ok {
+  background: var(--mon-ok-bg);
+  color: var(--mon-ok);
+  border: 1px solid var(--mon-ok);
+  font-weight: 700;
+}
+.det-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .5rem 0;
+  border-bottom: 1px solid var(--bs-border-color);
+  font-size: .85rem;
+}
+.det-row:last-child { border-bottom: 0; }
+.det-row .k { color: var(--bs-secondary-color); }
+.det-row .v {
+  font-weight: 600;
+  font-family: ui-monospace, monospace;
+  font-size: .8rem;
+  text-align: right;
+  word-break: break-all;
+  color: var(--bs-body-color);
+}
+.timeline-bar { display: flex; gap: 2px; height: 34px; align-items: stretch; }
+.timeline-bar i { flex: 1; border-radius: 2px; background: var(--mon-dot-ok); }
+.timeline-bar i.d { background: var(--mon-dot-down); }
+.timeline-bar i.n { background: var(--bs-border-color); }

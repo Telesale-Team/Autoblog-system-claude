@@ -9,6 +9,9 @@ urlpatterns = [
     path("projects/add/", views.project_add, name="project_add"),
     path("projects/<int:pk>/", views.project_detail, name="project_detail"),
     path("projects/<int:pk>/edit/", views.project_edit, name="project_edit"),
+    # Project Monitor
+    path("monitor/", views.monitor, name="monitor"),
+    path("monitor/<int:pk>/", views.monitor_detail, name="monitor_detail"),
     # Prompt Library
     path("prompts/", views.prompt_list, name="prompt_list"),
     path("prompts/add/", views.prompt_add, name="prompt_add"),

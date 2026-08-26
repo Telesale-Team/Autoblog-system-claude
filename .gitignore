@@ -44,3 +44,14 @@ agent_expansion_v2.md
 .claude/.credentials.json
 .claude/mcp-needs-auth-cache.json
 
+
+# === ไฟล์ที่มีค่าลับของ booking-system — ห้าม commit ===
+# มี SECRET_KEY / DB_PASSWORD / รหัส superuser ของ production อยู่จริง
+scripts/booking_env_prod.txt
+scripts/setup_booking_env.py
+scripts/create_booking_superuser.py
+
+# === ภาพที่หล่นมาไว้ที่ root ไม่ได้อยู่ใน media/ หรือ static/ ===
+/*.jpg
+/*.png
+/*.avif

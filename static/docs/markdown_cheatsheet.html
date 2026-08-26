@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สูตร Markdown สำหรับเขียนบทเรียน — Noodee BootBiz</title>
+<style>
+  :root {
+    --bg: #0b1120; --panel: #0f1626; --panel2: #111827;
+    --border: #1f2937; --gold: #c9a96e; --text: #e2e8f0;
+    --muted: #94a3b8; --green: #4ade80;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1rem 5rem; background: var(--bg); color: var(--text);
+    font-family: "Sarabun", "Segoe UI", sans-serif; line-height: 1.75; font-size: 15px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 1.7rem; margin: 0 0 0.3rem; color: #f1f5f9; }
+  .sub { color: var(--muted); margin: 0 0 2rem; font-size: 0.95rem; }
+  h2 {
+    font-size: 1.2rem; color: var(--gold); margin: 2.5rem 0 0.4rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+  }
+  h2:first-of-type { margin-top: 1.5rem; }
+  p { margin: 0.6rem 0; }
+  code {
+    background: rgba(148,163,184,.12); border: 1px solid var(--border);
+    border-radius: 5px; padding: 1px 6px; font-size: 0.86em; color: #e7d9bd;
+    font-family: Consolas, "Cascadia Mono", monospace;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--gold); font-weight: 700; }
+  td:first-child { white-space: nowrap; }
+  pre {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1rem 1.1rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.65;
+    font-family: Consolas, "Cascadia Mono", monospace; color: #cbd5e1; margin: 0.8rem 0;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .grid > div { min-width: 0; }
+  .lbl { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+  .note {
+    background: rgba(201,169,110,.08); border: 1px solid rgba(201,169,110,.3);
+    border-radius: 10px; padding: 0.9rem 1.1rem; margin: 1.2rem 0;
+  }
+  .warn {
+    background: rgba(245,158,11,.07); border: 1px solid rgba(245,158,11,.3);
+    border-radius: 10px; padding: 0.9rem 1.1rem; margin: 1.2rem 0;
+  }
+  .warn b, .note b { color: var(--gold); }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>สูตร Markdown สำหรับเขียนบทเรียน</h1>
+  <p class="sub">
+    ใช้เมื่อ <b>รูปแบบการเขียน = Markdown</b> เท่านั้น — พิมพ์ในช่อง "เนื้อหา (Markdown)"
+    ระบบจะแปลงเป็น HTML ให้อัตโนมัติทุกครั้งที่กดเซฟ
+  </p>
+
+  <div class="note">
+    <b>ทำไมไม่ใช้ CKEditor</b> — CKEditor เป็น WYSIWYG จึงลบแท็กที่มันไม่รู้จักทิ้ง
+    (กล่องเตือน, ขั้นตอน, ไดอะแกรม SVG หายหมด) บทเรียนของเราเป็นเนื้อหาที่มีโครงสร้าง
+    เลยต้องเขียนด้วย Markdown แทน
+  </div>
+
+  <h2>1. พื้นฐาน — จำแค่ 6 อย่างนี้ก็เขียนได้แล้ว</h2>
+
+  <table>
+    <tr><th>พิมพ์แบบนี้</th><th>ได้ผลแบบนี้</th></tr>
+    <tr><td><code>## หัวข้อใหญ่</code></td><td>หัวข้อ H2 — <b>ขึ้นในสารบัญอัตโนมัติ</b></td></tr>
+    <tr><td><code>### หัวข้อย่อย</code></td><td>หัวข้อ H3 — ขึ้นในสารบัญเหมือนกัน</td></tr>
+    <tr><td><code>**ตัวหนา**</code></td><td>ตัวหนา (ใช้เน้นคำสำคัญ)</td></tr>
+    <tr><td><code>`โค้ดสั้น`</code></td><td>โค้ดในบรรทัด เช่น ชื่อคำสั่ง ชื่อไฟล์</td></tr>
+    <tr><td><code>- รายการ</code></td><td>bullet list</td></tr>
+    <tr><td><code>1. รายการ</code></td><td>numbered list</td></tr>
+  </table>
+
+  <p>ย่อหน้าใหม่ = <b>เว้นบรรทัดว่าง 1 บรรทัด</b> ระหว่างข้อความ ถ้าไม่เว้นจะกลายเป็นย่อหน้าเดียวกัน</p>
+
+  <h2>2. โค้ดบล็อก</h2>
+
+  <p>ครอบด้วย backtick 3 ตัว ใส่ชื่อภาษาต่อท้ายอันเปิด — ได้ปุ่ม Copy อัตโนมัติ</p>
+
+  <pre>```python
+price = 250
+print(f"ราคา {price:,.2f} บาท")
+```</pre>
+
+  <div class="warn">
+    <b>ข้อดีสำคัญ</b> — ในโค้ดบล็อก ระบบจะไม่แตะอะไรเลย เครื่องหมายคำพูดจะไม่ถูกแปลงเป็นอัญประกาศโค้ง
+    ซึ่งเป็นปัญหาที่ทำให้โค้ดที่สอนไปแล้วรันไม่ได้ตอนใช้ WYSIWYG
+  </div>
+
+  <h2>3. กล่องพิเศษ (ของเราเอง) — ใช้ <code>:::</code></h2>
+
+  <p>ทุกกล่องเปิดด้วย <code>:::ชนิด หัวข้อ</code> และปิดด้วย <code>:::</code> บรรทัดเดียวโดดๆ</p>
+
+  <table>
+    <tr><th>คำสั่ง</th><th>ใช้ตอนไหน</th></tr>
+    <tr><td><code>:::goal</code></td><td>กล่องเป้าหมาย "จบ EP นี้ทำอะไรได้" (ไอคอน 🎯)</td></tr>
+    <tr><td><code>:::tip</code></td><td>เคล็ดลับ ของแถม ทางลัด (ทอง)</td></tr>
+    <tr><td><code>:::note</code></td><td>ข้อมูลเสริม รู้ไว้ก็ดี (ฟ้า)</td></tr>
+    <tr><td><code>:::warn</code></td><td>คำเตือน ระวังพลาด (ส้ม)</td></tr>
+    <tr><td><code>:::danger</code></td><td>กับดักร้ายแรง ห้ามทำ (แดง)</td></tr>
+    <tr><td><code>:::analogy 🍳</code></td><td>เปรียบเทียบให้เห็นภาพ (ใส่อิโมจิต่อท้าย)</td></tr>
+    <tr><td><code>:::step 1 หัวข้อ</code></td><td>สอนทีละขั้น มีเลขวงกลม</td></tr>
+    <tr><td><code>:::checklist</code></td><td>เช็คลิสต์ติ๊กถูก (ข้างในใช้ <code>-</code>)</td></tr>
+    <tr><td><code>:::answer ดูเฉลย</code></td><td>กล่องเฉลยแบบพับซ่อน กดแล้วค่อยเห็น</td></tr>
+    <tr><td><code>:::figure คำบรรยาย</code></td><td>รูปหรือไดอะแกรม (วาง <code>&lt;svg&gt;</code> หรือ <code>![](url)</code> ข้างใน)</td></tr>
+  </table>
+
+  <div class="grid">
+    <div>
+      <div class="lbl">เขียนแบบนี้</div>
+      <pre>:::warn ระวังตรงนี้
+`input()` คืนค่าเป็น**ข้อความ**เสมอ
+ต้องครอบด้วย `int()` ก่อน
+:::</pre>
+    </div>
+    <div>
+      <div class="lbl">ได้กล่องเตือนสีส้ม พร้อมไอคอน ⚠️</div>
+      <pre>&lt;div class="callout c-warn"&gt;
+  &lt;span class="ico"&gt;⚠️&lt;/span&gt;
+  &lt;div class="callout__body"&gt;
+    &lt;span class="ttl"&gt;ระวังตรงนี้&lt;/span&gt;
+    ...
+&lt;/div&gt;</pre>
+    </div>
+  </div>
+
+  <p><b>เปลี่ยนไอคอนเองได้</b> ด้วยวงเล็บเหลี่ยม — <code>:::tip[💰] ประหยัดเงินได้</code></p>
+
+  <p><b>กล่องซ้อนกันได้</b> เช่น ใส่ <code>:::warn</code> หรือโค้ดบล็อกไว้ข้างใน <code>:::answer</code></p>
+
+  <h2>4. ตัวอย่างเต็มๆ ของบทเรียน 1 ตอน</h2>
+
+  <pre>บทนำสั้นๆ 3-4 บรรทัด เล่าปัญหาจริงที่คนอ่านเจอ
+
+:::goal จบ EP นี้คุณจะทำอะไรได้
+เขียนลูปได้ · สรุปยอดขาย 50 บิลได้ใน 1 วินาที
+
+**ใช้เวลา:** อ่าน 15 นาที + ลงมือทำ 25 นาที · **ต้องผ่านมาก่อน:** EP4
+:::
+
+**ทบทวน 30 วินาที** — EP4 เราเรียนเงื่อนไข `if` มาแล้ว
+
+## ลูปคืออะไร
+
+:::analogy 💵
+เหมือนนับเงินในลิ้นชัก — หยิบทีละใบ บวกไปเรื่อยๆ จนกว่าจะหมด
+:::
+
+```python
+bills = [250, 180, 420]
+total = 0
+for bill in bills:
+    total = total + bill
+print(total)
+```
+
+:::danger ลืมย่อหน้า
+บรรทัดในลูปต้องเว้น 4 ช่อง ไม่งั้นได้ `IndentationError`
+:::
+
+## ลงมือทำ
+
+**ข้อ 1 (ง่าย)** — รวมยอดจากลิสต์ 5 ตัวเลข
+
+:::answer ดูเฉลยข้อ 1
+```python
+print(sum([1, 2, 3, 4, 5]))
+```
+:::
+
+## เช็คว่าคุณผ่าน EP นี้จริง
+
+:::checklist
+- เขียน `for` loop ได้เอง
+- อธิบายได้ว่าตัวแปรในลูปเปลี่ยนค่ายังไงทุกรอบ
+:::</pre>
+
+  <h2>5. ข้อควรรู้</h2>
+
+  <table>
+    <tr><th>เรื่อง</th><th>รายละเอียด</th></tr>
+    <tr>
+      <td>วาง HTML ได้</td>
+      <td>เขียน <code>&lt;svg&gt;</code> หรือ HTML ตรงๆ ลงไปได้เลย ระบบไม่ลบทิ้ง
+          (ต่างจาก CKEditor) — คั่นด้วยบรรทัดว่างก่อนและหลัง</td>
+    </tr>
+    <tr>
+      <td>ช่อง "เนื้อหา" ถูกล็อก</td>
+      <td>พอตั้งเป็น Markdown แล้ว ช่อง CKEditor จะกลายเป็นอ่านอย่างเดียว
+          เพื่อกันการเผลอเปิดแล้วเซฟทับ — ต้นฉบับอยู่ที่ช่อง Markdown เท่านั้น</td>
+    </tr>
+    <tr>
+      <td>สารบัญอัตโนมัติ</td>
+      <td>สร้างจาก <code>##</code> และ <code>###</code> ให้เอง ไม่ต้องเขียนเอง
+          (เฉพาะบทความที่ตั้ง layout = คู่มือ / Docs)</td>
+    </tr>
+    <tr>
+      <td>ต้นฉบับสำรอง</td>
+      <td>ไฟล์ <code>.md</code> ของทุกบทเรียนเก็บไว้ที่
+          <code>content_backlog/lessons/</code> ในโปรเจกต์ด้วย</td>
+    </tr>
+    <tr>
+      <td>ลืมปิด <code>:::</code></td>
+      <td>ระบบปิดให้เองตอนจบบทความ ไม่พัง แต่กล่องอาจกินเนื้อหายาวกว่าที่ตั้งใจ</td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <b>อยากเห็นของจริง</b> — เปิดบทเรียน Python 101 ตอนไหนก็ได้ใน Django admin
+    แล้วดูช่อง "เนื้อหา (Markdown)" ทั้ง 5 ตอนเขียนด้วยสูตรในหน้านี้ทั้งหมด
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ย้ายทีมหนูดีไปโปรเจกต์ใหม่ — Docs · AIBiz Thailand</title>
+
+  <!-- ============================================================
+       GUIDE 01 — ย้ายทีม Agent ไปทำงานโปรเจกต์ใหม่
+       สไตล์: storytelling docs (mikelopster-inspired)
+       ธีม: Navy + Gold (ตรงกับ Docs Hub เดิม)
+       ============================================================ -->
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark:   #090d18;
+      --card:   #111827;
+      --card-2: #0f1626;
+      --border: #1f2937;
+      --text:   #e2e8f0;
+      --muted:  #94a3b8;
+      --dim:    #64748b;
+      --gold:   #c9a96e;
+      --blue:   #3b82f6;
+      --green:  #10b981;
+      --orange: #f59e0b;
+      --red:    #ef4444;
+      --code-bg:#0b1120;
+    }
+    body {
+      font-family: 'Segoe UI','Sarabun',sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.8;
+    }
+    code, pre, .mono { font-family: 'JetBrains Mono','Consolas','Courier New',monospace; }
+
+    /* ===== Hero ===== */
+    .hero {
+      background: linear-gradient(135deg,#0d1b2a,#1a1f3a,#0f1a2a);
+      border-bottom: 2px solid var(--gold);
+      padding: 48px 32px 40px;
+    }
+    .hero-inner { max-width: 1180px; margin: 0 auto; }
+    .breadcrumb { font-size: .8rem; color: var(--dim); margin-bottom: 18px; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .eyebrow {
+      display: inline-block;
+      background: rgba(201,169,110,.15);
+      border: 1px solid rgba(201,169,110,.3);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .hero h1 { font-size: clamp(1.7rem,3.6vw,2.6rem); font-weight: 900; color: #f9fafb; margin-bottom: 12px; line-height: 1.25; }
+    .hero h1 span { color: var(--gold); }
+    .hero .lead { color: var(--muted); font-size: 1rem; max-width: 680px; }
+    .hero .meta { margin-top: 18px; font-size: .8rem; color: var(--dim); display: flex; gap: 18px; flex-wrap: wrap; }
+    .hero .meta b { color: var(--muted); font-weight: 600; }
+
+    /* ===== Layout: TOC + content ===== */
+    .layout { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; display: grid; grid-template-columns: 240px 1fr; gap: 48px; }
+    .toc { position: sticky; top: 24px; align-self: start; }
+    .toc__label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--dim); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .toc a { display: block; font-size: .86rem; color: var(--muted); text-decoration: none; padding: 7px 0 7px 14px; border-left: 2px solid var(--border); transition: .15s; }
+    .toc a:hover { color: var(--gold); border-left-color: var(--gold); }
+
+    .content { min-width: 0; }
+    .content h2 { font-size: 1.5rem; font-weight: 800; color: #f1f5f9; margin: 48px 0 8px; scroll-margin-top: 24px; }
+    .content h2:first-child { margin-top: 0; }
+    .content h2 .num { color: var(--gold); font-weight: 900; margin-right: 10px; }
+    .content h3 { font-size: 1.1rem; font-weight: 700; color: #e2e8f0; margin: 28px 0 8px; }
+    .content p { color: #cbd5e1; margin: 12px 0; }
+    .content .sub { color: var(--dim); font-size: .92rem; margin-top: -2px; margin-bottom: 18px; }
+    .content strong { color: #f1f5f9; }
+    .content a.link { color: var(--gold); }
+    .content ul { margin: 12px 0 12px 4px; list-style: none; }
+    .content ul li { position: relative; padding-left: 22px; margin: 7px 0; color: #cbd5e1; }
+    .content ul li::before { content: "›"; position: absolute; left: 6px; color: var(--gold); font-weight: 700; }
+
+    .divider { height: 1px; background: var(--border); margin: 40px 0; border: 0; }
+
+    /* ===== Analogy block ===== */
+    .analogy {
+      background: linear-gradient(135deg, rgba(201,169,110,.08), rgba(201,169,110,.02));
+      border: 1px solid rgba(201,169,110,.25);
+      border-radius: 14px; padding: 22px 24px; margin: 22px 0;
+      display: flex; gap: 18px; align-items: flex-start;
+    }
+    .analogy .emoji { font-size: 1.8rem; line-height: 1; flex-shrink: 0; }
+    .analogy p { margin: 0; color: #e7d9bd; }
+    .analogy b { color: var(--gold); }
+
+    /* ===== Callouts ===== */
+    .callout { border-radius: 12px; padding: 16px 20px; margin: 20px 0; border: 1px solid; display: flex; gap: 14px; align-items: flex-start; font-size: .94rem; }
+    .callout .ico { font-size: 1.15rem; flex-shrink: 0; line-height: 1.5; }
+    .callout p { margin: 0; }
+    .callout .ttl { font-weight: 700; display: block; margin-bottom: 2px; }
+    .c-tip  { background: rgba(201,169,110,.08); border-color: rgba(201,169,110,.3); }
+    .c-tip  .ttl { color: var(--gold); }
+    .c-warn { background: rgba(245,158,11,.07); border-color: rgba(245,158,11,.3); }
+    .c-warn .ttl { color: var(--orange); }
+    .c-danger { background: rgba(239,68,68,.07); border-color: rgba(239,68,68,.3); }
+    .c-danger .ttl { color: #fca5a5; }
+    .c-note { background: rgba(59,130,246,.07); border-color: rgba(59,130,246,.3); }
+    .c-note .ttl { color: #93c5fd; }
+    .callout p, .callout li { color: #d6deea; }
+
+    /* ===== Figure / diagram ===== */
+    figure { margin: 28px 0; background: var(--card-2); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    figure svg { display: block; width: 100%; height: auto; }
+    figcaption { text-align: center; color: var(--dim); font-size: .82rem; margin-top: 14px; }
+    figcaption b { color: var(--muted); }
+
+    /* ===== Code ===== */
+    pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; overflow-x: auto; margin: 16px 0; font-size: .86rem; line-height: 1.7; }
+    pre code { color: #d6deea; }
+    .cmt { color: #5b6b82; }
+    .kw  { color: #c9a96e; }
+    .str { color: #7dd3a8; }
+    p code, li code { background: rgba(148,163,184,.12); border: 1px solid var(--border); border-radius: 6px; padding: 1px 7px; font-size: .85em; color: #e7d9bd; }
+
+    /* ===== Step blocks ===== */
+    .step { display: flex; gap: 18px; margin: 22px 0; }
+    .step__n { flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; background: rgba(201,169,110,.12); border: 1px solid rgba(201,169,110,.4); color: var(--gold); font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; }
+    .step__body { flex: 1; min-width: 0; }
+    .step__body h3 { margin-top: 4px; }
+
+    /* ===== Decision cards ===== */
+    .cards3 { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 16px; margin: 22px 0; }
+    .pick { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .pick.is-active { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(201,169,110,.25); }
+    .pick .tag { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--gold); }
+    .pick h4 { font-size: 1.02rem; color: #f1f5f9; margin: 8px 0 6px; }
+    .pick p { font-size: .85rem; color: var(--muted); margin: 0; }
+    .pick .who { margin-top: 12px; font-size: .78rem; color: var(--dim); border-top: 1px dashed var(--border); padding-top: 10px; }
+
+    /* ===== Checklist ===== */
+    .checklist { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin: 22px 0; }
+    .checklist li { position: relative; padding-left: 32px; margin: 11px 0; color: #cbd5e1; list-style: none; }
+    .checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 5px; background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.4); color: var(--green); font-size: .78rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+    /* ===== Next / footer ===== */
+    .nextbox { background: linear-gradient(135deg,#0d1b2a,#141a30); border: 1px solid var(--border); border-radius: 16px; padding: 24px 26px; margin-top: 48px; }
+    .nextbox .k { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--dim); }
+    .nextbox h3 { margin: 6px 0 4px; color: #f1f5f9; }
+    .nextbox p { color: var(--muted); font-size: .9rem; margin: 0; }
+
+    footer { text-align: center; padding: 32px; color: #374151; font-size: .8rem; border-top: 1px solid var(--border); }
+    footer a { color: #4b5563; }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; gap: 24px; }
+      .toc { position: static; order: -1; background: var(--card-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+      .toc a { padding: 6px 0 6px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =================== HERO =================== -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Docs Hub</a> &nbsp;›&nbsp; คู่มือการทำงาน &nbsp;›&nbsp; ย้ายทีมไปโปรเจกต์ใหม่</div>
+    <div class="eyebrow">📘 Guide 01 · คู่มือการทำงาน</div>
+    <h1>ย้าย<span>ทีมหนูดี</span> ไปทำงานโปรเจกต์ใหม่<br>ต้องขนอะไรไปบ้าง?</h1>
+    <p class="lead">สร้างโฟลเดอร์ใหม่ขึ้นมาแล้วอยากให้หนูดีกับทีม Agent ทั้ง 25 ตัวตามไปทำงานด้วย — คู่มือนี้จะพาดูว่า "ตัวตน" ของทีมอยู่ตรงไหน ก๊อปอะไร และกับดักเรื่องความจำที่คนมักพลาด</p>
+    <div class="meta">
+      <span><b>อ่าน:</b> ~6 นาที</span>
+      <span><b>ระดับ:</b> เริ่มต้น</span>
+      <span><b>อัปเดต:</b> มิ.ย. 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- =================== LAYOUT =================== -->
+<div class="layout">
+
+  <!-- ---------- TOC ---------- -->
+  <nav class="toc">
+    <div class="toc__label">ในหน้านี้</div>
+    <a href="#intro">ทำความเข้าใจก่อน</a>
+    <a href="#where">1. ทีมงานอยู่ตรงไหน</a>
+    <a href="#memory">2. กับดักเรื่องความจำ</a>
+    <a href="#styles">3. เลือกวิธีย้าย</a>
+    <a href="#howto">4. ลงมือทำ (ทีมสะอาด)</a>
+    <a href="#fix">5. 3 จุดที่ต้องแก้</a>
+    <a href="#checklist">สรุป &amp; Checklist</a>
+  </nav>
+
+  <!-- ---------- CONTENT ---------- -->
+  <main class="content">
+
+    <!-- ===== INTRO ===== -->
+    <section id="intro">
+      <p>หลายครั้งเวลาเราเริ่มงานชิ้นใหม่ เราอยากแยกมันออกมาเป็นโฟลเดอร์ของตัวเอง ไม่ปนกับงานเก่า แต่พอแยกออกมาแล้ว... หนูดีกับทีม Agent ก็หายไปด้วย เพราะ Claude Code มองว่า "โฟลเดอร์ใหม่ = โปรเจกต์ใหม่ = ไม่รู้จักทีมนี้"</p>
+
+      <div class="analogy">
+        <div class="emoji">📦</div>
+        <p>ลองคิดว่าทีม Agent เหมือน <b>ทีมงานที่กำลังจะย้ายออฟฟิศ</b> — เราไม่ได้ย้ายแค่ "ตัวคน" แต่ต้องขน <b>คู่มือการทำงาน</b> (ความสามารถ) และ <b>แฟ้มความทรงจำ</b> (สิ่งที่ทีมเคยเรียนรู้) ไปด้วย ถ้าลืมขนอย่างใดอย่างหนึ่ง ทีมก็ทำงานได้ไม่เต็มที่</p>
+      </div>
+
+      <p>คู่มือนี้จะพาไล่ดูทีละขั้น ว่า "ตัวตน" ของทีมจริง ๆ เก็บอยู่ที่ไหน, มีกับดักอะไรที่ทำให้ความจำหาย, และวิธีย้ายที่ถูกต้องสำหรับการ <strong>"เริ่มทีมใหม่สะอาด ๆ"</strong></p>
+    </section>
+
+    <!-- ===== SECTION 1 ===== -->
+    <section id="where">
+      <h2><span class="num">1</span>ทีมงานอยู่ตรงไหนกันแน่?</h2>
+      <p class="sub">ก่อนจะขนของ ต้องรู้ก่อนว่าของอยู่ที่ไหน</p>
+
+      <p>สิ่งที่ทำให้หนูดี "เป็นหนูดี" และทำให้ Agent ทั้ง 25 ตัวมีตัวตน จริง ๆ แล้วเก็บอยู่แค่ <strong>2 ที่</strong> เท่านั้น — และน่าแปลกใจที่ <strong>หนึ่งในนั้นอยู่นอกโฟลเดอร์โปรเจกต์</strong></p>
+
+      <figure>
+        <!-- DIAGRAM 1: where the team lives -->
+        <svg viewBox="0 0 760 360" role="img" aria-label="ไดอะแกรมแสดงตำแหน่งไฟล์ของทีม">
+          <defs>
+            <style>
+              .lbl{font:600 13px 'Segoe UI',sans-serif;fill:#cbd5e1}
+              .lblg{font:700 13px 'Segoe UI',sans-serif;fill:#c9a96e}
+              .sm{font:500 11px 'Segoe UI',sans-serif;fill:#94a3b8}
+              .tt{font:700 14px 'Segoe UI',sans-serif;fill:#f1f5f9}
+              .mono{font:500 12px 'Consolas',monospace;fill:#94a3b8}
+            </style>
+          </defs>
+
+          <!-- Project box -->
+          <rect x="20" y="30" width="430" height="300" rx="14" fill="#0f1626" stroke="#1f2937"/>
+          <text x="40" y="58" class="tt">📁 โฟลเดอร์โปรเจกต์</text>
+          <text x="40" y="76" class="mono">My-New-Project/</text>
+
+          <!-- .claude -->
+          <rect x="44" y="92" width="382" height="150" rx="10" fill="#111827" stroke="#c9a96e" stroke-opacity="0.5"/>
+          <text x="60" y="116" class="lblg">📂 .claude/</text>
+          <text x="74" y="140" class="lbl">agents/ <tspan class="sm">— Agent ทั้ง 25 ตัว (หนูดี + ทีม)</tspan></text>
+          <text x="74" y="164" class="lbl">skills/ <tspan class="sm">— ความสามารถ 12 skill</tspan></text>
+          <text x="74" y="188" class="lbl">settings.json <tspan class="sm">— hooks + permission</tspan></text>
+          <text x="74" y="212" class="lbl">startup_hook.py <tspan class="sm">— โปรโตคอลเปิดงาน</tspan></text>
+
+          <!-- CLAUDE.md -->
+          <rect x="44" y="256" width="382" height="50" rx="10" fill="#111827" stroke="#1f2937"/>
+          <text x="60" y="286" class="lblg">📄 CLAUDE.md <tspan class="sm" dx="6">— คู่มือ + routing logic ของทีม</tspan></text>
+
+          <!-- memory box OUTSIDE -->
+          <rect x="500" y="110" width="240" height="140" rx="14" fill="#0f1626" stroke="#f59e0b" stroke-dasharray="6 5"/>
+          <text x="520" y="138" class="tt">🧠 memory/</text>
+          <text x="520" y="160" class="sm">ความทรงจำถาวร</text>
+          <text x="520" y="182" class="sm">MEMORY.md + ไฟล์ความจำ</text>
+          <rect x="520" y="198" width="200" height="36" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)"/>
+          <text x="534" y="221" class="sm" fill="#fbbf24">⚠ อยู่ "นอก" โปรเจกต์</text>
+
+          <!-- arrow linking -->
+          <line x1="450" y1="180" x2="500" y2="180" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 4"/>
+          <polygon points="500,180 491,175 491,185" fill="#f59e0b"/>
+          <text x="455" y="172" class="sm" fill="#fbbf24">ผูกด้วย path</text>
+        </svg>
+        <figcaption><b>ภาพรวม:</b> <code>.claude/</code> และ <code>CLAUDE.md</code> อยู่ในโปรเจกต์ — แต่ <code>memory/</code> อยู่ข้างนอก แล้วผูกกลับด้วย "ชื่อ path"</figcaption>
+      </figure>
+
+      <h3>แปลเป็นภาษาคน</h3>
+      <ul>
+        <li><strong><code>.claude/agents/</code></strong> — คือ "ตัวคน" ทั้ง 25 Agent แต่ละไฟล์คือสมองของ Agent หนึ่งตัว</li>
+        <li><strong><code>.claude/skills/</code></strong> — คือ "ทักษะ" ที่หยิบมาใช้ซ้ำได้ เช่น ทำไดอะแกรม, เขียน blog</li>
+        <li><strong><code>.claude/settings.json</code> + <code>startup_hook.py</code></strong> — กฎและพิธีเปิดงาน (เช่น สั่งให้อ่าน memory ก่อนเริ่มทุกครั้ง)</li>
+        <li><strong><code>CLAUDE.md</code></strong> — คู่มือเล่มใหญ่ บอกว่าใครทำอะไร และเวลามีงานเข้าให้ส่งต่อให้ใคร</li>
+        <li><strong><code>memory/</code></strong> — สมุดบันทึกความทรงจำ ที่หนูดีจดสิ่งที่เรียนรู้ไว้ข้ามวันข้ามครั้ง</li>
+      </ul>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ===== SECTION 2 ===== -->
+    <section id="memory">
+      <h2><span class="num">2</span>กับดักเรื่องความจำ (จุดที่คนพลาดบ่อยที่สุด)</h2>
+      <p class="sub">ทำไมก๊อปทุกอย่างแล้วหนูดียัง "ความจำหาย"</p>
+
+      <p>นี่คือหัวใจของคู่มือทั้งหน้านี้เลยครับ Claude Code <strong>ไม่ได้</strong>เก็บโฟลเดอร์ <code>memory/</code> ไว้ในโปรเจกต์ แต่เก็บไว้ที่ส่วนกลางของเครื่อง แล้ว <strong>ตั้งชื่อโฟลเดอร์ตาม path ของโปรเจกต์</strong></p>
+
+      <figure>
+        <!-- DIAGRAM 2: why memory disappears -->
+        <svg viewBox="0 0 760 290" role="img" aria-label="ไดอะแกรมแสดงว่าทำไมความจำหายเมื่อเปลี่ยน path">
+          <defs>
+            <style>
+              .h{font:700 13px 'Segoe UI',sans-serif}
+              .p{font:500 12px 'Consolas',monospace}
+              .s{font:500 11px 'Segoe UI',sans-serif;fill:#94a3b8}
+            </style>
+          </defs>
+
+          <!-- OLD path row -->
+          <rect x="20" y="30" width="240" height="60" rx="10" fill="#0f1626" stroke="#1f2937"/>
+          <text x="36" y="54" class="h" fill="#cbd5e1">path โปรเจกต์เดิม</text>
+          <text x="36" y="76" class="p" fill="#64748b">...Agent-Skill-Claude/</text>
+
+          <text x="288" y="65" class="h" fill="#64748b">→</text>
+
+          <rect x="320" y="30" width="180" height="60" rx="10" fill="#111827" stroke="#1f2937"/>
+          <text x="336" y="54" class="s">แปลงเป็นชื่อโฟลเดอร์</text>
+          <text x="336" y="76" class="p" fill="#94a3b8">E--Project-...-Claude</text>
+
+          <text x="528" y="65" class="h" fill="#64748b">→</text>
+
+          <rect x="560" y="30" width="180" height="60" rx="10" fill="#0f1626" stroke="#10b981" stroke-opacity="0.5"/>
+          <text x="576" y="54" class="h" fill="#4ade80">🧠 memory เดิม</text>
+          <text x="576" y="76" class="s">มีความจำครบ ✓</text>
+
+          <!-- divider -->
+          <line x1="20" y1="120" x2="740" y2="120" stroke="#1f2937" stroke-dasharray="4 4"/>
+          <text x="20" y="112" class="s">เมื่อสร้างโฟลเดอร์ใหม่ ↓</text>
+
+          <!-- NEW path row -->
+          <rect x="20" y="150" width="240" height="60" rx="10" fill="#0f1626" stroke="#f59e0b" stroke-opacity="0.5"/>
+          <text x="36" y="174" class="h" fill="#fbbf24">path โปรเจกต์ใหม่</text>
+          <text x="36" y="196" class="p" fill="#64748b">...My-New-Project/</text>
+
+          <text x="288" y="185" class="h" fill="#64748b">→</text>
+
+          <rect x="320" y="150" width="180" height="60" rx="10" fill="#111827" stroke="#1f2937"/>
+          <text x="336" y="174" class="s">ชื่อโฟลเดอร์ "ใหม่"</text>
+          <text x="336" y="196" class="p" fill="#94a3b8">E--My-New-Project</text>
+
+          <text x="528" y="185" class="h" fill="#64748b">→</text>
+
+          <rect x="560" y="150" width="180" height="60" rx="10" fill="#0f1626" stroke="#ef4444" stroke-opacity="0.5"/>
+          <text x="576" y="174" class="h" fill="#fca5a5">🧠 memory ใหม่</text>
+          <text x="576" y="196" class="s">ว่างเปล่า — เริ่มจาก 0</text>
+
+          <!-- bottom note -->
+          <text x="20" y="250" class="s" fill="#94a3b8">💡 path เปลี่ยน → ชื่อโฟลเดอร์ memory เปลี่ยน → Claude Code ไปเปิดสมุดเล่มใหม่ที่ยังว่าง</text>
+          <text x="20" y="272" class="s" fill="#94a3b8">     นี่คือเหตุผลว่าทำไม "ก๊อปทุกอย่างแล้ว แต่หนูดียังจำอะไรไม่ได้"</text>
+        </svg>
+        <figcaption><b>กลไก:</b> path ของโปรเจกต์ถูกแปลงเป็นชื่อโฟลเดอร์ memory — พอ path เปลี่ยน Claude Code ก็เปิด "สมุดเล่มใหม่" ที่ยังว่าง</figcaption>
+      </figure>
+
+      <div class="callout c-tip">
+        <span class="ico">💡</span>
+        <p><span class="ttl">ข่าวดีสำหรับ "ทีมสะอาด"</span>ถ้าเราตั้งใจจะ <strong>เริ่มใหม่จากศูนย์</strong> อยู่แล้ว กับดักนี้กลายเป็น <strong>ของแถม</strong> ทันที — เพราะ Claude Code จะสร้างโฟลเดอร์ memory ว่าง ๆ ให้เราเองโดยอัตโนมัติ เราจึง <strong>ไม่ต้องก๊อป <code>memory/</code></strong> เลย</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ===== SECTION 3 ===== -->
+    <section id="styles">
+      <h2><span class="num">3</span>เลือกวิธีย้าย — มี 3 แบบ</h2>
+      <p class="sub">ก๊อปไม่เหมือนกัน ขึ้นอยู่กับว่าโปรเจกต์ใหม่ทำอะไร</p>
+
+      <div class="cards3">
+        <div class="pick is-active">
+          <div class="tag">★ คู่มือนี้</div>
+          <h4>ทีมสะอาด</h4>
+          <p>เอาแค่โครงทีม 25 Agent ไปเริ่มงานคนละแบบ ความจำเริ่มจาก 0</p>
+          <div class="who">เหมาะกับ: งานใหม่ที่ไม่เกี่ยวกับ Django/blog เดิม</div>
+        </div>
+        <div class="pick">
+          <div class="tag">ตัวเลือก B</div>
+          <h4>Clone ทั้งระบบ</h4>
+          <p>ยกระบบธุรกิจทั้งก้อน (blog, dashboard, calendar) ไปด้วย</p>
+          <div class="who">เหมาะกับ: ทำสาขา/แบรนด์ใหม่บนระบบเดิม → ใช้ git clone</div>
+        </div>
+        <div class="pick">
+          <div class="tag">ตัวเลือก C</div>
+          <h4>ทีม + ความจำบางส่วน</h4>
+          <p>เอาโครงทีมไป แต่หยิบ memory เฉพาะ "วิธีการทำงาน" ติดไปด้วย</p>
+          <div class="who">เหมาะกับ: อยากให้ทีมจำสไตล์การทำงาน แต่ลืมเรื่องธุรกิจเดิม</div>
+        </div>
+      </div>
+
+      <div class="callout c-note">
+        <span class="ico">🧭</span>
+        <p><span class="ttl">คู่มือนี้โฟกัสที่ "ทีมสะอาด"</span>เป็นแบบที่ใช้บ่อยที่สุดและปลอดภัยที่สุด ส่วนแบบ Clone และ Hybrid จะแยกเป็น Guide ต่อไปครับ</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ===== SECTION 4 ===== -->
+    <section id="howto">
+      <h2><span class="num">4</span>ลงมือทำ — เริ่มทีมใหม่สะอาด ๆ</h2>
+      <p class="sub">4 ขั้นตอน จากโฟลเดอร์ว่างสู่ทีมพร้อมทำงาน</p>
+
+      <div class="step">
+        <div class="step__n">1</div>
+        <div class="step__body">
+          <h3>ก๊อป <code>.claude/</code> ไปทั้งโฟลเดอร์</h3>
+          <p>นี่คือ "สมองและทักษะ" ของทีมทั้งหมด ก๊อปยกโฟลเดอร์ไปวางในโปรเจกต์ใหม่ได้เลย</p>
+<pre><code><span class="cmt"># จากในโฟลเดอร์โปรเจกต์เดิม</span>
+<span class="kw">cp</span> -r .claude/ <span class="str">"path/ไปยัง/My-New-Project/"</span></code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step__n">2</div>
+        <div class="step__body">
+          <h3>ก๊อป <code>CLAUDE.md</code> ไปด้วย</h3>
+          <p>คู่มือ routing ของทีม — แต่เดี๋ยวเราจะต้องแก้เนื้อหาในขั้นที่ 5 เพราะตอนนี้มันเต็มไปด้วยเรื่องธุรกิจเดิม</p>
+<pre><code><span class="kw">cp</span> CLAUDE.md <span class="str">"path/ไปยัง/My-New-Project/"</span></code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step__n">3</div>
+        <div class="step__body">
+          <h3>เลือก skill ที่จำเป็น (ไม่ต้องเอาทั้ง 12)</h3>
+          <p>skill บางตัวผูกกับระบบ Django blog เดิม ถ้างานใหม่ไม่เกี่ยวก็ลบทิ้งได้ ดูรายละเอียดในขั้นที่ 5</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step__n">4</div>
+        <div class="step__body">
+          <h3>เปิด Claude Code ในโฟลเดอร์ใหม่ — จบ!</h3>
+          <p>Claude Code จะสร้างโฟลเดอร์ <code>memory/</code> ว่าง ๆ ให้เองอัตโนมัติ ได้ทีมสะอาดพร้อมเริ่มงานทันที</p>
+        </div>
+      </div>
+
+      <div class="callout c-warn">
+        <span class="ico">🚫</span>
+        <p><span class="ttl">ไม่ต้องก๊อป 2 อย่างนี้</span><code>settings.local.json</code> (เป็น permission สะสมของเครื่องเดิม ปล่อยให้สร้างใหม่ดีกว่า) และ <code>memory/</code> (ปล่อยให้เริ่มว่าง ๆ ตามที่อธิบายในข้อ 2)</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ===== SECTION 5 ===== -->
+    <section id="fix">
+      <h2><span class="num">5</span>3 จุดที่ "ต้องแก้" หลังก๊อป</h2>
+      <p class="sub">ไม่แก้แล้วทีมจะทำงานเพี้ยน เพราะยังชี้กลับไปของเดิม</p>
+
+      <h3>① <code>startup_hook.py</code> — path ฝังตายตัว</h3>
+      <p>ไฟล์นี้มี path เต็ม ๆ ชี้กลับไป memory ของโปรเจกต์เดิม ต้องเปลี่ยนให้ตรงโปรเจกต์ใหม่ หรือถ้ายังไม่อยากใช้ระบบ memory ก็ลบ hook นี้ทิ้งไปก่อนได้</p>
+<pre><code><span class="cmt"># ในไฟล์ .claude/startup_hook.py — แก้บรรทัดที่ชี้ path</span>
+<span class="cmt"># เดิม:</span> ...\E--Project-Peyo-Peyo-...\memory\MEMORY.md
+<span class="cmt"># ใหม่:</span> ...\E--My-New-Project\memory\MEMORY.md</code></pre>
+
+      <h3>② <code>CLAUDE.md</code> — ลบเรื่องธุรกิจเดิมออก</h3>
+      <p>ตอนนี้เต็มไปด้วยรายละเอียดเฉพาะ (สินค้า AI, Django port 8000, deploy server, content backlog) ให้เก็บไว้แค่โครงที่ใช้ซ้ำได้ แล้วเขียนส่วนที่เหลือใหม่ให้ตรงงานใหม่</p>
+      <ul>
+        <li><strong>เก็บไว้:</strong> ตาราง 25 Agents, วิธี activate, routing logic, approval matrix</li>
+        <li><strong>ลบ/เขียนใหม่:</strong> สินค้าและบริการ, deploy workflow, content backlog, ตัวเลขธุรกิจ</li>
+      </ul>
+
+      <h3>③ <code>settings.json</code> — เคลียร์ path เฉพาะเครื่อง</h3>
+      <p>มี <code>additionalDirectories</code> ที่ชี้ไป <code>static</code> ของโปรเจกต์เดิม ลบออกหรือแก้ให้ตรงโปรเจกต์ใหม่</p>
+
+      <div class="callout c-danger">
+        <span class="ico">⚠️</span>
+        <p><span class="ttl">skill 4 ตัวนี้ผูกกับ Django</span>ถ้าโปรเจกต์ใหม่ไม่มีระบบ blog พวกนี้จะใช้ไม่ได้: <code>django-blog-publisher</code>, <code>diagram-to-blog</code> และ skill ที่อ้าง Calendar API <code>localhost:8000</code> ในโปรโตคอลเปิดงาน — ถ้างานใหม่ไม่เกี่ยวกับ blog แนะนำไม่ต้องก๊อป skill กลุ่มนี้</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ===== CHECKLIST ===== -->
+    <section id="checklist">
+      <h2>สรุป &amp; Checklist</h2>
+      <p class="sub">เช็กให้ครบก่อนเริ่มงานในโปรเจกต์ใหม่</p>
+
+      <div class="checklist">
+        <ul>
+          <li>ก๊อป <code>.claude/</code> (agents + skills + settings.json + startup_hook.py)</li>
+          <li>ก๊อป <code>CLAUDE.md</code></li>
+          <li>เลือก skill เท่าที่จำเป็น ลบตัวที่ผูกกับ Django ถ้าไม่ใช้</li>
+          <li>แก้ path ใน <code>startup_hook.py</code> (หรือลบ hook ทิ้ง)</li>
+          <li>เขียน <code>CLAUDE.md</code> ใหม่ให้ตรงงานใหม่ เก็บแค่โครงทีม</li>
+          <li>ลบ <code>additionalDirectories</code> เก่าใน <code>settings.json</code></li>
+          <li><strong>อย่า</strong>ก๊อป <code>memory/</code> และ <code>settings.local.json</code> — ปล่อยให้สร้างใหม่</li>
+        </ul>
+      </div>
+
+      <div class="nextbox">
+        <div class="k">อยากให้หนูดีทำให้</div>
+        <h3>บอก path โฟลเดอร์ใหม่ + งานใหม่ทำเกี่ยวกับอะไร</h3>
+        <p>เดี๋ยวหนูดีจัดให้ครบในทีเดียว — ก๊อปไฟล์, แก้ path, ร่าง <code>CLAUDE.md</code> ใหม่ให้ตรงงาน แค่พิมพ์บอกมาได้เลยครับ 🐾</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Docs Hub — AIBiz Thailand · Guide 01 · <a href="index.html">← กลับหน้ารวมเอกสาร</a>
+</footer>
+
+</body>
+</html>

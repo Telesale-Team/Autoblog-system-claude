@@ -182,6 +182,12 @@ class Service(models.Model):
     status = models.CharField(max_length=20,
                               choices=[("published", "Published"), ("draft", "Draft")],
                               default="published")
+    delivery_type = models.CharField(
+        "ประเภทการส่งมอบ", max_length=10,
+        choices=[("product", "ผลิตภัณฑ์ — deploy ซ้ำได้"), ("custom", "งานรับทำ — ทำจบเป็นชิ้น")],
+        default="custom",
+        help_text="ใช้แบ่งกลุ่มในหน้า Project Monitor — ผลิตภัณฑ์มีเครื่องรันให้เฝ้า งานรับทำไม่มี",
+    )
 
     class Meta:
         ordering = ["display_order"]

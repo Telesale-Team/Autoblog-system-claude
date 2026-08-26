@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+{% block title %}{{ dep.name }} — Project Monitor{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+  <link rel="stylesheet" href="{% static 'css/monitor.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'operations:monitor' %}">Project Monitor</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{ dep.name }}</li>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Page Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-hdd-network"></i></span>
+      {{ dep.name }}
+      {% if dep.is_critical %}<span class="mon-flag">ร้านจริง ห้ามแตะข้อมูล</span>{% endif %}
+    </h1>
+    <p class="settings-hero-sub">
+      {{ dep.project.project_name }}
+      {% if dep.project.service %}&middot; บริการ: {{ dep.project.service.name }}{% endif %}
+      {% if dep.project.customer %}&middot; ลูกค้า: {{ dep.project.customer.company_name }}{% endif %}
+    </p>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    {% if dep.base_url %}
+      <a href="{{ dep.base_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-box-arrow-up-right"></i> เปิดเว็บจริง
+      </a>
+    {% endif %}
+    <a href="/admin/operations/deployment/{{ dep.pk }}/change/" class="btn btn-sm btn-mon-gold">
+      <i class="bi bi-pencil"></i> แก้ไข
+    </a>
+  </div>
+</div>
+
+<div class="row g-3">
+
+  <!-- === ทะเบียน Deployment === -->
+  <div class="col-lg-5">
+    <div class="scard h-100">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-2">
+          <span class="scard-header-icon"><i class="bi bi-server"></i></span>
+          <div>
+            <div class="fw-bold">ข้อมูล Deployment</div>
+            <div class="small text-secondary">ทะเบียนระบบบน server</div>
+          </div>
+        </div>
+      </div>
+      <div class="scard-body py-2">
+        <div class="det-row"><span class="k">Environment</span><span class="v">{{ dep.get_environment_display }}</span></div>
+        {% if dep.project.service %}
+          <div class="det-row"><span class="k">บริการ</span><span class="v">{{ dep.project.service.name }}</span></div>
+        {% endif %}
+        {% if dep.server_host %}
+          <div class="det-row"><span class="k">Server</span><span class="v">{{ dep.server_host }}</span></div>
+        {% endif %}
+        {% if dep.project_path %}
+          <div class="det-row"><span class="k">Path</span><span class="v">{{ dep.project_path }}</span></div>
+        {% endif %}
+        {% if dep.service_name %}
+          <div class="det-row"><span class="k">systemd service</span><span class="v">{{ dep.service_name }}</span></div>
+        {% endif %}
+        {% if dep.base_url %}
+          <div class="det-row"><span class="k">URL</span><span class="v">{{ dep.base_url }}</span></div>
+        {% endif %}
+        {% if dep.repo_url %}
+          <div class="det-row"><span class="k">Repo</span><span class="v">{{ dep.repo_url }} ({{ dep.branch }})</span></div>
+        {% endif %}
+        <div class="det-row">
+          <span class="k">API ตัวเลขธุรกิจ</span>
+          <span class="v">{% if dep.monitor_path %}{{ dep.monitor_path }}{% else %}ยังไม่ติดตั้ง{% endif %}</span>
+        </div>
+        <div class="det-row"><span class="k">ค่าดูแล/เดือน</span><span class="v">฿{{ dep.monthly_fee|floatformat:0|intcomma }}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- === ประวัติสถานะ === -->
+  <div class="col-lg-7">
+    <div class="scard h-100">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-2">
+          <span class="scard-header-icon"><i class="bi bi-graph-up"></i></span>
+          <div>
+            <div class="fw-bold">ประวัติสถานะ</div>
+            <div class="small text-secondary">แถบละ 1 ครั้งที่ตรวจ — เขียว=ปกติ แดง=ล่ม</div>
+          </div>
+        </div>
+        {% if uptime %}
+          <span class="badge mon-badge-ok">{{ uptime }}% uptime</span>
+        {% endif %}
+      </div>
+      <div class="scard-body">
+
+        <div class="timeline-bar mb-2">
+          {% for ok in dep.recent_states %}<i class="{% if not ok %}d{% endif %}"></i>{% empty %}<i class="n"></i>{% endfor %}
+        </div>
+        <div class="d-flex justify-content-between small text-secondary mb-3">
+          <span>เก่าสุด</span><span>ล่าสุด</span>
+        </div>
+
+        {% if latest and latest.metrics %}
+          <div class="fw-bold small mb-2">ตัวเลขธุรกิจล่าสุด</div>
+          {% for m in latest.metrics %}
+            <div class="det-row">
+              <span class="k">{{ m.label }}</span>
+              <span class="v {% if m.alert %}mon-down{% endif %}">{% if m.unit %}{{ m.unit }}{% endif %}{{ m.value }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="fw-bold small mt-3 mb-2">ผลตรวจล่าสุด</div>
+        {% for c in checks|slice:":10" %}
+          <div class="det-row">
+            <span class="k">
+              {% if c.is_up %}
+                <i class="bi bi-check-circle-fill mon-up"></i> ปกติ
+              {% else %}
+                <i class="bi bi-x-circle-fill mon-down"></i>
+                {% if c.status_code %}HTTP {{ c.status_code }}{% else %}{{ c.error|truncatechars:60 }}{% endif %}
+              {% endif %}
+              {% if c.response_ms %}&middot; {{ c.response_ms }} ms{% endif %}
+            </span>
+            <span class="v">{{ c.checked_at|date:"j M H:i" }}</span>
+          </div>
+        {% empty %}
+          <p class="text-secondary small mb-0">ยังไม่เคยตรวจ — รันคำสั่ง <code>check_deployments</code> เพื่อเริ่มเก็บข้อมูล</p>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% if dep.notes %}
+  <div class="scard mt-3">
+    <div class="scard-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="scard-header-icon"><i class="bi bi-journal-text"></i></span>
+        <div class="fw-bold">บันทึก</div>
+      </div>
+    </div>
+    <div class="scard-body">{{ dep.notes|linebreaks }}</div>
+  </div>
+{% endif %}
+
+{% endblock %}

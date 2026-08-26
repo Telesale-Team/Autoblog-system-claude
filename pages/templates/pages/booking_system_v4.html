@@ -267,6 +267,40 @@
   .price-foot span{display:inline-flex;align-items:center;gap:7px;}
   .price-foot .setup{color:var(--ink-3);font-size:12.5px;}
 
+  /* ── PRICING: การ์ดบนมือถือ · ตารางเทียบบนคอม (component เดียว) ── */
+  .pricing-table{display:none;}
+  @media(min-width:840px){
+    .price-grid{display:none;}
+    .pricing-table{display:block;margin-top:4px;}
+  }
+  .ptbl{width:100%;border-collapse:collapse;}
+  .ptbl td{padding:13px 20px;text-align:center;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line);}
+  .ptbl td.pf{text-align:left;width:36%;font-weight:500;}
+  .ptbl .yes{color:var(--accent);font-weight:700;}
+  .ptbl .no{color:var(--ink-3);}
+  .ptbl .txt{color:var(--ink);font-weight:600;font-size:12.5px;}
+  .ptbl .grp td{background:var(--surface);text-align:left;font-size:11.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:700;padding:14px 20px 7px;}
+  .ptbl .col-star{background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  /* หัวคอลัมน์ = การ์ดแพ็ก */
+  .ptbl thead th{vertical-align:bottom;text-align:center;position:relative;padding:30px 20px 20px;
+    border-bottom:1px solid var(--line-2);}
+  .ptbl thead th.col-star{border-top-left-radius:var(--radius-lg);border-top-right-radius:var(--radius-lg);}
+  .ph-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-bottom:10px;}
+  .ptbl thead h4{font-size:19px;margin:0 0 3px;color:var(--ink);}
+  .ph-who{font-size:12px;font-weight:400;color:var(--ink-3);line-height:1.4;margin-bottom:14px;min-height:34px;}
+  .ph-price{display:flex;align-items:flex-start;justify-content:center;gap:2px;}
+  .ph-price .cur{font-size:17px;font-weight:600;margin-top:6px;}
+  .ph-price .amt{font-size:34px;font-weight:700;font-family:var(--font-num);letter-spacing:-.03em;line-height:1;}
+  .ph-price .per{font-size:13px;color:var(--ink-3);align-self:flex-end;margin-bottom:4px;margin-left:2px;}
+  .ph-yr{font-size:11.5px;color:var(--accent);font-weight:600;margin:5px 0 0;}
+  .ph-ribbon{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);
+    font-size:11px;font-weight:600;border-radius:0 0 9px 9px;padding:4px 14px;white-space:nowrap;}
+  .ptbl tfoot td{padding:20px;border-bottom:0;}
+  .ptbl tfoot .plan-cta{width:100%;}
+  .ptbl .col-star .plan-cta{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .ptbl .col-star .plan-cta:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+
   /* ── SOCIAL PROOF ── */
   .proof-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);
     border-radius:var(--radius-lg);overflow:hidden;margin-bottom:34px;}
@@ -653,6 +687,67 @@
         </ul>
         <a href="#lead" class="btn plan-cta">คุยกับทีมงาน</a>
       </div>
+    </div>
+
+    <!-- 💻 Desktop: ตารางเทียบแพ็ก (หัวคอลัมน์ = การ์ดแพ็ก · CTA ท้ายคอลัมน์) -->
+    <div class="pricing-table">
+      <table class="ptbl">
+        <thead>
+          <tr>
+            <th class="pf"></th>
+            <th>
+              <span class="ph-dot" style="background:var(--ink-3)"></span>
+              <h4>Starter</h4>
+              <p class="ph-who">ร้านเล็ก 1 สาขา เพิ่งเริ่มระบบจองออนไลน์</p>
+              <div class="ph-price"><span class="cur">฿</span><span class="amt">790</span><span class="per">/เดือน</span></div>
+              <div class="ph-yr">จ่ายรายปี ประหยัด ~2 เดือน</div>
+            </th>
+            <th class="col-star">
+              <span class="ph-ribbon">แนะนำ · คุ้มที่สุด</span>
+              <span class="ph-dot" style="background:var(--accent)"></span>
+              <h4>Pro</h4>
+              <p class="ph-who">ร้านที่โตแล้ว อยากได้ลูกค้าประจำและระบบเต็ม</p>
+              <div class="ph-price"><span class="cur">฿</span><span class="amt">1,590</span><span class="per">/เดือน</span></div>
+              <div class="ph-yr">จ่ายรายปี ประหยัด ~2 เดือน</div>
+            </th>
+            <th>
+              <span class="ph-dot" style="background:var(--ink)"></span>
+              <h4>Business</h4>
+              <p class="ph-who">หลายสาขา หรือเชนร้าน ต้องการดูแลระดับพรีเมียม</p>
+              <div class="ph-price"><span class="cur">฿</span><span class="amt">2,990</span><span class="per">/เดือน</span></div>
+              <div class="ph-yr">จ่ายรายปี ประหยัด ~2 เดือน</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="4">พื้นฐาน — มีครบทุกแพ็ก</td></tr>
+          <tr><td class="pf">จองออนไลน์ 24 ชม. + จัดการคิว</td><td class="yes">✓</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">หลังบ้าน: บริการ / พนักงาน / ลูกค้า</td><td class="yes">✓</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">แดชบอร์ดรายได้ &amp; รีวิว</td><td class="yes">✓</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">เว็บแบรนด์ร้านเอง · ไม่หักค่าคอม</td><td class="yes">✓</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">แจ้งเตือนทางอีเมล</td><td class="yes">✓</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+
+          <tr class="grp"><td colspan="4">การตลาด &amp; ขายเพิ่ม</td></tr>
+          <tr><td class="pf">สะสมแต้ม (Points)</td><td class="no">—</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">ร้านค้า + ตะกร้าสินค้า</td><td class="no">—</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">แพ็กเกจซื้อล่วงหน้า (Prepaid)</td><td class="no">—</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">โปรโมชั่น / คูปอง</td><td class="no">—</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">Gift Card / บัตรของขวัญ</td><td class="no">—</td><td class="col-star no">—</td><td class="yes">✓</td></tr>
+
+          <tr class="grp"><td colspan="4">แจ้งเตือน &amp; การขยายสาขา</td></tr>
+          <tr><td class="pf">SMTP อีเมลของร้านเอง</td><td class="no">—</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">แจ้งเตือน LINE / SMS</td><td class="no">—</td><td class="col-star yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="pf">จำนวนสาขา</td><td class="txt">1 สาขา</td><td class="col-star txt">สูงสุด 3</td><td class="txt">ไม่จำกัด</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="pf"></td>
+            <td><a href="#lead" class="btn plan-cta">เริ่มทดลองฟรี</a></td>
+            <td class="col-star"><a href="#lead" class="btn plan-cta">เริ่มทดลองฟรี</a></td>
+            <td><a href="#lead" class="btn plan-cta">คุยกับทีมงาน</a></td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
 
     <div class="price-foot">

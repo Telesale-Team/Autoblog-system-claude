@@ -6,6 +6,36 @@
 /* === Google Fonts === */
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
 
+/* ============================================================
+   === BRAND TOKENS ===
+   base.html ของ /owner/ ไม่ได้โหลด main.css ตัวแปร --brand-*
+   ที่ settings.css / monitor.css เรียกใช้จึงไม่มีอยู่จริง
+   ทำให้ประกาศ CSS ถูกทิ้งทั้งบรรทัด (ไอคอนทองหาย ตัวหนังสือจม)
+   นิยามไว้ตรงนี้ครั้งเดียว ใช้ได้ทุกหน้าหลังบ้าน
+   ผูกกับ --app-primary/--app-secondary ที่ base.html ฉีดมา
+   เพื่อให้เปลี่ยนสีแบรนด์จากหน้า Settings แล้วมีผลตามไปด้วย
+   ============================================================ */
+:root {
+  --brand-gold:      var(--app-primary,   #c9a96e);
+  --brand-gold-d:    var(--app-secondary, #b8924f);
+  --brand-navy:      #1a2744;
+  --brand-dark:      #0f172a;
+  --brand-green:     #059669;
+  --brand-amber:     #b45309;
+  --brand-muted:     #64748b;
+  --brand-blue:      #2563eb;
+  --brand-blue-d:    #1d4ed8;
+}
+
+/* ── โหมดมืด: สีที่ใช้กับ "ตัวหนังสือ" ต้องสว่างขึ้น ไม่งั้นจมพื้นหลัง ── */
+[data-bs-theme="dark"] {
+  --brand-green:     #34d399;
+  --brand-amber:     #fbbf24;
+  --brand-muted:     #cbd5e1;
+  --brand-blue:      #60a5fa;
+  --brand-blue-d:    #93c5fd;
+}
+
 /* === Global Typography === */
 body {
   font-family: var(--app-font-family) !important;

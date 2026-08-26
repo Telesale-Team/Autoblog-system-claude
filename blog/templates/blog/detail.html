@@ -432,6 +432,27 @@
       display: flex; align-items: center; justify-content: center;
     }
 
+    /* ===== รองรับ HTML ที่มาจาก Markdown renderer =====
+       Markdown ห่อไอคอนด้วย <p> และห่อเนื้อหาไว้ใน .callout__body / .analogy__body
+       บล็อกนี้ทำให้ผลลัพธ์หน้าตาเหมือนที่เขียน HTML มือเป๊ะๆ */
+    .docs-body .callout > p:first-of-type,
+    .docs-body .analogy > p:first-of-type { flex-shrink: 0; margin: 0; }
+    .docs-body .callout__body,
+    .docs-body .analogy__body { flex: 1; min-width: 0; }
+    .docs-body .analogy__body p { margin: 0; color: #e7d9bd; }
+    .docs-body .callout__body > p + p,
+    .docs-body .analogy__body > p + p,
+    .docs-body .callout__body > ul,
+    .docs-body .callout__body > ol { margin-top: 0.5rem; }
+    .docs-body .callout__body > ul,
+    .docs-body .callout__body > ol { margin-bottom: 0; }
+    .docs-body details > pre,
+    .docs-body details > p:last-child { margin-bottom: 0; }
+    .docs-body details > summary { list-style: none; }
+    .docs-body details > summary::-webkit-details-marker { display: none; }
+    .docs-body details > summary::before { content: "▸ "; }
+    .docs-body details[open] > summary::before { content: "▾ "; }
+
     /* Inline code & pre tweaks ใน docs */
     .docs-body p code, .docs-body li code {
       background: rgba(148,163,184,.12); border: 1px solid var(--bs-border-color);

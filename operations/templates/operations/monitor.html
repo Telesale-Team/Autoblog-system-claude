@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+{% block title %}Project Monitor{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+  <link rel="stylesheet" href="{% static 'css/monitor.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active" aria-current="page">Project Monitor</li>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Page Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-activity"></i></span>
+      Project Monitor
+    </h1>
+    <p class="settings-hero-sub">
+      ระบบที่เราส่งมอบให้ลูกค้าแล้ว — จัดกลุ่มตามบริการที่ขายบนเว็บ
+    </p>
+  </div>
+  <div class="d-flex align-items-center gap-3 flex-wrap">
+    <div class="d-flex align-items-center gap-2">
+      <span class="small text-secondary">จัดกลุ่มตาม</span>
+      <div class="view-switch">
+        <button class="on" type="button">บริการ</button>
+        <button type="button" disabled title="เร็วๆ นี้">ลูกค้า</button>
+        <button type="button" disabled title="เร็วๆ นี้">สถานะ</button>
+      </div>
+    </div>
+    <a href="/admin/operations/deployment/add/" class="btn btn-sm btn-mon-gold">
+      <i class="bi bi-plus-lg"></i> เพิ่ม Deployment
+    </a>
+  </div>
+</div>
+
+<!-- === แถบสรุป === -->
+<div class="mon-summary">
+  <div class="mon-stat">
+    <div class="mon-stat-label">บริการบนเว็บ</div>
+    <div class="mon-stat-value">{{ summary.services }}</div>
+  </div>
+  <div class="mon-stat">
+    <div class="mon-stat-label">ระบบลูกค้า</div>
+    <div class="mon-stat-value">{{ summary.deployments }}</div>
+  </div>
+  <div class="mon-stat">
+    <div class="mon-stat-label">ออนไลน์</div>
+    <div class="mon-stat-value mon-up">{{ summary.up }}</div>
+  </div>
+  <div class="mon-stat">
+    <div class="mon-stat-label">มีปัญหา</div>
+    <div class="mon-stat-value {% if summary.down %}mon-down{% endif %}">{{ summary.down }}</div>
+  </div>
+  <div class="mon-stat">
+    <div class="mon-stat-label">Uptime 30 วัน</div>
+    <div class="mon-stat-value">
+      {% if summary.uptime %}{{ summary.uptime }}<small>%</small>{% else %}<small class="text-secondary">ยังไม่มีข้อมูล</small>{% endif %}
+    </div>
+  </div>
+  <div class="mon-stat">
+    <div class="mon-stat-label">MRR ค่าดูแล</div>
+    <div class="mon-stat-value">฿{{ summary.mrr|floatformat:0|intcomma }}</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- === TIER 1 : ผลิตภัณฑ์ — deploy ซ้ำได้ === -->
+<!-- ============================================================ -->
+<section class="tier">
+  <div class="tier-head">
+    <span class="tier-icon"><i class="bi bi-box-seam-fill"></i></span>
+    <div>
+      <h2 class="tier-title">ผลิตภัณฑ์ — deploy ซ้ำได้</h2>
+      <p class="tier-sub">ขายซ้ำได้เรื่อยๆ มีเครื่องรันจริง มีค่าดูแลรายเดือน</p>
+    </div>
+    <div class="tier-stat">
+      <b>{{ product_rows|length }}</b> บริการ
+    </div>
+  </div>
+
+  {% for row in product_rows %}
+    {% if row.deployments %}
+      <div class="svc">
+        <div class="svc-head">
+          <h3 class="svc-name"><i class="bi {{ row.service.icon }}"></i> {{ row.service.name }}</h3>
+          <span class="svc-price">เริ่ม ฿{{ row.service.price_start|intcomma }}</span>
+          {% if row.service.status == "draft" %}<span class="svc-draft">Draft บนเว็บ</span>{% endif %}
+          <span class="svc-count">
+            <b>{{ row.deployments|length }}</b> ระบบ
+            {% if row.up %}&middot; <b class="mon-up">{{ row.up }}</b> ออนไลน์{% endif %}
+            {% if row.down %}&middot; <b class="mon-down">{{ row.down }}</b> ล่ม{% endif %}
+          </span>
+        </div>
+        <div class="mon-grid">
+          {% for d in row.deployments %}{% include "operations/_monitor_card.html" %}{% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <div class="svc-empty">
+        <i class="bi {{ row.service.icon }}"></i> {{ row.service.name }}
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        {% if row.service.status == "draft" %}<span class="svc-draft">Draft</span>{% endif %}
+        <span class="price">เริ่ม ฿{{ row.service.price_start|intcomma }}</span>
+      </div>
+    {% endif %}
+  {% empty %}
+    <p class="text-secondary small">ยังไม่มีบริการที่ตั้งเป็น "ผลิตภัณฑ์"</p>
+  {% endfor %}
+</section>
+
+<!-- ============================================================ -->
+<!-- === TIER 2 : งานรับทำ — ไม่มี instance ให้เฝ้า === -->
+<!-- ============================================================ -->
+<section class="tier muted">
+  <div class="tier-head">
+    <span class="tier-icon"><i class="bi bi-tools"></i></span>
+    <div>
+      <h2 class="tier-title">งานรับทำ — ทำจบเป็นชิ้น</h2>
+      <p class="tier-sub">ส่งมอบแล้วจบ ไม่มีเครื่องรันของเราให้เฝ้า</p>
+    </div>
+    <div class="tier-stat"><b>{{ custom_rows|length }}</b> บริการ</div>
+  </div>
+
+  {% for row in custom_rows %}
+    {% if row.deployments %}
+      <div class="svc">
+        <div class="svc-head">
+          <h3 class="svc-name"><i class="bi {{ row.service.icon }}"></i> {{ row.service.name }}</h3>
+          <span class="svc-price">เริ่ม ฿{{ row.service.price_start|intcomma }}</span>
+          <span class="svc-count"><b>{{ row.deployments|length }}</b> ระบบ</span>
+        </div>
+        <div class="mon-grid">
+          {% for d in row.deployments %}{% include "operations/_monitor_card.html" %}{% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <div class="svc-empty">
+        <i class="bi {{ row.service.icon }}"></i> {{ row.service.name }}
+        <span class="text-secondary">— ยังไม่มีโปรเจกต์ลูกค้า</span>
+        <span class="price">เริ่ม ฿{{ row.service.price_start|intcomma }}</span>
+      </div>
+    {% endif %}
+  {% endfor %}
+</section>
+
+<!-- ============================================================ -->
+<!-- === TIER 3 : ระบบภายในของเราเอง === -->
+<!-- ============================================================ -->
+{% if internal %}
+<section class="tier">
+  <div class="tier-head">
+    <span class="tier-icon"><i class="bi bi-house-gear-fill"></i></span>
+    <div>
+      <h2 class="tier-title">ระบบภายในของเรา</h2>
+      <p class="tier-sub">ไม่ใช่ของลูกค้า แต่ต้องรู้เวลาล่มเหมือนกัน</p>
+    </div>
+    <div class="tier-stat"><b>{{ internal|length }}</b> ระบบ</div>
+  </div>
+  <div class="mon-grid">
+    {% for d in internal %}{% include "operations/_monitor_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- === ยังไม่ได้ผูกกับบริการ === -->
+{% if unassigned %}
+<section class="tier muted">
+  <div class="tier-head">
+    <span class="tier-icon"><i class="bi bi-question-circle"></i></span>
+    <div>
+      <h2 class="tier-title">ยังไม่ได้ผูกกับบริการ</h2>
+      <p class="tier-sub">เข้าไปเลือก "บริการที่ขาย" ในหน้า AI Project เพื่อให้จัดกลุ่มถูก</p>
+    </div>
+    <div class="tier-stat"><b>{{ unassigned|length }}</b> ระบบ</div>
+  </div>
+  <div class="mon-grid">
+    {% for d in unassigned %}{% include "operations/_monitor_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

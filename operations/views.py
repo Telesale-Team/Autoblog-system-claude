@@ -99,3 +99,86 @@ def qa_edit(request, pk):
         messages.success(request, "อัพเดต QA Log แล้ว")
         return redirect("operations:qa_list")
     return render(request, "operations/qa_form.html", {"form": form, "title": "แก้ไข QA Log", "log": log})
+
+
+# === PROJECT MONITOR ===
+
+@staff_member_required
+def monitor(request):
+    """หน้ารวมสถานะระบบที่เรา deploy ให้ลูกค้า — /owner/projects/
+
+    จัดกลุ่ม 2 ชั้น:
+      ชั้น 1  ผลิตภัณฑ์ (deploy ซ้ำได้) / งานรับทำ / ระบบภายในเรา
+      ชั้น 2  ซ้อนตามบริการที่ขายบนเว็บ (pages.Service)
+    """
+    from pages.models import Service
+    from .models import Deployment
+
+    deployments = (Deployment.objects
+                   .select_related("project", "project__service", "project__customer")
+                   .prefetch_related("checks"))
+
+    # ── แยกระบบภายในออกก่อน — ไม่ผูกกับบริการที่ขาย ──
+    internal = [d for d in deployments if d.is_internal]
+    external = [d for d in deployments if not d.is_internal]
+
+    # ── จัดกลุ่มตามบริการ ──
+    by_service = {}
+    unassigned = []
+    for d in external:
+        svc = d.project.service if d.project else None
+        if svc is None:
+            unassigned.append(d)
+        else:
+            by_service.setdefault(svc.id, []).append(d)
+
+    def build_tier(delivery_type):
+        rows = []
+        for svc in Service.objects.filter(delivery_type=delivery_type).order_by("display_order"):
+            rows.append({
+                "service": svc,
+                "deployments": by_service.get(svc.id, []),
+                "up":   sum(1 for d in by_service.get(svc.id, []) if d.state == "up"),
+                "down": sum(1 for d in by_service.get(svc.id, []) if d.state == "down"),
+            })
+        return rows
+
+    product_rows = build_tier("product")
+    custom_rows  = build_tier("custom")
+
+    all_ext = external
+    summary = {
+        "services":    Service.objects.count(),
+        "deployments": len(all_ext),
+        "up":          sum(1 for d in all_ext if d.state == "up"),
+        "down":        sum(1 for d in all_ext if d.state == "down"),
+        "mrr":         sum(d.monthly_fee for d in all_ext),
+    }
+    uptimes = [d.uptime_pct() for d in all_ext if d.uptime_pct() is not None]
+    summary["uptime"] = round(sum(uptimes) / len(uptimes), 1) if uptimes else None
+
+    return render(request, "operations/monitor.html", {
+        "product_rows": product_rows,
+        "custom_rows":  custom_rows,
+        "internal":     internal,
+        "unassigned":   unassigned,
+        "summary":      summary,
+    })
+
+
+@staff_member_required
+def monitor_detail(request, pk):
+    """รายละเอียด deployment เดียว — ทะเบียน + ประวัติสถานะ"""
+    from .models import Deployment
+
+    dep = get_object_or_404(
+        Deployment.objects.select_related("project", "project__service", "project__customer"),
+        pk=pk,
+    )
+    checks = dep.checks.order_by("-checked_at")[:120]
+    return render(request, "operations/monitor_detail.html", {
+        "dep":     dep,
+        "checks":  checks,
+        "latest":  dep.latest_check,
+        "uptime":  dep.uptime_pct(),
+    })

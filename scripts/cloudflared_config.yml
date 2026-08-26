@@ -1,0 +1,13 @@
+tunnel: 0fd2bddd-0ada-4386-a76b-098193f312b2
+credentials-file: /root/.cloudflared/0fd2bddd-0ada-4386-a76b-098193f312b2.json
+
+ingress:
+  - hostname: blog.kooky-shop.com
+    service: http://localhost:80
+  - hostname: mysql.kooky-shop.com
+    service: tcp://localhost:3306
+  - hostname: exam.kooky-shop.com
+    service: http://localhost:8001
+  - hostname: muskelterapeut-spa.com
+    service: http://localhost:8002
+  - service: http_status:404
