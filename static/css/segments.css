@@ -1,0 +1,325 @@
+/* ===================================================================
+   SEGMENTS — โปรไฟล์กลุ่มลูกค้า (Owner Dashboard)
+   ใช้ร่วมกัน 2 หน้า: dashboard/segments.html และ dashboard/segment_edit.html
+   ต่อยอดจาก settings.css (settings-hero + scard) ห้ามสร้าง layout ใหม่
+
+   วินัยเรื่องสี (สำคัญที่สุดของไฟล์นี้)
+   -----------------------------------------------------------------
+   สีแบรนด์กรม #0F172A + ทอง #C9A84C เป็นเจ้าของ "โครงหน้า" ทั้งหมด
+   ได้แก่ hero, ปุ่ม, สถานะ active, หัวตาราง, เส้นขอบที่โฟกัส
+   ส่วน accent_secondary ของแต่ละ segment เป็น "สีข้อมูล" เท่านั้น
+   อนุญาตให้ปรากฏได้แค่ 3 ที่: แถบขอบซ้ายบางของการ์ด, จุดกลมเล็ก,
+   และช่องพรีวิวสีในหน้าแก้ — ห้ามเป็นพื้นหลังการ์ด ห้ามเป็นสีปุ่ม
+   ห้ามเป็นสีตัวอักษรหัวข้อ รวมพื้นที่ที่สีรองกินต้องน้อยกว่า 5% ของการ์ด
+   =================================================================== */
+
+
+/* ── กล่องอธิบายหน้าว่าโปรไฟล์นี้ไปคุมอะไรบ้าง ─────────────────── */
+.sg-intro {
+  border: 1px solid var(--app-primary);
+  border-left-width: 4px;
+  border-radius: .75rem;
+  background: rgba(201,169,110,.06);
+  padding: 1.15rem 1.35rem;
+  margin-bottom: 1.5rem;
+}
+.sg-intro-head {
+  font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--app-primary);
+}
+.sg-intro-body {
+  font-size: .84rem; color: var(--bs-secondary-color);
+  line-height: 1.85; margin-top: .4rem;
+}
+.sg-intro-body b { color: var(--bs-body-color); }
+
+
+/* ── ตารางสัดส่วนสี — เตือนสายตาว่าสีรองมีสิทธิ์แค่นิดเดียว ────── */
+.sg-ratio { display: flex; height: 8px; border-radius: 99px; overflow: hidden; margin-top: .75rem; }
+.sg-ratio > span { display: block; }
+.sg-ratio-legend {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  font-size: .72rem; color: var(--bs-secondary-color); margin-top: .45rem;
+}
+.sg-ratio-legend i { font-size: .6rem; vertical-align: middle; }
+
+
+/* ── การ์ด segment (ทั้งใบคลิกได้ ไม่มีปุ่ม Actions) ──────────── */
+.sg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.sg-card {
+  display: block;
+  position: relative;
+  background: var(--bs-body-bg);
+  border: none;
+  border-radius: .5rem;
+  box-shadow: 0 7px 14px 0 rgba(65,69,88,.08), 0 3px 6px 0 rgba(0,0,0,.05);
+  padding: 1.15rem 1.25rem 1rem 1.45rem;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+}
+.sg-card:hover {
+  color: inherit;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px 0 rgba(65,69,88,.13), 0 4px 8px 0 rgba(0,0,0,.06);
+}
+/* แถบสีรอง — บาง 4px ชิดขอบซ้าย นี่คือที่ที่สีรองกินพื้นที่มากที่สุดแล้ว */
+.sg-card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; background: var(--sg-accent, #C9A84C);
+}
+.sg-card.is-off { opacity: .55; }
+
+.sg-card-top { display: flex; align-items: flex-start; gap: .75rem; }
+.sg-card-name { font-weight: 700; font-size: 1rem; line-height: 1.35; }
+.sg-card-pen  { font-size: .78rem; color: var(--bs-secondary-color); margin-top: .1rem; }
+.sg-card-key  {
+  font-size: .68rem; font-family: var(--bs-font-monospace, monospace);
+  color: var(--bs-secondary-color);
+  background: rgba(100,116,139,.12);
+  border-radius: .3rem; padding: .1rem .4rem;
+}
+.sg-card-tone {
+  font-size: .82rem; line-height: 1.8;
+  color: var(--bs-secondary-color);
+  margin: .7rem 0 .1rem;
+}
+.sg-card-hook {
+  font-size: .78rem; color: var(--bs-secondary-color);
+  border-left: 2px solid var(--bs-border-color);
+  padding-left: .65rem; margin-top: .7rem; line-height: 1.7;
+}
+.sg-card-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: .7rem; color: var(--bs-secondary-color);
+  border-top: 1px solid var(--bs-border-color);
+  margin-top: .85rem; padding-top: .6rem;
+}
+
+
+/* ── ชิปแสดงมิติแบบย่อ (ใช้ใน _segment_chips.html) ───────────── */
+.sg-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .75rem; }
+.sg-chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .72rem; font-weight: 600;
+  color: var(--bs-secondary-color);
+  background: rgba(100,116,139,.09);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 99px;
+  padding: .2rem .6rem;
+  white-space: nowrap;
+}
+.sg-chip i { font-size: .82rem; }
+.sg-hex { font-size: .68rem; color: inherit; }
+
+.sg-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.12) inset;
+  flex-shrink: 0;
+}
+
+
+/* ── ตัวอย่างรูปทรง — วาดกล่องจริงตามค่าที่เลือก ─────────────── */
+.sg-shape-demo {
+  width: 14px; height: 14px; flex-shrink: 0;
+  border: 2px solid currentColor;
+}
+.sg-shape-demo[data-shape="rounded"] { border-radius: 7px; }
+.sg-shape-demo[data-shape="soft"]    { border-radius: 3px; }
+.sg-shape-demo[data-shape="sharp"]   { border-radius: 0; }
+
+
+/* ── ตัวอย่างอารมณ์พื้นหลังปก — ไล่สีจริงในกล่องเล็ก ─────────── */
+.sg-mood-demo {
+  width: 22px; height: 12px; border-radius: 2px; flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.12) inset;
+}
+.sg-mood-demo[data-mood="tech"]  { background: linear-gradient(135deg,#0F172A,#2563EB); }
+.sg-mood-demo[data-mood="warm"]  { background: linear-gradient(135deg,#7C4A24,#E8B4B8); }
+.sg-mood-demo[data-mood="clean"] { background: linear-gradient(135deg,#F1F5F9,#CBD5E1); }
+.sg-mood-demo[data-mood="dark"]  { background: linear-gradient(135deg,#020617,#334155); }
+
+
+/* ── ตารางเทียบ 6 กลุ่ม (row คลิกได้ทั้งแถว ไม่มีคอลัมน์ปุ่ม) ── */
+.sg-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+.sg-table th {
+  background: var(--table-head-bg, #F9FAFD);
+  padding: .6rem 1rem;
+  font-size: .7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--bs-secondary-color);
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap; text-align: left;
+}
+[data-bs-theme="dark"] .sg-table th { background: rgba(255,255,255,.04); }
+.sg-table td {
+  padding: .7rem 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  vertical-align: middle;
+}
+.sg-table tr:last-child td { border-bottom: none; }
+.sg-table tbody tr { cursor: pointer; }
+.sg-table tbody tr:hover td { background: rgba(201,169,110,.08); }
+.sg-table-scroll { overflow-x: auto; }
+
+
+/* ── ป้ายสถานะ soft color ตามสเปก ───────────────────────────── */
+.sg-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .68rem; font-weight: 700;
+  border-radius: 99px; padding: .15rem .55rem;
+}
+.sg-badge.on  { background: rgba(0,210,122,.12);   color: #009a58; border: 1px solid rgba(0,210,122,.25); }
+.sg-badge.off { background: rgba(100,116,139,.12); color: #64748b; border: 1px solid rgba(100,116,139,.2); }
+
+
+/* ===================================================================
+   หน้าแก้ไข
+   =================================================================== */
+
+/* ── ป้ายบอกว่านี่คือมิติที่เท่าไหร่ ─────────────────────────── */
+.sg-dim-no {
+  width: 38px; height: 38px; border-radius: .5rem;
+  display: grid; place-items: center; flex-shrink: 0;
+  font-weight: 800; font-size: .95rem;
+  background: linear-gradient(135deg, var(--app-primary), var(--app-secondary, #b8924f));
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(201,169,110,.35);
+}
+.sg-dim-title { font-weight: 700; font-size: .95rem; }
+.sg-dim-sub   { font-size: .76rem; color: var(--bs-secondary-color); margin-top: .1rem; }
+
+/* ── ฟอร์ม — label ตัวพิมพ์ใหญ่ตามสเปก ──────────────────────── */
+.sg-label {
+  display: block;
+  font-size: .74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: var(--bs-secondary-color);
+  margin-bottom: .35rem;
+}
+.sg-help { font-size: .74rem; color: var(--bs-secondary-color); margin-top: .3rem; line-height: 1.7; }
+.sg-input, .sg-textarea {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .375rem;
+  padding: .5rem .75rem;
+  font-size: .88rem;
+  color: var(--bs-body-color);
+}
+.sg-input:focus, .sg-textarea:focus {
+  outline: none;
+  border-color: var(--app-primary);
+  box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+}
+.sg-textarea { line-height: 1.9; resize: vertical; }
+.sg-counter { font-size: .72rem; color: var(--bs-secondary-color); margin-top: .3rem; }
+
+
+/* ── ตัวเลือกแบบชิปกดได้ แทน select — เลือกจาก "ภาพ" ไม่ใช่ชื่อ ─ */
+.sg-opts { display: flex; flex-wrap: wrap; gap: .5rem; }
+.sg-opt { margin: 0; cursor: pointer; }
+.sg-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+.sg-opt-box {
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  min-width: 92px;
+  padding: .7rem .6rem;
+  border: 1.5px solid var(--bs-border-color);
+  border-radius: .5rem;
+  background: transparent;
+  transition: border-color .15s, background .15s, color .15s;
+  text-align: center;
+}
+.sg-opt-box i { font-size: 1.15rem; color: var(--bs-secondary-color); }
+.sg-opt-label { font-size: .74rem; font-weight: 600; color: var(--bs-secondary-color); line-height: 1.4; }
+.sg-opt:hover .sg-opt-box { border-color: var(--app-primary); }
+.sg-opt input:checked + .sg-opt-box {
+  border-color: var(--app-primary);
+  background: rgba(201,169,110,.12);
+}
+.sg-opt input:checked + .sg-opt-box i,
+.sg-opt input:checked + .sg-opt-box .sg-opt-label { color: var(--app-primary); }
+.sg-opt input:focus-visible + .sg-opt-box { box-shadow: 0 0 0 3px rgba(201,169,110,.25); }
+/* กล่องรูปทรงในตัวเลือก ให้ใหญ่กว่าในชิปเพื่อให้เห็นมุมชัด */
+.sg-opt-box .sg-shape-demo { width: 26px; height: 26px; border-width: 2.5px; color: var(--bs-secondary-color); }
+.sg-opt input:checked + .sg-opt-box .sg-shape-demo { color: var(--app-primary); }
+.sg-opt-box .sg-mood-demo { width: 40px; height: 22px; border-radius: .25rem; }
+
+
+/* ── ช่องเลือกสีรอง + คำเตือนกันไปชนสีแบรนด์ ────────────────── */
+.sg-color-row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.sg-color-input {
+  width: 52px; height: 40px; padding: 2px;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .375rem; background: transparent; cursor: pointer;
+}
+.sg-color-hex { width: 130px; font-family: var(--bs-font-monospace, monospace); text-transform: uppercase; }
+.sg-color-warn {
+  display: none;
+  font-size: .76rem; line-height: 1.7;
+  background: rgba(245,128,62,.12);
+  color: #c4631d;
+  border: 1px solid rgba(245,128,62,.25);
+  border-radius: .5rem;
+  padding: .55rem .8rem;
+  margin-top: .7rem;
+}
+.sg-color-warn.show { display: block; }
+
+
+/* ── การ์ดพรีวิวฝั่งขวา — จำลองว่า diagram/ปกจะออกมาหน้าตาแบบไหน ─ */
+.sg-preview-frame {
+  border-radius: .5rem;
+  overflow: hidden;
+  border: 1px solid var(--bs-border-color);
+}
+.sg-preview-cover {
+  height: 108px;
+  display: grid; place-items: center;
+  color: #fff; font-size: 2rem;
+}
+.sg-preview-cover[data-mood="tech"]  { background: linear-gradient(135deg,#0F172A,#2563EB); }
+.sg-preview-cover[data-mood="warm"]  { background: linear-gradient(135deg,#7C4A24,#E8B4B8); }
+.sg-preview-cover[data-mood="clean"] { background: linear-gradient(135deg,#F1F5F9,#CBD5E1); color:#0F172A; }
+.sg-preview-cover[data-mood="dark"]  { background: linear-gradient(135deg,#020617,#334155); }
+
+.sg-preview-diagram { padding: 1rem; display: flex; align-items: center; gap: .5rem; justify-content: center; }
+.sg-preview-node {
+  flex: 1; height: 34px;
+  display: grid; place-items: center;
+  font-size: .68rem; font-weight: 700;
+  background: #0F172A; color: #fff;
+}
+.sg-preview-node.accent { background: var(--sg-accent, #C9A84C); }
+.sg-preview-node.gold   { background: #C9A84C; color: #0F172A; }
+.sg-preview-diagram[data-shape="rounded"] .sg-preview-node { border-radius: 10px; }
+.sg-preview-diagram[data-shape="soft"]    .sg-preview-node { border-radius: 4px; }
+.sg-preview-diagram[data-shape="sharp"]   .sg-preview-node { border-radius: 0; }
+.sg-preview-arrow { color: var(--bs-secondary-color); font-size: .8rem; }
+
+
+/* ── รายการ segment ฝั่งขวา สลับไปแก้ตัวอื่นได้ทันที ─────────── */
+.sg-nav { display: flex; flex-direction: column; gap: .25rem; }
+.sg-nav-item {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .5rem .75rem; border-radius: .4rem;
+  text-decoration: none; font-size: .85rem;
+  color: var(--bs-secondary-color);
+  transition: background .15s, color .15s;
+}
+.sg-nav-item:hover { background: rgba(201,169,110,.08); color: var(--app-primary); }
+.sg-nav-item.active { background: rgba(201,169,110,.14); color: var(--app-primary); font-weight: 600; }
+.sg-nav-item span.nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+
+/* ── จอเล็ก ────────────────────────────────────────────────── */
+@media (max-width: 575.98px) {
+  .sg-grid { grid-template-columns: 1fr; }
+  .sg-opt-box { min-width: 78px; padding: .55rem .45rem; }
+}

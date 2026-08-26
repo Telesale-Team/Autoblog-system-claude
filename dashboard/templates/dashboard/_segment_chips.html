@@ -1,0 +1,55 @@
+<!-- ===================================================================
+     SEGMENT CHIPS — ชิ้นส่วนแสดงผล 5 มิติแบบย่อ ใช้ซ้ำได้ทั้งหน้า list และหน้าแก้
+     ต้องส่งตัวแปร p = SegmentProfile หนึ่งตัวเข้ามา
+     ตั้งใจให้ทุกมิติ "เห็นเป็นภาพ" ไม่ใช่อ่านเป็นข้อความอย่างเดียว
+     =================================================================== -->
+
+<div class="sg-chips">
+
+  <!-- === รูปทรง — แสดงเป็นกล่องจริงที่มีมุมตามค่าที่เลือก === -->
+  <span class="sg-chip" title="รูปทรงใน diagram: {{ p.get_shape_display }}">
+    <span class="sg-shape-demo" data-shape="{{ p.shape }}"></span>
+    {{ p.get_shape_display|truncatechars:14 }}
+  </span>
+
+  <!-- === สีรอง — จุดสีเล็ก ไม่ใช่พื้นหลัง เพื่อไม่ให้แย่งสีแบรนด์ === -->
+  <span class="sg-chip" title="สีรองของกลุ่มนี้ {{ p.accent_secondary }}">
+    <span class="sg-dot" style="background:{{ p.accent_secondary }}"></span>
+    <code class="sg-hex">{{ p.accent_secondary }}</code>
+  </span>
+
+  <!-- === อารมณ์ไอคอน === -->
+  <span class="sg-chip" title="อารมณ์ไอคอน">
+    {% if p.icon_mood == 'soft' %}<i class="bi bi-cloud"></i>
+    {% elif p.icon_mood == 'clean' %}<i class="bi bi-circle"></i>
+    {% elif p.icon_mood == 'technical' %}<i class="bi bi-cpu"></i>
+    {% else %}<i class="bi bi-lightning-charge"></i>{% endif %}
+    {{ p.get_icon_mood_display }}
+  </span>
+
+  <!-- === ชนิด diagram ที่กลุ่มนี้ชอบ === -->
+  <span class="sg-chip" title="ชนิด diagram ที่ควรใช้">
+    {% if p.prefer_diagram == 'concept' %}<i class="bi bi-diagram-3"></i>
+    {% elif p.prefer_diagram == 'steps' %}<i class="bi bi-list-ol"></i>
+    {% elif p.prefer_diagram == 'comparison' %}<i class="bi bi-table"></i>
+    {% else %}<i class="bi bi-bar-chart"></i>{% endif %}
+    {{ p.get_prefer_diagram_display }}
+  </span>
+
+  <!-- === ท่าของหนูดีบนภาพปก === -->
+  <span class="sg-chip" title="ท่าของหนูดีบนภาพปก">
+    {% if p.cover_pose == 'thinking' %}<i class="bi bi-lightbulb"></i>
+    {% elif p.cover_pose == 'pointing' %}<i class="bi bi-hand-index"></i>
+    {% elif p.cover_pose == 'happy' %}<i class="bi bi-emoji-smile"></i>
+    {% elif p.cover_pose == 'serious' %}<i class="bi bi-briefcase"></i>
+    {% else %}<i class="bi bi-book"></i>{% endif %}
+    ท่า{{ p.get_cover_pose_display }}
+  </span>
+
+  <!-- === อารมณ์พื้นหลังปก — แสดงเป็นแถบไล่สีจริง === -->
+  <span class="sg-chip" title="อารมณ์พื้นหลังภาพปก">
+    <span class="sg-mood-demo" data-mood="{{ p.cover_mood }}"></span>
+    พื้น{{ p.get_cover_mood_display }}
+  </span>
+
+</div>

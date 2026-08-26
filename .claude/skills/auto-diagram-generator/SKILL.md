@@ -21,6 +21,7 @@ description: Auto-generate Python Pillow diagrams for every H2 section in a blog
 
 ```yaml
 article_title: "ชื่อบทความภาษาไทย"
+segment: "beauty_wellness"                   # ⚠️ บังคับ — คุมสไตล์ทั้งชุด (ดูหัวข้อถัดไป)
 primary_keyword: "ai chatbot ธุรกิจ"        # สำหรับ file naming
 keyword_slug: "ai-chatbot-sme"               # EN slug สำหรับ filename
 output_dir: "scripts/article_assets/"
@@ -47,9 +48,42 @@ h2_sections:
   - `comparison` → comparison table/grid
   - `stats` → bar/metric cards
 
+### Step 1.5: ดึงสไตล์ของ segment (ทำก่อนวาดเสมอ)
+
+**ห้าม hardcode สไตล์เอง** — อ่านจาก `marketing.SegmentProfile` ผ่านตัวช่วยกลาง
+ถ้าไม่รู้ว่าบทความนี้อยู่ segment ไหน ให้ถามก่อน อย่าเดา
+
+```python
+import sys; sys.path.insert(0, "scripts")
+from segment_profile import load_segment, diagram_style
+
+seg = load_segment(segment)          # เช่น "beauty_wellness"
+style = diagram_style(seg)
+# {'bg': '#0F172A', 'primary': '#C9A84C', 'accent': '#E8B4B8',
+#  'corner_radius': 24, 'stroke_width': 2, 'prefer_type': 'steps'}
+```
+
+ดูค่าเร็ว ๆ จาก command line:
+```
+venv\Scripts\python.exe scripts/segment_profile.py --list
+venv\Scripts\python.exe scripts/segment_profile.py beauty_wellness
+```
+
+**สิ่งที่ segment คุม:**
+
+| ค่าจาก segment | เอาไปใช้ตรงไหน |
+|---|---|
+| `corner_radius` | ความโค้งมุมของทุกกล่องใน diagram (24 / 12 / 0) |
+| `accent` | สีเน้นจุดเดียวต่อรูป — เส้นชี้ ตัวเลขลำดับ ไอคอนเดี่ยว |
+| `stroke_width` | ความหนาเส้นไอคอนและกรอบ |
+| `prefer_type` | ชนิด diagram ที่กลุ่มนี้ชอบ — ใช้เมื่อ H2 นั้นไม่ได้ระบุ `type` มา |
+
 ### Step 2: Design standards (ต้องทำทุกรูป)
-- Background: `#0F172A` (Navy dark)
-- Accent: `#C9A84C` (Gold)
+- Background: `#0F172A` (Navy dark) — **ห้ามเปลี่ยนตาม segment**
+- Primary: `#C9A84C` (Gold) — **ห้ามเปลี่ยนตาม segment**
+- Accent: `style["accent"]` — สีรองของ segment **ใช้ได้จุดเดียวต่อรูป**
+  ห้ามเอาไปเป็นพื้นหลัง สีหัวข้อ หรือสีกรอบทุกกล่อง ไม่งั้นจะแย่งสีแบรนด์
+- Corner radius: `style["corner_radius"]` (มาจาก segment ไม่ใช่เลือกเอง)
 - Font: Sarabun หรือ system Thai font
 - Canvas: `1200x630px` (cover) หรือ `800x500px` (diagram)
 - Export: **WebP format** ไม่เกิน 200KB
@@ -92,3 +126,7 @@ scripts/article_assets/
 - ❌ Export เป็น JPG หรือ PNG (ต้องเป็น WebP)
 - ❌ ขนาดไฟล์เกิน 200KB
 - ❌ ไม่สร้าง image_brief.md — Content Writer จะไม่รู้ alt text
+- ❌ **ไม่ระบุ `segment` หรือเดาเอง** — สไตล์ผิดกลุ่มมองไม่ออกจากรูป กว่าจะรู้ก็สายแล้ว
+- ❌ **เอา `accent` ของ segment ไปใช้เป็นพื้นหลังหรือสีหัวข้อ** — มันคือสีรอง ใช้จุดเดียวต่อรูป
+- ❌ **เปลี่ยนสีกรม/ทองตาม segment** — สองสีนี้คือแบรนด์ ห้ามแตะ
+- ❌ hardcode `corner_radius` หรือความหนาเส้นเอง ทั้งที่ segment กำหนดไว้แล้ว

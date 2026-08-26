@@ -43,3 +43,21 @@ description: เขียนบทความภาษาไทยสำหร�
 
 ## AI Angle (บังคับ)
 เชื่อม pain point โค้ช/creator → LMS / AI content automation / chatbot สำหรับ student เสมอ
+
+## 🎨 Segment Profile — อ่านก่อนเขียนทุกครั้ง
+
+**segment ของคุณคือ `creator_coach`**
+
+ก่อนเริ่มเขียน ให้ดึงโปรไฟล์กลุ่มนี้มาก่อน:
+```
+venv\Scripts\python.exe scripts/segment_profile.py creator_coach
+```
+(หรือเรียก API `/owner/api/segment-profiles/creator_coach/` · แก้ค่าได้ที่ `/owner/segments/`)
+
+โปรไฟล์นี้เป็นแหล่งความจริงเดียวที่คุม **5 มิติพร้อมกัน** — โทนการเขียน แหล่งค้นข้อมูล
+สไตล์ diagram ท่าภาพปก และรูปแบบ hook ถ้าโปรไฟล์กับไฟล์นี้ขัดกัน **ให้ยึดโปรไฟล์**
+แล้วบอกผู้ใช้ว่าไม่ตรงกันตรงไหน
+
+**ตอนส่งงานต่อให้ Graphic Designer ต้องระบุ `segment: creator_coach` เสมอ** — ทั้ง
+`auto-diagram-generator` และ `flux-cover-image` บังคับ field นี้แล้ว ถ้าไม่ส่งไป
+diagram กับภาพปกจะไม่ไปทางเดียวกับบทความที่ไมโลเขียน

@@ -401,10 +401,13 @@ DECISIONS = [
 # หนี้ทางเทคนิค — รู้อยู่ว่าไม่สวย แต่จงใจยังไม่แก้ ต้องบอกเหตุผลเสมอ
 # ---------------------------------------------------------------------------
 TECH_DEBT = [
-    {'topic': 'งานจำนวนมากยังไม่ถูก commit',
-     'why': 'ตอนนี้มีไฟล์แก้ไข 15 ไฟล์และไฟล์ใหม่อีกหลายสิบไฟล์ค้างใน working tree '
-            'รวมถึงระบบ Project Monitor ทั้งชุด · ถ้าเครื่องพังตอนนี้งานหายทั้งหมด '
-            '· ยังไม่ commit เพราะกฎห้าม push จนกว่าเจ้าของจะสั่ง แต่ commit ทำได้',
+    {'topic': 'ค่าลับของ booking-system เคยวางเปล่า ๆ อยู่ในโฟลเดอร์ scripts',
+     'why': '**ต้องเปลี่ยนรหัสทั้งชุด** — พบ SECRET_KEY และ DB_PASSWORD ของ production '
+            'เขียนเป็น plaintext ใน scripts/booking_env_prod.txt และ scripts/setup_booking_env.py '
+            'และรหัส superuser ใน scripts/create_booking_superuser.py '
+            '· ตรวจแล้วว่า**ไม่เคยถูก commit** และตอนนี้ gitignore ไว้แล้ว ยังไม่หลุดออกนอกเครื่อง '
+            '· แต่ค่ายังใช้งานได้อยู่จริงบนเซิร์ฟเวอร์ ควรหมุนรหัสใหม่และย้ายไปเก็บใน .env '
+            'ที่ไม่ถูก track แทนการฝังในสคริปต์',
      'owner': 'ai-orchestrator'},
     {'topic': 'memory file บอกว่า Project Monitor ยังไม่ implement ทั้งที่ทำไปแล้ว',
      'why': 'project_monitor_system.md เขียนว่า "ยังไม่ implement" ลงวันที่ 20 ส.ค. '

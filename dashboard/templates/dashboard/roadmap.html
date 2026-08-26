@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% load static humanize %}
+<!-- ===================================================================
+     แผนพัฒนาระบบ (ROADMAP)
+     แหล่งความจริงเดียว = dashboard/roadmap.py — หน้านี้แค่แสดงผล
+     เห็นได้เฉพาะ superuser (คนอื่นได้ 404 จากวิว)
+     =================================================================== -->
+
+{% block title %}แผนพัฒนาระบบ — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">แผนพัฒนาระบบ</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<style>
+  /* === แถบสรุปความคืบหน้ารวม === */
+  .rm-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+  .rm-stat { background:var(--bs-body-bg); border:1px solid var(--bs-border-color); border-radius:.75rem; padding:1rem 1.15rem; }
+  .rm-stat-value { font-size:1.65rem; font-weight:800; line-height:1.1; }
+  .rm-stat-label { font-size:.74rem; color:var(--bs-secondary-color); text-transform:uppercase; letter-spacing:.06em; margin-top:.25rem; }
+  .rm-stat.accent .rm-stat-value { color:var(--app-primary); }
+
+  /* === แถบ "ตอนนี้กำลังทำ" === */
+  .rm-current { border:1px solid var(--app-primary); border-left-width:4px; border-radius:.75rem;
+                background:rgba(201,169,110,.06); padding:1.15rem 1.35rem; margin-bottom:1.5rem; }
+  .rm-current-head { font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--app-primary); }
+  .rm-current-task { font-size:1.05rem; font-weight:700; margin:.35rem 0 .5rem; }
+  .rm-current-note { font-size:.83rem; color:var(--bs-secondary-color); line-height:1.75; }
+
+  /* === แถบเตือนแผนล้าสมัย === */
+  .rm-alert { border-radius:.6rem; padding:.85rem 1.1rem; margin-bottom:1.25rem; font-size:.86rem; }
+  .rm-alert.stale { background:rgba(220,53,69,.1); border:1px solid rgba(220,53,69,.35); color:#b02a37; }
+
+  /* === การ์ดเฟส === */
+  .rm-phase { margin-bottom:1.15rem; }
+  .rm-phase-head { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.25rem; cursor:pointer;
+                   border-bottom:1px solid transparent; }
+  .rm-phase-head:hover { background:rgba(0,0,0,.02); }
+  .rm-phase.open .rm-phase-head { border-bottom-color:var(--bs-border-color); }
+  .rm-phase-no { flex:0 0 auto; width:2.4rem; height:2.4rem; border-radius:.6rem; display:grid; place-items:center;
+                 font-weight:800; font-size:.95rem; background:rgba(201,169,110,.15); color:var(--app-primary); }
+  .rm-phase-main { flex:1 1 auto; min-width:0; }
+  .rm-phase-name { font-weight:700; font-size:.98rem; }
+  .rm-phase-goal { font-size:.8rem; color:var(--bs-secondary-color); margin-top:.15rem; }
+  .rm-phase-right { flex:0 0 auto; text-align:right; }
+  .rm-count { font-size:.85rem; font-weight:700; white-space:nowrap; }
+  .rm-count small { font-weight:500; color:var(--bs-secondary-color); }
+
+  /* === แถบความคืบหน้า === */
+  .rm-bar { height:6px; border-radius:99px; background:rgba(0,0,0,.08); overflow:hidden; margin-top:.5rem; }
+  .rm-bar > span { display:block; height:100%; background:var(--app-primary); border-radius:99px; }
+
+  /* === รายการงานในเฟส === */
+  .rm-items { display:none; padding:.35rem 0 .5rem; }
+  .rm-phase.open .rm-items { display:block; }
+  .rm-item { display:flex; gap:.8rem; padding:.6rem 1.25rem; border-bottom:1px solid var(--bs-border-color); }
+  .rm-item:last-child { border-bottom:none; }
+  .rm-item-icon { flex:0 0 auto; width:1.35rem; text-align:center; padding-top:.1rem; }
+  .rm-item-body { flex:1 1 auto; min-width:0; }
+  .rm-item-name { font-size:.88rem; }
+  .rm-item-note { font-size:.79rem; color:var(--bs-secondary-color); line-height:1.7; margin-top:.25rem; }
+  .rm-item.is-done .rm-item-name { color:var(--bs-secondary-color); }
+  .rm-cal { display:inline-block; font-size:.7rem; padding:.1rem .5rem; border-radius:99px; margin-top:.3rem;
+            background:rgba(37,99,235,.12); color:#2563eb; font-weight:600; }
+
+  /* === ตัวเลขจริงจาก DB === */
+  .rm-metrics { display:flex; flex-wrap:wrap; gap:.5rem; padding:.65rem 1.25rem; background:rgba(0,0,0,.02); }
+  .rm-metric { font-size:.74rem; color:var(--bs-secondary-color); }
+  .rm-metric b { color:var(--bs-body-color); font-size:.85rem; }
+
+  /* === กล่องมติที่ค้าง === */
+  .rm-decision { border-left:3px solid #dc3545; background:rgba(220,53,69,.05); border-radius:.5rem;
+                 padding:.8rem 1rem; margin-bottom:.7rem; }
+  .rm-decision-top { display:flex; justify-content:space-between; gap:1rem; align-items:baseline; }
+  .rm-decision-code { font-size:.7rem; font-weight:800; color:#b02a37; letter-spacing:.05em; }
+  .rm-decision-days { font-size:.72rem; color:#b02a37; white-space:nowrap; }
+  .rm-decision-topic { font-weight:700; font-size:.88rem; margin:.2rem 0 .3rem; }
+  .rm-decision-detail { font-size:.8rem; color:var(--bs-secondary-color); line-height:1.75; }
+
+  /* === หนี้ทางเทคนิค === */
+  .rm-debt { padding:.75rem 0; border-bottom:1px solid var(--bs-border-color); }
+  .rm-debt:last-child { border-bottom:none; }
+  .rm-debt-topic { font-weight:700; font-size:.86rem; }
+  .rm-debt-why { font-size:.79rem; color:var(--bs-secondary-color); line-height:1.75; margin-top:.25rem; }
+  .rm-debt-owner { font-size:.7rem; color:var(--app-primary); font-weight:600; margin-top:.25rem; }
+
+  /* === งานค้างในปฏิทิน === */
+  .rm-ev { display:flex; gap:.75rem; padding:.5rem 0; border-bottom:1px solid var(--bs-border-color); font-size:.82rem; }
+  .rm-ev:last-child { border-bottom:none; }
+  .rm-ev-date { flex:0 0 auto; width:5.5rem; color:#dc3545; font-weight:600; font-size:.76rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-diagram-3"></i></span>
+      แผนพัฒนาระบบ
+    </h1>
+    <p class="settings-hero-sub">แหล่งความจริงเดียวว่าทำถึงไหน เหลือกี่งาน กี่เฟส</p>
+  </div>
+  <a href="{% url 'dashboard:calendar' %}" class="ds-btn-outline">
+    <i class="bi bi-calendar3"></i> ปฏิทินงาน
+  </a>
+</div>
+
+<!-- === เตือนเมื่อแผนไม่ถูกแก้นานเกินกำหนด === -->
+{% if staleness.is_stale %}
+<div class="rm-alert stale">
+  <i class="bi bi-exclamation-triangle-fill"></i>
+  <b>แผนนี้ไม่ถูกแก้มา {{ staleness.days }} วันแล้ว</b>
+  (แก้ล่าสุด {{ staleness.updated|date:"j M Y" }}) —
+  โค้ดเดินไปแต่แผนไม่ขยับ แปลว่าหน้าจอนี้อาจไม่ตรงกับความจริงแล้ว
+</div>
+{% endif %}
+
+<!-- === สรุปรวมทั้งโปรเจกต์ === -->
+<div class="rm-summary">
+  <div class="rm-stat accent">
+    <div class="rm-stat-value">{{ progress.percent }}%</div>
+    <div class="rm-stat-label">ความคืบหน้ารวม</div>
+  </div>
+  <div class="rm-stat">
+    <div class="rm-stat-value">{{ progress.done }}<small style="font-size:1rem;color:var(--bs-secondary-color)">/{{ progress.total }}</small></div>
+    <div class="rm-stat-label">งานที่เสร็จแล้ว</div>
+  </div>
+  <div class="rm-stat">
+    <div class="rm-stat-value">{{ progress.remaining }}</div>
+    <div class="rm-stat-label">งานที่เหลือ</div>
+  </div>
+  <div class="rm-stat">
+    <div class="rm-stat-value">{{ progress.blocked }}</div>
+    <div class="rm-stat-label">ติดรอตัดสินใจ</div>
+  </div>
+  <div class="rm-stat">
+    <div class="rm-stat-value">{{ progress.phases_done }}<small style="font-size:1rem;color:var(--bs-secondary-color)">/{{ progress.phases }}</small></div>
+    <div class="rm-stat-label">เฟสที่ปิดแล้ว</div>
+  </div>
+</div>
+
+<!-- === ตอนนี้กำลังทำอะไร === -->
+<div class="rm-current">
+  <div class="rm-current-head">ตอนนี้กำลังทำ — เฟส {{ current.phase }}{% if current_phase %} · {{ current_phase.name }}{% endif %}</div>
+  <div class="rm-current-task">{{ current.task }}</div>
+  <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-bottom:.5rem">
+    ผู้รับผิดชอบ <b>{{ current.owner }}</b> · เริ่ม {{ current.started|date:"j M Y" }}
+  </div>
+  <div class="rm-current-note">{{ current.note }}</div>
+</div>
+
+<div class="row g-3">
+
+  <!-- === ซ้าย: เฟสทั้งหมด === -->
+  <div class="col-lg-8">
+    {% for phase in phases %}
+    <div class="scard rm-phase {% if phase.status == 'in_progress' %}open{% endif %}">
+
+      <div class="rm-phase-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="rm-phase-no">{{ phase.no }}</div>
+        <div class="rm-phase-main">
+          <div class="rm-phase-name">
+            {{ phase.name }}
+            <span class="badge bg-{{ phase.meta.badge }}" style="font-size:.65rem;vertical-align:middle">
+              <i class="{{ phase.meta.icon }}"></i> {{ phase.meta.label }}
+            </span>
+            {% if phase.reopened %}
+              <span class="badge bg-warning text-dark" style="font-size:.65rem;vertical-align:middle">มีงานเพิ่มเข้ามาทีหลัง</span>
+            {% endif %}
+          </div>
+          <div class="rm-phase-goal">{{ phase.goal }}</div>
+          <div class="rm-bar"><span style="width:{{ phase.percent }}%"></span></div>
+        </div>
+        <div class="rm-phase-right">
+          <div class="rm-count">{{ phase.done_count }}<small>/{{ phase.total_count }}</small></div>
+          <div style="font-size:.72rem;color:var(--bs-secondary-color)">
+            {% if phase.remaining_count %}เหลือ {{ phase.remaining_count }}{% else %}ครบแล้ว{% endif %}
+          </div>
+          {% if phase.blocked_count %}
+            <div style="font-size:.7rem;color:#dc3545;font-weight:600">ติด {{ phase.blocked_count }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="rm-items">
+        {% if phase.note %}
+        <div style="padding:.6rem 1.25rem;font-size:.8rem;color:var(--bs-secondary-color);line-height:1.75">
+          {{ phase.note }}
+        </div>
+        {% endif %}
+
+        {% if phase.metrics %}
+        <div class="rm-metrics">
+          {% for m in phase.metrics %}
+            <div class="rm-metric">{{ m.label }} <b>{{ m.value|intcomma }}</b></div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for item in phase.items %}
+        <div class="rm-item {% if item.status == 'done' or item.status == 'early' %}is-done{% endif %}">
+          <div class="rm-item-icon text-{{ item.meta.badge }}"><i class="{{ item.meta.icon }}"></i></div>
+          <div class="rm-item-body">
+            <div class="rm-item-name">{{ item.name }}</div>
+            {% if item.note %}<div class="rm-item-note">{{ item.note }}</div>{% endif %}
+            {% if item.calendar_hit %}
+              <span class="rm-cal">
+                <i class="bi bi-calendar3"></i>
+                ปฏิทิน {{ item.calendar_hit.done }}/{{ item.calendar_hit.total }} ปิดแล้ว
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- === ขวา: มติค้าง / ปฏิทิน / หนี้ทางเทคนิค === -->
+  <div class="col-lg-4">
+
+    <!-- เรื่องที่ติดรอตัดสินใจ -->
+    <div class="scard" style="margin-bottom:1rem">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-3">
+          <div class="scard-header-icon"><i class="bi bi-hand-index"></i></div>
+          <div>
+            <div style="font-weight:700;font-size:.97rem">รอเจ้าของตัดสินใจ</div>
+            <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+              {{ decisions|length }} เรื่อง — งานเดินต่อไม่ได้จนกว่าจะเคาะ
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scard-body">
+        {% for d in decisions %}
+        <div class="rm-decision">
+          <div class="rm-decision-top">
+            <span class="rm-decision-code">{{ d.code }}</span>
+            <span class="rm-decision-days">ค้างมา {{ d.days }} วัน</span>
+          </div>
+          <div class="rm-decision-topic">{{ d.topic }}</div>
+          <div class="rm-decision-detail">{{ d.detail }}</div>
+        </div>
+        {% empty %}
+        <div style="font-size:.85rem;color:var(--bs-secondary-color)">ไม่มีเรื่องค้าง</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- ปฏิทินงานเดิม -->
+    <div class="scard" style="margin-bottom:1rem">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-3">
+          <div class="scard-header-icon"><i class="bi bi-calendar3"></i></div>
+          <div>
+            <div style="font-weight:700;font-size:.97rem">ปฏิทินงานเดิม</div>
+            <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+              เทียบกับแผน — ตัวเลขจาก DB จริง
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scard-body">
+        <div class="rm-metrics" style="background:transparent;padding:0 0 .75rem">
+          <div class="rm-metric">ทั้งหมด <b>{{ cal_stats.total }}</b></div>
+          <div class="rm-metric">ปิดแล้ว <b>{{ cal_stats.done }}</b></div>
+          <div class="rm-metric">ค้าง <b>{{ cal_stats.pending }}</b></div>
+          <div class="rm-metric" style="color:#dc3545">เลยกำหนด <b style="color:#dc3545">{{ cal_stats.overdue }}</b></div>
+        </div>
+        {% if overdue_events %}
+        <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-bottom:.4rem">
+          งานค้างที่เลยกำหนดแล้ว (15 รายการแรก)
+        </div>
+        {% for e in overdue_events %}
+        <div class="rm-ev">
+          <div class="rm-ev-date">{{ e.start_datetime|date:"j M y" }}</div>
+          <div>{{ e.title }}</div>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- หนี้ทางเทคนิค -->
+    <div class="scard">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-3">
+          <div class="scard-header-icon"><i class="bi bi-tools"></i></div>
+          <div>
+            <div style="font-weight:700;font-size:.97rem">หนี้ทางเทคนิค</div>
+            <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+              {{ tech_debt|length }} เรื่อง — รู้อยู่ว่ายังไม่แก้ และรู้ว่าทำไม
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scard-body">
+        {% for t in tech_debt %}
+        <div class="rm-debt">
+          <div class="rm-debt-topic">{{ t.topic }}</div>
+          <div class="rm-debt-why">{{ t.why }}</div>
+          <div class="rm-debt-owner">{{ t.owner }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,68 @@
+#!/bin/sh
+# กันไม่ให้แผนพัฒนาใน dashboard/roadmap.py ล้าสมัยโดยไม่มีใครรู้
+#
+# ปัญหาที่แก้: กฎบอกให้อัปเดตแผนทุกครั้งที่ปิดงาน แต่ถ้าใครลืม จะไม่มีอะไรจับได้เลย
+# เทสเขียวหมด เว็บทำงานปกติ เจ้าของเห็นแผนล้าสมัยโดยไม่รู้ตัว
+# เกิดขึ้นมาแล้วจริงกับ memory file ที่เขียนว่า Project Monitor "ยังไม่ implement"
+# ทั้งที่โค้ดกับ migration เสร็จไปแล้ว
+#
+# ทำงานเหมือนกันทุก session ทุก agent ไม่ต้องพึ่งความจำใคร
+#
+# ติดตั้งครั้งเดียวหลัง clone:  git config core.hooksPath .githooks
+# ทางออกฉุกเฉินถ้าจำเป็นจริง ๆ:  SKIP_ROADMAP_CHECK=1 git commit ...
+
+set -e
+
+if [ -n "$SKIP_ROADMAP_CHECK" ]; then
+    exit 0
+fi
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR)
+
+# ไฟล์ที่บ่งบอกว่า "โครงสร้างระบบเปลี่ยน" ไม่ใช่แค่แก้บั๊ก
+# เจตนาเลือกเฉพาะ models / urls / migrations เพื่อไม่ให้เตือนพร่ำเพรื่อจนคนชินแล้วมองข้าม
+# แก้บั๊กใน views.py หรือ forms.py ไม่ถือว่าเป็นการเปลี่ยนแผน
+FEATURE_CHANGES=$(printf '%s\n' "$STAGED" | grep -E '^[A-Za-z_]+/(models\.py|urls\.py|migrations/[0-9].*\.py)$' || true)
+
+# skill และ agent ก็เป็นความสามารถของระบบเหมือนกัน เพิ่มแล้วแผนต้องขยับ
+AGENT_CHANGES=$(printf '%s\n' "$STAGED" | grep -E '^\.claude/(agents|skills)/' || true)
+
+CHANGES="$FEATURE_CHANGES$AGENT_CHANGES"
+
+if [ -z "$CHANGES" ]; then
+    exit 0
+fi
+
+ROADMAP_TOUCHED=$(printf '%s\n' "$STAGED" | grep -E '^dashboard/roadmap\.py$' || true)
+
+if [ -n "$ROADMAP_TOUCHED" ]; then
+    exit 0
+fi
+
+cat >&2 <<'MSG'
+
+  ────────────────────────────────────────────────────────────────
+   หยุดก่อน — commit นี้เปลี่ยนความสามารถของระบบ แต่ไม่ได้อัปเดตแผนพัฒนา
+  ────────────────────────────────────────────────────────────────
+
+  ไฟล์ที่บ่งบอกว่าโครงสร้างเปลี่ยน:
+MSG
+
+printf '%s\n' "$CHANGES" | grep -v '^$' | sed 's/^/    - /' >&2
+
+cat >&2 <<'MSG'
+
+  แต่ dashboard/roadmap.py ไม่ได้ถูกแก้ในคอมมิตเดียวกัน
+
+  ให้เปิดไฟล์นั้นแล้วทำอย่างใดอย่างหนึ่ง:
+    - ปิดงานเสร็จแล้ว      ->  เปลี่ยน status ของเรื่องนั้นเป็น DONE
+    - ขึ้นเฟสใหม่          ->  แก้ CURRENT ให้ตรงกับที่กำลังทำจริง
+    - เป็นงานที่ไม่มีในแผน  ->  ถามเจ้าของก่อน อย่าเพิ่งลงมือต่อ
+
+  ดูแผนปัจจุบันได้ที่  /owner/roadmap/
+
+  ถ้าจำเป็นต้องข้ามจริง ๆ:  SKIP_ROADMAP_CHECK=1 git commit ...
+
+MSG
+
+exit 1

@@ -210,3 +210,130 @@ class Keyword(models.Model):
 
     def __str__(self):
         return self.keyword
+
+
+# === SEGMENT PROFILE =========================================================
+# โปรไฟล์ 5 มิติต่อกลุ่มลูกค้า — แหล่งความจริงเดียวที่ทั้ง agent (LLM) และ
+# script Python (Pillow / FLUX) อ่านร่วมกัน
+#
+# ปัญหาที่แก้: เดิม agent นักเขียนคุมแค่ "โทน" ส่วน skill ทำ diagram เลือกสไตล์จาก
+# ประเภทหัวข้อ (concept/steps/comparison) และ skill ทำภาพปกให้คนเรียกเลือก pose เอง
+# ทั้งสามอย่างจึงไม่เคยผูกกัน บทความร้านสปาโทนอบอุ่นได้ diagram แข็ง ๆ กับปกท่า serious ได้
+#
+# ทำไมเก็บใน DB ไม่ใช่ไฟล์: เจ้าของต้องแก้เองได้จากหน้าเว็บโดยไม่ต้อง deploy
+# (ต่างจาก dashboard/roadmap.py ที่จงใจเป็นไฟล์เพราะ git hook ต้องตรวจได้)
+#
+# ⚠️ สีแบรนด์กรม #0F172A + ทอง #C9A84C ห้ามเปลี่ยน — segment ปรับได้แค่สีรอง
+# รูปทรง อารมณ์ไอคอน และท่าของหนูดี เท่านั้น
+
+class SegmentProfile(models.Model):
+
+    class Shape(models.TextChoices):
+        ROUNDED = "rounded", "มุมโค้ง (อบอุ่น เป็นมิตร)"
+        SOFT    = "soft",    "มุมมนน้อย (กลาง ๆ)"
+        SHARP   = "sharp",   "มุมเหลี่ยม (จริงจัง เป็นทางการ)"
+
+    class IconMood(models.TextChoices):
+        SOFT       = "soft",       "นุ่มนวล"
+        CLEAN      = "clean",      "เรียบ สะอาด"
+        TECHNICAL  = "technical",  "เทคนิค"
+        ENERGETIC  = "energetic",  "มีพลัง"
+
+    class DiagramType(models.TextChoices):
+        CONCEPT    = "concept",    "แผนภาพแนวคิด"
+        STEPS      = "steps",      "ขั้นตอนเป็นลำดับ"
+        COMPARISON = "comparison", "ตารางเปรียบเทียบ"
+        STATS      = "stats",      "ตัวเลขและสถิติ"
+
+    class Pose(models.TextChoices):
+        THINKING = "thinking", "คิด"
+        POINTING = "pointing", "ชี้"
+        HAPPY    = "happy",    "ยิ้มสดใส"
+        SERIOUS  = "serious",  "จริงจัง"
+        READING  = "reading",  "อ่าน"
+
+    class Mood(models.TextChoices):
+        TECH  = "tech",  "เทคโนโลยี"
+        WARM  = "warm",  "อบอุ่น"
+        CLEAN = "clean", "สะอาดตา"
+        DARK  = "dark",  "เข้ม"
+
+    # --- ตัวระบุ ---
+    key         = models.SlugField("รหัส segment", max_length=50, unique=True,
+                                   help_text="เช่น beauty_wellness — script ใช้ค่านี้เรียก")
+    name        = models.CharField("ชื่อกลุ่ม", max_length=100)
+    agent_slug  = models.CharField("agent ที่รับผิดชอบ", max_length=60,
+                                   help_text="slug ใน frontmatter ของไฟล์ agent")
+    pen_name    = models.CharField("นามปากกา", max_length=50, blank=True)
+    pronoun     = models.CharField("สรรพนามในบทความ", max_length=20, blank=True)
+
+    # --- มิติที่ 1: โทนการเขียน ---
+    tone        = models.TextField("โทนการเขียน",
+                                   help_text="สรุปสั้น ๆ ว่าเขียนด้วยน้ำเสียงแบบไหน")
+    reader      = models.TextField("ผู้อ่านเป็นใคร", blank=True)
+
+    # --- มิติที่ 2: แหล่งค้นข้อมูล ---
+    research    = models.TextField("แหล่งค้นข้อมูลและมุมที่ควรหา", blank=True,
+                                   help_text="หนึ่งบรรทัดต่อหนึ่งแหล่ง")
+
+    # --- มิติที่ 3: สไตล์ diagram ---
+    shape            = models.CharField("รูปทรง", max_length=15, choices=Shape.choices, default=Shape.SOFT)
+    accent_secondary = models.CharField("สีรอง (hex)", max_length=7, default="#C9A84C",
+                                        help_text="สีหลักกรม+ทองห้ามเปลี่ยน อันนี้คือสีรองเท่านั้น")
+    icon_mood        = models.CharField("อารมณ์ไอคอน", max_length=15, choices=IconMood.choices, default=IconMood.CLEAN)
+    prefer_diagram   = models.CharField("ชนิด diagram ที่กลุ่มนี้ชอบ", max_length=15,
+                                        choices=DiagramType.choices, default=DiagramType.CONCEPT)
+
+    # --- มิติที่ 4: ภาพปก ---
+    cover_pose = models.CharField("ท่าของหนูดี", max_length=15, choices=Pose.choices, default=Pose.THINKING)
+    cover_mood = models.CharField("อารมณ์พื้นหลัง", max_length=15, choices=Mood.choices, default=Mood.CLEAN)
+
+    # --- มิติที่ 5: รูปแบบ hook ---
+    hook_style = models.CharField("รูปแบบ hook", max_length=200, blank=True,
+                                  help_text="เช่น คำถามที่ relate ได้ / ตัวเลขที่น่าตกใจ")
+
+    is_active  = models.BooleanField("ใช้งานอยู่", default=True)
+    notes      = models.TextField("บันทึกเพิ่มเติม", blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Segment Profile"
+        verbose_name_plural = "Segment Profiles"
+        ordering = ["name"]
+
+    def __str__(self):
+        return "%s (%s)" % (self.name, self.key)
+
+    @property
+    def research_count(self):
+        """จำนวนแหล่งค้นข้อมูลที่ใช้ได้จริง — นับแบบเดียวกับที่ as_dict() ตัด
+        ไม่งั้นตัวเลขบนหน้าจอจะไม่ตรงกับสิ่งที่ script ได้ไปจริง"""
+        return len([line for line in self.research.splitlines() if line.strip()])
+
+    def as_dict(self):
+        """รูปแบบที่ script Pillow/FLUX เอาไปใช้ได้ตรง ๆ
+
+        ตั้งใจให้ชื่อ key ตรงกับ input ที่ SKILL.md ของ auto-diagram-generator
+        และ flux-cover-image ประกาศไว้ จะได้เสียบใช้ได้เลยไม่ต้องแปลงอีกชั้น
+        """
+        return {
+            "key": self.key,
+            "name": self.name,
+            "writer": self.agent_slug,
+            "pen_name": self.pen_name,
+            "pronoun": self.pronoun,
+            "tone": self.tone,
+            "reader": self.reader,
+            "research": [line.strip() for line in self.research.splitlines() if line.strip()],
+            "diagram": {
+                "shape": self.shape,
+                "accent_secondary": self.accent_secondary,
+                "icon_mood": self.icon_mood,
+                "prefer_type": self.prefer_diagram,
+            },
+            "cover": {
+                "pose_category": self.cover_pose,
+                "background_mood": self.cover_mood,
+                "hook_style": self.hook_style,
+            },
+        }

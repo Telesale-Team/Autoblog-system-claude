@@ -163,6 +163,13 @@
       {# ── Operations ── #}
       <li class="nav-section-label" data-section>Operations</li>
 
+      <li class="nav-item" data-label="project monitor สถานะ ระบบ ลูกค้า uptime deploy server เฝ้า">
+        <a href="{% url 'operations:monitor' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'monitor' or request.resolver_match.url_name == 'monitor_detail' %}active{% endif %}">
+          <i class="bi bi-activity"></i>
+          <span class="nav-label">Project Monitor</span>
+        </a>
+      </li>
       <li class="nav-item" data-label="ai projects build deploy workflow">
         <a href="{% url 'dashboard:ai_projects' %}"
            class="nav-link {% if request.resolver_match.url_name == 'ai_projects' %}active{% endif %}">
@@ -191,6 +198,24 @@
           <span class="nav-label">Design System</span>
         </a>
       </li>
+      <!-- === โปรไฟล์กลุ่มลูกค้า — คุมโทน/diagram/ปก ให้ไปทางเดียวกัน === -->
+      <li class="nav-item" data-label="segment โปรไฟล์ กลุ่มลูกค้า โทน diagram ปก">
+        <a href="{% url 'dashboard:segments' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'segments' or request.resolver_match.url_name == 'segment_edit' %}active{% endif %}">
+          <i class="bi bi-people"></i>
+          <span class="nav-label">โปรไฟล์กลุ่มลูกค้า</span>
+        </a>
+      </li>
+      <!-- === แผนพัฒนาระบบ — เครื่องมือฝั่งผู้พัฒนา เห็นเฉพาะ superuser === -->
+      {% if request.user.is_superuser %}
+      <li class="nav-item" data-label="roadmap แผนพัฒนา เฟส ความคืบหน้า งานที่เหลือ">
+        <a href="{% url 'dashboard:roadmap' %}"
+           class="nav-link {% if request.resolver_match.url_name == 'roadmap' %}active{% endif %}">
+          <i class="bi bi-diagram-3"></i>
+          <span class="nav-label">แผนพัฒนาระบบ</span>
+        </a>
+      </li>
+      {% endif %}
 
 
       {# ── ระบบ ── #}

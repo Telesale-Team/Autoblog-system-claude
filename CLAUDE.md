@@ -2,7 +2,7 @@
 
 ระบบ AI Agent สำหรับธุรกิจ AI Automation Specialist ที่ขายระบบ AI ให้ SME ไทย
 
-**Version:** 2.8 | **Updated:** 2026-07-03
+**Version:** 2.9 | **Updated:** 2026-08-23
 
 ---
 
@@ -10,13 +10,60 @@
 
 **ทุก session ใหม่ ทำตามลำดับนี้:**
 
-1. อ่าน `memory/MEMORY.md` ทุกบรรทัด
+> ⚠️ **Memory ไม่ได้อยู่ในโฟลเดอร์โปรเจกต์** — อยู่ที่ absolute path นี้เท่านั้น:
+> `C:\Users\dphoo\.claude\projects\E--Project-Peyo-Peyo-Agent-Skill-Claude\memory`
+> (ใช้ path เต็มทุกครั้ง — path แบบ `memory/...` จะหาไม่เจอ โดยเฉพาะเมื่อเป็น subagent)
+
+1. อ่าน `C:\Users\dphoo\.claude\projects\E--Project-Peyo-Peyo-Agent-Skill-Claude\memory\MEMORY.md` ทุกบรรทัด
 2. อ่าน memory file ที่เกี่ยวข้องกับงานที่จะทำ
 3. ดูงานค้างจาก Calendar API: `GET http://localhost:8000/owner/api/events/` และ Notes: `GET http://localhost:8000/owner/api/notes/`
 4. ค่อยตอบหรือรับงาน
 
 **ห้าม assume ว่าจำได้** — ต้อง verify จาก memory files จริงๆ ทุกครั้ง
-โดยเฉพาะก่อนทำงานกับ server ต้องอ่าน `memory/project_deploy_workflow.md` ก่อนเสมอ
+โดยเฉพาะก่อนทำงานกับ server ต้องอ่าน `C:\Users\dphoo\.claude\projects\E--Project-Peyo-Peyo-Agent-Skill-Claude\memory\project_deploy_workflow.md` ก่อนเสมอ
+
+**สำหรับ subagent ทุกตัว:** subagent เกิดใหม่แบบ context เปล่า ไม่ได้รับ SessionStart hook
+ข้อมูล server ที่จำเป็นจึงสรุปไว้ในหัวข้อถัดไปของไฟล์นี้ (CLAUDE.md ถูกส่งให้ subagent ด้วย)
+
+---
+
+## 🖥️ SERVER & DEPLOY — อ่านก่อนแตะ server ทุกครั้ง (ทุก agent รวม subagent)
+
+**รายละเอียดเต็ม:** `C:\Users\dphoo\.claude\projects\E--Project-Peyo-Peyo-Agent-Skill-Claude\memory\project_deploy_workflow.md`
+
+### SSH
+```
+ssh -i ~/.ssh/id_ubuntu_local dphoompat@192.168.1.2
+```
+- User: `dphoompat` (ไม่ใช่ `peyo`, ไม่ใช่ `root`)
+- Key: `~/.ssh/id_ubuntu_local`
+- IP: `192.168.1.2` (IP เดิม 192.168.1.203 เลิกใช้แล้ว ตั้งแต่ 28 พ.ค. 69)
+- Warning `.bashrc: line 1: ฺexport: command not found` เป็นปกติ ข้ามได้
+
+### Deploy
+```
+ssh -i ~/.ssh/id_ubuntu_local dphoompat@192.168.1.2 "cd /home/dphoompat/peyo-agent && bash deploy.sh"
+```
+- ห้ามใช้แค่ `git pull` — ต้อง `bash deploy.sh` เสมอ (ไม่งั้น static files เก่า)
+- Service name: `peyo-agent` (ไม่ใช่ `gunicorn`)
+- peyo-agent มี **GitHub Actions runner บน server** — push ไป main แล้ว server pull+collectstatic+restart เองภายในไม่กี่วินาที ไม่ต้อง ssh รัน deploy.sh ซ้ำ (จะ conflict) — รอ ~1 นาที แล้วตรวจ `git log -1` บน server แทน
+
+### Instance บน server (ห้ามสับสน!)
+| Instance | Path | Service | Domain |
+|----------|------|---------|--------|
+| peyo-agent (AIBiz) | `/home/dphoompat/peyo-agent` | `peyo-agent` | blog.kooky-shop.com |
+| exam-system (ครูวิทย์) | `/home/dphoompat/exam-system` | `exam-system` | — |
+| **booking-system** | `/home/dphoompat/booking-system` | `booking-system` | muskelterapeut-spa.com |
+| noodee-booking (QueueFlow demo) | `/home/dphoompat/noodee-booking` | `noodee-booking` | booking.noodee-bootbiz.com |
+| kanjana-booking | `/home/dphoompat/kanjana-booking` | `kanjana-booking` | — |
+
+> 🚨 **`booking-system` = ร้านจริงที่ Bergen มีลูกค้าจริง ~50 คน — ห้ามแตะข้อมูลเด็ดขาด**
+> Demo/showcase ให้ใช้ `noodee-booking` เท่านั้น
+
+### กฎเหล็ก
+- **ห้าม `git push` จนกว่าผู้ใช้จะสั่ง** (commit ได้ แต่ push ต้องรอ)
+- **ห้าม deploy โดยไม่ได้รับคำสั่ง**
+- "update server ครูวิทย์" = commit + push + deploy `exam-system`
 
 ---
 
@@ -177,6 +224,32 @@ Chief of Staff จะเลือก agent ที่เหมาะสมให�
 - **Workflow D:** Data-Driven Decision Loop
 - **Workflow E:** Content Pipeline (SEO → Write → QA → Publish → Track)
 - **Workflow F:** AI News Pipeline (Scout → Write → QA → Draft → Human Publish)
+
+---
+
+## 🗺️ แผนพัฒนาต้องตรงกับความจริงเสมอ (บังคับ ตั้งแต่ 2026-08-26)
+
+**แหล่งความจริงเดียว:** `dashboard/roadmap.py` · **หน้าจอ:** `/owner/roadmap/` (superuser เท่านั้น คนอื่นได้ 404)
+
+1. **งานที่ไม่มีใน `roadmap.py` = งานนอกแผน ต้องถามเจ้าของก่อนลงมือ**
+2. ปิดงานเรื่องไหนเสร็จ **เปลี่ยน `status` เป็น `DONE` ในคอมมิตเดียวกับโค้ด** ห้ามค้างไว้ทำทีหลัง
+3. ขึ้นเฟสใหม่ต้องแก้ `CURRENT` ด้วย — เทส `dashboard.tests_roadmap` บังคับว่าต้องมีเฟส `IN_PROGRESS` เพียงเฟสเดียวเสมอ
+4. เรื่องที่ติดรอเจ้าของใส่ `DECISIONS` (ขึ้นกล่องแดงพร้อมนับวันที่ค้าง) · หนี้ทางเทคนิคใส่ `TECH_DEBT`
+5. สถานะเป็นสิ่งที่ **คนกำหนด** ไม่ใช่ระบบเดา — ตัวเลขจริงจาก DB แสดงคู่กันเพื่อเทียบว่า "แผนบอกเสร็จ" กับ "มีคนใช้จริงหรือยัง" ตรงกันไหม
+
+**มีของบังคับจริง 2 ชั้น ไม่ได้พึ่งความจำ:**
+
+| ชั้น | กลไก | ทำอะไร |
+|---|---|---|
+| กันตั้งแต่ต้นทาง | git hook `.githooks/pre-commit` | commit ที่แตะ `models.py` / `urls.py` / `migrations/` / `.claude/agents,skills/` แต่ไม่แตะ `roadmap.py` จะถูก **บล็อก** |
+| ให้เจ้าของจับได้เอง | แถบเตือนบนหน้า roadmap | แผนไม่ถูกแก้เกิน 7 วัน ขึ้นแถบแดง (`STALE_AFTER_DAYS`) |
+
+- **clone ใหม่ต้องสั่ง `git config core.hooksPath .githooks` หนึ่งครั้ง** ไม่งั้น hook ไม่ทำงาน
+- ข้าม hook ได้ด้วย `SKIP_ROADMAP_CHECK=1 git commit ...` — ใช้เฉพาะเวลาจำเป็นจริง ไม่ใช่เพื่อความเร็ว
+- รันเทส: `$env:USE_MYSQL="False"; venv\Scripts\python.exe manage.py test dashboard.tests_roadmap`
+  (ต้อง override เพราะ user `peyo` สร้าง test database บน MySQL ไม่ได้)
+
+> ระบบนี้ยกมาจากโปรเจกต์ StockProject (`MainProject/core/roadmap.py`) ตามที่เจ้าของสั่ง 26 ส.ค. 2569
 
 ---
 

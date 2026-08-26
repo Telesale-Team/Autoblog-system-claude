@@ -23,15 +23,18 @@ One-shot จาก topic → ได้ cover WebP พร้อม publish
 
 ```yaml
 article_title: "ชื่อบทความภาษาไทย"
+segment: "beauty_wellness"    # ⚠️ บังคับ — pose กับ mood มาจากตรงนี้ ไม่ต้องเลือกเอง
 primary_keyword: "ai chatbot ธุรกิจ"
 keyword_slug: "ai-chatbot-sme"
 hook:
   line1: "ธุรกิจคุณยังตอบช้าอยู่ไหม?"
   line2: "AI Chatbot ตอบแทนได้ 24 ชั่วโมง"
   line3: "ไม่ต้องจ้างพนักงานเพิ่ม"
-pose_category: "thinking"     # thinking | pointing | happy | serious | reading
-background_mood: "tech"       # tech | warm | clean | dark
 ```
+
+> `pose_category` กับ `background_mood` **เลิกรับเป็น input แล้ว** — ดึงจาก segment แทน
+> เดิมคนเรียกเลือกเอง ทำให้บทความกลุ่มเดียวกันได้ปกคนละอารมณ์ และไม่ตรงกับ diagram
+> ถ้าจำเป็นต้องฝืนท่าเป็นกรณีพิเศษ ให้ระบุ `pose_override:` พร้อมเหตุผล แล้วแจ้งผู้ใช้ด้วย
 
 ## ขั้นตอน
 
@@ -39,6 +42,22 @@ background_mood: "tech"       # tech | warm | clean | dark
 - อ่าน `memory/project_nudee_character_spec.md` ก่อนเสมอ
 - อ่าน `memory/feedback_cover_pose_hook.md` — Pose ต้องเชื่อมกับ hook
 - อ่าน `memory/feedback_cover_image_rules.md` — ห้ามมี stripe, ใช้ nudee_A_nobg.png, brand tag = "Noodee BootBiz"
+
+### Step 1.5: ดึง pose และ mood จาก segment (ทำก่อนยิง FLUX เสมอ)
+
+```python
+import sys; sys.path.insert(0, "scripts")
+from segment_profile import load_segment, cover_prompt, nudee_pose_prompt, BRAND_TAG
+
+seg = load_segment(segment)              # เช่น "beauty_wellness"
+bg_prompt = cover_prompt(seg, article_title)
+pose_desc = nudee_pose_prompt(seg)       # ต่อท้าย prompt base ใน character spec
+hook_style = seg["cover"]["hook_style"]  # ใช้ตรวจว่า hook ที่เขียนมาเข้าแนวกลุ่มนี้ไหม
+```
+
+**ยังต้องตรวจกฎ pose ↔ hook ด้วยตาอีกชั้น** — segment บอกท่าตั้งต้น แต่กฎเดิมยังอยู่:
+ท่าต้องล้อกับ hook ที่เขียนจริง ถ้า hook เป็นคำเตือนแต่ segment ให้ท่า `happy`
+ให้ทักผู้ใช้ก่อน อย่าปล่อยผ่าน (ดู `feedback_cover_pose_hook`)
 
 ### Step 2: Generate background ด้วย FLUX API
 ```python
@@ -49,7 +68,10 @@ load_dotenv()
 API_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 headers = {"Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}"}
 
-prompt = f"[background scene matching mood], no text, no characters, clean professional background for blog cover, {background_mood} style, navy blue and gold color palette"
+# ใช้ bg_prompt จาก Step 1.5 — อย่าประกอบ prompt เอง
+# cover_prompt() ใส่ "no text, no characters, no logos" ให้แล้ว
+# (ถ้าให้ FLUX วาดตัวหนังสือจะได้ตัวอักษรมั่ว และหนูดีจะผิดสเปก)
+payload = {"inputs": bg_prompt}
 ```
 
 ### Step 3: Composite ด้วย Pillow
@@ -98,6 +120,9 @@ Dimensions: 1200x630px
 - ❌ ลืมอ่าน nudee character spec → หนูดีออกมาผิด
 - ❌ มี stripe หรือ divider กลางภาพ
 - ❌ Hook ไม่เชื่อมกับ pose (เช่น pose "thinking" แต่ hook "ยินดีต้อนรับ")
+- ❌ **เลือก pose/mood เองโดยไม่ดู segment** — ทำให้ปกไม่ตรงกับ diagram ของบทความเดียวกัน
+- ❌ **ไม่ระบุ `segment`** — ถ้าไม่รู้ว่าบทความอยู่กลุ่มไหน ให้ถามก่อน อย่าเดา
+- ❌ ประกอบ prompt พื้นหลังเอง ทั้งที่ `cover_prompt()` ทำให้แล้ว
 - ❌ Brand tag ไม่ใช่ "Noodee BootBiz"
 - ❌ Export PNG แทน WebP
 - ❌ ขนาดเกิน 150KB

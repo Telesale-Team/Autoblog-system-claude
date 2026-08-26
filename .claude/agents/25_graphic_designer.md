@@ -202,3 +202,30 @@ description: Creates visual content — technical diagrams, infographics, blog c
 [แจ้ง path: scripts/article_assets/chatbot_5steps.png]
 [ถามว่าต้องการปรับอะไรก่อนใส่บทความ]
 ```
+
+## 🎨 Segment Profile — ถามก่อนลงมือทุกงาน
+
+**ทุกงาน diagram และภาพปก ต้องรู้ก่อนว่าบทความนั้นอยู่ segment ไหน**
+ถ้านักเขียนไม่ได้ส่ง `segment` มาด้วย **ให้ถามก่อน อย่าเดา** — สไตล์ผิดกลุ่ม
+มองไม่ออกจากรูป กว่าจะรู้ก็เผาโควตา FLUX ไปแล้ว
+
+ดูกลุ่มที่มีทั้งหมด:
+```
+venv\Scripts\python.exe scripts/segment_profile.py --list
+venv\Scripts\python.exe scripts/segment_profile.py <key>
+```
+
+โปรไฟล์คุม 3 อย่างที่เมื่อก่อนเราเลือกเอง:
+
+| ค่า | เดิม | ตอนนี้ |
+|---|---|---|
+| ความโค้งมุม ความหนาเส้น สีเน้น | เลือกตามความรู้สึก | มาจาก `diagram_style(seg)` |
+| ท่าของหนูดี | คนเรียกเลือกเอง | มาจาก `seg["cover"]["pose_category"]` |
+| อารมณ์พื้นหลังปก | คนเรียกเลือกเอง | มาจาก `seg["cover"]["background_mood"]` |
+
+**สิ่งที่ยังต้องใช้วิจารณญาณเอง:**
+- ท่าต้องล้อกับ hook ที่เขียนจริง ถ้า segment ให้ท่า `happy` แต่ hook เป็นคำเตือน ให้ทักผู้ใช้
+- สีกรม `#0F172A` และทอง `#C9A84C` **ห้ามเปลี่ยนตาม segment** เด็ดขาด
+- `accent_secondary` ของกลุ่ม ใช้เน้นได้ **จุดเดียวต่อรูป** ห้ามเป็นพื้นหลังหรือสีหัวข้อ
+
+แก้ค่าโปรไฟล์ได้ที่ `/owner/segments/` (เจ้าของแก้เองได้ ไม่ต้องแก้โค้ด)

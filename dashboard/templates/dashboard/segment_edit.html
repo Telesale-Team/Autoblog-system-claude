@@ -1,0 +1,434 @@
+{% extends "base.html" %}
+{% load static %}
+<!-- ===================================================================
+     SEGMENT PROFILE EDIT — แก้โปรไฟล์กลุ่มลูกค้าทีละกลุ่ม
+     URL: /owner/segments/<key>/
+     Model: marketing.models.SegmentProfile
+     Design: settings-hero + scard (Owner Dashboard Standard) + segments.css
+
+     ฟอร์มเดียว POST กลับมาที่ URL เดิม ชื่อ input ตรงกับชื่อฟิลด์ใน model ทุกตัว
+     เรียงตาม 5 มิติ มิติละหนึ่ง scard เพื่อให้คนแก้เห็นว่ากำลังแตะเรื่องอะไร
+     =================================================================== -->
+
+{% block title %}{{ p.name }} — โปรไฟล์กลุ่มลูกค้า{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'dashboard:segments' %}">โปรไฟล์กลุ่มลูกค้า</a></li>
+  <li class="breadcrumb-item active">{{ p.name }}</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" href="{% static 'css/segments.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- === Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-person-badge"></i></span>
+      {{ p.name }}
+    </h1>
+    <p class="settings-hero-sub">
+      <span class="sg-card-key">{{ p.key }}</span>
+      · เขียนโดย <b>{{ p.agent_slug }}</b>
+      · นามปากกา {{ p.pen_name|default:"—" }}
+      · แก้ล่าสุด {{ p.updated_at|date:"j M Y H:i" }}
+    </p>
+  </div>
+  <a href="{% url 'dashboard:segments' %}" class="ds-btn-outline">
+    <i class="bi bi-arrow-left"></i> กลับไปดูทุกกลุ่ม
+  </a>
+</div>
+
+<form method="post" action="{% url 'dashboard:segment_edit' p.key %}">
+  {% csrf_token %}
+  <div class="row g-4">
+
+    <!-- ================= ซ้าย: ฟอร์ม 5 มิติ ================= -->
+    <div class="col-lg-8">
+
+      <!-- === มิติ 1 — โทนการเขียน === -->
+      <div class="scard">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <span class="sg-dim-no">1</span>
+            <div>
+              <div class="sg-dim-title">โทนการเขียน</div>
+              <div class="sg-dim-sub">agent นักเขียนอ่านสองช่องนี้ก่อนพิมพ์ประโยคแรก</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="mb-3">
+            <label class="sg-label" for="f-tone">เขียนด้วยน้ำเสียงแบบไหน</label>
+            <textarea class="sg-textarea" id="f-tone" name="tone" rows="3"
+                      placeholder="เช่น อบอุ่น เป็นกันเอง เล่าจากประสบการณ์จริง ไม่ใช้ศัพท์เทคนิค">{{ p.tone }}</textarea>
+            <div class="sg-help">เขียนเป็นประโยคสั่ง ไม่ใช่คำคุณศัพท์ลอย ๆ — "เล่าเหมือนคุยกับเจ้าของร้าน" ใช้ได้ผลกว่า "เป็นมิตร"</div>
+          </div>
+          <div>
+            <label class="sg-label" for="f-reader">ผู้อ่านเป็นใคร</label>
+            <textarea class="sg-textarea" id="f-reader" name="reader" rows="3"
+                      placeholder="เช่น เจ้าของร้านนวด 1-3 สาขา ดูแลคิวเอง ไม่มีทีมไอที">{{ p.reader }}</textarea>
+            <div class="sg-help">ยิ่งระบุอาชีพ ขนาดกิจการ และสิ่งที่เขาไม่มี ยิ่งได้บทความที่ไม่ลอย</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === มิติ 2 — แหล่งค้นข้อมูล === -->
+      <div class="scard">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <span class="sg-dim-no">2</span>
+            <div>
+              <div class="sg-dim-title">แหล่งค้นข้อมูล</div>
+              <div class="sg-dim-sub">หนึ่งบรรทัดต่อหนึ่งแหล่ง — ห้ามแต่งตัวเลขเอง ต้องค้นจากของจริง</div>
+            </div>
+          </div>
+          <span class="sg-badge off" id="researchCount">0 แหล่ง</span>
+        </div>
+        <div class="scard-body">
+          <label class="sg-label" for="f-research">แหล่งและมุมที่ควรหา</label>
+          <textarea class="sg-textarea" id="f-research" name="research" rows="7"
+                    placeholder="กรมสนับสนุนบริการสุขภาพ — ข้อกำหนดการโฆษณาสถานพยาบาล&#10;สมาคมสปาไทย — ตัวเลขจำนวนร้านและอัตราการเติบโต">{{ p.research }}</textarea>
+          <div class="sg-help">บรรทัดว่างจะถูกตัดทิ้งอัตโนมัติตอนส่งให้ script</div>
+        </div>
+      </div>
+
+      <!-- === มิติ 3 — สไตล์ diagram === -->
+      <div class="scard">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <span class="sg-dim-no">3</span>
+            <div>
+              <div class="sg-dim-title">สไตล์ diagram</div>
+              <div class="sg-dim-sub">skill auto-diagram-generator อ่านสี่ค่านี้ไปวาด</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+
+          <div class="mb-4">
+            <label class="sg-label">รูปทรงของกล่องใน diagram</label>
+            <div class="sg-opts">
+              {% for val, label in shape_choices %}
+              <label class="sg-opt">
+                <input type="radio" name="shape" value="{{ val }}" {% if p.shape == val %}checked{% endif %}
+                       data-preview="shape">
+                <span class="sg-opt-box">
+                  <span class="sg-shape-demo" data-shape="{{ val }}"></span>
+                  <span class="sg-opt-label">{{ label }}</span>
+                </span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="sg-label" for="f-accent">สีรองของกลุ่มนี้</label>
+            <div class="sg-color-row">
+              <input type="color" class="sg-color-input" id="f-accent-picker" value="{{ p.accent_secondary }}">
+              <input type="text" class="sg-input sg-color-hex" id="f-accent" name="accent_secondary"
+                     value="{{ p.accent_secondary }}" maxlength="7" pattern="#[0-9A-Fa-f]{6}">
+              <span class="sg-help mb-0" style="max-width:300px;">
+                ใช้ได้แค่จุดเน้นเล็ก ๆ ใน diagram เช่นกล่องที่ต้องการชี้ — พื้นหลังและโครงยังเป็นกรมกับทองเสมอ
+              </span>
+            </div>
+            <div class="sg-color-warn" id="accentWarn">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              สีนี้ใกล้กับสีแบรนด์ (กรม #0F172A หรือ ทอง #C9A84C) มากเกินไป
+              คนอ่านจะแยกไม่ออกว่าอันไหนคือจุดเน้นของกลุ่ม ควรเลือกสีที่ต่างออกไปชัดเจน
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="sg-label">อารมณ์ของไอคอน</label>
+            <div class="sg-opts">
+              {% for val, label in icon_mood_choices %}
+              <label class="sg-opt">
+                <input type="radio" name="icon_mood" value="{{ val }}" {% if p.icon_mood == val %}checked{% endif %}>
+                <span class="sg-opt-box">
+                  {% if val == 'soft' %}<i class="bi bi-cloud"></i>
+                  {% elif val == 'clean' %}<i class="bi bi-circle"></i>
+                  {% elif val == 'technical' %}<i class="bi bi-cpu"></i>
+                  {% else %}<i class="bi bi-lightning-charge"></i>{% endif %}
+                  <span class="sg-opt-label">{{ label }}</span>
+                </span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div>
+            <label class="sg-label">ชนิด diagram ที่กลุ่มนี้ชอบ</label>
+            <div class="sg-opts">
+              {% for val, label in diagram_choices %}
+              <label class="sg-opt">
+                <input type="radio" name="prefer_diagram" value="{{ val }}" {% if p.prefer_diagram == val %}checked{% endif %}>
+                <span class="sg-opt-box">
+                  {% if val == 'concept' %}<i class="bi bi-diagram-3"></i>
+                  {% elif val == 'steps' %}<i class="bi bi-list-ol"></i>
+                  {% elif val == 'comparison' %}<i class="bi bi-table"></i>
+                  {% else %}<i class="bi bi-bar-chart"></i>{% endif %}
+                  <span class="sg-opt-label">{{ label }}</span>
+                </span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- === มิติ 4 — ภาพปก === -->
+      <div class="scard">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <span class="sg-dim-no">4</span>
+            <div>
+              <div class="sg-dim-title">ภาพปก</div>
+              <div class="sg-dim-sub">skill flux-cover-image อ่านสองค่านี้แทนที่จะให้คนเลือกเอง</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+
+          <div class="mb-4">
+            <label class="sg-label">ท่าของหนูดี</label>
+            <div class="sg-opts">
+              {% for val, label in pose_choices %}
+              <label class="sg-opt">
+                <input type="radio" name="cover_pose" value="{{ val }}" {% if p.cover_pose == val %}checked{% endif %}
+                       data-preview="pose">
+                <span class="sg-opt-box">
+                  {% if val == 'thinking' %}<i class="bi bi-lightbulb"></i>
+                  {% elif val == 'pointing' %}<i class="bi bi-hand-index"></i>
+                  {% elif val == 'happy' %}<i class="bi bi-emoji-smile"></i>
+                  {% elif val == 'serious' %}<i class="bi bi-briefcase"></i>
+                  {% else %}<i class="bi bi-book"></i>{% endif %}
+                  <span class="sg-opt-label">{{ label }}</span>
+                </span>
+              </label>
+              {% endfor %}
+            </div>
+            <div class="sg-help">
+              ท่านี้เป็นค่าตั้งต้นของกลุ่ม — กฎเดิมยังอยู่ ถ้า hook ของบทความนั้นเรียกท่าอื่น ให้ท่าล้อกับ hook ก่อน
+            </div>
+          </div>
+
+          <div>
+            <label class="sg-label">อารมณ์พื้นหลัง</label>
+            <div class="sg-opts">
+              {% for val, label in mood_choices %}
+              <label class="sg-opt">
+                <input type="radio" name="cover_mood" value="{{ val }}" {% if p.cover_mood == val %}checked{% endif %}
+                       data-preview="mood">
+                <span class="sg-opt-box">
+                  <span class="sg-mood-demo" data-mood="{{ val }}"></span>
+                  <span class="sg-opt-label">{{ label }}</span>
+                </span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- === มิติ 5 — รูปแบบ hook === -->
+      <div class="scard">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <span class="sg-dim-no">5</span>
+            <div>
+              <div class="sg-dim-title">รูปแบบ hook</div>
+              <div class="sg-dim-sub">สามบรรทัดแรกบนปก และประโยคเปิดบทความ ใช้แนวเดียวกันนี้</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <label class="sg-label" for="f-hook">hook ของกลุ่มนี้ควรเป็นแนวไหน</label>
+          <input type="text" class="sg-input" id="f-hook" name="hook_style" maxlength="200"
+                 value="{{ p.hook_style }}"
+                 placeholder="เช่น คำถามที่เจ้าของร้านเคยเจอกับตัว">
+          <div class="sg-help">บอกเป็น "ชนิดของ hook" ไม่ใช่ประโยค hook สำเร็จรูป จะได้ไม่ซ้ำกันทุกบทความ</div>
+        </div>
+      </div>
+
+      <!-- === ท้ายฟอร์ม — สถานะและบันทึกภายใน === -->
+      <div class="scard">
+        <div class="scard-header">
+          <div class="d-flex align-items-center gap-3">
+            <span class="scard-header-icon"><i class="bi bi-sliders"></i></span>
+            <div>
+              <div class="sg-dim-title">การใช้งานและบันทึก</div>
+              <div class="sg-dim-sub">ปิดกลุ่มไว้ได้ถ้ายังไม่พร้อมใช้ โดยไม่ต้องลบข้อมูล</div>
+            </div>
+          </div>
+        </div>
+        <div class="scard-body">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="f-active"
+                   name="is_active" {% if p.is_active %}checked{% endif %}>
+            <label class="form-check-label" for="f-active" style="font-size:.88rem;">
+              เปิดใช้กลุ่มนี้ — ถ้าปิด script จะข้ามกลุ่มนี้ไป
+            </label>
+          </div>
+          <label class="sg-label" for="f-notes">บันทึกเพิ่มเติม</label>
+          <textarea class="sg-textarea" id="f-notes" name="notes" rows="3"
+                    placeholder="เหตุผลที่ตั้งค่าแบบนี้ หรือสิ่งที่เคยลองแล้วไม่เวิร์ก">{{ p.notes }}</textarea>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 mb-4">
+        <button type="submit" class="ds-btn"><i class="bi bi-check-lg"></i> บันทึกโปรไฟล์</button>
+        <a href="{% url 'dashboard:segments' %}" class="ds-btn-outline">ยกเลิก</a>
+      </div>
+
+    </div>
+
+    <!-- ================= ขวา: พรีวิว + สลับกลุ่ม ================= -->
+    <div class="col-lg-4">
+      <div style="position:sticky;top:70px;">
+
+        <!-- === พรีวิวว่าตั้งค่านี้แล้วจะได้หน้าตาแบบไหน === -->
+        <div class="scard">
+          <div class="scard-header">
+            <div style="font-weight:700;font-size:.9rem;">ตั้งค่านี้แล้วจะได้แบบนี้</div>
+          </div>
+          <div class="scard-body">
+
+            <div class="sg-label">ภาพปก</div>
+            <div class="sg-preview-frame mb-3">
+              <div class="sg-preview-cover" id="prevCover" data-mood="{{ p.cover_mood }}">
+                <i class="bi bi-lightbulb" id="prevPose"></i>
+              </div>
+            </div>
+
+            <div class="sg-label">diagram</div>
+            <div class="sg-preview-frame mb-3" id="prevDiagramFrame">
+              <div class="sg-preview-diagram" id="prevDiagram" data-shape="{{ p.shape }}">
+                <span class="sg-preview-node">ปัญหา</span>
+                <span class="sg-preview-arrow"><i class="bi bi-arrow-right"></i></span>
+                <span class="sg-preview-node accent" id="prevAccentNode"
+                      style="--sg-accent: {{ p.accent_secondary }};">จุดเน้น</span>
+                <span class="sg-preview-arrow"><i class="bi bi-arrow-right"></i></span>
+                <span class="sg-preview-node gold">ผลลัพธ์</span>
+              </div>
+            </div>
+
+            <div class="sg-help mb-0">
+              กล่องกรมกับกล่องทองคือโครงที่ทุกกลุ่มใช้เหมือนกัน มีแค่กล่องกลางกล่องเดียวที่เป็นสีของกลุ่มนี้
+            </div>
+
+          </div>
+        </div>
+
+        <!-- === สลับไปแก้กลุ่มอื่น === -->
+        <div class="scard">
+          <div class="scard-header">
+            <div style="font-weight:700;font-size:.9rem;">กลุ่มอื่น</div>
+          </div>
+          <div class="scard-body" style="padding:.75rem;">
+            <div class="sg-nav">
+              {% for s in all_profiles %}
+              <a href="{% url 'dashboard:segment_edit' s.key %}"
+                 class="sg-nav-item {% if s.key == p.key %}active{% endif %}">
+                <span class="sg-dot" style="background:{{ s.accent_secondary }}"></span>
+                <span class="nm">{{ s.name }}</span>
+                {% if not s.is_active %}<span class="sg-badge off">ปิด</span>{% endif %}
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</form>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ── นับจำนวนแหล่งค้นข้อมูลจากบรรทัดที่ไม่ว่าง ให้ตรงกับที่ as_dict() ตัด ── */
+function countResearch() {
+  var raw = document.getElementById('f-research').value;
+  var n = raw.split('\n').filter(function (line) { return line.trim() !== ''; }).length;
+  document.getElementById('researchCount').textContent = n + ' แหล่ง';
+}
+
+/* ── สีรอง: ช่อง picker กับช่อง hex ต้องตามกันเสมอ ── */
+var picker = document.getElementById('f-accent-picker');
+var hexIn  = document.getElementById('f-accent');
+
+function applyAccent(hex) {
+  document.getElementById('prevAccentNode').style.setProperty('--sg-accent', hex);
+  checkAccentClash(hex);
+}
+
+/* ── เตือนเมื่อสีรองใกล้สีแบรนด์เกินไป วัดระยะแบบ euclidean บน RGB ── */
+function checkAccentClash(hex) {
+  var warn = document.getElementById('accentWarn');
+  var c = hexToRgb(hex);
+  if (!c) { warn.classList.remove('show'); return; }
+  var brand = [[15, 23, 42], [201, 168, 76]];   /* กรม, ทอง */
+  var tooClose = brand.some(function (b) {
+    var d = Math.sqrt(Math.pow(c[0] - b[0], 2) + Math.pow(c[1] - b[1], 2) + Math.pow(c[2] - b[2], 2));
+    return d < 70;
+  });
+  warn.classList.toggle('show', tooClose);
+}
+
+function hexToRgb(hex) {
+  var m = /^#([0-9a-f]{6})$/i.exec((hex || '').trim());
+  if (!m) return null;
+  var v = parseInt(m[1], 16);
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+}
+
+picker.addEventListener('input', function () {
+  hexIn.value = picker.value.toUpperCase();
+  applyAccent(picker.value);
+});
+hexIn.addEventListener('input', function () {
+  if (hexToRgb(hexIn.value)) { picker.value = hexIn.value; }
+  applyAccent(hexIn.value);
+});
+
+/* ── พรีวิวสด: รูปทรง ท่า และพื้นหลังปก ── */
+var POSE_ICON = {
+  thinking: 'bi-lightbulb',
+  pointing: 'bi-hand-index',
+  happy:    'bi-emoji-smile',
+  serious:  'bi-briefcase',
+  reading:  'bi-book'
+};
+
+document.querySelectorAll('input[data-preview]').forEach(function (input) {
+  input.addEventListener('change', function () {
+    var kind = input.getAttribute('data-preview');
+    if (kind === 'shape') {
+      document.getElementById('prevDiagram').setAttribute('data-shape', input.value);
+    } else if (kind === 'mood') {
+      document.getElementById('prevCover').setAttribute('data-mood', input.value);
+    } else if (kind === 'pose') {
+      document.getElementById('prevPose').className = 'bi ' + (POSE_ICON[input.value] || 'bi-lightbulb');
+    }
+  });
+});
+
+/* ── ตั้งค่าเริ่มต้นตอนโหลดหน้า ── */
+document.getElementById('f-research').addEventListener('input', countResearch);
+countResearch();
+applyAccent(hexIn.value);
+var checkedPose = document.querySelector('input[name="cover_pose"]:checked');
+if (checkedPose) {
+  document.getElementById('prevPose').className = 'bi ' + (POSE_ICON[checkedPose.value] || 'bi-lightbulb');
+}
+</script>
+{% endblock %}

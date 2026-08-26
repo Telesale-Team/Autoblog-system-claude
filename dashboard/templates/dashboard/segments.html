@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+<!-- ===================================================================
+     SEGMENT PROFILES — โปรไฟล์กลุ่มลูกค้า 5 มิติ (รายการ)
+     URL: /owner/segments/
+     Model: marketing.models.SegmentProfile
+     Design: settings-hero + scard (Owner Dashboard Standard) + segments.css
+
+     กติกาสีของหน้านี้
+       สีกรม #0F172A + ทอง #C9A84C เป็นเจ้าของโครงหน้าทั้งหมด
+       accent_secondary ของแต่ละ segment โผล่ได้แค่ แถบขอบซ้าย 4px กับจุดกลม
+       เพื่อให้อ่านออกทันทีว่าเป็นสีข้อมูล ไม่ใช่สีแบรนด์
+     =================================================================== -->
+
+{% block title %}โปรไฟล์กลุ่มลูกค้า — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">โปรไฟล์กลุ่มลูกค้า</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" href="{% static 'css/segments.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- === Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-people"></i></span>
+      โปรไฟล์กลุ่มลูกค้า
+    </h1>
+    <p class="settings-hero-sub">
+      แหล่งความจริงเดียวที่คุมโทนการเขียน สไตล์ diagram และภาพปกของทั้ง {{ profiles|length }} กลุ่ม
+    </p>
+  </div>
+  <a href="{% url 'dashboard:api_segment_profiles' %}" target="_blank" rel="noopener" class="ds-btn-outline">
+    <i class="bi bi-code-slash"></i> ดูข้อมูลที่ script ดึงไปใช้
+  </a>
+</div>
+
+<!-- === อธิบายว่าโปรไฟล์นี้ไปคุมอะไร + วินัยเรื่องสี === -->
+<div class="sg-intro">
+  <div class="sg-intro-head">โปรไฟล์นี้ถูกอ่านตอนไหน</div>
+  <div class="sg-intro-body">
+    ก่อน agent นักเขียนลงมือ ก่อน skill สร้าง diagram และก่อน generate ภาพปก
+    ทั้งสามอย่างอ่านค่าจากที่นี่ที่เดียว — แก้ตรงนี้ครั้งเดียวแล้วไปทางเดียวกันทั้งสาย
+    ไม่ต้องไปตามแก้ในไฟล์ agent ทีละตัวแล้วเพี้ยนกันทีหลัง
+    <br>
+    <b>สีกรมกับสีทองห้ามเปลี่ยน</b> — แต่ละกลุ่มปรับได้แค่ <b>สีรอง</b> รูปทรง และอารมณ์เท่านั้น
+    <div class="sg-ratio">
+      <span style="flex:6;background:#0F172A"></span>
+      <span style="flex:3;background:#C9A84C"></span>
+      <span style="flex:1;background:linear-gradient(90deg,#4A90A4,#A855F7)"></span>
+    </div>
+    <div class="sg-ratio-legend">
+      <span><i class="bi bi-circle-fill" style="color:#0F172A"></i> กรม — โครงสร้างหลัก</span>
+      <span><i class="bi bi-circle-fill" style="color:#C9A84C"></i> ทอง — จุดเน้นและปุ่ม</span>
+      <span><i class="bi bi-circle-fill" style="color:#A855F7"></i> สีรองของ segment — ไม่เกิน 10%</span>
+    </div>
+  </div>
+</div>
+
+<!-- === การ์ด 6 กลุ่ม — ทั้งใบคลิกเข้าไปแก้ ไม่มีปุ่ม Actions === -->
+<div class="sg-grid">
+  {% for p in profiles %}
+  <a class="sg-card {% if not p.is_active %}is-off{% endif %}"
+     style="--sg-accent: {{ p.accent_secondary }};"
+     href="{% url 'dashboard:segment_edit' p.key %}">
+
+    <div class="sg-card-top">
+      <div style="flex:1;min-width:0;">
+        <div class="sg-card-name">{{ p.name }}</div>
+        <div class="sg-card-pen">
+          นามปากกา {{ p.pen_name|default:"—" }}
+          {% if p.pronoun %}· แทนตัวว่า {{ p.pronoun }}{% endif %}
+        </div>
+      </div>
+      <span class="sg-badge {% if p.is_active %}on{% else %}off{% endif %}">
+        {% if p.is_active %}ใช้งานอยู่{% else %}ปิดอยู่{% endif %}
+      </span>
+    </div>
+
+    <div class="sg-card-tone">{{ p.tone|truncatechars:110 }}</div>
+
+    {% include "dashboard/_segment_chips.html" %}
+
+    {% if p.hook_style %}
+    <div class="sg-card-hook">hook: {{ p.hook_style|truncatechars:90 }}</div>
+    {% endif %}
+
+    <div class="sg-card-foot">
+      <span class="sg-card-key">{{ p.key }}</span>
+      <span>แก้ล่าสุด {{ p.updated_at|date:"j M y" }}</span>
+    </div>
+  </a>
+  {% empty %}
+  <div class="scard">
+    <div class="scard-body text-center" style="padding:2.5rem 1.5rem;">
+      <i class="bi bi-people" style="font-size:2rem;color:var(--bs-secondary-color)"></i>
+      <p class="mb-1 mt-3" style="font-weight:700">ยังไม่มีโปรไฟล์กลุ่มลูกค้า</p>
+      <p class="sg-help mb-0">
+        รันคำสั่ง <code>python manage.py seed_segment_profiles</code> เพื่อสร้าง 6 กลุ่มตั้งต้น
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- === ตารางเทียบข้ามกลุ่ม — ไว้จับว่ามีกลุ่มไหนตั้งค่าหลุดแนว === -->
+{% if profiles %}
+<div class="scard">
+  <div class="scard-header">
+    <div class="d-flex align-items-center gap-3">
+      <span class="scard-header-icon"><i class="bi bi-table"></i></span>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;">เทียบทั้ง {{ profiles|length }} กลุ่มในตารางเดียว</div>
+        <div class="sg-dim-sub">อ่านลงคอลัมน์เพื่อดูว่ามีกลุ่มไหนตั้งค่าหลุดจากพวก · คลิกที่แถวเพื่อเข้าไปแก้</div>
+      </div>
+    </div>
+  </div>
+  <div class="scard-body" style="padding:0;">
+    <div class="sg-table-scroll">
+      <table class="sg-table">
+        <thead>
+          <tr>
+            <th>กลุ่ม</th>
+            <th>ผู้อ่าน</th>
+            <th>สีรอง</th>
+            <th>รูปทรง</th>
+            <th>ไอคอน</th>
+            <th>diagram</th>
+            <th>ท่าปก</th>
+            <th>พื้นปก</th>
+            <th>แหล่งค้น</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in profiles %}
+          <tr style="cursor:pointer;" onclick="window.location='{% url 'dashboard:segment_edit' p.key %}'">
+            <td>
+              <div style="font-weight:700;">{{ p.name }}</div>
+              <div style="font-size:.72rem;color:var(--bs-secondary-color);">{{ p.pen_name }}</div>
+            </td>
+            <td style="max-width:220px;font-size:.8rem;color:var(--bs-secondary-color);">
+              {{ p.reader|truncatechars:60|default:"—" }}
+            </td>
+            <td>
+              <span class="d-inline-flex align-items-center gap-2">
+                <span class="sg-dot" style="background:{{ p.accent_secondary }}"></span>
+                <code class="sg-hex">{{ p.accent_secondary }}</code>
+              </span>
+            </td>
+            <td>
+              <span class="d-inline-flex align-items-center gap-2">
+                <span class="sg-shape-demo" data-shape="{{ p.shape }}"></span>
+                {{ p.get_shape_display|truncatechars:12 }}
+              </span>
+            </td>
+            <td>{{ p.get_icon_mood_display }}</td>
+            <td>{{ p.get_prefer_diagram_display }}</td>
+            <td>{{ p.get_cover_pose_display }}</td>
+            <td>
+              <span class="d-inline-flex align-items-center gap-2">
+                <span class="sg-mood-demo" data-mood="{{ p.cover_mood }}"></span>
+                {{ p.get_cover_mood_display }}
+              </span>
+            </td>
+            <td>{{ p.research_count }} แหล่ง</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

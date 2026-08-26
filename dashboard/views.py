@@ -17,7 +17,10 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
 
-from pages.models import ContactLead
+from pages.models import ContactLead, Service
+from crm.models import Customer
+from marketing.models import ContentBacklog
+from operations.models import AIProject, Deployment
 from blog.models import Article, Category, Tag
 from blog.forms import ArticleForm
 from portfolio.models import CaseStudy
@@ -2123,3 +2126,160 @@ def website_contact_save(request):
     site.save()
     messages.success(request, "บันทึกข้อมูล Contact แล้ว")
     return redirect("/owner/website-content/?tab=contact")
+
+
+# ── แผนพัฒนาระบบ (Roadmap) ──────────────────────────────────────────────
+# แหล่งความจริงเดียวคือ dashboard/roadmap.py — วิวนี้แค่เอาตัวเลขจริงจาก DB
+# มาแสดง "ควบคู่" กับสถานะที่คนกำหนดไว้ ไม่ได้เดาสถานะเอง
+@staff_member_required
+def roadmap_view(request):
+    from dashboard import roadmap as rm
+
+    # หน้านี้เป็นเครื่องมือฝั่งผู้พัฒนา คนอื่นไม่ควรรู้ด้วยซ้ำว่ามีอยู่ จึงคืน 404 ไม่ใช่ 403
+    if not request.user.is_superuser:
+        raise Http404
+
+    today = timezone.localdate()
+
+    # ตัวเลขจริงจากฐานข้อมูล ณ เวลาที่เปิดหน้า
+    cal_qs = CalendarEvent.objects.all()
+    cal_pending = cal_qs.filter(is_completed=False)
+    metrics = {
+        "articles": Article.objects.count(),
+        "articles_published": Article.objects.filter(status="published").count(),
+        "services": Service.objects.count(),
+        "leads": ContactLead.objects.count(),
+        "customers": Customer.objects.count(),
+        "python101": Article.objects.filter(category__slug="python-101").count(),
+        "backlog": ContentBacklog.objects.count(),
+        "queueflow_pages": 4,
+        "ai_projects": AIProject.objects.count(),
+        "deployments": Deployment.objects.count(),
+        "cal_total": cal_qs.count(),
+        "cal_pending": cal_pending.count(),
+        "cal_overdue": cal_pending.filter(start_datetime__date__lt=today).count(),
+    }
+
+    # จับคู่ item ในแผนกับงานในปฏิทิน เพื่อดูว่าสองที่พูดตรงกันไหม
+    calendar_hits = {}
+    for kw in rm.calendar_keywords():
+        matched = cal_qs.filter(title__icontains=kw)
+        calendar_hits[kw] = {
+            "total": matched.count(),
+            "done": matched.filter(is_completed=True).count(),
+        }
+
+    # งานค้างในปฏิทินที่เลยกำหนดแล้ว — ของจริงที่แผนยังไม่ได้รับรู้
+    overdue = list(
+        cal_pending.filter(start_datetime__date__lt=today).order_by("start_datetime")[:15]
+    )
+
+    context = {
+        "phases": rm.build_phases(metrics=metrics, calendar_hits=calendar_hits),
+        "progress": rm.overall_progress(),
+        "current": rm.CURRENT,
+        "current_phase": rm.current_phase(),
+        "decisions": rm.open_decisions(today),
+        "tech_debt": rm.TECH_DEBT,
+        "staleness": rm.staleness(today),
+        "cal_stats": {
+            "total": metrics["cal_total"],
+            "done": metrics["cal_total"] - metrics["cal_pending"],
+            "pending": metrics["cal_pending"],
+            "overdue": metrics["cal_overdue"],
+        },
+        "overdue_events": overdue,
+    }
+    return render(request, "dashboard/roadmap.html", context)
+
+
+# ── API: โปรไฟล์ 5 มิติต่อกลุ่มลูกค้า ────────────────────────────────────
+# script Pillow/FLUX และ agent อ่านจากที่นี่ ไม่ต้องรู้ว่าเก็บใน DB ยังไง
+# รูปแบบตรงกับ input ที่ SKILL.md ของ auto-diagram-generator / flux-cover-image ประกาศไว้
+@staff_member_required
+def api_segment_profiles(request, key=None):
+    from marketing.models import SegmentProfile
+
+    if key:
+        profile = get_object_or_404(SegmentProfile, key=key, is_active=True)
+        return JsonResponse(profile.as_dict())
+
+    profiles = SegmentProfile.objects.filter(is_active=True)
+    return JsonResponse({
+        "count": profiles.count(),
+        "profiles": [p.as_dict() for p in profiles],
+    })
+
+
+# ── โปรไฟล์กลุ่มลูกค้า (Segment Profile) ─────────────────────────────────
+# แหล่งความจริงเดียวที่คุมโทนการเขียน สไตล์ diagram และภาพปก ให้ไปทางเดียวกัน
+# ออกแบบหน้าจอโดย Frontend Designer (ลอย) 26 ส.ค. 2569
+@staff_member_required
+def segments_view(request):
+    from marketing.models import SegmentProfile
+
+    return render(request, "dashboard/segments.html", {
+        "profiles": SegmentProfile.objects.all(),
+    })
+
+
+# ค่าที่ยอมรับได้ของแต่ละช่องตัวเลือก — ตรวจฝั่งเซิร์ฟเวอร์ด้วย
+# ไม่เชื่อ pattern/radio ฝั่งหน้าจออย่างเดียว เพราะ POST ตรงมาเลยก็ได้
+HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
+
+
+@staff_member_required
+def segment_edit_view(request, key):
+    from marketing.models import SegmentProfile
+
+    profile = get_object_or_404(SegmentProfile, key=key)
+
+    # key กับ agent_slug ตั้งใจไม่ให้แก้จากหน้าจอ — script อ้างค่านี้อยู่
+    # ถ้าจำเป็นต้องเปลี่ยนจริงให้ทำผ่าน Django admin
+    CHOICE_FIELDS = {
+        "shape":          SegmentProfile.Shape,
+        "icon_mood":      SegmentProfile.IconMood,
+        "prefer_diagram": SegmentProfile.DiagramType,
+        "cover_pose":     SegmentProfile.Pose,
+        "cover_mood":     SegmentProfile.Mood,
+    }
+    TEXT_FIELDS = ["tone", "reader", "research", "hook_style", "notes"]
+
+    if request.method == "POST":
+        errors = []
+
+        for field in TEXT_FIELDS:
+            setattr(profile, field, request.POST.get(field, "").strip())
+
+        for field, choices in CHOICE_FIELDS.items():
+            value = request.POST.get(field, "")
+            if value in choices.values:
+                setattr(profile, field, value)
+            else:
+                errors.append("ค่าของ '%s' ไม่ถูกต้อง" % profile._meta.get_field(field).verbose_name)
+
+        accent = request.POST.get("accent_secondary", "").strip()
+        if HEX_COLOR_RE.match(accent):
+            profile.accent_secondary = accent.upper()
+        else:
+            errors.append("สีรองต้องเป็นรหัส hex 6 หลัก เช่น #E8B4B8")
+
+        profile.is_active = "is_active" in request.POST
+
+        if errors:
+            for message in errors:
+                messages.error(request, message)
+        else:
+            profile.save()
+            messages.success(request, "บันทึกโปรไฟล์ %s แล้ว" % profile.name)
+            return redirect("dashboard:segment_edit", key=profile.key)
+
+    return render(request, "dashboard/segment_edit.html", {
+        "p": profile,
+        "all_profiles": SegmentProfile.objects.all(),
+        "shape_choices": SegmentProfile.Shape.choices,
+        "icon_mood_choices": SegmentProfile.IconMood.choices,
+        "diagram_choices": SegmentProfile.DiagramType.choices,
+        "pose_choices": SegmentProfile.Pose.choices,
+        "mood_choices": SegmentProfile.Mood.choices,
+    })

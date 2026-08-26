@@ -29,7 +29,7 @@ urlpatterns = [
     path("docs/<slug:slug>/", views.docs_view, name="docs_view"),
     path("docs/<slug:slug>/content/", views.docs_content, name="docs_content"),
     # legacy coming-soon routes (keep for backward compat)
-    path("projects/", views.coming_soon, name="projects"),
+    path("projects/", views.redirect_to("operations:monitor"), name="projects"),
     path("loi/", views.coming_soon, name="loi"),
     path("retail/", views.coming_soon, name="retail"),
     path("gap/", views.coming_soon, name="gap"),
@@ -62,6 +62,11 @@ urlpatterns = [
     path("content-calendar/", views.redirect_to("dashboard:blog"), name="content_calendar"),
     # Frontend Designer
     path("design-system/",    views.design_system_view, name="design_system"),
+    path("roadmap/",          views.roadmap_view,       name="roadmap"),
+    path("segments/",                          views.segments_view,        name="segments"),
+    path("segments/<slug:key>/",               views.segment_edit_view,    name="segment_edit"),
+    path("api/segment-profiles/",              views.api_segment_profiles, name="api_segment_profiles"),
+    path("api/segment-profiles/<slug:key>/",   views.api_segment_profiles, name="api_segment_profile_detail"),
     # Website Content Manager
     path("website-content/",                         views.website_content_view,    name="website_content"),
     path("blog/category/add/",                          views.blog_category_add,       name="blog_category_add"),
