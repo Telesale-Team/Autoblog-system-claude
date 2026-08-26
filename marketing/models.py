@@ -337,3 +337,143 @@ class SegmentProfile(models.Model):
                 "hook_style": self.hook_style,
             },
         }
+
+
+# === AI-SLOP PATTERN ========================================================
+# รายการคำและรูปประโยคที่ทำให้บทความ "อ่านออกว่า AI เขียน"
+#
+# ที่มาแนวคิด: content-ops/experts/humanizer.md ของ ai-marketing-skills (MIT)
+# แต่ของเขาเป็นภาษาอังกฤษล้วน (delve, tapestry, seamless) ใช้กับบทความไทยไม่ได้เลย
+# รายการนี้จึงรวบรวมขึ้นใหม่สำหรับภาษาไทยโดยเฉพาะ
+#
+# ทำไมเก็บใน DB: รายการนี้ต้องโตขึ้นเรื่อย ๆ จากของจริงที่เจอ
+# ถ้าฝังในโค้ดหรือใน prompt จะไม่มีใครเพิ่ม เพราะต้องแก้ไฟล์แล้ว deploy
+
+class SlopPattern(models.Model):
+
+    class Kind(models.TextChoices):
+        WORD      = "word",      "คำต้องห้าม"
+        PHRASE    = "phrase",    "วลีสำเร็จรูป"
+        STRUCTURE = "structure", "รูปประโยค/โครงสร้าง"
+        CLAIM     = "claim",     "การอ้างลอย ๆ"
+
+    class Severity(models.IntegerChoices):
+        LIGHT  = 3,  "เบา (-3)"
+        MEDIUM = 5,  "กลาง (-5)"
+        HEAVY  = 8,  "หนัก (-8)"
+        FATAL  = 10, "ร้ายแรง (-10)"
+
+    pattern     = models.CharField("คำ/วลีที่จับ", max_length=200,
+                                   help_text="ข้อความที่ค้นหาตรง ๆ ในบทความ")
+    kind        = models.CharField("ชนิด", max_length=15, choices=Kind.choices, default=Kind.PHRASE)
+    penalty     = models.IntegerField("คะแนนที่หัก", choices=Severity.choices, default=Severity.MEDIUM)
+    why         = models.TextField("ทำไมถึงไม่ดี",
+                                   help_text="อธิบายให้นักเขียนเข้าใจ ไม่ใช่แค่บอกว่าห้าม")
+    fix         = models.TextField("ควรเขียนแทนว่าอย่างไร", blank=True)
+    example_bad = models.TextField("ตัวอย่างที่ไม่ดี", blank=True)
+    example_ok  = models.TextField("ตัวอย่างที่แก้แล้ว", blank=True)
+    is_active   = models.BooleanField("ใช้งานอยู่", default=True)
+    hit_count   = models.IntegerField("เจอมาแล้วกี่ครั้ง", default=0,
+                                      help_text="ระบบนับให้เอง ใช้ดูว่าอันไหนเป็นปัญหาจริง")
+    created_at  = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "AI-Slop Pattern"
+        verbose_name_plural = "AI-Slop Patterns (ไทย)"
+        ordering = ["-penalty", "pattern"]
+
+    def __str__(self):
+        return self.pattern
+
+
+# === CONTENT SCORE ==========================================================
+# คะแนนคุณภาพบทความจากคณะกรรมการผู้เชี่ยวชาญ
+#
+# ที่มาแนวคิด: content-ops/SKILL.md (Expert Panel) ของ ai-marketing-skills
+# เก็บ "ทุกรอบ" ไม่ใช่แค่รอบสุดท้าย เพราะเส้นทางการแก้คือของมีค่า
+# ถ้าเก็บแค่คะแนนสุดท้ายจะไม่มีใครรู้ว่าแก้อะไรไปบ้างและทำไม
+
+class ContentScore(models.Model):
+
+    class Status(models.TextChoices):
+        RUNNING    = "running",    "กำลังให้คะแนน"
+        PASSED     = "passed",     "ผ่าน (90+)"
+        NEEDS_WORK = "needs_work", "ยังไม่ผ่าน"
+
+    PASS_MARK = 90          # เกณฑ์ผ่าน ตามที่ Expert Panel ต้นทางใช้
+    MAX_ROUNDS = 3          # วนแก้ได้สูงสุดกี่รอบ
+
+    article      = models.ForeignKey(Article, on_delete=models.CASCADE,
+                                     related_name="scores", verbose_name="บทความ")
+    segment      = models.ForeignKey(SegmentProfile, on_delete=models.SET_NULL,
+                                     null=True, blank=True, related_name="scores",
+                                     verbose_name="กลุ่มลูกค้า")
+    rubric       = models.CharField("เกณฑ์ที่ใช้", max_length=30, default="content-quality")
+    aggregate    = models.IntegerField("คะแนนรวม (ถ่วงน้ำหนักแล้ว)", default=0)
+    rounds       = models.IntegerField("จำนวนรอบที่วน", default=0)
+    status       = models.CharField("สถานะ", max_length=15,
+                                    choices=Status.choices, default=Status.RUNNING)
+    panel        = models.TextField("รายชื่อคณะกรรมการ", blank=True,
+                                    help_text="หนึ่งบรรทัดต่อหนึ่งคน")
+    weaknesses   = models.TextField("จุดอ่อนที่เหลืออยู่", blank=True)
+    slop_hits    = models.TextField("AI-slop ที่เจอ", blank=True)
+    approved_by  = models.ForeignKey("auth.User", on_delete=models.SET_NULL, null=True, blank=True,
+                                     related_name="approved_scores", verbose_name="ผู้อนุมัติ")
+    approved_at  = models.DateTimeField("อนุมัติเมื่อ", null=True, blank=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Content Score"
+        verbose_name_plural = "Content Scores"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return "%s — %s/100" % (self.article.title[:40], self.aggregate)
+
+    @property
+    def is_passed(self):
+        return self.aggregate >= self.PASS_MARK
+
+    @property
+    def is_approved(self):
+        """ผ่านเกณฑ์ยังไม่พอ ต้องมีคนกดอนุมัติด้วย
+
+        คะแนนบอกว่า 'ดีพอ' แต่การอนุมัติบอกว่า 'เจ้าของยอมให้เผยแพร่'
+        สองอย่างนี้ไม่ใช่เรื่องเดียวกัน
+        """
+        return self.approved_at is not None
+
+    def recalculate(self):
+        """คิดคะแนนรวมใหม่จากกรรมการทุกคนในรอบล่าสุด (ถ่วงน้ำหนักแล้ว)"""
+        latest = self.expert_scores.filter(round_no=self.rounds)
+        total_weight = sum(e.weight for e in latest)
+        if not total_weight:
+            self.aggregate = 0
+        else:
+            self.aggregate = round(
+                sum(e.score * e.weight for e in latest) / total_weight)
+        self.status = self.Status.PASSED if self.is_passed else self.Status.NEEDS_WORK
+        return self.aggregate
+
+
+class ExpertScore(models.Model):
+    """คะแนนรายคนต่อรอบ — ตัวตรวจ AI-slop ถ่วงน้ำหนัก 1.5 เท่าตามต้นทาง"""
+
+    HUMANIZER_WEIGHT = 1.5
+
+    content_score = models.ForeignKey(ContentScore, on_delete=models.CASCADE,
+                                      related_name="expert_scores")
+    round_no      = models.IntegerField("รอบที่", default=1)
+    expert        = models.CharField("ผู้เชี่ยวชาญ", max_length=100)
+    lens          = models.CharField("มองจากมุมไหน", max_length=200, blank=True)
+    score         = models.IntegerField("คะแนน 0-100", default=0)
+    weight        = models.FloatField("น้ำหนัก", default=1.0)
+    feedback      = models.TextField("เหตุผล", blank=True)
+
+    class Meta:
+        verbose_name = "Expert Score"
+        verbose_name_plural = "Expert Scores"
+        ordering = ["round_no", "-weight", "expert"]
+
+    def __str__(self):
+        return "รอบ %s · %s · %s" % (self.round_no, self.expert, self.score)

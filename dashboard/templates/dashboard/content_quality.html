@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% load static %}
+<!-- ===================================================================
+     CONTENT QUALITY — รายการบทความที่ตรวจคะแนนแล้ว
+     URL: /owner/content-quality/
+     Model: marketing.models.ContentScore
+     Design: settings-hero + scard (Owner Dashboard Standard) + content-quality.css
+
+     สิ่งที่หน้านี้ต้องทำให้ได้ก่อนเรื่องอื่นทั้งหมด
+       แยกให้ขาดว่า "คะแนนถึง 90" กับ "เจ้าของกดอนุมัติ" เป็นคนละด่าน
+       บทความ 95 คะแนนที่ยังไม่มีใครกดอนุมัติ = ยังเผยแพร่ไม่ได้
+       จึงมีคอลัมน์สถานะสองคอลัมน์แยกกัน และมีคิว "รออนุมัติ" อยู่บนสุด
+
+     กติกาสี
+       เขียว = ด่านคะแนน (เครื่องตัดสิน)
+       ทอง   = ด่านอนุมัติ (คนตัดสิน — สีแบรนด์สงวนให้การกระทำของคน)
+       ส้ม    = ผ่านคะแนนแล้วแต่ค้างรออนุมัติ คือคิวงานที่ต้องแตะ
+     =================================================================== -->
+
+{% block title %}คะแนนคุณภาพบทความ — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">คะแนนคุณภาพบทความ</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" href="{% static 'css/content-quality.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- === Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-patch-check"></i></span>
+      คะแนนคุณภาพบทความ
+    </h1>
+    <p class="settings-hero-sub">
+      ผลตรวจจากคณะกรรมการผู้เชี่ยวชาญ {{ total }} ครั้ง · เกณฑ์ผ่านอยู่ที่ {{ pass_mark }} คะแนน
+    </p>
+  </div>
+  <a href="{% url 'dashboard:slop_patterns' %}" class="ds-btn-outline">
+    <i class="bi bi-slash-circle"></i> คลังคำ AI-slop
+  </a>
+</div>
+
+<!-- === สองด่าน — อธิบายหัวใจของหน้านี้ก่อนให้ดูตัวเลขใด ๆ === -->
+<div class="cq-gates">
+  <div class="cq-gate machine">
+    <div class="cq-gate-no">ด่านที่ 1 · เครื่องตัดสิน</div>
+    <div class="cq-gate-title">คะแนนรวมถึง {{ pass_mark }} หรือยัง</div>
+    <div class="cq-gate-body">
+      คณะกรรมการให้คะแนนคนละมุม ถ่วงน้ำหนักแล้วรวมเป็นคะแนนเดียว
+      ตัวตรวจ AI-slop นับหนัก <b>1.5 เท่า</b> ของกรรมการคนอื่น
+      ด่านนี้บอกได้แค่ว่างานชิ้นนี้ <b>ดีพอในเชิงเทคนิค</b>
+    </div>
+  </div>
+  <div class="cq-gate-and">
+    <i class="bi bi-plus-lg"></i>
+    <span>ต้องผ่าน</span>
+    <span>ทั้งสองด่าน</span>
+  </div>
+  <div class="cq-gate human">
+    <div class="cq-gate-no">ด่านที่ 2 · คนตัดสิน</div>
+    <div class="cq-gate-title">เจ้าของกดอนุมัติแล้วหรือยัง</div>
+    <div class="cq-gate-body">
+      ได้ 95 คะแนนก็ยัง <b>เผยแพร่ไม่ได้</b> ถ้ายังไม่มีใครกดอนุมัติ
+      คะแนนบอกว่า "ดีพอ" การอนุมัติบอกว่า "ยอมให้ออกในชื่อเรา"
+      สองอย่างนี้ไม่ใช่เรื่องเดียวกัน
+    </div>
+  </div>
+</div>
+
+<!-- === ตัวเลขสรุป 4 ช่อง — ช่อง "รออนุมัติ" คือช่องที่ต้องมองก่อน === -->
+<div class="cq-stats">
+  <div class="cq-stat is-wait">
+    <div class="cq-stat-num">{{ stat_awaiting }}</div>
+    <div class="cq-stat-label">รออนุมัติ</div>
+    <div class="cq-stat-note">คะแนนผ่านแล้ว ค้างอยู่ที่คุณคนเดียว</div>
+  </div>
+  <div class="cq-stat is-done">
+    <div class="cq-stat-num">{{ stat_approved }}</div>
+    <div class="cq-stat-label">อนุมัติแล้ว</div>
+    <div class="cq-stat-note">ผ่านครบสองด่าน เผยแพร่ได้</div>
+  </div>
+  <div class="cq-stat is-fail">
+    <div class="cq-stat-num">{{ stat_needs_work }}</div>
+    <div class="cq-stat-label">ยังไม่ผ่านเกณฑ์</div>
+    <div class="cq-stat-note">ต่ำกว่า {{ pass_mark }} ต้องวนแก้อีกรอบ</div>
+  </div>
+  <div class="cq-stat">
+    <div class="cq-stat-num">{{ stat_running }}</div>
+    <div class="cq-stat-label">กำลังให้คะแนน</div>
+    <div class="cq-stat-note">กรรมการยังตรวจไม่ครบ</div>
+  </div>
+</div>
+
+<!-- === คิวรออนุมัติ — ดึงขึ้นมาข้างบนเพราะเป็นงานเดียวที่ค้างที่คน === -->
+{% if awaiting_list %}
+<div class="cq-queue">
+  <div class="cq-queue-head">
+    <i class="bi bi-hourglass-split"></i>
+    ผ่านคะแนนแล้ว รอคุณกดอนุมัติ {{ stat_awaiting }} เรื่อง
+  </div>
+  <div class="cq-queue-list">
+    {% for s in awaiting_list %}
+    <a class="cq-queue-item" href="{% url 'dashboard:content_quality_detail' s.pk %}">
+      <span class="cq-badge passed"><i class="bi bi-check-lg"></i>{{ s.aggregate }}</span>
+      <span class="nm">{{ s.article.title }}</span>
+      <span style="font-size:.74rem;color:var(--bs-secondary-color)">ตรวจเมื่อ {{ s.created_at|date:"j M y" }}</span>
+      <i class="bi bi-chevron-right" style="font-size:.75rem;color:var(--bs-secondary-color)"></i>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- === ตารางผลตรวจทั้งหมด — คลิกทั้งแถว ไม่มีคอลัมน์ปุ่ม === -->
+<div class="scard">
+  <div class="scard-header">
+    <div class="d-flex align-items-center gap-3">
+      <span class="scard-header-icon"><i class="bi bi-list-check"></i></span>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;">ผลตรวจทั้งหมด</div>
+        <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-top:.1rem;">
+          ขีดสีเข้มบนแถบคะแนนคือเส้น {{ pass_mark }} · คลิกที่แถวเพื่อดูเส้นทางคะแนนทุกรอบ
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="?f=all"        class="{% if current_filter == 'all' %}ds-btn{% else %}ds-btn-outline{% endif %}">ทั้งหมด</a>
+      <a href="?f=awaiting"   class="{% if current_filter == 'awaiting' %}ds-btn{% else %}ds-btn-outline{% endif %}">รออนุมัติ</a>
+      <a href="?f=needs_work" class="{% if current_filter == 'needs_work' %}ds-btn{% else %}ds-btn-outline{% endif %}">ยังไม่ผ่าน</a>
+      <a href="?f=approved"   class="{% if current_filter == 'approved' %}ds-btn{% else %}ds-btn-outline{% endif %}">อนุมัติแล้ว</a>
+    </div>
+  </div>
+  <div class="scard-body" style="padding:0;">
+    <div class="cq-table-scroll">
+      <table class="cq-table">
+        <thead>
+          <tr>
+            <th style="min-width:260px;">บทความ</th>
+            <th style="min-width:160px;">คะแนนรวม</th>
+            <th>ด่าน 1 คะแนน</th>
+            <th>ด่าน 2 อนุมัติ</th>
+            <th>รอบที่วน</th>
+            <th>กลุ่มลูกค้า</th>
+            <th>ตรวจเมื่อ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in scores %}
+          <tr class="{% if s.is_passed and not s.is_approved %}is-waiting{% endif %}"
+              onclick="window.location='{% url 'dashboard:content_quality_detail' s.pk %}'">
+
+            <td>
+              <div class="cq-title">{{ s.article.title|truncatechars:70 }}</div>
+              <div class="cq-sub">
+                เกณฑ์ {{ s.rubric }}
+                {% if s.article.status %}· บทความสถานะ {{ s.article.get_status_display|default:s.article.status }}{% endif %}
+              </div>
+            </td>
+
+            <!-- แถบคะแนนพร้อมขีดเกณฑ์ อ่านเร็วกว่าตัวเลขเปล่า -->
+            <td>
+              <div class="cq-score {% if s.status == 'running' %}run{% elif s.is_passed %}pass{% else %}fail{% endif %}">
+                <span class="cq-score-num">{{ s.aggregate }}</span>
+                <span class="cq-score-track">
+                  <span class="cq-score-fill" style="width: {{ s.aggregate }}%"></span>
+                  <span class="cq-score-mark"></span>
+                </span>
+              </div>
+            </td>
+
+            <td>
+              {% if s.status == 'running' %}
+                <span class="cq-badge running"><i class="bi bi-three-dots"></i>กำลังตรวจ</span>
+              {% elif s.is_passed %}
+                <span class="cq-badge passed"><i class="bi bi-check-circle-fill"></i>ผ่าน {{ pass_mark }}</span>
+              {% else %}
+                <span class="cq-badge failed"><i class="bi bi-x-circle-fill"></i>ยังไม่ผ่าน</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if s.is_approved %}
+                <span class="cq-badge approved"><i class="bi bi-patch-check-fill"></i>อนุมัติแล้ว</span>
+                <div class="cq-sub">{{ s.approved_by.get_full_name|default:s.approved_by.username|default:"—" }} · {{ s.approved_at|date:"j M y" }}</div>
+              {% elif s.is_passed %}
+                <span class="cq-badge waiting"><i class="bi bi-hourglass-split"></i>รอคุณกด</span>
+              {% else %}
+                <span style="font-size:.78rem;color:var(--bs-secondary-color);">ยังไม่ถึงคิว</span>
+              {% endif %}
+            </td>
+
+            <!-- จุดกลม 3 จุด = เพดาน 3 รอบ ติดทองเท่าจำนวนรอบที่ใช้ไป -->
+            <td>
+              <span class="cq-rounds" title="วนแก้ไปแล้ว {{ s.rounds }} จาก {{ max_rounds }} รอบ">
+                {% for n in round_slots %}
+                  <i class="bi bi-circle-fill {% if n <= s.rounds %}on{% endif %}"></i>
+                {% endfor %}
+                <span style="font-size:.76rem;margin-left:.3rem;color:var(--bs-secondary-color);">{{ s.rounds }}/{{ max_rounds }}</span>
+              </span>
+            </td>
+
+            <td style="font-size:.82rem;color:var(--bs-secondary-color);">
+              {{ s.segment.name|default:"—" }}
+            </td>
+
+            <td style="font-size:.8rem;color:var(--bs-secondary-color);white-space:nowrap;">
+              {{ s.created_at|date:"j M y" }}
+            </td>
+          </tr>
+          {% empty %}
+          <tr style="cursor:default;">
+            <td colspan="7" style="padding:2.5rem 1.5rem;text-align:center;">
+              <i class="bi bi-clipboard-check" style="font-size:2rem;color:var(--bs-secondary-color)"></i>
+              <p class="mb-1 mt-3" style="font-weight:700">ยังไม่มีผลตรวจในเงื่อนไขนี้</p>
+              <p style="font-size:.8rem;color:var(--bs-secondary-color);margin:0;">
+                ผลตรวจจะถูกบันทึกอัตโนมัติเมื่อ agent ตรวจคุณภาพบทความเสร็จหนึ่งรอบ
+              </p>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

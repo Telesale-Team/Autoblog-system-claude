@@ -16,14 +16,26 @@ from dashboard import roadmap as rm
 class RoadmapDataTests(TestCase):
     """ตรวจความสมเหตุสมผลของข้อมูลในไฟล์แผน"""
 
-    def test_exactly_one_phase_in_progress(self):
+    def test_never_more_than_one_phase_in_progress(self):
         # ถ้าทำหลายเฟสพร้อมกัน แปลว่าไม่มีใครรู้จริงว่าตอนนี้โฟกัสอะไร
         running = [p for p in rm.PHASES if p['status'] == rm.IN_PROGRESS]
-        self.assertEqual(
+        self.assertLessEqual(
             len(running), 1,
-            'ต้องมีเฟสที่กำลังทำเพียงเฟสเดียว แต่ตอนนี้มี %d เฟส: %s'
+            'ทำได้ทีละเฟส แต่ตอนนี้มี %d เฟสที่กำลังทำ: %s'
             % (len(running), [p['no'] for p in running]),
         )
+
+    def test_unfinished_project_must_have_a_phase_in_progress(self):
+        # มีเฟสที่ยังไม่ปิด แต่ไม่มีเฟสไหนกำลังทำ = แผนหยุดนิ่งโดยไม่มีใครรู้
+        # ยกเว้นกรณีเดียวคือทุกเฟสปิดหมดแล้ว ซึ่งแปลว่าไม่มีอะไรให้ทำจริง ๆ
+        unfinished = [p for p in rm.PHASES if p['status'] not in rm.COMPLETED_STATUSES]
+        running = [p for p in rm.PHASES if p['status'] == rm.IN_PROGRESS]
+        if unfinished:
+            self.assertEqual(
+                len(running), 1,
+                'ยังมีเฟสที่ไม่ปิด %s แต่ไม่มีเฟสไหนกำลังทำ'
+                % [p['no'] for p in unfinished],
+            )
 
     def test_current_points_to_a_real_phase(self):
         self.assertIsNotNone(
@@ -31,13 +43,22 @@ class RoadmapDataTests(TestCase):
             'CURRENT ชี้ไปที่เฟส %s ซึ่งไม่มีอยู่ใน PHASES' % rm.CURRENT['phase'],
         )
 
-    def test_current_phase_is_the_in_progress_one(self):
-        phase = rm.current_phase()
-        self.assertEqual(
-            phase['status'], rm.IN_PROGRESS,
-            'CURRENT ชี้ไปเฟส %s แต่เฟสนั้นสถานะเป็น %s ไม่ใช่ in_progress'
-            % (phase['no'], phase['status']),
-        )
+    def test_current_phase_matches_the_in_progress_one(self):
+        # ถ้ามีเฟสที่กำลังทำ CURRENT ต้องชี้ไปที่เฟสนั้น ไม่ใช่เฟสอื่น
+        running = [p for p in rm.PHASES if p['status'] == rm.IN_PROGRESS]
+        if running:
+            self.assertEqual(
+                rm.CURRENT['phase'], running[0]['no'],
+                'CURRENT ชี้เฟส %s แต่เฟสที่กำลังทำจริงคือเฟส %s'
+                % (rm.CURRENT['phase'], running[0]['no']),
+            )
+
+    def test_finished_project_still_reports_remaining_items(self):
+        # ปิดครบทุกเฟสไม่ได้แปลว่าไม่เหลืองาน — เรื่องที่ค้างในเฟสที่ปิดแล้ว
+        # ต้องยังนับอยู่ ไม่งั้นหน้าจอจะบอกว่าเสร็จหมดทั้งที่ยังมีของค้าง
+        progress = rm.overall_progress()
+        if progress['remaining']:
+            self.assertLess(progress['percent'], 100)
 
     def test_phase_numbers_are_unique_and_ordered(self):
         numbers = [p['no'] for p in rm.PHASES]

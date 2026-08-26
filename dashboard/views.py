@@ -2283,3 +2283,191 @@ def segment_edit_view(request, key):
         "pose_choices": SegmentProfile.Pose.choices,
         "mood_choices": SegmentProfile.Mood.choices,
     })
+
+
+# ── คะแนนคุณภาพบทความ ───────────────────────────────────────────────────
+# ด่านตรวจก่อนเผยแพร่ ออกแบบหน้าจอโดย Frontend Designer (ลอย) 26 ส.ค. 2569
+#
+# กติกาที่ทั้งหน้าจอและวิวนี้ยึด: "คะแนนผ่าน" กับ "เจ้าของอนุมัติ" เป็นคนละเรื่องกัน
+# คะแนนบอกว่างานดีพอ การอนุมัติบอกว่ายอมให้ออกในชื่อเรา ระบบจะรวมสองอย่างนี้ไม่ได้
+def _round_aggregate(experts):
+    """คิดคะแนนถ่วงน้ำหนักของรอบเดียว — สูตรเดียวกับ ContentScore.recalculate()"""
+    total_weight = sum(e.weight for e in experts)
+    if not total_weight:
+        return 0
+    return round(sum(e.score * e.weight for e in experts) / total_weight)
+
+
+@staff_member_required
+def content_quality_view(request):
+    from marketing.models import ContentScore
+
+    base = ContentScore.objects.select_related("article", "segment", "approved_by")
+    graded = base.exclude(status=ContentScore.Status.RUNNING)
+
+    stat_awaiting = base.filter(aggregate__gte=ContentScore.PASS_MARK,
+                                approved_at__isnull=True).count()
+    stat_approved = base.filter(approved_at__isnull=False).count()
+    stat_needs_work = graded.filter(aggregate__lt=ContentScore.PASS_MARK).count()
+    stat_running = base.filter(status=ContentScore.Status.RUNNING).count()
+
+    current_filter = request.GET.get("f", "all")
+    scores = base
+    if current_filter == "awaiting":
+        scores = base.filter(aggregate__gte=ContentScore.PASS_MARK, approved_at__isnull=True)
+    elif current_filter == "needs_work":
+        scores = graded.filter(aggregate__lt=ContentScore.PASS_MARK)
+    elif current_filter == "approved":
+        scores = base.filter(approved_at__isnull=False)
+
+    return render(request, "dashboard/content_quality.html", {
+        "scores": scores.order_by("-created_at"),
+        "total": base.count(),
+        "stat_awaiting": stat_awaiting,
+        "stat_approved": stat_approved,
+        "stat_needs_work": stat_needs_work,
+        "stat_running": stat_running,
+        "awaiting_list": base.filter(aggregate__gte=ContentScore.PASS_MARK,
+                                     approved_at__isnull=True)[:5],
+        "pass_mark": ContentScore.PASS_MARK,
+        "max_rounds": ContentScore.MAX_ROUNDS,
+        "round_slots": range(1, ContentScore.MAX_ROUNDS + 1),
+        "current_filter": current_filter,
+    })
+
+
+@staff_member_required
+def content_quality_detail_view(request, pk):
+    from marketing.models import ContentScore
+
+    score = get_object_or_404(
+        ContentScore.objects.select_related("article", "segment", "approved_by"), pk=pk)
+
+    # คิดคะแนนรายรอบให้เสร็จที่นี่ ไม่ให้ template คิดเลข
+    all_experts = list(score.expert_scores.all())
+    round_numbers = sorted({e.round_no for e in all_experts})
+    rounds_data, previous = [], None
+    for i, number in enumerate(round_numbers):
+        experts = [e for e in all_experts if e.round_no == number]
+        experts.sort(key=lambda e: (-e.weight, e.expert))
+        aggregate = _round_aggregate(experts)
+        rounds_data.append({
+            "round_no": number,
+            "experts": experts,
+            "aggregate": aggregate,
+            "pct": max(0, min(aggregate, 100)),
+            "passed": aggregate >= ContentScore.PASS_MARK,
+            "is_first": i == 0,
+            "is_last": i == len(round_numbers) - 1,
+            "delta": 0 if previous is None else aggregate - previous,
+        })
+        previous = aggregate
+
+    def as_lines(text):
+        return [line.strip() for line in (text or "").splitlines() if line.strip()]
+
+    panel_list = as_lines(score.panel)
+    return render(request, "dashboard/content_quality_detail.html", {
+        "score": score,
+        "rounds_data": rounds_data,
+        "pass_mark": ContentScore.PASS_MARK,
+        "max_rounds": ContentScore.MAX_ROUNDS,
+        "gap_to_pass": max(ContentScore.PASS_MARK - score.aggregate, 0),
+        "rounds_left": max(ContentScore.MAX_ROUNDS - score.rounds, 0),
+        "weaknesses_list": as_lines(score.weaknesses),
+        "slop_list": as_lines(score.slop_hits),
+        "panel_list": panel_list,
+        "panel_count": len(panel_list),
+    })
+
+
+@staff_member_required
+@require_POST
+def content_quality_approve(request, pk):
+    from marketing.models import ContentScore
+
+    score = get_object_or_404(ContentScore, pk=pk)
+
+    # ตรวจซ้ำฝั่งเซิร์ฟเวอร์ — ปุ่มที่ถูก disable ด้วย JS ถูกข้ามได้ง่ายมาก
+    if not score.is_passed and request.POST.get("override") != "1":
+        messages.error(
+            request,
+            "คะแนน %s ยังไม่ถึงเกณฑ์ %s — ถ้าตั้งใจข้ามเกณฑ์ ต้องติ๊กยอมรับก่อน"
+            % (score.aggregate, ContentScore.PASS_MARK))
+        return redirect("dashboard:content_quality_detail", pk=pk)
+
+    if score.is_approved:
+        messages.info(request, "บทความนี้ถูกอนุมัติไปแล้วเมื่อ %s"
+                      % timezone.localtime(score.approved_at).strftime("%d/%m/%Y %H:%M"))
+        return redirect("dashboard:content_quality_detail", pk=pk)
+
+    score.approved_by = request.user
+    score.approved_at = timezone.now()
+    score.save(update_fields=["approved_by", "approved_at"])
+
+    if score.is_passed:
+        messages.success(request, "อนุมัติ '%s' แล้ว" % score.article.title[:60])
+    else:
+        messages.warning(
+            request, "อนุมัติ '%s' แบบข้ามเกณฑ์ (%s/%s)"
+            % (score.article.title[:50], score.aggregate, ContentScore.PASS_MARK))
+    return redirect("dashboard:content_quality_detail", pk=pk)
+
+
+@staff_member_required
+def slop_patterns_view(request):
+    from marketing.models import SlopPattern
+
+    patterns = list(SlopPattern.objects.order_by("-hit_count", "-penalty", "pattern"))
+    # แถบเทียบความถี่ — คิดที่นี่ ไม่ให้ template คิดเลข
+    max_hits = max([p.hit_count for p in patterns] or [0]) or 1
+    for p in patterns:
+        p.hit_pct = round(p.hit_count / max_hits * 100)
+
+    return render(request, "dashboard/slop_patterns.html", {
+        "patterns": patterns,
+        "stat_active": sum(1 for p in patterns if p.is_active),
+        "kind_choices": SlopPattern.Kind.choices,
+        "severity_choices": SlopPattern.Severity.choices,
+    })
+
+
+@staff_member_required
+@require_POST
+def slop_pattern_save(request):
+    from marketing.models import SlopPattern
+
+    pk = request.POST.get("pk", "").strip()
+    obj = get_object_or_404(SlopPattern, pk=pk) if pk else SlopPattern()
+
+    pattern = request.POST.get("pattern", "").strip()
+    if not pattern:
+        messages.error(request, "ต้องระบุคำหรือวลีที่จะจับ")
+        return redirect("dashboard:slop_patterns")
+
+    kind = request.POST.get("kind", "")
+    if kind not in SlopPattern.Kind.values:
+        messages.error(request, "ชนิดไม่ถูกต้อง")
+        return redirect("dashboard:slop_patterns")
+
+    try:
+        penalty = int(request.POST.get("penalty", ""))
+    except ValueError:
+        penalty = None
+    if penalty not in SlopPattern.Severity.values:
+        messages.error(request, "คะแนนที่หักไม่ถูกต้อง")
+        return redirect("dashboard:slop_patterns")
+
+    obj.pattern = pattern
+    obj.kind = kind
+    obj.penalty = penalty
+    obj.why = request.POST.get("why", "").strip()
+    obj.fix = request.POST.get("fix", "").strip()
+    obj.example_bad = request.POST.get("example_bad", "").strip()
+    obj.example_ok = request.POST.get("example_ok", "").strip()
+    obj.is_active = request.POST.get("is_active") == "1"
+    # ห้ามแตะ hit_count — ระบบนับเองตอนตรวจบทความ
+    obj.save()
+
+    messages.success(request, "บันทึก '%s' แล้ว" % obj.pattern)
+    return redirect("dashboard:slop_patterns")

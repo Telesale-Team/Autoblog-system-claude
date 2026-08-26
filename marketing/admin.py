@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Campaign, Keyword, ContentBacklog, SegmentProfile
+from .models import (Campaign, Keyword, ContentBacklog, SegmentProfile,
+                     SlopPattern, ContentScore, ExpertScore)
 
 @admin.register(Campaign)
 class CampaignAdmin(admin.ModelAdmin):
@@ -38,4 +39,50 @@ class SegmentProfileAdmin(admin.ModelAdmin):
         ("4. ภาพปก", {"fields": ("cover_pose", "cover_mood")}),
         ("5. รูปแบบ hook", {"fields": ("hook_style",)}),
         ("อื่น ๆ", {"fields": ("notes",)}),
+    )
+
+
+@admin.register(SlopPattern)
+class SlopPatternAdmin(admin.ModelAdmin):
+    """รายการ AI-slop ภาษาไทย — เพิ่มได้เรื่อย ๆ เมื่อเจอของจริง"""
+    list_display = ["pattern", "kind", "penalty", "hit_count", "is_active"]
+    list_filter = ["kind", "penalty", "is_active"]
+    search_fields = ["pattern", "why", "fix"]
+    list_editable = ["is_active"]
+    ordering = ["-hit_count", "-penalty"]
+    fieldsets = (
+        ("สิ่งที่จับ", {"fields": ("pattern", "kind", "penalty", "is_active")}),
+        ("อธิบายให้นักเขียนเข้าใจ", {
+            "fields": ("why", "fix"),
+            "description": "บอกเหตุผลเสมอ ห้ามบอกแค่ว่าห้าม ไม่งั้นนักเขียนจะเลี่ยงคำแต่เขียนแบบเดิม",
+        }),
+        ("ตัวอย่าง", {"fields": ("example_bad", "example_ok")}),
+        ("สถิติ", {"fields": ("hit_count",)}),
+    )
+    readonly_fields = ["hit_count"]
+
+
+class ExpertScoreInline(admin.TabularInline):
+    model = ExpertScore
+    extra = 0
+    fields = ["round_no", "expert", "score", "weight", "feedback"]
+    ordering = ["round_no", "-weight"]
+
+
+@admin.register(ContentScore)
+class ContentScoreAdmin(admin.ModelAdmin):
+    list_display = ["article", "aggregate", "status", "rounds", "approved_at"]
+    list_filter = ["status", "rubric", "segment"]
+    search_fields = ["article__title"]
+    inlines = [ExpertScoreInline]
+    readonly_fields = ["created_at"]
+    fieldsets = (
+        ("บทความ", {"fields": ("article", "segment", "rubric")}),
+        ("ผลคะแนน", {"fields": ("aggregate", "rounds", "status", "panel")}),
+        ("สิ่งที่ต้องแก้", {"fields": ("weaknesses", "slop_hits")}),
+        ("การอนุมัติ", {
+            "fields": ("approved_by", "approved_at"),
+            "description": "คะแนนผ่านไม่เท่ากับอนุมัติ — บทความจะเผยแพร่ได้ต้องมีคนกดอนุมัติที่นี่หรือที่ /owner/content-quality/",
+        }),
+        ("อื่น ๆ", {"fields": ("created_at",)}),
     )

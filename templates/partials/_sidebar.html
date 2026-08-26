@@ -206,6 +206,14 @@
           <span class="nav-label">โปรไฟล์กลุ่มลูกค้า</span>
         </a>
       </li>
+      <!-- === คะแนนคุณภาพบทความ — ด่านตรวจก่อนเผยแพร่ === -->
+      <li class="nav-item" data-label="คุณภาพ คะแนน ตรวจ อนุมัติ slop panel">
+        <a href="{% url 'dashboard:content_quality' %}"
+           class="nav-link {% if 'content_quality' in request.resolver_match.url_name or request.resolver_match.url_name == 'slop_patterns' %}active{% endif %}">
+          <i class="bi bi-patch-check"></i>
+          <span class="nav-label">คะแนนคุณภาพบทความ</span>
+        </a>
+      </li>
       <!-- === แผนพัฒนาระบบ — เครื่องมือฝั่งผู้พัฒนา เห็นเฉพาะ superuser === -->
       {% if request.user.is_superuser %}
       <li class="nav-item" data-label="roadmap แผนพัฒนา เฟส ความคืบหน้า งานที่เหลือ">

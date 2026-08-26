@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+{% load static %}
+<!-- ===================================================================
+     SLOP PATTERNS — คลังคำ/วลี AI-slop ภาษาไทย
+     URL: /owner/slop-patterns/
+     Model: marketing.models.SlopPattern
+     Design: settings-hero + scard (Owner Dashboard Standard) + content-quality.css
+
+     ทำไมต้องเรียงตามจำนวนครั้งที่เจอ
+       คลังคำที่ไม่มีใครดูจะบวมเรื่อย ๆ จนไม่รู้ว่าคำไหนเป็นปัญหาจริง
+       การเรียงตาม hit_count ทำให้เปิดหน้ามาแล้วเห็นทันทีว่าควรไปสอนนักเขียน
+       เรื่องอะไรก่อน ส่วนคำที่ตั้งไว้แล้วไม่เคยเจอเลยคือคำที่ควรพิจารณาตัดทิ้ง
+
+     ทั้งเพิ่มและแก้ใช้ modal ตัวเดียวกัน ยิง POST ไป endpoint เดียว
+     ไม่แยกหน้าแก้ เพราะฟิลด์น้อยและไม่มีอะไรต้องพรีวิว
+     =================================================================== -->
+
+{% block title %}คลังคำ AI-slop — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'dashboard:content_quality' %}">คะแนนคุณภาพบทความ</a></li>
+  <li class="breadcrumb-item active">คลังคำ AI-slop</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" href="{% static 'css/content-quality.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- === Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-slash-circle"></i></span>
+      คลังคำ AI-slop
+    </h1>
+    <p class="settings-hero-sub">
+      คำและวลีที่อ่านแล้วรู้ว่าเครื่องเขียน · ใช้อยู่ {{ stat_active }} จากทั้งหมด {{ patterns|length }} รายการ
+    </p>
+  </div>
+  <button type="button" class="ds-btn" data-cq-new>
+    <i class="bi bi-plus-lg"></i> เพิ่มคำใหม่
+  </button>
+</div>
+
+<!-- === อธิบายว่าคลังนี้ถูกใช้ตอนไหน === -->
+<div class="cq-queue" style="border-left-color: var(--cq-gold); border-color: rgba(201,168,76,.35); background: rgba(201,169,110,.05);">
+  <div class="cq-queue-head" style="color: var(--app-primary, #C9A84C);">
+    <i class="bi bi-info-circle"></i> คลังนี้ถูกอ่านตอนไหน
+  </div>
+  <div style="font-size:.84rem;line-height:1.85;color:var(--bs-secondary-color);margin-top:.4rem;">
+    ตัวตรวจ AI-slop กวาดบทความหาคำในคลังนี้ก่อนให้คะแนน เจอแล้วหักตามคะแนนที่ตั้งไว้
+    และคะแนนของตัวตรวจตัวนี้ถูกถ่วงน้ำหนัก <b style="color:var(--bs-body-color)">1.5 เท่า</b> ของกรรมการคนอื่น
+    — แปลว่าเพิ่มคำผิด ๆ ลงคลังนี้หนึ่งคำ กระทบคะแนนทั้งระบบมากกว่าที่คิด
+  </div>
+</div>
+
+<!-- === ตารางคำ — เรียงจากเจอบ่อยสุด คลิกทั้งแถวเพื่อแก้ === -->
+<div class="scard">
+  <div class="scard-header">
+    <div class="d-flex align-items-center gap-3">
+      <span class="scard-header-icon"><i class="bi bi-list-ul"></i></span>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;">เรียงจากที่เจอบ่อยที่สุด</div>
+        <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-top:.1rem;">
+          แถวจาง ๆ คือคำที่ปิดใช้งานอยู่ · คลิกที่แถวเพื่อแก้
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scard-body" style="padding:0;">
+    <div class="cq-table-scroll">
+      <table class="cq-table">
+        <thead>
+          <tr>
+            <th style="min-width:240px;">คำ / วลีที่จับ</th>
+            <th>ชนิด</th>
+            <th>หัก</th>
+            <th style="min-width:150px;">เจอมาแล้ว</th>
+            <th style="min-width:220px;">ควรเขียนแทนว่าอย่างไร</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in patterns %}
+          <tr class="{% if not p.is_active %}cq-row-off{% endif %}"
+              data-cq-edit
+              data-pk="{{ p.pk }}"
+              data-pattern="{{ p.pattern }}"
+              data-kind="{{ p.kind }}"
+              data-penalty="{{ p.penalty }}"
+              data-why="{{ p.why }}"
+              data-fix="{{ p.fix }}"
+              data-bad="{{ p.example_bad }}"
+              data-ok="{{ p.example_ok }}"
+              data-active="{{ p.is_active|yesno:"1,0" }}">
+
+            <td>
+              <div class="cq-pattern">{{ p.pattern }}</div>
+              {% if p.why %}<div class="cq-pattern-why">{{ p.why|truncatechars:90 }}</div>{% endif %}
+            </td>
+
+            <td><span class="cq-kind">{{ p.get_kind_display }}</span></td>
+
+            <td><span class="cq-penalty" data-p="{{ p.penalty }}">-{{ p.penalty }}</span></td>
+
+            <!-- แถบเทียบความถี่ — ตัวเลขเปล่าเทียบข้ามแถวด้วยตาไม่ได้ -->
+            <td>
+              <div class="cq-hit {% if not p.hit_count %}zero{% endif %}">
+                <span class="cq-hit-num">{{ p.hit_count }}</span>
+                <span class="cq-hit-track">
+                  <span class="cq-hit-fill" style="width: {{ p.hit_pct }}%"></span>
+                </span>
+              </div>
+            </td>
+
+            <td style="font-size:.8rem;color:var(--bs-secondary-color);line-height:1.7;">
+              {{ p.fix|truncatechars:90|default:"—" }}
+            </td>
+          </tr>
+          {% empty %}
+          <tr style="cursor:default;">
+            <td colspan="5" style="padding:2.5rem 1.5rem;text-align:center;">
+              <i class="bi bi-slash-circle" style="font-size:2rem;color:var(--bs-secondary-color)"></i>
+              <p class="mb-1 mt-3" style="font-weight:700">คลังคำยังว่างอยู่</p>
+              <p style="font-size:.8rem;color:var(--bs-secondary-color);margin:0;">
+                กด "เพิ่มคำใหม่" ด้านบน หรือรัน <code>python manage.py seed_slop_patterns</code> ถ้ามีชุดตั้งต้น
+              </p>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================================
+     Modal เพิ่ม/แก้ — ฟอร์มเดียวใช้ทั้งสองกรณี
+     pk ว่าง = เพิ่มใหม่ · pk มีค่า = แก้ของเดิม
+     =================================================================== -->
+<div class="modal fade" id="cq-slop-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <form method="post" action="{% url 'dashboard:slop_pattern_save' %}" class="modal-content">
+      {% csrf_token %}
+      <input type="hidden" name="pk" id="f-pk" value="">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="cq-modal-title">เพิ่มคำใหม่</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="cq-label" for="f-pattern">คำ / วลีที่จับ</label>
+          <input class="cq-input" id="f-pattern" name="pattern" required
+                 placeholder="เช่น ในยุคดิจิทัลที่เปลี่ยนแปลงอย่างรวดเร็ว">
+          <div class="cq-help">ระบบค้นหาข้อความนี้ตรง ๆ ในบทความ — ยิ่งสั้นยิ่งจับพลาดง่าย ให้ใส่ยาวพอที่จะไม่ชนคำปกติ</div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-sm-6">
+            <label class="cq-label" for="f-kind">ชนิด</label>
+            <select class="cq-select" id="f-kind" name="kind">
+              {% for value, label in kind_choices %}
+              <option value="{{ value }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-sm-6">
+            <label class="cq-label" for="f-penalty">หักกี่คะแนน</label>
+            <select class="cq-select" id="f-penalty" name="penalty">
+              {% for value, label in severity_choices %}
+              <option value="{{ value }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+            <div class="cq-help">หักหนักเกินไปจะทำให้บทความดี ๆ ตกเกณฑ์เพราะคำเดียว</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="cq-label" for="f-why">ทำไมถึงไม่ดี</label>
+          <textarea class="cq-textarea" id="f-why" name="why" rows="3" required
+                    placeholder="อธิบายให้นักเขียนเข้าใจ ไม่ใช่แค่บอกว่าห้าม"></textarea>
+          <div class="cq-help">ข้อความนี้จะถูกส่งกลับไปให้ agent นักเขียนอ่านตอนแก้ — เขียนเป็นเหตุผล ไม่ใช่คำสั่ง</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="cq-label" for="f-fix">ควรเขียนแทนว่าอย่างไร</label>
+          <textarea class="cq-textarea" id="f-fix" name="fix" rows="2"
+                    placeholder="เช่น ตัดทิ้งแล้วเข้าเรื่องเลย หรือแทนด้วยข้อเท็จจริงที่ระบุปีได้"></textarea>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="cq-label" for="f-bad">ตัวอย่างที่ไม่ดี</label>
+            <textarea class="cq-textarea" id="f-bad" name="example_bad" rows="3"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="cq-label" for="f-ok">ตัวอย่างที่แก้แล้ว</label>
+            <textarea class="cq-textarea" id="f-ok" name="example_ok" rows="3"></textarea>
+          </div>
+        </div>
+
+        <label class="cq-override" for="f-active" style="border-color: var(--bs-border-color); cursor:pointer;">
+          <input type="checkbox" id="f-active" name="is_active" value="1" checked>
+          <span>ใช้งานอยู่ — ติ๊กไว้ให้ตัวตรวจกวาดหาคำนี้ ถ้าเอาออกจะเก็บไว้ในคลังเฉย ๆ โดยไม่หักคะแนน</span>
+        </label>
+
+        <div class="cq-help" id="cq-hit-note" style="display:none;"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="ds-btn-outline" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="submit" class="ds-btn"><i class="bi bi-check-lg"></i> บันทึก</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* คลังคำ AI-slop — modal ตัวเดียวใช้ทั้งเพิ่มและแก้
+   คลิกทั้งแถวเพื่อแก้ ไม่มีคอลัมน์ปุ่มในตาราง */
+(function () {
+  var modalEl = document.getElementById('cq-slop-modal');
+  if (!modalEl) return;
+  var modal = new bootstrap.Modal(modalEl);
+
+  var f = {
+    pk:      document.getElementById('f-pk'),
+    pattern: document.getElementById('f-pattern'),
+    kind:    document.getElementById('f-kind'),
+    penalty: document.getElementById('f-penalty'),
+    why:     document.getElementById('f-why'),
+    fix:     document.getElementById('f-fix'),
+    bad:     document.getElementById('f-bad'),
+    ok:      document.getElementById('f-ok'),
+    active:  document.getElementById('f-active'),
+    title:   document.getElementById('cq-modal-title')
+  };
+
+  function reset() {
+    f.pk.value = '';
+    f.pattern.value = '';
+    f.why.value = '';
+    f.fix.value = '';
+    f.bad.value = '';
+    f.ok.value = '';
+    f.kind.selectedIndex = 0;
+    f.penalty.value = '5';
+    f.active.checked = true;
+    f.title.textContent = 'เพิ่มคำใหม่';
+  }
+
+  document.querySelectorAll('[data-cq-new]').forEach(function (btn) {
+    btn.addEventListener('click', function () { reset(); modal.show(); });
+  });
+
+  document.querySelectorAll('[data-cq-edit]').forEach(function (row) {
+    row.addEventListener('click', function () {
+      var d = row.dataset;
+      f.pk.value      = d.pk;
+      f.pattern.value = d.pattern;
+      f.kind.value    = d.kind;
+      f.penalty.value = d.penalty;
+      f.why.value     = d.why;
+      f.fix.value     = d.fix;
+      f.bad.value     = d.bad;
+      f.ok.value      = d.ok;
+      f.active.checked = d.active === '1';
+      f.title.textContent = 'แก้คำ: ' + d.pattern;
+      modal.show();
+    });
+  });
+})();
+</script>
+{% endblock %}

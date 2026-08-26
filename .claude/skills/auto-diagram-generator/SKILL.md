@@ -88,6 +88,30 @@ venv\Scripts\python.exe scripts/segment_profile.py beauty_wellness
 - Canvas: `1200x630px` (cover) หรือ `800x500px` (diagram)
 - Export: **WebP format** ไม่เกิน 200KB
 
+### Step 2.5: หยุดให้เจ้าของอนุมัติ prompt ก่อนสร้างรูปจริง (บังคับ)
+
+**ห้ามยิงสร้างรูปก่อนได้รับอนุมัติ** — แก้ prompt ราคาศูนย์ แต่แก้รูปที่สร้างเสร็จแล้ว
+ต้องเผาโควตาใหม่ทั้งชุด
+
+ที่มาแนวคิด: HITL checkpoint ใน `AI-Content-Studio/agents.py` ซึ่งหยุดให้คนแก้
+prompt ของทุกฉากก่อน generate จริง
+
+แสดงตารางนี้ให้เจ้าของดูก่อนเสมอ:
+
+```
+กำลังจะสร้าง diagram N รูป สำหรับ "<ชื่อบทความ>" (segment: <key>)
+สไตล์: มุมโค้ง <corner_radius> · เส้นหนา <stroke_width> · สีเน้น <accent>
+
+| # | H2 | ชนิด | สิ่งที่จะวาด |
+|---|----|------|-------------|
+| 1 | ... | steps | กล่อง 4 ขั้น เรียงลงล่าง มีเลขลำดับสีทอง |
+| 2 | ... | ...   | ... |
+
+พิมพ์ "ok" เพื่อสร้าง หรือบอกว่าจะแก้รูปไหนอย่างไร
+```
+
+**ข้ามขั้นนี้ได้กรณีเดียว** — เจ้าของสั่งไว้ล่วงหน้าในข้อความเดียวกันว่าไม่ต้องถาม
+
 ### Step 3: File naming (SEO standard)
 ```
 [keyword-slug]-[section-number]-[descriptor].webp
@@ -130,3 +154,16 @@ scripts/article_assets/
 - ❌ **เอา `accent` ของ segment ไปใช้เป็นพื้นหลังหรือสีหัวข้อ** — มันคือสีรอง ใช้จุดเดียวต่อรูป
 - ❌ **เปลี่ยนสีกรม/ทองตาม segment** — สองสีนี้คือแบรนด์ ห้ามแตะ
 - ❌ hardcode `corner_radius` หรือความหนาเส้นเอง ทั้งที่ segment กำหนดไว้แล้ว
+
+## ใบงานประจำบทความ (รันซ้ำแล้วไม่ทำซ้ำ)
+
+ก่อนเริ่มให้เช็คว่าขั้นนี้ทำไปแล้วหรือยัง:
+```
+venv\Scripts\python.exe scripts/article_manifest.py status <slug>
+```
+ถ้าขั้นนี้ขึ้นว่า "เสร็จ" แล้ว **อย่าทำซ้ำ** ให้ถามเจ้าของก่อนว่าจะสร้างทับไหม
+
+ทำเสร็จแล้วบันทึก:
+```
+venv\Scripts\python.exe scripts/article_manifest.py done <slug> <cover|diagram>
+```

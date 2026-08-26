@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+{% load static %}
+<!-- ===================================================================
+     CONTENT QUALITY DETAIL — เส้นทางคะแนนรายรอบ + ปุ่มอนุมัติ
+     URL: /owner/content-quality/<pk>/
+     Model: marketing.models.ContentScore + ExpertScore
+     Design: settings-hero + scard (Owner Dashboard Standard) + content-quality.css
+
+     ลำดับการอ่านของหน้านี้ตั้งใจให้เป็น
+       1. คำตัดสินตอนนี้ (วงคะแนน + สองด่าน)
+       2. เส้นทางคะแนนทุกรอบ — ของมีค่าที่สุด เพราะบอกว่าแก้อะไรแล้วขยับเท่าไหร่
+       3. กรรมการรายคนต่อรอบ + เหตุผล
+       4. จุดอ่อนและ AI-slop ที่ยังเหลือ
+       5. แผงอนุมัติ อยู่ล่างสุดเพราะควรกดหลังอ่านครบ ไม่ใช่ก่อน
+
+     ตารางกรรมการไม่คลิก (is-heavy / cursor default) เพราะไม่มีหน้าปลายทาง
+     แถวที่มีขอบทองซ้ายคือตัวตรวจ AI-slop ที่ถ่วงน้ำหนัก 1.5 เท่า
+     =================================================================== -->
+
+{% block title %}{{ score.article.title|truncatechars:40 }} — คะแนนคุณภาพ{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'dashboard:content_quality' %}">คะแนนคุณภาพบทความ</a></li>
+  <li class="breadcrumb-item active">{{ score.article.title|truncatechars:30 }}</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" href="{% static 'css/content-quality.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- === Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-patch-check"></i></span>
+      {{ score.article.title|truncatechars:60 }}
+    </h1>
+    <p class="settings-hero-sub">
+      ตรวจด้วยเกณฑ์ <b>{{ score.rubric }}</b>
+      {% if score.segment %}· กลุ่ม {{ score.segment.name }}{% endif %}
+      · ตรวจเมื่อ {{ score.created_at|date:"j M Y H:i" }}
+    </p>
+  </div>
+  <div class="d-flex gap-2 flex-wrap">
+    <a href="{{ score.article.get_absolute_url }}" target="_blank" rel="noopener" class="ds-btn-outline">
+      <i class="bi bi-box-arrow-up-right"></i> เปิดบทความ
+    </a>
+    <a href="{% url 'dashboard:content_quality' %}" class="ds-btn-outline">
+      <i class="bi bi-arrow-left"></i> กลับไปดูทุกเรื่อง
+    </a>
+  </div>
+</div>
+
+<!-- === 1) คำตัดสินตอนนี้ === -->
+<div class="scard">
+  <div class="scard-body">
+    <div class="cq-verdict">
+
+      <div class="cq-dial {% if score.status == 'running' %}run{% elif score.is_passed %}pass{% else %}fail{% endif %}"
+           style="--cq-dial-pct: {{ score.aggregate }};">
+        <div class="cq-dial-inner">
+          <div class="cq-dial-num">{{ score.aggregate }}</div>
+          <div class="cq-dial-of">จาก 100 · เกณฑ์ {{ pass_mark }}</div>
+        </div>
+      </div>
+
+      <div>
+        {% if score.is_approved %}
+          <div class="cq-verdict-line">ผ่านครบสองด่านแล้ว เผยแพร่ได้</div>
+          <div class="cq-verdict-sub">
+            คะแนน {{ score.aggregate }} ผ่านเกณฑ์ และ
+            <b>{{ score.approved_by.get_full_name|default:score.approved_by.username|default:"เจ้าของ" }}</b>
+            กดอนุมัติเมื่อ {{ score.approved_at|date:"j M Y H:i" }}
+          </div>
+        {% elif score.is_passed %}
+          <div class="cq-verdict-line">คะแนนผ่านแล้ว แต่ <span style="color:var(--cq-wait)">ยังเผยแพร่ไม่ได้</span></div>
+          <div class="cq-verdict-sub">
+            ด่านเครื่องผ่านเรียบร้อย เหลือด่านคน — งานชิ้นนี้ค้างอยู่ที่คุณคนเดียว
+            เลื่อนลงไปอ่านเหตุผลของกรรมการก่อน แล้วค่อยกดอนุมัติที่ท้ายหน้า
+          </div>
+        {% elif score.status == 'running' %}
+          <div class="cq-verdict-line">กรรมการยังให้คะแนนไม่ครบ</div>
+          <div class="cq-verdict-sub">คะแนนที่เห็นยังไม่ใช่คะแนนสุดท้าย รอรอบนี้จบก่อนค่อยตัดสิน</div>
+        {% else %}
+          <div class="cq-verdict-line">ยังไม่ถึงเกณฑ์ {{ pass_mark }} คะแนน</div>
+          <div class="cq-verdict-sub">
+            ขาดอีก <b>{{ gap_to_pass }}</b> คะแนน
+            {% if score.rounds < max_rounds %}
+              ยังวนแก้ได้อีก {{ rounds_left }} รอบ
+            {% else %}
+              และวนครบ {{ max_rounds }} รอบแล้ว — ถ้าจะปล่อยต้องอนุมัติแบบข้ามเกณฑ์
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="d-flex gap-2 flex-wrap mt-3">
+          {% if score.status == 'running' %}
+            <span class="cq-badge running"><i class="bi bi-three-dots"></i>ด่าน 1 · กำลังตรวจ</span>
+          {% elif score.is_passed %}
+            <span class="cq-badge passed"><i class="bi bi-check-circle-fill"></i>ด่าน 1 · คะแนนผ่าน</span>
+          {% else %}
+            <span class="cq-badge failed"><i class="bi bi-x-circle-fill"></i>ด่าน 1 · คะแนนไม่ผ่าน</span>
+          {% endif %}
+
+          {% if score.is_approved %}
+            <span class="cq-badge approved"><i class="bi bi-patch-check-fill"></i>ด่าน 2 · อนุมัติแล้ว</span>
+          {% else %}
+            <span class="cq-badge waiting"><i class="bi bi-hourglass-split"></i>ด่าน 2 · ยังไม่อนุมัติ</span>
+          {% endif %}
+        </div>
+
+        <div class="cq-verdict-meta">
+          <span><i class="bi bi-arrow-repeat"></i> วนแก้ {{ score.rounds }} จาก {{ max_rounds }} รอบ</span>
+          <span><i class="bi bi-people"></i> กรรมการ {{ panel_count }} คน</span>
+          <span><i class="bi bi-file-text"></i> บทความสถานะ {{ score.article.get_status_display }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- === 2) เส้นทางคะแนนทุกรอบ — หัวใจของหน้านี้ === -->
+<div class="scard">
+  <div class="scard-header">
+    <div class="d-flex align-items-center gap-3">
+      <span class="scard-header-icon"><i class="bi bi-graph-up-arrow"></i></span>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;">เส้นทางคะแนน {{ rounds_data|length }} รอบ</div>
+        <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-top:.1rem;">
+          เส้นประเขียวคือเกณฑ์ {{ pass_mark }} · ตัวเลขใต้แท่งคือส่วนต่างจากรอบก่อนหน้า
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scard-body" style="padding:0;">
+    {% if rounds_data %}
+    <div class="cq-trail">
+      <div class="cq-trail-plot">
+        <div class="cq-trail-mark"><span>{{ pass_mark }}</span></div>
+        {% for r in rounds_data %}
+        <div class="cq-trail-col {% if r.passed %}pass{% endif %} {% if r.is_last %}last{% endif %}">
+          <div class="cq-trail-bar" style="height: {{ r.pct }}%">
+            <div class="cq-trail-cap">
+              <span class="cq-trail-score">{{ r.aggregate }}</span>
+              {% if not r.is_first %}
+                {% if r.delta > 0 %}
+                  <span class="cq-trail-delta up">+{{ r.delta }}</span>
+                {% elif r.delta < 0 %}
+                  <span class="cq-trail-delta down">{{ r.delta }}</span>
+                {% else %}
+                  <span class="cq-trail-delta flat">เท่าเดิม</span>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="cq-trail-foot">
+      {% for r in rounds_data %}
+      <div>รอบ {{ r.round_no }}</div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="cq-trail-empty">
+      <i class="bi bi-graph-up" style="font-size:1.6rem;display:block;margin-bottom:.6rem;"></i>
+      ยังไม่มีคะแนนรายรอบให้ลาก — รอบแรกอาจยังให้คะแนนไม่เสร็จ
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- === 3) กรรมการรายคนต่อรอบ === -->
+{% for r in rounds_data %}
+<div class="scard">
+  <div class="scard-header">
+    <div class="cq-round-head">
+      <span class="cq-round-no">{{ r.round_no }}</span>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;">
+          รอบที่ {{ r.round_no }} — รวมแล้ว {{ r.aggregate }} คะแนน
+          {% if r.is_last %}<span class="cq-badge approved" style="margin-left:.4rem;">รอบล่าสุด</span>{% endif %}
+        </div>
+        <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-top:.1rem;">
+          กรรมการ {{ r.experts|length }} คน · แถวที่มีขอบทองคือตัวตรวจ AI-slop ที่นับหนัก 1.5 เท่า
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scard-body" style="padding:0;">
+    <div class="cq-table-scroll">
+      <table class="cq-table">
+        <thead>
+          <tr>
+            <th style="min-width:180px;">กรรมการ</th>
+            <th style="min-width:140px;">คะแนน</th>
+            <th>น้ำหนัก</th>
+            <th style="min-width:280px;">เหตุผล</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in r.experts %}
+          <tr class="is-heavy">
+            <td>
+              <div class="cq-expert-name">{{ e.expert }}</div>
+              {% if e.lens %}<div class="cq-expert-lens">มองจาก {{ e.lens }}</div>{% endif %}
+            </td>
+            <td>
+              <div class="cq-score {% if e.score >= pass_mark %}pass{% else %}fail{% endif %}">
+                <span class="cq-score-num">{{ e.score }}</span>
+                <span class="cq-score-track">
+                  <span class="cq-score-fill" style="width: {{ e.score }}%"></span>
+                  <span class="cq-score-mark"></span>
+                </span>
+              </div>
+            </td>
+            <td>
+              {% if e.weight >= 1.5 %}
+                <span class="cq-weight heavy"><i class="bi bi-exclamation-diamond-fill"></i> x{{ e.weight }}</span>
+              {% else %}
+                <span class="cq-weight">x{{ e.weight }}</span>
+              {% endif %}
+            </td>
+            <td><div class="cq-expert-fb">{{ e.feedback|default:"—"|linebreaksbr }}</div></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<!-- === 4) จุดอ่อนและ AI-slop ที่ยังเหลืออยู่ === -->
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="scard h-100">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-3">
+          <span class="scard-header-icon"><i class="bi bi-exclamation-triangle"></i></span>
+          <div>
+            <div style="font-weight:700;font-size:.95rem;">จุดอ่อนที่ยังเหลือ</div>
+            <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-top:.1rem;">
+              สิ่งที่กรรมการยังติดใจแม้คะแนนจะผ่านแล้ว
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scard-body">
+        {% if weaknesses_list %}
+        <ul class="cq-list weak">
+          {% for w in weaknesses_list %}
+          <li><i class="bi bi-circle-fill"></i><span>{{ w }}</span></li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="cq-empty-line"><i class="bi bi-check-circle-fill"></i> ไม่มีจุดอ่อนค้างอยู่</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="scard h-100">
+      <div class="scard-header">
+        <div class="d-flex align-items-center gap-3">
+          <span class="scard-header-icon"><i class="bi bi-slash-circle"></i></span>
+          <div>
+            <div style="font-weight:700;font-size:.95rem;">AI-slop ที่ตรวจเจอ</div>
+            <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-top:.1rem;">
+              คำหรือวลีที่อ่านแล้วรู้ว่าเครื่องเขียน · <a href="{% url 'dashboard:slop_patterns' %}">ดูคลังคำทั้งหมด</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scard-body">
+        {% if slop_list %}
+        <ul class="cq-list slop">
+          {% for s in slop_list %}
+          <li><i class="bi bi-circle-fill"></i><span>{{ s }}</span></li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="cq-empty-line"><i class="bi bi-check-circle-fill"></i> ไม่เจอ AI-slop ที่อยู่ในคลังคำ</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- === คณะกรรมการที่ใช้ตรวจครั้งนี้ === -->
+{% if panel_list %}
+<div class="scard">
+  <div class="scard-header">
+    <div class="d-flex align-items-center gap-3">
+      <span class="scard-header-icon"><i class="bi bi-people"></i></span>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;">คณะกรรมการชุดนี้</div>
+        <div style="font-size:.76rem;color:var(--bs-secondary-color);margin-top:.1rem;">
+          คนละมุมมอง ไม่ซ้ำกัน — ยิ่งมุมต่างกันมาก คะแนนยิ่งเชื่อถือได้
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scard-body">
+    <div class="d-flex flex-wrap gap-2">
+      {% for name in panel_list %}
+      <span class="cq-kind">{{ name }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- ===================================================================
+     5) แผงอนุมัติ — ปุ่มเดียวในหน้านี้ที่เปลี่ยนสถานะจริง
+     จงใจแยกออกมาเป็นกล่องของตัวเอง ไม่มีปุ่มอื่นอยู่ระดับเดียวกัน
+     ถ้าคะแนนยังไม่ถึงเกณฑ์ ปุ่มจะเป็นสีแดงและต้องติ๊กยอมรับก่อนถึงจะกดได้
+     =================================================================== -->
+{% if score.is_approved %}
+<div class="cq-approve is-done">
+  <div class="cq-approve-head"><i class="bi bi-patch-check-fill"></i> อนุมัติแล้ว</div>
+  <div class="cq-approve-title">บทความนี้ผ่านครบสองด่าน</div>
+  <div class="cq-approved-by">
+    <i class="bi bi-person-check-fill"></i>
+    {{ score.approved_by.get_full_name|default:score.approved_by.username|default:"เจ้าของ" }}
+    <span style="font-weight:400;color:var(--bs-secondary-color);font-size:.82rem;">
+      · {{ score.approved_at|date:"j M Y" }} เวลา {{ score.approved_at|date:"H:i" }}
+    </span>
+  </div>
+  <div class="cq-approve-body">
+    ถ้าต้องการถอนการอนุมัติ ให้ลบค่า <b>approved_at</b> ผ่าน Django admin
+    — จงใจไม่ทำปุ่มถอนไว้ตรงนี้ เพราะการถอนควรเป็นเรื่องที่ต้องตั้งใจทำ
+  </div>
+</div>
+
+{% else %}
+<form method="post" action="{% url 'dashboard:content_quality_approve' score.pk %}" id="cq-approve-form">
+  {% csrf_token %}
+  <div class="cq-approve {% if not score.is_passed %}is-risky{% endif %}">
+
+    {% if score.is_passed %}
+      <div class="cq-approve-head"><i class="bi bi-hand-index"></i> ด่านที่ 2 · รอคนตัดสิน</div>
+      <div class="cq-approve-title">อนุมัติให้บทความนี้เผยแพร่ในชื่อเรา</div>
+      <div class="cq-approve-body">
+        คะแนน <b>{{ score.aggregate }}</b> ผ่านเกณฑ์แล้ว แต่คะแนนไม่ใช่คนรับผิดชอบ
+        การกดปุ่มนี้คือการบอกว่า <b>คุณอ่านแล้วและยอมให้งานชิ้นนี้ออกในชื่อเรา</b>
+        ระบบจะบันทึกชื่อคุณและเวลาที่กดไว้ถาวร
+      </div>
+      <button type="submit" class="cq-approve-btn">
+        <i class="bi bi-patch-check-fill"></i> อนุมัติบทความนี้
+      </button>
+      <div class="cq-approve-note">กดแล้วบันทึกทันที · ถอนคืนได้เฉพาะผ่าน Django admin</div>
+
+    {% else %}
+      <div class="cq-approve-head"><i class="bi bi-exclamation-octagon-fill"></i> คะแนนยังไม่ถึงเกณฑ์</div>
+      <div class="cq-approve-title">อนุมัติได้ แต่นับเป็นการข้ามเกณฑ์</div>
+      <div class="cq-approve-body">
+        บทความนี้ได้ <b>{{ score.aggregate }}</b> คะแนน ต่ำกว่าเกณฑ์ {{ pass_mark }} อยู่ <b>{{ gap_to_pass }}</b> คะแนน
+        ทางที่ควรทำคือส่งกลับไปแก้อีกรอบ
+        {% if score.rounds < max_rounds %}(ยังวนได้อีก {{ rounds_left }} รอบ){% endif %}
+        ถ้ายืนยันจะปล่อยทั้งอย่างนี้ ระบบจะบันทึกไว้ว่าคุณอนุมัติทั้งที่รู้ว่ายังไม่ผ่าน
+      </div>
+
+      <!-- บังคับให้ติ๊กก่อน ปุ่มถึงจะกดได้ — กันการกดพลาด -->
+      <label class="cq-override" for="cq-override">
+        <input type="checkbox" id="cq-override" name="override" value="1">
+        <span>
+          ผมเข้าใจว่าคะแนนยังไม่ถึง {{ pass_mark }} และยืนยันจะอนุมัติแบบข้ามเกณฑ์
+          โดยรับผิดชอบผลที่ตามมาเอง
+        </span>
+      </label>
+
+      <button type="submit" class="cq-approve-btn risky" id="cq-approve-btn" disabled>
+        <i class="bi bi-exclamation-triangle-fill"></i> อนุมัติแบบข้ามเกณฑ์
+      </button>
+      <div class="cq-approve-note">ระบบจะบันทึกว่านี่คือการอนุมัติที่ข้ามเกณฑ์ {{ pass_mark }} คะแนน</div>
+    {% endif %}
+
+  </div>
+</form>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ปุ่มอนุมัติแบบข้ามเกณฑ์ — ปลดล็อกเมื่อผู้ใช้ติ๊กยอมรับแล้วเท่านั้น */
+(function () {
+  var box = document.getElementById('cq-override');
+  var btn = document.getElementById('cq-approve-btn');
+  if (!box || !btn) return;
+  box.addEventListener('change', function () { btn.disabled = !box.checked; });
+})();
+</script>
+{% endblock %}

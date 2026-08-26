@@ -63,6 +63,11 @@ urlpatterns = [
     # Frontend Designer
     path("design-system/",    views.design_system_view, name="design_system"),
     path("roadmap/",          views.roadmap_view,       name="roadmap"),
+    path("content-quality/",                   views.content_quality_view,        name="content_quality"),
+    path("content-quality/<int:pk>/",          views.content_quality_detail_view, name="content_quality_detail"),
+    path("content-quality/<int:pk>/approve/",  views.content_quality_approve,     name="content_quality_approve"),
+    path("slop-patterns/",                     views.slop_patterns_view,          name="slop_patterns"),
+    path("slop-patterns/save/",                views.slop_pattern_save,           name="slop_pattern_save"),
     path("segments/",                          views.segments_view,        name="segments"),
     path("segments/<slug:key>/",               views.segment_edit_view,    name="segment_edit"),
     path("api/segment-profiles/",              views.api_segment_profiles, name="api_segment_profiles"),

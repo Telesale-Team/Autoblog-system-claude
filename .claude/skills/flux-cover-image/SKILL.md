@@ -59,6 +59,24 @@ hook_style = seg["cover"]["hook_style"]  # ใช้ตรวจว่า hook �
 ท่าต้องล้อกับ hook ที่เขียนจริง ถ้า hook เป็นคำเตือนแต่ segment ให้ท่า `happy`
 ให้ทักผู้ใช้ก่อน อย่าปล่อยผ่าน (ดู `feedback_cover_pose_hook`)
 
+### Step 1.7: หยุดให้เจ้าของอนุมัติก่อนยิง FLUX (บังคับ)
+
+**ห้ามยิง FLUX ก่อนได้รับอนุมัติ** — แก้ prompt ราคาศูนย์ แต่แก้ปกที่สร้างเสร็จแล้ว
+ต้องเผาโควตาใหม่ ที่มาแนวคิด: HITL checkpoint ใน AI-Content-Studio/agents.py
+
+แสดงให้ดูก่อน:
+```
+กำลังจะสร้างภาพปกสำหรับ "<ชื่อบทความ>" (segment: <key>)
+ท่าหนูดี : <pose>  ← มาจาก segment
+พื้นหลัง : <mood>  ← มาจาก segment
+Hook     : บรรทัด 1 / 2 / 3
+prompt   : <bg_prompt>
+
+ท่ากับ hook เข้ากันไหม? พิมพ์ "ok" เพื่อสร้าง หรือบอกว่าจะแก้อะไร
+```
+
+**ข้ามได้กรณีเดียว** — เจ้าของสั่งไว้ล่วงหน้าว่าไม่ต้องถาม
+
 ### Step 2: Generate background ด้วย FLUX API
 ```python
 import requests, os
@@ -126,3 +144,16 @@ Dimensions: 1200x630px
 - ❌ Brand tag ไม่ใช่ "Noodee BootBiz"
 - ❌ Export PNG แทน WebP
 - ❌ ขนาดเกิน 150KB
+
+## ใบงานประจำบทความ (รันซ้ำแล้วไม่ทำซ้ำ)
+
+ก่อนเริ่มให้เช็คว่าขั้นนี้ทำไปแล้วหรือยัง:
+```
+venv\Scripts\python.exe scripts/article_manifest.py status <slug>
+```
+ถ้าขั้นนี้ขึ้นว่า "เสร็จ" แล้ว **อย่าทำซ้ำ** ให้ถามเจ้าของก่อนว่าจะสร้างทับไหม
+
+ทำเสร็จแล้วบันทึก:
+```
+venv\Scripts\python.exe scripts/article_manifest.py done <slug> <cover|diagram>
+```

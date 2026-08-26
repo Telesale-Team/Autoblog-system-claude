@@ -1,0 +1,550 @@
+/* ===================================================================
+   CONTENT QUALITY — คะแนนคุณภาพบทความ (Owner Dashboard)
+   ใช้ร่วมกัน 3 หน้า:
+     dashboard/content_quality.html         รายการบทความที่ตรวจแล้ว
+     dashboard/content_quality_detail.html  เส้นทางคะแนนรายรอบ + อนุมัติ
+     dashboard/slop_patterns.html           คลังคำ AI-slop ภาษาไทย
+   ต่อยอดจาก settings.css (settings-hero + scard) ห้ามสร้าง layout ใหม่
+
+   ความคิดหลักของหน้านี้ (สำคัญกว่าเรื่องสี)
+   -----------------------------------------------------------------
+   "คะแนนถึง 90" กับ "เจ้าของอนุมัติ" เป็นคนละด่านกัน
+   หน้าจอจึงต้องแยกสองอย่างนี้ออกจากกันด้วยสายตา ไม่ใช่ป้ายเดียวรวมกัน
+   ระบบสีจึงกำหนดว่า
+     เขียว  = ด่านคะแนนผ่าน       (เครื่องตัดสิน)
+     ทอง    = ด่านอนุมัติผ่าน      (คนตัดสิน — สีแบรนด์สงวนไว้ให้การกระทำของคน)
+     ส้ม    = ผ่านคะแนนแต่ยังค้างรออนุมัติ  (คิวงานที่ต้องแตะ)
+     แดง    = ยังไม่ผ่านเกณฑ์
+   สีกรม #0F172A + ทอง #C9A84C ยังเป็นเจ้าของโครงหน้าทั้งหมดตามเดิม
+   =================================================================== */
+
+
+/* ── ตัวแปรเฉพาะหน้านี้ ───────────────────────────────────────── */
+:root {
+  --cq-pass:    #00A86B;   /* คะแนนผ่านเกณฑ์ */
+  --cq-wait:    #E8890C;   /* ผ่านแล้วแต่ยังรออนุมัติ */
+  --cq-fail:    #E63757;   /* ยังไม่ผ่านเกณฑ์ */
+  --cq-run:     #64748B;   /* กำลังให้คะแนนอยู่ */
+  --cq-gold:    var(--app-primary, #C9A84C);
+  --cq-navy:    #0F172A;
+}
+
+
+/* ===================================================================
+   1) แถบอธิบายสองด่าน — หัวใจของหน้า list
+   =================================================================== */
+.cq-gates {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .75rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background: var(--bs-body-bg);
+}
+.cq-gate {
+  padding: 1.1rem 1.35rem;
+  border-left: 4px solid transparent;
+}
+.cq-gate.machine { border-left-color: var(--cq-pass); }
+.cq-gate.human   { border-left-color: var(--cq-gold); background: rgba(201,169,110,.05); }
+.cq-gate-no {
+  font-size: .68rem; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.cq-gate.machine .cq-gate-no { color: var(--cq-pass); }
+.cq-gate.human   .cq-gate-no { color: var(--cq-gold); }
+.cq-gate-title { font-weight: 700; font-size: .95rem; margin-top: .25rem; }
+.cq-gate-body  {
+  font-size: .8rem; line-height: 1.85;
+  color: var(--bs-secondary-color); margin-top: .3rem;
+}
+.cq-gate-body b { color: var(--bs-body-color); }
+/* ตัวคั่นกลาง — บอกว่าต้องผ่านทั้งสองด่านถึงจะเผยแพร่ได้ */
+.cq-gate-and {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: .3rem;
+  padding: 0 1rem;
+  border-left: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-color);
+  font-size: .66rem; font-weight: 800; letter-spacing: .08em;
+  color: var(--bs-secondary-color);
+  background: rgba(100,116,139,.05);
+  white-space: nowrap;
+}
+.cq-gate-and i { font-size: 1rem; color: var(--cq-gold); }
+
+
+/* ===================================================================
+   2) ไทล์ตัวเลขสรุป — ไทล์ "รออนุมัติ" คือคิวงาน จึงเน้นด้วยทอง
+   =================================================================== */
+.cq-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.cq-stat {
+  background: var(--bs-body-bg);
+  border-radius: .5rem;
+  box-shadow: 0 7px 14px 0 rgba(65,69,88,.08), 0 3px 6px 0 rgba(0,0,0,.05);
+  padding: 1rem 1.15rem;
+  border-top: 3px solid var(--bs-border-color);
+}
+.cq-stat.is-wait { border-top-color: var(--cq-wait); }
+.cq-stat.is-pass { border-top-color: var(--cq-pass); }
+.cq-stat.is-fail { border-top-color: var(--cq-fail); }
+.cq-stat.is-done { border-top-color: var(--cq-gold); }
+.cq-stat-num {
+  font-size: 1.75rem; font-weight: 800; line-height: 1.1;
+  letter-spacing: -.02em;
+}
+.cq-stat.is-wait .cq-stat-num { color: var(--cq-wait); }
+.cq-stat-label {
+  font-size: .74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--bs-secondary-color);
+  margin-top: .3rem;
+}
+.cq-stat-note { font-size: .72rem; color: var(--bs-secondary-color); margin-top: .35rem; line-height: 1.6; }
+
+
+/* ===================================================================
+   3) แถบคะแนน + ขีดเกณฑ์ 90 — อ่านเร็วกว่าตัวเลขเปล่า
+   =================================================================== */
+.cq-score { display: flex; align-items: center; gap: .6rem; min-width: 140px; }
+.cq-score-num {
+  font-weight: 800; font-size: .95rem;
+  width: 2.4rem; text-align: right; flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.cq-score.pass .cq-score-num { color: var(--cq-pass); }
+.cq-score.fail .cq-score-num { color: var(--cq-fail); }
+.cq-score.run  .cq-score-num { color: var(--cq-run); }
+.cq-score-track {
+  position: relative;
+  flex: 1; min-width: 70px; height: 8px;
+  border-radius: 99px;
+  background: rgba(100,116,139,.16);
+  overflow: visible;
+}
+.cq-score-fill {
+  height: 100%; border-radius: 99px;
+  background: var(--cq-fail);
+}
+.cq-score.pass .cq-score-fill { background: var(--cq-pass); }
+.cq-score.run  .cq-score-fill { background: var(--cq-run); }
+/* ขีดเกณฑ์ผ่านที่ 90 — เส้นเดียวที่ทำให้ทั้งตารางมีความหมาย */
+.cq-score-mark {
+  position: absolute; top: -3px; bottom: -3px; left: 90%;
+  width: 2px; background: var(--cq-navy);
+  opacity: .55;
+}
+[data-bs-theme="dark"] .cq-score-mark { background: #E2E8F0; opacity: .6; }
+
+
+/* ===================================================================
+   4) ป้ายสถานะ soft color — แยกด่านเครื่องกับด่านคน
+   =================================================================== */
+.cq-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .7rem; font-weight: 700;
+  border-radius: 99px; padding: .18rem .6rem;
+  white-space: nowrap;
+}
+.cq-badge i { font-size: .78rem; }
+.cq-badge.passed   { background: rgba(0,168,107,.12);   color: #00885a; border: 1px solid rgba(0,168,107,.25); }
+.cq-badge.failed   { background: rgba(230,55,87,.12);   color: #c01236; border: 1px solid rgba(230,55,87,.25); }
+.cq-badge.running  { background: rgba(100,116,139,.12); color: #64748b; border: 1px solid rgba(100,116,139,.22); }
+.cq-badge.waiting  { background: rgba(232,137,12,.13);  color: #b26a05; border: 1px solid rgba(232,137,12,.28); }
+.cq-badge.approved { background: rgba(201,168,76,.15);  color: #8a6d1c; border: 1px solid rgba(201,168,76,.35); }
+[data-bs-theme="dark"] .cq-badge.passed   { color: #34d399; }
+[data-bs-theme="dark"] .cq-badge.failed   { color: #fb7185; }
+[data-bs-theme="dark"] .cq-badge.waiting  { color: #fbbf24; }
+[data-bs-theme="dark"] .cq-badge.approved { color: #e3c46a; }
+
+
+/* ===================================================================
+   5) ตาราง — คลิกได้ทั้งแถว ไม่มีคอลัมน์ปุ่ม
+   =================================================================== */
+.cq-table-scroll { overflow-x: auto; }
+.cq-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.cq-table th {
+  background: var(--table-head-bg, #F9FAFD);
+  padding: .6rem 1rem;
+  font-size: .7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--bs-secondary-color);
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap; text-align: left;
+}
+[data-bs-theme="dark"] .cq-table th { background: rgba(255,255,255,.04); }
+.cq-table td {
+  padding: .7rem 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  vertical-align: middle;
+}
+.cq-table tr:last-child td { border-bottom: none; }
+.cq-table tbody tr { cursor: pointer; }
+.cq-table tbody tr:hover td { background: rgba(201,169,110,.08); }
+/* แถวที่ผ่านคะแนนแล้วแต่ยังไม่มีใครอนุมัติ — ต้องสะดุดตาที่สุดในตาราง */
+.cq-table tbody tr.is-waiting td:first-child { box-shadow: inset 3px 0 0 var(--cq-wait); }
+
+.cq-title    { font-weight: 700; line-height: 1.45; }
+.cq-sub      { font-size: .72rem; color: var(--bs-secondary-color); margin-top: .15rem; }
+.cq-rounds   {
+  display: inline-flex; align-items: center; gap: .2rem;
+}
+.cq-rounds i { font-size: .55rem; color: rgba(100,116,139,.35); }
+.cq-rounds i.on { color: var(--cq-gold); }
+
+
+/* ===================================================================
+   6) คิวรออนุมัติ — กล่องเรียกงานบนสุดของหน้า list
+   =================================================================== */
+.cq-queue {
+  border: 1px solid rgba(232,137,12,.35);
+  border-left-width: 4px;
+  border-left-color: var(--cq-wait);
+  border-radius: .75rem;
+  background: rgba(232,137,12,.05);
+  padding: 1.1rem 1.35rem;
+  margin-bottom: 1.5rem;
+}
+.cq-queue-head {
+  font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase; color: #b26a05;
+}
+[data-bs-theme="dark"] .cq-queue-head { color: #fbbf24; }
+.cq-queue-list { display: flex; flex-direction: column; gap: .2rem; margin-top: .7rem; }
+.cq-queue-item {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .5rem .65rem; border-radius: .4rem;
+  text-decoration: none; color: inherit;
+  font-size: .86rem;
+}
+.cq-queue-item:hover { background: rgba(232,137,12,.1); color: inherit; }
+.cq-queue-item .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+
+
+/* ===================================================================
+   7) หน้ารายละเอียด — แผงคำตัดสินด้านบน
+   =================================================================== */
+.cq-verdict {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+@media (max-width: 767.98px) { .cq-verdict { grid-template-columns: 1fr; } }
+
+/* วงคะแนน — วาดด้วย conic-gradient ไม่ต้องพึ่ง library */
+.cq-dial {
+  width: 128px; height: 128px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: conic-gradient(var(--cq-dial-color) calc(var(--cq-dial-pct) * 1%), rgba(100,116,139,.15) 0);
+  position: relative; flex-shrink: 0;
+}
+.cq-dial.pass { --cq-dial-color: var(--cq-pass); }
+.cq-dial.fail { --cq-dial-color: var(--cq-fail); }
+.cq-dial.run  { --cq-dial-color: var(--cq-run); }
+.cq-dial::after {
+  content: ""; position: absolute; inset: 11px;
+  border-radius: 50%; background: var(--bs-body-bg);
+}
+.cq-dial-inner { position: relative; z-index: 1; text-align: center; }
+.cq-dial-num {
+  font-size: 2.1rem; font-weight: 800; line-height: 1;
+  letter-spacing: -.03em; color: var(--cq-dial-color);
+  font-variant-numeric: tabular-nums;
+}
+.cq-dial-of { font-size: .68rem; color: var(--bs-secondary-color); margin-top: .2rem; }
+
+.cq-verdict-line { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
+.cq-verdict-sub  { font-size: .84rem; color: var(--bs-secondary-color); line-height: 1.85; margin-top: .35rem; }
+.cq-verdict-meta {
+  display: flex; flex-wrap: wrap; gap: .5rem .9rem;
+  font-size: .76rem; color: var(--bs-secondary-color);
+  margin-top: .8rem; padding-top: .8rem;
+  border-top: 1px solid var(--bs-border-color);
+}
+
+
+/* ===================================================================
+   8) เส้นทางคะแนนรายรอบ — ของมีค่าที่สุดในหน้านี้
+   =================================================================== */
+.cq-trail { height: 210px; padding: 3.2rem 1rem 0 3rem; }
+.cq-trail-plot {
+  position: relative;
+  display: flex; align-items: flex-end;
+  height: 100%;
+}
+/* เส้นเกณฑ์ 90 พาดขวางกราฟ — เห็นทันทีว่ารอบไหนข้ามเส้นได้ */
+.cq-trail-mark {
+  position: absolute; left: 0; right: 0; bottom: 90%;
+  border-top: 2px dashed rgba(0,168,107,.55);
+  pointer-events: none;
+}
+.cq-trail-mark span {
+  position: absolute; left: -2.6rem; top: -.7rem;
+  font-size: .68rem; font-weight: 700; color: var(--cq-pass);
+  background: var(--bs-body-bg); padding-right: .3rem;
+}
+.cq-trail-col { flex: 1; position: relative; height: 100%; }
+.cq-trail-bar {
+  position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 46px; max-width: 70%;
+  border-radius: .3rem .3rem 0 0;
+  background: var(--cq-fail);
+  min-height: 4px;
+}
+.cq-trail-col.pass .cq-trail-bar { background: var(--cq-pass); }
+.cq-trail-col.last .cq-trail-bar { box-shadow: 0 0 0 2px var(--bs-body-bg), 0 0 0 4px var(--cq-gold); }
+/* ป้ายคะแนน + ส่วนต่าง ลอยอยู่เหนือหัวแท่ง */
+.cq-trail-cap {
+  position: absolute; bottom: 100%; left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: .35rem;
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  white-space: nowrap;
+}
+.cq-trail-score {
+  font-size: .95rem; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.cq-trail-delta {
+  font-size: .72rem; font-weight: 700;
+  border-radius: 99px; padding: .05rem .4rem;
+}
+.cq-trail-delta.up   { background: rgba(0,168,107,.14); color: #00885a; }
+.cq-trail-delta.down { background: rgba(230,55,87,.14);  color: #c01236; }
+.cq-trail-delta.flat { background: rgba(100,116,139,.14); color: #64748b; }
+.cq-trail-foot {
+  display: flex; gap: 0;
+  padding: .5rem 1rem .25rem 3rem;
+  border-top: 1px solid var(--bs-border-color);
+}
+.cq-trail-foot > div {
+  flex: 1; text-align: center;
+  font-size: .74rem; font-weight: 700;
+  color: var(--bs-secondary-color);
+}
+.cq-trail-empty {
+  padding: 2rem 1.5rem; text-align: center;
+  font-size: .85rem; color: var(--bs-secondary-color);
+}
+
+
+/* ===================================================================
+   9) ตารางกรรมการรายรอบ — ตัวตรวจ AI-slop ต้องอ่านออกว่าหนักกว่าคนอื่น
+   =================================================================== */
+.cq-round-head {
+  display: flex; align-items: center; gap: .75rem;
+  flex-wrap: wrap;
+}
+.cq-round-no {
+  width: 34px; height: 34px; border-radius: .5rem;
+  display: grid; place-items: center; flex-shrink: 0;
+  font-weight: 800; font-size: .9rem;
+  background: linear-gradient(135deg, var(--cq-gold), #b8924f);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(201,169,110,.35);
+}
+.cq-expert-name { font-weight: 700; }
+.cq-expert-lens { font-size: .74rem; color: var(--bs-secondary-color); margin-top: .1rem; }
+.cq-expert-fb   { font-size: .8rem; line-height: 1.8; color: var(--bs-secondary-color); }
+/* แถวของตัวตรวจ AI-slop — ขอบทองซ้าย + ป้าย x1.5 */
+.cq-table tbody tr.is-heavy { cursor: default; }
+.cq-table tbody tr.is-heavy td:first-child { box-shadow: inset 3px 0 0 var(--cq-gold); }
+.cq-table tbody tr.is-heavy:hover td { background: rgba(201,169,110,.06); }
+.cq-weight {
+  display: inline-flex; align-items: center; gap: .25rem;
+  font-size: .72rem; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--bs-secondary-color);
+}
+.cq-weight.heavy {
+  background: rgba(201,168,76,.15); color: #8a6d1c;
+  border: 1px solid rgba(201,168,76,.35);
+  border-radius: 99px; padding: .12rem .5rem;
+}
+[data-bs-theme="dark"] .cq-weight.heavy { color: #e3c46a; }
+
+
+/* ===================================================================
+   10) รายการจุดอ่อน / AI-slop ที่ยังเหลือ
+   =================================================================== */
+.cq-list { list-style: none; margin: 0; padding: 0; }
+.cq-list li {
+  display: flex; gap: .65rem;
+  font-size: .85rem; line-height: 1.85;
+  padding: .5rem 0;
+  border-bottom: 1px dashed var(--bs-border-color);
+}
+.cq-list li:last-child { border-bottom: none; }
+.cq-list li i { flex-shrink: 0; margin-top: .32rem; font-size: .7rem; }
+.cq-list.weak li i { color: var(--cq-wait); }
+.cq-list.slop li i { color: var(--cq-fail); }
+.cq-empty-line {
+  font-size: .84rem; color: var(--bs-secondary-color);
+  display: flex; align-items: center; gap: .5rem;
+}
+.cq-empty-line i { color: var(--cq-pass); }
+.cq-panel-list {
+  font-size: .82rem; line-height: 1.9;
+  color: var(--bs-secondary-color);
+  white-space: pre-line; margin: 0;
+}
+
+
+/* ===================================================================
+   11) แผงอนุมัติ — ปุ่มสำคัญที่สุดในระบบ ต้องไม่ปนกับปุ่มอื่น
+   =================================================================== */
+.cq-approve {
+  border-radius: .75rem;
+  border: 1px solid rgba(201,168,76,.4);
+  border-top: 4px solid var(--cq-gold);
+  background: rgba(201,169,110,.06);
+  padding: 1.35rem 1.5rem;
+  margin-top: 1.5rem;
+}
+.cq-approve.is-risky {
+  border-color: rgba(230,55,87,.35);
+  border-top-color: var(--cq-fail);
+  background: rgba(230,55,87,.05);
+}
+.cq-approve.is-done {
+  border-color: rgba(0,168,107,.35);
+  border-top-color: var(--cq-pass);
+  background: rgba(0,168,107,.05);
+}
+.cq-approve-head {
+  font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--cq-gold);
+}
+.cq-approve.is-risky .cq-approve-head { color: var(--cq-fail); }
+.cq-approve.is-done  .cq-approve-head { color: var(--cq-pass); }
+.cq-approve-title { font-size: 1.05rem; font-weight: 700; margin-top: .3rem; }
+.cq-approve-body  { font-size: .85rem; line-height: 1.9; color: var(--bs-secondary-color); margin-top: .4rem; }
+.cq-approve-body b { color: var(--bs-body-color); }
+
+/* กล่องยืนยันตอนคะแนนยังไม่ถึง 90 — บังคับให้อ่านก่อนกด */
+.cq-override {
+  display: flex; gap: .65rem; align-items: flex-start;
+  background: var(--bs-body-bg);
+  border: 1px solid rgba(230,55,87,.3);
+  border-radius: .5rem;
+  padding: .8rem 1rem;
+  margin-top: 1rem;
+  font-size: .84rem; line-height: 1.8;
+  cursor: pointer;
+}
+.cq-override input { margin-top: .35rem; flex-shrink: 0; }
+
+/* ปุ่มอนุมัติ — ใหญ่ ปุ่มเดียว ไม่มีปุ่มอื่นอยู่ระดับเดียวกัน */
+.cq-approve-btn {
+  display: inline-flex; align-items: center; gap: .55rem;
+  margin-top: 1.1rem;
+  padding: .7rem 1.6rem;
+  font-size: .95rem; font-weight: 700;
+  border: none; border-radius: .5rem;
+  background: linear-gradient(135deg, var(--cq-gold), #b8924f);
+  color: #fff; cursor: pointer;
+  box-shadow: 0 6px 16px rgba(201,169,110,.4);
+  transition: transform .15s, box-shadow .15s, opacity .15s;
+}
+.cq-approve-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(201,169,110,.45); }
+.cq-approve-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.cq-approve-btn.risky { background: linear-gradient(135deg, #E63757, #b81e3c); box-shadow: 0 6px 16px rgba(230,55,87,.35); }
+.cq-approve-note { font-size: .74rem; color: var(--bs-secondary-color); margin-top: .6rem; }
+
+/* สรุปเมื่ออนุมัติแล้ว */
+.cq-approved-by {
+  display: flex; align-items: center; gap: .6rem;
+  font-size: .9rem; font-weight: 700; margin-top: .5rem;
+}
+.cq-approved-by i { color: var(--cq-pass); font-size: 1.15rem; }
+
+
+/* ===================================================================
+   12) คลังคำ AI-slop
+   =================================================================== */
+.cq-pattern { font-weight: 700; font-size: .9rem; }
+.cq-pattern-why { font-size: .74rem; color: var(--bs-secondary-color); margin-top: .15rem; line-height: 1.6; }
+.cq-kind {
+  font-size: .7rem; font-weight: 600;
+  color: var(--bs-secondary-color);
+  background: rgba(100,116,139,.1);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 99px; padding: .12rem .55rem;
+  white-space: nowrap;
+}
+.cq-penalty {
+  display: inline-block; min-width: 2.6rem; text-align: center;
+  font-size: .74rem; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  border-radius: .3rem; padding: .15rem .45rem;
+}
+.cq-penalty[data-p="3"]  { background: rgba(100,116,139,.14); color: #64748b; }
+.cq-penalty[data-p="5"]  { background: rgba(232,137,12,.14);  color: #b26a05; }
+.cq-penalty[data-p="8"]  { background: rgba(230,55,87,.14);   color: #c01236; }
+.cq-penalty[data-p="10"] { background: rgba(230,55,87,.9);    color: #fff; }
+
+/* แถบจำนวนครั้งที่เจอ — เทียบกันข้ามแถวได้ด้วยตา */
+.cq-hit { display: flex; align-items: center; gap: .55rem; min-width: 120px; }
+.cq-hit-num { font-size: .8rem; font-weight: 700; width: 2rem; text-align: right; font-variant-numeric: tabular-nums; }
+.cq-hit-track { flex: 1; height: 6px; border-radius: 99px; background: rgba(100,116,139,.14); }
+.cq-hit-fill  { height: 100%; border-radius: 99px; background: var(--cq-gold); }
+.cq-hit.zero .cq-hit-num { color: var(--bs-secondary-color); font-weight: 500; }
+
+.cq-row-off { opacity: .5; }
+
+
+/* ===================================================================
+   13) ฟอร์มใน modal ของคลังคำ (ใช้ label uppercase ตามสเปก)
+   =================================================================== */
+.cq-label {
+  display: block;
+  font-size: .74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: var(--bs-secondary-color);
+  margin-bottom: .35rem;
+}
+.cq-input, .cq-textarea, .cq-select {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .375rem;
+  padding: .5rem .75rem;
+  font-size: .88rem;
+  color: var(--bs-body-color);
+}
+.cq-select option { color: initial; }
+.cq-input:focus, .cq-textarea:focus, .cq-select:focus {
+  outline: none;
+  border-color: var(--cq-gold);
+  box-shadow: 0 0 0 3px rgba(201,169,110,.12);
+}
+.cq-textarea { line-height: 1.85; resize: vertical; }
+.cq-help { font-size: .74rem; color: var(--bs-secondary-color); margin-top: .3rem; line-height: 1.7; }
+
+
+/* ── จอเล็ก ────────────────────────────────────────────────── */
+@media (max-width: 991.98px) {
+  .cq-gates { grid-template-columns: 1fr; }
+  .cq-gate-and {
+    flex-direction: row; padding: .5rem 1rem;
+    border-left: none; border-right: none;
+    border-top: 1px solid var(--bs-border-color);
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+}
+@media (max-width: 575.98px) {
+  .cq-trail { padding-left: 2.6rem; height: 185px; }
+  .cq-trail-foot { padding-left: 2.6rem; }
+  .cq-trail-bar { width: 34px; }
+}
