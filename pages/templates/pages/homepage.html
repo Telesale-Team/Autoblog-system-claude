@@ -713,13 +713,27 @@
         <div class="nd-eyebrow">ทำไมถึงเชื่อหนูดี?</div>
         <h2 class="nd-h2">ธุรกิจไทยเลือกหนูดีเพราะ...</h2>
         <div class="row g-3 mb-4">
-          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">50+</div><div style="font-size:.8rem;color:var(--nd-muted);">ธุรกิจที่ดูแล</div></div>
-          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">98%</div><div style="font-size:.8rem;color:var(--nd-muted);">ความพึงพอใจ</div></div>
-          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">4.9★</div><div style="font-size:.8rem;color:var(--nd-muted);">คะแนนเฉลี่ย</div></div>
+          {# ตัวเลขทั้งสามต้องนับจากของจริงได้ — 27 ส.ค. 69 ถอด "50+ / 98% / 4.9★" ออกเพราะไม่มีที่มา #}
+          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">5</div><div style="font-size:.8rem;color:var(--nd-muted);">ระบบที่รันอยู่จริง</div></div>
+          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">2</div><div style="font-size:.8rem;color:var(--nd-muted);">ร้านที่ใช้ทุกวัน</div></div>
+          <div class="col-4 text-center"><div style="font-size:2rem;font-weight:900;color:var(--nd-gold);">24/7</div><div style="font-size:.8rem;color:var(--nd-muted);">ระบบรับงานให้ตลอด</div></div>
         </div>
+        {# 27 ส.ค. 69 ถอดคำชมลูกค้า 2 ก้อนออก — เป็นข้อความที่แต่งขึ้นเองพร้อมชื่อคนที่ไม่มีตัวตน #}
+        {# ใส่คืนได้เมื่อได้ testimonial จริงจากร้านที่ใช้งานอยู่ (อยู่ในแผนเฟส 9 แล้ว) #}
+        {# ระหว่างนี้ใช้ "ของจริงที่กดเล่นได้" แทน ซึ่งพิสูจน์ได้ทันทีและแรงกว่าคำชม #}
         <div class="row g-3">
-          <div class="col-sm-6"><div class="nd-testi"><blockquote>"ก่อนใช้หนูดี ต้องจ้าง 2 คนตอบแชท ตอนนี้ 1 คนก็พอ แถมยอดขายเพิ่มด้วย"</blockquote><cite>คุณณัฐพร — เจ้าของคลินิกความงาม กรุงเทพฯ</cite></div></div>
-          <div class="col-sm-6"><div class="nd-testi"><blockquote>"ระบบจองอัตโนมัติช่วยได้มาก ลูกค้าต่างชาติจองได้ตลอด 24 ชม. รายได้เพิ่ม 30%"</blockquote><cite>คุณปิยะ — เจ้าของรีสอร์ท เชียงใหม่</cite></div></div>
+          <div class="col-sm-6">
+            <a href="https://booking.noodee-bootbiz.com/" target="_blank" rel="noopener" class="nd-testi d-block text-decoration-none">
+              <blockquote>ระบบจองคิวที่ร้านนวดใช้อยู่จริงทุกวัน — กดเข้าไปลองจองดูได้เลย ไม่ต้องสมัคร ไม่ต้องนัดคุยก่อน</blockquote>
+              <cite>ลองเล่น QueueFlow <i class="bi bi-box-arrow-up-right"></i></cite>
+            </a>
+          </div>
+          <div class="col-sm-6">
+            <a href="https://pos.noodee-bootbiz.com/" target="_blank" rel="noopener" class="nd-testi d-block text-decoration-none">
+              <blockquote>ระบบสต๊อกและขายหน้าร้าน เปิดเป็นร้านค้าออนไลน์ให้กดสั่งของได้จริง ตั้งแต่หยิบใส่ตะกร้าจนจ่ายเงิน</blockquote>
+              <cite>ลองเล่นระบบ POS <i class="bi bi-box-arrow-up-right"></i></cite>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -865,14 +879,14 @@ ndTypewriter('tw-pkg', [
   'ไม่ต้องลงทุนหลักแสนครับ',
   'Growth เป็นตัวที่หนูดีแนะนำครับ',
   'เริ่มได้วันนี้เลย ปรับได้ตลอดครับ',
-  'ถ้าไม่พอใจ คืนเงินครับ ไม่มีปัญหา',
+  'ลองเล่นระบบจริงก่อนตัดสินใจได้ครับ',
 ], 1000);
 
 /* ── Section 7: Trust ───────────────────────── */
 ndTypewriter('tw-trust', [
-  'หนูดีดูแลธุรกิจไทยมาแล้ว 50+ ราย',
-  'ความพึงพอใจ 98% วัดจากจริงครับ',
-  'ลูกค้าต่อสัญญากับหนูดีทุกรายครับ',
+  'ระบบที่หนูดีทำ รันอยู่จริง 5 ระบบครับ',
+  'ร้านจริง 2 ร้านใช้ทุกวัน ไม่ใช่เดโมครับ',
+  'กดลองเล่นก่อนได้เลย ไม่ต้องนัดคุยครับ',
   'หนูดีไม่ทิ้งลูกค้าแน่นอนครับ',
 ], 1200);
 

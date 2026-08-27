@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "slug": "ai-chatbot",
+    "name": "AI Chatbot สำหรับธุรกิจ",
+    "tagline": "บอทสนทนาอัจฉริยะที่ตอบแทนทีมได้ตลอด 24 ชั่วโมง",
+    "price_start": 15000,
+    "price_label": "เริ่มต้น",
+    "features": "ตอบคำถามอัตโนมัติ 24/7\nเชื่อมต่อ LINE OA / Facebook Page / เว็บไซต์\nเข้าใจภาษาไทยตามบริบทธุรกิจคุณ\nส่ง Lead เข้า CRM อัตโนมัติ\nDashboard ดูสถิติการสนทนา\nรองรับลูกค้าพร้อมกันไม่จำกัด\nจำบทสนทนาและ Context ลูกค้าแต่ละราย\nตอบหลายภาษา ไทย/อังกฤษ/จีน\nส่งแคตตาล็อก/โปรโมชันอัตโนมัติ\nHandoff ให้ Staff เมื่อต้องการ\nตั้ง Greeting/เมนูได้เองไม่ต้องโค้ด\nทดสอบและ Deploy ภายใน 7 วัน",
+    "status": "published",
+    "is_featured": true,
+    "display_order": 1
+  },
+  {
+    "id": 2,
+    "slug": "ai-lead-generation",
+    "name": "AI Lead Generation",
+    "tagline": "ดึง Lead คุณภาพสูงเข้าธุรกิจโดยอัตโนมัติด้วย AI",
+    "price_start": 20000,
+    "price_label": "ต่อเดือน",
+    "features": "วิเคราะห์ Lead Score อัตโนมัติ\nส่ง Follow-up อัตโนมัติทาง LINE / Email\nแจ้งเตือนทีมขายแบบ Real-time\nทำนายโอกาสปิดดีล\nIntegrate กับ CRM ที่มีอยู่\nReport ประสิทธิภาพ Lead รายสัปดาห์\nคัดกรอง Lead ปลอมออกอัตโนมัติ\nA/B Test ข้อความ Follow-up\nสร้าง Landing Page ดักจับ Lead\nแบ่งกลุ่ม Lead ตาม Product สนใจ\nติดตาม Lead ข้ามช่องทางได้\nDashboard Conversion Rate รายวัน",
+    "status": "published",
+    "is_featured": true,
+    "display_order": 2
+  },
+  {
+    "id": 3,
+    "slug": "ai-workflow-automation",
+    "name": "AI Workflow Automation",
+    "tagline": "ลด Manual Work ซ้ำซากด้วย AI Workflow อัตโนมัติ",
+    "price_start": 25000,
+    "price_label": "ต่อโปรเจกต์",
+    "features": "วิเคราะห์ Process ที่ซ้ำซากในองค์กร\nเชื่อมต่อ Google Workspace / Microsoft 365\nAuto-generate รายงานรายวัน / รายสัปดาห์\nแจ้งเตือนและ Escalation อัตโนมัติ\nลด Human Error ในงานข้อมูล\nROI เฉลี่ย 3-6 เดือน\nดึงข้อมูลข้ามระบบโดยไม่ต้องพิมพ์ซ้ำ\nApprove งานผ่าน LINE ได้เลย\nจัดลำดับงานอัตโนมัติตาม Priority\nBackup ข้อมูลและ Log ทุก Action\nปรับ Workflow ได้เองไม่ต้องรอ IT\nรองรับทีมหลายสาขาพร้อมกัน",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 3
+  },
+  {
+    "id": 4,
+    "slug": "custom-ai-agent",
+    "name": "Custom AI Agent",
+    "tagline": "AI Agent เฉพาะองค์กร ทำงานได้ทุกอย่างที่คุณต้องการ",
+    "price_start": 50000,
+    "price_label": "ต่อโปรเจกต์",
+    "features": "ออกแบบตาม Business Logic ของคุณ\nเชื่อมต่อ Database และ API ภายใน\nทำงานได้หลาย Step โดยอัตโนมัติ\nรองรับ Multi-agent Collaboration\nมี Logging และ Audit Trail\nพร้อม Support และ Maintenance\nวิเคราะห์เอกสาร/ใบเสนอราคาอัตโนมัติ\nเรียนรู้และปรับปรุงจากการใช้งานจริง\nตั้ง Permission แยกตาม Role ทีม\nทดสอบใน Sandbox ก่อน Deploy จริง\nอัปเดต Logic ได้โดยไม่หยุดระบบ\nSLA รับประกัน Uptime 99.5%",
+    "status": "published",
+    "is_featured": true,
+    "display_order": 4
+  },
+  {
+    "id": 5,
+    "slug": "ai-hardware-integration",
+    "name": "AI + Hardware Integration",
+    "tagline": "เชื่อม AI เข้ากับอุปกรณ์จริงในสถานประกอบการ",
+    "price_start": 80000,
+    "price_label": "ต่อโปรเจกต์",
+    "features": "Camera AI วิเคราะห์ภาพ Real-time\nIoT Sensor + AI Alert System\nKiosk / Self-service ด้วย AI\nเชื่อมต่อ POS / ERP / MES\nติดตั้ง On-premise หรือ Cloud\nดูแลระบบ Onsite ทั่วประเทศ\nนับคน/รถ/สินค้าจากกล้องอัตโนมัติ\nแจ้งเตือนทันทีเมื่อเกิดเหตุผิดปกติ\nควบคุมอุปกรณ์ระยะไกลผ่านแอป\nเก็บ Log ภาพ/เซ็นเซอร์ย้อนหลัง 90 วัน\nขยายจุดติดตั้งได้โดยไม่เปลี่ยนระบบ\nติดตั้งและอบรมทีมงาน Onsite",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 5
+  },
+  {
+    "id": 6,
+    "slug": "booking-system",
+    "name": "ระบบ Booking",
+    "tagline": "ลูกค้าจองได้ตลอด 24 ชม. โดยไม่ต้องรับโทรศัพท์",
+    "price_start": 25000,
+    "price_label": "เริ่มต้น",
+    "features": "จองออนไลน์ 24 ชม. ผ่านมือถือ\nจัดตาราง therapist ไม่ชนกัน\nแจ้งเตือน LINE อัตโนมัติ\nรับชำระเงินออนไลน์ได้ทันที\nแดชบอร์ดรายได้และสถิติร้าน\nระบบสมาชิกและโปรโมชั่นลูกค้าประจำ\nลูกค้าเลือก Therapist ที่ชอบได้เอง\nยืนยันนัดและ Remind อัตโนมัติ\nจัดการ Walk-in + Online พร้อมกัน\nสะสมแต้มและแลกรางวัลในระบบ\nรายงานบริการยอดนิยมรายเดือน\nรองรับหลายสาขาจากระบบเดียว",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 6
+  },
+  {
+    "id": 7,
+    "slug": "online-exam-system",
+    "name": "ระบบข้อสอบออนไลน์",
+    "tagline": "สร้างข้อสอบใน 10 นาที ตรวจอัตโนมัติ รู้ผลทันที",
+    "price_start": 35000,
+    "price_label": "เริ่มต้น",
+    "features": "สร้างข้อสอบได้หลายประเภทคำถาม\nตรวจและให้คะแนนอัตโนมัติ\nวิเคราะห์ผลรายบุคคลและรายกลุ่ม\nระบบสุ่มข้อและสลับตัวเลือก\nป้องกันทุจริตด้วย proctoring เบื้องต้น\nส่งออกรายงานผล PDF และ Excel\nกำหนดเวลาและตัดสิทธิ์อัตโนมัติ\nแสดงผลคะแนนทันทีหลังส่งข้อสอบ\nเปรียบเทียบผลกับค่าเฉลี่ยกลุ่ม\nออกใบรับรองผลสอบอัตโนมัติ\nจัดการหลายห้องสอบพร้อมกัน\nเข้าสอบได้ทุก Device ไม่ต้องติดตั้ง",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 7
+  },
+  {
+    "id": 8,
+    "slug": "online-course-lms",
+    "name": "ระบบคอร์สเรียนออนไลน์",
+    "tagline": "เปิดคอร์สออนไลน์ได้เอง ขายได้ทันที ไม่ต้องง้อแพลตฟอร์มใหญ่",
+    "price_start": 45000,
+    "price_label": "เริ่มต้น",
+    "features": "อัปโหลดวิดีโอและเอกสารไม่จำกัด\nรับชำระเงินผ่าน QR และบัตรเครดิต\nติดตามความก้าวหน้าผู้เรียนรายคน\nออกใบเซอร์ติฟิเคตอัตโนมัติ\nระบบ quiz และแบบทดสอบท้ายบท\nแบรนด์เป็นของคุณ 100% ไม่มีโลโก้เรา\nล็อคบทเรียนตามลำดับ ข้ามไม่ได้\nLive สดและบันทึกในระบบเดียว\nส่ง Assignment และตรวจงานออนไลน์\nแจ้งเตือนผู้เรียนที่หายหน้าไป\nขายคอร์สผ่านระบบ Affiliate ได้\nAnalytics ผู้เรียนรายคนรายบท",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 8
+  },
+  {
+    "id": 9,
+    "slug": "stock-pos-system",
+    "name": "ระบบสต๊อก + ขายหน้าร้าน (POS)",
+    "tagline": "คุมสต๊อกหลายคลัง ขายหน้าร้านลื่นไหล รู้กำไรทุกบิล",
+    "price_start": 35000,
+    "price_label": "เริ่มต้น",
+    "features": "จัดการสินค้า หมวดหมู่ หน่วยนับ และตัวเลือกสินค้า (สี/ไซซ์/สไตล์)\nแยกสต๊อกตามสาขา คลังสินค้า และตำแหน่งเก็บ (โซน/แถว/ชั้น/ช่อง)\nติดตามหมายเลขซีเรียล ล็อตการผลิต และวันหมดอายุ\nแจ้งเตือนจุดสั่งซื้อซ้ำ และสินค้าต่ำกว่าสต๊อกขั้นต่ำ\nหน้าขายหน้าร้าน (POS) รองรับบาร์โค้ด\nรายงานยอดขาย ต้นทุน และกำไรรายวัน\nระบบผู้ใช้และสิทธิ์ตามตำแหน่งงาน",
+    "status": "published",
+    "is_featured": false,
+    "display_order": 9
+  }
+]

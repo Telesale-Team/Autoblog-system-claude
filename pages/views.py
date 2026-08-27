@@ -70,9 +70,14 @@ def about(request):
 
 
 def services(request):
+    # แยกสองกลุ่มเพราะคนซื้อคิดคนละแบบ — "ระบบพร้อมใช้" ถามว่าเริ่มได้เมื่อไหร่
+    # ส่วน "งานออกแบบเฉพาะ" ถามว่าทำอะไรได้บ้าง เอามาเรียงปนกันแล้วเทียบราคาผิดตัว
     from .models import Service
-    all_services = Service.objects.filter(status="published").order_by("display_order")
-    return render(request, "pages/services.html", {"services": all_services})
+    published = Service.objects.filter(status="published").order_by("display_order")
+    return render(request, "pages/services.html", {
+        "products": published.filter(delivery_type="product"),
+        "customs": published.filter(delivery_type="custom"),
+    })
 
 
 def service_detail(request, slug):

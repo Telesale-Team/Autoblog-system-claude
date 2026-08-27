@@ -27,6 +27,15 @@
 @media (max-width: 1199.98px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 575.98px)  { .svc-grid { grid-template-columns: 1fr; } }
 
+/* === GROUP HEADING — แยกของพร้อมใช้ ออกจากงานออกแบบเฉพาะ === */
+.svc-group-head { margin: 2.5rem 0 1.1rem; }
+.svc-group-head:first-of-type { margin-top: 0; }
+.svc-group-head h2 {
+  font-size: 1.15rem; font-weight: 800; color: var(--brand-navy, #1a2744);
+  margin: 0 0 .2rem; letter-spacing: -.01em;
+}
+.svc-group-head p { font-size: .84rem; color: var(--brand-muted); margin: 0; }
+
 /* === SERVICE CARD — matches Blog yt-card === */
 .svc-card {
   display: block;
@@ -126,12 +135,18 @@
   <!-- Page header -->
   <div class="svc-page-header">
     <h1>บริการของเรา</h1>
-    <p>โซลูชัน AI และระบบดิจิทัลครบวงจรสำหรับ SME ไทย เริ่มต้นได้ทันที</p>
+    <p>ระบบที่ใช้งานได้จริงสำหรับ SME ไทย — มีทั้งของที่พร้อมเริ่มเลย และงานที่ออกแบบให้เฉพาะคุณ</p>
+  </div>
+
+  <!-- === กลุ่มที่ 1: ระบบพร้อมใช้ — deploy ซ้ำได้ เริ่มได้ทันที === -->
+  <div class="svc-group-head">
+    <h2>ระบบพร้อมใช้ — เริ่มได้เลย</h2>
+    <p>ของที่รันอยู่จริงแล้ว มีให้ลองเล่นก่อนตัดสินใจ</p>
   </div>
 
   <!-- Services grid -->
   <div class="svc-grid">
-    {% for svc in services %}
+    {% for svc in products %}
     <a href="{% url 'pages:service_detail' svc.slug %}" class="svc-card">
 
       <!-- Thumbnail -->
@@ -156,7 +171,7 @@
         <div class="svc-card-info">
           <p class="svc-card-title">{{ svc.name }}</p>
           <p class="svc-card-tagline">{{ svc.tagline }}</p>
-          <p class="svc-card-price">เริ่มต้น ฿{{ svc.price_start|floatformat:0 }} · {{ svc.price_label }}</p>
+          <p class="svc-card-price">฿{{ svc.price_start|floatformat:0 }} {{ svc.price_label }}</p>
         </div>
       </div>
 
@@ -168,5 +183,47 @@
     </div>
     {% endfor %}
   </div>
+
+  <!-- === กลุ่มที่ 2: งานออกแบบเฉพาะธุรกิจ — ต้องคุยขอบเขตก่อน === -->
+  {% if customs %}
+  <div class="svc-group-head">
+    <h2>ออกแบบเฉพาะธุรกิจคุณ</h2>
+    <p>ราคาขึ้นกับขอบเขตงาน คุยกันก่อนแล้วเราประเมินให้</p>
+  </div>
+
+  <div class="svc-grid">
+    {% for svc in customs %}
+    <a href="{% url 'pages:service_detail' svc.slug %}" class="svc-card">
+
+      <!-- Thumbnail -->
+      <div class="svc-thumb">
+        {% if svc.cover_image_url %}
+        <img src="{{ svc.cover_image_url }}" alt="{{ svc.name }}" loading="lazy">
+        {% else %}
+        <div class="svc-thumb-ph"><i class="bi {{ svc.icon }}"></i></div>
+        {% endif %}
+
+        {% if svc.is_featured %}
+        <span class="svc-badge-featured">แนะนำ</span>
+        {% endif %}
+
+        <span class="svc-price-badge">฿{{ svc.price_start|floatformat:0 }}+</span>
+        <span class="svc-icon-badge"><i class="bi {{ svc.icon }}"></i></span>
+      </div>
+
+      <!-- Card body — same structure as Blog -->
+      <div class="svc-card-body">
+        <div class="svc-icon-avatar"><i class="bi {{ svc.icon }}"></i></div>
+        <div class="svc-card-info">
+          <p class="svc-card-title">{{ svc.name }}</p>
+          <p class="svc-card-tagline">{{ svc.tagline }}</p>
+          <p class="svc-card-price">฿{{ svc.price_start|floatformat:0 }} {{ svc.price_label }}</p>
+        </div>
+      </div>
+
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
 
 {% endblock %}
