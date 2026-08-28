@@ -19,6 +19,15 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
+# โดเมนที่ยอมรับฟอร์ม POST ข้ามมาได้ — ถ้าไม่มี ฟอร์มบนเว็บจริงจะขึ้น CSRF error ทุกใบ
+# เคยตั้งด้วยมือบนเซิร์ฟเวอร์อย่างเดียวจนทำให้ deploy ชนกับ git pull (28 ส.ค. 2569)
+# ค่า default ครอบโดเมนที่ใช้งานจริงอยู่แล้ว เพิ่มโดเมนใหม่ผ่าน .env ได้โดยไม่ต้องแก้โค้ด
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[
+    "https://noodee-bootbiz.com",
+    "https://www.noodee-bootbiz.com",
+    "https://blog.kooky-shop.com",
+])
+
 
 # Application definition
 INSTALLED_APPS = [
