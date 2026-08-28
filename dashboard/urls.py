@@ -63,6 +63,7 @@ urlpatterns = [
     # Frontend Designer
     path("design-system/",    views.design_system_view, name="design_system"),
     path("roadmap/",          views.roadmap_view,       name="roadmap"),
+    path("playbook/",         views.playbook_view,      name="playbook"),
     path("content-quality/",                   views.content_quality_view,        name="content_quality"),
     path("content-quality/<int:pk>/",          views.content_quality_detail_view, name="content_quality_detail"),
     path("content-quality/<int:pk>/approve/",  views.content_quality_approve,     name="content_quality_approve"),

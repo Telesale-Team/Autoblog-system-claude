@@ -20,6 +20,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from pages.models import ContactLead, Service
 from crm.models import Customer
 from marketing.models import ContentBacklog
+from finance.models import Expense
 from operations.models import AIProject, Deployment
 from blog.models import Article, Category, Tag
 from blog.forms import ArticleForm
@@ -2191,6 +2192,65 @@ def roadmap_view(request):
         "overdue_events": overdue,
     }
     return render(request, "dashboard/roadmap.html", context)
+
+
+@staff_member_required
+def playbook_view(request):
+    from marketing import playbook as pb
+
+    # เครื่องมือฝั่งผู้พัฒนา/เจ้าของ เหมือน roadmap — คนอื่นไม่ควรรู้ด้วยซ้ำว่ามีอยู่
+    if not request.user.is_superuser:
+        raise Http404
+
+    today = timezone.localdate()
+    week_start, week_end = pb.week_range(today)
+    prev_start, prev_end = pb.previous_week_range(today)
+
+    def _in_range(qs, field, start, end):
+        return qs.filter(**{f"{field}__date__gte": start, f"{field}__date__lte": end})
+
+    leads_qs = ContactLead.objects.all()
+    leads_this_week = _in_range(leads_qs, "created_at", week_start, week_end).count()
+    leads_prev_week = _in_range(leads_qs, "created_at", prev_start, prev_end).count()
+
+    articles_this_week = _in_range(Article.objects.all(), "created_at", week_start, week_end).count()
+    articles_prev_week = _in_range(Article.objects.all(), "created_at", prev_start, prev_end).count()
+
+    expenses_this_week = Expense.objects.filter(date__gte=week_start, date__lte=week_end).count()
+    expenses_prev_week = Expense.objects.filter(date__gte=prev_start, date__lte=prev_end).count()
+
+    # เป้ารายสัปดาห์ของ "ตามงาน lead ค้าง" = จำนวน lead ที่ยังค้างสถานะ new ตอนต้นสัปดาห์นี้
+    lead_follow_up_target = leads_qs.filter(status="new", created_at__date__lt=week_start).count()
+    # ตัวจริง = จำนวนที่เปลี่ยนสถานะออกจาก new และถูกแก้ในสัปดาห์นี้ (ประมาณจาก updated_at เพราะยังไม่มี LeadActivity log)
+    lead_follow_up_actual = _in_range(
+        leads_qs.exclude(status="new"), "updated_at", week_start, week_end
+    ).count()
+    lead_follow_up_target_prev = leads_qs.filter(status="new", created_at__date__lt=prev_start).count()
+    lead_follow_up_actual_prev = _in_range(
+        leads_qs.exclude(status="new"), "updated_at", prev_start, prev_end
+    ).count()
+
+    metrics = {
+        "leads_new": leads_this_week,
+        "leads_new_prev": leads_prev_week,
+        "seo_article": articles_this_week,
+        "seo_article_prev": articles_prev_week,
+        "expense_logging": expenses_this_week,
+        "expense_logging_prev": expenses_prev_week,
+        "lead_follow_up": lead_follow_up_actual,
+        "lead_follow_up_prev": lead_follow_up_actual_prev,
+        "lead_follow_up_target": lead_follow_up_target,
+        "lead_follow_up_target_prev": lead_follow_up_target_prev,
+    }
+
+    context = {
+        "week_start": week_start,
+        "week_end": week_end,
+        "channels": pb.build_channels(metrics=metrics),
+        "summary": pb.weekly_summary(metrics=metrics),
+        "staleness": pb.staleness(today),
+    }
+    return render(request, "dashboard/playbook.html", context)
 
 
 # ── API: โปรไฟล์ 5 มิติต่อกลุ่มลูกค้า ────────────────────────────────────

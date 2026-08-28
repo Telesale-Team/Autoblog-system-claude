@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static humanize %}
+<!-- ===================================================================
+     แผนการตลาดรายสัปดาห์ (PLAYBOOK)
+     แหล่งความจริงเดียว = marketing/playbook.py — หน้านี้แค่แสดงผล
+     ต่างจาก roadmap: วัด "ทำถึงเป้าสัปดาห์นี้ไหม" ไม่ใช่ DONE/TODO ถาวร
+     เห็นได้เฉพาะ superuser (คนอื่นได้ 404 จากวิว) — ออกแบบโดย Frontend Designer 28 ส.ค. 69
+     =================================================================== -->
+
+{% block title %}แผนการตลาดรายสัปดาห์ — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">แผนการตลาดรายสัปดาห์</li>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<style>
+  /* === แถบเตือนแผนล้าสมัย (โครงเดียวกับ roadmap แต่ class แยก) === */
+  .pb-alert { border-radius:.6rem; padding:.85rem 1.1rem; margin-bottom:1.25rem; font-size:.86rem; }
+  .pb-alert.stale { background:rgba(220,53,69,.1); border:1px solid rgba(220,53,69,.35); color:#b02a37; }
+
+  /* === สรุปผลลัพธ์รวมของสัปดาห์ === */
+  .pb-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+  .pb-stat { background:var(--bs-body-bg); border:1px solid var(--bs-border-color); border-radius:.75rem; padding:1rem 1.15rem; }
+  .pb-stat-value { font-size:1.65rem; font-weight:800; line-height:1.1; }
+  .pb-stat-label { font-size:.74rem; color:var(--bs-secondary-color); text-transform:uppercase; letter-spacing:.06em; margin-top:.25rem; }
+  .pb-stat.accent .pb-stat-value { color:var(--app-primary); }
+  .pb-stat-trend { font-size:.74rem; margin-top:.35rem; font-weight:600; }
+  .pb-trend-up { color:#198754; }
+  .pb-trend-down { color:#dc3545; }
+  .pb-trend-flat { color:var(--bs-secondary-color); }
+
+  /* === แถบ "สัปดาห์นี้" === */
+  .pb-week { border:1px solid var(--app-primary); border-left-width:4px; border-radius:.75rem;
+             background:rgba(201,169,110,.06); padding:1rem 1.35rem; margin-bottom:1.5rem;
+             display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; }
+  .pb-week-head { font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--app-primary); }
+  .pb-week-range { font-size:1.05rem; font-weight:700; margin-top:.2rem; }
+
+  /* === การ์ดช่องทาง === */
+  .pb-channel { background:var(--bs-body-bg); border:1px solid var(--bs-border-color); border-left-width:4px;
+                border-radius:.75rem; padding:1rem 1.25rem; margin-bottom:.75rem;
+                display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.75rem; }
+  .pb-channel.status-on_target,.pb-channel.status-done_once { border-left-color:#198754; }
+  .pb-channel.status-partial { border-left-color:var(--app-primary); }
+  .pb-channel.status-not_started { border-left-color:#dc3545; background:rgba(220,53,69,.04); }
+  .pb-channel.status-tracked { border-left-color:var(--bs-border-color); }
+  .pb-channel-main { flex:1 1 260px; min-width:0; }
+  .pb-channel-name { font-weight:700; font-size:.92rem; display:flex; align-items:center; gap:.5rem; }
+  .pb-channel-target { font-size:.78rem; color:var(--bs-secondary-color); margin-top:.2rem; }
+  .pb-channel-note { font-size:.78rem; color:var(--bs-secondary-color); line-height:1.7; margin-top:.4rem; }
+  .pb-channel-right { flex:0 0 auto; text-align:right; min-width:110px; }
+  .pb-channel-actual { font-size:1.25rem; font-weight:800; }
+  .pb-channel-bar { height:6px; border-radius:99px; background:rgba(0,0,0,.08); overflow:hidden; margin-top:.4rem; width:120px; margin-left:auto; }
+  .pb-channel-bar > span { display:block; height:100%; border-radius:99px; }
+  .pb-channel.status-on_target .pb-channel-bar > span,
+  .pb-channel.status-done_once .pb-channel-bar > span { background:#198754; }
+  .pb-channel.status-partial .pb-channel-bar > span { background:var(--app-primary); }
+  .pb-channel.status-not_started .pb-channel-bar > span { background:#dc3545; }
+  .pb-channel-trend { font-size:.72rem; margin-top:.3rem; font-weight:600; }
+
+  .pb-badge { display:inline-block; border-radius:99px; font-size:.72rem; font-weight:700; padding:.2rem .65rem; }
+
+  @media (max-width:576px) {
+    .pb-channel { flex-direction:column; align-items:flex-start; }
+    .pb-channel-right { text-align:left; width:100%; }
+    .pb-channel-bar { margin-left:0; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- === Hero === -->
+<div class="settings-hero">
+  <div>
+    <h1 class="settings-hero-title">
+      <span class="hero-icon"><i class="bi bi-megaphone"></i></span>
+      แผนการตลาดรายสัปดาห์
+    </h1>
+    <p class="settings-hero-sub">ทำไปกี่ครั้ง / ได้ lead กี่ราย เทียบกับเป้า — ไม่มีวันจบ ไม่ใช่ checklist</p>
+  </div>
+  <a href="{% url 'dashboard:roadmap' %}" class="ds-btn-outline">
+    <i class="bi bi-diagram-3"></i> แผนพัฒนาระบบ
+  </a>
+</div>
+
+<!-- === เตือนเมื่อไฟล์แผนไม่ถูกแก้นานเกินกำหนด === -->
+{% if staleness.is_stale %}
+<div class="pb-alert stale">
+  <i class="bi bi-exclamation-triangle-fill"></i>
+  <b>ไฟล์แผนนี้ไม่ถูกแก้มา {{ staleness.days }} วันแล้ว</b>
+  (แก้ล่าสุด {{ staleness.updated|date:"j M Y" }}) —
+  ถ้าช่องทางแบบ manual ไม่มีใครอัปเดตสถานะ หน้านี้จะโชว์ "ยังไม่เริ่ม" ค้างไปเรื่อยๆ ทั้งที่อาจทำไปแล้วจริง
+</div>
+{% endif %}
+
+<!-- === สัปดาห์นี้ === -->
+<div class="pb-week">
+  <div>
+    <div class="pb-week-head">สัปดาห์นี้</div>
+    <div class="pb-week-range">{{ week_start|date:"j M" }} – {{ week_end|date:"j M Y" }}</div>
+  </div>
+  <div style="font-size:.8rem;color:var(--bs-secondary-color);max-width:420px;text-align:right">
+    ตัวเลข lead รวมสแปมด้วย — ยังแยกอัตโนมัติไม่ได้จนกว่าจะมีปุ่มทำเครื่องหมายสแปม (roadmap เฟส 9)
+  </div>
+</div>
+
+<!-- === สรุปผลลัพธ์รวม === -->
+<div class="pb-summary">
+  <div class="pb-stat accent">
+    <div class="pb-stat-value">{{ summary.leads_new }}</div>
+    <div class="pb-stat-label">Lead ใหม่สัปดาห์นี้</div>
+    <div class="pb-stat-trend pb-trend-{{ summary.leads_trend_dir }}">{{ summary.leads_trend }}</div>
+  </div>
+  <div class="pb-stat">
+    <div class="pb-stat-value">{{ summary.on_target }}<small style="font-size:1rem;color:var(--bs-secondary-color)">/{{ summary.total_channels }}</small></div>
+    <div class="pb-stat-label">ช่องทางที่ถึงเป้า</div>
+  </div>
+  <div class="pb-stat">
+    <div class="pb-stat-value">{{ summary.not_started }}</div>
+    <div class="pb-stat-label">ยังไม่เริ่มสัปดาห์นี้</div>
+  </div>
+</div>
+
+<!-- === รายการช่องทาง === -->
+<div class="scard">
+  <div class="scard-header">
+    <div class="d-flex align-items-center gap-3">
+      <div class="scard-header-icon"><i class="bi bi-funnel"></i></div>
+      <div>
+        <div style="font-weight:700;font-size:.97rem">ช่องทาง / กิจกรรมประจำสัปดาห์</div>
+        <div style="font-size:.78rem;color:var(--bs-secondary-color);margin-top:.1rem">
+          {{ channels|length }} ช่องทาง — เขียว = ถึงเป้า (รีเซ็ตทุกสัปดาห์) · ทอง = ทำได้บางส่วน · แดง = ยังไม่ทำเลย
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scard-body">
+    {% for ch in channels %}
+    <div class="pb-channel status-{{ ch.status }}">
+      <div class="pb-channel-main">
+        <div class="pb-channel-name"><i class="{{ ch.icon }}"></i> {{ ch.name }}</div>
+        <div class="pb-channel-target">
+          {% if ch.target_resolved %}เป้า {{ ch.target_resolved }} {{ ch.unit }}{% else %}ติดตามอย่างเดียว ไม่ตั้งเป้าตายตัว{% endif %}
+          {% if ch.cadence == 'once' %} · งานครั้งเดียวจบ{% endif %}
+          {% if ch.tracking == 'manual' %} · <span title="ยังไม่มีที่บันทึกอัตโนมัติ">อัปเดตมือ</span>{% endif %}
+        </div>
+        {% if ch.note %}<div class="pb-channel-note">{{ ch.note }}</div>{% endif %}
+      </div>
+      <div class="pb-channel-right">
+        <span class="pb-badge bg-{{ ch.meta.badge }}"><i class="{{ ch.meta.icon }}"></i> {{ ch.meta.label }}</span>
+        <div class="pb-channel-actual">{{ ch.actual|default:0 }}{% if ch.unit and ch.tracking == 'auto' %}<small style="font-size:.7rem;color:var(--bs-secondary-color)"> {{ ch.unit }}</small>{% endif %}</div>
+        {% if ch.target_resolved %}
+        <div class="pb-channel-bar"><span style="width:{{ ch.pct|default:0 }}%"></span></div>
+        {% endif %}
+        {% if ch.trend_text %}<div class="pb-channel-trend pb-trend-{{ ch.trend_dir }}">{{ ch.trend_text }}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
