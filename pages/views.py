@@ -110,7 +110,7 @@ def service_detail(request, slug):
                 )
             except Exception:
                 pass
-            messages.success(request, "ส่งข้อความเรียบร้อย เราจะติดต่อกลับภายใน 24 ชั่วโมงครับ")
+            messages.success(request, "ส่งข้อความเรียบร้อย เราจะติดต่อกลับภายใน 24 ชั่วโมงค่ะ")
             return redirect("pages:service_detail", slug=slug)
     return render(request, "pages/service_detail.html", {
         "svc": svc,
@@ -147,7 +147,7 @@ def contact(request):
                 )
             except Exception:
                 pass
-            messages.success(request, "ส่งข้อความเรียบร้อย เราจะติดต่อกลับภายใน 24 ชั่วโมงครับ")
+            messages.success(request, "ส่งข้อความเรียบร้อย เราจะติดต่อกลับภายใน 24 ชั่วโมงค่ะ")
             return redirect("pages:contact")
     else:
         form = ContactForm()
