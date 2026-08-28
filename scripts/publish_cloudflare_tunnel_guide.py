@@ -10,10 +10,13 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 # ── Config ──────────────────────────────────────────────────────────────────
-HF_KEY   = "REMOVED_SEE_DOTENV"
 API_URL  = "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell"
 BASE_DIR = Path(__file__).resolve().parent.parent
 FONT     = BASE_DIR / "Kanit-Bold.ttf"
+
+from dotenv import load_dotenv
+load_dotenv(BASE_DIR / ".env")
+HF_KEY   = os.getenv("HUGGINGFACE_API_KEY", "")
 OUT_DIR  = BASE_DIR / "scripts" / "article_assets"
 OUT_DIR.mkdir(exist_ok=True)
 

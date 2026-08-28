@@ -12,7 +12,10 @@ from PIL import Image, ImageDraw, ImageFont
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
-HF_KEY  = "REMOVED_SEE_DOTENV"
+from dotenv import load_dotenv
+load_dotenv(BASE_DIR / ".env")
+
+HF_KEY  = os.getenv("HUGGINGFACE_API_KEY", "")
 API_URL = "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell"
 
 OUT_DIR = BASE_DIR / "scripts" / "logo_preview"
