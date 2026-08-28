@@ -1,6 +1,12 @@
 from django import forms
+from django.conf import settings
 from django.utils import timezone
+
 from .models import ContactLead
+
+# ชื่อช่องกับดักบอท — ตั้งชื่อให้ดูน่ากรอกสำหรับสคริปต์ที่กรอกทุกช่องที่เจอ
+# คนจริงไม่เห็นช่องนี้ (ซ่อนด้วย CSS + aria-hidden) จึงไม่มีทางกรอก
+HONEYPOT_FIELD = "website"
 
 
 CONSENT_TEXT = (
@@ -12,11 +18,52 @@ CONSENT_TEXT = (
 
 
 class ContactForm(forms.ModelForm):
+    """ฟอร์มติดต่อบนหน้าเว็บสาธารณะ — มีด่านกันบอท 2 ชั้น
+
+    ชั้นที่ 1 กับดัก (honeypot): ช่องที่คนมองไม่เห็น ถ้ามีค่า = บอทกรอก
+    ชั้นที่ 2 reCAPTCHA: เปิดเมื่อมีกุญแจใน .env ครบ (settings.RECAPTCHA_ENABLED)
+
+    ทำไมต้องสองชั้น: กับดักดักบอทถูก ๆ ได้ฟรีโดยลูกค้าไม่ต้องกดอะไรเลย
+    ส่วน reCAPTCHA ดักตัวที่ฉลาดกว่า แต่เพิ่มขั้นตอนให้ลูกค้า จึงให้กับดักทำงานก่อน
+    """
+
     consent_given = forms.BooleanField(
         required=True,
         label=CONSENT_TEXT,
         error_messages={"required": "ต้องยินยอม PDPA ก่อนส่งข้อความ"},
     )
+
+    # ช่องกับดัก — ต้องเว้นว่างเสมอ
+    website = forms.CharField(
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={
+            "tabindex": "-1",
+            "autocomplete": "off",
+            "aria-hidden": "true",
+        }),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if getattr(settings, "RECAPTCHA_ENABLED", False):
+            from django_recaptcha.fields import ReCaptchaField
+            from django_recaptcha.widgets import ReCaptchaV2Checkbox
+
+            self.fields["captcha"] = ReCaptchaField(
+                widget=ReCaptchaV2Checkbox(attrs={"data-theme": "light"}),
+                label="",
+                error_messages={
+                    "required": "กรุณาทำเครื่องหมายยืนยันว่าไม่ใช่บอทก่อนส่งข้อความ",
+                },
+            )
+
+    def clean_website(self):
+        """กับดักบอท — ถ้าช่องนี้มีค่า แปลว่าไม่ใช่คน"""
+        value = self.cleaned_data.get(HONEYPOT_FIELD, "")
+        if value:
+            raise forms.ValidationError("ไม่สามารถส่งข้อความได้ กรุณาติดต่อทาง LINE แทน")
+        return value
 
     class Meta:
         model = ContactLead

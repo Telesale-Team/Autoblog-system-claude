@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -201,6 +202,30 @@ class Service(models.Model):
         return [f.strip() for f in self.features.splitlines() if f.strip()]
 
 
+class ContactLeadQuerySet(models.QuerySet):
+    """ตัวกรองมาตรฐานของ lead
+
+    ทำไมต้องมี: lead 19 รายแรกในระบบเป็นบอทสแปมต่างชาติทั้งหมด ทำให้ตัวเลข
+    "lead ใหม่" บนหน้าแรกไม่มีความหมาย ทุกที่ที่นับ lead เพื่อรายงานหรือแจ้งเตือน
+    ต้องเรียก .real() เสมอ ไม่ใช่ .all() — สแปมยังอยู่ใน DB แต่ไม่นับเป็นงาน
+    """
+
+    def real(self):
+        """เฉพาะ lead ที่ยังไม่ถูกทำเครื่องหมายว่าเป็นสแปม"""
+        return self.filter(is_spam=False)
+
+    def spam(self):
+        return self.filter(is_spam=True)
+
+    def due_follow_up(self, as_of=None):
+        """lead ที่ถึงกำหนดตามอีกครั้งแล้ว (รวมที่เลยกำหนด)"""
+        as_of = as_of or timezone.localdate()
+        return self.real().filter(
+            next_follow_up__isnull=False,
+            next_follow_up__lte=as_of,
+        ).exclude(status__in=["closed_won", "closed_lost"])
+
+
 class ContactLead(models.Model):
     STATUS_CHOICES = [
         ("new", "New"),
@@ -211,12 +236,28 @@ class ContactLead(models.Model):
         ("closed_lost", "Closed - Lost"),
     ]
 
+    # 8 ช่องทางของ GTM + ช่องทางที่เว็บกรอกเองอัตโนมัติ
+    # ต้องแยกให้ครบเพื่อคำนวณต้นทุนต่อ lead รายช่องทาง (CAC) ซึ่งเป็น KPI ที่เราประกาศไว้เอง
+    # ถ้าไม่แยก จะตอบไม่ได้ว่าช่องทางไหนคุ้ม แล้วตัดสินใจลงงบไม่ได้
     SOURCE_CHOICES = [
+        # — เว็บกรอกให้เอง —
         ("landing", "Landing Page"),
         ("blog", "Blog"),
         ("portfolio", "Portfolio"),
+        # — 8 ช่องทางของ GTM (บันทึกเองจากหลังบ้าน) —
+        ("linkedin", "LinkedIn"),
+        ("line_oa", "LINE OA"),
+        ("fb_group", "Facebook Group"),
+        ("youtube", "YouTube"),
+        ("tiktok", "TikTok"),
+        ("referral", "คนแนะนำต่อ"),
+        ("cold_dm", "ทัก DM เอง"),
+        ("google_ads", "Google Ads"),
         ("other", "Other"),
     ]
+
+    # ช่องทางที่ "เราไปหาเขา" ไม่ใช่ "เขาเดินมาหาเรา" — ใช้แยกตอนคิด CAC
+    OUTBOUND_SOURCES = ["linkedin", "cold_dm", "fb_group"]
 
     name = models.CharField("ชื่อ-สกุล", max_length=100)
     email = models.EmailField("อีเมล")
@@ -233,6 +274,22 @@ class ContactLead(models.Model):
     deal_value = models.DecimalField("มูลค่าดีล (บาท)", max_digits=12, decimal_places=2, null=True, blank=True)
     notes = models.TextField("บันทึกภายใน", blank=True)
 
+    # ── การตามงาน ──────────────────────────────────────────────────────────
+    next_follow_up   = models.DateField("ตามอีกครั้งวันที่", null=True, blank=True,
+                                        help_text="เว้นว่าง = ไม่มีอะไรทวง lead รายนี้จะเงียบหายไปเอง")
+    last_contacted_at = models.DateTimeField("คุยครั้งล่าสุดเมื่อ", null=True, blank=True)
+
+    # ── สแปม ───────────────────────────────────────────────────────────────
+    is_spam        = models.BooleanField("เป็นสแปม", default=False,
+                                         help_text="ทำเครื่องหมายแทนการลบ เก็บไว้ดูรูปแบบบอทได้")
+    spam_marked_at = models.DateTimeField("ทำเครื่องหมายสแปมเมื่อ", null=True, blank=True)
+
+    # ── ที่มาของแถวนี้ ─────────────────────────────────────────────────────
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="ผู้บันทึก",
+                                   null=True, blank=True, on_delete=models.SET_NULL,
+                                   related_name="leads_created",
+                                   help_text="มีค่าเมื่อบันทึกเองจากหลังบ้าน · ว่าง = มาจากฟอร์มบนเว็บ")
+
     # PDPA
     consent_given = models.BooleanField("ยินยอม PDPA", default=False)
     consent_text = models.TextField("ข้อความ consent ที่แสดง", blank=True)
@@ -243,6 +300,8 @@ class ContactLead(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deletable_after = models.DateTimeField("ลบได้หลัง", null=True, blank=True)
 
+    objects = ContactLeadQuerySet.as_manager()
+
     class Meta:
         verbose_name = "Contact Lead"
         verbose_name_plural = "Contact Leads"
@@ -251,11 +310,88 @@ class ContactLead(models.Model):
     def __str__(self):
         return f"{self.name} ({self.email})"
 
+    def get_absolute_url(self):
+        return reverse("dashboard:lead_detail", args=[self.pk])
+
     def save(self, *args, **kwargs):
         if self.consent_given and not self.consent_given_at:
             self.consent_given_at = timezone.now()
             self.deletable_after = timezone.now() + timedelta(days=730)  # 24 months
+        if self.is_spam and not self.spam_marked_at:
+            self.spam_marked_at = timezone.now()
+        if not self.is_spam:
+            self.spam_marked_at = None
         super().save(*args, **kwargs)
+
+    # ── สถานะการตามงาน (ใช้ทั้งหน้ารายการและหน้ารายละเอียด) ────────────────
+    @property
+    def follow_up_state(self):
+        """คืนค่า overdue / today / scheduled / none"""
+        if not self.next_follow_up or self.status in ("closed_won", "closed_lost"):
+            return "none"
+        today = timezone.localdate()
+        if self.next_follow_up < today:
+            return "overdue"
+        if self.next_follow_up == today:
+            return "today"
+        return "scheduled"
+
+    @property
+    def days_since_contact(self):
+        """กี่วันแล้วที่ไม่ได้คุยกัน — ถ้ายังไม่เคยคุยเลย นับจากวันที่เข้าระบบ"""
+        ref = self.last_contacted_at or self.created_at
+        if not ref:
+            return None
+        return (timezone.now() - ref).days
+
+
+class LeadActivity(models.Model):
+    """บันทึกว่าคุยอะไรกับ lead รายนี้ เมื่อไหร่
+
+    ทำไมต้องแยกเป็นตาราง ไม่ใช่ต่อท้ายช่อง notes: ต้องเรียงตามเวลาได้
+    ต้องรู้ว่าใครเป็นคนคุย และต้องนับได้ว่าติดต่อไปกี่ครั้งกว่าจะปิดดีล
+    ซึ่งเป็นตัวเลขที่ใช้วางแผนกำลังคนตอนมีลูกค้าหลายราย
+    """
+
+    KIND_CHOICES = [
+        ("call",    "โทรคุย"),
+        ("line",    "คุยทาง LINE"),
+        ("email",   "อีเมล"),
+        ("meeting", "นัดเจอ / ประชุม"),
+        ("quote",   "ส่งใบเสนอราคา"),
+        ("note",    "บันทึกภายใน"),
+    ]
+
+    KIND_ICONS = {
+        "call": "bi-telephone-fill",
+        "line": "bi-chat-dots-fill",
+        "email": "bi-envelope-fill",
+        "meeting": "bi-people-fill",
+        "quote": "bi-file-earmark-text-fill",
+        "note": "bi-sticky-fill",
+    }
+
+    lead        = models.ForeignKey(ContactLead, on_delete=models.CASCADE,
+                                    related_name="activities", verbose_name="Lead")
+    kind        = models.CharField("ประเภท", max_length=20, choices=KIND_CHOICES, default="call")
+    note        = models.TextField("คุยอะไร")
+    occurred_at = models.DateTimeField("เกิดขึ้นเมื่อ", default=timezone.now)
+    created_by  = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                                    on_delete=models.SET_NULL, related_name="lead_activities",
+                                    verbose_name="ผู้บันทึก")
+    created_at  = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "บันทึกการติดต่อ Lead"
+        verbose_name_plural = "บันทึกการติดต่อ Lead"
+        ordering = ["-occurred_at", "-id"]
+
+    def __str__(self):
+        return f"{self.lead.name} — {self.get_kind_display()} ({self.occurred_at:%d/%m/%Y})"
+
+    @property
+    def icon(self):
+        return self.KIND_ICONS.get(self.kind, "bi-sticky-fill")
 
 
 # ── Home Page ────────────────────────────────────────────────────────────────

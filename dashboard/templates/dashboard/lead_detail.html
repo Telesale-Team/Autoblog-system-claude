@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+<!-- ===================================================================
+     LEAD DETAIL — ข้อมูลติดต่อ + ไทม์ไลน์ว่าคุยอะไรไปแล้วบ้าง
+     ใช้โดย: dashboard.views.lead_detail
+     ทำไมต้องมี: เดิม 18 จาก 19 ราย ค้างสถานะ new เพราะไม่มีที่บันทึกว่าคุยอะไรไป
+     และไม่มีวันนัดตามต่อ จึงไม่มีอะไรทวงให้กลับมาหาคนคนนี้
+     =================================================================== -->
+
+{% block title %}{{ lead.name }} — Lead{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'dashboard:leads' %}">Leads</a></li>
+  <li class="breadcrumb-item active">{{ lead.name }}</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .form-label-sm {
+    font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--bs-secondary-color); margin-bottom: .3rem;
+  }
+  .field-help { font-size: .75rem; color: var(--bs-secondary-color); margin-top: .25rem; }
+
+  .meta-row { display: flex; gap: .75rem; padding: .5rem 0; border-bottom: 1px solid var(--bs-border-color); }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-key { font-size: .78rem; color: var(--bs-secondary-color); min-width: 7.5rem; }
+  .meta-val { font-size: .88rem; }
+
+  /* ไทม์ไลน์ — เส้นเดียวเรียงจากใหม่ไปเก่า */
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 1.6rem; position: relative; }
+  .timeline::before {
+    content: ""; position: absolute; left: .42rem; top: .4rem; bottom: .4rem;
+    width: 2px; background: var(--bs-border-color);
+  }
+  .timeline-item { position: relative; padding-bottom: 1.1rem; }
+  .timeline-item::before {
+    content: ""; position: absolute; left: -1.35rem; top: .38rem;
+    width: .7rem; height: .7rem; border-radius: 50%;
+    background: var(--app-primary); border: 2px solid var(--bs-body-bg);
+  }
+  .timeline-head { font-size: .82rem; font-weight: 600; display: flex; gap: .5rem; flex-wrap: wrap; align-items: baseline; }
+  .timeline-when { font-size: .75rem; color: var(--bs-secondary-color); font-weight: 400; }
+  .timeline-note { font-size: .88rem; white-space: pre-line; margin-top: .15rem; }
+
+  .follow-banner { border-radius: .5rem; padding: .6rem .9rem; font-size: .85rem; font-weight: 600; }
+  .follow-banner-overdue  { background: #f8d7da; color: #842029; }
+  .follow-banner-today    { background: #fff3cd; color: #856404; }
+  .follow-banner-scheduled{ background: #e2e3e5; color: #41464b; }
+  .follow-banner-none     { background: rgba(13,110,253,.08); color: var(--bs-body-color); }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Page Header ─────────────────────────────────────────────────────────── #}
+<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">
+      {{ lead.name }}
+      {% if lead.is_spam %}<span class="badge bg-secondary ms-2">สแปม</span>{% endif %}
+    </h4>
+    <p class="mb-0 text-muted small">
+      {{ lead.company|default:"ไม่ได้ระบุร้าน/บริษัท" }} ·
+      มาจาก {{ lead.get_source_display }} ·
+      เข้าระบบ {{ lead.created_at|date:"d M Y" }}
+    </p>
+  </div>
+  <div class="d-flex gap-2">
+    {% if lead.phone %}
+    <a href="tel:{{ lead.phone }}" class="btn btn-sm btn-app-filled btn-app">
+      <i class="bi bi-telephone-fill me-1"></i>โทรหา {{ lead.phone }}
+    </a>
+    {% endif %}
+    <form method="post" action="{% url 'dashboard:lead_toggle_spam' lead.pk %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{% url 'dashboard:leads' %}">
+      <button type="submit" class="btn btn-sm btn-outline-secondary">
+        {% if lead.is_spam %}
+          <i class="bi bi-arrow-counterclockwise me-1"></i>ไม่ใช่สแปม
+        {% else %}
+          <i class="bi bi-shield-slash me-1"></i>ทำเครื่องหมายสแปม
+        {% endif %}
+      </button>
+    </form>
+    <a href="{% url 'dashboard:leads' %}" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+  </div>
+</div>
+
+{# ── แถบเตือนเรื่องวันตามต่อ ─────────────────────────────────────────────── #}
+{% if lead.follow_up_state == "overdue" %}
+<div class="follow-banner follow-banner-overdue mb-3">
+  <i class="bi bi-alarm-fill me-1"></i>
+  เลยวันที่นัดตามไว้แล้ว — นัดไว้ {{ lead.next_follow_up|date:"d M Y" }}
+</div>
+{% elif lead.follow_up_state == "today" %}
+<div class="follow-banner follow-banner-today mb-3">
+  <i class="bi bi-alarm me-1"></i>วันนี้ถึงกำหนดตามคนนี้แล้ว
+</div>
+{% elif lead.follow_up_state == "scheduled" %}
+<div class="follow-banner follow-banner-scheduled mb-3">
+  <i class="bi bi-calendar-check me-1"></i>นัดตามอีกครั้ง {{ lead.next_follow_up|date:"d M Y" }}
+</div>
+{% else %}
+<div class="follow-banner follow-banner-none mb-3">
+  <i class="bi bi-exclamation-circle me-1"></i>
+  ยังไม่ได้นัดวันตามต่อ — ถ้าไม่ใส่วันไว้ จะไม่มีอะไรทวงให้กลับมาหาคนนี้อีก
+</div>
+{% endif %}
+
+<div class="row g-3">
+  {# ── ซ้าย: บันทึกการติดต่อ + ไทม์ไลน์ ──────────────────────────────── #}
+  <div class="col-lg-7">
+    <div class="card border mb-3" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom py-2 px-3">
+        <span class="fw-semibold small">บันทึกว่าคุยอะไรไป</span>
+      </div>
+      <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-5">
+              <label class="form-label-sm d-block" for="{{ activity_form.kind.id_for_label }}">ประเภท</label>
+              {{ activity_form.kind }}
+            </div>
+            <div class="col-md-7">
+              <label class="form-label-sm d-block" for="{{ activity_form.occurred_at.id_for_label }}">เมื่อไหร่</label>
+              {{ activity_form.occurred_at }}
+            </div>
+            <div class="col-12">
+              <label class="form-label-sm d-block" for="{{ activity_form.note.id_for_label }}">คุยอะไรกัน</label>
+              {{ activity_form.note }}
+              {% if activity_form.note.errors %}
+                <div class="text-danger" style="font-size:.78rem">{{ activity_form.note.errors.0 }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ activity_form.next_follow_up.id_for_label }}">ตามอีกครั้งวันที่</label>
+              {{ activity_form.next_follow_up }}
+              <div class="field-help">{{ activity_form.next_follow_up.help_text }}</div>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <div class="form-check mb-2">
+                {{ activity_form.clear_follow_up }}
+                <label class="form-check-label small" for="{{ activity_form.clear_follow_up.id_for_label }}">
+                  {{ activity_form.clear_follow_up.label }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-app-filled btn-app btn-sm mt-3">
+            <i class="bi bi-plus-lg me-1"></i>บันทึกการติดต่อ
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card border" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom py-2 px-3 d-flex justify-content-between align-items-center">
+        <span class="fw-semibold small">ประวัติการติดต่อ</span>
+        <span class="text-muted" style="font-size:.78rem">{{ activities|length }} ครั้ง</span>
+      </div>
+      <div class="card-body">
+        {% if activities %}
+        <ul class="timeline">
+          {% for a in activities %}
+          <li class="timeline-item">
+            <div class="timeline-head">
+              <span><i class="bi {{ a.icon }} me-1"></i>{{ a.get_kind_display }}</span>
+              <span class="timeline-when">
+                {{ a.occurred_at|date:"d M Y H:i" }}
+                {% if a.created_by %}· {{ a.created_by.get_full_name|default:a.created_by.username }}{% endif %}
+              </span>
+            </div>
+            <div class="timeline-note">{{ a.note }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="text-center text-muted py-4">
+          <i class="bi bi-chat-square-dots fs-3"></i>
+          <p class="mt-2 mb-0 small">ยังไม่เคยบันทึกการติดต่อกับคนนี้</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {# ── ขวา: ข้อมูลติดต่อ + แก้ไข ───────────────────────────────────────── #}
+  <div class="col-lg-5">
+    <div class="card border mb-3" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom py-2 px-3">
+        <span class="fw-semibold small">ข้อมูลติดต่อ</span>
+      </div>
+      <div class="card-body py-2">
+        <div class="meta-row">
+          <span class="meta-key">สถานะ</span>
+          <span class="meta-val">{{ lead.get_status_display }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">อีเมล</span>
+          <span class="meta-val">{{ lead.email }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">เบอร์โทร</span>
+          <span class="meta-val">{{ lead.phone|default:"—" }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">คุยล่าสุด</span>
+          <span class="meta-val">
+            {% if lead.last_contacted_at %}
+              {{ lead.last_contacted_at|date:"d M Y H:i" }}
+            {% else %}
+              <span class="text-muted">ยังไม่เคยคุย</span>
+            {% endif %}
+          </span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">มูลค่าดีลที่คาด</span>
+          <span class="meta-val">{% if lead.deal_value %}฿{{ lead.deal_value|floatformat:0 }}{% else %}—{% endif %}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">ยินยอม PDPA</span>
+          <span class="meta-val">
+            {% if lead.consent_given %}
+              ยินยอมแล้ว {{ lead.consent_given_at|date:"d M Y" }}
+            {% else %}
+              <span class="text-danger">ยังไม่ได้รับความยินยอม</span>
+            {% endif %}
+          </span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">ผู้บันทึก</span>
+          <span class="meta-val">
+            {% if lead.created_by %}
+              {{ lead.created_by.get_full_name|default:lead.created_by.username }} (บันทึกเอง)
+            {% else %}
+              ฟอร์มบนเว็บ
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {% if lead.message %}
+    <div class="card border mb-3" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom py-2 px-3">
+        <span class="fw-semibold small">ข้อความที่เขาส่งมา</span>
+      </div>
+      <div class="card-body">
+        <div style="font-size:.88rem;white-space:pre-line">{{ lead.message }}</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card border" style="border-radius:.6rem">
+      <div class="card-header bg-transparent border-bottom py-2 px-3">
+        <span class="fw-semibold small">แก้ไขข้อมูล</span>
+      </div>
+      <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          {% if edit_form.non_field_errors %}
+          <div class="alert alert-danger py-2 px-3 small">
+            {% for error in edit_form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+          </div>
+          {% endif %}
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.name.id_for_label }}">ชื่อ-สกุล</label>
+              {{ edit_form.name }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.company.id_for_label }}">ร้าน / บริษัท</label>
+              {{ edit_form.company }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.phone.id_for_label }}">เบอร์โทร</label>
+              {{ edit_form.phone }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.email.id_for_label }}">อีเมล</label>
+              {{ edit_form.email }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.source.id_for_label }}">ช่องทาง</label>
+              {{ edit_form.source }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.status.id_for_label }}">สถานะ</label>
+              {{ edit_form.status }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.next_follow_up.id_for_label }}">ตามอีกครั้ง</label>
+              {{ edit_form.next_follow_up }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ edit_form.deal_value.id_for_label }}">มูลค่าดีล</label>
+              {{ edit_form.deal_value }}
+            </div>
+            <div class="col-12">
+              <label class="form-label-sm d-block" for="{{ edit_form.message.id_for_label }}">เขาสนใจอะไร</label>
+              {{ edit_form.message }}
+            </div>
+            <div class="col-12">
+              <label class="form-label-sm d-block" for="{{ edit_form.notes.id_for_label }}">บันทึกภายใน</label>
+              {{ edit_form.notes }}
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                {{ edit_form.consent_given }}
+                <label class="form-check-label small" for="{{ edit_form.consent_given.id_for_label }}">
+                  {{ edit_form.consent_given.label }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-outline-secondary btn-sm mt-3">
+            <i class="bi bi-save me-1"></i>บันทึกการแก้ไข
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

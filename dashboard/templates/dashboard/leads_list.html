@@ -58,6 +58,32 @@
   .status-select:focus { outline: none; border-color: var(--app-primary); }
   .status-select.saving { opacity: .5; pointer-events: none; }
 
+  /* แถวคลิกได้ทั้งแถว — เข้าหน้ารายละเอียด lead */
+  .table-leads tbody tr { cursor: pointer; }
+
+  .follow-pill {
+    font-size: .72rem;
+    font-weight: 600;
+    padding: .18em .6em;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .follow-overdue  { background: #f8d7da; color: #842029; }
+  .follow-today    { background: #fff3cd; color: #856404; }
+  .follow-scheduled{ background: #e2e3e5; color: #41464b; }
+  .follow-none     { color: var(--bs-secondary-color); font-size: .78rem; }
+
+  .btn-spam {
+    border: none;
+    background: none;
+    color: var(--bs-secondary-color);
+    font-size: .95rem;
+    line-height: 1;
+    padding: .25rem .4rem;
+    border-radius: .3rem;
+  }
+  .btn-spam:hover { color: #dc3545; background: rgba(220,53,69,.1); }
+
   .toast-feedback {
     position: fixed;
     bottom: 1.5rem;
@@ -78,12 +104,14 @@
     <p class="mb-0 text-muted small">จัดการและ update สถานะ lead ได้ทันที</p>
   </div>
   <div class="d-flex align-items-center gap-2">
-    {% if new_count > 0 %}
-      <span class="badge bg-danger rounded-pill">{{ new_count }} ใหม่รอ follow-up</span>
+    {% if due_count > 0 %}
+      <span class="badge bg-danger rounded-pill">ถึงกำหนดตาม {{ due_count }} ราย</span>
     {% endif %}
-    <a href="/admin/pages/contactlead/add/" target="_blank" rel="noopener"
-       class="btn btn-sm btn-app-filled btn-app">
-      <i class="bi bi-plus-lg me-1"></i>เพิ่ม Lead
+    {% if new_count > 0 %}
+      <span class="badge bg-warning text-dark rounded-pill">{{ new_count }} ใหม่รอ follow-up</span>
+    {% endif %}
+    <a href="{% url 'dashboard:lead_new' %}" class="btn btn-sm btn-app-filled btn-app">
+      <i class="bi bi-plus-lg me-1"></i>เพิ่ม Lead เอง
     </a>
   </div>
 </div>
@@ -91,8 +119,12 @@
 {# ── Filter Tabs ──────────────────────────────────────────────────────────── #}
 <div class="d-flex flex-wrap gap-2 mb-3">
   <a href="{% url 'dashboard:leads' %}"
-     class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter %}active{% endif %}">
+     class="btn btn-sm btn-outline-secondary filter-btn {% if not status_filter and not due_only %}active{% endif %}">
     ทั้งหมด
+  </a>
+  <a href="{% url 'dashboard:leads' %}?due=1"
+     class="btn btn-sm btn-outline-secondary filter-btn {% if due_only %}active{% endif %}">
+    ถึงกำหนดตาม{% if due_count %} ({{ due_count }}){% endif %}
   </a>
   {% for value, label in status_choices %}
   <a href="{% url 'dashboard:leads' %}?status={{ value }}"
@@ -100,7 +132,19 @@
     {{ label }}
   </a>
   {% endfor %}
+  <a href="{% url 'dashboard:leads' %}?status=spam"
+     class="btn btn-sm btn-outline-secondary filter-btn {% if show_spam %}active{% endif %}">
+    <i class="bi bi-trash3 me-1"></i>สแปม{% if spam_count %} ({{ spam_count }}){% endif %}
+  </a>
 </div>
+
+{% if show_spam %}
+<div class="alert alert-secondary py-2 px-3 small mb-3">
+  <i class="bi bi-info-circle me-1"></i>
+  รายการที่ทำเครื่องหมายว่าเป็นสแปม — ไม่ถูกนับในตัวเลขใด ๆ ของหลังบ้าน แต่ยังเก็บไว้ดูรูปแบบบอทได้
+  กดปุ่มขวาสุดเพื่อเอาเครื่องหมายออกถ้าทำเครื่องหมายผิด
+</div>
+{% endif %}
 
 {# ── Leads Table ──────────────────────────────────────────────────────────── #}
 <div class="card border" style="border-radius:.6rem">
@@ -115,12 +159,15 @@
             <th>เบอร์โทร</th>
             <th>ที่มา</th>
             <th>สถานะ</th>
-            <th class="pe-3">วันที่</th>
+            <th>ตามอีกครั้ง</th>
+            <th>วันที่</th>
+            <th class="pe-3"></th>
           </tr>
         </thead>
         <tbody>
           {% for lead in leads %}
-          <tr id="lead-row-{{ lead.pk }}">
+          <tr id="lead-row-{{ lead.pk }}"
+              data-href="{% url 'dashboard:lead_detail' lead.pk %}">
             <td class="ps-3">
               <div class="fw-semibold">{{ lead.name }}</div>
               <div class="text-muted" style="font-size:.76rem">{{ lead.email }}</div>
@@ -144,8 +191,32 @@
                 {% endfor %}
               </select>
             </td>
-            <td class="pe-3 text-muted" style="font-size:.8rem;white-space:nowrap">
+            <td>
+              {% if lead.follow_up_state == "overdue" %}
+                <span class="follow-pill follow-overdue">
+                  <i class="bi bi-alarm-fill me-1"></i>เลยกำหนด {{ lead.next_follow_up|date:"d M" }}
+                </span>
+              {% elif lead.follow_up_state == "today" %}
+                <span class="follow-pill follow-today"><i class="bi bi-alarm me-1"></i>วันนี้</span>
+              {% elif lead.follow_up_state == "scheduled" %}
+                <span class="follow-pill follow-scheduled">{{ lead.next_follow_up|date:"d M Y" }}</span>
+              {% else %}
+                <span class="follow-none">— ไม่ได้นัดไว้</span>
+              {% endif %}
+            </td>
+            <td class="text-muted" style="font-size:.8rem;white-space:nowrap">
               {{ lead.created_at|date:"d M Y" }}
+            </td>
+            <td class="pe-3 text-end">
+              <form method="post" action="{% url 'dashboard:lead_toggle_spam' lead.pk %}" class="d-inline js-no-row-click">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button type="submit" class="btn-spam"
+                        title="{% if lead.is_spam %}เอาเครื่องหมายสแปมออก{% else %}ทำเครื่องหมายว่าเป็นสแปม{% endif %}"
+                        aria-label="{% if lead.is_spam %}เอาเครื่องหมายสแปมออก{% else %}ทำเครื่องหมายว่าเป็นสแปม{% endif %}">
+                  <i class="bi {% if lead.is_spam %}bi-arrow-counterclockwise{% else %}bi-shield-slash{% endif %}"></i>
+                </button>
+              </form>
             </td>
           </tr>
           {% endfor %}
@@ -192,6 +263,15 @@
     toastEl.classList.add(isError ? 'bg-danger' : 'bg-success', 'text-white');
     toast.show();
   }
+
+  // คลิกที่แถวไหนก็เข้าหน้ารายละเอียด lead รายนั้น
+  // ยกเว้นตรงที่กดแล้วต้องทำอย่างอื่น — ช่องเลือกสถานะ ปุ่มสแปม และลิงก์โทรออก
+  document.querySelectorAll('.table-leads tbody tr[data-href]').forEach(function (row) {
+    row.addEventListener('click', function (e) {
+      if (e.target.closest('select, button, a, form, .js-no-row-click')) return;
+      window.location.href = row.dataset.href;
+    });
+  });
 
   document.querySelectorAll('.status-select').forEach(function (sel) {
     sel.addEventListener('change', function () {

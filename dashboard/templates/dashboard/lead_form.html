@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+<!-- ===================================================================
+     LEAD FORM — บันทึก lead ที่ได้มาจากนอกเว็บ
+     ใช้โดย: dashboard.views.lead_create
+     ทำไมต้องมี: GTM สั่งทัก DM 50 ราย/สัปดาห์ + LINE OA + คนแนะนำต่อ
+     แต่ระบบเดิมรับ lead ได้ทางเดียวคือฟอร์มบนเว็บสาธารณะ
+     =================================================================== -->
+
+{% block title %}เพิ่ม Lead เอง — Dashboard{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'dashboard:leads' %}">Leads</a></li>
+  <li class="breadcrumb-item active">เพิ่ม Lead เอง</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .form-label-sm {
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color);
+    margin-bottom: .3rem;
+  }
+  .field-help { font-size: .75rem; color: var(--bs-secondary-color); margin-top: .25rem; }
+  .field-error { font-size: .78rem; color: #dc3545; margin-top: .25rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Page Header ─────────────────────────────────────────────────────────── #}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-0 page-title">เพิ่ม Lead เอง</h4>
+    <p class="mb-0 text-muted small">
+      สำหรับคนที่เราไปหามาเอง — ทัก DM, LINE OA, คนแนะนำต่อ, เจอกันในงาน
+    </p>
+  </div>
+  <a href="{% url 'dashboard:leads' %}" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-arrow-left me-1"></i>กลับไปรายการ
+  </a>
+</div>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+  <div class="alert alert-danger py-2 px-3 small">
+    {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="row g-3">
+    {# ── ซ้าย: ใครและมาจากไหน ─────────────────────────────────────────── #}
+    <div class="col-lg-7">
+      <div class="card border" style="border-radius:.6rem">
+        <div class="card-header bg-transparent border-bottom py-2 px-3">
+          <span class="fw-semibold small">เขาเป็นใคร</span>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ form.name.id_for_label }}">ชื่อ-สกุล *</label>
+              {{ form.name }}
+              {% if form.name.errors %}<div class="field-error">{{ form.name.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ form.company.id_for_label }}">ร้าน / บริษัท</label>
+              {{ form.company }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ form.phone.id_for_label }}">เบอร์โทร</label>
+              {{ form.phone }}
+              {% if form.phone.errors %}<div class="field-error">{{ form.phone.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-sm d-block" for="{{ form.email.id_for_label }}">อีเมล</label>
+              {{ form.email }}
+              <div class="field-help">ไม่มีก็เว้นว่างได้ แต่ต้องมีเบอร์โทรอย่างน้อยหนึ่งอย่าง</div>
+              {% if form.email.errors %}<div class="field-error">{{ form.email.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-12">
+              <label class="form-label-sm d-block" for="{{ form.message.id_for_label }}">เขาสนใจอะไร</label>
+              {{ form.message }}
+            </div>
+            <div class="col-12">
+              <label class="form-label-sm d-block" for="{{ form.notes.id_for_label }}">บันทึกภายใน</label>
+              {{ form.notes }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# ── ขวา: ช่องทาง สถานะ และวันตามต่อ ──────────────────────────────── #}
+    <div class="col-lg-5">
+      <div class="card border mb-3" style="border-radius:.6rem">
+        <div class="card-header bg-transparent border-bottom py-2 px-3">
+          <span class="fw-semibold small">มาจากช่องทางไหน</span>
+        </div>
+        <div class="card-body">
+          <label class="form-label-sm d-block" for="{{ form.source.id_for_label }}">ช่องทาง *</label>
+          {{ form.source }}
+          <div class="field-help">
+            เลือกให้ตรงเสมอ — นี่คือข้อมูลเดียวที่บอกได้ว่าช่องทางไหนคุ้มค่าลงแรงต่อ
+          </div>
+          {% if form.source.errors %}<div class="field-error">{{ form.source.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="card border mb-3" style="border-radius:.6rem">
+        <div class="card-header bg-transparent border-bottom py-2 px-3">
+          <span class="fw-semibold small">คุยกันถึงไหนแล้ว</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label-sm d-block" for="{{ form.status.id_for_label }}">สถานะ</label>
+            {{ form.status }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label-sm d-block" for="{{ form.next_follow_up.id_for_label }}">ตามอีกครั้งวันที่</label>
+            {{ form.next_follow_up }}
+            <div class="field-help">เว้นว่างได้ แต่ถ้าไม่ใส่ จะไม่มีอะไรทวงให้กลับมาหาคนนี้</div>
+          </div>
+          <div>
+            <label class="form-label-sm d-block" for="{{ form.deal_value.id_for_label }}">มูลค่าดีลที่คาด (บาท)</label>
+            {{ form.deal_value }}
+          </div>
+        </div>
+      </div>
+
+      <div class="card border mb-3" style="border-radius:.6rem">
+        <div class="card-body">
+          <div class="form-check">
+            {{ form.consent_given }}
+            <label class="form-check-label small" for="{{ form.consent_given.id_for_label }}">
+              {{ form.consent_given.label }}
+            </label>
+            <div class="field-help">{{ form.consent_given.help_text }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-app-filled btn-app flex-grow-1">
+          <i class="bi bi-check-lg me-1"></i>บันทึก Lead
+        </button>
+        <a href="{% url 'dashboard:leads' %}" class="btn btn-outline-secondary">ยกเลิก</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

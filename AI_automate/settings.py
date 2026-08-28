@@ -227,6 +227,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY", default="")
 RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY", default="")
 
+# เปิดช่องยืนยันว่าไม่ใช่บอทเฉพาะเมื่อมีกุญแจครบทั้งคู่เท่านั้น
+# เหตุผล: ถ้าไม่มีกุญแจแล้วยังใส่ช่องนี้ ฟอร์มจะไม่ผ่านตลอดกาล ลูกค้าส่งข้อความไม่ได้
+# และเทสในเครื่องที่ไม่มีไฟล์ .env จะพังทั้งชุด — ตรวจจากกุญแจดีกว่าใช้สวิตช์แยกที่ลืมเปิดได้
+RECAPTCHA_ENABLED = bool(RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY)
+
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" if DEBUG else "django.core.mail.backends.smtp.EmailBackend"

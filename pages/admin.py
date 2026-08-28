@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (ContactLead, Service, SiteSetting, ContactTopic,
+from .models import (ContactLead, LeadActivity, Service, SiteSetting, ContactTopic,
                      AboutPage, AboutStat, AboutValue, AboutCheckpoint, AboutExpertise,
                      HomePage, HomePain, HomeProcess, HomeTestimonial, HomeFAQ)
 
@@ -149,17 +149,25 @@ class AboutExpertiseAdmin(admin.ModelAdmin):
 
 @admin.register(ContactLead)
 class ContactLeadAdmin(admin.ModelAdmin):
-    list_display = ("name", "email", "phone", "source", "status", "consent_given", "created_at")
-    list_filter = ("status", "source", "consent_given", "created_at")
+    list_display = ("name", "email", "phone", "source", "status", "next_follow_up",
+                    "is_spam", "consent_given", "created_at")
+    list_filter = ("is_spam", "status", "source", "consent_given", "created_at")
     search_fields = ("name", "email", "phone", "company", "message")
     readonly_fields = ("created_at", "updated_at", "consent_given_at", "ip_address",
-                       "utm_source", "utm_medium", "utm_campaign", "deletable_after")
+                       "utm_source", "utm_medium", "utm_campaign", "deletable_after",
+                       "spam_marked_at")
     fieldsets = (
         ("ข้อมูลลูกค้า", {
             "fields": ("name", "email", "phone", "company", "message"),
         }),
         ("CRM", {
-            "fields": ("source", "status", "notes"),
+            "fields": ("source", "status", "deal_value", "notes"),
+        }),
+        ("การตามงาน", {
+            "fields": ("next_follow_up", "last_contacted_at", "created_by"),
+        }),
+        ("สแปม", {
+            "fields": ("is_spam", "spam_marked_at"),
         }),
         ("PDPA", {
             "fields": ("consent_given", "consent_text", "consent_given_at",
@@ -174,3 +182,11 @@ class ContactLeadAdmin(admin.ModelAdmin):
             "classes": ("collapse",),
         }),
     )
+
+
+@admin.register(LeadActivity)
+class LeadActivityAdmin(admin.ModelAdmin):
+    list_display = ("lead", "kind", "occurred_at", "created_by")
+    list_filter = ("kind", "occurred_at")
+    search_fields = ("lead__name", "lead__email", "note")
+    autocomplete_fields = ("lead",)

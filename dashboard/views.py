@@ -119,8 +119,8 @@ def kpi_dashboard(request):
     at_risk = customers.filter(health_score__lt=40).count()
 
     # Lead conversion
-    total_leads = ContactLead.objects.count()
-    won_leads = ContactLead.objects.filter(status="closed_won").count()
+    total_leads = ContactLead.objects.real().count()
+    won_leads = ContactLead.objects.real().filter(status="closed_won").count()
     conversion_rate = round(won_leads / total_leads * 100, 1) if total_leads else 0
 
     # Revenue this month (paid invoices)
@@ -226,20 +226,20 @@ def index(request):
     last_month_start = (month_start - timedelta(days=1)).replace(day=1)
 
     # ── KPI 1: Lead ใหม่วันนี้ + source breakdown ───────────────────────────
-    leads_today = ContactLead.objects.filter(created_at__gte=today_start).count()
+    leads_today = ContactLead.objects.real().filter(created_at__gte=today_start).count()
     leads_today_sources = list(
-        ContactLead.objects.filter(created_at__gte=today_start)
+        ContactLead.objects.real().filter(created_at__gte=today_start)
         .values("source")
         .annotate(count=Count("id"))
         .order_by("-count")
     )
 
     # ── KPI 2: Active Pipeline (non-closed leads) ────────────────────────────
-    active_pipeline = ContactLead.objects.exclude(
+    active_pipeline = ContactLead.objects.real().exclude(
         status__in=["closed_won", "closed_lost"]
     ).count()
     pipeline_by_status = list(
-        ContactLead.objects.exclude(status__in=["closed_won", "closed_lost"])
+        ContactLead.objects.real().exclude(status__in=["closed_won", "closed_lost"])
         .values("status")
         .annotate(count=Count("id"))
         .order_by("status")
@@ -255,15 +255,24 @@ def index(request):
     article_weekly_goal = 2
 
     # ── KPI 5: MQL สะสม (leads ทั้งหมด) ────────────────────────────────────
-    mql_total = ContactLead.objects.count()
+    mql_total = ContactLead.objects.real().count()
 
     # ── KPI 6: วันนี้ต้องทำ (auto action list) ──────────────────────────────
-    stale_count = ContactLead.objects.filter(
+    stale_count = ContactLead.objects.real().filter(
         status__in=["new", "contacted"],
         updated_at__lt=now - timedelta(days=3),
     ).count()
-    new_lead_count = ContactLead.objects.filter(status="new").count()
+    new_lead_count = ContactLead.objects.real().filter(status="new").count()
+    # lead ที่นัดตัวเองไว้ว่าจะตามวันนี้หรือเลยกำหนดมาแล้ว — ตัวนี้คือสิ่งที่ทวงจริง
+    due_follow_up_count = ContactLead.objects.due_follow_up().count()
     today_actions = []
+    if due_follow_up_count > 0:
+        today_actions.append({
+            "type": "danger",
+            "icon": "bi-alarm-fill",
+            "text": f"ถึงกำหนดตาม {due_follow_up_count} lead ที่นัดตัวเองไว้",
+            "url": "leads/?due=1",
+        })
     if stale_count > 0:
         today_actions.append({
             "type": "danger",
@@ -286,7 +295,7 @@ def index(request):
             "text": f"Qualify {new_lead_count} new lead",
             "url": "leads/?status=new",
         })
-    hot_leads = ContactLead.objects.filter(
+    hot_leads = ContactLead.objects.real().filter(
         status="proposal",
         updated_at__lt=now - timedelta(days=5),
     ).count()
@@ -301,7 +310,7 @@ def index(request):
     # ── Chart: Leads 30 วัน ──────────────────────────────────────────────────
     days_ago_30 = now - timedelta(days=30)
     leads_by_day = (
-        ContactLead.objects.filter(created_at__gte=days_ago_30)
+        ContactLead.objects.real().filter(created_at__gte=days_ago_30)
         .annotate(day=TruncDate("created_at"))
         .values("day")
         .annotate(count=Count("id"))
@@ -315,8 +324,8 @@ def index(request):
         chart_data.append(by_day_map.get(d.isoformat(), 0))
 
     # ── Supporting data ──────────────────────────────────────────────────────
-    leads_this_month = ContactLead.objects.filter(created_at__gte=month_start).count()
-    leads_last_month = ContactLead.objects.filter(
+    leads_this_month = ContactLead.objects.real().filter(created_at__gte=month_start).count()
+    leads_last_month = ContactLead.objects.real().filter(
         created_at__gte=last_month_start, created_at__lt=month_start
     ).count()
     leads_delta = leads_this_month - leads_last_month
@@ -325,7 +334,7 @@ def index(request):
     )
     published_articles = Article.objects.filter(status="published").count()
     active_cases = CaseStudy.objects.filter(status="published").count()
-    recent_leads = ContactLead.objects.order_by("-created_at")[:10]
+    recent_leads = ContactLead.objects.real().order_by("-created_at")[:10]
     top_articles = Article.objects.filter(status="published").order_by("-views_count")[:5]
 
     # ── Analytics data (merged) ──────────────────────────────────────────────
@@ -333,13 +342,13 @@ def index(request):
     from blog.models import Category
 
     leads_by_source = list(
-        ContactLead.objects.values("source")
+        ContactLead.objects.real().values("source")
         .annotate(count=Count("id")).order_by("-count")
     )
     status_order = ["new", "contacted", "qualified", "proposal", "closed_won", "closed_lost"]
     status_counts = {
         row["status"]: row["count"]
-        for row in ContactLead.objects.values("status").annotate(count=Count("id"))
+        for row in ContactLead.objects.real().values("status").annotate(count=Count("id"))
     }
     leads_funnel = [
         {"status": s, "label": dict(ContactLead.STATUS_CHOICES).get(s, s), "count": status_counts.get(s, 0)}
@@ -352,7 +361,7 @@ def index(request):
     weeks_ago_12 = now - timedelta(weeks=12)
     weekly_leads_map = {
         row["week"].date().isoformat(): row["count"]
-        for row in ContactLead.objects.filter(created_at__gte=weeks_ago_12)
+        for row in ContactLead.objects.real().filter(created_at__gte=weeks_ago_12)
         .annotate(week=TruncWeek("created_at")).values("week").annotate(count=Count("id"))
     }
     weekly_articles_map = {
@@ -396,19 +405,38 @@ def index(request):
 
 @staff_member_required
 def leads_list(request):
+    """รายการ lead — ซ่อนสแปมไว้เบื้องหลังเสมอ
+
+    ค่าตั้งต้นต้องเป็น "เฉพาะ lead จริง" เพราะตัวเลขบนหน้านี้คือสิ่งที่ใช้ตัดสินใจว่า
+    วันนี้ต้องโทรหาใคร ถ้าปนบอท 19 รายเข้ามาด้วย ป้าย "lead ใหม่" จะไร้ความหมาย
+    ดูสแปมได้ที่แท็บของมันเอง (?status=spam) ไม่ได้ลบทิ้ง
+    """
     status_filter = request.GET.get("status", "")
-    leads = ContactLead.objects.all()
-    if status_filter:
-        leads = leads.filter(status=status_filter)
+    show_spam = status_filter == "spam"
+    due_only = request.GET.get("due") == "1"
+
+    if show_spam:
+        leads = ContactLead.objects.spam()
+    elif due_only:
+        leads = ContactLead.objects.due_follow_up()
+    else:
+        leads = ContactLead.objects.real()
+        if status_filter:
+            leads = leads.filter(status=status_filter)
+
     leads = leads.order_by("-created_at")
 
-    new_count = ContactLead.objects.filter(status="new").count()
-
+    real_leads = ContactLead.objects.real()
     return render(request, "dashboard/leads_list.html", {
         "leads": leads,
         "status_filter": status_filter,
+        "show_spam": show_spam,
+        "due_only": due_only,
         "status_choices": ContactLead.STATUS_CHOICES,
-        "new_count": new_count,
+        "new_count": real_leads.filter(status="new").count(),
+        "spam_count": ContactLead.objects.spam().count(),
+        "due_count": real_leads.due_follow_up().count(),
+        "today": timezone.localdate(),
     })
 
 
@@ -429,6 +457,105 @@ def lead_update_status(request, pk):
     lead.status = new_status
     lead.save(update_fields=["status", "updated_at"])
     return JsonResponse({"ok": True, "status": lead.status, "status_display": lead.get_status_display()})
+
+
+@staff_member_required
+@require_POST
+def lead_toggle_spam(request, pk):
+    """ทำเครื่องหมายสแปม / เอาเครื่องหมายออก
+
+    ไม่ลบทิ้ง เพราะยังต้องใช้ดูรูปแบบของบอทเวลาปรับด่านกันสแปมหน้าเว็บ
+    และเพราะการลบข้อมูลถาวรจากหน้าจอเป็นสิ่งที่กดพลาดแล้วกู้คืนไม่ได้
+    """
+    lead = get_object_or_404(ContactLead, pk=pk)
+    lead.is_spam = not lead.is_spam
+    if lead.is_spam:
+        lead.status = "closed_lost"
+    lead.save()
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"ok": True, "is_spam": lead.is_spam})
+
+    messages.success(
+        request,
+        f'ทำเครื่องหมายว่า "{lead.name}" เป็นสแปมแล้ว' if lead.is_spam
+        else f'เอาเครื่องหมายสแปมของ "{lead.name}" ออกแล้ว',
+    )
+    return redirect(request.POST.get("next") or "dashboard:leads")
+
+
+@staff_member_required
+def lead_create(request):
+    """เพิ่ม lead เอง — สำหรับคนที่เราไปหามาเอง ไม่ได้กรอกฟอร์มบนเว็บ"""
+    from dashboard.forms import LeadForm
+
+    if request.method == "POST":
+        form = LeadForm(request.POST)
+        if form.is_valid():
+            lead = form.save(created_by=request.user)
+            messages.success(request, f'บันทึก lead "{lead.name}" แล้ว')
+            return redirect("dashboard:lead_detail", pk=lead.pk)
+    else:
+        form = LeadForm()
+
+    return render(request, "dashboard/lead_form.html", {"form": form})
+
+
+@staff_member_required
+def lead_detail(request, pk):
+    """หน้ารายละเอียด lead — ข้อมูลติดต่อ + ไทม์ไลน์ว่าคุยอะไรไปแล้วบ้าง"""
+    from dashboard.forms import LeadActivityForm, LeadForm
+    from pages.models import LeadActivity
+
+    lead = get_object_or_404(ContactLead, pk=pk)
+    action = request.POST.get("action", "")
+
+    edit_form = LeadForm(instance=lead)
+    activity_form = LeadActivityForm()
+
+    if request.method == "POST" and action == "edit":
+        edit_form = LeadForm(request.POST, instance=lead)
+        if edit_form.is_valid():
+            edit_form.save()
+            messages.success(request, "แก้ไขข้อมูล lead แล้ว")
+            return redirect("dashboard:lead_detail", pk=lead.pk)
+
+    elif request.method == "POST":
+        activity_form = LeadActivityForm(request.POST)
+        if activity_form.is_valid():
+            activity = activity_form.save(commit=False)
+            activity.lead = lead
+            activity.created_by = request.user
+            activity.save()
+
+            update_fields = ["updated_at"]
+            # บันทึกภายในไม่นับว่า "ได้คุยกันแล้ว" — ไม่งั้นตัวนับวันที่เงียบหายจะเพี้ยน
+            if activity.kind != "note":
+                lead.last_contacted_at = activity.occurred_at
+                update_fields.append("last_contacted_at")
+                if lead.status == "new":
+                    lead.status = "contacted"
+                    update_fields.append("status")
+
+            if activity_form.cleaned_data.get("clear_follow_up"):
+                lead.next_follow_up = None
+                update_fields.append("next_follow_up")
+            elif activity_form.cleaned_data.get("next_follow_up"):
+                lead.next_follow_up = activity_form.cleaned_data["next_follow_up"]
+                update_fields.append("next_follow_up")
+
+            lead.save(update_fields=update_fields)
+            messages.success(request, "บันทึกการติดต่อแล้ว")
+            return redirect("dashboard:lead_detail", pk=lead.pk)
+
+    return render(request, "dashboard/lead_detail.html", {
+        "lead": lead,
+        "activities": lead.activities.select_related("created_by"),
+        "activity_form": activity_form,
+        "edit_form": edit_form,
+        "status_choices": ContactLead.STATUS_CHOICES,
+        "today": timezone.localdate(),
+    })
 
 
 # ── Blog ────────────────────────────────────────────────────────────────────
@@ -510,7 +637,7 @@ PIPELINE_STAGES = [
 @staff_member_required
 def pipeline_view(request):
     now = timezone.now()
-    all_leads = ContactLead.objects.order_by("-updated_at")
+    all_leads = ContactLead.objects.real().order_by("-updated_at")
     leads_by_stage = {}
     for status, _, _ in PIPELINE_STAGES:
         leads_by_stage[status] = []
@@ -519,21 +646,21 @@ def pipeline_view(request):
             leads_by_stage[lead.status].append(lead)
 
     pipeline_value = (
-        ContactLead.objects.exclude(status__in=["closed_won", "closed_lost"])
+        ContactLead.objects.real().exclude(status__in=["closed_won", "closed_lost"])
         .aggregate(total=Sum("deal_value"))["total"] or 0
     )
     won_value = (
-        ContactLead.objects.filter(status="closed_won")
+        ContactLead.objects.real().filter(status="closed_won")
         .aggregate(total=Sum("deal_value"))["total"] or 0
     )
     hot_leads_pks = list(
-        ContactLead.objects.filter(
+        ContactLead.objects.real().filter(
             status="proposal",
             updated_at__lt=now - timedelta(days=5),
         ).values_list("pk", flat=True)
     )
     stale_pks = list(
-        ContactLead.objects.filter(
+        ContactLead.objects.real().filter(
             status__in=["new", "contacted"],
             updated_at__lt=now - timedelta(days=3),
         ).values_list("pk", flat=True)
@@ -581,25 +708,25 @@ def revenue_view(request):
     month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     last_month_start = (month_start - timedelta(days=1)).replace(day=1)
 
-    won_total = ContactLead.objects.filter(status="closed_won").aggregate(
+    won_total = ContactLead.objects.real().filter(status="closed_won").aggregate(
         total=Sum("deal_value"))["total"] or 0
-    won_this_month = ContactLead.objects.filter(
+    won_this_month = ContactLead.objects.real().filter(
         status="closed_won", updated_at__gte=month_start
     ).aggregate(total=Sum("deal_value"))["total"] or 0
-    won_last_month = ContactLead.objects.filter(
+    won_last_month = ContactLead.objects.real().filter(
         status="closed_won",
         updated_at__gte=last_month_start, updated_at__lt=month_start,
     ).aggregate(total=Sum("deal_value"))["total"] or 0
 
-    pipeline_value = ContactLead.objects.exclude(
+    pipeline_value = ContactLead.objects.real().exclude(
         status__in=["closed_won", "closed_lost"]
     ).aggregate(total=Sum("deal_value"))["total"] or 0
 
-    won_count = ContactLead.objects.filter(status="closed_won").count()
-    lost_count = ContactLead.objects.filter(status="closed_lost").count()
+    won_count = ContactLead.objects.real().filter(status="closed_won").count()
+    lost_count = ContactLead.objects.real().filter(status="closed_lost").count()
     win_rate = round(won_count / (won_count + lost_count) * 100) if (won_count + lost_count) > 0 else 0
 
-    recent_won = ContactLead.objects.filter(status="closed_won").order_by("-updated_at")[:10]
+    recent_won = ContactLead.objects.real().filter(status="closed_won").order_by("-updated_at")[:10]
 
     rev_delta_pct = (
         round((float(won_this_month) - float(won_last_month)) / float(won_last_month) * 100)
@@ -630,7 +757,7 @@ def analytics_view(request):
 
     # Leads by source
     leads_by_source = list(
-        ContactLead.objects.values("source")
+        ContactLead.objects.real().values("source")
         .annotate(count=Count("id"))
         .order_by("-count")
     )
@@ -639,7 +766,7 @@ def analytics_view(request):
     status_order = ["new", "contacted", "qualified", "proposal", "closed_won", "closed_lost"]
     status_counts = {
         row["status"]: row["count"]
-        for row in ContactLead.objects.values("status").annotate(count=Count("id"))
+        for row in ContactLead.objects.real().values("status").annotate(count=Count("id"))
     }
     leads_funnel = [
         {"status": s, "label": dict(ContactLead.STATUS_CHOICES).get(s, s), "count": status_counts.get(s, 0)}
@@ -664,7 +791,7 @@ def analytics_view(request):
     # Weekly leads — last 12 weeks
     weeks_ago_12 = now - timedelta(weeks=12)
     weekly_leads_qs = (
-        ContactLead.objects.filter(created_at__gte=weeks_ago_12)
+        ContactLead.objects.real().filter(created_at__gte=weeks_ago_12)
         .annotate(week=TruncWeek("created_at"))
         .values("week")
         .annotate(count=Count("id"))
@@ -1095,7 +1222,7 @@ def calendar_view(request):
         })
 
     # ── 2. Lead activities (created_at) ──────────────────────────────────────
-    leads_qs = ContactLead.objects.values("name", "company", "status", "created_at")
+    leads_qs = ContactLead.objects.real().values("name", "company", "status", "created_at")
     for lead in leads_qs:
         company  = lead["company"] or lead["name"]
         is_done  = lead["status"] in ("closed_won", "closed_lost")
@@ -2149,7 +2276,7 @@ def roadmap_view(request):
         "articles": Article.objects.count(),
         "articles_published": Article.objects.filter(status="published").count(),
         "services": Service.objects.count(),
-        "leads": ContactLead.objects.count(),
+        "leads": ContactLead.objects.real().count(),
         "customers": Customer.objects.count(),
         "python101": Article.objects.filter(category__slug="python-101").count(),
         "backlog": ContentBacklog.objects.count(),
@@ -2209,7 +2336,7 @@ def playbook_view(request):
     def _in_range(qs, field, start, end):
         return qs.filter(**{f"{field}__date__gte": start, f"{field}__date__lte": end})
 
-    leads_qs = ContactLead.objects.all()
+    leads_qs = ContactLead.objects.real().all()
     leads_this_week = _in_range(leads_qs, "created_at", week_start, week_end).count()
     leads_prev_week = _in_range(leads_qs, "created_at", prev_start, prev_end).count()
 
